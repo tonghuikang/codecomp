@@ -1,9 +1,13 @@
 def q1(arr):
     arr.sort()
+    num_nonzeros = len([x for x in arr if x > 0])
+    
     length = len(arr)
     counter = 0
     for i in range(length):
         for j in range(i+1, length):
+            if arr[i] == 0 and arr[j] == 0:
+                counter += num_nonzeros
             counter += arr[j+1:].count(arr[i]*arr[j])
     return counter
 
