@@ -6,6 +6,19 @@ print = lambda *a, **k: __builtins__.print(str(lineno())+':', *a, file=sys.stder
 
 #---------------------------------------------
 
+
+cases = []
+t = int(input())  # read a line with a single integer
+for case_num in range(1, t + 1):
+    N, Q = [int(s) for s in input().split(" ")]
+    X1, X2, A1, B1, C1, M1 = [int(s) for s in input().split(" ")]
+    Y1, Y2, A2, B2, C2, M2 = [int(s) for s in input().split(" ")]
+    Z1, Z2, A3, B3, C3, M3 = [int(s) for s in input().split(" ")]
+    cases.append([case_num, N, Q, X1, X2, A1, B1, C1, M1, Y1, Y2, A2, B2, C2, M2, Z1, Z2, A3, B3, C3, M3])
+
+#---------------------------------------------
+
+
 '''
 this reminds me of that algorithm for polygon rasterization called 'scan-line conversion'
 
@@ -14,12 +27,8 @@ this reminds me of that algorithm for polygon rasterization called 'scan-line co
 import collections
 import heapq
 
-def run(data):
-    a, b, c, n, q = data
-
-    x1, x2, a1, b1, c1, m1 = a
-    y1, y2, a2, b2, c2, m2 = b
-    z1, z2, a3, b3, c3, m3 = c
+def solve(case):
+    case_num, n, q, x1, x2, a1, b1, c1, m1, y1, y2, a2, b2, c2, m2, z1, z2, a3, b3, c3, m3 = case
 
     x = [x1, x2]
     y = [y1, y2]
@@ -58,7 +67,7 @@ def run(data):
             if cur_rank >= k[0]:
                 ret_score = score + (cur_rank - k[0]) // len(active)
                 print('SCORE = ', ret_score)
-                return ret_score
+                return case_num, ret_score
                 break
 
             prev_score = score
@@ -76,7 +85,7 @@ def run(data):
             if cur_rank >= k[0]:
                 ret_score = score + (cur_rank - k[0]) // len(active)
                 print('SCORE = ', ret_score)
-                return ret_score
+                return case_num, ret_score
                 break
 
             prev_score = score
@@ -87,20 +96,20 @@ def run(data):
             i += 1
 
 
-    return 0
+    return case_num, 0
 
 
 
 #---------------------------------------------
 
-def read_case():
-    n, q = [int(x) for x in input().split()]
-    a = [int(x) for x in input().split()]
-    b = [int(x) for x in input().split()]
-    c = [int(x) for x in input().split()]
-    return (a, b, c, n, q)
+import multiprocessing as mp
+n_thread = mp.cpu_count()
+with mp.Pool(n_thread) as p:
+    results = p.map(solve, cases)
 
-for i in range(int(input())):
-    outstr = 'Case #'+str(i+1)+': '+str(run(read_case()))
+results.sort(key=lambda x: x[0])
+
+for result in results:
+    outstr = 'Case #'+str(result[0])+': '+str(result[1])
     print(outstr, ' @ t =', time.clock())
     __builtins__.print(outstr)
