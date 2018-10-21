@@ -1,4 +1,5 @@
-def q1(arr):
+def q1(case):
+    case_num, arr = case
     arr.sort()
     num_nonzeros = len([x for x in arr if x > 0])
     
@@ -9,14 +10,21 @@ def q1(arr):
             if arr[i] == 0 and arr[j] == 0:
                 counter += num_nonzeros
             counter += arr[j+1:].count(arr[i]*arr[j])
-    return counter
-
-
-t = int(input())  # read a line with a single integer
-for i in range(1, t + 1):
-    dump = int(input())
-    arr_a = [int(s) for s in input().split(" ")]
-    assert dump == len(arr_a)
+    return case_num, counter
     
-    result = q1(arr_a)
-    print("Case #{}: {}".format(i, result))
+cases = []
+t = int(input())  # read a line with a single integer
+for case_num in range(1, t + 1):
+    dump = int(input())
+    arr = [int(s) for s in input().split(" ")]
+    cases.append([case_num, arr])
+
+import multiprocessing as mp
+n_thread = mp.cpu_count()
+with mp.Pool(n_thread) as p:
+    results = p.map(q1, cases)
+
+results.sort(key=lambda x: x[0])
+
+for result in results:
+    print("Case #{}: {}".format(result[0], result[1]))
