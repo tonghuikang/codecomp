@@ -1,10 +1,17 @@
+cases = []
 t = int(input())  # read a line with a single integer
-for case in range(1, t + 1):
+for case_num in range(1, t + 1):
     N, Q = [int(s) for s in input().split(" ")]
     X1, X2, A1, B1, C1, M1 = [int(s) for s in input().split(" ")]
     Y1, Y2, A2, B2, C2, M2 = [int(s) for s in input().split(" ")]
     Z1, Z2, A3, B3, C3, M3 = [int(s) for s in input().split(" ")]
+    cases.append([case_num, N, Q, X1, X2, A1, B1, C1, M1, Y1, Y2, A2, B2, C2, M2, Z1, Z2, A3, B3, C3, M3])
+
+
     
+    
+def solve_case(case):
+    case_num, N, Q, X1, X2, A1, B1, C1, M1, Y1, Y2, A2, B2, C2, M2, Z1, Z2, A3, B3, C3, M3 = case
     X = [X1, X2]
     Y = [Y1, Y2]
     Z = [Z1, Z2]
@@ -62,4 +69,23 @@ for case in range(1, t + 1):
         counter += score*(i+1)
     
     result = counter
-    print("Case #{}: {}".format(case, result))
+    print("Case #{}: {}".format(case_num, result))
+    
+    
+# from multiprocessing.dummy import Pool as ThreadPool 
+# import time
+
+# start_time = time.time()
+
+# # make the Pool of workers
+# pool = ThreadPool(24) 
+
+# # open the urls in their own threads
+# # and return the results
+# results = pool.map(solve_case, cases)  # CHANGE THIS 
+
+
+import multiprocessing as mp
+n_thread = mp.cpu_count()
+with mp.Pool(n_thread) as p:
+    p.map(solve_case, cases)
