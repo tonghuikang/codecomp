@@ -1,7 +1,18 @@
+# I got zero for this :(
+Question 1 I could not find out my errors. Question 2 the code took too long to run (it generates 1GB of memory) and my answers is wrong also.
+
+# Reflections
+I should not be using Python for any coding challenge. It is too slow.
+
+Moreover, if I am using Python, I need to have a standard process to read and write files. I spent quite some time hand-copying test cases to the notebook input space.
+
+Multiprocessing. On my computer I could only run 37 cases for question 2. I can select a 24 or 96 vCPU cloud and run the cases in parallel. It works (though my code produce the wrong result).
+
+Now I will analyse why my answers are wrong :/
+
 # Google Kickstart 2018 Round G
 
-
-### Why Python?
+### Why Python? (I retract this - ALWAYS USE .CPP FOR CODEJAM/KICKSTART)
 Because I have been coding in Python. The intermediate results are saved and be easily be shown to other people. Moreover I am not yet in the business of optimising yet. I am not sure for Google Kickstart/CodeJam but I know that Hackerrank allow more run time for files written in Python.
 
 The use of Python was an issue in a recent coding challenge at Credit Suisse. Python was slow, which is suspect is due to all the deepcopy that needs to be made. Someday, I need to have some understanding of C++ does. 
