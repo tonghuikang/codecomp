@@ -6,9 +6,15 @@ I should not be using Python for any coding challenge. It is too slow.
 
 Moreover, if I am using Python, I need to have a standard process to read and write files. I spent quite some time hand-copying test cases to the notebook input space.
 
-Multiprocessing. On my computer I could only run 37 cases for question 2. I can select a 24 or 96 vCPU cloud and run the cases in parallel. It works (though my code produce the wrong result).
+Multiprocessing. On my computer I could only run 37 cases for question 2. I can select a 24 or 96 vCPU cloud and run the cases in parallel. It works (though my code produce the wrong result). Following is the installation script for your cloud:
+```curl https://raw.githubusercontent.com/tonghuikang/kickstart/master/install.sh | sudo bash```
 
 Now I will analyse why my answers are wrong :/
+
+# Question Analysis
+For Question 1, I have missed the special case of zeros. What I did is to multiply two numbers count how many numbers are equal to the result. To make the code run slightly faster I first sort them and the see if any of the larger number is the product of the first two numbers. However, the triplet of `(0,0,100)` for example works as `0*100=0` but it isn't included in our system. I then moved on to the next question. To solve the large problem, you need to use hash tables and collections - i.e. grouping the numbers with the same value together. Libraries like `collections` and `deque` seem to be essential before you can claim that you work with Python.
+
+I could not find out where I am wrong in Question 2. (Probably everything) The code provided by Python writer xjcl does not work: https://code.google.com/codejam/contest/5374486/scoreboard?c=5374486#vf=1&sp=331 This person also seem to follow a standard debugging procedure, separating print to file and printing on console. I hope to learn more.
 
 # Google Kickstart 2018 Round G
 
