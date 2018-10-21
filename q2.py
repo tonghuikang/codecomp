@@ -70,19 +70,6 @@ def solve_case(case):
     
     result = counter
     print("Case #{}: {}".format(case_num, result))
-    
-    
-# from multiprocessing.dummy import Pool as ThreadPool 
-# import time
-
-# start_time = time.time()
-
-# # make the Pool of workers
-# pool = ThreadPool(24) 
-
-# # open the urls in their own threads
-# # and return the results
-# results = pool.map(solve_case, cases)  # CHANGE THIS 
 
 
 import multiprocessing as mp
