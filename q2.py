@@ -88,4 +88,9 @@ def solve_case(case):
 import multiprocessing as mp
 n_thread = mp.cpu_count()
 with mp.Pool(n_thread) as p:
-    p.map(solve_case, cases)
+    results = p.map(q1, cases)
+
+results.sort(key=lambda x: x[0])
+
+for result in results:
+    print("Case #{}: {}".format(result[0], result[1]))
