@@ -1,15 +1,27 @@
+from collections import Counter
+
 def q1(case):
-    case_num, arr = case
-    arr.sort()
-    num_nonzeros = len([x for x in arr if x > 0])
-    
-    length = len(arr)
-    counter = 0
-    for i in range(length):
-        for j in range(i+1, length):
-            if arr[i] == 0 and arr[j] == 0:
-                counter += num_nonzeros
-            counter += arr[j+1:].count(arr[i]*arr[j])
+    case_num, nums = case
+    nums = sorted(nums)
+    mp = Counter(nums)
+    nonzeros = len(nums) - mp[0]
+    counter = int(mp[0] * (mp[0]-1) * (mp[0]-2) / 6) + int(mp[1] * (mp[1]-1) * (mp[1]-2) / 6)  # triplets of 1 and zero
+#     print(mp, nonzeros, counter)
+
+    for a in mp:
+        val = a*a
+        if val != a:
+            counter += int(mp[a] * (mp[a]-1) / 2 * mp[val])
+
+        for b in mp:
+            if b > a: 
+                val = a*b
+                if val == a:
+                    counter += int(mp[0] * (mp[0]-1) * mp[b]/2)
+                if val == b:
+                    counter += int(mp[b] * (mp[b]-1) * mp[1]/2)
+                if val > b:
+                    counter += mp[a] * mp[b] * mp[val]
     return case_num, counter
     
 cases = []
