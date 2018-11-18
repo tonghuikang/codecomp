@@ -1,45 +1,42 @@
-file = open("A-large.in", "r") 
-lines = file.read().splitlines()
+from collections import Counter
 
-tests_total = int(lines[0])
-tests = []
-test_number = 1
+def q1(case):
+    case_num, nums = case
+    nums = sorted(nums)
+    mp = Counter(nums)
+    nonzeros = len(nums) - mp[0]
+    counter = int(mp[0] * (mp[0]-1) * (mp[0]-2) / 6) + int(mp[1] * (mp[1]-1) * (mp[1]-2) / 6)  # triplets of 1 and zero
+#     print(mp, nonzeros, counter)
 
-i = 1
-while i < len(lines):
-    info_line = lines[i]
-    N, P = info_line.split(" ")
-    prefixes = []
+    for a in mp:
+        val = a*a
+        if val != a:
+            counter += int(mp[a] * (mp[a]-1) / 2 * mp[val])
+
+        for b in mp:
+            if b > a: 
+                val = a*b
+                if val == a:
+                    counter += int(mp[0] * (mp[0]-1) * mp[b]/2)
+                if val == b:
+                    counter += int(mp[b] * (mp[b]-1) * mp[1]/2)
+                if val > b:
+                    counter += mp[a] * mp[b] * mp[val]
+    return case_num, counter
     
-    for p in range(int(P)):
-        prefixes.append(lines[i+p+1])
-    tests.append((test_number, int(N), int(P), prefixes))
-    
-    test_number += 1
-    i += int(P) + 1
-print(tests)
+cases = []
+t = int(input())  # read a line with a single integer
+for case_num in range(1, t + 1):
+    dump = int(input())
+    arr = [int(s) for s in input().split(" ")]
+    cases.append([case_num, arr])
 
+import multiprocessing as mp
+n_thread = mp.cpu_count()
+with mp.Pool(n_thread) as p:
+    results = p.map(q1, cases)
 
-def test_function(test):
+results.sort(key=lambda x: x[0])
 
-    test_number, N, P, test_prefixes = test
-    test_prefixes.sort(key=len)
-    # https://stackoverflow.com/questions/4659524/
-
-    lengths = [len(test_prefixes[0])]
-    for i,prefix in enumerate(test_prefixes[1:]):
-    #     print(i,prefix, test_prefixes[:i+1])
-        if not any(prefix.startswith(p) for p in test_prefixes[:i+1]):
-            # https://stackoverflow.com/questions/7539959/
-            lengths.append(len(prefix))
-    # print(lengths)
-    count = 2**N - sum([2**(N-length) for length in lengths])
-    # print(count)
-    return test_number, count
-
-
-with open("18G1.out", "w") as f:
-    for test in tests:
-        test_number, count = test_function(test)
-        print("Case #{}: {}".format(test_number, count))
-        f.writelines("Case #{}: {}\n".format(test_number, count))
+for result in results:
+    print("Case #{}: {}".format(result[0], result[1]))
