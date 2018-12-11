@@ -27,6 +27,8 @@ sudo ifconfig | grep inet
 echo "c.NotebookApp.ip = '*'" >> ~/.jupyter/jupyter_notebook_config.py
 echo "c.NotebookApp.open_browser = False" >> ~/.jupyter/jupyter_notebook_config.py
 sudo chmod -R 777 ~/.jupyter
+echo "c.NotebookApp.ip = '0.0.0.0'" >> ~/.jupyter/jupyter_notebook_config.py
+# https://stackoverflow.com/questions/52706238/jupyter-throwing-error-socket-gaierror-errno-2-name-or-service-not-known
 echo 'Done!'
 
 echo 'Configuring firewall (ufw) to allow ports 8888 and 8889'
