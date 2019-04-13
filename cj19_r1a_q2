@@ -1,0 +1,56 @@
+# Python 3.6
+import sys
+from functools import reduce
+def chinese_remainder(n, a):
+    sum = 0
+    prod = reduce(lambda a, b: a*b, n)
+    for n_i, a_i in zip(n, a):
+        p = prod // n_i
+        sum += a_i * mul_inv(p, n_i) * p
+    return sum % prod
+
+def mul_inv(a, b):
+    b0 = b
+    x0, x1 = 0, 1
+    if b == 1: return 1
+    while a > 1:
+        q = a // b
+        a, b = b, a%b
+        x0, x1 = x1 - q * x0, x0
+    if x1 < 0: x1 += b0
+    return x1
+
+str_input = input()
+first_input = str_input.split()
+t,n,g = [int(x) for x in first_input]  # 1 7 1000000
+# 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+
+for case_num in range(1, t+1):
+    arr_all = []
+    remainders = [5,7,9,11,13,16,17]
+    for remainder in remainders:
+        print((("{} ".format(remainder))*18)[:-1]) # 317
+        sys.stdout.flush()
+        str_input = input()
+        arr = str_input.split()
+        arr317 = sum([int(x) for x in arr])%remainder
+        arr_all.append(arr317)
+
+    for k in range(0,g+1):
+        if all([k%r == i for r,i in zip(remainders,arr_all)]):
+            print(k)
+            break
+    else:
+        print(0)
+
+#     for _ in range(n - 3):
+#         print(("11 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18")) # 317
+#         sys.stdout.flush()
+#         dont_care = input()
+
+#     print(result)
+    sys.stdout.flush()
+    result_which_we_dont_care = int(input())
+    if result_which_we_dont_care == -1:
+        print("exit")
+        exit()
