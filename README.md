@@ -1,3 +1,24 @@
+# Regarding codejam
+I am far from being qualified into the top 1500 of CodeJam round 1.
+
+On the use of Python. One main reason I want to use Python is because the rest of the school (SUTD) is only familar with Python. I want to make a starter kit to make it easy to participate in Codejam/Kickstart which takes in line input and output. A lot of time is wasted not writing the function.
+
+## What to include in starter kit / template code
+- Automatic loading and typing
+- Print statements to inspect variables (considering pysnooper)
+- Default case printing
+
+## How to participate in interactive questions
+- Downlaod the testing tool specific to the question and the general interactive runner.
+```python interactive_runner.py python testing_tool.py 0 -- ./solution_q1.py```
+- Remember to add a shebang at the start of the code
+```#!/usr/bin/env python```
+
+## Tips
+- Use multiple screen. Put the problem in another screen for easy viewing and testing
+- Use a proper IDE? Currently my workflow is jupyter > copy cell and paste to a .py, test locally if applicable, upload to codejam and test
+- 
+
 # I got zero for this :(
 Question 1 I could not find out my errors. Question 2 the code took too long to run (it generates 1GB of memory) and my answers is wrong also.
 
@@ -40,5 +61,4 @@ Sometimes the code from the Internet is faulty as well. "ABB" and "BAB" are anag
 > See Section 7 (Disqualification) of the Terms and Conditions and Section 7 (Disqualification) of the Contest Rules.
 > Collaborating with anyone else during any round of the contest, with the exception of the Qualification Round or Practice Session, is strictly prohibited and will result in your disqualification. This includes discussing or sharing the problem statements or solutions with others during the round. Participating with multiple accounts is also prohibited. If we believe that you have undermined the integrity of the contest, we reserve the right to disqualify you. Use your best judgment. If you have a question about whether something is allowed, or if you suspect another contestant of cheating, please contact us at codejam@google.com.
 
-This repository will be made private and be only accessible by me during the duration of the competition.
-
+This repository will only the updated at the end of the competition.
