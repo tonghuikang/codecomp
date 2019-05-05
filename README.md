@@ -1,3 +1,27 @@
+# Regarding competitive coding in general
+This is this process to follow
+- Understand the question
+- Formula solution strategy
+- Implement solution strategy
+- Deliver solution
+
+There are some insights to understanding this ideal process.
+- Each step depends on the previous steps.
+  - You cannot implement the solution without formulating a strategy. 
+  - You cannot devise a strategy without understanding the question.
+  - It may be possible that you understand the question wrong, and wasted time on the rest of the steps.
+- Having a strategy does not mean that you have the ability to implement it.
+
+
+# Regarding leetcode
+There is a leetcode contest every Sunday. It starts at 10:30 am Singapore time and lasts for 90 minutes. 
+The problems are well-written and usually is not a mere duplicate of what you can find on the Internet.
+There are four questions. The first question is simple. 
+The next three questions are more difficult and its difficult varies.
+
+One question is on binary trees, or uses binary trees. Some training is necessary to understand how to use them. Binary trees are constructed from an array and can be deconstructed and be represented by an array.
+
+
 # Regarding codejam
 I am far from being qualified into the top 1500 of CodeJam round 1.
 
