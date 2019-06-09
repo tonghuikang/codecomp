@@ -1,3 +1,8 @@
+# Additonal notes recorded
+Difference between substring and subsequence
+lexicographic (not alphabetical) order - is ab > aaa? yes
+Provide a directory of questions, for example qn 5086 is actually 316. 
+
 # Regarding competitive coding in general
 This is this process to follow
 - Understand the question
