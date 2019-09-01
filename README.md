@@ -3,6 +3,60 @@ Difference between substring and subsequence
 lexicographic (not alphabetical) order - is ab > aaa? yes
 Provide a directory of questions, for example qn 5086 is actually 316. 
 
+On whether should we care about
+
+### Most common tools
+
+Sorting a 2D list based on a certain index. <br>
+https://stackoverflow.com/questions/18563680/ <br>
+```lst = sorted(lst,key=lambda e:e[1])```
+
+Making a freqency dictionary <br>
+https://stackoverflow.com/questions/722697/ <br>
+```
+from collections import defaultdict
+fq = defaultdict(int)
+for w in words:
+    fq[w] += 1
+```
+
+```
+from collections import Counter
+fq = Counter(lst)
+```
+
+### Common algorithms
+(please elaborate - given what, produce what)
+
+Dijkstra
+
+Minimum spanning tree
+
+
+### How to write recursive algorithms
+
+You need two functions
+
+
+### Tricks
+Define a function within a function. 
+You can define a function outside, but sometimes the function is inside an object, then you need to use the `self` which complicate matters.
+
+
+
+### Complexity concepts
+You need to roughly calculate the worst case scenario - consider how much computations is necessary.
+
+Hashmap read is much faster than ?.
+
+
+
+### Misc
+
+Bitwise operations.
+
+
+
 # Regarding competitive coding in general
 This is this process to follow
 - Understand the question
