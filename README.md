@@ -1,29 +1,189 @@
-# Additonal notes recorded
-Difference between substring and subsequence
-lexicographic (not alphabetical) order - is ab > aaa? yes
-Provide a directory of questions, for example qn 5086 is actually 316. 
+# Leetcode Python Reference
 
-On whether should we care about
 
-### Most common tools
+## Overview of this reference
 
-Sorting a 2D list based on a certain index. <br>
-https://stackoverflow.com/questions/18563680/ <br>
-```lst = sorted(lst,key=lambda e:e[1])```
+This guide is will be an overview of concepts for people who have never taken a course on algorithms (like me). 
 
-Making a freqency dictionary <br>
-https://stackoverflow.com/questions/722697/ <br>
+I use Python because I am more familiar with it.
+
+All leetcode problems should be solvable with Python as well, because the question is very constrained. However, in coding competitions (like one you need to deploy an API that solves incoming challenges), the speed at which Python creates objects can be too slow.
+
+This contains
+- a reference to terminologies used in leetcode
+- code snippets
+- problems and their named solutions and implementation
+
+
+**What this is not**
+
+This does not teach you Python. Neither does this teach or algorithms. There is no step-by-step guide here.
+
+This does not help you with anything other than helping people like me perform better at leetcode. For the full technical interview process please do refer to Yangshun's [tech interview handbook](https://yangshun.github.io/tech-interview-handbook), which I think it covers all aspects of the technical interview.
+
+
+## Foreword
+
+Spending one or two one-and-half hours every week on solving programming problems is pretty fun. I can see myself playing leetcode for a long time.
+
+There are code snippets and references that would have helped me to become more efficient at coding. Here I am sharing with you what I have done for myself.
+
+Moreover, many big companies have a coding interview at various stages of hiring. If entering these companies is your objective it is recommended that you are good at solving problems.
+
+Of course, this is not enough to get hired. In the interview you need to clarify the problem, explain your approach and then justify the computational complexity, without being affected by the interview setting.
+
+We also have to keep in mind the more important prerequsites of a good hire 
+- good communication skills
+- good discipline at work 
+- ability to learn quickly
+
+Why is Leetcode better? It offers weekly challenges which I am keen to participate. Moreover, it handles the input/output for you so that you can focus on the code that matters. (On the other hand, for CodeForces or Google CodeJam, you are required to parse the text input, which can be time consuming and error prone.)
+
+
+## Leetcode setup
+
+A sample function looks like this
+
+```python
+class Solution:
+    def functionName(self, s: str) -> str:
+        return s
 ```
+
+If you are to run the code on your computer, this is how you check the result.
+
+```
+s = Solution()
+print(s.functionName("test_string"))
+```
+
+[TODO: Consider the use of PySnooper here]
+
+Here we consider the advantages and disadvantages of testing on your computer (for example writing on VSCode with a debugger)
+
+Writing on Leetcode|Writing on local computer 
+-----------------------------|--------------------------------------
+No need to copy and paste anything.|**Require copying of starter code and test cases**, which might have error.
+Debugging requires print statements.|**Dubugging tools** is available with your IDE
+**Waiting time for the code to run**.|No waiting time.
+A **cooldown** applies between running code.|No cooldown or limits.
+**Submission** is easy, and there is a greater confidence that it works.|Requires copying to leetcode for submission. Copying might cause error again.
+Shows **expected output** (not during competitions)|Does not show expected output.
+Require manual work to **swtich between test cases**.|Test cases (and its results) can be saved and tested all at once.
+
+In summary, writing on Leetcode is great if you are confident that your code will work in one sitting - this especially applies to the easy question. However, if you code involve extensive debugging, perhaps it might be better to bring your code offline.
+
+## Code snippets
+
+These are some code snippets I freqently use in Leetcode, in descending order. I place them here so that I do not need to use the search engine everytime I want it.
+
+**Sorting a 2D list based on a certain index**. <br>
+https://stackoverflow.com/questions/18563680/ <br>
+
+```python
+lst = sorted(lst,key=lambda e:e[1])
+```
+
+
+**Making a freqency dictionary.** <br>
+https://stackoverflow.com/questions/722697/ <br>
+```python
 from collections import defaultdict
 fq = defaultdict(int)
 for w in words:
     fq[w] += 1
 ```
 
-```
+```python
 from collections import Counter
 fq = Counter(lst)
 ```
+
+
+
+### Graphs
+
+There are a few types of graphs
+- depending whether it is directed or undirected
+- whether the nodes are weighted,
+- whether the edges are weighted.
+
+
+
+**Creating a unweighted <u>directed</u> graph**<br>
+
+```python
+from collections import defaultdict
+
+class Graph: 
+    def __init__(self,vertices): 
+        # dictionary containing adjacency List 
+        self.graph = defaultdict(list) 
+        # number of vertices
+        self.V = vertices  
+  
+    # function to add an edge to graph 
+    def addEdge(self,u,v): 
+        self.graph[u].append(v) 
+        
+    def additionalFunction(self,u,v):
+        return None
+```
+
+Usage of the Graph object.
+
+```python
+g = Graph(6) 
+g.addEdge(5, 2) 
+g.addEdge(5, 0) 
+g.addEdge(4, 0)
+g.additionalFunction() 
+```
+
+**Creating an <u>weighted</u> <u>undirected</u> graph**<br>
+
+https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/
+
+Initialising with adjacency matrix.
+
+```python
+class Graph(): 
+  
+    def __init__(self, vertices): 
+        self.V = vertices
+        self.graph = [[0 for column in range(vertices)]  
+                      for row in range(vertices)] 
+```
+
+Usage of the Graph object.
+```python
+g = Graph(5)
+g.graph = [ [0, 2, 0, 6, 0],
+            [2, 0, 3, 8, 5],
+            [0, 3, 0, 0, 7],
+            [6, 8, 0, 0, 9],
+            [0, 5, 7, 9, 0]]
+
+g.additionalFunction()
+```
+
+
+
+
+
+# Additonal notes recorded
+
+Sometimes, it is better to write a probabilitistic algorithm with a small but calculated chance the algorithm fails.
+
+
+
+Difference between substring and subsequence
+
+Lexicographic (not alphabetical) order - is ab > aaa > aa? yes (cite leetcode questions)
+
+On whether should we care about
+
+
 
 ### Common algorithms
 (please elaborate - given what, produce what)
@@ -33,13 +193,19 @@ Dijkstra
 Minimum spanning tree
 
 
+
+
+
+
+
+
 ### How to write recursive algorithms
 
-You need two functions
+You need two functions, one to start, one to call.
 
 
 ### Tricks
-Define a function within a function. 
+You can define a function within a function. 
 You can define a function outside, but sometimes the function is inside an object, then you need to use the `self` which complicate matters.
 
 
@@ -49,11 +215,17 @@ You need to roughly calculate the worst case scenario - consider how much comput
 
 Hashmap read is much faster than ?.
 
+Binary search insert is faster because there is no need to read the whole (sorted) array.
 
 
 ### Misc
-
 Bitwise operations.
+
+
+### Python
+del lst[0] is efficient, but lst = lst[1:] requires iterating through the full array.
+
+
 
 
 
@@ -74,9 +246,10 @@ There are some insights to understanding this ideal process.
 
 # Regarding leetcode
 There is a leetcode contest every Sunday. It starts at 10:30 am Singapore time and lasts for 90 minutes. 
-The problems are well-written and usually is not a mere duplicate of what you can find on the Internet.
+
+The problems are usually well-written and usually are not a mere duplicate of what you can find on the Internet.
 There are four questions. The first question is simple. 
-The next three questions are more difficult and its difficult varies.
+The next three questions are more difficult and its difficulty varies.
 
 One question is on binary trees, or uses binary trees. Some training is necessary to understand how to use them. Binary trees are constructed from an array and can be deconstructed and be represented by an array.
 
@@ -88,19 +261,18 @@ On the use of Python. One main reason I want to use Python is because the rest o
 
 ## What to include in starter kit / template code
 - Automatic loading and typing
-- Print statements to inspect variables (considering pysnooper)
-- Default case printing
+- Debugging tools 
+  - To try out VScode or pysnooper?
 
 ## How to participate in interactive questions
-- Downlaod the testing tool specific to the question and the general interactive runner.
+- Downlaod the testing tool specific to the question and the general interactive runner. (official reference?)
 ```python interactive_runner.py python testing_tool.py 0 -- ./solution_q1.py```
 - Remember to add a shebang at the start of the code
 ```#!/usr/bin/env python```
 
 ## Tips
-- Use multiple screen. Put the problem in another screen for easy viewing and testing
+- Use multiple screens. Put the problem in another screen for easy viewing and testing.
 - Use a proper IDE? Currently my workflow is jupyter > copy cell and paste to a .py, test locally if applicable, upload to codejam and test
-- 
 
 # I got zero for this :(
 Question 1 I could not find out my errors. Question 2 the code took too long to run (it generates 1GB of memory) and my answers is wrong also.
@@ -145,3 +317,13 @@ Sometimes the code from the Internet is faulty as well. "ABB" and "BAB" are anag
 > Collaborating with anyone else during any round of the contest, with the exception of the Qualification Round or Practice Session, is strictly prohibited and will result in your disqualification. This includes discussing or sharing the problem statements or solutions with others during the round. Participating with multiple accounts is also prohibited. If we believe that you have undermined the integrity of the contest, we reserve the right to disqualify you. Use your best judgment. If you have a question about whether something is allowed, or if you suspect another contestant of cheating, please contact us at codejam@google.com.
 
 This repository will only the updated at the end of the competition.
+
+**Recommended leetcode setup**
+
+This is for me to improve my leetcode efficiency. 
+I am forgettful and usually lose track of details.
+
+Common mistakes in python - please refer to digital world.
+Setup - use VScode to track your variables.
+
+A good programmer does not repeat a mistake.
