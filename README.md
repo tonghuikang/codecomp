@@ -162,6 +162,42 @@ Official essay on Python graphs - https://www.python.org/doc/essays/graphs/
 
 (Why didn't Python already have standard Graph object that implement common algorithms? Trying to make one here).
 
+
+
+**Creating a graph from a grid**
+
+
+```
+        g = defaultdict(list)
+        row_length = len(grid[0])
+
+        for i,row in enumerate(grid):
+            for j,cell in enumerate(row):
+                yy = []
+                if j != 0:
+                    yy.append(j-1)
+                if j != len(grid[0]) - 1:
+                    yy.append(j+1)
+    
+                xx = []
+                if i != 0:
+                    xx.append(i-1)
+                if i != len(grid) - 1:
+                    xx.append(i+1)
+    
+                for x in xx:
+                    y = j
+                    if grid[i][j] != 0 and grid[x][y] != 0:
+                        g[i*row_length + j].append(x*row_length + y)
+                for y in yy:
+                    x = i
+                    if grid[i][j] != 0 and grid[x][y] != 0:
+                        g[i*row_length + j].append(x*row_length + y)
+
+```
+
+
+
 **Creating a unweighted <u>directed</u> graph**<br>
 
 - Using Topological Sort
@@ -392,3 +428,8 @@ Say you want to determine whether an array contain something, for many times. Co
 Binary search insert is faster because there is no need to read the whole (sorted) array. Use `bisort` for this.
 
 `del lst[0]` is constant time, but `lst = lst[1:]` requires iterating through the full array. Use `heapq` if necessary.
+
+
+
+
+
