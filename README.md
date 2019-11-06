@@ -105,9 +105,15 @@ https://stackoverflow.com/questions/18563680/ <br>
 lst = sorted(lst,key=lambda e:e[1])
 ```
 
+**Flatten a list of list**
+
+```python
+sum(arr, [])
+```
 
 **Making a freqency dictionary.** <br>
 https://stackoverflow.com/questions/722697/ <br>
+
 ```python
 from collections import defaultdict
 fq = defaultdict(int)
@@ -120,7 +126,40 @@ from collections import Counter
 fq = Counter(lst)
 ```
 
+**Reduce excess whitespace**
 
+Replace multiple whitespace with one whitespace.
+
+```python
+' '.join(mystring.split())
+```
+
+**Knapsack**
+
+```python
+def knapsack(items, maxweight):
+    # items is an array of (value, weight)
+    @lru_cache(maxsize=None)
+    def bestvalue(i, j):
+        # Return the value of the most valuable 
+        # subsequence of the first i elements in 
+        # items whose weights sum to no more than j.
+        if j < 0:
+            return float('-inf')
+        if i == 0:
+            return 0
+        value, weight, idx = items[i - 1]
+        return max(bestvalue(i - 1, j), bestvalue(i - 1, j - weight) + value)
+
+    j = maxweight
+    result = []
+    for i in reversed(range(len(items))):
+        if bestvalue(i + 1, j) != bestvalue(i, j):
+            result.append(items[i])
+            j -= items[i][1]
+    result.reverse()
+    return bestvalue(len(items), maxweight), result
+```
 
 ## Binary Tree
 
@@ -413,7 +452,7 @@ print(visited)
             return L[m][n] 
 ```
 
-
+The longest palindromic subsequence is the long common subsequence of the current and reversed string.
 
 ## Tricks
 
@@ -430,6 +469,10 @@ Binary search insert is faster because there is no need to read the whole (sorte
 `del lst[0]` is constant time, but `lst = lst[1:]` requires iterating through the full array. Use `heapq` if necessary.
 
 
+
+# Miscellanceous
+
+Optimal substructure.
 
 
 
