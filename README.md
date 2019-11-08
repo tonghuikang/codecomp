@@ -4,6 +4,7 @@
 ## Overview of this reference
 
 **What this document contains** (to be updated)
+
 - a reference to terminologies used in leetcode
 - code snippets
 - problems and their named solutions and implementation
@@ -26,6 +27,7 @@ Moreover, many big companies have a coding interview at various stages of hiring
 Of course, this is not enough to get hired. In the interview you need to clarify the problem, explain your approach and then justify the computational complexity, without being affected by the interview setting.
 
 We also have to keep in mind the more important prerequsites of a good hire 
+
 - good communication skills
 - good discipline at work 
 - ability to learn quickly
@@ -42,12 +44,14 @@ All leetcode problems should be solvable with Python as well, because the questi
 **On problem solving**
 
 This is this process to follow
+
 - Understand the question
 - Formula solution strategy
 - Implement solution strategy
 - Deliver solution
 
 There are some insights to understanding this ideal process.
+
 - Each step depends on the previous steps.
   - You cannot implement the solution without formulating a strategy. 
   - You cannot devise a strategy without understanding the question.
@@ -76,21 +80,25 @@ print(s.functionName("test_string"))
 
 Here we consider the advantages and disadvantages of testing on your computer (for example writing on VSCode with a debugger)
 
-Writing on Leetcode|Writing on local computer 
------------------------------|--------------------------------------
-No need to copy and paste anything.|**Require copying of starter code and test cases**, which might have error.
-Debugging requires print statements.|**Dubugging tools** is available with your IDE
-**Waiting time for the code to run**.|No waiting time.
-A **cooldown** applies between running code.|No cooldown or limits.
-**Submission** is easy, and there is a greater confidence that it works.|Requires copying to leetcode for submission. Copying might cause error again.
-Shows **expected output** (not during competitions)|Does not show expected output.
-Require manual work to **swtich between test cases**.|Test cases (and its results) can be saved and tested all at once.
+| Writing on Leetcode                                          | Writing on local computer                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| No need to copy and paste anything.                          | **Require copying of starter code and test cases**, which might have error. |
+| Debugging requires print statements.                         | **Dubugging tools** is available with your IDE               |
+| **Waiting time for the code to run**.                        | No waiting time.                                             |
+| A **cooldown** applies between running code.                 | No cooldown or limits.                                       |
+| **Submission** is easy, and there is a greater confidence that it works. | Requires copying to leetcode for submission. Copying might cause error again. |
+| Shows **expected output** (not during competitions)          | Does not show expected output.                               |
+| Require manual work to **swtich between test cases**.        | Test cases (and its results) can be saved and tested all at once. |
 
 In summary, writing on Leetcode is great if you are confident that your code will work in one sitting - this especially applies to the easy question. However, if you code involve extensive debugging, perhaps it might be better to bring your code offline.
 
 ## Terminologies
 
-Difference between substring and subsequence
+Difference between subset, subsequence and subarray/substring
+
+- subset: some elements in the collection
+- subsequence: some elements in the array maintaining relative order (not necessary to be continuous)
+- subarray: some continuous elements in the array
 
 Lexicographic (not alphabetical) order - is ab > aaa > aa? yes (cite leetcode questions)
 
@@ -126,15 +134,60 @@ from collections import Counter
 fq = Counter(lst)
 ```
 
+**Python deque**
+
+If you want a list that can be popped efficiently from either side.
+
+```python
+from collections import deque
+```
+
+Deleting the first element is quite fast as well.
+
+```python
+lst = range(10000)
+del lst[0]
+```
+
+**Python heapq**
+
+https://www.cs.usfca.edu/~galles/visualization/Heap.html
+
+The interesting property of a heap is that its smallest element is always the root, heap[0].
+
+```python
+heapq.heapify(lst)
+heapq.heappush(heap, item)
+heapq.heappop(heap)
+
+```
+
+- Transforming an array into a heap takes linear time $n$.
+- Adding a element to the array takes $log(n)$ time. 
+- Removing the smallest element from the array takes $log(n)$ time.
+
+**Search an array efficiently in Python**
+
+Does binary search for you.
+
+https://docs.python.org/3/library/bisect.html
+
+
+
 **Reduce excess whitespace**
 
 Replace multiple whitespace with one whitespace.
 
 ```python
 ' '.join(mystring.split())
+
 ```
 
 **Knapsack**
+
+There are 0–1 knapsack, bounded knapsack, and unbounded knapsack. These are actually linear/integer/mixed programming problems. 
+
+**Binary** Knapsack problem. Choose
 
 ```python
 def knapsack(items, maxweight):
@@ -159,13 +212,20 @@ def knapsack(items, maxweight):
             j -= items[i][1]
     result.reverse()
     return bestvalue(len(items), maxweight), result
+
 ```
+
+**Integer**
+https://rosettacode.org/wiki/Knapsack_problem/Bounded#Python
+
+You no longer build by number of items selected, you iterate from the first possible item?
 
 ## Binary Tree
 
 One question is on binary trees, or uses binary trees. Some training is necessary to understand how to use them. Binary trees are constructed from an array and can be deconstructed and be represented by an array.
 
 This is leetcode's definition of a binary tree.
+
 ```
 # Definition for a binary tree node.
 # class TreeNode:
@@ -173,9 +233,11 @@ This is leetcode's definition of a binary tree.
 #         self.val = x
 #         self.left = None
 #         self.right = None
+
 ```
 
 This is a basic way to iterate a binary tree.
+
 ```
         def helper(node):
             if node == None:
@@ -186,6 +248,7 @@ This is a basic way to iterate a binary tree.
 
         arr1 = []
         helper(root2)
+
 ```
 
 
@@ -193,6 +256,7 @@ This is a basic way to iterate a binary tree.
 ## Graphs
 
 There are a few types of graphs
+
 - depending whether it is directed or undirected
 - whether the nodes are weighted
 - whether the edges are weighted
@@ -200,6 +264,10 @@ There are a few types of graphs
 Official essay on Python graphs - https://www.python.org/doc/essays/graphs/
 
 (Why didn't Python already have standard Graph object that implement common algorithms? Trying to make one here).
+
+A tree is a directed graph with all (except the root node) with an indegree.
+
+A **trie** is a tree-like data structure whose nodes store the letters of an alphabet. 
 
 
 
@@ -232,6 +300,7 @@ Official essay on Python graphs - https://www.python.org/doc/essays/graphs/
                     x = i
                     if grid[i][j] != 0 and grid[x][y] != 0:
                         g[i*row_length + j].append(x*row_length + y)
+
 
 ```
 
@@ -298,6 +367,7 @@ class UnweightedDirectedGraph:
   
         # Push current vertex to stack which stores result 
         stack.insert(0,v)
+
 ```
 
 Usage of the Graph object.
@@ -308,6 +378,7 @@ g.addEdge(5, 2)
 g.addEdge(5, 0) 
 g.addEdge(4, 0)
 g.topoSort() # for example
+
 ```
 
 **Creating an <u>weighted</u> <u>undirected</u> graph**<br>
@@ -323,9 +394,11 @@ class Graph():
         self.V = vertices
         self.graph = [[0 for column in range(vertices)]  
                       for row in range(vertices)] 
+
 ```
 
 Usage of the Graph object.
+
 ```python
 g = Graph(5)
 g.graph = [ [0, 2, 0, 6, 0],
@@ -335,11 +408,13 @@ g.graph = [ [0, 2, 0, 6, 0],
             [0, 5, 7, 9, 0]]
 
 g.additionalFunction()
+
 ```
 
 
 **Obtain connected components from undirected graph**
-```
+
+```python
 # Python program to print connected  
 # components in an undirected graph 
 class Graph: 
@@ -383,6 +458,7 @@ class Graph:
                 temp = [] 
                 cc.append(self.DFSUtil(temp, v, visited)) 
         return cc 
+
 ```
 
 
@@ -419,6 +495,7 @@ while True:
     current, currentDistance = sorted(candidates, key = lambda x: x[1])[0]
 
 print(visited)
+
 ```
 
 
@@ -428,7 +505,7 @@ print(visited)
 
 **Longest Common Subsequence**
 
-```
+```python
         def lcs(X, Y, m, n ): 
     
             L = [[0]*(n+1) for _ in range(m+1)] 
@@ -450,6 +527,7 @@ print(visited)
             # L[m][n] contains length 
                 # of LCS for X and Y 
             return L[m][n] 
+
 ```
 
 The longest palindromic subsequence is the long common subsequence of the current and reversed string.
@@ -473,6 +551,4 @@ Binary search insert is faster because there is no need to read the whole (sorte
 # Miscellanceous
 
 Optimal substructure.
-
-
 
