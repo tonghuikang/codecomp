@@ -1,10 +1,10 @@
 # Leetcode Python Reference
 
+[TOC]
 
 ## Overview of this reference
 
 **What this document contains** (to be updated)
-
 - a reference to terminologies used in leetcode
 - code snippets
 - problems and their named solutions and implementation
@@ -27,7 +27,6 @@ Moreover, many big companies have a coding interview at various stages of hiring
 Of course, this is not enough to get hired. In the interview you need to clarify the problem, explain your approach and then justify the computational complexity, without being affected by the interview setting.
 
 We also have to keep in mind the more important prerequsites of a good hire 
-
 - good communication skills
 - good discipline at work 
 - ability to learn quickly
@@ -40,18 +39,15 @@ I use Python because I am more familiar with it.
 
 All leetcode problems should be solvable with Python as well, because the question is very constrained. However, in coding competitions (like one you need to deploy an API that solves incoming challenges), the speed at which Python creates objects can be too slow.
 
-
 **On problem solving**
 
 This is this process to follow
-
 - Understand the question
 - Formula solution strategy
 - Implement solution strategy
 - Deliver solution
 
 There are some insights to understanding this ideal process.
-
 - Each step depends on the previous steps.
   - You cannot implement the solution without formulating a strategy. 
   - You cannot devise a strategy without understanding the question.
@@ -80,22 +76,21 @@ print(s.functionName("test_string"))
 
 Here we consider the advantages and disadvantages of testing on your computer (for example writing on VSCode with a debugger)
 
-| Writing on Leetcode                                          | Writing on local computer                                    |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| No need to copy and paste anything.                          | **Require copying of starter code and test cases**, which might have error. |
-| Debugging requires print statements.                         | **Dubugging tools** is available with your IDE               |
-| **Waiting time for the code to run**.                        | No waiting time.                                             |
-| A **cooldown** applies between running code.                 | No cooldown or limits.                                       |
-| **Submission** is easy, and there is a greater confidence that it works. | Requires copying to leetcode for submission. Copying might cause error again. |
-| Shows **expected output** (not during competitions)          | Does not show expected output.                               |
-| Require manual work to **swtich between test cases**.        | Test cases (and its results) can be saved and tested all at once. |
+Writing on Leetcode|Writing on local computer 
+-----------------------------|--------------------------------------
+No need to copy and paste anything.|**Require copying of starter code and test cases**, which might have error.
+Debugging requires print statements.|**Dubugging tools** is available with your IDE
+**Waiting time for the code to run**.|No waiting time.
+A **cooldown** applies between running code.|No cooldown or limits.
+**Submission** is easy, and there is a greater confidence that it works.|Requires copying to leetcode for submission. Copying might cause error again.
+Shows **expected output** (not during competitions)|Does not show expected output.
+Require manual work to **swtich between test cases**.|Test cases (and its results) can be saved and tested all at once.
 
 In summary, writing on Leetcode is great if you are confident that your code will work in one sitting - this especially applies to the easy question. However, if you code involve extensive debugging, perhaps it might be better to bring your code offline.
 
 ## Terminologies
 
 Difference between subset, subsequence and subarray/substring
-
 - subset: some elements in the collection
 - subsequence: some elements in the array maintaining relative order (not necessary to be continuous)
 - subarray: some continuous elements in the array
@@ -159,7 +154,6 @@ The interesting property of a heap is that its smallest element is always the ro
 heapq.heapify(lst)
 heapq.heappush(heap, item)
 heapq.heappop(heap)
-
 ```
 
 - Transforming an array into a heap takes linear time $n$.
@@ -172,7 +166,18 @@ Does binary search for you.
 
 https://docs.python.org/3/library/bisect.html
 
+**List comprehensive with if and else**
 
+```python
+lst = [(i - 12*((i//12)-1)) if i>25 else i for i in lst]
+```
+
+**Using maxint because you are cool**
+
+```python
+import sys
+MAX = sys.maxint
+```
 
 **Reduce excess whitespace**
 
@@ -180,16 +185,17 @@ Replace multiple whitespace with one whitespace.
 
 ```python
 ' '.join(mystring.split())
-
 ```
 
 **Knapsack**
 
 There are 0–1 knapsack, bounded knapsack, and unbounded knapsack. These are actually linear/integer/mixed programming problems. 
 
-**Binary** Knapsack problem. Choose
+**Binary** Knapsack problem. For every item you may or may not take, and you need to fulfil the max limit.
 
 ```python
+from functools import lru_cache
+
 def knapsack(items, maxweight):
     # items is an array of (value, weight)
     @lru_cache(maxsize=None)
@@ -213,19 +219,42 @@ def knapsack(items, maxweight):
     result.reverse()
     return bestvalue(len(items), maxweight), result
 
+arr = [(a,b,c) for a,b,c in zip([16,22,12,8,11,19],
+                                [5,7,4,3,4,6],
+                                range(6))]
+knapsack(arr, 15)
 ```
 
-**Integer**
+**Integer** Knapsack problem
 https://rosettacode.org/wiki/Knapsack_problem/Bounded#Python
 
 You no longer build by number of items selected, you iterate from the first possible item?
 
+**Mixed linear programming**
+
+This one you need to use a library.
+
+**Integer factorisation (brute force)**
+
+Just in case you need it.
+
+```python
+def factors(nr):
+    i = 2
+    factors = []
+    while i <= nr:
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr / i
+        else:
+            i = i + 1
+    return factors
+```
 ## Binary Tree
 
 One question is on binary trees, or uses binary trees. Some training is necessary to understand how to use them. Binary trees are constructed from an array and can be deconstructed and be represented by an array.
 
 This is leetcode's definition of a binary tree.
-
 ```
 # Definition for a binary tree node.
 # class TreeNode:
@@ -233,11 +262,9 @@ This is leetcode's definition of a binary tree.
 #         self.val = x
 #         self.left = None
 #         self.right = None
-
 ```
 
 This is a basic way to iterate a binary tree.
-
 ```
         def helper(node):
             if node == None:
@@ -248,7 +275,6 @@ This is a basic way to iterate a binary tree.
 
         arr1 = []
         helper(root2)
-
 ```
 
 
@@ -256,7 +282,6 @@ This is a basic way to iterate a binary tree.
 ## Graphs
 
 There are a few types of graphs
-
 - depending whether it is directed or undirected
 - whether the nodes are weighted
 - whether the edges are weighted
@@ -300,7 +325,6 @@ A **trie** is a tree-like data structure whose nodes store the letters of an alp
                     x = i
                     if grid[i][j] != 0 and grid[x][y] != 0:
                         g[i*row_length + j].append(x*row_length + y)
-
 
 ```
 
@@ -367,7 +391,6 @@ class UnweightedDirectedGraph:
   
         # Push current vertex to stack which stores result 
         stack.insert(0,v)
-
 ```
 
 Usage of the Graph object.
@@ -378,7 +401,6 @@ g.addEdge(5, 2)
 g.addEdge(5, 0) 
 g.addEdge(4, 0)
 g.topoSort() # for example
-
 ```
 
 **Creating an <u>weighted</u> <u>undirected</u> graph**<br>
@@ -394,11 +416,9 @@ class Graph():
         self.V = vertices
         self.graph = [[0 for column in range(vertices)]  
                       for row in range(vertices)] 
-
 ```
 
 Usage of the Graph object.
-
 ```python
 g = Graph(5)
 g.graph = [ [0, 2, 0, 6, 0],
@@ -408,9 +428,7 @@ g.graph = [ [0, 2, 0, 6, 0],
             [0, 5, 7, 9, 0]]
 
 g.additionalFunction()
-
 ```
-
 
 **Obtain connected components from undirected graph**
 
@@ -458,9 +476,33 @@ class Graph:
                 temp = [] 
                 cc.append(self.DFSUtil(temp, v, visited)) 
         return cc 
-
 ```
 
+Obtain connected components without building a graph
+
+```python
+    synonyms = [["happy","joy"],
+                ["sad","sorrow"],
+                ["joy","cheerful"]],
+    d = defaultdict(list)
+    index = 0
+    d_rev = {}
+    for syn in synonyms:
+        if not syn[0] in d_rev and not syn[1] in d_rev:
+            index += 1
+            d[index].append(syn[0])
+            d[index].append(syn[1])
+            d_rev[syn[0]] = index
+            d_rev[syn[1]] = index
+        elif syn[0] in d_rev:
+            d[d_rev[syn[0]]].append(syn[1])
+            d_rev[syn[1]] = d_rev[syn[0]]
+        elif syn[1] in d_rev:
+            d[d_rev[syn[1]]].append(syn[0])
+            d_rev[syn[0]] = d_rev[syn[1]]
+        else:
+            pass
+```
 
 
 **Djistrka algorithm**
@@ -495,7 +537,6 @@ while True:
     current, currentDistance = sorted(candidates, key = lambda x: x[1])[0]
 
 print(visited)
-
 ```
 
 
@@ -527,7 +568,6 @@ print(visited)
             # L[m][n] contains length 
                 # of LCS for X and Y 
             return L[m][n] 
-
 ```
 
 The longest palindromic subsequence is the long common subsequence of the current and reversed string.
@@ -550,5 +590,111 @@ Binary search insert is faster because there is no need to read the whole (sorte
 
 # Miscellanceous
 
-Optimal substructure.
+Please understand the concepts, e.g. optimal substructure.
 
+Count number of permutations a number is divisible by 11. https://www.quora.com/log/revision/22296018
+
+```python
+import operator as op
+from functools import reduce, lru_cache
+
+def eval(lst):
+    # lst = ins[5]
+    L = sum(lst)
+    M = (L+1)//2
+    cnt = [0] + lst
+    csum = [sum(cnt[i:]) for i in range(10)]
+
+#     print(lst)
+#     print(L)
+#     print(M)
+#     print(cnt)
+#     print(csum)
+
+    DP = [[[0 for _ in range(11)] for _ in range(M+1)] for _ in range(11)]
+    DP[10][0][0]=1
+
+    @lru_cache(maxsize=9999)
+    def ncr(n, r):
+        r = min(r, n-r)
+        numer = reduce(op.mul, range(n, n-r, -1), 1)
+        denom = reduce(op.mul, range(1, r+1), 1)
+        return numer // denom
+
+    C = ncr    
+
+    for i in range(9,-1,-1):
+      for j in range(0, M+1):
+        for k in range(0, 10+1):
+          for p in range(0,min(j,cnt[i])+1):
+            j_=j-p
+            k_=(k-i*(2*p-cnt[i]))%11
+            if(i>0):
+                DP[i][j][k]+=C(j,p)*C(csum[i]-j,cnt[i]-p)*DP[i+1][j_][k_]
+            else:
+                DP[i][j][k]+=C(j-1,p)*C(csum[i]-j,cnt[i]-p)*DP[i+1][j_][k_]
+    
+    if DP[0][M][0] > 0:
+        return "YES"
+    return "NO"
+```
+
+
+
+
+
+### Box pushing
+
+
+
+```python
+    def minPushBox(self, grid: List[List[str]]) -> int:
+        
+        free = set((i, j) 
+                   for i, row in enumerate(grid) 
+                   for j, cell in enumerate(row) 
+                   if grid[i][j] != '#')
+
+        target = next((i, j) 
+                      for i, row in enumerate(grid) 
+                      for j, cell in enumerate(row) 
+                      if grid[i][j] == 'T')
+
+        boxi, boxj = next((i, j) 
+                          for i, row in enumerate(grid) 
+                          for j, cell in enumerate(row) 
+                          if grid[i][j] == 'B')
+
+        si, sj = next((i, j) 
+                      for i, row in enumerate(grid) 
+                      for j, cell in enumerate(row) 
+                      if grid[i][j] == 'S')
+
+        visited = set()
+        heap = [(0, si, sj, boxi, boxj)]
+
+        while heap:
+            moves, si, sj, boxi, boxj = heapq.heappop(heap)
+            
+            if (boxi, boxj) == target:
+                return moves
+            
+            if (si, sj, boxi, boxj) in visited:
+                continue
+            
+            visited.add((si, sj, boxi, boxj))
+            
+            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                ni, nj = si + dx, dy + sj
+                if ((ni, nj) == (boxi, boxj) 
+                    and (boxi + dx, boxj + dy) in free 
+                    and (ni, nj, boxi + dx, boxj + dy) not in visited):
+                    heapq.heappush(heap, 
+                                   (moves + 1, ni, nj, boxi + dx, boxj + dy))
+
+                elif ((ni, nj) in free 
+                      and (ni, nj, boxi, boxj) not in visited):
+                    heapq.heappush(heap, 
+                                   (moves, ni, nj, boxi, boxj))
+        return -1
+```
