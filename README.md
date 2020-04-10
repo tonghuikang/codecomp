@@ -22,6 +22,12 @@ https://stackoverflow.com/questions/18563680/ <br>
 lst = sorted(lst,key=lambda e:e[1])
 ```
 
+**Tranpose an array**
+
+```python
+zip(*theArray)
+```
+
 **Flatten a list of list**
 
 ```python
@@ -71,6 +77,7 @@ https://www.cs.usfca.edu/~galles/visualization/Heap.html
 The interesting property of a heap is that its smallest element is always the root, heap[0].
 
 ```python
+import heapq
 heapq.heapify(lst)
 heapq.heappush(heap, item)
 heapq.heappop(heap)
