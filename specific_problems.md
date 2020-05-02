@@ -1,6 +1,8 @@
-# Miscellanceous
+# Specific algorithms
 
 Please understand the concepts, e.g. optimal substructure.
+
+
 
 Count number of permutations a number is divisible by 11. https://www.quora.com/log/revision/22296018
 
@@ -108,3 +110,58 @@ def eval(lst):
                                    (moves, ni, nj, boxi, boxj))
         return -1
 ```
+
+
+
+### Max sliding window
+
+```python
+class Solution:
+    def maxSlidingWindow(self, nums, k):
+        res = []
+        bigger = deque()
+        for i, n in enumerate(nums):
+            # make sure the rightmost one is the smallest
+            while bigger and nums[bigger[-1]] <= n:
+                bigger.pop()
+
+            # add in
+            bigger += [i]
+
+            # make sure the leftmost one is in-bound
+            if i - bigger[0] >= k:
+                bigger.popleft()
+
+            # if i + 1 < k, then we are initializing the bigger array
+            if i + 1 >= k:
+                res.append(nums[bigger[0]])
+                
+            print(bigger)
+        return res        
+```
+
+
+
+## Other standard problems
+
+**Longest Common Subsequence**
+
+```python
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        
+        L = [[0 for _ in range(len(text2) + 1)] 
+             for _ in range(len(text1) + 1)]
+        
+        for i in range(len(text1) + 1):
+            for j in range(len(text2) + 1):
+                if i == 0 or j == 0:
+                    L[i][j] = 0
+                elif text1[i - 1] == text2[j - 1]:
+                    L[i][j] = L[i-1][j-1] + 1
+                else:
+                    L[i][j] = max(L[i-1][j], L[i][j-1])
+        
+        return L[-1][-1] 
+```
+
+The longest palindromic subsequence is the long common subsequence of the current and reversed string.

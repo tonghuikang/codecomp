@@ -1,6 +1,6 @@
 # Google Coding Competitions
 
-This refers to the [Kickstart](https://codingcompetitions.withgoogle.com/kickstart)and [Codejam](https://codingcompetitions.withgoogle.com/codejam)
+This refers to the [Kickstart ](https://codingcompetitions.withgoogle.com/kickstart)and [Codejam](https://codingcompetitions.withgoogle.com/codejam)
 
 Python 3 environment (but for some reason I need to install packages)
 
@@ -41,5 +41,15 @@ Libraries allowed in Google coding environment, other than native libraries
 ```
 numpy
 scipy
+```
+
+
+
+To run with an input file
+
+It may be your environment problem
+
+```
+python3 a.py < a.in
 ```
 
