@@ -28,13 +28,26 @@ lst = sorted(lst,key=lambda e:e[1])
 zip(*theArray)
 ```
 
+**Rotate an array**
+
+```python
+rotated = [list(reversed(col)) for col in zip(*matrix)]
+```
+
 **Flatten a list of list**
 
 ```python
 sum(arr, [])
 ```
 
+**Zip longest**
+
+```
+itertools.zip_longest()
+```
+
 **String range**
+
 ```python
 def srange(a, b):
     yield from (chr(i) for i in range(ord(a), ord(b)+1))
@@ -191,7 +204,7 @@ This is leetcode's definition of a binary tree.
 #         self.right = None
 ```
 
-This is a basic way to iterate a binary tree.
+This is a basic way to iterate a binary tree. Note that `node.left` and `node.right` can be called before or after.
 ```
         def helper(node):
             if node == None:
@@ -469,35 +482,6 @@ print(visited)
 
 
 
-## Other standard problems
-
-**Longest Common Subsequence**
-
-```python
-        def lcs(X, Y, m, n ): 
-    
-            L = [[0]*(n+1) for _ in range(m+1)] 
-    
-            # Following steps build 
-                # L[m+1][n+1] in bottom up 
-                # fashion. Note that L[i][j] 
-                # contains length of 
-            # LCS of X[0..i-1] and Y[0..j-1]  
-            for i in range(m+1): 
-                for j in range(n+1): 
-                    if not i or not j: 
-                        L[i][j] = 0
-                    elif X[i - 1] == Y[j - 1]: 
-                        L[i][j] = L[i - 1][j - 1] + 1
-                    else: 
-                        L[i][j] = max(L[i - 1][j], L[i][j - 1]) 
-    
-            # L[m][n] contains length 
-                # of LCS for X and Y 
-            return L[m][n] 
-```
-
-The longest palindromic subsequence is the long common subsequence of the current and reversed string.
 
 ## Tricks
 
