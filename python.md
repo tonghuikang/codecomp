@@ -127,6 +127,17 @@ https://docs.python.org/3/library/bisect.html
 
 
 
+Lru_cache
+
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def something
+```
+
+
+
 ##### List comprehension with if/else
 
 The element is included in the array only if condition if fulfilled
