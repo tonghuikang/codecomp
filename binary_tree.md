@@ -81,3 +81,6 @@ class Trie:
         return True
 ```
 
+
+
+`<defaultdict>.get(<key>)` is different from `<defaultdict>[<key>]`. The former returns `None` if the key does not exist, the latter returns the template.

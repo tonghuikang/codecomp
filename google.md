@@ -1,6 +1,9 @@
 # Coding platforms
 
 ### Codeforces
+
+This is like CodeJam
+
 ```python
 for _ in range(int(input())):
     n = int(input())
@@ -17,6 +20,8 @@ for _ in range(int(input())):
 
 ### Leetcode
 Pretty intuitive. Very regular contest. Problems are sufficiently novel every time. I want the T-shirt.
+
+
 
 ### Google Coding platforms
 
