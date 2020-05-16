@@ -3,7 +3,7 @@ Refer to [google.md](../google.md) for comments on the various competitive progr
 
 
 
-Specify a problem ID
+Specify a problem ID, open one terminal tab per question.
 
 ```bash
 export PROBLEM_ID=a
@@ -13,7 +13,7 @@ Copy the template
 
 ```bash
 cp sample.py $PROBLEM_ID.py
-cp sample.py $PROBLEM_ID.in
+cp sample.in $PROBLEM_ID.in
 ```
 
 Run the template

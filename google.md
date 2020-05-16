@@ -29,6 +29,14 @@ This refers to the [Kickstart ](https://codingcompetitions.withgoogle.com/kickst
 
 
 
+You need to be able to hedge that your solution works. This may not be known in advance.
+
+Interactive problems might be easier to compensate on its difficulty of implementation. Many interactive problems have a low bound on the number of moves that can be made, and you can experiment with that to formulate a strategy.
+
+The size limits hints the allowed computation time. Sometimes it may fool you, as the optimal computation time is much lower compared.
+
+
+
 Python 3 environment (but for some reason I need to install packages)
 
 ```
