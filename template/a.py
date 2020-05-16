@@ -1,44 +1,39 @@
+import sys
 import heapq
+import random
+import collections
 
-def solve(k):
+# not available on Codeforces, available on Google
+# import numpy as np 
+# import scipy
 
-    stack = [(-k,0,k-1)]  # -length, start, end (both inclusive)
-    heapq.heapify(stack) 
+def solve():  # fix inputs here
+    def console(*args):
+        # the judge will not read this print statement
+        print(args, file=sys.stderr)
+    console("solving")
 
-    res = ["x" for _ in range(k)]
-    cnt = 0
-
-    while stack:
-        # print(res, stack)
-        cnt += 1
-        length, start, end = heapq.heappop(stack)
-        length = -length  # fix sign
-        if length%2 == 1:  # if segment is odd length
-            mid_point = (start+end)//2
-            res[mid_point] = cnt
-            if not start == end:
-                heapq.heappush(stack, (-(mid_point-start), start, mid_point-1))
-                heapq.heappush(stack, (-(mid_point-start), mid_point+1, end))
-        else:  # segment is of even length
-            mid_point = (start+end-1)//2
-            res[mid_point] = cnt
-            if length == 2:  # one other left
-                heapq.heappush(stack, (-1, end, end))
-            else: 
-                heapq.heappush(stack, (-(length//2 - 1), start, mid_point-1))
-                heapq.heappush(stack, (-(length//2), mid_point+1, end))
-
-        # if cnt > 5:
-        #     break
-
-    # print()
-    # print()
-    # print()
-    return " ".join([str(x) for x in res])
-                
+    return ""  # return a string (i.e. not a list or matrix)
 
 
-strr = input()
-for _ in range(int(strr)):
-    k = int(input())
-    print(solve(k))
+for case_num in range(int(input())):
+    # read one integer
+    k = int(input()) 
+    
+    # read one list and parse as integers
+    lst = list(map(int,input().split()))
+
+    # read matrix and parse as integers
+    lst = list(map(int,input().split()))
+    nrows = lst[0]  # index containing information, please change
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
+
+    res = solve()  # please change
+    
+    # Google - case number required
+    # print("Case #{}: {}".format(case_num+1, res))
+
+    # Codeforces - no case number required
+    # print(res)
