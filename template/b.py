@@ -1,31 +1,31 @@
 from functools import lru_cache
 
-@lru_cache(maxsize=None)
-def find_factors(k):
-    factors = []
-    for i in range(1, int(k**0.5)+1):
-        if k%i == 0:
-            factors.append(i)
-            factors.append(k//i)
-    # print(k, factors)
-    return factors
+def solve(arr,k):
+    # print(k, arr)
+    arr = arr.strip("0")
+    if arr == "":
+        return 0
 
-def solve(lst):
-    # print(len(lst))
+    arr = [int(x) for x in list(arr)]
+    brr = [1 for x in arr]  # for calculations
 
-    res = [1 for _ in lst]
-    for i,_ in enumerate(lst, start=1):
-        for factor in find_factors(i):
-            if lst[factor-1] < lst[i-1]:
-                res[i-1] = max(1 + res[factor-1], res[i-1])
+    summ = sum(arr)
+    # print(sum(arr))
+
+    crr = [sum(arr[i::k]) for i in range(k)]   # already ones
+    drr = [summ - sum(arr[i::k]) for i in range(k)]   # should be zeroes
+    err = [sum(brr[i::k]) for i in range(k)]   # should be ones 
+    frr = [summ - sum(brr[i::k]) for i in range(k)]
     
+    res = [e-c + d for c,d,e,f in zip(crr,drr,err,frr)]
+    # print(crr)
+    # print(drr)
+    # print(err)
     # print(res)
-    return max(res)
-
-
+    return min(res)
 
 
 for _ in range(int(input())):
-    _ = input()
-    lst = list(map(int,input().split()))
-    print(solve(lst))
+    _,k = list(map(int,input().split()))
+    arr = input()
+    print(solve(arr,k))

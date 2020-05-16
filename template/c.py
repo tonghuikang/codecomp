@@ -3,50 +3,77 @@ from itertools import cycle
 import math
 import random
 
-def lcm(a, b):
-    return abs(a*b) // math.gcd(a, b)
+def minPathSum(grid):
+    m = len(grid)
+    n = len(grid[0])
+    for i in range(1, n):
+        grid[0][i] += grid[0][i-1]
+    for i in range(1, m):
+        grid[i][0] += grid[i-1][0]
+    for i in range(1, m):
+        for j in range(1, n):
+            grid[i][j] += min(grid[i-1][j], grid[i][j-1])
+    return grid[-1][-1]
 
 
-def solve(lst):
-    if len(lst) == 2:
-        return lcm(*lst)
+def explore(start, matrix):
+    grid = [[cell - (start + i + j) for j,cell in enumerate(row)]
+            for i,row in enumerate(matrix)]
+    
+    invalid = False
+    for i,row in enumerate(grid):
+        for j,cell in enumerate(row):
+            if cell < 0:
+                invalid = True
 
-    if len(lst) == 3:
-        return math.gcd(
-            math.gcd(
-                lcm(lst[0], lst[1]), 
-                lcm(lst[1], lst[2])),
-            lcm(lst[0], lst[2])
-        )
+    if invalid:
+        return 10**16 + start
+    
+    res = minPathSum(grid)
+    return res
 
-    # random.shuffle(lst)
-    # lst = sorted(lst)
 
-    root = 1
-    # root = math.gcd(lst[0], lst[1])
-    # for i in lst:
-    #     root = math.gcd(root, i)
-    # lst = [x//root for x in lst]
-    # print(root, lst)
+def solve(matrix):
+    upper = matrix[0][0]
+    lower = -30
+    middle = (upper + lower)// 2
 
-    lcm_arr = set()
-    for a,b in zip(lst[1:] + [lst[0]], [lst[-1]] + lst[:-1]):
-        lcm_arr.add(lcm(a, b))
+    upper_val = explore(upper, matrix)
+    lower_val = explore(lower, matrix)
 
-    for _ in range(3000000//len(lst)): 
-        # print(i)
-        random.shuffle(lst)
-        for a,b in zip(lst[1:], lst[:-1]):
-            lcm_arr.add(lcm(a, b))
+    res = min(upper_val, lower_val)
 
-    # print(sorted(set(lcm_arr)))
-    lcm_arr = list(lcm_arr)
-    res = math.gcd(lcm_arr[0], lcm_arr[1])
-    for lcm_element in lcm_arr:
-        res = math.gcd(res, lcm_element)
+    # for i in range(lower, upper):
+    #     print(explore(i, matrix))
 
-    return res*root
+    for _ in range(51):
+        # print(middle)
+        middle = (upper + lower)// 2
+        middle_upper_val = explore((middle+upper)//2, matrix)
+        middle_val = explore(middle, matrix)
+        middle_lower_val = explore((middle+lower)//2, matrix)
+        
+        res = min(res, middle_upper_val, middle_val, middle_lower_val)
+        if middle_lower_val <= middle_upper_val:
+            upper = middle
+        else:
+            lower = middle
+    
+    r1 = explore(middle+2, matrix)
+    r2 = explore(middle+1, matrix)
+    r3 = explore(middle, matrix)
+    r4 = explore(middle-1, matrix)
+    r5 = explore(middle-2, matrix)
 
-_ = input()
-lst = list(map(int,input().split()))
-print(solve(lst))
+    return min(res,r1,r2,r3,r4,r5)
+
+for _ in range(int(input())):
+    nrows, _ = list(map(int,input().split()))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
+    print(solve(grid))
+    # print()
+    # print()   
+    # print()
+    # print() 
