@@ -63,11 +63,13 @@ for case in range(int(str_in)):
 
 
 
-Libraries allowed in Google coding environment, other than native libraries
+Libraries allowed in Google coding environment, other than native libraries - https://codingcompetitions.withgoogle.com/kickstart/faq
 
 ```
-numpy
-scipy
+python 3.5.3 (package: python3.5)
+ numpy 1.16.2 (pip install numpy)
+ scipy 1.2.1 (pip install scipy)
+ python3.5 Solution.py
 ```
 
 
@@ -106,8 +108,16 @@ The output is read from std out. How can we avoid the process of commenting and 
 
 You need to obtain `interactive_runner.py` which applies to all CodeJam problem post-2020, and `local_testing_tool.py` from the specific problem.
 
+Run this on your computer to ensure that it is working.
+
 ```bash
-python interactive_runner.py python3 sample_local_testing_tool.py 2 -- python3 sample_interactive.py
+python interactive_runner.py python3 sample_local_testing_tool.py 0 -- python3 sample_interactive_script.py
+
+
+python interactive_runner.py python3 sample_local_testing_tool.py 1 -- python3 sample_interactive_script.py
+
+
+python interactive_runner.py python3 sample_local_testing_tool.py 2 -- python3 sample_interactive_script.py
 ```
 
 
@@ -115,6 +125,10 @@ python interactive_runner.py python3 sample_local_testing_tool.py 2 -- python3 s
 For competition usage
 
 ```bash
+python interactive_runner.py python3 local_testing_tool.py 0 -- python3 interactive.py
+
+python interactive_runner.py python3 local_testing_tool.py 1 -- python3 interactive.py
+
 python interactive_runner.py python3 local_testing_tool.py 2 -- python3 interactive.py
 ```
 
