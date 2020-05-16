@@ -23,8 +23,8 @@ class QuantumArray():
         self.update_states()
 
     def read_bit(self, i):
-        print(i, flush=True)
-        return input()
+        interactive_print(i)
+        return interactive_read()
 
     def update_states(self):
         self.bits_c  = complement(self.bits)
@@ -58,10 +58,25 @@ class QuantumArray():
             except IndexError: break
 
 
+def console(*args):  # the judge will not read these standard error output
+    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    return
+
+def interactive_print(output):
+    # print output with flush (and also print output to standard error)
+    print(output, flush=True)
+    print('\033[35m', output, '\033[0m', file=sys.stderr)
+
+
+def interactive_read():
+    # read (and also print input to standard error)
+    input_string = input()
+    print('\033[34m', input_string, '\033[0m', file=sys.stderr)
+    return input_string
+
+
 T, B = map(int, input().split())
-print('B:', B, file=sys.stderr)
 for _ in range(T):
     array = QuantumArray(B)
-    print('guess:', ''.join(array.bits), file=sys.stderr)
-    print(''.join(array.bits), flush=True)
-    if input() == 'N': sys.exit()
+    interactive_print(''.join(array.bits))
+    if interactive_read() == 'N': sys.exit()
