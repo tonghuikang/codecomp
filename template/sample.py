@@ -13,7 +13,8 @@ def solve():  # fix inputs here
         print(args, file=sys.stderr)
     console("solving")
 
-    return ""  # return a string (i.e. not a list or matrix)
+    # return a string (i.e. not a list or matrix)
+    return ""  
 
 
 for case_num in range(int(input())):

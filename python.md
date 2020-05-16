@@ -6,7 +6,7 @@ Please study or include
 
 - factorisation algorithm, and divisor counting
 - knapsack of all variants
-- the constraint programming solver code
+- the constraint programming solver code (use scipy for integer programming)
 - binary search implementation
 
 
