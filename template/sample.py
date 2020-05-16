@@ -17,6 +17,7 @@ def solve():  # fix inputs here
 
 def console(*args):  # the judge will not read these print statement
     print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    return
 
 
 for case_num in range(int(input())):
