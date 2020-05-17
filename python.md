@@ -5,6 +5,29 @@
 Please study or include
 
 - factorisation algorithm, and divisor counting
+
+```python
+from functools import reduce
+
+def all_divisors(n):    
+    return set(reduce(list.__add__, 
+    ([i, n//i] for i in 
+    range(1, int(n**0.5) + 1) if n % i == 0)))
+  
+def prime_factors(nr):
+    i = 2
+    factors = []
+    while i <= nr:
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr / i
+        else:
+            i = i + 1
+    return factors
+```
+
+
+
 - knapsack of all variants
 - the constraint programming solver code (use scipy for integer programming)
 - binary search implementation

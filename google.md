@@ -71,7 +71,7 @@ for case in range(int(str_in)):
 
 
 
-Libraries allowed in Google coding environment, other than native libraries - https://codingcompetitions.withgoogle.com/kickstart/faq
+Libraries allowed in Google coding environment, other than native libraries - Numpy and scipy is [allowed](https://codingcompetitions.withgoogle.com/kickstart/faq)
 
 ```
 python 3.5.3 (package: python3.5)
@@ -104,9 +104,7 @@ T, B = map(int, input().split())
 
 ## Printing
 
-The output is read from std out. How can we avoid the process of commenting and uncommmenting the code?
-
-
+The output is read from std out. How can we avoid the process of commenting and uncommmenting the code? Please refer to printing standard error
 
 
 
@@ -114,45 +112,20 @@ The output is read from std out. How can we avoid the process of commenting and 
 
 ## Interactive problems
 
-You need to obtain `interactive_runner.py` which applies to all CodeJam problem post-2020, and `local_testing_tool.py` from the specific problem.
+You need to obtain `interactive_runner.py` which applies to all CodeJam problem post-2020, and `local_testing_tool.py` from the specific problem. Refer to [template.md](template/template.md) for the code to run.
 
 Run this on your computer to ensure that it is working.
 
 ```bash
-python interactive_runner.py python3 sample_local_testing_tool.py 0 -- python3 sample_interactive_script.py
-
-
-python interactive_runner.py python3 sample_local_testing_tool.py 1 -- python3 sample_interactive_script.py
-
-
-python interactive_runner.py python3 sample_local_testing_tool.py 2 -- python3 sample_interactive_script.py
+for TEST_CASE in 0 1 2
+do
+  python interactive_runner.py python3 sample_local_testing_tool.py $TEST_CASE -- python3 sample_interactive_script.py
+done
 ```
 
+You need to flush after printing `print(i, flush=True)`
 
 
-For competition usage
-
-```bash
-python interactive_runner.py python3 local_testing_tool.py 0 -- python3 interactive.py
-
-python interactive_runner.py python3 local_testing_tool.py 1 -- python3 interactive.py
-
-python interactive_runner.py python3 local_testing_tool.py 2 -- python3 interactive.py
-```
-
-
-
-This is how to flush.
-
-```python
-T, B = map(int, input().split())
-print('B:', B, file=sys.stderr)
-for _ in range(T):
-    array = QuantumArray(B)
-    print('guess:', ''.join(array.bits), file=sys.stderr)
-    print(''.join(array.bits), flush=True)
-    if input() == 'N': sys.exit()
-```
 
 
 
