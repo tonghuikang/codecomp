@@ -1,6 +1,41 @@
 ## Overview of this reference
 
+
+
+Python snippet gallery
+- [Python](python.md)
+
+Mathematical theories
+- [Geometry](geometry.md)
+- [Number theory](number_theory.md)
+- [Probability](Probability)
+
+Methods
+- [Binary search](binary_search.md)
+- [Bit manipulation](bit_manipulation.md)
+- [Dynamic programming](dynamic_programming.md)
+
+Specific problems
+- [Optimisation](optimisation.md)
+- [Named problems](specific_problems.md)
+
+Data structures
+- [Graphs](graphs.md)
+- [Trees](tree.md)
+
+
+
+
+
+Miscellaneous
+- [Websites](websites.md)
+- [Interview](interview.md)
+
+  
+
+
 **What this document contains** (to be updated)
+
 - a reference to terminologies used in leetcode
 - code snippets
 - problems and their named solutions and implementation
