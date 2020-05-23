@@ -33,7 +33,6 @@ Miscellaneous
 
   
 
-
 **What this document contains** (to be updated)
 
 - a reference to terminologies used in leetcode
