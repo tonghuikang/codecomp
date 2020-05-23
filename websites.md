@@ -1,5 +1,7 @@
 # Coding platforms
 
+Calendar containing all competitions information https://competitiveprogramming.info/calendar
+
 ### Codeforces
 
 This is like CodeJam
