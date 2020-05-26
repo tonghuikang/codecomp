@@ -8,7 +8,8 @@ Python snippet gallery
 Mathematical theories
 - [Geometry](geometry.md)
 - [Number theory](number_theory.md)
-- [Probability](Probability)
+- Combinatorics
+- [Probability](probability.md)
 
 Methods
 - [Binary search](binary_search.md)
@@ -32,6 +33,7 @@ Miscellaneous
 - [Interview](interview.md)
 
   
+
 
 **What this document contains** (to be updated)
 

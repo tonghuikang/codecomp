@@ -20,18 +20,6 @@ for _ in range(int(input())):
 
 
 
-### Preflight checklist
-
-Activate environment
-
-Open a jupyter notebook
-
-Open VSCode
-
-Reset in the template folder
-
-
-
 ### Leetcode
 Pretty intuitive. Very regular contest. Problems are sufficiently novel every time. I want the T-shirt.
 

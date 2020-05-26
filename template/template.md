@@ -24,6 +24,18 @@ python3 $PROBLEM_ID.py < $PROBLEM_ID
 
 
 
+### Preflight checklist
+
+Activate environment `ss; sa sml`
+
+Open a jupyter notebook `jn`
+
+Open VSCode `code .`
+
+Reset in the template folder
+
+
+
 ## Interactive problems
 
 Run this on your computer to ensure that it is working
