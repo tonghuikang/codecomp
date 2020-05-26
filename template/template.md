@@ -13,13 +13,13 @@ Copy the template
 
 ```bash
 cp sample.py $PROBLEM_ID.py
-cp sample.in $PROBLEM_ID.in
+cp sample $PROBLEM_ID
 ```
 
 Run the template
 
 ```bash
-python3 $PROBLEM_ID.py < $PROBLEM_ID.in
+python3 $PROBLEM_ID.py < $PROBLEM_ID
 ```
 
 
