@@ -57,8 +57,6 @@ def eval(lst):
 
 ### Box pushing
 
-
-
 ```python
     def minPushBox(self, grid: List[List[str]]) -> int:
         
@@ -160,21 +158,26 @@ Sliding window
 **Longest Common Subsequence**
 
 ```python
-    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        
-        L = [[0 for _ in range(len(text2) + 1)] 
-             for _ in range(len(text1) + 1)]
-        
-        for i in range(len(text1) + 1):
-            for j in range(len(text2) + 1):
-                if i == 0 or j == 0:
-                    L[i][j] = 0
-                elif text1[i - 1] == text2[j - 1]:
-                    L[i][j] = L[i-1][j-1] + 1
-                else:
-                    L[i][j] = max(L[i-1][j], L[i][j-1])
-        
-        return L[-1][-1] 
+class Solution:
+  def longestCommonSubsequence(self, A: str, B: str):
+    n, m = len(A), len(B)
+    dp = [[0] * (m) for i in range(n)]
+    for i in range(n):
+      for j in range(m):
+        # value condition
+        dp[i][j] = int(A[i] == B[j])
+        if i>0 and j>0: 
+          dp[i][j] += max(dp[i - 1][j - 1], 0)
+        if i>0:
+          dp[i][j] = max(dp[i][j], dp[i - 1][j])
+        if j>0:
+          dp[i][j] = max(dp[i][j], dp[i][j - 1])
+    return dp[-1][-1]
 ```
 
 The longest palindromic subsequence is the long common subsequence of the current and reversed string.
+
+[Max Dot Product of Two Subsequences](https://leetcode.com/problems/max-dot-product-of-two-subsequences/) is similar as well.
+
+You have a rectangular matrix, you start from outside the top left edge and you can jump to a box strictly left and strictly below of your box.
+

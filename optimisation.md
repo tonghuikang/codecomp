@@ -8,6 +8,12 @@ General problems is presented.
 
 
 
+Please include 
+
+Max-flow https://github.com/Errichto/contest_library/blob/master/dinic.cpp
+
+
+
 ##### Knapsack
 
 There are 0–1 knapsack, bounded knapsack, and unbounded knapsack. These are actually linear/integer/mixed programming problems. 

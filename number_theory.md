@@ -2,6 +2,14 @@
 
 You need some basic number theory, and accompanying code.
 
+
+
+Please translate from 
+
+https://github.com/Errichto/contest_library/blob/master/number_theory.cpp
+
+https://github.com/Errichto/contest_library/blob/master/fft.cpp (just use Numpy, but also provide real number calculation as well)
+
 Prime factorisation - there is a unique way to factorise an integer into number factors.
 
 
