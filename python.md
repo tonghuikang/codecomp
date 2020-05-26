@@ -4,30 +4,6 @@
 
 Please study or include
 
-- factorisation algorithm, and divisor counting
-
-```python
-from functools import reduce
-
-def all_divisors(n):    
-    return set(reduce(list.__add__, 
-    ([i, n//i] for i in 
-    range(1, int(n**0.5) + 1) if n % i == 0)))
-  
-def prime_factors(nr):
-    i = 2
-    factors = []
-    while i <= nr:
-        if (nr % i) == 0:
-            factors.append(i)
-            nr = nr / i
-        else:
-            i = i + 1
-    return factors
-```
-
-
-
 - knapsack of all variants
 - the constraint programming solver code (use scipy for integer programming)
 - binary search implementation
@@ -150,7 +126,7 @@ https://docs.python.org/3/library/bisect.html
 
 
 
-Lru_cache
+**Least Recently Used Cache**
 
 ```python
 from functools import lru_cache
@@ -191,4 +167,19 @@ Replace multiple whitespace with one whitespace.
 ' '.join(mystring.split())
 ```
 
+
+
+
+
+```python
+    for layer in range((nrows+1)//2):
+        for x in range(nrows-2*layer-1):
+            count_matrix[layer][layer+x] = layer
+            count_matrix[layer+x][-layer-1] = layer
+            count_matrix[-layer-1][-layer-x-1] = layer
+            count_matrix[-layer-x-1][layer] = layer
+    else:
+        if nrows%2 == 1:
+            count_matrix[nrows//2][nrows//2] = nrows//2
+```
 
