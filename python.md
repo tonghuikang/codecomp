@@ -5,7 +5,7 @@
 Please study or include
 
 - knapsack of all variants
-- the constraint programming solver code (use scipy for integer programming)
+- the constraint programming solver code (use scipy for linear programming)
 - binary search implementation
 
 
