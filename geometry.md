@@ -22,7 +22,7 @@ To determine whether three points lie on the same line
 To check whether a candidate point is inside a triangle defined by three points
 
 - Calculate the area of the triangle
-- Calculate the area of the two points triangle
+- Calculate the area of the point with two points of the triangle
 
 https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
 
@@ -30,7 +30,15 @@ https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle
 
 Order the points such that a shape is not deformed
 
+- I haven't seen this question yet
+- 
 - Use 2-Opt from TSP?
+
+
+
+Calculate the area of a polygon defined by a sequence of points
+
+- 
 
 
 

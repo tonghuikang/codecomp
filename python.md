@@ -183,3 +183,10 @@ Replace multiple whitespace with one whitespace.
             count_matrix[nrows//2][nrows//2] = nrows//2
 ```
 
+
+
+### Floats and integers
+
+Be aware of implementation here
+https://atcoder.jp/contests/abc169/tasks/abc169_c
+

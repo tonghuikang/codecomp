@@ -26,7 +26,7 @@ Objectives that could use dynamic programming
 
 Take the example of the `n`-th Fibonacci number
 
-Iterative solution
+Iterative solution (bottom-up approach)
 
 ```python
 def fib(n):
@@ -48,6 +48,19 @@ def fib(n):
     return 0 
   return fib(n-1) + fib(n-2)
 ```
+
+
+
+Benefits of each approach
+
+ Iteration                                                    | Recursion                                                    
+ ------------------------------------------------------------ | ------------------------------------------------------------ 
+ Harder techniques allowed<br />- Prefix sums<br />- Segment trees | Easier to apply<br />- You do not need to care about the order 
+ Faster running time                                          |                                                              
+ Easier complexity calcuation                                 |                                                              
+
+In Leetcode, recursion DP usually helps to solve the last problem in the contest neatly. Codeforces problems are more iterative in nature.
+
 
 
 
