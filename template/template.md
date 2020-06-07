@@ -16,7 +16,7 @@ cp sample.py $PROBLEM_ID.py
 cp sample $PROBLEM_ID
 ```
 
-Run the template
+Run the template, or simply `p a.py < a`
 
 ```bash
 python3 $PROBLEM_ID.py < $PROBLEM_ID
