@@ -225,38 +225,41 @@ Obtain connected components without building a graph
             pass
 ```
 
-
 **Djistrka algorithm**
 
+Contest tested
+
 ```python
-nodes = ('A', 'B', 'C', 'D', 'E', 'F', 'G')
-distances = {
-    'B': {'A': 5, 'D': 1, 'G': 2},
-    'A': {'B': 5, 'D': 3, 'E': 12, 'F' :5},
-    'D': {'B': 1, 'G': 1, 'E': 1, 'A': 3},
-    'G': {'B': 2, 'D': 1, 'C': 2},
-    'C': {'G': 2, 'E': 1, 'F': 16},
-    'E': {'A': 12, 'D': 1, 'C': 1, 'F': 2},
-    'F': {'A': 5, 'E': 2, 'C': 16}}
+import heapq as hq
+import math
 
-unvisited = {node: None for node in nodes} #using None as +inf
-visited = {}
-current = 'B'
-currentDistance = 0
-unvisited[current] = currentDistance
+def dijkstra(G, s):
+    n = len(G)
+    visited = [False]*n
+    weights = [math.inf]*n
+    path = [None]*n
+    queue = []
+    weights[s] = 0
+    hq.heappush(queue, (0, s))
+    while len(queue) > 0:
+        g, u = hq.heappop(queue)
+        visited[u] = True
+        for v, w in G[u]:
+            if not visited[v]:
+                f = g + w
+                if f < weights[v]:
+                    weights[v] = f
+                    path[v] = u
+                    hq.heappush(queue, (f, v))
+    return path, weights
 
-while True:
-    for neighbour, distance in distances[current].items():
-        if neighbour not in unvisited: continue
-        newDistance = currentDistance + distance
-        if unvisited[neighbour] is None or unvisited[neighbour] > newDistance:
-            unvisited[neighbour] = newDistance
-    visited[current] = currentDistance
-    del unvisited[current]
-    if not unvisited: break
-    candidates = [node for node in unvisited.items() if node[1]]
-    current, currentDistance = sorted(candidates, key = lambda x: x[1])[0]
+G = [[(1, 6), (3, 7)],
+     [(2, 5), (3, 8), (4, -4)],
+     [(1, -2), (4, 7)],
+     [(2, -3), (4, 9)],
+     [(0, 2)]]
 
-print(visited)
+print(dijkstra(G, 0))
+
 ```
 

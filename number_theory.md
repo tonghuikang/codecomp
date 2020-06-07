@@ -30,10 +30,14 @@ def all_divisors(n):
 To obtain prime factorisation
 
 ```python
+import math
+
 def prime_factors(nr):
     i = 2
     factors = []
     while i <= nr:
+      	if i > math.sqrt(nr):
+            i = nr
         if (nr % i) == 0:
             factors.append(i)
             nr = nr / i
@@ -45,6 +49,27 @@ def prime_factors(nr):
 
 
 Geometric progression
+
+
+
+Modular inverse
+
+```python
+MMI = lambda A, n,s=1,t=0,N=0: (n < 2 and t%N or MMI(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+
+```
+
+
+
+Modular exponentiation
+
+Python has an inbuilt function that does this
+
+```python
+pow(base, exponent, modulo)
+```
+
+
 
 
 
