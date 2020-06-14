@@ -84,3 +84,9 @@ class Trie:
 
 
 `<defaultdict>.get(<key>)` is different from `<defaultdict>[<key>]`. The former returns `None` if the key does not exist, the latter returns the template.
+
+
+
+## AVL Tree
+
+Self-balancing tree. Please refer to https://github.com/tonghuikang/binary-tree for a Python 2 implementation.
