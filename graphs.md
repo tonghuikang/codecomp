@@ -263,3 +263,33 @@ print(dijkstra(G, 0))
 
 ```
 
+
+
+dijkstra with stop limit
+
+```python
+        def dijkstra(G, s):
+            n = len(G)
+            visited = [[False for _ in range(n+1)] for _ in range(n)]
+            weights = [[math.inf for _ in range(n+1)] for _ in range(n)]
+            path = [[None for _ in range(n+1)] for _ in range(n)]
+            queue = []
+            weights[s][0] = 0
+            hq.heappush(queue, (0, s, 0))
+            while len(queue) > 0:
+                g, u, p = hq.heappop(queue)
+                
+                if p > K:
+                    continue
+                    
+                visited[u][p+1] = True
+                for v, w in G[u]:
+                    if not visited[v][p+1]:
+                        f = g + w
+                        if f < weights[v][p+1]:
+                            weights[v][p+1] = f
+                            path[v][p+1] = u
+                            hq.heappush(queue, (f, v, p+1))
+            return path, weights        
+```
+
