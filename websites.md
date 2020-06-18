@@ -102,6 +102,14 @@ T, B = map(int, input().split())
 
 
 
+For python2 it is `rawinput()`
+
+
+
+# Resources
+
+https://cp-algorithms.com/
+
 
 
 ## Printing
