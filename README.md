@@ -123,8 +123,17 @@ In summary, writing on Leetcode is great if you are confident that your code wil
 ## Terminologies
 
 Difference between subset, subsequence and subarray/substring
-- subset: some elements in the collection
+- subset: some elements in the set
 - subsequence: some elements in the array maintaining relative order (not necessary to be continuous)
 - subarray: some continuous elements in the array
 
 Lexicographic (not alphabetical) order - is ab > aaa > aa? yes (cite leetcode questions)
+
+
+
+- Prefix tree - Trie
+
+- Segment tree - A Segment Tree is a data structure that allows answering range queries over an array effectively, while still being flexible enough to allow modifying the array. C++ multiset?
+
+
+
