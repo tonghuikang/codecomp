@@ -111,6 +111,31 @@ def eval(lst):
 
 
 
+
+
+### Maximum subarray
+
+not contest tested yet
+
+```python
+import sys
+def maxSubArraySum(arr): 
+       
+    max_so_far = -sys.maxint - 1
+    max_ending_here = 0
+       
+    for a in arr: 
+        max_ending_here = max_ending_here + a 
+        if (max_so_far < max_ending_here): 
+            max_so_far = max_ending_here 
+  
+        if max_ending_here < 0: 
+            max_ending_here = 0   
+    return max_so_far 
+```
+
+
+
 ### Max sliding window
 
 ```python
