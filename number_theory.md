@@ -36,7 +36,7 @@ def prime_factors(nr):
     i = 2
     factors = []
     while i <= nr:
-      	if i > math.sqrt(nr):
+        if i > math.sqrt(nr):
             i = nr
         if (nr % i) == 0:
             factors.append(i)
