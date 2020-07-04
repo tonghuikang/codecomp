@@ -12,46 +12,56 @@ def solve(lst):  # fix inputs here
     console("----- solving ------")
     console(lst)
 
-    d = defaultdict(set)
-    for i,x in enumerate(lst):
-        d[x].add(i)
-
     # console(d)
 
     res = []
+    nums = set(range(len(lst)+1))
+    console("nums", nums)
+
+    for i in range(len(lst)):
+        mex = min(nums - set(lst))
+        console("mex", mex)
+        if mex == len(lst):
+            break
+        res.append(mex)
+        lst[mex] = mex
+        console("lst", lst)
+
+    d = {}
+    for i,x in enumerate(lst):
+        d[x] = i
+    console(d)   # should be one-to-one, unused
 
     for i in range(len(lst)):
         if i == lst[i]:
-            console(i, d)
-            continue  # no changes necessary
-        if d[i] == set():  # assign MEX
-            res.append(i)
-            d[lst[i]].remove(i)
-            lst[i] = i
-            d[lst[i]].add(i)  # not really necessary
-            console(i, d)
             continue
-        mex = 0
-        while d[i]:
-            idx = min(d[i])
-            while d[mex] != set():
-                mex += 1
-            res.append(idx)
-            d[i].remove(idx)
-            lst[idx] = mex
-            d[mex].add(idx)
-        
-        res.append(i)
-        d[lst[i]].remove(i)
-        lst[i] = i
-        d[lst[i]].add(i)  # not really necessary
-        console(i, d)
+        start = i
+        current = i
+        next_node = lst[i]
 
+        res.append(start)
+        console("starting", i, lst[i])
+        # cnt = 0
+
+        while next_node != start:
+            current = next_node
+            next_node = lst[current]
+            lst[current] = current
+            console(current, next_node, lst)
+            res.append(current)
+
+            # if cnt > 5:
+            #     break
+            # cnt += 1
+
+        res.append(start)
+
+    console(res)
     return " ".join([str(x+1) for x in res])
 
 
 def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 cases = int(input())
@@ -82,25 +92,25 @@ for case_num in range(cases):
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
-    cnt = [0 for _ in lst]
+    # cnt = [0 for _ in lst]
 
-    console(lst)
-    for i in res.split():
-        i = int(i) - 1
-        mex = len(lst)
-        set_lst = set(lst)
-        for x in range(len(lst)):
-            if not x in set_lst:
-                # console(x)
-                mex = x
-                break
-        lst[i] = mex
-        cnt[i] += 1
-        console([x for x in lst])
+    # console(lst)
+    # for i in res.split():
+    #     i = int(i) - 1
+    #     mex = len(lst)
+    #     set_lst = set(lst)
+    #     for x in range(len(lst)):
+    #         if not x in set_lst:
+    #             # console(x)
+    #             mex = x
+    #             break
+    #     lst[i] = mex
+    #     cnt[i] += 1
+    #     console([x for x in lst])
 
-    console(cnt)
+    # console(cnt)
 
     # Codeforces - no case number required
-    console(len(lst)*2, len(res.split()))
+    # print(len(lst)*2, len(res.split()))
     print(len(res.split()))
     print(res)
