@@ -1,5 +1,5 @@
 import sys
-import heapq, functools, collections
+import heapq, functools, collections, itertools
 import math, random
 from collections import Counter, defaultdict
 
@@ -8,11 +8,25 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(grid,k):  # fix inputs here
+    console(grid)
+    grid = [[1 if x == "#" else 0 for x in row] for row in grid]
     console("----- solving ------")
+    console(grid)
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    res = 0
+
+    for arr in itertools.product([0,1], repeat=len(grid)+len(grid[0])):
+        cnt = 0
+        for i,row in enumerate(grid):
+            for j,cell in enumerate(row):
+                if arr[i] == 0 and arr[-j-1] == 0 and cell == 1:
+                    cnt += 1
+        if cnt == k:
+            res += 1
+        # print(arr, res, cnt)
+    
+    return res
 
 
 def console(*args):  # the judge will not read these print statement
@@ -20,7 +34,7 @@ def console(*args):  # the judge will not read these print statement
     return
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -31,19 +45,19 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    nrows,_,k = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(input())
 
-    res = solve()  # please change
+    res = solve(grid,k)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
