@@ -19,6 +19,8 @@ def console(*args):  # the judge will not read these print statement
     print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
+# fast read all
+# sys.stdin.readlines()
 
 for case_num in range(int(input())):
     # read line as a string
