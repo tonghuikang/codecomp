@@ -11,12 +11,17 @@ from collections import Counter, defaultdict
 # strr = input()
 
 # read line as an integer
-# k = int(input())
+k = int(input())
 
 # read one line and parse each word as a string
 # lst = input().split()
 
 # read one line and parse each word as an integer
-# arr = list(map(int,input().split()))
+lst = list(map(int,input().split()))
 
-print()
+res = 0
+for i,x in enumerate(lst, start=1):
+    if x%2 == 1 and i%2 == 1:
+        res += 1
+
+print(res)
