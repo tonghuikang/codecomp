@@ -39,7 +39,7 @@ def prime_factors(nr):
         if i > math.sqrt(nr):
             i = nr
         if (nr % i) == 0:
-            factors.append(i)
+            factors.append(int(i))
             nr = nr / i
         elif i == 2:
             i = 3
