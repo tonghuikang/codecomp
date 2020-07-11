@@ -8,13 +8,26 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
-    console("----- solving ------")
+def solve(lst):  # fix inputs here
+    lst = [x-1 for x in lst]
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    if lst == list(range(len(lst))):
+        return 0
 
+    for i,x in enumerate(lst):
+        if i != x:
+            break
 
+    for j,x in list(enumerate(lst))[::-1]:
+        if j != x:
+            break
+    
+    for k,x in enumerate(lst[i:j+1], start=i):
+        if k == x:
+            return 2
+    return 1
+            
+            
 def console(*args):  # the judge will not read these print statement
     print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
@@ -27,13 +40,13 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    _ = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -42,10 +55,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)

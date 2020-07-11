@@ -7,12 +7,40 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
+import math
 
-def solve():  # fix inputs here
+def prime_factors(nr):
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(int(i))
+            nr = nr / i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+def solve(k):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    if k%2 == 0:
+        return "{} {}".format(k//2, k//2)
+
+    if k%3 == 0:
+        return "{} {}".format(k//3, 2*k//3)
+
+    lst = sorted(list(set(prime_factors(k))))
+    console(lst)
+    if len(lst) > 1:
+        f = lst[0]
+        return "{} {}".format(k//f, (f-1)*k//f)
+
+    return "{} {}".format(1, k-1)
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,7 +55,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -42,10 +70,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
