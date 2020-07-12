@@ -19,6 +19,20 @@ To determine whether three points lie on the same line
 
 
 
+Centre of mass
+
+- Take the mean of each coordinate over every point
+
+
+
+Point where the euclidean distance from each point is minimised
+
+- Not the centre of mass
+- Are there multiple unconnected solutions?
+- This is the geometric median
+
+
+
 To check whether a candidate point is inside a triangle defined by three points
 
 - Calculate the area of the triangle
@@ -31,7 +45,6 @@ https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle
 Order the points such that a shape is not deformed
 
 - I haven't seen this question yet
-- 
 - Use 2-Opt from TSP?
 
 
