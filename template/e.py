@@ -7,6 +7,21 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
+# peusdocode for g
+# if less than half, it is just the sum
+# 1 1 1 1 0 0 0 0
+# 3 2 1 1 1 0 0 0  # idx 0 1       4 0
+# 3 3 2 2 1 1 0 0  # idx 2 3       5
+# 7 6 5 4 3 2 1 0  # idx 0 - 5     6
+
+# 1 1 1 1 0 0 0 0 0
+# 2 1 1 1 1 0 0 0 0  # idx 0        5
+# 3 2 2 1 1 1 0 0 0  # idx 1 2 3    6
+# 4 3 3 2 2 1 1 0 0  # idx 0 1 2 3  7
+# 8 7 6 5 4 3 2 1 0  # idx 0 - 7    8
+
+
+# the distribution of the smaller numbers probably matter
 
 def solve():  # fix inputs here
     console("----- solving ------")
