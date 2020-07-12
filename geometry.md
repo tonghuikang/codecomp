@@ -18,6 +18,20 @@ To determine whether three points lie on the same line
 ```
 
 
+Centre of mass
+
+- Take the mean of each coordinate over every point
+
+
+
+Point where the euclidean distance from each point is minimised
+
+- Not the centre of mass
+- Are there multiple unconnected solutions?
+- This is the geometric median
+
+
+
 
 To check whether a candidate point is inside a triangle defined by three points
 

@@ -14,6 +14,30 @@ Max-flow https://github.com/Errichto/contest_library/blob/master/dinic.cpp
 
 
 
+**Convex optimisation**
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+
+class Solution:
+    def getMinDistSum(self, positions: List[List[int]]) -> float:
+        def loss_function(z):
+            loss = 0
+            for a, b in positions:
+                loss += ((z[0] - a)**2 + 
+                         (z[1] - b)**2)**0.5
+            return loss
+        
+        res = minimize(loss_function, [0,0])
+        print(res)
+        return res.fun
+```
+
+
+
+
+
 ##### Knapsack
 
 There are 0–1 knapsack, bounded knapsack, and unbounded knapsack. These are actually linear/integer/mixed programming problems. 
