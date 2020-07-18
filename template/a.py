@@ -10,7 +10,7 @@ class FixedNumberOfDigits:
                 # print("break")
                 break
 
-            forward = min((int("9"*len(str(a))) - a )//b, c//len(str(a)))
+            forward = min((int("9"*len(str(a))) - a )//b, c//len(str(a)))-1
             # print("forward", forward, len(str(a)))
 
             c = c - forward*len(str(a))
