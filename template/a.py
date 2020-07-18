@@ -1,51 +1,49 @@
-import sys
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
+class FixedNumberOfDigits:
+    def sum(self, a,b,c):
 
-# available on Google, not available on Codeforces
-# import numpy as np
-# import scipy
+        if c <= len(str(a)):
+            return int(str(a)[:c])
 
+        for i in range(40):
 
-def solve():  # fix inputs here
-    console("----- solving ------")
+            if c//len(str(a)) < 10:
+                # print("break")
+                break
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+            forward = min((int("9"*len(str(a))) - a )//b, c//len(str(a)))
+            # print("forward", forward, len(str(a)))
 
+            c = c - forward*len(str(a))
+            a = a + forward*b
 
-def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
+            # print(a,b,c)
 
-# fast read all
-# sys.stdin.readlines()
+            if c//len(str(a)) < 10:
+                # print("break")
+                break
 
-for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
+            forward = 3
+            # print("forward", forward)
 
-    # read line as an integer
-    # k = int(input())
-    
-    # read one line and parse each word as a string
-    # lst = input().split()
+            c = c - len(str(a))
+            a = a + b
 
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+            c = c - len(str(a))
+            a = a + b
 
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+            c = c - len(str(a))
+            a = a + b
 
-    res = solve()  # please change
-    
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+            # print(a,b,c)
 
-    # Codeforces - no case number required
-    # print(res)
+        res = list(range(a,a+b*c,b))
+
+        # print(res)
+
+        for r in res:
+            if c <= len(str(r)):
+                return int(str(r)[:c])
+            c = c-len(str(r))
+
+        return None
+
