@@ -8,15 +8,67 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(arr):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    appear_once = False
+    cnt = 0
+    idxs = []
+
+    for i,(a,b,c,d,e,f,g) in enumerate(zip(*[arr[i:] for i in range(7)])):
+        if ((a == "a" or a == "?") and 
+            (b == "b" or b == "?") and 
+            (c == "a" or c == "?") and 
+            (d == "c" or d == "?") and 
+            (e == "a" or e == "?") and 
+            (f == "b" or f == "?") and 
+            (g == "a" or g == "?")):
+            appear_once = True
+            idxs.append(i)
+        if a+b+c+d+e+f+g == "abacaba":
+            cnt += 1
+        
+    console(arr)
+    console(cnt, appear_once, idxs)
+
+    if cnt > 1:
+        print("No")
+        return
+
+    if not appear_once:
+        print("No")
+        return
+    
+    if cnt == 1:
+        arr = arr.replace("?", "z")
+        print("Yes")
+        print(arr)
+        return
+
+    def count(brr):
+        cnt = 0
+        for i,(a,b,c,d,e,f,g) in enumerate(zip(*[brr[i:] for i in range(7)])):
+            if a+b+c+d+e+f+g == "abacaba":
+                cnt += 1
+        console(brr, cnt)
+        return cnt
+
+
+
+    for idx in idxs:
+        crr = "".join([x for x in arr[:idx]]) + "abacaba" + "".join([y for y in arr[idx+7:]])
+    
+        crr = crr.replace("?", "q")
+        if count(crr) == 1:
+            print("Yes")
+            print(crr)
+            return
+
+    print("No")
 
 
 def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
@@ -27,7 +79,8 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    _ = int(input())
+    strr = input()
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -42,7 +95,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    _ = solve(strr)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
