@@ -1,51 +1,61 @@
-import sys
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
+# to note - topcoder uses python 2.7
+import heapq as hq
+import math
+from fractions import gcd  # instead of math.gcd
 
-# available on Google, not available on Codeforces
-# import numpy as np
-# import scipy
+def dijkstra(G, s):
+    n = len(G)
+    visited = [False]*n
+    weights = [float('inf')]*n   # instead of math.inf
+    path = [None]*n
+    queue = []
+    weights[s] = 0
+    hq.heappush(queue, (0, s))
+    while len(queue) > 0:
+        g, u = hq.heappop(queue)
+        visited[u] = True
+        for v, w in G[u]:
+            if not visited[v]:
+                f = -gcd(g,w)
+                if f < weights[v]:
+                    weights[v] = f
+                    path[v] = u
+                    hq.heappush(queue, (f, v))
+    return path, weights
 
 
-def solve():  # fix inputs here
-    console("----- solving ------")
+class SquareCityWalking:
+    def largestGCD(self, N, A):
+        if N == 1:
+            return A[0]
+        G = [[] for _ in A]
+        for x in range(N):
+            for y in range(N):
+                loc1 = x*N+y
+                culture = A[loc1]
+                for dx, dy in [(0,1), (0,-1), (1,0), (-1,0)]:
+                    x2, y2 = x + dx, y + dy
+                    loc2 = x2*N+y2
+                    
+                    if not (0 <= x2 < N): 
+                        continue
+                    if not (0 <= y2 < N): 
+                        continue
+                   	
+                    cost = gcd(A[loc1], A[loc2])
+                    G[loc1].append((loc2, cost))
+                    G[loc2].append((loc1, cost))
+                    
+        # print(G)
+        res = dijkstra(G, 0)
+        # print(res)
+        return -res[1][-1]
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
 
-
-def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
-
-# fast read all
-# sys.stdin.readlines()
-
-for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
-
-    # read line as an integer
-    # k = int(input())
-    
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
-
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
-
-    res = solve()  # please change
-    
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
-
-    # Codeforces - no case number required
-    # print(res)
+s = SquareCityWalking()
+print(s.largestGCD(5, [
+ 96, 48, 96, 96, 96,
+ 32, 11, 11, 11, 16,
+ 96, 11, 96, 32, 96,
+ 96, 11, 96, 11, 96,
+ 96, 32, 96, 11, 96]))
