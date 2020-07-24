@@ -8,11 +8,49 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
-    console("----- solving ------")
+def solve(arr, brr, size):  # fix inputs here
+    # console("----- solving ------")
+    # console(arr)
+    # console(brr)
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    crr = []
+    drr = []
+
+    for i in range(size):
+        cnt = 0
+        for a,b in zip(arr[i+1:],brr[i:]):
+            if not (a == "Y" and b == "Y"):
+                break
+            cnt += 1
+        crr.append(cnt)
+
+        cnt = 0
+        for a,b in zip(arr[::-1][i+1:],brr[::-1][i:]):
+            if not (a == "Y" and b == "Y"):
+                break
+            cnt += 1
+        drr.append(cnt)
+
+    drr = drr[::-1]
+    # console(crr, drr)
+
+    grid = [["N" for _ in range(size)] for _ in range(size)]
+    
+    for i in range(size):
+        grid[i][i] = "Y"
+
+    for i in range(size):
+        for k in range(crr[i]):
+            grid[i][i+k+1] = "Y"
+
+    for i in range(size):
+        for k in range(drr[i]):
+            grid[i][i-k-1] = "Y"
+
+    for row in grid:
+        print("".join(row))
+
+    return
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,10 +65,11 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
-    # lst = input().split()
+    arr = input()
+    brr = input()
 
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
@@ -42,10 +81,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
     
     # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}:".format(case_num+1))
+    solve(arr, brr, k)  # please change
 
     # Codeforces - no case number required
     # print(res)
