@@ -8,11 +8,29 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(lst):  # fix inputs here
     console("----- solving ------")
+    console(lst)
+
+    abc = "abcdefghijklmnopqrstuvwxyz"
+    abc = [x for x in abc]
+    random.shuffle(abc)
+    abc = "".join([str(x) for x in abc])
+
+    cur = abc[-1] * 200 
+    res = [cur]
+
+    for i,a in enumerate(lst):
+        nex = cur[:a] + abc[i%26]*(200-a)
+        # print(nex)
+        res.append(nex)
+        cur = nex
+
+    for r in res:
+        print(r)
 
     # return a string (i.e. not a list or matrix)
-    return ""  
+    return None  
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,13 +45,13 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    _ = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -42,7 +60,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    solve(lst)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
