@@ -17,6 +17,13 @@ from collections import Counter, defaultdict
 # lst = input().split()
 
 # read one line and parse each word as an integer
-# arr = list(map(int,input().split()))
+n,k = list(map(int,input().split()))
+arr = list(map(int,input().split()))
 
-print()
+# arr = [math.log(arr) for arr in n,k]
+
+for i in range(n-k):
+    if arr[i] < arr[i+k]:
+        print("Yes")
+    else:
+        print("No")

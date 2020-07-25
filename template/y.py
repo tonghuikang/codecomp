@@ -11,12 +11,27 @@ from collections import Counter, defaultdict
 # strr = input()
 
 # read line as an integer
-# k = int(input())
+a,b,c = list(map(int,input().split()))
+k = int(input())
 
 # read one line and parse each word as a string
 # lst = input().split()
 
 # read one line and parse each word as an integer
-# arr = list(map(int,input().split()))
 
-print()
+cnt = 0
+
+while b <= a:
+    cnt += 1 
+    b = b*2
+
+while c <= b:
+    cnt += 1 
+    c = c*2
+
+# print(cnt, a, b, c)
+
+if cnt <= k:
+    print("Yes")
+else:
+    print("No")
