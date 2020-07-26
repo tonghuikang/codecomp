@@ -8,11 +8,16 @@ from collections import Counter, defaultdict
 # import scipy
 
 
+import threading
+sys.setrecursionlimit(10**6+10)    # adjust numbers
+threading.stack_size(1 << 32)     # for your needs
+
+
 def solve(grid,m,start,end):  # fix inputs here
     console("----- solving ------")
     start, end = start-1, end-1
     grid = [(a-1, b) for a,b in grid]
-    console(grid, m, start, end)
+    # console(grid, m, start, end)
 
     supplies = [x[1] for x in grid]
 
@@ -21,13 +26,13 @@ def solve(grid,m,start,end):  # fix inputs here
         g[i].append(a)
         g[a].append(i)
 
-    console(g)
+    # console(g)
 
     visited = [False for x in grid]
 
     def dfs(cur):
         visited[cur] = True
-        console(cur, "dfs")
+        # console(cur, "dfs")
         if cur == end:
             return [cur]
         for nex in g[cur]:
@@ -41,7 +46,7 @@ def solve(grid,m,start,end):  # fix inputs here
         return []        
 
     path = dfs(start)
-    console(path, "path")
+    console("path")
 
     visited = [False for x in grid]
     for p in path:
@@ -62,7 +67,7 @@ def solve(grid,m,start,end):  # fix inputs here
         return sups
         
     path_supps = [[]] + [dfs2(p) for p in path[1:-1]] + [[]]
-    console("path_supps", path_supps)
+    console("path_supps")
 
     lst = [[(0,math.inf)] for _ in path_supps]
     lst[0] = [(0,0)]
@@ -74,7 +79,7 @@ def solve(grid,m,start,end):  # fix inputs here
                 continue
             lst[i + depth].append((depth, cost))
 
-    console(lst)
+    # console(lst)
 
     cost_heap = [(0,m)]  # cost, range
     heapq.heapify(cost_heap)
@@ -85,7 +90,7 @@ def solve(grid,m,start,end):  # fix inputs here
         for depth, cost in stn:
             min_cost = cost_heap[0][0]
             heapq.heappush(cost_heap, (min_cost + cost, i+m-depth*2))
-            console(cost_heap)
+            # console(cost_heap)
 
     if cost_heap[0][0] == math.inf:
         return -1
@@ -94,36 +99,41 @@ def solve(grid,m,start,end):  # fix inputs here
 
 
 def console(*args):  # the judge will not read these print statement
-    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
 # sys.stdin.readlines()
 
-for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
+def main():
+    for case_num in range(int(input())):
+        # read line as a string
+        # strr = input()
 
-    # read line as an integer
-    # k = int(input())
-    
-    # read one line and parse each word as a string
-    # lst = input().split()
+        # read line as an integer
+        # k = int(input())
+        
+        # read one line and parse each word as a string
+        # lst = input().split()
 
-    # read one line and parse each word as an integer
-    nrows,m,a,b = list(map(int,input().split()))
+        # read one line and parse each word as an integer
+        nrows,m,a,b = list(map(int,input().split()))
 
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    grid = []
-    for _ in range(nrows):
-        grid.append(list(map(int,input().split())))
+        # read matrix and parse as integers (after reading read nrows)
+        # lst = list(map(int,input().split()))
+        # nrows = lst[0]  # index containing information, please change
+        grid = []
+        for _ in range(nrows):
+            grid.append(list(map(int,input().split())))
 
-    res = solve(grid,m,a,b)  # please change
-    
-    # Google - case number required
-    print("Case #{}: {}".format(case_num+1, res))
+        res = solve(grid,m,a,b)  # please change
+        
+        # Google - case number required
+        print("Case #{}: {}".format(case_num+1, res))
 
-    # Codeforces - no case number required
-    # print(res)
+        # Codeforces - no case number required
+        # print(res)
+
+
+main_thread = threading.Thread(target=main)
+main_thread.start()

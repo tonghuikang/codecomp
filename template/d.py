@@ -70,3 +70,4 @@ for case_num in range(int(input())):
 
     # Codeforces - no case number required
     # print(res)
+
