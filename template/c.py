@@ -51,13 +51,13 @@ def solve(arr,brr):  # fix inputs here
         while stack:
             cur = stack.pop()
             visited[cur] = idx
-            if not cur in d:
-                continue
+            # if not cur in d:
+            #     continue
             for nex in d[cur]:
                 if visited[nex]:
                     continue
                 visited[nex] = idx
-                stack.append(cur)
+                stack.append(nex)
         console(d)
 
     console(visited)
