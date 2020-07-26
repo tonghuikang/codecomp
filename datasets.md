@@ -31,6 +31,8 @@ You should not save the DataFrame with an index unless specifically required.
 df.to_csv(index=False)
 ```
 
+
+
 ## Datetime manipulation 
 
 Consider Python in-built datetime object.
