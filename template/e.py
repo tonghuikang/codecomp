@@ -26,15 +26,17 @@ def solve(grid,m,start,end):  # fix inputs here
         g[i].append(a)
         g[a].append(i)
 
-    # console(g)
+    console("graph")
 
     visited = [False for x in grid]
 
+    res = []
     def dfs(cur):
         visited[cur] = True
         # console(cur, "dfs")
         if cur == end:
-            return [cur]
+            res.append(cur)
+            return True
         for nex in g[cur]:
             if visited[nex]:
                 continue
@@ -42,31 +44,40 @@ def solve(grid,m,start,end):  # fix inputs here
             path = dfs(nex)
             # visited[nex] = False
             if path:
-                return [cur] + path
-        return []        
-
-    path = dfs(start)
+                # console("x")
+                res.append(cur)
+                return True
+        return []
+         
+    dfs(start)
+    path = res[::-1]
     console("path")
+    # console(path)
 
     visited = [False for x in grid]
     for p in path:
         visited[p] = True
 
-    def dfs2(cur, depth=0):
+    path_supps = [[] for _ in path]
+
+    def dfs2(i, cur, depth=0):
         # if depth * 2 >= m:  # no point detouring
         #     return []
         sups = []
         if supplies[cur] > 0:
-            sups.append((depth, supplies[cur]))
+            path_supps[i].append((depth, supplies[cur]))
         
         for nex in g[cur]:
             if visited[nex]:
                 continue
             visited[nex] = True
-            sups += dfs2(nex, depth+1)
+            dfs2(i, nex, depth+1)
         return sups
         
-    path_supps = [[]] + [dfs2(p) for p in path[1:-1]] + [[]]
+
+    for i,p in enumerate(path[1:-1], start=1):
+        dfs2(i, p)
+    
     console("path_supps")
 
     lst = [[(0,math.inf)] for _ in path_supps]
