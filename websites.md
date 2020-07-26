@@ -11,6 +11,8 @@ Probably should make a table with the following features.
 - Shows wrong test case
 - Interactive problems
 - Input parsing required
+- Python libraries - numpy, scipy
+- PyPy
 
 
 
