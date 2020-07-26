@@ -2,7 +2,27 @@
 
 Calendar containing all competitions information https://competitiveprogramming.info/calendar
 
+
+
+Probably should make a table with the following features.
+
+- Full feedback
+- Peer hacking
+- Shows wrong test case
+- Interactive problems
+- Input parsing required
+
+
+
+Probably a rating map table as well.
+
+
+
+
+
 ### Codeforces
+
+Basically the platform for competitive programming.
 
 This is like CodeJam
 
@@ -20,8 +40,27 @@ for _ in range(int(input())):
 
 
 
+### AtCoder
+
+Neat and minimal interface. Discussion threads are held at Codeforces.
+
+
+
+
+
+
+
 ### Leetcode
 Pretty intuitive. Very regular contest. Problems are sufficiently novel every time. I want the T-shirt.
+
+This is the platform to share interview questions.
+
+
+
+### Hackerrank
+
+They have mostly discontinued contests, only having almostly monthly contest with nice prizes.
+
 
 
 
@@ -92,6 +131,13 @@ python3 a.py < a.in
 
 
 
+### Facebook Hackercup
+
+You compute your solution on your computer and upload the result.
+
+
+
+
 ## Reading variables
 
 Try this
@@ -121,6 +167,10 @@ The output is read from std out. How can we avoid the process of commenting and 
 
 
 ## Interactive problems
+
+This feature is available on Leetcode, Google and Codeforces.
+
+
 
 You need to obtain `interactive_runner.py` which applies to all CodeJam problem post-2020, and `local_testing_tool.py` from the specific problem. Refer to [template.md](template/template.md) for the code to run.
 
