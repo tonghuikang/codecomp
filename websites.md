@@ -4,6 +4,12 @@ Calendar containing all competitions information https://competitiveprogramming.
 
 
 
+Belongs somewhere (somewhere)
+
+- Procedures of 
+
+
+
 Probably should make a table with the following features.
 
 - Full feedback
@@ -13,6 +19,9 @@ Probably should make a table with the following features.
 - Input parsing required
 - Python libraries - numpy, scipy
 - PyPy
+- Online Judging
+- Official solutions
+- Frequency
 
 
 
