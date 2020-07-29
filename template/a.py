@@ -8,11 +8,18 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(a,b):  # fix inputs here
     console("----- solving ------")
+    console(a,b)
+
+    # if a % 2 == 1:
+    #     a = a+1
+
+    if 2*a > b:
+        return "{} {}".format(-1, -1)
 
     # return a string (i.e. not a list or matrix)
-    return ""  
+    return "{} {}".format(a, 2*a)
 
 
 def console(*args):  # the judge will not read these print statement
@@ -33,7 +40,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -42,10 +49,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(a,b)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
