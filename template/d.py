@@ -7,10 +7,25 @@ from collections import Counter, defaultdict, deque
 # import numpy as np
 # import scipy
 
-from collections import defaultdict
 
-sys.setrecursionlimit(2*10**5+10)    # adjust numbers
-threading.stack_size(2**27)   # for your needs
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
 
 
 def solve(arr, brr):  # fix inputs here
@@ -29,22 +44,23 @@ def solve(arr, brr):  # fix inputs here
     q = defaultdict(list) # children of maximum value of subtree
     # other_roots = set()
 
+    @bootstrap
     def get_maximum_subtree_children(node):
         node_val = arr[node-1]
         
         if g[node] == []:
             p[node] = node_val
-            return node_val
+            yield node_val
 
         for nex in g[node]:
-            child_val = get_maximum_subtree_children(nex)
+            child_val = yield get_maximum_subtree_children(nex)
             if child_val > 0:
                 q[node].append(nex)
                 node_val += child_val
             # else:
             #     other_roots.add(nex)
         p[node] = node_val
-        return node_val
+        yield node_val
 
     get_maximum_subtree_children(-1)
 
@@ -101,14 +117,16 @@ def solve(arr, brr):  # fix inputs here
             arr[brr[x]-1] += arr[x]
         # console(x+1, arr[x], arr)
 
-    # print(score)
-    print(sum(p.values()) - p[-1])
+    score2 = sum(p.values()) - p[-1]
+    if score != score2:
+        print(len(order), len(set(order)))
+    print(score2)
     print(" ".join(str(x) for x in order))
     return None
 
 
 def console(*args):  # the judge will not read these print statement
-    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
@@ -143,6 +161,4 @@ def main():
     # Codeforces - no case number required
     # print(res)
 
-main_thread = threading.Thread(target=main)
-main_thread.start()
-main_thread.join()
+main()
