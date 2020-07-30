@@ -8,11 +8,34 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(k):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+
+    if k == 36:
+        print("YES")
+        print("6 10 15 5")
+        return
+
+    if k == 40:
+        print("YES")
+        print("6 10 15 9")
+        return
+
+    if k == 44:
+        print("YES")
+        print("6 7 10 21")
+        return
+
+    if k > 30:
+        print("YES")
+        print("6 10 14 {}".format(k-6-10-14))
+        return
+
+    else:
+        print("NO")
+
+    return
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,7 +50,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -42,7 +65,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    solve(k)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
