@@ -37,29 +37,32 @@ def treeConstruction(N, X):
         if (guess*(guess+1))//2 > missing:
             break
             
-    remainder = fill - (flood - (guess*(guess+1))//2)
-    
     height = N-guess
     
     print("flood", flood)
     print("fill", fill)
     print("guess", guess)
     print("height", height)
-    print("remainder", remainder)
     # Write your code here
     
     # N-2, guess, remainder
     
     res = []
     for i in range(height):
+        # print("main")
         res.append([i+1, i+2])
     
-    for i in range(height, height+remainder-1):
-        res.append([height, i+2])
-        
-    for i in range(height+remainder-1, N-1):
-        res.append([1, i+2])
-        
+    remaining_nodes = N - height - 1
+    remaining_score = fill - (height*(height+1)//2) - remaining_nodes
+    
+    print(remaining_nodes)
+    print(remaining_score)
+    
+    for i in range(height, N-1):
+        assign = min(remaining_score, height-1)
+        remaining_score = remaining_score - (assign)
+        res.append([assign+1, i+2])
+                
     # print(res)
     return res
     
