@@ -16,6 +16,11 @@ import sys
 #
 
 def treeConstruction(N, X):
+    if N == 1:
+        if X == 0:
+            return []
+        else:
+            return [[-1, -1]]
     if X < N-1:
         return [[-1, -1]]
     if X > ((N-1)*N)//2:
@@ -34,10 +39,10 @@ def treeConstruction(N, X):
     # print(guesses)
     
     for guess in guesses:
-        if (guess*(guess+1))//2 > missing:
+        if guess >= 0 and (guess*(guess+1))//2 >= missing:
             break
             
-    height = N-guess
+    height = N-guess-1
     if X == N-1:
         height = 1
     if X == (N*(N-1))//2:
@@ -58,11 +63,12 @@ def treeConstruction(N, X):
     remaining_nodes = N - height - 1
     remaining_score = fill - (height*(height+1)//2) - remaining_nodes
     
-    print(remaining_nodes)
-    print(remaining_score)
+    print("remaining_nodes", remaining_nodes)
+    print("remaining_score", remaining_score)
+    print()
     
     for i in range(height, N-1):
-        assign = min(remaining_score, height-1)
+        assign = min(remaining_score, height)
         remaining_score = remaining_score - (assign)
         res.append([assign+1, i+2])
                 
