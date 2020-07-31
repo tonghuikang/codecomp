@@ -1,14 +1,21 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
 import sys
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
 
-# available on Google, not available on Codeforces
-# import numpy as np
-# import scipy
+#
+# Complete the 'performOperations' function below.
+#
+# The function is expected to return a LONG_INTEGER_ARRAY.
+# The function accepts following parameters:
+#  1. INTEGER N
+#  2. INTEGER_ARRAY op
+#
 
-
-def solve(N, op):  # fix inputs here
+def performOperations(N, op):  # fix inputs here
     # console("----- solving ------")
     # console(k, arr)
     k = N
@@ -32,42 +39,19 @@ def solve(N, op):  # fix inputs here
         res.append(const + first_val + last_val)
     
     return res
-    # print("\n".join([str(x) for x in res]))
-    # # return a string (i.e. not a list or matrix)
-    # # return ""  
 
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
-def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
-
-# fast read all
-# sys.stdin.readlines()
-
-# for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
-
-    # read line as an integer
-    # k = int(input())
+    N, M = list(map(int, input().rstrip().split()))
     
-    # read one line and parse each word as a string
-    # lst = input().split()
+    op = []
+    for i in range(M):
+        op.append(int(input().rstrip()))
 
-    # read one line and parse each word as an integer
-k, nrows = list(map(int,input().split()))
+    result = performOperations(N, op)
 
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-grid = []
-for _ in range(nrows):
-    grid.append(int(input()))
+    fptr.write('\n'.join(map(str, result)))
+    fptr.write('\n')
 
-res = solve(k, grid)  # please change
-    
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
-
-    # Codeforces - no case number required
-print("\n".join([str(x) for x in res]))
+    fptr.close()
