@@ -1,51 +1,84 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
 import sys
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
 
-# available on Google, not available on Codeforces
-# import numpy as np
-# import scipy
+#
+# Complete the 'treeConstruction' function below.
+#
+# The function is expected to return a 2D_INTEGER_ARRAY.
+# The function accepts following parameters:
+#  1. INTEGER N
+#  2. LONG_INTEGER X
+#
 
+def treeConstruction(N, X):
+    if X < N-1:
+        return [[-1, -1]]
+    if X > ((N-1)*N)//2:
+        return [[-1, -1]]
 
-def solve():  # fix inputs here
-    console("----- solving ------")
-
-    # return a string (i.e. not a list or matrix)
-    return ""  
-
-
-def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
-
-# fast read all
-# sys.stdin.readlines()
-
-for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
-
-    # read line as an integer
-    # k = int(input())
+    # distributable
     
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
-
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
-
-    res = solve()  # please change
+    flood = ((N)*(N-1))//2
+    fill = X
     
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
-
-    # Codeforces - no case number required
+    missing = flood - fill
+    
+    guess = int(math.sqrt(missing))
+    guesses = [guess-1, guess, guess+1, guess+2]
+    
+    # print(guesses)
+    
+    for guess in guesses:
+        if (guess*(guess+1))//2 > missing:
+            break
+            
+    remainder = fill - (flood - (guess*(guess+1))//2)
+    
+    height = N-guess
+    
+    print("flood", flood)
+    print("fill", fill)
+    print("guess", guess)
+    print("height", height)
+    print("remainder", remainder)
+    # Write your code here
+    
+    # N-2, guess, remainder
+    
+    res = []
+    for i in range(height):
+        res.append([i+1, i+2])
+    
+    for i in range(height, height+remainder-1):
+        res.append([height, i+2])
+        
+    for i in range(height+remainder-1, N-1):
+        res.append([1, i+2])
+        
     # print(res)
+    return res
+    
+    
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    T = int(input().strip())
+
+    for T_itr in range(T):
+        first_multiple_input = input().rstrip().split()
+
+        N = int(first_multiple_input[0])
+
+        X = int(first_multiple_input[1])
+
+        result = treeConstruction(N, X)
+
+        fptr.write('\n'.join([' '.join(map(str, x)) for x in result]))
+        fptr.write('\n')
+
+    fptr.close()
