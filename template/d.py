@@ -1,51 +1,80 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
 import sys
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
+import bisect
 
-# available on Google, not available on Codeforces
-# import numpy as np
-# import scipy
+#
+# Complete the 'countCups' function below.
+#
+# The function is expected to return an INTEGER_ARRAY.
+# The function accepts following parameters:
+#  1. INTEGER n
+#  2. INTEGER_ARRAY balls
+#  3. 2D_INTEGER_ARRAY swaps
+#  4. 2D_INTEGER_ARRAY queries
+#
 
-
-def solve():  # fix inputs here
-    console("----- solving ------")
-
-    # return a string (i.e. not a list or matrix)
-    return ""  
-
-
-def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
-
-# fast read all
-# sys.stdin.readlines()
-
-for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
-
-    # read line as an integer
-    # k = int(input())
+def countCups(n, balls, swaps, queries):
+    balls = set(balls)
     
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
-
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
-
-    res = solve()  # please change
+    for a,b in swaps:
+        x = a in balls
+        y = b in balls
+        
+        if x and y:
+            continue
+        if (not x) and (not y):
+            continue
+        if x and (not y):
+            balls.remove(a)
+            balls.add(b)
+        if (not x) and y:
+            balls.add(a)
+            balls.remove(b)
+            
+    balls = sorted(balls)
     
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    res = []
+    for a,b in queries:
+        x = bisect.bisect_left(balls, a)
+        y = bisect.bisect_right(balls, b)
+        res.append(y-x)
+    
+    return res
 
-    # Codeforces - no case number required
-    # print(res)
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    first_multiple_input = input().rstrip().split()
+
+    n = int(first_multiple_input[0])
+
+    m = int(first_multiple_input[1])
+
+    s = int(first_multiple_input[2])
+
+    q = int(first_multiple_input[3])
+
+    balls = list(map(int, input().rstrip().split()))
+
+    swaps = []
+
+    for _ in range(s):
+        swaps.append(list(map(int, input().rstrip().split())))
+
+    query = []
+
+    for _ in range(q):
+        query.append(list(map(int, input().rstrip().split())))
+
+    result = countCups(n, balls, swaps, query)
+
+    fptr.write(' '.join(map(str, result)))
+    fptr.write('\n')
+
+    fptr.close()
