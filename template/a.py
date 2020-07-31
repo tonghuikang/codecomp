@@ -40,18 +40,19 @@ def performOperations(N, op):  # fix inputs here
     
     return res
 
+
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
-    N, M = list(map(int, input().rstrip().split()))
-    
-    op = []
-    for i in range(M):
-        op.append(int(input().rstrip()))
+    N = int(input().strip())
+
+    M = int(input().strip())
+
+    op = list(map(int, input().rstrip().split()))
 
     result = performOperations(N, op)
 
-    fptr.write('\n'.join(map(str, result)))
+    fptr.write('&#039;\n&#039;'.join(map(str, result)))
     fptr.write('\n')
 
     fptr.close()

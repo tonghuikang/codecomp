@@ -72,6 +72,8 @@ def treeConstruction(N, X):
         remaining_score = remaining_score - (assign)
         res.append([assign+1, i+2])
                 
+            
+    res = [[min(N, max(1, x)), min(N, max(1, y))] for x,y in res]
     # print(res)
     return res
     
