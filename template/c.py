@@ -38,15 +38,18 @@ def treeConstruction(N, X):
             break
             
     height = N-guess
-    
+    if X == N-1:
+        height = 1
+    if X == (N*(N-1))//2:
+        height = N-1
+        
     print("flood", flood)
     print("fill", fill)
     print("guess", guess)
+    
+    # above code is to obtain the height
     print("height", height)
-    # Write your code here
-    
-    # N-2, guess, remainder
-    
+        
     res = []
     for i in range(height):
         # print("main")
