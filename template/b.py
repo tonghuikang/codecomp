@@ -8,11 +8,56 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(lst, queries):  # fix inputs here
     console("----- solving ------")
+    console(lst)
+    console(queries)
+
+    c = Counter(lst)
+
+    counts = [0 for _ in range(9)]
+    
+    for k,v in c.items():
+        if v > 8:
+            v = 8
+        counts[v] += 1
+
+    console(counts)
+
+    for a,b in queries:
+        cur = c[b]
+        if a == "+":
+            c[b] += 1
+        if a == "-":
+            c[b] -= 1
+        new = c[b]
+    
+        if cur > 8:
+            cur = 8
+        if new > 8:
+            new = 8
+        
+        counts[cur] -= 1
+        counts[new] += 1
+
+        console(counts)
+
+        if sum(counts[8:]) >= 1:
+            print("YES")
+            continue
+        if sum(counts[6:]) >= 1 and sum(counts[2:]) >= 2:
+            print("YES")
+            continue
+        if sum(counts[4:]) >= 2:
+            print("YES")
+            continue
+        if sum(counts[4:]) >= 1 and sum(counts[2:]) >= 3:
+            print("YES")
+            continue    
+        print("NO")
 
     # return a string (i.e. not a list or matrix)
-    return ""  
+    return
 
 
 def console(*args):  # the judge will not read these print statement
@@ -20,9 +65,9 @@ def console(*args):  # the judge will not read these print statement
     return
 
 # fast read all
-# sys.stdin.readlines()
+lines = sys.stdin.readlines()
 
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
     # read line as a string
     # strr = input()
 
@@ -33,7 +78,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+lst = list(map(int,lines[1].split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -41,8 +86,12 @@ for case_num in range(int(input())):
     # grid = []
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
+num_queries = int(lines[2])
 
-    res = solve()  # please change
+grid = [x.split() for x in lines[3:3+num_queries]]
+grid = [(str(a), int(b)) for a,b in grid]
+
+solve(lst, grid)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
