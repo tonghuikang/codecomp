@@ -300,3 +300,44 @@ g.addEdge(2, 3, 4)
   
 g.KruskalMST()
 ```
+
+
+
+
+
+Moating and searching template
+
+```python
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        grid = [[0] + row + [0] for row in grid]
+        grid = [[0]*len(grid[0])] + grid + [[0]*len(grid[0])]
+        
+        start_points = set()
+        for i,row in enumerate(grid):
+            for j,cell in enumerate(row):
+                if cell == 2:
+                    start_points.add((i,j))
+        
+        cnt = -1
+        
+        while start_points:
+            cnt += 1
+            next_points = set()
+            for (i,j) in start_points:
+                for dx,dy in [(0,1),(0,-1),(1,0),(-1,0)]:
+                    x,y = i+dx, j+dy
+                    if grid[x][y] == 2:
+                        continue
+                    if grid[x][y] == 1:
+                        next_points.add((x,y))
+                        grid[x][y] = 2
+            start_points = next_points
+            
+        if all(all(cell != 1 for cell in row) for row in grid):
+            return max(0, cnt)
+    
+        return -1
+
+```
+
