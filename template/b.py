@@ -8,12 +8,18 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(h,w,x,y):  # fix inputs here
     console("----- solving ------")
+    x,y = x-1,y-1
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
-
+    for _ in range(h):
+        for _ in range(w):
+            print("{} {}".format(x+1,y+1))
+            y = (y+1)%w
+        y = (y-1)%w
+        x = (x+1)%h
+    
+    return
 
 def console(*args):  # the judge will not read these print statement
     print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -22,7 +28,7 @@ def console(*args):  # the judge will not read these print statement
 # fast read all
 # sys.stdin.readlines()
 
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
     # read line as a string
     # strr = input()
 
@@ -33,7 +39,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+h,w,x,y = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -42,7 +48,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+solve(h,w,x,y)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
