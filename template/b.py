@@ -8,12 +8,14 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(res):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    arr = [len(segment) for segment in res.split("0") if len(segment) > 0]
 
+    arr = sorted(arr)[::-1]
+
+    return sum(arr[::2])
 
 def console(*args):  # the judge will not read these print statement
     print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -24,7 +26,7 @@ def console(*args):  # the judge will not read these print statement
 
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
+    strr = input()
 
     # read line as an integer
     # k = int(input())
@@ -42,10 +44,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(strr)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
