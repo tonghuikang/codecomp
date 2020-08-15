@@ -21,6 +21,7 @@ def solve(items,R,C):  # fix inputs here
     console("\n\n")
 
     dp = [[[0 for _ in range(4)] for _ in range(C)] for _ in range(R)]
+    maxx = [[0 for _ in range(C)] for i in range(R)]
 
     if grid[0][0] > 0:
         dp[0][0][1] = dp[0][0][0] + grid[0][0]
@@ -29,10 +30,12 @@ def solve(items,R,C):  # fix inputs here
         dp[i][0][0] = max(dp[i-1][0][0], dp[i-1][0][1])
         if grid[i][0] > 0:
             dp[i][0][1] = dp[i][0][0] + grid[i][0]
+        maxx[i][0] = max(dp[i][0])
 
     for j in range(1,C):
         for k in range(1,4):
             dp[0][j][k] = max(dp[0][j-1][k], dp[0][j-1][k-1] + grid[0][j])
+        maxx[0][j] = max(dp[0][j])
 
     # console(np.array(dp)[:,:,0])  # PLEASE SILENCE
     # console(np.array(dp)[:,0,:])  # PLEASE SILENCE
@@ -41,15 +44,19 @@ def solve(items,R,C):  # fix inputs here
     # console("\n\nPost")
 
     for i in range(1,R):
+        j_1 = 0
         for j in range(1,C):
-            dp[i][j][0] = max(max(dp[i-1][j][k] for k in range(4)), dp[i][j-1][0])
+            dp[i][j][0] = max(maxx[i-1][j], dp[i][j-1][0])
             if grid[i][j] > 0:
                 dp[i][j][1] = max(dp[i][j-1][1], dp[i][j][0] + grid[i][j])
                 for k in range(2,4):
                     dp[i][j][k] = max(dp[i][j-1][k], dp[i][j-1][k-1] + grid[i][j])
+                j_1 = j
             else:
                 for k in range(1,4):
                     dp[i][j][k] = dp[i][j-1][k]
+            maxx[i][j] = max(dp[i][j])
+                # maxx[i][j] = max(maxx[i][j-1], dp[i][j][0])
 
     # console(np.array(dp)[:,:,0])  # PLEASE SILENCE
     # console(np.array(dp)[:,:,1])  # PLEASE SILENCE
@@ -58,7 +65,7 @@ def solve(items,R,C):  # fix inputs here
     # console(np.array(dp))  # PLEASE SILENCE
 
     # return a string (i.e. not a list or matrix)
-    return max(dp[R-1][C-1][k] for k in range(4))
+    return max(dp[R-1][C-1])
 
 
 def console(*args):  # the judge will not read these print statement
