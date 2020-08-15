@@ -6,24 +6,28 @@ import sys
 # available on Google, not available on Codeforces
 # import numpy as np
 # import scipy
+import numpy as np
+import numba
+from numba import njit, b1, i4, i8, f8
 
+@njit((i8[:], i8, i8, i8), cache=True)
+def solve(items,R,C,K):  # fix inputs here
+    # console("----- solving ------")
+    # console(R,C)
 
-def solve(items,R,C):  # fix inputs here
-    console("----- solving ------")
-    console(R,C)
+    grid = np.zeros((R, C), np.int64)
 
-    grid = [[0 for _ in range(C)] for _ in range(R)]
-
-    for r,c,v in items:
-        grid[r-1][c-1] = v
+    for i in range(0, 3 * K, 3):
+        x, y, v = items[i:i + 3]
+        grid[x - 1, y - 1] = v
 
     # console(np.array(grid))  # PLEASE SILENCE
-    console("\n\n")
+    # console("\n\n")
 
-    dp = [[[0 for _ in range(4)] for _ in range(C)] for _ in range(R)]
-    maxx = [[0 for _ in range(C)] for i in range(R)]
+    dp = np.zeros((R, C, 4), np.int64)
+    maxx = np.zeros((R, C), np.int64)
 
-    if grid[0][0] > 0:
+    if grid[0,0] > 0:
         dp[0][0][1] = dp[0][0][0] + grid[0][0]
 
     for i in range(1,R):
@@ -48,13 +52,14 @@ def solve(items,R,C):  # fix inputs here
         for j in range(1,C):
             dp[i][j][0] = max(maxx[i-1][j], dp[i][j-1][0])
             if grid[i][j] > 0:
-                dp[i][j][1] = max(dp[i][j_1][1], dp[i][j][0] + grid[i][j])
+                dp[i][j][1] = max(dp[i][j-1][1], dp[i][j][0] + grid[i][j])
                 for k in range(2,4):
-                    dp[i][j][k] = max(dp[i][j_1][k], dp[i][j_1][k-1] + grid[i][j])
+                    dp[i][j][k] = max(dp[i][j-1][k], dp[i][j-1][k-1] + grid[i][j])
                 j_1 = j
-                maxx[i][j] = max(dp[i][j])
             else:
-                maxx[i][j] = max(maxx[i][j-1], dp[i][j][0])
+                for k in range(1,4):
+                    dp[i][j][k] = dp[i][j-1][k]
+            maxx[i][j] = max(dp[i][j])
 
     # console(np.array(dp)[:,:,0])  # PLEASE SILENCE
     # console(np.array(dp)[:,:,1])  # PLEASE SILENCE
@@ -63,40 +68,18 @@ def solve(items,R,C):  # fix inputs here
     # console(np.array(dp))  # PLEASE SILENCE
 
     # return a string (i.e. not a list or matrix)
-    return maxx[R-1][C-1]
+    return dp.max()
 
 
 def console(*args):  # the judge will not read these print statement
     # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
-# fast read all
-inn = sys.stdin.readlines()
+read = sys.stdin.buffer.read
+readline = sys.stdin.buffer.readline
+readlines = sys.stdin.buffer.readlines
 
-for case_num in [1]:
-    # read line as a string
-    # strr = input()
-
-    # read line as an integer
-    # k = int(input())
-    
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    r,c,nrows = list(map(int,inn[0].split()))
-
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    grid = []
-    for t in range(1,nrows+1):
-        grid.append(list(map(int,inn[t].split())))
-
-    res = solve(grid,r,c)  # please change
-    
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
-
-    # Codeforces - no case number required
-    print(res)
+H, W, K = map(int, readline().split())
+XYV = np.array(read().split(), np.int64)
+ 
+print(solve(XYV, H, W, K))
