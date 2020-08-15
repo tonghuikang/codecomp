@@ -8,11 +8,24 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(strr):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    arr = [int(x) for x in strr]
+    brr = [0]
+    cs = 0
+    for a in arr:
+        cs += a
+        brr.append(cs)
+
+    c = Counter([])
+
+    for i,b in enumerate(brr):
+        c[b-i] += 1
+
+    # console(c)
+
+    return sum([v*(v-1)//2 for k,v in c.items()])
 
 
 def console(*args):  # the judge will not read these print statement
@@ -24,7 +37,8 @@ def console(*args):  # the judge will not read these print statement
 
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
+    _ = input()
+    strr = input()
 
     # read line as an integer
     # k = int(input())
@@ -42,10 +56,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(strr)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)

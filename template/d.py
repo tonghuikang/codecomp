@@ -17,7 +17,7 @@ def solve(arr, brr, crr):  # fix inputs here
 
     arr = sorted(arr)
     brr = sorted(brr)
-    crr = sorted(crr)
+    crr = sorted(crr)[::-1]
 
     console(arr)
     console(brr)
@@ -28,57 +28,28 @@ def solve(arr, brr, crr):  # fix inputs here
         crr = sorted(crr)[::-1]
         return sum([x*y for x,y in zip(drr,crr)])
 
-    maxres = 0
+    res = [-1 for i in range(600)]
 
-    for i in range(200):  # ac matches
-        if i > c or i > a:
+    res[0:3*len(crr):3] = crr
+    res[1:3*len(brr):3] = brr
+    res[2:3*len(arr):3] = arr
+
+    console(res[:10])
+
+    result = 0
+    prev = None
+    for a in res:
+        if a == -1 and prev == -1:
+            return result
+        if prev == None:
+            prev = a
             continue
-        for j in range(200):  # bc matches
-            if j > c or j > b:
-                continue
-            if i + j > c:
-                continue
-            k = min(a-i, b-j)  # ab matches
-            console("budget", i,j,k)
+        else:
+            result += a*prev
+            prev = None
+        
 
-            ar = [0] + arr.copy()
-            br = [0] + brr.copy()
-            cr = [0] + crr.copy()
-
-            ax = ar.pop()
-            bx = br.pop()
-            cx = cr.pop()
-
-            res = 0
-            while (ax == 0) + (bx == 0) + (cx == 0) <= 1:
-                console(i,j,k,ax,bx,cx)
-                if cx == 0 or (min(ax,bx,cx) == cx and k > 0):
-                    console("ab")
-                    res += ax * bx
-                    k -= 1
-                    ax = ar.pop()
-                    bx = br.pop()                    
-                    continue
-
-                if bx == 0 or (min(ax,bx,cx) == bx and i > 0):
-                    console("ac")
-                    res += ax * cx
-                    i -= 1
-                    ax = ar.pop()
-                    cx = cr.pop()                    
-                    continue
-
-                else:
-                    console("bc")
-                    res += bx * cx
-                    j -= 1
-                    bx = br.pop()
-                    cx = cr.pop()                    
-                    continue                    
-
-        console(res)
-        maxres = max(maxres, res)
-    return maxres
+    return res
 
 
 def console(*args):  # the judge will not read these print statement
