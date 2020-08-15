@@ -17,7 +17,7 @@ Probably should make a table with the following features.
 - Shows wrong test case
 - Interactive problems
 - Input parsing required
-- Python libraries - numpy, scipy
+- Python libraries - numpy, scipy, numba
 - PyPy
 - Online Judging
 - Official solutions

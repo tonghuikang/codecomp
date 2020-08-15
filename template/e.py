@@ -48,7 +48,7 @@ def console(*args):  # the judge will not read these print statement
     return
 
 # fast read all
-# sys.stdin.readlines()
+# lines = sys.stdin.readlines()
 
 for case_num in range(int(input())):
     # read line as a string

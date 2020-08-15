@@ -20,3 +20,68 @@ with
 
 would have made my code run within time limit. I am still trying to find a reproducible example.
 
+
+
+
+
+# Fast reading
+
+To read the remaining lines quickly
+
+```python
+import sys
+lines = sys.stdin.readlines()
+```
+
+
+
+
+
+
+
+# Use of numba
+
+This is only tested in Python 3.8.2 in AtCoder
+
+
+
+Please refer to a [past question](https://atcoder.jp/contests/abc175/submissions?f.Task=abc175_e&f.Language=4006&f.Status=AC) for examples.
+
+
+My implementation
+
+- import statements
+
+```
+import numpy as np
+import numba
+from numba import njit, b1, i4, i8, f8
+```
+
+- function decorator
+```
+@njit((i8[:], i8, i8, i8), cache=True)
+def solve(items,R,C,K):  # fix inputs here
+	# use
+	return something
+```
+
+- ensure input format is consistent
+
+```python
+read = sys.stdin.buffer.read
+readline = sys.stdin.buffer.readline
+readlines = sys.stdin.buffer.readlines
+ 
+H, W, K = map(int, readline().split())
+XYV = np.array(read().split(), np.int64)
+ 
+print(solve(XYV, H, W, K))
+```
+
+Vectorised operations are now allowed (with numpy arrays), but not necessary for optimisation.
+
+
+
+
+
