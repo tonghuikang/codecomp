@@ -22,20 +22,21 @@ def solve(inp):  # fix inputs here
                 return False
             
             if p > qrr[cur]:  # if going left
-                remainder = max(0, x - 2*(p - qrr[cur])) # how much time left after reaching leftmost of untouched
+                extent = max(p,  # if not returning
+                             p + x - 2*(p - qrr[cur]),  # if go left then go right
+                             p + (x -   (p - qrr[cur]))//2
+                            )   # if go right then go left
             else:
-                remainder = x
-            # console(p, remainder)
+                extent = p + x
             
             # then go right and clear
-            extent = p+remainder
             while qrr[cur] <= extent:
                 cur += 1
                 if cur == len(qrr):
                     return True
         return False
 
-    # for tmp in range(30):
+    # for tmp in range(70):
     #     if attempt(tmp):
     #         return tmp
 
@@ -60,7 +61,7 @@ def solve(inp):  # fix inputs here
 
 
 def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
@@ -92,12 +93,12 @@ for case_num in range(int(input())):
     for _ in range(k, m):
         qrr.append(((ah * qrr[-2] + bh * qrr[-1] + ch) % dh) + 1)
 
-    console(prr)
-    console(qrr)
-    prr = [-x for x in prr]
-    qrr = [-x for x in qrr]
+    # prr = [-x for x in prr]
+    # qrr = [-x for x in qrr]
     prr = sorted(prr)
     qrr = sorted(qrr)
+    console(prr)
+    console(qrr)
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
