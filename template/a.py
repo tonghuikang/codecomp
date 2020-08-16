@@ -10,6 +10,8 @@ from collections import Counter, defaultdict
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
+plotting = False
+debugging = False
 
 def solve(n,k,w,
           lrr,al,bl,cl,dl,
@@ -34,56 +36,59 @@ def solve(n,k,w,
 
     # ===== algorithm starts here =====
     # cumulative variables tracked
-    height_changes = 0
-    combed_blocks = 0
-
-    corners = []  # [(-height, extent)]
+    corners = []
     heapq.heapify(corners)
+    detours = 0
     
-    cur_loc = 0
-    cur_height = 0
+    base_covered = 0
+    previous_heights = 0
+
+    cur_max_height = 0
+    cur_min_height = 0
     cur_block_start = lrr[0]
+    cur_extent = lrr[0] + w
 
     result = []
 
     for l,h in zip(lrr,hrr):
 
-        while corners and corners[0][1] < l:
-            old_height, loc = heapq.heappop(corners)
-            old_height = - old_height  # heapq correction
-            if cur_loc <= loc:
-                height_changes += cur_height - old_height
-                cur_height = old_height
-                cur_loc = loc
-            if not corners:
-                combed_blocks += cur_loc - cur_block_start
-                height_changes += cur_height
-            
-        if not corners:  # broken and start new
+        if l > cur_extent:  # make new block
+            base_covered += cur_extent - cur_block_start
+            previous_heights += cur_max_height
             cur_block_start = l
-            cur_height = 0
+            cur_max_height, cur_min_height = h,h
+            corners = []
+            heapq.heapify(corners)
 
-        if h > cur_height:
-            height_changes += h - cur_height
+        cur_extent = l+w
 
-        heapq.heappush(corners, (-h, l+w))
+        while corners and corners[0][1] < l:
+            heapq.heappop(corners)
 
-        cur_height = -corners[0][0]
-        console(l,h,combed_blocks,cur_block_start,height_changes,cur_height,corners)
-        res = (combed_blocks + l-cur_block_start+w)*2 + height_changes + cur_height
+        if corners and -corners[0][0] < h:
+            added_detour = min(cur_max_height, h) + corners[0][0]
+            console(added_detour)
+            detours += added_detour
+        cur_max_height = max(h, cur_max_height)
+
+        heapq.heappush(corners, (-h, cur_extent))
+
+        console(base_covered, previous_heights, " ", detours, " ", cur_block_start, cur_max_height, cur_min_height)
+        res = 2*((base_covered + previous_heights) + (l - cur_block_start + detours + cur_max_height + w))
         result.append(res)
 
     console("result")
     console(result)
 
-    fig1 = plt.figure()
-    ax1 = fig1.add_subplot(111, aspect='equal')
-    for l,h in list(zip(lrr,hrr))[::-1]:
-        ax1.add_patch(  # DELETE
-            patches.Rectangle((l, 0), w, h, ec="b"))
-    plt.xlim(-1, max(lrr) + w + 1)
-    plt.ylim(-1, max(hrr) + 1)
-    plt.show()
+    if plotting:
+        fig1 = plt.figure()
+        ax1 = fig1.add_subplot(111, aspect='equal')
+        for l,h in list(zip(lrr,hrr))[::-1]:
+            ax1.add_patch(  # DELETE
+                patches.Rectangle((l, 0), w, h, ec="b"))
+        plt.xlim(-1, max(lrr) + w + 1)
+        plt.ylim(-1, max(hrr) + 1)
+        plt.show()
 
     submission = 1
     for res in result:
@@ -95,7 +100,8 @@ def solve(n,k,w,
 
 
 def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    if debugging:
+        print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
