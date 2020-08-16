@@ -8,11 +8,24 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(lst):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+
+    lst = [10**10] + lst[::-1] + [0]
+
+    lows = []
+    highs = []
+    for a,b,c in zip(lst, lst[1:], lst[2:]):
+        if a > b and b < c:
+            lows.append(b)
+        if a < b and b > c:
+            highs.append(b)
+
+    console(lows)
+    console(highs)
+
+    return sum(b-a for a,b in zip(lows,highs))
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,13 +40,13 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    _ = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -42,10 +55,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
