@@ -7,8 +7,12 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
+import ray
+ray.init()
 
-def solve(prr,qrr):  # fix inputs here
+@ray.remote
+def solve(inp):  # fix inputs here
+    prr,qrr = inp
     console("----- solving ------")
 
     def attempt(x):
@@ -35,7 +39,7 @@ def solve(prr,qrr):  # fix inputs here
     #     if attempt(tmp):
     #         return tmp
 
-    high = 2**31
+    high = 2**32
     low = 0
 
     for _ in range(31):
@@ -47,7 +51,7 @@ def solve(prr,qrr):  # fix inputs here
         else:
             low = mid
     
-    for d in range(-2,2):
+    for d in range(-5,5):
         tmp = mid+d
         if attempt(tmp):
             return tmp
@@ -56,11 +60,14 @@ def solve(prr,qrr):  # fix inputs here
 
 
 def console(*args):  # the judge will not read these print statement
-    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
 # sys.stdin.readlines()
+
+inputs = []
+
 
 for case_num in range(int(input())):
     # read line as a string
@@ -87,6 +94,8 @@ for case_num in range(int(input())):
 
     console(prr)
     console(qrr)
+    prr = [-x for x in prr]
+    qrr = [-x for x in qrr]
     prr = sorted(prr)
     qrr = sorted(qrr)
 
@@ -97,9 +106,12 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve(prr,qrr)  # please change
-    
-    # Google - case number required
+    inputs.append([prr,qrr])
+
+futures = [solve.remote(inp) for inp in inputs]
+results = ray.get(futures)
+
+for case_num, res in enumerate(results):
     print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
