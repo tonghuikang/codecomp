@@ -9,10 +9,10 @@ from intervaltree import IntervalTree
 # import numpy as np
 # import scipy
 
-# import ray
-# ray.init()
+import ray
+ray.init()
 
-# @ray.remote
+@ray.remote
 def solve(inp):  # fix inputs here
     lrr,wrr,hrr = inp
     console("----- solving ------")
@@ -40,67 +40,45 @@ def solve(inp):  # fix inputs here
         # horizontal accounting
         overlapping = coverage_tree.overlap(l-delta, l+w+delta)  # this is a set
         if len(overlapping) == 0:
-            coverage_tree.addi(l, l+w, None)
+            coverage_tree.addi(l, l+w, h)
             coverage += w
         else:
             coverage_tree.remove_overlap(l-delta, l+w+delta)
             coverage -= sum([interval.end - interval.begin for interval in overlapping])
             new_begin = min(min(overlapping).begin, l)
             new_end = max(max(overlapping).end, l+w)
-            coverage_tree.addi(new_begin, new_end, None)
+            coverage_tree.addi(new_begin, new_end, h)
             coverage += new_end - new_begin
-        del overlapping
+        coverage_intervals = overlapping
 
         # vertical accounting
-        overlapping = vertical_tree.overlap(l-delta, l+w+delta)  # this is a set
+        overlapping = sorted(vertical_tree.overlap(l-delta, l+w+delta))  # this is a set
         if len(overlapping) == 0:
-            vertical_tree.addi(l,   l+epsilon,   (0,h, MAXVAL,l+w))
-            vertical_tree.addi(l+w, l+w+epsilon, (0,h, l, MINVAL))
-            heights += h*2
-
+            vertical_tree[l:l+w] = h
+            heights += 2*h
         else:
-            vertical_tree.remove_envelop(l-delta, l+w+delta)
-            for interval in overlapping:
-                a,b,c,d = interval.data
-                heights -= (b-a)
-            
-            left_interval = min(overlapping)
-            right_interval = max(overlapping)
+            for interval_1, interval_2 in zip(overlapping, overlapping[1:]):
+                # console(heights)
+                # console(overlapping)
+                if interval_1.end == interval_2.begin:
+                    heights -= abs(interval_1.data - interval_2.data)
+                else:
+                    heights -= (interval_1.data + interval_2.data)
+                # console(heights)
 
-            if left_interval.begin == l and left_interval.data[3] != MINVAL:  # inherit everything
-                left_pillar_start  = left_interval.data[0]
-                left_pillar_extent = left_interval.data[2]
-            elif left_interval.data[2] > l:
-                left_pillar_start = 0
-                left_pillar_extent = MAXVAL
-            else:
-                left_pillar_start  = left_interval.data[1]
-                left_pillar_extent = left_interval.data[2]
-
-            if right_interval.begin == l+w and right_interval.data[2] != MAXVAL:   # inherit everything
-                right_pillar_start  = right_interval.data[0]
-                right_pillar_extent = right_interval.data[3]
-            elif right_interval.data[3] < l+w:
-                right_pillar_start = 0
-                right_pillar_extent = MINVAL
-            else:
-                right_pillar_start = right_interval.data[1]
-                right_pillar_extent = right_interval.data[3]
-
-            vertical_tree.addi(l,   l+epsilon,   (left_pillar_start, h, left_pillar_extent, l+w))
-            vertical_tree.addi(l+w, l+w+epsilon, (right_pillar_start,h, l, right_pillar_extent))
-
-            heights += h*2 - left_pillar_start - right_pillar_start
+            vertical_tree.chop(l,l+w)
+            vertical_tree[l:l+w] = h
+            heights += 2*h - min(overlapping).data - max(overlapping).data 
 
         res = coverage*2 + heights
 
-        console("\n", idx+1, coverage, heights, res)
-        console(coverage_tree)
-        console(vertical_tree)
+        # console("\n", idx+1, coverage, heights, res)
+        # console(coverage_tree)
+        # console(vertical_tree)
 
         result.append(res)
 
-    console(result)
+    # console(result)
     submission = 1
     for res in result:
         submission = submission*res%(10**9+7)
@@ -110,7 +88,7 @@ def solve(inp):  # fix inputs here
 
 
 def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
@@ -148,13 +126,13 @@ for case_num in range(int(input())):
     # grid = []
     # for _ sin range(nrows):
     #     grid.append(list(map(int,input().split())))
-
+    hrr = hrr[::-1]
     inputs.append([lrr,wrr,hrr])
 
-# futures = [solve.remote(inp) for inp in inputs]
-# results = ray.get(futures)
+futures = [solve.remote(inp) for inp in inputs]
+results = ray.get(futures)
 
-results = map(solve, inputs)
+# results = map(solve, inputs)
 
 for case_num, res in enumerate(results):
     print("Case #{}: {}".format(case_num+1, res))
