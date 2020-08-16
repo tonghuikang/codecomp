@@ -9,16 +9,19 @@ from collections import Counter, defaultdict
 
 def solve(arr):  # fix inputs here
     console("----- solving ------")
+    console(arr)
     minres = 10**9
     for i in range(min(4, len(arr))):
         minres = min(minres, solve2(arr[i:] + arr[:i]))
     return minres
 
-@functools.lru_cache()
+# @functools.lru_cache()
 def diff(given, desired):
     return sum([a != b for a,b in zip(given, desired)])
 
 def solve2(arr):  # fix inputs here
+    console(arr)
+    arr = list(arr)
 
     # approved patterns
     # RRLL RL RRL RLL
@@ -43,12 +46,12 @@ def console(*args):  # the judge will not read these print statement
     return
 
 # fast read all
-# lines = sys.stdin.readlines()
+lines = sys.stdin.readlines()
 
-for case_num in range(int(input())):
+for case_num in range(int(lines[0])):
     # read line as a string
-    _ = input()
-    strr = input()
+    # _ = input()
+    strr = lines[2+2*case_num].strip()
 
     # read line as an integer
     # k = int(input())
