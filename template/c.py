@@ -126,7 +126,7 @@ for case_num in range(int(input())):
     # grid = []
     # for _ sin range(nrows):
     #     grid.append(list(map(int,input().split())))
-    hrr = hrr[::-1]
+    # hrr = hrr[::-1]
     inputs.append([lrr,wrr,hrr])
 
 futures = [solve.remote(inp) for inp in inputs]
