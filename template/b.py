@@ -8,8 +8,24 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(n,k,lrr,al,bl,cl,dl,wrr,aw,bw,cd,dw,hrr,ah,bh,ch,dh):  # fix inputs here
     console("----- solving ------")
+    console(n,k)
+    # console(lrr)
+    # console(al,bl,cl,dl)
+    # console(wrr)
+    # console(aw,bw,cw,dw)
+    # console(hrr)
+    # console(ah,bh,ch,dh)
+
+    for _ in range(k, n):
+        lrr.append(((al * lrr[-2] + bl * lrr[-1] + cl) % dl) + 1)
+        wrr.append(((aw * wrr[-2] + bw * wrr[-1] + cw) % dw) + 1)
+        hrr.append(((ah * hrr[-2] + bh * hrr[-1] + ch) % dh) + 1)
+
+    console(lrr)
+    console(wrr)
+    console(hrr)
 
     # return a string (i.e. not a list or matrix)
     return ""  
@@ -33,16 +49,25 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    lrr = list(map(int,input().split()))
+    al, bl, cl, dl = list(map(int,input().split()))
+    wrr = list(map(int,input().split()))
+    aw, bw, cw, dw = list(map(int,input().split()))
+    hrr = list(map(int,input().split()))
+    ah, bh, ch, dh = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
     # grid = []
-    # for _ in range(nrows):
+    # for _ sin range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(n,k,
+                lrr,al,bl,cl,dl,
+                wrr,aw,bw,cw,dw,
+                hrr,ah,bh,ch,dh)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
