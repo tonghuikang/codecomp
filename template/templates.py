@@ -9,8 +9,8 @@ from fractions import Fraction
 import sys
 import threading
 from collections import defaultdict
-threading.stack_size(10**8)
-mod = 10 ** 9 + 7
+threading.stack_size(1<<27)
+mod = 10**9 + 7
 mod1 = 998244353
 
 # ------------------------------warmup----------------------------
@@ -524,6 +524,7 @@ def countdig(n):
         n //= 10
         c += 1
     return c
+
 def binary(x, length):
     y = bin(x)[2:]
     return y if len(y) >= length else "0" * (length - len(y)) + y
@@ -555,53 +556,15 @@ def countGreater(arr, n, k):
 
 # --------------------------------------------------binary------------------------------------
 def main():
- for ik in range(int(input())):
-    n=int(input())
-    graph=defaultdict(list)
-    for i in range(n-1):
-        a,b=map(int,input().split())
-        graph[a-1].append(b-1)
-        graph[b-1].append(a-1)
-    k=int(input())
-    l=list(map(int,input().split()))
-    l.sort(reverse=True)
-    fact=[1 for i in range(n-1)]
-    if len(l)<=n-1:
-        fact[0]=l[0]
-        st=0
-    else:
-        n1=n-1
-        for i in range(len(l)-n1+1):
-            fact[0]*=l[i]
-            fact[0]%=mod
-            st=i
-    st+=1
-    t=1
-    for i in range(st,len(l)):
-        fact[t]=l[i]
-        t+=1
-    child=[0]*(n)
-    visited=[False]*n
-    def DFS(v, visited):
-       visited[v] = True
-       c=1
-       for i in graph[v]:
-          if visited[i] == False:
-             c+=DFS(i, visited)
-       child[v]=c
-       return c
-    DFS(0,visited)
-    for i in range(n):
-        r = n - child[i]
-        child[i]=n*(n-1)-child[i]*(child[i]-1)-r*(r-1)
-        child[i]//=2
-    child=child[1:]
-    child.sort(reverse=True)
-    ans=0
-    for i in range(n-1):
-        ans+=(child[i]*fact[i])%mod
-        ans%=mod
-    print(ans)
+    def recurse(n):
+        if n <= 0:
+            return 0
+        return recurse(n-1) + 2
+
+    value = int(input())
+    print(recurse(value))
+
+
 t = threading.Thread(target=main)
 t.start()
 t.join()
