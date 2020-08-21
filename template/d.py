@@ -4,9 +4,8 @@ import math, random
 from collections import Counter, defaultdict
 
 import collections,sys,threading
-sys.setrecursionlimit(10**9)
-threading.stack_size(10**8)
- 
+threading.stack_size(2 ** 27)
+sys.setrecursionlimit(10**5 + 100)
 
 # available on Google, not available on Codeforces
 # import numpy as np
@@ -72,20 +71,33 @@ def solve(edges, fact):  # fix inputs here
 
     lst = [[1,total_nodes-1]]
 
-    @bootstrap
+    # @bootstrap
+    # def dfs(cur, prev):
+    #     if g[cur] == [prev]:
+    #         console("leaf", cur)
+    #         yield 1
+    #     desc = 1
+    #     for nex in g[cur]:
+    #         if nex != prev:
+    #             val = next(dfs(nex, cur))
+    #             desc += val
+    #             lst.append([total_nodes-val, val])
+
+    #     yield desc
+
     def dfs(cur, prev):
         if g[cur] == [prev]:
             console("leaf", cur)
-            yield 1
+            return 1
         desc = 1
         for nex in g[cur]:
             if nex != prev:
-                val = next(dfs(nex, cur))
+                val = (dfs(nex, cur))
                 desc += val
                 lst.append([total_nodes-val, val])
 
-        yield desc
-    
+        return desc
+
     dfs(g[starting_leaf][0], starting_leaf)
 
     console(lst)
@@ -141,4 +153,6 @@ def main():
         # Codeforces - no case number required
         print(res)
 
-threading.Thread(target=main).start()
+t = threading.Thread(target=main)
+t.start()
+t.join()
