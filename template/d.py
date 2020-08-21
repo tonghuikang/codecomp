@@ -3,10 +3,6 @@ import heapq, functools, collections, itertools
 import math, random
 from collections import Counter, defaultdict
 
-import collections,sys,threading
-# threading.stack_size(2 ** 27)
-# sys.setrecursionlimit(10**5 + 100)
-
 # available on Google, not available on Codeforces
 # import numpy as np
 # import scipy
@@ -84,20 +80,7 @@ def solve(edges, fact):  # fix inputs here
                 lst.append([total_nodes-val, val])
 
         yield desc
-
-    # def dfs(cur, prev):
-    #     if g[cur] == [prev]:
-    #         console("leaf", cur)
-    #         return 1
-    #     desc = 1
-    #     for nex in g[cur]:
-    #         if nex != prev:
-    #             val = (dfs(nex, cur))
-    #             desc += val
-    #             lst.append([total_nodes-val, val])
-
-    #     return desc
-
+    
     dfs(g[starting_leaf][0], starting_leaf)
 
     console(lst)
@@ -121,39 +104,33 @@ def console(*args):  # the judge will not read these print statement
 # fast read all
 # sys.stdin.readlines()
 
-def main():
-    for case_num in range(int(input())):
-        # read line as a string
-        # strr = input()
+for case_num in range(int(input())):
+    # read line as a string
+    # strr = input()
 
-        # read line as an integer
-        nrows = int(input())
-        
-        # read one line and parse each word as a string
-        # lst = input().split()
+    # read line as an integer
+    nrows = int(input())
+    
+    # read one line and parse each word as a string
+    # lst = input().split()
 
-        # read one line and parse each word as an integer
-        # lst = list(map(int,input().split()))
+    # read one line and parse each word as an integer
+    # lst = list(map(int,input().split()))
 
-        # read matrix and parse as integers (after reading read nrows)
-        # lst = list(map(int,input().split()))
-        # nrows = lst[0]  # index containing information, please change
-        grid = []
-        for _ in range(nrows-1):
-            grid.append(list(map(int,input().split())))
+    # read matrix and parse as integers (after reading read nrows)
+    # lst = list(map(int,input().split()))
+    # nrows = lst[0]  # index containing information, please change
+    grid = []
+    for _ in range(nrows-1):
+        grid.append(list(map(int,input().split())))
 
-        _ = int(input())
-        fact = list(map(int,input().split()))
+    _ = int(input())
+    fact = list(map(int,input().split()))
 
-        res = solve(grid, fact)  # please change
-        
-        # Google - case number required
-        # print("Case #{}: {}".format(case_num+1, res))
+    res = solve(grid, fact)  # please change
+    
+    # Google - case number required
+    # print("Case #{}: {}".format(case_num+1, res))
 
-        # Codeforces - no case number required
-        print(res)
-
-main()
-# t = threading.Thread(target=main)
-# t.start()
-# t.join()
+    # Codeforces - no case number required
+    print(res)
