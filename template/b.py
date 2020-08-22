@@ -66,8 +66,6 @@ def solve(grid, sx, sy, ex, ey):  # fix inputs here
     labels = [[False for _ in row] for row in grid]
     diffs = [(-1,0), (1,0), (0,-1), (0,1)]
 
-    g = defaultdict(set)
-
     # @bootstrap
     def dfs(var):
         x,y,cur_label = var
@@ -86,7 +84,7 @@ def solve(grid, sx, sy, ex, ey):  # fix inputs here
         for j,cell in enumerate(row):
             if labels[i][j]:
                 continue
-            if cell == 0:
+            if grid[i][j] == 0:
                 continue
             cur_label += 1
             labels[i][j] = cur_label
@@ -100,8 +98,6 @@ def solve(grid, sx, sy, ex, ey):  # fix inputs here
     start = labels[sx][sy]
     end = labels[ex][ey]
     console("start and end", start, end)
-    if start == end:
-        return 0
 
     connections = defaultdict(set)
 
@@ -129,7 +125,7 @@ def solve(grid, sx, sy, ex, ey):  # fix inputs here
     
     console("result", result)
 
-    if result[end] > 10**4:
+    if result[end] > 10**6:
         return -1
     return result[end]
 
