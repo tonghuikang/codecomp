@@ -5,12 +5,33 @@ import math, random
 from collections import Counter, defaultdict
 import threading
 
-threading.stack_size(2**27)
-sys.setrecursionlimit(10**6 + 5)
+# threading.stack_size(2**27)
+# sys.setrecursionlimit(10**6 + 5)
 
 # available on Google, not available on Codeforces
 # import numpy as np
 # import scipy
+
+
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
 
 
 def dijkstra(G, s):
@@ -47,8 +68,9 @@ def solve(grid, sx, sy, ex, ey):  # fix inputs here
 
     g = defaultdict(set)
 
-    @functools.lru_cache(maxsize=None)
-    def dfs(x,y,cur_label):
+    # @bootstrap
+    def dfs(var):
+        x,y,cur_label = var
         for dx,dy in diffs:
             xx, yy = x+dx, y+dy
             if labels[xx][yy]:
@@ -56,7 +78,8 @@ def solve(grid, sx, sy, ex, ey):  # fix inputs here
             if grid[xx][yy] == 0:
                 continue
             labels[xx][yy] = cur_label
-            dfs(xx,yy,cur_label)
+            var2 = xx,yy,cur_label
+            dfs(var2)
 
     cur_label = 0
     for i,row in enumerate(grid):
@@ -67,7 +90,8 @@ def solve(grid, sx, sy, ex, ey):  # fix inputs here
                 continue
             cur_label += 1
             labels[i][j] = cur_label
-            dfs(i,j,cur_label)
+            var = i,j,cur_label
+            dfs(var)
             
     console("label")
     console(labels)
@@ -148,6 +172,7 @@ def main():
     # Codeforces - no case number required
     print(res)
 
-t = threading.Thread(target=main)
-t.start()
-t.join()
+main()
+# t = threading.Thread(target=main)
+# t.start()
+# t.join()
