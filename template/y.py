@@ -8,7 +8,7 @@ import random
 from collections import Counter, defaultdict
 
 # read line as a string
-# strr = input()
+strr = input()
 
 # read line as an integer
 # k = int(input())
@@ -19,4 +19,9 @@ from collections import Counter, defaultdict
 # read one line and parse each word as an integer
 # arr = list(map(int,input().split()))
 
-print()
+summ = sum([int(x) for x in strr])
+
+if summ%9 == 0:
+    print("Yes")
+else:
+    print("No")
