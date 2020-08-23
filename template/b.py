@@ -8,11 +8,51 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(n,a,b,c):  # fix inputs here
     console("----- solving ------")
+    console(n, a, b, c)
+    console(n, a, c, b)
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    assert 1 <= c <= a <= n
+    assert 1 <= c <= b <= n
+
+    if a == b == c == n:
+        console("a=b=c=n")
+        return [1]*n
+
+    if a == b == 1:
+        console("a=b=1")
+        return ["IMPOSSIBLE"]
+
+    if n == 2:
+        console("n=2")
+        # a == b == c case covered
+        if a == 1 and b == 2 and c == 1:
+            return [2, 1]
+        if a == 2 and b == 1 and c == 1:
+            return [1, 2]
+        return ["IMPOSSIBLE"]
+
+    if a == b == c:  # not equals n
+        console("a=b=c but not n")
+        return ["IMPOSSIBLE"]
+        
+    a_only = a-c
+    b_only = b-c
+
+    if a_only+b_only+c > n:
+        console("a_only+b_only+c > n")
+        return ["IMPOSSIBLE"]
+
+    nobody = n - (a_only+b_only+c)
+
+
+    console(nobody, a_only, c, b_only)
+    
+    if a_only > 0:
+        return [2]*a_only + [1]*nobody + [3]*c + [2]*b_only
+    else:
+        return [2]*a_only + [3]*c + [1]*nobody + [2]*b_only
 
 
 def console(*args):  # the judge will not read these print statement
@@ -33,7 +73,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,a,b,c = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -42,10 +82,15 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(n,a,b,c)  # please change
     
+    if res == ["IMPOSSIBLE"]:
+        pass
+    else:
+        pass        
+
     # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, " ".join(str(x) for x in res)))
 
     # Codeforces - no case number required
     # print(res)
