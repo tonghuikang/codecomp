@@ -82,10 +82,22 @@ def solve(edges, stones_available, recipies_target, recipies_ingredients, total_
             for target, ingredients in zip(recipies_target, recipies_ingredients):
                 availability[junction][target] = min(availability[junction][target], 
                                                      sum(availability[junction][ingredient] for ingredient in ingredients))
+            c = list(zip(recipies_target, recipies_ingredients))
+            random.shuffle(c)
+            recipies_target, recipies_ingredients = zip(*c)
+            for target, ingredients in zip(recipies_target, recipies_ingredients):
+                availability[junction][target] = min(availability[junction][target], 
+                                                     sum(availability[junction][ingredient] for ingredient in ingredients))
+            c = list(zip(recipies_target, recipies_ingredients))
+            random.shuffle(c)
+            recipies_target, recipies_ingredients = zip(*c)
+            for target, ingredients in zip(recipies_target, recipies_ingredients):
+                availability[junction][target] = min(availability[junction][target], 
+                                                     sum(availability[junction][ingredient] for ingredient in ingredients))
 
         if min(row[0] for row in availability) > 10**12 + 10:
             return -1
-            
+
         console("availability")
         # console(np.array(availability))
 
