@@ -33,10 +33,6 @@ def solve(n,a,b,c):  # fix inputs here
             return [1, 2]
         return ["IMPOSSIBLE"]
 
-    if a == b == c:  # not equals n
-        console("a=b=c but not n")
-        return ["IMPOSSIBLE"]
-        
     a_only = a-c
     b_only = b-c
 
@@ -49,6 +45,8 @@ def solve(n,a,b,c):  # fix inputs here
 
     console(nobody, a_only, c, b_only)
     
+    if a_only == 0 and b_only == 0:
+        return [2] + [1]*nobody + [2]*(c-2) + [2]
     if a_only > 0:
         return [2]*a_only + [1]*nobody + [3]*c + [2]*b_only
     else:
@@ -87,7 +85,7 @@ for case_num in range(int(input())):
     if res == ["IMPOSSIBLE"]:
         pass
     else:
-        pass        
+        pass
 
     # Google - case number required
     print("Case #{}: {}".format(case_num+1, " ".join(str(x) for x in res)))
