@@ -5,7 +5,7 @@ import math, random
 from collections import Counter, defaultdict
 
 # available on Google, not available on Codeforces
-# import numpy as np
+import numpy as np
 # import scipy
 
 def dijkstra(G, s):
@@ -47,7 +47,7 @@ def solve(edges, stones_available, recipies_target, recipies_ingredients, total_
     # activate recipie until good
 
     # calculate distance matrix
-    distance = [[None for _ in range(total_junctions)] for _ in range(total_junctions)]
+    distance = [[0 for _ in range(total_junctions)] for _ in range(total_junctions)]
 
     G = [[] for _ in range(total_junctions)]
     for a,b in edges:
@@ -57,43 +57,44 @@ def solve(edges, stones_available, recipies_target, recipies_ingredients, total_
     for start in range(total_junctions):
         distance[start] = dijkstra(G, start)[1]
 
+    distance = np.array(distance, dtype=int)
     # console(np.array(distance))
 
     # intialise availability
     availability = [[10**12+1 for _ in range(total_stones)] for _ in range(total_junctions)]
+    availability = np.array(availability, dtype=int)
 
     for i,lst in enumerate(stones_available):
         for stone in lst:
            availability[i][stone] = 0
 
     prev_availability = [[10**12+1 for x in row] for row in availability]
+    prev_availability = np.array(prev_availability, dtype=int)
 
     while True:
-        if prev_availability == availability:
+        if (prev_availability == availability).all():
             break
-        prev_availability = [[x for x in row] for row in availability]
+        prev_availability = availability.copy()
         for junction1 in range(total_junctions):
             for stone in range(total_stones):
                 for junction2 in range(total_junctions):
                     availability[junction2][stone] = min(availability[junction2][stone], 
-                                                        availability[junction1][stone] + distance[junction1][junction2])
+                                                         availability[junction1][stone] + distance[junction1][junction2])
 
         for junction,lst in enumerate(availability):
-            for target, ingredients in zip(recipies_target, recipies_ingredients):
-                availability[junction][target] = min(availability[junction][target], 
-                                                     sum(availability[junction][ingredient] for ingredient in ingredients))
-            c = list(zip(recipies_target, recipies_ingredients))
-            random.shuffle(c)
-            recipies_target, recipies_ingredients = zip(*c)
-            for target, ingredients in zip(recipies_target, recipies_ingredients):
-                availability[junction][target] = min(availability[junction][target], 
-                                                     sum(availability[junction][ingredient] for ingredient in ingredients))
-            c = list(zip(recipies_target, recipies_ingredients))
-            random.shuffle(c)
-            recipies_target, recipies_ingredients = zip(*c)
-            for target, ingredients in zip(recipies_target, recipies_ingredients):
-                availability[junction][target] = min(availability[junction][target], 
-                                                     sum(availability[junction][ingredient] for ingredient in ingredients))
+            prev_lst = availability[junction,:].copy()
+            prev_lst[:] = -1
+            while True:
+                cur_lst = availability[junction,:]
+                if (prev_lst == cur_lst).all():
+                    break
+                prev_lst = cur_lst
+                for target, ingredients in zip(recipies_target, recipies_ingredients):
+                    availability[junction][target] = min(availability[junction][target], 
+                                                         sum(availability[junction][ingredient] for ingredient in ingredients))
+                # c = list(zip(recipies_target, recipies_ingredients))
+                # random.shuffle(c)
+                # recipies_target, recipies_ingredients = zip(*c)
 
         if min(row[0] for row in availability) > 10**12 + 10:
             return -1
