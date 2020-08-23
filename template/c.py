@@ -76,7 +76,7 @@ def solve(grid_original):  # fix inputs here
         console(maxres, min_elim_for_maxres, "|", cur_time, cur_elim, "|", heap)
 
     # # return a string (i.e. not a list or matrix)
-    return [maxres, min_elim_for_maxres]
+    return [min_elim_for_maxres, maxres]
 
 
 def console(*args):  # the judge will not read these print statement
