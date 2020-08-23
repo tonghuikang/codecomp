@@ -5,7 +5,7 @@ import math, random
 from collections import Counter, defaultdict
 
 # available on Google, not available on Codeforces
-import numpy as np
+# import numpy as np
 # import scipy
 
 def dijkstra(G, s):
@@ -57,7 +57,7 @@ def solve(edges, stones_available, recipies_target, recipies_ingredients, total_
     for start in range(total_junctions):
         distance[start] = dijkstra(G, start)[1]
 
-    console(np.array(distance))
+    # console(np.array(distance))
 
     # intialise availability
     availability = [[10**12+1 for _ in range(total_stones)] for _ in range(total_junctions)]
@@ -66,7 +66,12 @@ def solve(edges, stones_available, recipies_target, recipies_ingredients, total_
         for stone in lst:
            availability[i][stone] = 0
 
-    for i in range(200):
+    prev_availability = [[10**12+1 for x in row] for row in availability]
+
+    while True:
+        if prev_availability == availability:
+            break
+        prev_availability = [[x for x in row] for row in availability]
         for junction1 in range(total_junctions):
             for stone in range(total_stones):
                 for junction2 in range(total_junctions):
@@ -75,10 +80,11 @@ def solve(edges, stones_available, recipies_target, recipies_ingredients, total_
 
         for junction,lst in enumerate(availability):
             for target, ingredients in zip(recipies_target, recipies_ingredients):
-                availability[junction][target] = sum(availability[junction][ingredient] for ingredient in ingredients)
+                availability[junction][target] = min(availability[junction][target], 
+                                                     sum(availability[junction][ingredient] for ingredient in ingredients))
 
         console("availability")
-        console(np.array(availability))
+        # console(np.array(availability))
 
     return min(row[0] for row in availability)
     # cases
