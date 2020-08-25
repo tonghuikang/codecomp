@@ -8,11 +8,30 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(a,b,cx,cy,x,y):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    a,b = sorted([a,b])
+    if x > y:  # to make x < y
+        x,y = y,x
+        cx,cy = cy,cx
+
+    maxcnt = 0
+    for i in range(cx+1):
+        ax = min(a//x, i)
+        bx_max = cx - ax
+        bx = min(b//x, bx_max)
+
+        a_left = a - ax*x
+        b_left = b - bx*x
+
+        ay = min(a_left//y, cy)
+        by_max = cy - ay
+        by = min(b_left//y, by_max)
+
+        maxcnt = max(maxcnt, ax+bx+ay+by)
+
+    return maxcnt
 
 
 def console(*args):  # the judge will not read these print statement
@@ -33,7 +52,9 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    p,f = list(map(int,input().split()))
+    cs,cw = list(map(int,input().split()))
+    s,w = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -42,10 +63,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(p,f,cs,cw,s,w)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)

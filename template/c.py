@@ -8,11 +8,38 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(strr, k):  # fix inputs here
     console("----- solving ------")
+    console(strr, k)
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    arr = [int(x) for x in strr]
+    res = [1 for _ in strr]
+
+    for i,a in enumerate(arr):
+        if a == 0:
+            if i-k >= 0:
+                res[i-k] = 0
+            if i+k < len(arr):
+                res[i+k] = 0
+    
+    for i,a in enumerate(arr):
+        if a == 1:                
+            if i-k >= 0 and i+k < len(arr):
+                if res[i-k] == 0 and res[i+k] == 0:
+                    return -1
+
+            elif i-k >= 0:
+                if res[i-k] == 0:
+                    return -1
+
+            elif i+k < len(arr):
+                if res[i+k] == 0:
+                    return -1
+
+            else:  # not(i-k >= 0) and not(i+k < len(arr)):
+                return -1
+
+    return "".join(str(x) for x in res)
 
 
 def console(*args):  # the judge will not read these print statement
@@ -24,10 +51,10 @@ def console(*args):  # the judge will not read these print statement
 
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
+    strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -42,10 +69,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(strr, k)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
