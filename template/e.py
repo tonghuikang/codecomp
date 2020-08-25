@@ -14,26 +14,33 @@ def solve(lst):  # fix inputs here
     console(lst)
     res = 0
 
-    for height in range(1, len(lst)):
+    for threshold in list(range(1, min(5000+1, 1+len(lst))))[::-1]:
+        height = 1
         cur = 0
         start = 10**4
         for i in range(len(lst)):
-            if lst[i] == height:
+            console(threshold, height, cur, i, start, lst, res)
+            if lst[i] == threshold:
                 if cur == 0:
                     start = i
                 cur += 1
-            if lst[i] < i:
-                if cur >= i:
-                    res += 1
+            if lst[i] < threshold:
+                if cur >= threshold:
+                    res += threshold
                     for j in range(start, i):
                         cur = 0
-                        lst[j] -= height
+                        lst[j] -= threshold
                         start = 10**4
+                else:
+                    cur = 0
+                    start = 10**4
         if start < 10**4:
-            res += 1
-            for j in range(start, i):
-                cur = 0
-                lst[j] -= height
+            if cur >= threshold:
+                console(cur, i, height, res, start)
+                res += threshold
+                for j in range(start, len(lst)):
+                    cur = 0
+                    lst[j] -= threshold
 
     for x in lst:
         if x > 0:
