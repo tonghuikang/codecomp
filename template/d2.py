@@ -21,9 +21,11 @@ def ncr(n, r):
 for i in range(3000):
     ncr(i, 4)
 
-def solve(a):  # fix inputs here
-    # console("----- solving ------")
-    n = len(a)
+def solve(arr):  # fix inputs here
+    console("----- solving ------")
+    console(arr)
+
+    n = len(arr)
     # console(lst)
 
     l = [0] * (n+1)
@@ -32,9 +34,13 @@ def solve(a):  # fix inputs here
     for j in range(n):
         r = [0] * (n+1)
         for k in range(n-1,j,-1):
-            ans += l[a[k]] * r[a[j]]
-            r[a[k]] += 1
-        l[a[j]] += 1
+            ans += l[arr[k]] * r[arr[j]]
+            r[arr[k]] += 1
+        l[arr[j]] += 1
+        
+        console(r)
+        console(l)
+        console(ans)
 
     
     # return a string (i.e. not a list or matrix)
@@ -42,7 +48,7 @@ def solve(a):  # fix inputs here
 
 
 def console(*args):  # the judge will not read these print statement
-    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
