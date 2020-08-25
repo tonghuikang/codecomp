@@ -3,12 +3,6 @@ import heapq, functools, collections
 import math, random
 from collections import Counter, defaultdict
 
-# fails
-# arr = [1]*3000
-# arr[:1500:2] = range(2,750+2)
-# arr[1500::2] = range(2,750+2)
-# print(" ".join(str(x) for x in arr))
-
 # available on Google, not available on Codeforces
 # import numpy as np
 # import scipy
@@ -27,64 +21,28 @@ def ncr(n, r):
 for i in range(3000):
     ncr(i, 4)
 
-def solve(lst):  # fix inputs here
+def solve(a):  # fix inputs here
     # console("----- solving ------")
-
+    n = len(a)
     # console(lst)
 
-    d = defaultdict(list)
-    res = 0
-
-    for i,x in enumerate(lst):
-        d[x].append(i)
-
-    # console(d)
-
-    idxs = d.values()
-
-    for k1,v1 in enumerate(idxs):
-        if len(v1) == 1:
-            continue
-
-        for k2,v2 in enumerate(idxs):
-            if len(v2) == 1:
-                continue 
-
-            if k1 == k2:
-                continue
-
-            j = 0
-            cnt = 0
-            segments = [0 for _ in v1]
-            for i,x in enumerate(v1):  # reference
-                while j < len(v2) and v2[j] < x:
-                    j += 1
-                    cnt += 1
-                segments[i] = cnt
-
-            psum = segments
-            
-
-            for i in range(len(psum)):
-                if psum[i] == 0:
-                    continue
-                for j in range(i+1, len(psum)):
-                    if psum[j] == psum[i]:
-                        continue
-                    res += psum[i] * (psum[j] - psum[i])
-
-    for v in idxs:
-        if len(v) >= 4:
-            res += ncr(len(v), 4)
-            # lst.append(len(v2) - cnt)
+    l = [0] * (n+1)
+    ans = 0
+ 
+    for j in range(n):
+        r = [0] * (n+1)
+        for k in range(n-1,j,-1):
+            ans += l[a[k]] * r[a[j]]
+            r[a[k]] += 1
+        l[a[j]] += 1
 
     
     # return a string (i.e. not a list or matrix)
-    return res
+    return ans
 
 
 def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
