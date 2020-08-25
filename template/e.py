@@ -8,60 +8,60 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-# https://codeforces.com/blog/entry/80158?locale=en
-from types import GeneratorType
-def bootstrap(f, stack=[]):
-    def wrappedfunc(*args, **kwargs):
-        if stack:
-            return f(*args, **kwargs)
-        else:
-            to = f(*args, **kwargs)
-            while True:
-                if type(to) is GeneratorType:
-                    stack.append(to)
-                    to = next(to)
-                else:
-                    stack.pop()
-                    if not stack:
-                        break
-                    to = stack[-1].send(to)
-            return to
-    return wrappedfunc
 
+def solve(lst):  # fix inputs here
+    # console("----- solving ------")
+    console(lst)
+    res = 0
 
-## Usage example
-# @bootstrap
-# def recurse(n):
-#   if (n < 2): yield n
-#   yield (yield recurse(n-1)) + (yield recurse(n-2))
+    for height in range(1, len(lst)):
+        cur = 0
+        start = 10**4
+        for i in range(len(lst)):
+            if lst[i] == height:
+                if cur == 0:
+                    start = i
+                cur += 1
+            if lst[i] < i:
+                if cur >= i:
+                    res += 1
+                    for j in range(start, i):
+                        cur = 0
+                        lst[j] -= height
+                        start = 10**4
+        if start < 10**4:
+            res += 1
+            for j in range(start, i):
+                cur = 0
+                lst[j] -= height
 
-
-def solve():  # fix inputs here
-    console("----- solving ------")
+    for x in lst:
+        if x > 0:
+            res += 1
 
     # return a string (i.e. not a list or matrix)
-    return ""  
+    return res
 
 
 def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
-# lines = sys.stdin.readlines()
+inp = sys.stdin.readlines()
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    # _ = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,inp[1].split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -70,10 +70,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
