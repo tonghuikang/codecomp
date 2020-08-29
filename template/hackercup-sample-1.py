@@ -8,9 +8,9 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-import threading
-sys.setrecursionlimit(10**6+10)    # adjust numbers
-threading.stack_size(1 << 32)     # for your needs
+# import threading
+# sys.setrecursionlimit(10**6+10)    # adjust numbers
+# threading.stack_size(1 << 32)     # for your needs
 
 # https://codeforces.com/blog/entry/80158?locale=en
 from types import GeneratorType
@@ -146,8 +146,8 @@ def console(*args):  # the judge will not read these print statement
 
 inputs = []
 
-def main():
-# for i in [1]:
+# def main():
+for i in [1]:
     for case_num in range(int(input())):
 
         # read line as a string
@@ -188,5 +188,5 @@ def main():
     # Codeforces - no case number required
     # print(res)
 
-main_thread = threading.Thread(target=main)
-main_thread.start()
+# main_thread = threading.Thread(target=main)
+# main_thread.start()
