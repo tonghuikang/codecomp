@@ -12,17 +12,21 @@ def solve(lst, r1, r2, r3, d):  # fix inputs here
     console("----- solving ------")
     # console(lst, r1, r2, r3, d)
     # baseline = (len(lst)-1)*d + sum([x*r1 + r3 for x in lst])
-
+    const_r2_r1_d = r2 + r1 + d
+    const_2r1_d = 2*r1 + d
+    # lst_r1x = [r1*x for x in lst]
     m1_cost = [r1*x + r3 for x in lst]       # shoot all, snipe boss, no relocation necessary
-    m4_cost = [min(r1*x + 2*r1 + d, r2 + r1 + d) for x in lst]     
+    m4_cost = [min(r1*x + const_2r1_d, const_r2_r1_d) for x in lst]
     # board clear, relocation necessary
     # shoot all incl boss, relocation necessary
 
     # m4_cost = [min(a,b) for a,b in zip(m2_cost, m3_cost)]
 
     baseline = sum(m1_cost) + (len(lst)-1)*d
-
     cost_diff = [a-b for a,b in zip(m1_cost, m4_cost)]
+
+    del m1_cost
+    del m4_cost
 
     # console("m1", m1_cost)
     # # console(m2_cost)
