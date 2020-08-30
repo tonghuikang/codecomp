@@ -39,13 +39,14 @@ def solve(lst, r1, r2, r3, d):  # fix inputs here
         savings[i][1] = max(savings[i-1][0] + cost_diff[i],   # start outstanding
                             savings[i-1][0] - d)   # start outstanding with supplement
 
-    total_savings = max(savings[-2][1], savings[-1][0])
+    # console(savings)
+    total_savings = max(0, savings[-2][1], savings[-1][0], savings[-1][1] - d)
 
     return baseline - total_savings
 
 
 def console(*args):  # the judge will not read these print statement
-    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
