@@ -8,11 +8,17 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(lst):  # fix inputs here
     console("----- solving ------")
+    lst = sorted(lst)[::-1]
+    
+    if lst[0] > sum(lst)/2:  # camp on one
+        return "T"
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    if sum(lst)%2 == 1:  # odd sum
+        return "T"
+
+    return "HL"
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,7 +33,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    _ = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -36,16 +42,16 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
     # grid = []
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)

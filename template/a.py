@@ -8,11 +8,19 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(lst, nrows):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    c = Counter()
+
+    for strr in lst:
+        c += Counter(strr)
+    
+    for v in c.values():
+        if v%nrows:
+            return "NO"
+    return "YES"
+
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,7 +35,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    nrows = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -38,14 +46,14 @@ for case_num in range(int(input())):
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(input())
 
-    res = solve()  # please change
+    res = solve(grid, nrows)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
