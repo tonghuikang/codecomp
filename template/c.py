@@ -1,51 +1,19 @@
-import sys
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
+X,Y,Z = 3,5,7
 
-# available on Google, not available on Codeforces
-# import numpy as np
-# import scipy
+import math
 
+def calc(X,Y,Z):
+    if Y*math.log(X) < 10*math.log(10):
+        res = ("{:.4f}".format((X**Y)/Z))[:-1]
+        if len(res) > 7:
+            res = res[-7:]
+        return res 
+    return "{:.4f}".format(pow(X, Y, Z*1000)/Z)[-9:-1].zfill(7)
 
-def solve():  # fix inputs here
-    console("----- solving ------")
-
-    # return a string (i.e. not a list or matrix)
-    return ""  
-
-
-def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
-
-# fast read all
-# sys.stdin.readlines()
-
-for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
-
-    # read line as an integer
-    # k = int(input())
-    
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
-
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
-
-    res = solve()  # please change
-    
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
-
-    # Codeforces - no case number required
-    # print(res)
+print(calc(3,5,7))
+print(calc(4,7,32))
+print(calc(3,2,36))
+print(calc(7,4,47))
+print(calc(13,6,479))
+print(calc(1234,56789,123456))
+print(calc(999999999,128,1000000))
