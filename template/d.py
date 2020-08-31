@@ -68,30 +68,35 @@ def solve(edges, stones_available, recipies_target, recipies_ingredients, total_
         for stone in lst:
            availability[i][stone] = 0
 
-    prev_availability = [[10**12+1 for x in row] for row in availability]
-    prev_availability = np.array(prev_availability, dtype=int)
+    # prev_availability = [[10**12+1 for x in row] for row in availability]
+    # prev_availability = np.array(prev_availability, dtype=int)
 
-    while True:
-        if (prev_availability == availability).all():
-            break
-        prev_availability = availability.copy()
+    improvement_1 = True
+    improvement_2 = True
+    while improvement_1:
+        improvement_1 = False
+        # prev_availability = availability.copy()
         for junction1 in range(total_junctions):
             for stone in range(total_stones):
                 for junction2 in range(total_junctions):
-                    availability[junction2][stone] = min(availability[junction2][stone], 
-                                                         availability[junction1][stone] + distance[junction1][junction2])
+                    if availability[junction2][stone] > availability[junction1][stone] + distance[junction1][junction2]:
+                        improvement_1 = True
+                        availability[junction2][stone] = availability[junction1][stone] + distance[junction1][junction2]
 
         for junction,lst in enumerate(availability):
-            prev_lst = availability[junction,:].copy()
-            prev_lst[:] = -1
-            while True:
+            # prev_lst = availability[junction,:].copy()
+            # prev_lst[:] = -1
+            
+            improvement_2 = True
+            while improvement_2:
+                improvement_2 = False
                 cur_lst = availability[junction,:]
-                if (prev_lst == cur_lst).all():
-                    break
-                prev_lst = cur_lst
+                # prev_lst = cur_lst
                 for target, ingredients in zip(recipies_target, recipies_ingredients):
-                    availability[junction][target] = min(availability[junction][target], 
-                                                         sum(availability[junction][ingredient] for ingredient in ingredients))
+                    if availability[junction][target] > sum(availability[junction][ingredient] for ingredient in ingredients):
+                        improvement_1 = True
+                        improvement_2 = True
+                        availability[junction][target] = sum(availability[junction][ingredient] for ingredient in ingredients)
                 # c = list(zip(recipies_target, recipies_ingredients))
                 # random.shuffle(c)
                 # recipies_target, recipies_ingredients = zip(*c)
