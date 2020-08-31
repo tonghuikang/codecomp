@@ -79,24 +79,26 @@ def solve(edges, stones_available, recipies_target, recipies_ingredients, total_
         for junction1 in range(total_junctions):
             for stone in range(total_stones):
                 for junction2 in range(total_junctions):
-                    if availability[junction2][stone] > availability[junction1][stone] + distance[junction1][junction2]:
+                    new_availability_junction2_stone = availability[junction1][stone] + distance[junction1][junction2]
+                    if availability[junction2][stone] > new_availability_junction2_stone:
                         improvement_1 = True
-                        availability[junction2][stone] = availability[junction1][stone] + distance[junction1][junction2]
+                        availability[junction2][stone] = new_availability_junction2_stone
 
         for junction,lst in enumerate(availability):
             # prev_lst = availability[junction,:].copy()
             # prev_lst[:] = -1
-            
+
             improvement_2 = True
             while improvement_2:
                 improvement_2 = False
                 cur_lst = availability[junction,:]
                 # prev_lst = cur_lst
                 for target, ingredients in zip(recipies_target, recipies_ingredients):
-                    if availability[junction][target] > sum(availability[junction][ingredient] for ingredient in ingredients):
+                    newsum = sum(availability[junction][ingredient] for ingredient in ingredients)
+                    if availability[junction][target] > newsum:
                         improvement_1 = True
                         improvement_2 = True
-                        availability[junction][target] = sum(availability[junction][ingredient] for ingredient in ingredients)
+                        availability[junction][target] = newsum
                 # c = list(zip(recipies_target, recipies_ingredients))
                 # random.shuffle(c)
                 # recipies_target, recipies_ingredients = zip(*c)
