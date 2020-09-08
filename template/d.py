@@ -79,7 +79,7 @@ def solve(lst):  # fix inputs here
     def get_envelop_2(lst):
         edges = []
         i = 0
-        while i < len(lst) - 2:
+        while i < len(lst) - 1:
             start = i
             cur = lst[i]
             curmax = lst[i+1]
@@ -96,9 +96,16 @@ def solve(lst):  # fix inputs here
 
     edges_5 = get_envelop_2(lst)
     edges_6 = get_envelop_2([-x for x in lst])
+    edges_7 = get_envelop_2(lst[::-1])
+    edges_8 = get_envelop_2([-x for x in lst][::-1])
+
+    edges_7 = [(lenlst - 1 - b, lenlst - 1 - a) for a,b in edges_7]
+    edges_8 = [(lenlst - 1 - b, lenlst - 1 - a) for a,b in edges_8]
 
     console(edges_5)
     console(edges_6)
+    console(edges_7)
+    console(edges_8)
 
     edgeset = set()
     edgeset.update([(i,i+1) for i in range(lenlst-1)])
@@ -108,7 +115,9 @@ def solve(lst):  # fix inputs here
     edgeset.update(edges_4)
     edgeset.update(edges_5)
     edgeset.update(edges_6)
-    
+    edgeset.update(edges_7)
+    edgeset.update(edges_8)
+
     G = [[] for _ in range(lenlst)]
     for a,b in edgeset:
         G[a].append((b,1))
