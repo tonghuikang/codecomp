@@ -8,11 +8,26 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(lst):  # fix inputs here
     console("----- solving ------")
+    console(lst)
 
+    if lst.count('0') >= len(lst) // 2:
+        print(len(lst) // 2)
+        print(" ".join(["0" for _ in range(len(lst) // 2)]))
+        return
+
+    if (len(lst)//2 % 2) == 0:
+        length = len(lst)//2
+        print(length)
+        print(" ".join(["1" for _ in range(length)]))
+    else:
+        length = len(lst)//2 + 1
+        print(length)
+        print(" ".join(["1" for _ in range(length)]))
+        
     # return a string (i.e. not a list or matrix)
-    return ""  
+    return
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,10 +42,10 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    _ = int(input())
     
     # read one line and parse each word as a string
-    # lst = input().split()
+    lst = input().split()
 
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
@@ -42,7 +57,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
