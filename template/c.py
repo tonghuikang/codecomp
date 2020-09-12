@@ -8,8 +8,10 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(grid, nrows):  # fix inputs here
     console("----- solving ------")
+
+
 
     # return a string (i.e. not a list or matrix)
     return ""  
@@ -27,7 +29,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    nrows = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -39,10 +41,10 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
     # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    for _ in range(nrows-1):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid, nrows)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
