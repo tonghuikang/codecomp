@@ -21,56 +21,56 @@ def solve(arr, brr):  # fix inputs here
                 print("No")
                 return
 
-    anew = []
-    for v,k in sorted([(v,k) for k,v in c1.items()])[::-1]:
-        anew.extend([k]*v)
+    anew = sorted(arr)
+    bnew = sorted(brr)[::-1]
 
-    bnew = [None for _ in arr]
-    fallback_ptr = 0
-    ptr = 0
-    for a in anew:
-        ptr = fallback_ptr
-        while c2[a]:
-            while anew[ptr] == a or bnew[ptr] != None:
-                ptr += 1
-                if ptr == len(arr):
-                    ptr = fallback_ptr
-            bnew[ptr] = a
-            c2[a] -= 1
-            ptr += 1
-            if ptr == len(arr):
-                ptr = fallback_ptr
-            
-            while bnew[fallback_ptr] != None:
-                fallback_ptr += 1
-                
-    bremainder = []
-    for k,v in c2.items():
-        bremainder.extend([k] * v)
+    idxs = set([i for i,(a,b) in enumerate(zip(anew,bnew)) if a == b])
+    swaps = []
 
-    console(c2)
+    if idxs:
+        same_num = bnew[list(idxs)[0]]
+        for i in range(len(arr)):
+            if i in idxs:
+                continue
+            if bnew[i] == same_num:
+                continue
+            if anew[i] == same_num:
+                continue
+            swaps.append(i)
+            if len(swaps) == len(idxs):
+                break
+    
+    assert len(swaps) == len(idxs)
+    
+    console()
+    console(anew)
     console(bnew)
-    console(bremainder)
+    console(idxs)
+    console(swaps)
+    console()
 
-    for i in range(len(bnew)):
-        if bnew[i] == None:
-            bnew[i] = bremainder.pop()
+    for x,y in zip(swaps, idxs):
+        bnew[x], bnew[y] = bnew[y], bnew[x]
 
     d = defaultdict(list)
     for a,b in zip(anew, bnew):
         d[a].append(b)
     
-    console(anew)
-    console(bnew)
-    console(d)
     
     res = []
     for a in arr:
         b = d[a].pop()
-        # assert b != a
+        assert b != a
         res.append(b)
 
     # assert(sorted(res) == sorted(brr))
+
+    console()
+    console(anew)
+    console(bnew)
+    console(idxs)
+    console(swaps)
+    console()
 
     print("Yes")
     print(" ".join([str(a) for a in res]))
