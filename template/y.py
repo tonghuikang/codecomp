@@ -17,6 +17,21 @@ from collections import Counter, defaultdict
 # lst = input().split()
 
 # read one line and parse each word as an integer
-# arr = list(map(int,input().split()))
+a,b,c,d = list(map(int,input().split()))
 
-print()
+if a <= 0 <= b:
+    xx = [a,0,b] 
+else:
+    xx = [a,b]
+
+if c <= 0 <= d:
+    yy = [c,0,d]
+else:
+    yy = [c,d]
+
+maxres = -10**18
+for x in xx:
+    for y in yy:
+        maxres = max(maxres, x*y)
+
+print(maxres)
