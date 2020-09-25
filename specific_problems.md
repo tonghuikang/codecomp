@@ -4,6 +4,32 @@ Please understand the concepts, e.g. optimal substructure.
 
 https://judge.yosupo.jp/
 
+
+
+Sort by custom criteria with `cmp_to_key`
+
+```python
+from functools import cmp_to_key
+
+def largestNumber(self, nums):
+  def compare(a,b):
+    if a+b > b+a:
+        return -1
+    if a+b < b+a:
+        return 1
+    return 0
+
+  nums = map(str, nums)
+  nums = sorted(nums, key = cmp_to_key(compare))
+
+  return str(int("".join(nums)))
+
+```
+
+
+
+
+
 Count number of permutations a number is divisible by 11. https://www.quora.com/log/revision/22296018
 
 ```python

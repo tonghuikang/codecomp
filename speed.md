@@ -35,7 +35,7 @@ lines = sys.stdin.readlines()
 
 
 
-
+https://codeforces.com/blog/entry/82989 On fast reading
 
 
 
