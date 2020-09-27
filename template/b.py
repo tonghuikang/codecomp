@@ -8,11 +8,30 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(arr,k):  # fix inputs here
     console("----- solving ------")
 
+    # if k is odd, even goes to C, odd goes to D
+    if k%2 == 1:
+        return [1 if a%2 else 0 for a in arr]
+
+    # if k is even, k//2 split onto both sides, smaller than k//2 goes to C, greater than k//2 goes to D
+    res = []
+    cnt = 0
+    for a in arr:
+        if a == k//2:
+            cnt += 1
+            if cnt%2:
+                res.append(0)
+            else:
+                res.append(1)
+        elif a < k//2:
+            res.append(0)
+        else:
+            res.append(1)
+        
     # return a string (i.e. not a list or matrix)
-    return ""  
+    return res
 
 
 def console(*args):  # the judge will not read these print statement
@@ -33,7 +52,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -42,10 +62,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
-    
+    res = solve(lst,k)  # please change
+    res = " ".join(str(x) for x in res)
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)
