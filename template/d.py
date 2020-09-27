@@ -38,7 +38,7 @@ def solve(lst):  # fix inputs here
     assert arr[0][1] == 1
 
     for remaining_to_fulfill, i, x in arr[1:]:
-        if status[0] <= remaining_to_fulfill:  # you cannot already
+        if status[0] < remaining_to_fulfill:  # you cannot already
             break
         print("{} {} {}".format(1, i, remaining_to_fulfill))
         status[0] -= remaining_to_fulfill
@@ -55,6 +55,10 @@ def solve(lst):  # fix inputs here
     # transfer all equally    
     for i,x in enumerate(status[1:], start=2):
         transfer = target-x
+        if transfer < 0:
+            cout = []
+            print(-1)
+            return "\n".join(str(x) for x in cout)
         print("{} {} {}".format(1, i, transfer))
         status[0] -= transfer
         status[i-1] += transfer
