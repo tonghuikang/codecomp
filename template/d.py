@@ -33,11 +33,11 @@ def solve(lst):  # fix inputs here
 
 
     # sort by distance to fulfillment
-    arr = sorted([((-x)%i,x,i) for i,x in enumerate(lst, start=1)])
+    arr = sorted([((-x)%i,i,x) for i,x in enumerate(lst, start=1)])
 
-    assert arr[0][2] == 1
+    assert arr[0][1] == 1
 
-    for remaining_to_fulfill, x, i in arr[1:]:
+    for remaining_to_fulfill, i, x in arr[1:]:
         if status[0] <= remaining_to_fulfill:  # you cannot already
             break
         print("{} {} {}".format(1, i, remaining_to_fulfill))
