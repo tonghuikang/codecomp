@@ -20,11 +20,12 @@ def solve(lst):  # fix inputs here
         global cout
         cout += [strr]
 
-    if sum(lst) % len(lst) != 0:
-        print(-1)
-        return "\n".join(str(x) for x in cout)
+    # if sum(lst) % len(lst) != 0:
+    #     print(-1)
+    #     return "\n".join(str(x) for x in cout)
     
     if len(set(lst)) == 1:
+        cout = []
         print(0)
         return "\n".join(str(x) for x in cout)
 
@@ -47,7 +48,7 @@ def solve(lst):  # fix inputs here
         print("{} {} {}".format(i, 1, multiple))
         status[0] += multiple*i
         status[i-1] -= multiple*i
-        assert status[i-1] == 0
+        # assert status[i-1] == 0
         
     console(status)
 
@@ -59,6 +60,11 @@ def solve(lst):  # fix inputs here
         status[i-1] += transfer
 
     console(status)
+
+    if len(set(status)) != 1:
+        cout = []
+        print(-1)
+        return "\n".join(str(x) for x in cout)
 
     # return a string (i.e. not a list or matrix)
     return "\n".join(str(x) for x in [len(cout)] + cout)
