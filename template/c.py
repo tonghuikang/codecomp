@@ -8,11 +8,18 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
+def solve(k):  # fix inputs here
     console("----- solving ------")
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    z = int(math.sqrt(k))
+    res = (z-1) * 2
+
+    if k%(z**2):
+        res += 1
+        console("check")
+    if res > 12:
+        res += 1
+    return res
 
 
 def console(*args):  # the judge will not read these print statement
@@ -27,7 +34,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -42,10 +49,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)

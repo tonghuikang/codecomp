@@ -40,7 +40,7 @@ def solve(grid, k):  # fix inputs here
     if check_1 and check_2 and k > 2:
         return "YES"
 
-    return "NO"  
+    return "NO"
 
 
 def console(*args):  # the judge will not read these print statement
