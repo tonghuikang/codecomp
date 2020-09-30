@@ -9,7 +9,6 @@ from collections import Counter, defaultdict
 
 import os
 from io import BytesIO, IOBase
-BUFSIZE = 8192
 
 class FastIO(IOBase):
     newlines = 0
@@ -59,51 +58,60 @@ sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
 input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 
-def solve(arr,brr,crr):  # fix inputs here
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
+
+
+## Usage example
+# @bootstrap
+# def recurse(n):
+#   if (n < 2): yield n
+#   yield (yield recurse(n-1)) + (yield recurse(n-2))
+
+
+def solve():  # fix inputs here
     console("----- solving ------")
 
-    res = [arr[0]]
-    for a,b,c in zip(arr[1:],brr[1:],crr[1:]):
-        if a != res[-1]:
-            res.append(a)
-        elif b != res[-1]:
-            res.append(b)
-        else:
-            res.append(c)
-
-    if res[0] == res[-1]:
-        if a != res[-2] and a != res[0]:
-            res[-1] = a
-        elif b != res[-2] and b != res[0]:
-            res[-1] = b
-        else:
-            res[-1] = c
-
     # return a string (i.e. not a list or matrix)
-    return res
+    return ""  
 
 
 def console(*args):  # the judge will not read these print statement
-    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
-# sys.stdin.readlines()
+# lines = sys.stdin.readlines()
 
 for case_num in range(int(input())):
     # read line as a string
     # strr = input()
 
     # read line as an integer
-    k = int(input())
+    # k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    arr = list(map(int,input().split()))
-    brr = list(map(int,input().split()))
-    crr = list(map(int,input().split()))
+    # lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -112,10 +120,10 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve(arr, brr, crr)  # please change
+    res = solve()  # please change
     
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(" ".join(str(x) for x in res))
+    # print(res)
