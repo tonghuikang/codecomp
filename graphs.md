@@ -227,7 +227,7 @@ Obtain connected components without building a graph
 
 **Djistrka algorithm**
 
-Contest tested
+Contest tested - PyPy3 600k nodes 2 seconds
 
 ```python
 import heapq as hq
@@ -253,6 +253,28 @@ def dijkstra(G, s):
                     hq.heappush(queue, (f, v))
     return path, weights
 
+
+# d is a map from e to [(v1,cost), (v2,cost), ...]
+# node indexes can be of any data type
+
+# define your source and target
+source = "source"
+target = "target"
+
+# processing edge matrix
+idxs = {k:i for i,k in enumerate(d.keys())}
+G = [[] for _ in range(len(idxs))]
+for e,vrr in d.items():
+    for v,cost in vrr:
+        G[idxs[e]].append((idxs[v],cost))
+
+_,costs = dijkstra(G, idxs[source])
+res = costs[idxs[target]]
+```
+
+
+```python
+# test code for dijkstra()
 G = [[(1, 6), (3, 7)],
      [(2, 5), (3, 8), (4, -4)],
      [(1, -2), (4, 7)],
@@ -260,7 +282,6 @@ G = [[(1, 6), (3, 7)],
      [(0, 2)]]
 
 print(dijkstra(G, 0))
-
 ```
 
 

@@ -9,9 +9,14 @@ import collections
 from scipy.stats import binom
 
 
-def solve(w,h,l,u,r,d):
+def solve(*args):
     console("----- solving ------")
+    console(*args)
+    console("----- ------- ------")
+    return solve_(*args)
 
+
+def solve_(w,h,l,u,r,d):
     res = 0
     # 6,4,1,3,3,4
     if u-2 >= 0 and w > r:
@@ -21,6 +26,7 @@ def solve(w,h,l,u,r,d):
         res += binom.cdf(l-2, d+l-2, 0.5)
     
     return res
+
 
 
 def console(*args):  # the judge will not read these print statement
