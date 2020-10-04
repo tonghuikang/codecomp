@@ -41,59 +41,33 @@ def solve(grid,sx,sy,ex,ey):  # fix inputs here
         return minres
 
     d = defaultdict(list)
-    allx = sorted(set(x for x,y in grid))
-    ally = sorted(set(y for x,y in grid))
-    nextx = {a:b for a,b in zip(allx, allx[1:])}
-    prevx = {b:a for a,b in zip(allx, allx[1:])}
-    nexty = {a:b for a,b in zip(ally, ally[1:])}
-    prevy = {b:a for a,b in zip(ally, ally[1:])}
+    grid = [(i,x,y) for i,(x,y) in enumerate(grid)]
 
-    console(allx, nextx, prevx)
-    console(ally, nexty, prevy)
+    # x-order
+    grid = sorted(grid, key=lambda x: x[1])
+    for (i1,x1,y1),(i2,x2,y2) in zip(grid, grid[1:]):
+        d[i1].append((i2,x2-x1))
+        d[i2].append((i1,x2-x1))
 
-    # i point
-    # (x,0) x-axis
-    # (0,y) y-axis
-    # "source" source
-    # "dest" destination
-    for i,(x,y) in enumerate(grid):
-        # x-axis to point
-        d[(x,0)].append((i,0))
+    grid = sorted(grid, key=lambda x: x[2])
+    for (i1,x1,y1),(i2,x2,y2) in zip(grid, grid[1:]):
+        d[i1].append((i2,y2-y1))
+        d[i2].append((i1,y2-y1))
 
-        # y-axis to point
-        d[(0,y)].append((i,0))
-
+    for i,x,y in grid:
         # start to x-axis
-        d["source"].append(((x,0),abs(x-sx)))
+        d[-2].append((i,abs(x-sx)))
 
         # start to y-axis
-        d["source"].append(((0,y),abs(y-sy)))
+        d[-2].append((i,abs(y-sy)))
 
         # point to destination
-        d[i].append(("dest", abs(x-ex) + abs(y-ey)))
+        d[i].append((-1, abs(x-ex) + abs(y-ey)))
 
-    d["dest"] = []
+    d[-1] = []
     console(d.keys())
 
-    # point to adjacent x-axis
-    # point to adjacent y-axis
-    for i,(x,y) in enumerate(grid):
-        if x in nextx:
-            d[i].append(((nextx[x],0),abs(x-nextx[x])))
-        if x in prevx:
-            d[i].append(((prevx[x],0),abs(x-prevx[x])))
-        if y in nexty:
-            d[i].append(((0,nexty[y]),abs(y-nexty[y])))
-        if y in prevy:
-            d[i].append(((0,prevy[y]),abs(y-prevy[y])))
-
-
-    # return a string (i.e. not a list or matrix)
-    # console("keys", d.keys())
-    # console(d)
-
     idxs = {k:i for i,k in enumerate(d.keys())}
-
     G = [[] for _ in range(len(idxs))]
 
     for e,vrr in d.items():
@@ -101,16 +75,16 @@ def solve(grid,sx,sy,ex,ey):  # fix inputs here
             G[idxs[e]].append((idxs[v],cost))
     # console(G)
 
-    _,costs = dijkstra(G, idxs["source"])
+    _,costs = dijkstra(G, idxs[-2])
     
 
-    res = costs[idxs["dest"]]
+    res = costs[idxs[-1]]
 
     return min(minres, res)
 
 
 def console(*args):  # the judge will not read these print statement
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     return
 
 # fast read all
