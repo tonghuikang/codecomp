@@ -47,7 +47,10 @@ def solve(grid,sx,sy,ex,ey):  # fix inputs here
     prevx = {b:a for a,b in zip(allx, allx[1:])}
     nexty = {a:b for a,b in zip(ally, ally[1:])}
     prevy = {b:a for a,b in zip(ally, ally[1:])}
-    
+
+    console(allx, nextx, prevx)
+    console(ally, nexty, prevy)
+
     # i point
     # (x,0) x-axis
     # (0,y) y-axis
@@ -70,8 +73,10 @@ def solve(grid,sx,sy,ex,ey):  # fix inputs here
         d[i].append(("dest", abs(x-ex) + abs(y-ey)))
 
     d["dest"] = []
+    console(d.keys())
 
     # point to adjacent x-axis
+    # point to adjacent y-axis
     for i,(x,y) in enumerate(grid):
         if x in nextx:
             d[i].append(((nextx[x],0),abs(x-nextx[x])))
@@ -81,7 +86,6 @@ def solve(grid,sx,sy,ex,ey):  # fix inputs here
             d[i].append(((0,nexty[y]),abs(y-nexty[y])))
         if y in prevy:
             d[i].append(((0,prevy[y]),abs(y-prevy[y])))
-    # point to adjacent y-axis
 
 
     # return a string (i.e. not a list or matrix)
