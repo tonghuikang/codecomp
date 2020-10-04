@@ -1,33 +1,36 @@
 import sys, io, os
-import math
+import math, random
 import heapq as hq
-import random
 from collections import defaultdict
 
 # available on Google, not available on Codeforces
 # import numpy as np
 # import scipy
 
-import sys
-from os import path
-
-def console(*args):  # the judge will not read these print statement
-    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
+def console(*args):  
+    # print on terminal in different color
+    print('\033[36m', *args, '\033[0m', file=sys.stderr)
     pass
 
 # if Codeforces environment
-if path.exists('input.txt'):
+if os.path.exists('input.txt'):
     sys.stdin = open("input.txt","r")
     sys.stdout = open("output.txt","w")
 
     def console(*args):
         pass
 
-inp = sys.stdin.readlines()
-# input = io.BytesIO(os.read(0,os.fstat(0).st_size)).readline
+if True:
+    # if memory is not a constraint
+    inp = iter(sys.stdin.buffer.readlines())
+    input = lambda: next(inp)
+else:
+    # if memory is a constraint
+    input = sys.stdin.buffer.readline
 
 
 def solve(*args):
+    # screen input
     console("----- solving ------")
     console(*args)
     console("----- ------- ------")
@@ -35,8 +38,6 @@ def solve(*args):
 
 
 def solve_(grid,sx,sy,ex,ey):  # fix inputs here
-    console("----- solving ------")
-    # console(grid,sx,sy,ex,ey)
 
     minres = abs(sx-ex) + abs(sy-ey)
     console(minres)
@@ -52,6 +53,7 @@ def solve_(grid,sx,sy,ex,ey):  # fix inputs here
         d[i1].append((i2,x2-x1))
         d[i2].append((i1,x2-x1))
 
+    # y-order
     grid = sorted(grid, key=lambda x: x[2])
     for (i1,x1,y1),(i2,x2,y2) in zip(grid, grid[1:]):
         d[i1].append((i2,y2-y1))
@@ -67,17 +69,9 @@ def solve_(grid,sx,sy,ex,ey):  # fix inputs here
         # point to destination
         d[i].append((-1, abs(x-ex) + abs(y-ey)))
 
-    d[-1] = []
-    console(d.keys())
+    res = dijkstra_with_preprocessing(d, -2, -1)
 
-    idxs = {k:i for i,k in enumerate(d.keys())}
-    G = [[] for _ in range(len(idxs))]
-
-    for e,vrr in d.items():
-        for v,cost in vrr:
-            G[idxs[e]].append((idxs[v],cost))
-
-    return min(minres, dijkstra_with_preprocessing(d, -2, -1))
+    return min(minres,res)
 
 
 def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target):
@@ -132,8 +126,8 @@ for case_num in [1]:
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    _, nrows = list(map(int,inp[0].split()))
-    sx,sy,ex,ey = list(map(int,inp[1].split()))
+    _, nrows = list(map(int,input().split()))
+    sx,sy,ex,ey = list(map(int,input().split()))
 
     # currow = 2
     # read matrix and parse as integers (after reading read nrows)
@@ -141,7 +135,7 @@ for case_num in [1]:
     # nrows = lst[0]  # index containing information, please change
     grid = []
     for z in range(nrows):
-        grid.append(list(map(int,inp[z+2].split())))
+        grid.append(list(map(int,input().split())))
 
     res = solve(grid,sx,sy,ex,ey)  # please change
     
