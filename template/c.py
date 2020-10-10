@@ -8,10 +8,24 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(grid):
     # your solution here
 
-    return ""
+    grid = [[0,1,1]] + grid
+    dp = [0]*len(grid)
+    dp[0] = 1
+    dp = [1 if x+y-2 <= t else 0 for t,x,y in grid]
+
+    for i,(t,x,y) in enumerate(grid):
+        i2 = i + 1
+        while i2 < len(grid) and grid[i2][0] - t <= 1000:
+            if abs(grid[i2][1] - x) + abs(grid[i2][2] - y) <= grid[i2][0] - t:
+                if dp[i] > 0:
+                    dp[i2] = max(dp[i2], dp[i] + 1)
+            i2 += 1
+
+    console(dp)    
+    return max(dp) - 1
 
 
 def console(*args):  
@@ -46,7 +60,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -57,16 +71,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _, nrows = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]

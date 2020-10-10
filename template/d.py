@@ -18,6 +18,7 @@ def solve_(lst):
         return [[1]*length]
 
     res = []
+    check = False
 
     for i in range(1, length+1):
         ops = []
@@ -26,21 +27,29 @@ def solve_(lst):
         ops = [idx] + [length - idx - (i-1)] + [1]*(i-1)            
         ops = [x for x in ops if x > 0]
 
+        console(ops)
         assert(sum(ops) == length)
+
+        # if len(ops) == 1:
+        #     ops = [1] + [length-1] 
+        #     res.append(ops)
+        #     res.append(ops)
+        #     console("len(ops) == 1", ops)
+        #     check = True
+        #     continue
 
         arr = []
         ptr = 0
         for op in ops:
             arr.append(lst[ptr:ptr+op])
             ptr += op
+
+
         arr = arr[::-1]
         brr = []
         for ar in arr:
             brr.extend(ar)
         lst = brr
-        if len(ops) == 1:
-            console("len(ops) == 1")
-            continue
         lst = lst[::-1]
         
         console("ops", ops)
@@ -50,18 +59,23 @@ def solve_(lst):
         # print()
         res.append(ops)
 
+    # if not check:
     res[1::2] = [ops[::-1] for ops in res[1::2]]
-    if length%2 == 0:
-        res.pop()
+    # else:
+    #     res[::2] = [ops[::-1] for ops in res[::2]]
+    # if length%2 == 0:
+    #     res.pop()
 
     lst = original_lst
     console(lst)
     
-    for ops in res:
-        assert len(ops) >= 2
+    # for ops in res:
+    #     assert len(ops) >= 2
 
     res2 = []
     for ops in res:
+        if len(ops) == 1:
+            continue
         arr = []
         ptr = 0
         for op in ops:
@@ -149,7 +163,16 @@ for case_num in [1]:
     # print("Case #{}: {}".format(case_num+1, res))
     print(len(res))
 
+    console(lst, res)
+
     for row in res:
         print("{} {}".format(len(row), " ".join([str(x) for x in row])))
     # Codeforces - no case number required
     # print(res)
+
+# import itertools
+# for i in range(1,10):
+#     for lst in itertools.permutations(range(1, i+1)):
+#         console("TEST", list(lst))
+#         solve(list(lst))
+        
