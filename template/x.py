@@ -8,7 +8,8 @@ import random
 from collections import Counter, defaultdict
 
 # read line as a string
-# strr = input()
+str1 = input()
+str2 = input()
 
 # read line as an integer
 # k = int(input())
@@ -19,4 +20,7 @@ from collections import Counter, defaultdict
 # read one line and parse each word as an integer
 # arr = list(map(int,input().split()))
 
-print()
+if str1 == "Y":
+    print(str2.upper())
+else:
+    print(str2)
