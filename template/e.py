@@ -8,19 +8,43 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve():  # fix inputs here
-    console("----- solving ------")
+def solve_():
+    # your solution here
 
-    # return a string (i.e. not a list or matrix)
-    return ""  
+    return ""
 
 
-def console(*args):  # the judge will not read these print statement
+def console(*args):  
+    # print on terminal in different color
     print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
+    pass
 
-# fast read all
-# lines = sys.stdin.readlines()
+
+# if Codeforces environment
+if os.path.exists('input.txt'):
+    sys.stdin = open("input.txt","r")
+    sys.stdout = open("output.txt","w")
+
+    def console(*args):
+        pass
+
+
+def solve(*args):
+    # screen input
+    console("----- solving ------")
+    console(*args)
+    console("----- ------- ------")
+    return solve_(*args)
+
+
+if True:
+    # if memory is not a constraint
+    inp = iter(sys.stdin.buffer.readlines())
+    input = lambda: next(inp)
+else:
+    # if memory is a constraint
+    input = sys.stdin.buffer.readline
+
 
 for case_num in range(int(input())):
     # read line as a string
@@ -44,8 +68,13 @@ for case_num in range(int(input())):
 
     res = solve()  # please change
     
+    # post processing methods
+    # res = [str(x) for x in res]
+    # res = " ".join(res)
+
+    # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    # print(res)
+    print(res)

@@ -26,7 +26,7 @@ python3 $PROBLEM_ID.py < $PROBLEM_ID
 
 ### Preflight checklist
 
-Activate environment `ss; sa sml`
+Activate environment `ss; sa code`
 
 Open a jupyter notebook `jn`
 
