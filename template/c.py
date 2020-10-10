@@ -17,15 +17,13 @@ def solve_(grid):
     dp = [1 if x+y-2 <= t else 0 for t,x,y in grid]
     # console(dp)
 
-    for i,(t,x,y) in enumerate(grid):       
+    for i,(t,x,y) in enumerate(grid):
         i2 = i + 1
-        while i2 < len(grid) and (i2 - 1 <= 1000):
+        while i2 < len(grid) and i2 - i <= 1000:
             if abs(grid[i2][1] - x) + abs(grid[i2][2] - y) <= grid[i2][0] - t:
                 if dp[i] > 0:
                     dp[i2] = max(dp[i2], dp[i] + 1)
-                    # curmax = max(curmax, dp[i2])
             i2 += 1
-        
 
     # console(dp)    
     return max(dp)
