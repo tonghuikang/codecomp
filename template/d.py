@@ -8,8 +8,49 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst):
     # your solution here
+    length = len(lst)
+    if length == 1 or lst == sorted(lst):
+        return []
+
+    if length%2 == 1:
+        cur = "left"
+    else:
+        cur = "right"
+
+    res = []
+    for i in range(1, length+1):
+        console(cur)
+        ops = []
+        idx = lst.index(i)
+
+        if cur == "left":
+            ops = [idx] + [length - idx - (i-1)] + [1]*(i-1)
+            cur = "right"
+            
+        else:
+            ops = [1]*(i-1) + [length - idx - (i-1)] + [idx]
+            # ops = ops[::-1]
+            cur = "left"
+
+        arr = []
+        ptr = 0
+        for op in ops:
+            arr.append(lst[ptr:ptr+op])
+            ptr += op
+        arr = arr[::-1]
+        brr = []
+        for ar in arr:
+            brr.extend(ar)
+        lst = brr
+        
+        console("ops", ops)
+        console("arr", arr)
+        console("brr", brr)
+        console("lst", lst)
+        print()
+        res.append(ops)
 
     return ""
 
@@ -46,18 +87,18 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    _ = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -66,7 +107,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
@@ -75,6 +116,9 @@ for case_num in range(int(input())):
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
+    print(len(res))
 
+    for row in res:
+        print("{} {}".format(len(row), " ".join([str(x) for x in res])))
     # Codeforces - no case number required
-    print(res)
+    # print(res)

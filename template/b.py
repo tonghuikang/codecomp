@@ -8,10 +8,56 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst, k):
     # your solution here
+    length = len(lst)
+    lst = lst
 
-    return ""
+
+    if sum(lst) + k >= length:
+        # console(lst, sum(lst), k, length)
+        # console("skip")
+        return 2*length - 1
+
+    if sum(lst) == 0:
+        return max(0, k*2 - 1)
+
+    lst = "".join(str(x) for x in lst)
+    lst = lst.strip("0")
+    lst = [int(x) for x in lst]    
+
+    console(lst)
+
+    spaces = []
+    prev = 0
+    curspace = 0
+    for a in lst:
+        if prev == 0 and a == 1:
+            spaces.append(curspace)
+            curspace = 0
+        if a == 0:
+            curspace += 1
+        prev = a
+    
+    spaces = spaces[1:]
+    spaces = sorted(spaces)
+    
+    console("spaces", spaces, k)
+
+    res = 2*sum(lst) - len(spaces) - 1
+    console("initial", res)
+
+    for a in spaces:
+        if a <= k:
+            k -= a
+            res += a*2 + 1
+
+    console("filled", res)
+
+    console("remainder", k)
+    res += k*2
+    
+    return res
 
 
 def console(*args):  
@@ -31,9 +77,9 @@ if os.path.exists('input.txt'):
 
 def solve(*args):
     # screen input
-    console("----- solving ------")
-    console(*args)
-    console("----- ------- ------")
+    # console("----- solving ------")
+    # console(*args)
+    # console("----- ------- ------")
     return solve_(*args)
 
 
@@ -47,8 +93,12 @@ else:
 
 
 for case_num in range(int(input())):
+
+    _, k = list(map(int,input().split()))
+
     # read line as a string
-    # strr = input()
+    lst = input().strip()
+    # lst = str(lst)
 
     # read line as an integer
     # k = int(input())
@@ -66,7 +116,9 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    # console(lst)
+    lst = [0 if x == 76 else 1 for x in lst]
+    res = solve(lst, k)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
