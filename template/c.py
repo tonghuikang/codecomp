@@ -1,7 +1,7 @@
 import sys, os
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
+# import heapq, functools, collections
+# import math, random
+# from collections import Counter, defaultdict
 
 # available on Google, not available on Codeforces
 # import numpy as np
@@ -11,18 +11,13 @@ from collections import Counter, defaultdict
 def solve_(grid):
     # your solution here
 
-    # grid = [[0,1,1]] + grid
-    dp = [0]*len(grid)
-    # dp[0] = 1
     dp = [1 if x+y-2 <= t else 0 for t,x,y in grid]
-    # console(dp)
 
     for i,(t,x,y) in enumerate(grid):
         i2 = i + 1
         while i2 < len(grid) and i2 - i <= 1000:
-            if abs(grid[i2][1] - x) + abs(grid[i2][2] - y) <= grid[i2][0] - t:
-                if dp[i] > 0:
-                    dp[i2] = max(dp[i2], dp[i] + 1)
+            if dp[i] > 0 and abs(grid[i2][1] - x) + abs(grid[i2][2] - y) <= grid[i2][0] - t:
+                dp[i2] = max(dp[i2], dp[i] + 1)
             i2 += 1
 
     # console(dp)    
@@ -52,7 +47,7 @@ def solve(*args):
     return solve_(*args)
 
 
-if True:
+if False:
     # if memory is not a constraint
     inp = iter(sys.stdin.buffer.readlines())
     input = lambda: next(inp)
