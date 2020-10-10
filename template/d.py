@@ -12,8 +12,10 @@ def solve_(lst):
     # your solution here
     original_lst = [x for x in lst]
     length = len(lst)
-    if length == 1:
+    if length == 1 or sorted(lst) == lst:
         return []
+    if sorted(lst) == lst[::-1]:
+        return [[1]*length]
 
     res = []
 
@@ -36,6 +38,9 @@ def solve_(lst):
         for ar in arr:
             brr.extend(ar)
         lst = brr
+        if len(ops) == 1:
+            console("len(ops) == 1")
+            continue
         lst = lst[::-1]
         
         console("ops", ops)
@@ -51,6 +56,11 @@ def solve_(lst):
 
     lst = original_lst
     console(lst)
+    
+    for ops in res:
+        assert len(ops) >= 2
+
+    res2 = []
     for ops in res:
         arr = []
         ptr = 0
@@ -65,7 +75,13 @@ def solve_(lst):
         console("ops", ops)
         console(lst)
 
+        res2.append(ops)
+        if lst == sorted(lst):
+            console("early escape")
+            return res2
+
     assert lst == sorted(lst)
+
 
     return res
 
