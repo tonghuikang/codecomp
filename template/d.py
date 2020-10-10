@@ -10,29 +10,21 @@ from collections import Counter, defaultdict
 
 def solve_(lst):
     # your solution here
+    original_lst = [x for x in lst]
     length = len(lst)
-    if length == 1 or lst == sorted(lst):
+    if length == 1:
         return []
 
-    if length%2 == 1:
-        cur = "left"
-    else:
-        cur = "right"
-
     res = []
+
     for i in range(1, length+1):
-        console(cur)
         ops = []
         idx = lst.index(i)
 
-        if cur == "left":
-            ops = [idx] + [length - idx - (i-1)] + [1]*(i-1)
-            cur = "right"
-            
-        else:
-            ops = [1]*(i-1) + [length - idx - (i-1)] + [idx]
-            # ops = ops[::-1]
-            cur = "left"
+        ops = [idx] + [length - idx - (i-1)] + [1]*(i-1)            
+        ops = [x for x in ops if x > 0]
+
+        assert(sum(ops) == length)
 
         arr = []
         ptr = 0
@@ -44,15 +36,38 @@ def solve_(lst):
         for ar in arr:
             brr.extend(ar)
         lst = brr
+        lst = lst[::-1]
         
         console("ops", ops)
         console("arr", arr)
         console("brr", brr)
         console("lst", lst)
-        print()
+        # print()
         res.append(ops)
 
-    return ""
+    res[1::2] = [ops[::-1] for ops in res[1::2]]
+    if length%2 == 0:
+        res.pop()
+
+    lst = original_lst
+    console(lst)
+    for ops in res:
+        arr = []
+        ptr = 0
+        for op in ops:
+            arr.append(lst[ptr:ptr+op])
+            ptr += op
+        arr = arr[::-1]
+        brr = []
+        for ar in arr:
+            brr.extend(ar)
+        lst = brr
+        console("ops", ops)
+        console(lst)
+
+    assert lst == sorted(lst)
+
+    return res
 
 
 def console(*args):  
@@ -119,6 +134,6 @@ for case_num in [1]:
     print(len(res))
 
     for row in res:
-        print("{} {}".format(len(row), " ".join([str(x) for x in res])))
+        print("{} {}".format(len(row), " ".join([str(x) for x in row])))
     # Codeforces - no case number required
     # print(res)
