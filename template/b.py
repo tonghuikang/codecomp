@@ -92,6 +92,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
+cout = []
 for case_num in range(int(input())):
 
     _, k = list(map(int,input().split()))
@@ -129,4 +130,5 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    cout.append(str(res))
+print("\n".join(cout))

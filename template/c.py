@@ -1,26 +1,71 @@
-import sys, os
-# import heapq, functools, collections
-# import math, random
-# from collections import Counter, defaultdict
-
-# available on Google, not available on Codeforces
-# import numpy as np
-# import scipy
+import os
+import sys
+from io import BytesIO, IOBase
+# region fastio
+BUFSIZE = 8192
+class FastIO(IOBase):
+    newlines = 0
+ 
+    def __init__(self, file):
+        self._fd = file.fileno()
+        self.buffer = BytesIO()
+        self.writable = "x" in file.mode or "r" not in file.mode
+        self.write = self.buffer.write if self.writable else None
+ 
+    def read(self):
+        while True:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            if not b:
+                break
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines = 0
+        return self.buffer.read()
+ 
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines -= 1
+        return self.buffer.readline()
+ 
+    def flush(self):
+        if self.writable:
+            os.write(self._fd, self.buffer.getvalue())
+            self.buffer.truncate(0), self.buffer.seek(0)
+ 
+ 
+class IOWrapper(IOBase):
+    def __init__(self, file):
+        self.buffer = FastIO(file)
+        self.flush = self.buffer.flush
+        self.writable = self.buffer.writable
+        self.write = lambda s: self.buffer.write(s.encode("ascii"))
+        self.read = lambda: self.buffer.read().decode("ascii")
+        self.readline = lambda: self.buffer.readline().decode("ascii")
+ 
+ 
+sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 
 def solve_(grid):
+    # if len(grid) > 1000:
+    #     return 0
     # your solution here
 
     dp = [1 if x+y-2 <= t else 0 for t,x,y in grid]
 
     for i,(t,x,y) in enumerate(grid):
-        i2 = i + 1
-        while i2 < len(grid) and i2 - i <= 1000:
+        for i2 in range(i+1, i+1001):
+            if i2 >= len(grid):
+                break
             if dp[i] > 0 and abs(grid[i2][1] - x) + abs(grid[i2][2] - y) <= grid[i2][0] - t:
                 dp[i2] = max(dp[i2], dp[i] + 1)
-            i2 += 1
 
-    # console(dp)    
+    # console(dp)
     return max(dp)
 
 
@@ -30,13 +75,13 @@ def console(*args):
     pass
 
 
-# if Codeforces environment
-if os.path.exists('input.txt'):
-    sys.stdin = open("input.txt","r")
-    sys.stdout = open("output.txt","w")
+# # if Codeforces environment
+# if os.path.exists('input.txt'):
+#     sys.stdin = open("input.txt","r")
+#     sys.stdout = open("output.txt","w")
 
-    def console(*args):
-        pass
+#     def console(*args):
+#         pass
 
 
 def solve(*args):
@@ -47,13 +92,13 @@ def solve(*args):
     return solve_(*args)
 
 
-if False:
-    # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
-    input = lambda: next(inp)
-else:
-    # if memory is a constraint
-    input = sys.stdin.buffer.readline
+# if False:
+#     # if memory is not a constraint
+#     inp = iter(sys.stdin.buffer.readlines())
+#     input = lambda: next(inp)
+# else:
+#     # if memory is a constraint
+#     input = sys.stdin.buffer.readline
 
 
 for case_num in [1]:
