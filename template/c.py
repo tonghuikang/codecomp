@@ -8,15 +8,43 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    c = Counter(lst)
+    if c["B"] == 0:
+        return len(lst)
+
+    lst = lst[::-1]
+    console(lst)
+    
+    pairs = 0
+    cumulative_B = 0
+    for char in lst:
+        if char == "B":
+            cumulative_B += 1
+        if char == "A":
+            if cumulative_B > 0:
+                cumulative_B -= 1
+                pairs += 1
+        # console(cumulative_B, pairs)
+    
+    remaining_B = c["B"] - pairs
+
+    res = pairs*2
+    if remaining_B%2 == 1:
+        res += remaining_B - 1
+    else:
+        res += remaining_B
+
+    # end result is BAAAA or AAAAA
+
+    return len(lst) - res
 
 
 def console(*args):  
     # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     pass
 
 
@@ -32,7 +60,7 @@ if os.path.exists('input.txt'):
 def solve(*args):
     # screen input
     console("----- solving ------")
-    console(*args)
+    # console(*args)
     console("----- ------- ------")
     return solve_(*args)
 
@@ -46,9 +74,12 @@ else:
     input = sys.stdin.buffer.readline
 
 
+cout = []
+
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
+    # _ = input()
+    strr = input()
 
     # read line as an integer
     # k = int(input())
@@ -65,8 +96,8 @@ for case_num in range(int(input())):
     # grid = []
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
-
-    res = solve()  # please change
+    strr = [chr(x) for x in strr.strip()]
+    res = solve(strr)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
@@ -77,4 +108,6 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    cout.append(res)
+
+print("\n".join(str(x) for x in cout))

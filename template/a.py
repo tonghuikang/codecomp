@@ -8,10 +8,17 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(a,b,c,d):
     # your solution here
 
-    return ""
+    if a == c:
+        return abs(d-b)
+
+    if b == d:
+        return abs(a-c)
+
+    return abs(a-c) + abs(b-d) + 2
+
 
 
 def console(*args):  
@@ -54,10 +61,10 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as a string
-    # lst = input().split()
+    # x1,y1,x2,y2 = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    x1,y1,x2,y2 = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -66,7 +73,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(x1,y1,x2,y2)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]

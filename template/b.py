@@ -8,10 +8,21 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(strr):
     # your solution here
+    strr = [chr(x) for x in strr]
+    c = Counter(strr)
 
-    return ""
+    if c['<'] == 0 or c['>'] == 0:
+        return len(strr)
+    
+    res = 0
+    strr.append(strr[0])
+    for a,b in zip(strr, strr[1:]):
+        if a == '-' or b == '-':
+            res += 1
+    
+    return res
 
 
 def console(*args):  
@@ -48,7 +59,8 @@ else:
 
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
+    _ = input()
+    strr = input().strip()
 
     # read line as an integer
     # k = int(input())
@@ -65,8 +77,7 @@ for case_num in range(int(input())):
     # grid = []
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
-
-    res = solve()  # please change
+    res = solve(strr)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
