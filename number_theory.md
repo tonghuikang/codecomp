@@ -14,6 +14,10 @@ Prime factorisation - there is a unique way to factorise an integer into number 
 
 
 
+Please learn how to do division in the modulo space
+
+
+
 To find all divisors
 
 ```python
@@ -77,7 +81,7 @@ pow(base, exponent, modulo)
 
 Arithmetirc progression
 
-
+OMG please edit
 
 
 
@@ -89,7 +93,7 @@ You can obtain the smallest factor all numbers up to N in $O(N \log \log N)$. WI
 
 
 
-List of primes
+List of primes (get a better way to generate this list?)
 
 
 
