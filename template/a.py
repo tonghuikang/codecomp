@@ -8,15 +8,38 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(strr):
     # your solution here
 
-    return ""
+    idxs = [0 for _ in strr]
+
+    for i,(a,b,c,d) in enumerate(zip(strr[0:],strr[1:],strr[2:],strr[3:])):
+        if a+b+c+d == "KICK":
+            # console(i, "KICK")
+            idxs[i] = 1
+
+    for i,(a,b,c,d,e) in enumerate(zip(strr[0:],strr[1:],strr[2:],strr[3:],strr[4:])):
+        console(a+b+c+d+e)
+        if a+b+c+d+e == "START":
+            # console(i, "START")
+            idxs[i] = 2
+
+    console(idxs)
+
+    cnt = 0
+    res = 0
+    for x in idxs:
+        if x == 1:
+            cnt += 1
+        if x == 2:
+            res += cnt
+
+    return res
 
 
 def console(*args):  
     # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     pass
 
 
@@ -48,7 +71,7 @@ else:
 
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
+    strr = input()
 
     # read line as an integer
     # k = int(input())
@@ -66,7 +89,8 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    strr = "".join([chr(x) for x in strr])
+    res = solve(strr)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
@@ -74,7 +98,7 @@ for case_num in range(int(input())):
 
     # print result
     # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)

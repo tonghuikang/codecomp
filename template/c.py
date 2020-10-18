@@ -8,15 +8,46 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst, n):
+    lst = sorted(lst)
+    length = len(lst)
     # your solution here
+    if len(lst) == 1:
+        return 0
+    if len(lst) == 2:
+        return min(lst[1] - lst[0], n+lst[0] - lst[1])
 
-    return ""
+    c = Counter(lst)    
+
+    arr = lst + [x+n for x in lst] + [x+2*n for x in lst]
+
+    ptr = (length-1)//2
+    smaller = sum(lst[ptr] - x for x in lst[:ptr])
+    larger = sum(x - lst[ptr] for x in lst[ptr+1:])
+    current = 0
+    cost = smaller + larger
+    console(arr)
+    console(ptr, arr[ptr], cost)
+    mincost = cost
+
+    for i in range(1,length):
+        ptr += 1
+        remove = arr[ptr-1] - arr[i-1]
+        add = arr[i+length-1] - arr[ptr]
+        move = arr[ptr] - arr[ptr-1]
+        if length%2:
+            move = 0
+            # add = arr[i+length-1] - arr[ptr-1]
+        cost = cost - remove + add - move
+        console(ptr,arr[ptr], remove, add, move, cost)
+        mincost = min(cost, mincost)
+
+    return mincost
 
 
 def console(*args):  
     # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     pass
 
 
@@ -57,7 +88,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _,n = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -66,7 +98,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst, n)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
@@ -74,7 +106,7 @@ for case_num in range(int(input())):
 
     # print result
     # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)

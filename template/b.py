@@ -8,15 +8,21 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(grid):
     # your solution here
 
-    return ""
+    d = defaultdict(int)
+    
+    for i,row in enumerate(grid):
+        for j,cell in enumerate(row):
+            d[i-j] += cell
+    
+    return max(d.values())
 
 
 def console(*args):  
     # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     pass
 
 
@@ -51,7 +57,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    nrows = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -62,11 +68,11 @@ for case_num in range(int(input())):
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
@@ -74,7 +80,7 @@ for case_num in range(int(input())):
 
     # print result
     # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)
