@@ -18,7 +18,7 @@ def solve_(grid):
     check = []
 
     for cmd in grid[::-1]:
-        if cmd == "+":
+        if cmd == -1:
             if not heap:
                 print("NO")
                 return
@@ -26,30 +26,30 @@ def solve_(grid):
             res.append(added)
         else:
             # print(cmd)
-            sold = int(cmd.split()[1])
+            sold = cmd
             check.append(sold)
             heapq.heappush(heap, sold)
 
-    del heap
+    # del heap
 
     res_check = [x for x in res]
     heap = []
     heapq.heapify(heap)
     seq_check = []
     for cmd in grid:
-        if cmd == "+":
+        if cmd == -1:
             heapq.heappush(heap, res_check.pop())
         else:
             seq_check.append(heapq.heappop(heap))
 
-    console(seq_check)
-    console(check)
+    # console(seq_check)
+    # console(check)
 
     if seq_check != check[::-1]:
         print("NO")
         return
 
-    console(res)
+    # console(res)
     print("YES")
     res = [str(x) for x in res[::-1]]
     res = " ".join(res)
@@ -74,7 +74,7 @@ if os.path.exists('input.txt'):
 def solve(*args):
     # screen input
     console("----- solving ------")
-    console(*args)
+    # console(*args)
     console("----- ------- ------")
     return solve_(*args)
 
@@ -108,8 +108,14 @@ for case_num in [1]:
     grid = []
     for _ in range(2*k):
         strr = input()
-        strr = "".join([chr(x) for x in strr.strip()])
-        grid.append(strr)
+        if strr[0] == 43:
+            grid.append(-1)
+        else:
+        # print(strr[0])
+            i = int("".join([chr(x) for x in strr][2:-1]))
+            # print(i)
+            grid.append(i)
+        # grid.append()
         # grid.append(list(map(int,input().split())))
 
     res = solve(grid)  # please change

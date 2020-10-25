@@ -79,6 +79,8 @@ for case_num in [1]:
 
     arr = sorted(arr)
     brr = sorted(brr)
+    arr = [x-arr[0] for x in arr]
+    brr = [x-brr[0] for x in brr]
     res = solve(arr,brr)  # please change
     
     # post processing methods
