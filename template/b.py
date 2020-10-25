@@ -8,10 +8,21 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(grid1, grid2):
     # your solution here
 
-    return ""
+    first_elements = set([row[0] for row in grid1])
+    first_elements_map = {row[0]:i for i,row in enumerate(grid1)}
+
+    for col in grid2:
+        if col[0] in first_elements:
+            break
+    
+    res = []
+    for c in col:
+        res.append(grid1[first_elements_map[c]])
+
+    return res
 
 
 def console(*args):  
@@ -31,9 +42,9 @@ if os.path.exists('input.txt'):
 
 def solve(*args):
     # screen input
-    console("----- solving ------")
-    console(*args)
-    console("----- ------- ------")
+    # console("----- solving ------")
+    # console(*args)
+    # console("----- ------- ------")
     return solve_(*args)
 
 
@@ -46,6 +57,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
+cout = []
 for case_num in range(int(input())):
     # read line as a string
     # strr = input()
@@ -57,24 +69,34 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid1 = []
+    for _ in range(a):
+        grid1.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    grid2 = []
+    for _ in range(b):
+        grid2.append(list(map(int,input().split())))
+
+
+    res = solve(grid1, grid2)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
     # res = " ".join(res)
+
+    for row in res:
+        cout.append(" ".join(str(x) for x in row))
 
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)
+
+print("\n".join(cout))

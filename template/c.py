@@ -1,5 +1,5 @@
 import sys, os
-import heapq, functools, collections
+import heapq, functools, collections, itertools
 import math, random
 from collections import Counter, defaultdict
 
@@ -8,10 +8,19 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(arr,brr):
+    minres = brr[-1] - brr[0]
+    for i1,a1 in enumerate(arr):
+        for i2,a2 in enumerate(arr[i1+1:], start=i1+1):
+            res = brr[-1] - arr[i2] - (brr[0] - arr[i1])
+            # console(i1,i2,a1,a2,res)
+            minres = min(minres, abs(res))
     # your solution here
 
-    return ""
+    # for activation in itertools.product([0,1], repeat=len(arr)):
+    #     console(activation)
+
+    return minres
 
 
 def console(*args):  
@@ -46,7 +55,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -57,7 +66,9 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    k = int(input())
+    brr = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -66,7 +77,9 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    arr = sorted(arr)
+    brr = sorted(brr)
+    res = solve(arr,brr)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]

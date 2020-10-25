@@ -8,10 +8,52 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(grid):
     # your solution here
 
-    return ""
+    heap = []
+    heapq.heapify(heap)
+    res = []
+
+    check = []
+
+    for cmd in grid[::-1]:
+        if cmd == "+":
+            if not heap:
+                print("NO")
+                return
+            added = heapq.heappop(heap)
+            res.append(added)
+        else:
+            # print(cmd)
+            sold = int(cmd.split()[1])
+            check.append(sold)
+            heapq.heappush(heap, sold)
+
+    del heap
+
+    res_check = [x for x in res]
+    heap = []
+    heapq.heapify(heap)
+    seq_check = []
+    for cmd in grid:
+        if cmd == "+":
+            heapq.heappush(heap, res_check.pop())
+        else:
+            seq_check.append(heapq.heappop(heap))
+
+    console(seq_check)
+    console(check)
+
+    if seq_check != check[::-1]:
+        print("NO")
+        return
+
+    console(res)
+    print("YES")
+    res = [str(x) for x in res[::-1]]
+    res = " ".join(res)
+    print(res)
 
 
 def console(*args):  
@@ -46,27 +88,31 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
-    # strr = input()
-
+    
+    
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
-
+    
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
     # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(2*k):
+        strr = input()
+        strr = "".join([chr(x) for x in strr.strip()])
+        grid.append(strr)
+        # grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
@@ -77,4 +123,4 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)

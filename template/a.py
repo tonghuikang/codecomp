@@ -8,10 +8,16 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    res = []
+
+    for a,b in zip(lst[::2],lst[1::2]):
+        res.append(-b)
+        res.append(a)
+
+    return res
 
 
 def console(*args):  
@@ -51,13 +57,13 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -66,11 +72,11 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # post processing methods
-    # res = [str(x) for x in res]
-    # res = " ".join(res)
+    res = [str(x) for x in res]
+    res = " ".join(res)
 
     # print result
     # Google - case number required
