@@ -74,7 +74,7 @@ if os.path.exists('input.txt'):
 def solve(*args):
     # screen input
     console("----- solving ------")
-    # console(*args)
+    console(*args)
     console("----- ------- ------")
     return solve_(*args)
 
@@ -111,11 +111,8 @@ for case_num in [1]:
         if strr[0] == 43:
             grid.append(-1)
         else:
-        # print(strr[0])
             i = int("".join([chr(x) for x in strr][2:-1]))
-            # print(i)
             grid.append(i)
-        # grid.append()
         # grid.append(list(map(int,input().split())))
 
     res = solve(grid)  # please change
