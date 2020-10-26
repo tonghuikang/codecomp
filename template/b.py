@@ -20,8 +20,13 @@ def console(*args):
     pass
 
 
+ONLINE_JUDGE = False
+
 # if Codeforces environment
 if os.path.exists('input.txt'):
+    ONLINE_JUDGE = True
+
+if ONLINE_JUDGE:
     sys.stdin = open("input.txt","r")
     sys.stdout = open("output.txt","w")
 
@@ -31,9 +36,10 @@ if os.path.exists('input.txt'):
 
 def solve(*args):
     # screen input
-    console("----- solving ------")
-    console(*args)
-    console("----- ------- ------")
+    if not ONLINE_JUDGE:
+        console("----- solving ------")
+        console(*args)
+        console("----- ------- ------")
     return solve_(*args)
 
 
@@ -68,13 +74,10 @@ for case_num in range(int(input())):
 
     res = solve()  # please change
     
-    # post processing methods
-    # res = [str(x) for x in res]
-    # res = " ".join(res)
-
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
     print(res)
+    # print(*res)  # if printing a list
