@@ -1,5 +1,5 @@
 import sys, os
-import heapq, functools, collections
+import heapq, functools, collections, bisect
 import math, random
 from collections import Counter, defaultdict
 
@@ -8,10 +8,40 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
-    # your solution here
 
-    return ""
+def solve_(lst):
+    lst = lst[1:] + [10**6]
+    # everytime we decrease, we break, and see how many rows do we need
+
+    segments = []
+    cur = [lst[0]]
+    for a,b in zip(lst, lst[1:]):
+        if a > b:
+            segments.append(cur)   
+            cur = []     
+        cur.append(b)
+    cur.pop()
+    segments.append(cur)
+
+    segments = segments[::-1]
+    console(segments)
+    
+    breadth = 1
+    depth = 0
+    while segments:
+        depth += 1
+        currow = 0
+        for i in range(breadth):
+            if not segments:
+                break
+            currow += len(segments.pop())
+        console(currow)
+        breadth = currow
+
+
+    # console(segments)
+
+    return depth
 
 
 def console(*args):  
@@ -51,13 +81,13 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -66,7 +96,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]

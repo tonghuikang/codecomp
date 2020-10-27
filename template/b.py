@@ -8,10 +8,19 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    res1 = 0
+    res0 = 0
+
+    for a,b in zip(lst, lst[1:]):
+        if a == b == "1":
+            res1 += 1
+        if a == b == "0":
+            res0 += 1
+
+    return max(res1, res0)
 
 
 def console(*args):  
@@ -48,7 +57,9 @@ else:
 
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
+    _ = input()
+    strr = input()
+    strr = [chr(x) for x in strr.strip()]
 
     # read line as an integer
     # k = int(input())
@@ -66,7 +77,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(strr)  # please change
     
     # post processing methods
     # res = [str(x) for x in res]
