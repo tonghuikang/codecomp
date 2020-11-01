@@ -33,9 +33,9 @@ def solve_(arr, wrr):
         # dissoc += abs(arr[get_corres_ptr(ptr)] - arr[ptr])
         # assoc += abs(arr[get_corres_ptr(ptr)] - w)
         seg_start = ptr - ptr%2
-        while arr[ptr+2] <= w:
+        while arr[ptr+10] <= w:
             ptr += 1
-        seg_end = ptr - ptr%2 + 2
+        seg_end = ptr - ptr%2 + 10
 
         segment = [x for x in arr[seg_start:seg_end]]
         dissoc += sum(abs(b-a) for a,b in zip(segment[::2], segment[1::2]))
@@ -54,7 +54,9 @@ def solve_(arr, wrr):
 
         # console(w, ptr, arr[ptr], len(segment), arr, curres, minres)
     
-    # assert sorted(arr_original + [wrr[-1]]) == arr
+    # console(arr)
+    # console(sorted(arr_original + [wrr[-1]]))
+    assert sorted(arr_original + [wrr[-1]]) == arr
 
     return minres
 
@@ -117,7 +119,7 @@ for case_num in [1]:
     # grid = []
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
-    arr = [-10**10]*4 + arr + [10**10]*4
+    arr = [-10**10]*4 + arr + [10**10]*10
 
     arr = sorted(arr)
     wrr = sorted(set(wrr))
