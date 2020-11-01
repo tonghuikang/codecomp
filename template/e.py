@@ -14,6 +14,7 @@ def get_corres_ptr(ptr):
     return ptr+1
 
 def solve_(arr, wrr):
+    arr_original = [x for x in arr]
     # your solution here
     arr = sorted(arr + [wrr[0]])
     curres = sum(abs(b-a) for a,b in zip(arr[::2], arr[1::2]))
@@ -52,6 +53,8 @@ def solve_(arr, wrr):
         minres = min(curres, minres)
 
         # console(w, ptr, arr[ptr], len(segment), arr, curres, minres)
+    
+    # assert sorted(arr_original + [wrr[-1]]) == arr
 
     return minres
 
@@ -80,7 +83,7 @@ def solve(*args):
     # screen input
     if not ONLINE_JUDGE:
         console("----- solving ------")
-        console(*args)
+        # console(*args)
         console("----- ------- ------")
     return solve_(*args)
 
@@ -114,7 +117,7 @@ for case_num in [1]:
     # grid = []
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
-    arr = [-100,-100,-100,-100] + arr + [10**10, 10**10, 10**10, 10**10, 10**10, 10**10]
+    arr = [-10**10]*4 + arr + [10**10]*4
 
     arr = sorted(arr)
     wrr = sorted(set(wrr))
