@@ -8,10 +8,15 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(arr, brr, k):
     # your solution here
+    brr = sorted(brr)
+    arr = sorted(arr)[::-1]
+    for a,b in zip(arr,brr):
+        if a + b > k:
+            return "No"
 
-    return ""
+    return "Yes"
 
 
 def console(*args):  
@@ -51,8 +56,8 @@ else:
     # if memory is a constraint
     input = sys.stdin.buffer.readline
 
-
-for case_num in range(int(input())):
+total_cases = int(input())
+for case_num in range(total_cases):
     # read line as a string
     # strr = input()
 
@@ -63,7 +68,9 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,12 +79,17 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(arr, brr, k)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
+
     # Codeforces - no case number required
     print(res)
     # print(*res)  # if printing a list
+
+    if total_cases - 1 == case_num:
+        break
+    _ = input()

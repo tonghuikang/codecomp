@@ -7,11 +7,76 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
+from functools import reduce
 
-def solve_():
-    # your solution here
+# def all_divisors(n):
+#     return set(reduce(list.__add__, 
+#     ([i, n//i] for i in 
+#     range(1, int(n**0.5) + 1) if n % i == 0)))
 
-    return ""
+
+import math
+
+def prime_factors(nr):
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(int(i))
+            nr = nr / i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+def solve_(p, q):
+    if p%q:
+        return p
+    
+    # p_fact = prime_factors(p)
+    q_fact = prime_factors(q)
+    c_q_fact = Counter(q_fact)
+
+    nr = p
+    p_fact = []
+    for k,v in c_q_fact.items():
+        while nr % k == 0:
+            p_fact.append(k)
+            nr = nr//k
+    if nr > 1:
+        p_fact.append(nr)
+
+    console(p_fact)
+    console(q_fact)
+
+    c_p_fact = Counter(p_fact)
+    maxres = 1
+
+    for k1,v1 in c_q_fact.items():
+        res = 1
+        for k2,v2 in c_p_fact.items():
+            if k2 != k1:
+                res *= k2**v2
+            else:
+                res *= k1**(v1-1)
+        maxres = max(maxres, res)
+
+    return maxres
+
+    # lst = all_divisors(p)
+    # lst = sorted(lst)
+
+    # # your solution here
+
+    # for x in lst[::-1]:
+    #     if x%q:
+    #         return x
+
+    # return p
 
 
 def console(*args):  
@@ -63,7 +128,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    p,q = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +137,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(p,q)  # please change
     
     # print result
     # Google - case number required
