@@ -11,7 +11,7 @@ from collections import Counter, defaultdict
 # strr = input()
 
 # read line as an integer
-# k = int(input())
+k = int(input())
 
 # read one line and parse each word as a string
 # lst = input().split()
@@ -19,4 +19,7 @@ from collections import Counter, defaultdict
 # read one line and parse each word as an integer
 # arr = list(map(int,input().split()))
 
-print()
+if k%2 == 0:
+    print("White")
+else:
+    print("Black")

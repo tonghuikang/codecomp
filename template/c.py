@@ -8,10 +8,19 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(grid):
     # your solution here
 
-    return ""
+    for i,(x1,y1) in enumerate(grid):
+        for j,(x2,y2) in enumerate(grid[i+1:],start=i+1):
+            for x3,y3 in grid[j+1:]:
+                if x1 == x2 == x3:
+                    return "Yes"
+                if y1 == y2 == y3:
+                    return "Yes"
+                if (x1-x2)*(y1-y3) == (x1-x3)*(y1-y2):
+                    return "Yes"
+    return "No"
 
 
 def console(*args):  
@@ -52,12 +61,12 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    nrows = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -68,11 +77,11 @@ for case_num in range(int(input())):
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid)  # please change
     
     # print result
     # Google - case number required
