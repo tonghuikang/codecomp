@@ -14,6 +14,9 @@ def solve_(lst):
 
     original = [x for x in lst]
 
+
+
+
     res = []
     while sum(lst) > 0:
         # if len(res) > len(lst):
@@ -25,6 +28,17 @@ def solve_(lst):
             lst = [x >> 1 for x in lst]
             # console("cont")
             continue
+            
+
+        count = [0 for _ in range(30)]
+        for i in lst:
+            for z in range(30):
+                count[z] += i&1
+                i = i >> 1
+        ref = count.index(min([c if c%2 == 0 else len(lst) - c for c in count]))
+        swap = 2**ref
+        lst = [(x&swap) ^ ((x&1) << ref) ^ x for x in lst]
+
 
         # number of odd has to be even
         if len(lst)%2 == 0:
