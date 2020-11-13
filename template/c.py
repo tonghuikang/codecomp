@@ -8,10 +8,18 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(grid):
     # your solution here
 
-    return ""
+    res = []
+
+    for i,row in enumerate(grid):
+        cur = []
+        for j,cell in enumerate(row):
+            if (i+j)%2 != cell%2:
+                grid[i][j] += 1
+
+    return grid
 
 
 def console(*args):  
@@ -63,21 +71,23 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    nrows, _ = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)
     # print(*res)  # if printing a list
+    for r in res:
+        print(*r)

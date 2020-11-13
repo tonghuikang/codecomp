@@ -8,10 +8,10 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    return [1,2,3]
 
 
 def console(*args):  
@@ -52,7 +52,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -63,7 +63,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,12 +72,17 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    if res == -1:
+        print("NO")
+        continue
+    print("YES")
+    print(len(res))
+    print(*res)
     # print(*res)  # if printing a list
