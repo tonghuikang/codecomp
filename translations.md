@@ -22,7 +22,7 @@ For name of the person, just say the English name.
 | ------------ | ------- |
 | Integer      | 整数    |
 | Prime number | 质数    |
-| Modulo       | 模数    |
+| Modulo       | 余数    |
 | Theorem      | 定理    |
 
 
