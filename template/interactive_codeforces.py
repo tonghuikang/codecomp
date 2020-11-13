@@ -1,6 +1,13 @@
 import sys
-lst = list(map(int,input().split()))
- 
+k = int(input())
+
+sus = []
+
+for i in range(2**k-1):
+    
+    
+
+
 print ("First",flush = True)
  
 while True:

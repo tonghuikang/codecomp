@@ -9,9 +9,65 @@ from collections import Counter, defaultdict
 
 
 def solve_(lst):
-    # your solution here
+    if len(lst) == 3:
+        return [[0,1,2]]
 
-    return [1,2,3]
+    original = [x for x in lst]
+
+    res = []
+    while sum(lst) > 0:
+        # if len(res) > len(lst):
+        #     return -1
+
+        number_of_odd = sum(x&1 for x in lst)
+
+        if number_of_odd == 0 or number_of_odd == len(lst):
+            lst = [x >> 1 for x in lst]
+            # console("cont")
+            continue
+
+        # number of odd has to be even
+        if len(lst)%2 == 0:
+            if number_of_odd%2 != 0:
+                return -1
+            if number_of_odd < len(lst)//2:
+                lst = [x^1 for x in lst]
+        else:
+            if number_of_odd%2 != 0:
+                lst = [x^1 for x in lst]
+        
+        number_of_odd = sum(x&1 for x in lst)
+        assert number_of_odd%2 == 0
+        # console(lst, number_of_odd)
+
+        fixing = []
+        ref = 0
+        for i,x in enumerate(lst):
+            if x&1:
+                fixing.append(i)
+            else:
+                ref = i
+        
+        for a,b in zip(fixing[::2],fixing[1::2]):
+            new = lst[ref]^lst[a]^lst[b]
+            lst[ref], lst[a], lst[b] = new, new, new
+            res.append([ref,a,b])
+
+            new = original[ref]^original[a]^original[b]
+            original[ref], original[a], original[b] = new, new, new
+
+        # console(lst)
+        # console(original)
+        lst = [x >> 1 for x in lst]
+        # console(lst, res, fixing, number_of_odd)
+
+    assert len(set(original)) == 1
+    assert len(res) < len(lst)
+
+    if len(res) > len(lst):
+        return -1
+
+    return res
 
 
 def console(*args):  
@@ -57,7 +113,7 @@ for case_num in [1]:
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -82,7 +138,11 @@ for case_num in [1]:
     if res == -1:
         print("NO")
         continue
+
     print("YES")
     print(len(res))
-    print(*res)
+    for re in res:
+        print(*[r+1 for r in re])
+
+    # print("\n".join(cout))
     # print(*res)  # if printing a list
