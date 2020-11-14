@@ -8,10 +8,40 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    # if closet match from brr, the rest to match themselves
+    sumarr = sum(arr)
+    sumbrr = sum(brr)
+    if sumarr < sumbrr:
+        return -1
+    if (sumbrr - sumarr)%2 != 0:
+        return -1
+    
+    # ca, cb = 0
+    looking = []
+    skipped = []
+
+    cost = 0
+
+    for i,(a,b) in enumerate(zip(arr,brr)):
+        if b:
+            looking.append(i)
+        if a and looking:  # match
+            cost += i - looking[-1]
+            looking.pop()
+            continue
+        if a:
+            skipped.append(i)        
+    if looking:
+        return -1
+    
+    assert len(skipped)%2 == 0
+    # console(skipped, cost)
+    cost += sum([b-a for a,b in zip(skipped[::2], skipped[1::2])])
+
+    return cost
 
 
 def console(*args):  
@@ -52,9 +82,14 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
+    _ = input()
     # read line as a string
-    # strr = input()
+    arr = input().strip()
+    arr = [int(chr(x)) for x in arr] #[::-1]
+
+    brr = input().strip()
+    brr = [int(chr(x)) for x in brr] #[::-1]
 
     # read line as an integer
     # k = int(input())
@@ -72,7 +107,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(arr, brr)  # please change
     
     # print result
     # Google - case number required
