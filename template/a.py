@@ -1,5 +1,5 @@
 import sys, os
-import heapq, functools, collections
+import heapq, functools, collections, itertools
 import math, random
 from collections import Counter, defaultdict
 
@@ -8,10 +8,22 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(grid, target):
     # your solution here
 
-    return ""
+    res = 0
+    
+    for seq in itertools.permutations(range(len(grid))):
+        # console(seq)
+        if seq[0] != 0:
+            continue
+        count = 0
+        for i,j in zip(seq, list(seq[1:]) + [0]):
+            count += grid[i][j]
+        if count == target:
+            res += 1
+
+    return res
 
 
 def console(*args):  
@@ -52,7 +64,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -63,16 +75,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    nrows, target = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid, target)  # please change
     
     # print result
     # Google - case number required

@@ -11,7 +11,7 @@ from collections import Counter, defaultdict
 # strr = input()
 
 # read line as an integer
-# k = int(input())
+k = int(input())
 
 # read one line and parse each word as a string
 # lst = input().split()

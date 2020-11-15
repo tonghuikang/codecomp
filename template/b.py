@@ -8,10 +8,22 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(grid, cap):
     # your solution here
 
-    return ""
+    diff = [0 for _ in range((2*10**5) + 10)]
+
+    for start,end,amt in grid:
+        diff[start] += amt
+        diff[end] -= amt
+
+    cs = 0
+    for d in diff:
+        cs += d
+        if cs > cap:
+            return "No"
+
+    return "Yes"
 
 
 def console(*args):  
@@ -36,10 +48,10 @@ if ONLINE_JUDGE:
 
 def solve(*args):
     # screen input
-    if not ONLINE_JUDGE:
-        console("----- solving ------")
-        console(*args)
-        console("----- ------- ------")
+    # if not ONLINE_JUDGE:
+    #     console("----- solving ------")
+    #     console(*args)
+    #     console("----- ------- ------")
     return solve_(*args)
 
 
@@ -52,7 +64,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -63,16 +75,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    nrows, cap = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid, cap)  # please change
     
     # print result
     # Google - case number required

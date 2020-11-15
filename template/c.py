@@ -7,11 +7,66 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
+MOD = (10**9 + 7)
 
-def solve_():
+def solve_(grid, h, w):
     # your solution here
 
-    return ""
+    dp = [[0 for _ in row] for row in grid]
+    dp_hori = [[0 for _ in row] for row in grid]
+    dp_vert = [[0 for _ in row] for row in grid]
+    dp_diag = [[0 for _ in row] for row in grid]
+    dp[0][0] = 1
+    dp_vert[0][0] = 1
+    dp_diag[0][0] = 1
+    dp_hori[0][0] = 1
+
+    for i,row in enumerate(grid[1:], start=1):
+        if grid[i][0] == 1:
+            continue
+        dp[i][0] = dp_vert[i-1][0]
+        dp_vert[i][0] = dp[i][0] + dp_vert[i-1][0]
+        dp_diag[i][0] = dp[i][0]
+        dp_hori[i][0] = dp[i][0]
+
+    for j,cell in enumerate(grid[0][1:], start=1):
+        if grid[0][j] == 1:
+            continue
+        dp[0][j] = dp_hori[0][j-1]
+        dp_hori[0][j] = dp[0][j] + dp_hori[0][j-1]
+        dp_diag[0][j] = dp[0][j]
+        dp_vert[0][j] = dp[0][j]
+
+    # console(dp)
+    # console(dp_vert)
+    # console(dp_hori)
+    # console(dp_diag)
+    # console("----")
+    # console(dp_vert)
+    # console(dp_vert[1-1][1])
+    # console("-----")
+
+    for i,row in enumerate(grid[1:], start=1):
+        for j,cell in enumerate(row[1:], start=1):
+            # console(i,j,dp_vert[i-1][j],dp_hori[i][j-1],dp_diag[i-1][j-1])
+            if cell == 1:
+                continue
+            dp[i][j] = dp_vert[i-1][j] + dp_hori[i][j-1] + dp_diag[i-1][j-1]
+            dp_vert[i][j] = (dp[i][j] + dp_vert[i-1][j])
+            dp_hori[i][j] = (dp[i][j] + dp_hori[i][j-1])
+            dp_diag[i][j] = (dp[i][j] + dp_diag[i-1][j-1])
+            if i%2 == 0:
+                dp[i][j] %= MOD
+                dp_vert[i][j] %= MOD
+                dp_hori[i][j] %= MOD
+                dp_diag[i][j] %= MOD
+
+    # console(dp)
+    # console(dp_vert)
+    # console(dp_hori)
+    # console(dp_diag)
+
+    return dp[-1][-1]%MOD
 
 
 def console(*args):  
@@ -36,10 +91,10 @@ if ONLINE_JUDGE:
 
 def solve(*args):
     # screen input
-    if not ONLINE_JUDGE:
-        console("----- solving ------")
-        console(*args)
-        console("----- ------- ------")
+    # if not ONLINE_JUDGE:
+    #     console("----- solving ------")
+    #     console(*args)
+    #     console("----- ------- ------")
     return solve_(*args)
 
 
@@ -52,7 +107,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -63,16 +118,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    h, w = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(h):
+        grid.append([0 if chr(x) == '.' else 1 for x in input().strip()])
 
-    res = solve()  # please change
+    res = solve(grid, h, w)  # please change
     
     # print result
     # Google - case number required
