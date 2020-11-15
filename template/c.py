@@ -28,19 +28,19 @@ def solve_(grid):
         cur = 0
         r = sum(abs(a-b) for a,b in zip(arr,brr))
 
-        console(r)
+        # console("x", r, mincost)
 
         return r
     
 
     mincost = 10**18
-    mincost = min(mincost, check_median_x(len(grid)//2))
-    mincost = min(mincost, check_median_x((len(grid)+1)//2))
-    mincost = min(mincost, check_median_x(len(grid)//2), -1)
-    mincost = min(mincost, check_median_x((len(grid)+1)//2), -1)
-    mincost = min(mincost, check_median_x(len(grid)//2), 1)
-    mincost = min(mincost, check_median_x((len(grid)+1)//2), 1)
     
+    for offset in range(-10,10):
+        mincost = min(mincost, check_median_x(len(grid)//2, offset))
+        mincost = min(mincost, check_median_x((len(grid)+1)//2, offset))
+    
+    console(cost, mincost)
+
     return cost+mincost
 
 
