@@ -11,7 +11,26 @@ from collections import defaultdict
 
 import heapq as hq
 import math
+from sys import stdin
 
+
+# FAST_IO = 1
+# if FAST_IO:
+#     import io, sys, atexit
+#     rr = iter(sys.stdin.read().splitlines()).next
+#     sys.stdout = _OUTPUT_BUFFER = io.BytesIO()
+ 
+#     @atexit.register
+#     def write():
+#         sys.__stdout__.write(_OUTPUT_BUFFER.getvalue())
+# else:
+#     rr = raw_input
+input = sys.stdin.buffer.readline
+rr = input
+rri = lambda: int(rr())
+rrm = lambda: map(int, rr().split())
+rrmm = lambda n: [rrm() for _ in range(n)]
+ 
 LARGE = 1000
 
 def dijkstra(G, s):
@@ -56,21 +75,20 @@ def dijkstra(G, s):
 def solve_(arr, grid):  
     d = defaultdict(set)
     # d2 = defaultdict(set)
-    arr = [set(ar) for ar in arr]
+    arr = [list(set(ar)) for ar in arr]
 
     for abc in "abcdefghijklmnopqrstuvwxyz".upper():
         d[abc].add(abc)
 
     for ar in arr:
-        for a in ar:
-            for b in ar:
-                if a != b:
-                    d[a].add(b)
-                    d[b].add(a)
+        for i,a in enumerate(ar):
+            for b in ar[i+1:]:
+                d[a].add(b)
+                d[b].add(a)
     
     d = {k:[(x,1) for x in v] for k,v in d.items()}
     
-
+    # print(d)
     cost_arr = []
     for abc in "abcdefghijklmnopqrstuvwxyz".upper():
         source = abc
@@ -100,6 +118,7 @@ def solve_(arr, grid):
                     break
                 calc = 2+cost_arr[mapping[a]][mapping[b]]
                 if calc < mindist:
+                    # print(arr[x], arr[y], a, b, calc, cost_arr[mapping[a]][mapping[b]])
                     mindist = min(mindist, calc)
         res.append(mindist)
 
@@ -117,7 +136,7 @@ def solve_(arr, grid):
 
 def console(*args):  
     # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     pass
 
 
@@ -144,16 +163,16 @@ def solve(*args):
     return solve_(*args)
 
 
-if True:
-    # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
-    input = lambda: next(inp)
-else:
+# if True:
+#     # if memory is not a constraint
+#     inp = iter(sys.stdin.buffer.readlines())
+#     input = lambda: next(inp)
+# else:
     # if memory is a constraint
-    input = sys.stdin.buffer.readline
+    # input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in range(rri()):
     # read line as a string
     # strr = input()
 
@@ -164,21 +183,23 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    _, nrows = list(map(int,input().split()))
+    _, nrows = rrm()
 
     arr = input()
     arr = "".join(chr(a) for a in arr)
+    # arr = rr().split()
     arr = arr.split()
     # console(arr)
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    grid = []
-    for _ in range(nrows):
-        grid.append(list(map(int,input().split())))
+    grid = rrmm(nrows)
+    # for _ in range(nrows):
+    #     grid.append(list(map(int,input().split())))
 
     grid = [(x-1,y-1) for x,y in grid]
+    # print(arr, grid)
     res = solve(arr, grid)  # please change
     
     # print result
