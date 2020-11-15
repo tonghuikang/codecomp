@@ -35,7 +35,7 @@ def solve_(grid):
 
     mincost = 10**18
     
-    for offset in range(-10,10):
+    for offset in range(-40,40):
         mincost = min(mincost, check_median_x(len(grid)//2, offset))
         mincost = min(mincost, check_median_x((len(grid)+1)//2, offset))
     
