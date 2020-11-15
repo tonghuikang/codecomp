@@ -8,6 +8,56 @@ from collections import Counter, defaultdict
 # import scipy
 
 
+def count(a):
+    if a == 0:
+        return 0
+    if a == 1:
+        return 1
+    # i = len(a)
+    count = 0
+    base_count = 0
+    length = len(str(a))
+
+    for i in range(1,length):
+        base_count += 5**(i)
+
+    odd = True
+    eligible = True
+    for i,d in enumerate(str(a)):
+        if odd:
+            for j in "13579":
+                if eligible and d == j and i == length - 1:
+                    # console("add last")
+                    count += 1 
+                    break
+                if d <= j:
+                    break
+                if eligible:
+                    count += 5**(length - i - 1)
+            if not d in "13579":
+                eligible = False
+
+        else:
+            for j in "02468":
+                if eligible and d == j and i == length - 1:
+                    # console("add last")
+                    count += 1 
+                    break
+                if d <= j:
+                    break
+                if eligible:
+                    count += 5**(length - i - 1)
+            if not d in "02468":
+                eligible = False
+
+        # console(i, d, count)
+                
+        odd = not odd
+
+    # console("summ", a, base_count, count)
+    return count + base_count
+
+
 def solve_(a,b):
     # your solution here
 
@@ -27,8 +77,10 @@ def solve_(a,b):
                 count += 1
     return count
 
+def solve_(a,b):
+    return count(b) - count(a-1)
 
-def console(*args):  
+def console(*args):
     # print on terminal in different color
     print('\033[36m', *args, '\033[0m', file=sys.stderr)
     pass
@@ -56,6 +108,23 @@ def solve(*args):
         console("----- ------- ------")
     return solve_(*args)
 
+# console(count(7))
+# console("\n"*3)
+
+# console(solve_(1,9))
+# console(solve_(1,99)    - solve_(1,9))
+# console(solve_(1,999)   - solve_(1,99))
+# console(solve_(1,9999)  - solve_(1,999))
+# console(solve_(1,99999) - solve_(1,9999))
+
+# console(solve_(1,999)   - solve_(1,99))
+# console(solve_(1000,1999))
+
+# for a in range(1,10000):
+#     ref = solve_(1,a)
+#     pred = count(a)
+#     console("x", a, ref, pred)
+#     assert ref == pred
 
 if True:
     # if memory is not a constraint
