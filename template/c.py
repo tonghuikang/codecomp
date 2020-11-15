@@ -19,32 +19,14 @@ def solve_(grid):
     arr = sorted([x for x,y in grid])
 
 
-    
-    def check_median_x(median, offset=0):
-        # median = arr[pos]
+    brr = sorted([(x-i,x) for i,x in enumerate(arr)])   
 
-        brr = [median + i + offset for i in range(len(grid))]
-        
-        cur = 0
-        r = sum(abs(a-b) for a,b in zip(arr,brr))
+    start,_ = brr[len(grid)//2]
+    console(brr, start)
 
-        # console("x", r, mincost)
-
-        return r
-    
-
-    mincost = 10**18
-    for offset in range(-5,5):
-        
-        median = (arr[len(grid)//2] + arr[(len(grid)+1)//2]) // 2
-        mincost = min(mincost, check_median_x(median, offset))
-
-        median = arr[len(grid)//2]
-        mincost = min(mincost, check_median_x(median, offset))
-
-        median = arr[(len(grid)+1)//2]
-        mincost = min(mincost, check_median_x(median, offset))
-
+    mincost = 0
+    for a,c in zip(arr, range(start, start+len(grid))):
+        mincost += abs(a-c)
         # mincost = min(mincost, check_median_x((len(grid)+1)//2, offset))
     
     console(cost, mincost)
