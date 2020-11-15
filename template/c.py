@@ -8,10 +8,40 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
-    # your solution here
+def solve_(grid):
+    if len(grid) == 1:
+        return 0
 
-    return ""
+    median = sorted([y for x,y in grid])[len(grid)//2]
+
+    cost = sum([abs(median - y) for x,y in grid])
+
+    arr = sorted([x for x,y in grid])
+
+
+    
+    def check_median_x(pos, offset=0):
+        median = arr[pos]
+
+        brr = [median - pos + i + offset for i in range(len(grid))]
+        
+        cur = 0
+        r = sum(abs(a-b) for a,b in zip(arr,brr))
+
+        console(r)
+
+        return r
+    
+
+    mincost = 10**18
+    mincost = min(mincost, check_median_x(len(grid)//2))
+    mincost = min(mincost, check_median_x((len(grid)+1)//2))
+    mincost = min(mincost, check_median_x(len(grid)//2), -1)
+    mincost = min(mincost, check_median_x((len(grid)+1)//2), -1)
+    mincost = min(mincost, check_median_x(len(grid)//2), 1)
+    mincost = min(mincost, check_median_x((len(grid)+1)//2), 1)
+    
+    return cost+mincost
 
 
 def console(*args):  
@@ -36,10 +66,10 @@ if ONLINE_JUDGE:
 
 def solve(*args):
     # screen input
-    if not ONLINE_JUDGE:
-        console("----- solving ------")
-        console(*args)
-        console("----- ------- ------")
+    # if not ONLINE_JUDGE:
+    #     console("----- solving ------")
+    #     console(*args)
+    #     console("----- ------- ------")
     return solve_(*args)
 
 
@@ -57,7 +87,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    nrows = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -68,16 +98,16 @@ for case_num in range(int(input())):
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid)  # please change
     
     # print result
     # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)
     # print(*res)  # if printing a list
