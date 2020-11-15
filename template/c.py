@@ -8,10 +8,25 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(arr, weight):
     # your solution here
+    arr = sorted([(a,i+1) for i,a in enumerate(arr) if a <= weight])
 
-    return ""
+    required = (weight+1)//2
+
+    for a,i in arr:
+        if a >= required:
+            return [i]
+
+    res = []
+    cur = 0
+    for a,i in arr:
+        cur += a
+        res.append(i)
+        if cur >= required:
+            return res
+
+    return []
 
 
 def console(*args):  
@@ -63,7 +78,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _, limit = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,12 +88,17 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst, limit)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
+    if not res:
+        print(-1)
+    else:
+        print(len(res))
+        print(*res)
+    
     # Codeforces - no case number required
-    print(res)
     # print(*res)  # if printing a list

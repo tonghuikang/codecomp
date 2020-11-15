@@ -7,11 +7,88 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
+# assumption - the most common element remains the most common
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    c = Counter(lst)
+
+    if len(c) == 1:
+        return 0
+    
+    a,b = c.most_common(2)
+    if a[1] == b[1]:
+        return len(lst)
+    
+    maxres = 0
+    # counters = []
+    for i,x in enumerate(lst):
+        c[x] -= 1
+        if c[x] == 0:
+            del c[x]
+        if len(c) == 1:
+            break
+        a,b = c.most_common(2)
+        if a[1] == b[1]:
+            maxres = max(maxres, len(lst)-i-1)
+        # counters.append({k:v for k,v in c.items()})
+
+    c = Counter(lst)
+    for i,x in enumerate(lst[::-1]):
+        c[x] -= 1
+        if c[x] == 0:
+            del c[x]
+        if len(c) == 1:
+            break
+        a,b = c.most_common(2)
+        if a[1] == b[1]:
+            maxres = max(maxres, len(lst)-i-1)
+    
+    c = Counter(lst)
+    (f,cnt), = c.most_common(1)
+    poss = [i for i,x in enumerate(lst) if x == f] + [len(lst)]
+
+    # console(poss)
+
+    def frequency(x):
+        maxres = 0
+        # ptr_start = 0
+        # ptr_end = poss[x+1]
+        c = Counter(lst[poss[0]+1:poss[x+1]])
+        # console(lst[poss[0]+1:poss[x+1]], c)
+
+        if len(c) > 1:
+            a,b = c.most_common(2)
+            # console(a,b,"check",poss[x+1],poss[0])
+            if a[1] == b[1]:
+                maxres = max(maxres, poss[x+1]-poss[0]-1)
+
+        for i,(start,end) in enumerate(zip(poss, poss[x+1:-1])):
+            for remove in range(poss[i]+1, poss[i+1]+1):
+                c[lst[remove]] -= 1
+                if c[lst[remove]] == 0:
+                    del c[lst[remove]]
+            for add in range(poss[x+1+i], poss[x+2+i]):
+                c[lst[add]] += 1
+            
+            # console(x, start, end, c)
+
+            if len(c) > 1:
+                a,b = c.most_common(2)
+                if a[1] == b[1]:
+                    maxres = max(maxres, poss[x+2+i]-(poss[i+1]+1))
+
+        return maxres
+
+    for x in range(max(2, cnt - 7), cnt):
+        if x > cnt:
+            continue
+        fx = frequency(x)
+        # console(x, fx)
+        maxres = max(maxres, fx)
+
+    return maxres
 
 
 def console(*args):  
@@ -52,18 +129,18 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +149,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required

@@ -8,10 +8,22 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(arr):
     # your solution here
+    maxres = sum(arr)
 
-    return ""
+    if len(arr) % 2 == 0:
+        maxres = max(maxres, -maxres)
+
+    number_negatives = sum(a < 0 for a in arr)
+    arr = [abs(a) for a in arr]
+
+    if number_negatives%2 == 0:
+        maxres = sum(arr)
+
+    maxres = max(maxres, sum(arr) - 2*min(arr))
+
+    return maxres
 
 
 def console(*args):  
@@ -63,16 +75,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    nrows,_ = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.extend(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(grid)  # please change
     
     # print result
     # Google - case number required
