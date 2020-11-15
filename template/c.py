@@ -52,14 +52,9 @@ def solve_(grid, h, w):
             if cell == 1:
                 continue
             dp[i][j] = dp_vert[i-1][j] + dp_hori[i][j-1] + dp_diag[i-1][j-1]
-            dp_vert[i][j] = (dp[i][j] + dp_vert[i-1][j])
-            dp_hori[i][j] = (dp[i][j] + dp_hori[i][j-1])
-            dp_diag[i][j] = (dp[i][j] + dp_diag[i-1][j-1])
-            if i%2 == 0:
-                dp[i][j] %= MOD
-                dp_vert[i][j] %= MOD
-                dp_hori[i][j] %= MOD
-                dp_diag[i][j] %= MOD
+            dp_vert[i][j] = (dp[i][j] + dp_vert[i-1][j])%MOD
+            dp_hori[i][j] = (dp[i][j] + dp_hori[i][j-1])%MOD
+            dp_diag[i][j] = (dp[i][j] + dp_diag[i-1][j-1])%MOD
 
     # console(dp)
     # console(dp_vert)
