@@ -12,22 +12,30 @@ MOD = (10**9 + 7)
 def solve_(grid, h, w):
     # your solution here
 
-    dp = [[0 for _ in row] for row in grid]
-    dp_hori = [[0 for _ in row] for row in grid]
-    dp_vert = [[0 for _ in row] for row in grid]
-    dp_diag = [[0 for _ in row] for row in grid]
+    dp = [[0 for _ in row] for row in grid[:2]]
+    dp_hori = [[0 for _ in row] for row in grid[:2]]
+    dp_vert = [[0 for _ in row] for row in grid[:2]]
+    dp_diag = [[0 for _ in row] for row in grid[:2]]
     dp[0][0] = 1
     dp_vert[0][0] = 1
     dp_diag[0][0] = 1
     dp_hori[0][0] = 1
 
+    dp_first_col = [[0] for _ in grid]
+    dp_vert_first_col = [[0] for _ in grid]
+    dp_first_col[0][0] = 1
+    dp_vert_first_col[0][0] = 1
     for i,row in enumerate(grid[1:], start=1):
         if grid[i][0] == 1:
             continue
-        dp[i][0] = dp_vert[i-1][0]
-        dp_vert[i][0] = dp[i][0] + dp_vert[i-1][0]
-        dp_diag[i][0] = dp[i][0]
-        dp_hori[i][0] = dp[i][0]
+        dp_first_col[i][0] = dp_vert_first_col[i-1][0]
+        dp_vert_first_col[i][0] = dp_first_col[i][0] + dp_vert_first_col[i-1][0]
+        # dp_diag[i][0] = dp[i][0]
+        # dp_hori[i][0] = dp[i][0]
+
+    console(dp_first_col)
+    console(dp_vert_first_col)
+    console("----")
 
     for j,cell in enumerate(grid[0][1:], start=1):
         if grid[0][j] == 1:
@@ -46,10 +54,16 @@ def solve_(grid, h, w):
     # console(dp_vert[1-1][1])
     # console("-----")
 
-    for i,row in enumerate(grid[1:], start=1):
-        for j,cell in enumerate(row[1:], start=1):
+    for idx in range(1, len(grid)):
+        i = idx
+        dp[1][0] = dp_first_col[i][0]
+        dp_vert[1][0] = dp_vert_first_col[i][0]
+        dp_hori[1][0] = dp[1][0]
+        dp_diag[1][0] = dp[1][0]
+        i = 1
+        for j in range(1, len(grid[0])):
             # console(i,j,dp_vert[i-1][j],dp_hori[i][j-1],dp_diag[i-1][j-1])
-            if cell == 1:
+            if grid[idx][j] == 1:
                 continue
             dp[i][j] = dp_vert[i-1][j] + dp_hori[i][j-1] + dp_diag[i-1][j-1]
             dp_vert[i][j] = (dp[i][j] + dp_vert[i-1][j])
@@ -61,12 +75,18 @@ def solve_(grid, h, w):
                 dp_hori[i][j] %= MOD
                 dp_diag[i][j] %= MOD
 
-    # console(dp)
-    # console(dp_vert)
-    # console(dp_hori)
-    # console(dp_diag)
+        console(dp[0])
+        console(dp[1])
+        console(dp_vert[1])
+        console(dp_hori[1])
+        console(dp_diag[1])
+        console("----")
+        
+        dp[0] = dp[1]
+        dp[1] = [0 for _ in range(len(grid[0]))]
 
-    return dp[-1][-1]%MOD
+
+    return dp[0][-1]%MOD
 
 
 def console(*args):  
