@@ -1,7 +1,7 @@
 import sys, os
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
+# import heapq, functools, collections
+# import math, random
+# from collections import Counter, defaultdict
 
 # available on Google, not available on Codeforces
 # import numpy as np
@@ -52,9 +52,14 @@ def solve_(grid, h, w):
             if cell == 1:
                 continue
             dp[i][j] = dp_vert[i-1][j] + dp_hori[i][j-1] + dp_diag[i-1][j-1]
-            dp_vert[i][j] = (dp[i][j] + dp_vert[i-1][j])%MOD
-            dp_hori[i][j] = (dp[i][j] + dp_hori[i][j-1])%MOD
-            dp_diag[i][j] = (dp[i][j] + dp_diag[i-1][j-1])%MOD
+            dp_vert[i][j] = (dp[i][j] + dp_vert[i-1][j])
+            dp_hori[i][j] = (dp[i][j] + dp_hori[i][j-1])
+            dp_diag[i][j] = (dp[i][j] + dp_diag[i-1][j-1])
+
+            if i%5 == 0 or j%5 == 0:
+                dp_vert[i][j] %= MOD
+                dp_hori[i][j] %= MOD
+                dp_diag[i][j] %= MOD
 
     # console(dp)
     # console(dp_vert)
