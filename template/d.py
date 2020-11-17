@@ -40,10 +40,10 @@ def solve_again(edges, num_vertices, required):
         del edge_count[k]
 
     # console(edge_count)
-    if not edge_count:
+    if not edge_count or sum(edge_count.values()) < (required*(required-1))//2:
         print(-1)
         return
-    
+
     # console(g)
 
     stack = [starting_node]
@@ -109,6 +109,9 @@ def solve_(edges, num_vertices, required):
 
     # console(edge_count)
     if not edge_count:
+        if len(edges) < (required*(required-1))//2:
+            print(-1)
+            return
         solve_again(edges, num_vertices, required)
         return
 
