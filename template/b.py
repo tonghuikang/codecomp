@@ -8,10 +8,27 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst,n,k):
+    if n == 1:
+        return sum(lst)
     # your solution here
 
-    return ""
+    lst = sorted(lst)
+
+    if n%2 == 1:
+        chopped = (n-1)//2
+        lst = lst[chopped * k:]
+        # console(lst)
+        lst = lst[::n-chopped]
+        # console(lst)
+    else: 
+        chopped = (n-2)//2
+        lst = lst[chopped * k:]
+        # console(lst)
+        lst = lst[::n-chopped]
+        # console(lst)
+    return sum(lst)
+
 
 
 def console(*args):  
@@ -63,7 +80,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +90,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst,n,k)  # please change
     
     # print result
     # Google - case number required

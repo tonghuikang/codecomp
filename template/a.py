@@ -8,10 +8,16 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(a,b,h,arr):
     # your solution here
 
-    return ""
+    c = Counter(arr)
+
+    return min(
+        c["0"]*a + c["1"]*b,
+        c["0"]*a + c["1"]*(a+h),
+        c["0"]*(b+h) + c["1"]*b,
+    )
 
 
 def console(*args):  
@@ -45,7 +51,7 @@ def solve(*args):
 
 if True:
     # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
+    inp = iter(sys.stdin.readlines())
     input = lambda: next(inp)
 else:
     # if memory is a constraint
@@ -57,13 +63,13 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
-    
+    _,a,b,h = list(map(int,input().split()))
+    arr = input()
+
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +78,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(a,b,h,arr)  # please change
     
     # print result
     # Google - case number required
