@@ -7,60 +7,6 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
-def solve_again(edges, num_vertices, required):
-    # console("rematch")
-    required = required - 1
-
-    edge_count = Counter([])
-    LARGE = 10**6
-    for i in range(num_vertices):
-        edge_count[i] += LARGE
-
-    g = defaultdict(set)
-
-    for a,b in edges:
-        g[a].add(b)
-        g[b].add(a)
-        edge_count[a] -= 1
-        edge_count[b] -= 1
-    
-    while edge_count:
-        (k,v), = edge_count.most_common(1)
-        if v <= LARGE - required:
-            # console("starting", k)
-            starting_node = k
-            break
-        
-        for nex in g[k]:
-            # g[k].remove(nex)
-            g[nex].remove(k)
-            # edge_count[k] += 1
-            edge_count[nex] += 1
-        del g[k]
-        del edge_count[k]
-
-    # console(edge_count)
-    if not edge_count or sum(edge_count.values()) < (required*(required-1))//2:
-        print(-1)
-        return
-
-    # console(g)
-
-    stack = [starting_node]
-    visited = [False for _ in range(num_vertices)]
-    visited[starting_node] == True
-    while stack:
-        cur = stack.pop()
-        for nex in g[cur]:
-            if visited[nex]:
-                continue
-            stack.append(nex)
-            visited[nex] = True
-    
-    res = [i+1 for i,x in enumerate(visited)]
-    print(2)
-    print(*res[:required+1])
-
 
 # remove vertices with less than required edges until we find the answer :)
 def solve_(edges, num_vertices, required):
@@ -94,7 +40,7 @@ def solve_(edges, num_vertices, required):
     
     while edge_count:
         (k,v), = edge_count.most_common(1)
-        if v <= LARGE - required:
+        if v <= LARGE - (required - 1):
             # console("starting", k)
             starting_node = k
             break
@@ -107,12 +53,14 @@ def solve_(edges, num_vertices, required):
         del g[k]
         del edge_count[k]
 
+    # check for all edges with exactly k-1 degree, if there is a clique
+    # continue to remove
+
     # console(edge_count)
     if not edge_count:
         if len(edges) < (required*(required-1))//2:
             print(-1)
             return
-        solve_again(edges, num_vertices, required)
         return
 
     stack = [starting_node]
