@@ -8,7 +8,7 @@ from collections import Counter, defaultdict
 # import scipy
 
 def solve_again(edges, num_vertices, required):
-    console("rematch")
+    # console("rematch")
     required = required - 1
 
     edge_count = Counter([])
@@ -27,24 +27,24 @@ def solve_again(edges, num_vertices, required):
     while edge_count:
         (k,v), = edge_count.most_common(1)
         if v <= LARGE - required:
-            console("starting", k)
+            # console("starting", k)
             starting_node = k
             break
         
-        for nex in list(g[k]):
-            g[k].remove(nex)
+        for nex in g[k]:
+            # g[k].remove(nex)
             g[nex].remove(k)
-            edge_count[k] += 1
+            # edge_count[k] += 1
             edge_count[nex] += 1
-        
+        del g[k]
         del edge_count[k]
 
-    console(edge_count)
+    # console(edge_count)
     if not edge_count:
         print(-1)
         return
     
-    console(g)
+    # console(g)
 
     stack = [starting_node]
     visited = [False for _ in range(num_vertices)]
@@ -95,19 +95,19 @@ def solve_(edges, num_vertices, required):
     while edge_count:
         (k,v), = edge_count.most_common(1)
         if v <= LARGE - required:
-            console("starting", k)
+            # console("starting", k)
             starting_node = k
             break
         
-        for nex in list(g[k]):
-            g[k].remove(nex)
+        for nex in g[k]:
+            # g[k].remove(nex)
             g[nex].remove(k)
-            edge_count[k] += 1
+            # edge_count[k] += 1
             edge_count[nex] += 1
-        
+        del g[k]
         del edge_count[k]
 
-    console(edge_count)
+    # console(edge_count)
     if not edge_count:
         solve_again(edges, num_vertices, required)
         return
@@ -132,7 +132,7 @@ def solve_(edges, num_vertices, required):
 
 def console(*args):  
     # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
     pass
 
 
@@ -151,11 +151,11 @@ if ONLINE_JUDGE:
 
 
 def solve(*args):
-    # screen input
-    if not ONLINE_JUDGE:
-        console("----- solving ------")
-        console(*args)
-        console("----- ------- ------")
+    # # screen input
+    # if not ONLINE_JUDGE:
+    #     console("----- solving ------")
+    #     console(*args)
+    #     console("----- ------- ------")
     return solve_(*args)
 
 
