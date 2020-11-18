@@ -1,6 +1,6 @@
+[![Codeforces Rating](https://cfrating.ihcr.top/?user=huikang&style=flat-square)](https://codeforces.com/profile/huikang)
+
 ## Overview of this reference
-
-
 
 Python snippet gallery
 - [Python](python.md)
