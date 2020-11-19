@@ -8,8 +8,14 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(a,b):
     # your solution here
+    a,b = sorted([a,b])
+
+    if a+1 >= b:
+        return a+b
+    
+    return (b-(a+1))*2 + (a+a+1)
 
     return ""
 
@@ -63,7 +69,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +78,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(a,b)  # please change
     
     # print result
     # Google - case number required

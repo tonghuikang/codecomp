@@ -8,10 +8,27 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+
+    lst = sorted(lst)
+    length = len(lst)
+
+    cnt = lst[0]//(length-1)
+    arr = [x+cnt for x in lst[1:]]
+
+    remainder = lst[0]%(length-1)
+    for i in range(remainder):
+        arr[i] += 1
+
+    console(arr)
+
+    sumlst = sum(lst)
+    maxlst = max(max(lst), max(arr))
+
+
+    return (maxlst * (length-1) - sumlst)
 
 
 def console(*args):  
@@ -57,13 +74,13 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +89,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required
