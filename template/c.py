@@ -8,10 +8,27 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(arr):
     # your solution here
+    round = 0
+    square = 0
+    res = 0
 
-    return ""
+    for a in arr:
+        if a == "[":
+            square += 1
+        if a == "]":
+            if square > 0:
+                square -= 1
+                res += 1
+        if a == "(":
+            round += 1
+        if a == ")":
+            if round > 0:
+                round -= 1
+                res += 1
+
+    return res
 
 
 def console(*args):  
@@ -45,16 +62,16 @@ def solve(*args):
 
 if True:
     # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
+    inp = iter(sys.stdin.readlines())
     input = lambda: next(inp)
 else:
     # if memory is a constraint
-    input = sys.stdin.buffer.readline
+    input = sys.stdin.readline
 
 
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
+    arr = input()
 
     # read line as an integer
     # k = int(input())
@@ -72,7 +89,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(arr)  # please change
     
     # print result
     # Google - case number required

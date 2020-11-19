@@ -8,10 +8,35 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(n):
     # your solution here
 
-    return ""
+    # lst = [0 for _ in range(n+1)]
+
+    even_cul = 0
+    odd_cul = 1
+    cur = 1
+    
+    MOD = 998244353
+
+    for i in range(1,n+1):
+        if i%2 == 0:
+            cur = even_cul
+            odd_cul += cur
+            odd_cul %= MOD
+        if i%2 == 1:
+            cur = odd_cul
+            even_cul += cur
+            even_cul %= MOD
+        # console(cur, even_cul, odd_cul)
+    
+    console(cur)
+
+    def invmod(a,b): return 0 if a==0 else 1 if b%a==0 else b - invmod(b%a,a)*b//a
+
+    res = pow(invmod(2,MOD), n, MOD) * cur
+
+    return res%MOD
 
 
 def console(*args):  
@@ -52,12 +77,12 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -72,7 +97,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # print result
     # Google - case number required

@@ -15,20 +15,32 @@ def solve_(lst):
     lst = sorted(lst)
     length = len(lst)
 
-    cnt = lst[0]//(length-1)
-    arr = [x+cnt for x in lst[1:]]
+    # cnt = lst[0]//(length-1)
+    # arr = [x+cnt for x in lst[1:]]
 
-    remainder = lst[0]%(length-1)
-    for i in range(remainder):
-        arr[i] += 1
+    # remainder = lst[0]%(length-1)
+    # for i in range(remainder):
+    #     arr[i] += 1
 
-    console(arr)
+    # console(arr)
+    # console(sum(arr), sum(lst))
 
     sumlst = sum(lst)
-    maxlst = max(max(lst), max(arr))
+    maxlst = max(lst)
 
+    if maxlst * (length-1) >= sumlst:
+        console("use max")
+        return (maxlst * (length-1) - sumlst)
 
-    return (maxlst * (length-1) - sumlst)
+    leftovers = sumlst - maxlst * (length-1)
+    remainder = leftovers%(length-1)
+
+    if remainder == 0:
+        console("exact fill")
+        return 0
+
+    console("remainder", remainder)
+    return length-1-remainder
 
 
 def console(*args):  
