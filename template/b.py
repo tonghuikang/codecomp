@@ -8,10 +8,27 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst, queries):
     # your solution here
 
-    return ""
+    for a,b in queries:
+        seq = lst[a:b]
+
+    #     ptr = 0
+    #     for s in seq:
+    #         while ptr < len(lst):
+    #             if 
+        
+
+        if seq[0] in lst[:a]:
+            print("YES")
+            continue
+        if seq[-1] in lst[b:]:
+            print("YES")
+            continue
+        print("NO")
+
+    return
 
 
 def console(*args):  
@@ -45,16 +62,15 @@ def solve(*args):
 
 if True:
     # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
+    inp = iter(sys.stdin.readlines())
     input = lambda: next(inp)
 else:
     # if memory is a constraint
-    input = sys.stdin.buffer.readline
+    input = sys.stdin.readline
 
 
 for case_num in range(int(input())):
     # read line as a string
-    # strr = input()
 
     # read line as an integer
     # k = int(input())
@@ -63,21 +79,23 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _,nrows = list(map(int,input().split()))
+    strr = input()
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    grid = [(a-1, b) for a,b in grid]
+    res = solve(list(strr.strip()), grid)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)
     # print(*res)  # if printing a list

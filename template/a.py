@@ -8,10 +8,15 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(k):
     # your solution here
+    if k < 4:
+        return k-1
 
-    return ""
+    if k%2 == 0:
+        return 2
+
+    return 3
 
 
 def console(*args):  
@@ -57,7 +62,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -72,7 +77,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # print result
     # Google - case number required

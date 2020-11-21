@@ -8,10 +8,21 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(a,b):
     # your solution here
 
-    return ""
+    steps = (a/b) / math.sqrt(2) 
+    steps2 = a**2 / b**2
+
+    equal = math.floor(steps)
+    upper = equal + 1
+
+    console(steps, equal, upper**2 + equal**2, steps2)
+
+    if upper**2 + equal**2 > steps2:
+        return "Utkarsh"
+    return "Ashish"
+
 
 
 def console(*args):  
@@ -63,7 +74,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +83,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(a,b)  # please change
     
     # print result
     # Google - case number required
