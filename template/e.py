@@ -27,32 +27,32 @@ for i in range(1,len(grid)-1):
 start = g["S"][0]
 end = g["G"][0]
 
-if len(g) == 2:
-    print(abs(start[0] - end[0]) + abs(start[1] - end[1]))
-    sys.exit()
+# if len(g) == 2:
+#     print(abs(start[0] - end[0]) + abs(start[1] - end[1]))
+#     sys.exit()
 
 dxy = [(1,0),(-1,0),(0,-1),(0,1)]
 visited = set([start])
-stack = collections.deque([(start,0)])
+stack = collections.deque([(*start,0)])
 
 while stack:
-    (x,y),dist = stack.popleft()
+    x,y,dist = stack.popleft()
     val = grid[x][y]
 
     for dx,dy in dxy:
         xx,yy = x+dx, y+dy
-        if grid[xx][yy] == "#":
+        if val == "#":
             continue
         if (xx,yy) in visited:
             continue
         visited.add((xx,yy))
-        stack.append(((xx,yy), dist+1))
+        stack.append((xx,yy, dist+1))
 
     if val in g:
         for i,j in g[val]:
             if (i,j) in visited:
                 continue
-            stack.append(((i,j), dist+1))
+            stack.append((i,j, dist+1))
             visited.add((xx,yy))
         del g[val]
 
@@ -61,9 +61,9 @@ while stack:
 
 if end in visited:
     while stack:
-        loc, dist = stack.pop()
-        if loc == end:
+        x,y, dist = stack.pop()
+        if (x,y) == end:
             print(dist)
-            break
+            sys.exit()
 else:
     print(-1)
