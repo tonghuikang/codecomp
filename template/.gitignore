@@ -1,3 +1,5 @@
 *.ipynb
 __pycache__/
 e9
+e8
+notebook_adhoc.ipynb

@@ -14,16 +14,19 @@ def solve_(a,b,c,d):
     if a == c and b == d:
         return 0
 
-    if abs(a-b) == abs(c-d):
+    if abs(a-c) == abs(b-d):
         return 1
     
-    if abs(a-b) + abs(c-d) <= 3:
+    if abs(a-c) + abs(b-d) <= 3:
         return 1
-    
-    if a-b == -1 and c-d == -500:
-        return 3
 
-    return 2
+    if abs(abs(a-c) - abs(b-d)) <= 3:
+        return 2
+
+    if (a-c)%2 == (b-d)%2:
+        return 2
+
+    return 3
 
 def console(*args):  
     # print on terminal in different color
