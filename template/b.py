@@ -8,10 +8,16 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(strr,k):
     # your solution here
+    
+    for s in strr:
+        if s == "o":
+            k += 1
+        else:
+            k = max(0, k-1)
 
-    return ""
+    return k
 
 
 def console(*args):  
@@ -45,14 +51,14 @@ def solve(*args):
 
 if True:
     # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
+    inp = iter(sys.stdin.readlines())
     input = lambda: next(inp)
 else:
     # if memory is a constraint
-    input = sys.stdin.buffer.readline
+    input = sys.stdin.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -63,7 +69,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    strr = input().strip()
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +79,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(strr,k)  # please change
     
     # print result
     # Google - case number required

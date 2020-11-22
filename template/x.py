@@ -17,6 +17,7 @@ from collections import Counter, defaultdict
 # lst = input().split()
 
 # read one line and parse each word as an integer
-# arr = list(map(int,input().split()))
+a,b = list(map(int,input().split()))
+c,d = list(map(int,input().split()))
 
-print()
+print(a*d - b*c)

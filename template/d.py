@@ -8,10 +8,37 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(aa,bb,cc):
     # your solution here
+    divide = 1/((aa > 0) + (bb > 0) + (cc > 0))
+    console(divide)
+    expected = 0
+    in_play = {(aa,bb,cc):1}
 
-    return ""
+    count = 0
+    while in_play:
+        count += 1
+        next_phase = defaultdict(float)
+        
+        for (a,b,c),prob in in_play.items():
+            fact = prob/(a+b+c)
+            next_phase[(a+1,b,c)] += fact * a
+            next_phase[(a,b+1,c)] += fact * b
+            next_phase[(a,b,c+1)] += fact * c
+
+        # console(next_phase)
+        for a,b,c in list(k for k in next_phase):
+            if a == 100 or b == 100 or c == 100:
+                expected += next_phase[(a,b,c)]*count
+                del next_phase[(a,b,c)]
+        
+        # console(next_phase)
+        # console(sum(next_phase.values()))
+        in_play = next_phase
+        # break
+        
+    return expected
+
 
 
 def console(*args):  
@@ -52,7 +79,7 @@ else:
     input = sys.stdin.buffer.readline
 
 
-for case_num in range(int(input())):
+for case_num in [1]:
     # read line as a string
     # strr = input()
 
@@ -63,7 +90,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    a,b,c = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +99,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(a,b,c)  # please change
     
     # print result
     # Google - case number required
