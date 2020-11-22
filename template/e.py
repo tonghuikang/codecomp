@@ -8,25 +8,9 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
-def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target):
-    d = map_from_node_to_nodes_and_costs
-    if target not in d:
-        d[-1] = []
+# def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target):
 
-    # assign indexes
-    idxs = {k:i for i,k in enumerate(d.keys())}
-
-    # population array of nodes and costs
-    G = [[] for _ in range(len(idxs))]
-    for e,vrr in d.items():
-        for v,cost in vrr:
-            G[idxs[e]].append((idxs[v],cost))
-
-    del map_from_node_to_nodes_and_costs
-    del d
-
-    _,costs = dijkstra(G, idxs[source])
-    return costs[idxs[target]]
+    # return costs[idxs[target]]
 
 
 def dijkstra(G, s):
@@ -50,8 +34,68 @@ def dijkstra(G, s):
     return path, weights
 
 
-def solve_(grid):
-    # your solution here
+def console(*args):  
+    # print on terminal in different color
+    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
+    pass
+
+
+ONLINE_JUDGE = False
+
+# if Codeforces environment
+# if os.path.exists('input.txt'):
+#     ONLINE_JUDGE = True
+
+# if ONLINE_JUDGE:
+#     sys.stdin = open("input.txt","r")
+#     sys.stdout = open("output.txt","w")
+
+#     def console(*args):
+#         pass
+
+
+# def solve(*args):
+#     # screen input
+#     # if not ONLINE_JUDGE:
+#     #     console("----- solving ------")
+#     #     console(*args)
+#     #     console("----- ------- ------")
+#     return solve_(*args)
+
+
+# if True:
+#     # if memory is not a constraint
+#     inp = iter(sys.stdin.readlines())
+#     input = lambda: next(inp)
+# else:
+    # if memory is a constraint
+input = sys.stdin.readline
+
+
+for case_num in [1]:
+    # read line as a string
+    # strr = input()
+
+    # read line as an integer
+    # k = int(input())
+    
+    # read one line and parse each word as a string
+    # lst = input().split()
+
+    # read one line and parse each word as an integer
+    nrows,_ = list(map(int,input().split()))
+
+    # read matrix and parse as integers (after reading read nrows)
+    # lst = list(map(int,input().split()))
+    # nrows = lst[0]  # index containing information, please change
+    grid = []
+    for _ in range(nrows):
+        grid.append(input().strip())
+    #     grid.append(list(map(int,input().split())))
+
+    # res = solve(grid)  # please change
+    
+
     grid = ["#"*len(grid[0])] + grid + ["#"*len(grid[0])]
     grid = [["#"] + list(row) + ["#"] for row in grid]
 
@@ -80,76 +124,35 @@ def solve_(grid):
     # console(g)
     del grid
 
-    res = dijkstra_with_preprocessing(g, "S", "G")
-    if res > 10**6:
-        return -1
-    return res//2 - 1
+    source = "G"
+    target = "S"
+    d = g
+    if target not in d:
+        d[-1] = []
 
-def console(*args):  
-    # print on terminal in different color
-    # print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    pass
+    # assign indexes
+    idxs = {k:i for i,k in enumerate(d.keys())}
 
+    # population array of nodes and costs
+    G = [[] for _ in range(len(idxs))]
+    for e,vrr in d.items():
+        for v,cost in vrr:
+            G[idxs[e]].append((idxs[v],cost))
 
-ONLINE_JUDGE = False
+    del g
+    del d
 
-# if Codeforces environment
-# if os.path.exists('input.txt'):
-#     ONLINE_JUDGE = True
-
-# if ONLINE_JUDGE:
-#     sys.stdin = open("input.txt","r")
-#     sys.stdout = open("output.txt","w")
-
-#     def console(*args):
-#         pass
-
-
-def solve(*args):
-    # screen input
-    # if not ONLINE_JUDGE:
-    #     console("----- solving ------")
-    #     console(*args)
-    #     console("----- ------- ------")
-    return solve_(*args)
-
-
-if True:
-    # if memory is not a constraint
-    inp = iter(sys.stdin.readlines())
-    input = lambda: next(inp)
-else:
-    # if memory is a constraint
-    input = sys.stdin.readline
-
-
-for case_num in [1]:
-    # read line as a string
-    # strr = input()
-
-    # read line as an integer
-    # k = int(input())
+    _,costs = dijkstra(G, idxs[source])
     
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    nrows,_ = list(map(int,input().split()))
-
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    grid = []
-    for _ in range(nrows):
-        grid.append(input().strip())
-    #     grid.append(list(map(int,input().split())))
-
-    res = solve(grid)  # please change
-    
+    res = costs[idxs[target]]
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
+    if res > 10**6:
+        print(-1)
+    else:
+        print(res//2 - 1)
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)
     # print(*res)  # if printing a list
