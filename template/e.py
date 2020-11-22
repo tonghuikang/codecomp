@@ -18,8 +18,8 @@ grid = [["#"] + list(row) + ["#"] for row in grid]
 
 g = defaultdict(list)
 
-for i in range(1,len(grid)-1):
-    for j in range(1,len(grid[0])-1):
+for i in range(0,len(grid)):
+    for j in range(0,len(grid[0])):
         val = grid[i][j]
         if val != ".":
             g[val].append((i,j))
@@ -27,12 +27,13 @@ for i in range(1,len(grid)-1):
 start = g["S"][0]
 end = g["G"][0]
 
-# if len(g) == 2:
-#     print(abs(start[0] - end[0]) + abs(start[1] - end[1]))
-#     sys.exit()
+if len(g) == 2:
+    print(abs(start[0] - end[0]) + abs(start[1] - end[1]))
+    sys.exit()
 
 dxy = [(1,0),(-1,0),(0,-1),(0,1)]
-visited = set([start])
+visited = set(g["#"])
+visited.add(start)
 stack = collections.deque([(*start,0)])
 
 while stack:
@@ -41,8 +42,6 @@ while stack:
 
     for dx,dy in dxy:
         xx,yy = x+dx, y+dy
-        if grid[xx][yy] == "#":
-            continue
         if (xx,yy) in visited:
             continue
         visited.add((xx,yy))
@@ -53,7 +52,7 @@ while stack:
             if (i,j) in visited:
                 continue
             stack.append((i,j, dist+1))
-            visited.add((xx,yy))
+            visited.add((i,j))
         del g[val]
 
     if end in visited:
