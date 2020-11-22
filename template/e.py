@@ -41,7 +41,7 @@ while stack:
 
     for dx,dy in dxy:
         xx,yy = x+dx, y+dy
-        if val == "#":
+        if grid[xx][yy] == "#":
             continue
         if (xx,yy) in visited:
             continue
