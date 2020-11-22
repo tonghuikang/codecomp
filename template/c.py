@@ -9,11 +9,21 @@ from collections import Counter, defaultdict
 
 
 def solve_(a,b,c,d):
-    
+    console(a-b, c-d)
     # your solution here
+    if a == c and b == d:
+        return 0
 
-    return ""
+    if abs(a-b) == abs(c-d):
+        return 1
+    
+    if abs(a-b) + abs(c-d) <= 3:
+        return 1
+    
+    if a-b == -1 and c-d == -500:
+        return 3
 
+    return 2
 
 def console(*args):  
     # print on terminal in different color

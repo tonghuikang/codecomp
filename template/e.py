@@ -63,13 +63,13 @@ ONLINE_JUDGE = False
 #     return solve_(*args)
 
 
-# if True:
-#     # if memory is not a constraint
-#     inp = iter(sys.stdin.readlines())
-#     input = lambda: next(inp)
+if True:
+    # if memory is not a constraint
+    inp = iter(sys.stdin.readlines())
+    input = lambda: next(inp)
 # else:
     # if memory is a constraint
-input = sys.stdin.readline
+# input = sys.stdin.readline
 
 
 for case_num in [1]:
@@ -99,59 +99,71 @@ for case_num in [1]:
     grid = ["#"*len(grid[0])] + grid + ["#"*len(grid[0])]
     grid = [["#"] + list(row) + ["#"] for row in grid]
 
-    # map_from_node_to_nodes_and_costs
+    # locations
     g = defaultdict(list)
-
-    dxy = [(-1,0), (1,0), (0,-1), (0,1)] 
-    sx,sy = -1,-1
-    ex,ey = -1,-1
 
     for i in range(1,len(grid)-1):
         for j in range(1,len(grid[0])-1):
-            if grid[i][j] == "#":
-                continue
             val = grid[i][j]
-            for dx,dy in dxy:
-                xx,yy = i+dx,j+dy
-                if grid[xx][yy] == "#":
-                    continue
-                g[(i,j)].append(((xx,yy),2))
-
+            # if val == "#":
+            #     continue
             if val != ".":
-                g[(i,j)].append((val,1))
-                g[val].append(((i,j),1))
+                # g[(i,j)].append((val,1))
+                g[val].append((i,j))
+
+    # print("check1")
+    start = g["S"][0]
+    end = g["G"][0]
 
     # console(g)
-    del grid
+    # del grid
 
-    source = "G"
-    target = "S"
-    d = g
-    if target not in d:
-        d[-1] = []
+    if len(g) == 2:
+        print(abs(start[0] - end[0]) + abs(start[1] - end[1]))
+        continue
 
-    # assign indexes
-    idxs = {k:i for i,k in enumerate(d.keys())}
-
-    # population array of nodes and costs
-    G = [[] for _ in range(len(idxs))]
-    for e,vrr in d.items():
-        for v,cost in vrr:
-            G[idxs[e]].append((idxs[v],cost))
-
-    del g
-    del d
-
-    _,costs = dijkstra(G, idxs[source])
-    
-    res = costs[idxs[target]]
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
-    if res > 10**6:
-        print(-1)
+    c = Counter()
+    dxy = [(1,0),(-1,0),(0,-1),(0,1)]
+    visited = set([start])
+    stack = collections.deque([(start,0)])
+    while stack:
+        (x,y),dist = stack.popleft()
+        # print(dist)
+        # c[dist] += 1
+        val = grid[x][y]
+        for dx,dy in dxy:
+            xx,yy = x+dx, y+dy
+            # print(x,dx, y,dy, xx,yy)
+            if grid[xx][yy] == "#":
+                continue
+            if (xx,yy) in visited:
+                continue
+            visited.add((xx,yy))
+            stack.append(((xx,yy), dist+1))
+        if val in g:
+            # print(val)
+            for i,j in g[val]:
+                if (i,j) in visited:
+                    continue
+                stack.append(((i,j), dist+1))
+                visited.add((xx,yy))
+            del g[val]
+            # print(g)
+        if end in visited:
+            break
+    # print(c)
+    # print("results")
+    # print(visited)
+    if end in visited:
+        while stack:
+            loc, dist = stack.pop()
+            if loc == end:
+                print(dist)
+                break
     else:
-        print(res//2 - 1)
+        print(-1)
+
+
 
     # Codeforces - no case number required
     # print(res)
