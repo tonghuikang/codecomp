@@ -16,43 +16,71 @@ def solve_(edges, k):
         d[a].append(b)
         d[b].append(a)
 
-    c = Counter(len(v) for k,v in d.items())
-    tails = [k for k,v in d.items() if len(v) == 1]
-    junctions = set([k for k,v in d.items() if len(v) >= 3])
-    # console(tails, junctions)
-
-    # console(d)
-
-    # if c[1] == 0:  # one big circle
-    #     return k*(k-1)
+    stack = [k]
+    visited = {k: None}
+    while stack:
+        cur = stack.pop()
+        for nex in d[cur]:
+            if nex in visited:
+                if visited[cur] == nex:
+                    continue
+                stack = []
+                break
+            visited[nex] = cur
+            stack.append(nex)
     
-    junction_to_length = defaultdict(list)
+    stack_1 = [cur]
+    stack_1_set = set([cur])
+    stack_2 = [nex]
 
-    visited = set()
-    for tail in tails:
-        cur = tail
-        visited.add(cur)
-        tail_length = 0
+    cur = stack_1[0]
+    while visited[cur]:
+        cur = visited[cur]
+        stack_1.append(cur)
+        stack_1_set.add(cur)
+    
 
-        while not cur in junctions:
-            tail_length += 1
+    cur = stack_2[0]
+    while visited[cur]:
+        cur = visited[cur]
+        stack_2.append(cur)
+        if cur in stack_1_set:
+            break
+    
+    cycle = set(stack_2)
+    for x in stack_1:
+        if x in cycle:
+            break
+        cycle.add(x)
+
+
+    # console("cycle", cycle)
+    visited = set(cycle)
+
+    res = k*(k-1)
+
+    for start in cycle:
+        stack = d[start]
+        count = 0
+        while stack:
+            cur = stack.pop()
+            if cur in cycle:
+                continue
+            visited.add(cur)
+            # console(start, cur)
+            count += 1
             for nex in d[cur]:
                 if nex in visited:
                     continue
+                stack.append(nex)
                 visited.add(nex)
-                cur = nex
-                break
-
-        junction_to_length[cur].append(tail_length)
-        visited.remove(cur)  # remove junction
-
-    # console(junction_to_length)
-    res = k*(k-1)
-    for junction,lengths in junction_to_length.items():
-        sum_lengths = sum(lengths)
-        res -= sum_lengths*(sum_lengths+1)//2
+        console(start, count)
+        res -= count*(count+1)//2
 
     return res
+
+             
+
 
 
 def console(*args):  
