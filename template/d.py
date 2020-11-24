@@ -8,10 +8,45 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+primes = set(range(2,10**5+10))
+for i in range(2,10**5+10):
+    for j in range(2*i,10**5+10,i):
+        primes.discard(j)
+
+primes = sorted(primes)
+
+# print(primes)
+
+import math
+
+def prime_factors(nr):
+    i = 0
+    factors = []
+    candidate = 2
+    while candidate <= nr:
+        candidate = primes[i]
+        if candidate > math.sqrt(nr):
+            factors.append(nr)
+            break
+        elif (nr % candidate) == 0:
+            factors.append(candidate)
+            nr = nr // candidate
+        else:
+            i = i + 1
+    return factors
+
+
+def solve_(x):
     # your solution here
 
-    return ""
+    factors = prime_factors(x)
+    console(factors)
+    lst = Counter(factors)
+
+    (v,k), = lst.most_common(1)    
+
+    return [v]*(k-1) + [x//v**(k-1)]
+
 
 
 def console(*args):  
@@ -57,7 +92,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    x = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -72,12 +107,13 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(x)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
-    # print(*res)  # if printing a list
+    # print(res)
+    print(len(res))
+    print(*res)  # if printing a list
