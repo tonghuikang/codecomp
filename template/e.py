@@ -46,26 +46,14 @@ def solve_(edges, k):
         junction_to_length[cur].append(tail_length)
         visited.remove(cur)  # remove junction
 
-    cycle_diameter = k-sum(sum(x) for x in junction_to_length.values())
-    res = cycle_diameter*(cycle_diameter-1)
-    # console("count from cycle", res, cycle_diameter)
-
-    res += (k-cycle_diameter)*(2*cycle_diameter-1)
-
-    tmp = 0
+    # console(junction_to_length)
+    res = k*(k-1)
     for junction,lengths in junction_to_length.items():
         sum_lengths = sum(lengths)
-        the_rest = k-cycle_diameter-sum_lengths
-
-        tmp += the_rest*sum_lengths*2
-        for length in lengths:
-            tmp += length*(sum_lengths-length)
-
-    # console(tmp)
-    assert tmp%2 == 0
-    res += tmp//2
+        res -= sum_lengths*(sum_lengths+1)//2
 
     return res
+
 
 def console(*args):  
     # print on terminal in different color
