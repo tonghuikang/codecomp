@@ -18,20 +18,25 @@ def solve_(edges, k):
 
     c = Counter(len(v) for k,v in d.items())
     tails = [k for k,v in d.items() if len(v) == 1]
-    junction = set([k for k,v in d.items() if len(v) >= 3])
-    console(tails, junction)
+    junctions = set([k for k,v in d.items() if len(v) >= 3])
+    console(tails, junctions)
 
     console(d)
 
     if c[1] == 0:  # one big circle
         return k*(k-1)
     
-    if c[1] == 1:  # one tail
-        cur = tails[0]
-        visited = set([cur])
+    connection_point = {}
+    connection_length = {}
+    junction_to_length = defaultdict(list)
+
+    visited = set()
+    for tail in tails:
+        cur = tail
+        visited.add(cur)
         tail_length = 0
 
-        while not cur in junction:
+        while not cur in junctions:
             tail_length += 1
             for nex in d[cur]:
                 if nex in visited:
@@ -39,63 +44,27 @@ def solve_(edges, k):
                 visited.add(nex)
                 cur = nex
                 break
-            # else:
-            #     break
 
-        console(tail_length)
-        cycle_diameter = k - tail_length
-        return cycle_diameter*(cycle_diameter-1) + tail_length*(2*cycle_diameter-1)
+        junction_to_length[cur].append(tail_length)
+        visited.remove(cur)  # remove junction
 
+    cycle_diameter = k-sum(connection_length.values())
+    res = cycle_diameter*(cycle_diameter-1)
+    console("count from cycle", res, cycle_diameter)
 
-    cur = tails[0]
-    visited = set([cur])
-    tail_length = 0
+    tmp = 0
+    for junction,lengths in junction_to_length.items():
+        sum_lengths = sum(lengths)
+        the_rest = k-cycle_diameter-sum_lengths
 
-    while not cur in junction:
-        tail_length += 1
-        for nex in d[cur]:
-            if nex in visited:
-                continue
-            visited.add(nex)
-            cur = nex
-            break
-        # else:
-        #     break
+        tmp += the_rest*sum_lengths*2
+        for length in lengths:
+            tmp += length*(sum_lengths-length)
 
-    junction_1 = cur
-    tail_length_1 = tail_length
+    console(tmp)
+    res += tmp//2
 
-    visited.remove(cur)
-    cur = tails[1]
-    visited.add(cur)
-    tail_length = 0
-
-    while not cur in junction:
-        tail_length += 1
-        for nex in d[cur]:
-            if nex in visited:
-                continue
-            visited.add(nex)
-            cur = nex
-            break
-        # else:
-        #     break
-    visited.remove(cur)
-
-    junction_2 = cur
-    tail_length_2 = tail_length
-
-    console(tails[0], junction_1, tail_length_1)
-    console(tails[1], junction_2, tail_length_2)
-
-    cycle_diameter = k-tail_length_1-tail_length_2
-
-    if junction_1 == junction_2:
-        return cycle_diameter*(cycle_diameter-1) + tail_length_1*(2*cycle_diameter-1) + tail_length_2*(2*cycle_diameter-1) + tail_length_1*tail_length_2
-
-    return cycle_diameter*(cycle_diameter-1) + tail_length_1*(2*cycle_diameter-1) + tail_length_2*(2*cycle_diameter-1) + 2*tail_length_1*tail_length_2
-
-
+    return res
 
 def console(*args):  
     # print on terminal in different color
