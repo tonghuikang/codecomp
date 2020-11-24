@@ -21,6 +21,8 @@ def solve_(edges, k):
     junction = set([k for k,v in d.items() if len(v) >= 3])
     console(tails, junction)
 
+    console(d)
+
     if c[1] == 0:  # one big circle
         return k*(k-1)
     
@@ -37,6 +39,8 @@ def solve_(edges, k):
                 visited.add(nex)
                 cur = nex
                 break
+            # else:
+            #     break
 
         console(tail_length)
         cycle_diameter = k - tail_length
@@ -55,12 +59,15 @@ def solve_(edges, k):
             visited.add(nex)
             cur = nex
             break
+        # else:
+        #     break
 
     junction_1 = cur
     tail_length_1 = tail_length
 
     visited.remove(cur)
     cur = tails[1]
+    visited.add(cur)
     tail_length = 0
 
     while not cur in junction:
@@ -71,6 +78,8 @@ def solve_(edges, k):
             visited.add(nex)
             cur = nex
             break
+        # else:
+        #     break
     visited.remove(cur)
 
     junction_2 = cur
