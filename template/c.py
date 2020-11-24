@@ -11,6 +11,9 @@ def solve(a,b,c,d):
     if abs(a-c) + abs(b-d) <= 3:
         return 1
 
+    if abs(a-c) + abs(b-d) <= 6:
+        return 2
+
     if abs(abs(a-c) - abs(b-d)) <= 3:
         return 2
 

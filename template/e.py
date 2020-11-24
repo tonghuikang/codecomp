@@ -27,9 +27,9 @@ for i in range(0,len(grid)):
 start = g["S"][0]
 end = g["G"][0]
 
-if len(g) == 2:
-    print(abs(start[0] - end[0]) + abs(start[1] - end[1]))
-    sys.exit()
+# if len(g) == 2:
+#     print(abs(start[0] - end[0]) + abs(start[1] - end[1]))
+#     sys.exit()
 
 dxy = [(1,0),(-1,0),(0,-1),(0,1)]
 visited = set(g["#"])
