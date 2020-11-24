@@ -19,15 +19,13 @@ def solve_(edges, k):
     c = Counter(len(v) for k,v in d.items())
     tails = [k for k,v in d.items() if len(v) == 1]
     junctions = set([k for k,v in d.items() if len(v) >= 3])
-    console(tails, junctions)
+    # console(tails, junctions)
 
-    console(d)
+    # console(d)
 
-    if c[1] == 0:  # one big circle
-        return k*(k-1)
+    # if c[1] == 0:  # one big circle
+    #     return k*(k-1)
     
-    connection_point = {}
-    connection_length = {}
     junction_to_length = defaultdict(list)
 
     visited = set()
@@ -48,9 +46,11 @@ def solve_(edges, k):
         junction_to_length[cur].append(tail_length)
         visited.remove(cur)  # remove junction
 
-    cycle_diameter = k-sum(connection_length.values())
+    cycle_diameter = k-sum(sum(x) for x in junction_to_length.values())
     res = cycle_diameter*(cycle_diameter-1)
-    console("count from cycle", res, cycle_diameter)
+    # console("count from cycle", res, cycle_diameter)
+
+    res += (k-cycle_diameter)*(2*cycle_diameter-1)
 
     tmp = 0
     for junction,lengths in junction_to_length.items():
@@ -61,7 +61,8 @@ def solve_(edges, k):
         for length in lengths:
             tmp += length*(sum_lengths-length)
 
-    console(tmp)
+    # console(tmp)
+    assert tmp%2 == 0
     res += tmp//2
 
     return res
