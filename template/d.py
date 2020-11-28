@@ -1,5 +1,5 @@
 import sys, os
-import heapq, functools, collections
+import heapq, functools, collections, itertools
 import math, random
 from collections import Counter, defaultdict
 
@@ -8,10 +8,58 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(ax,ay,bx,by,cx,cy):
     # your solution here
 
-    return ""
+    (ax,ay),(bx,by),(cx,cy) = sorted([(ax,ay),(bx,by),(cx,cy)], key=lambda x:(x[1],x[0]))
+    dest = (ax,ay),(bx,by),(cx,cy)
+    console(dest)
+
+    addn = 0
+    type = 0
+
+    if bx - ax == 1 and by == ay and bx == cx and cy - by == 1:
+        dx,dy = (bx,by)
+        console("center b")
+        console("down right")
+        if dx > 0:
+            dx -= 1
+        addn = 1
+    elif bx - ax == 1 and by == ay and ax == cx and cy - ay == 1:
+        dx,dy = (ax,ay)
+        type = 1
+        console("center a")
+        console("point down left")
+    elif cy - ay == 1 and cx == ax and cy == by and cx - bx == 1:
+        dx,dy = (cx,cy)
+        console("center c")
+        console("up right")
+        console("NULL")
+        type = 1
+        return 0
+    elif by - ay == 1 and bx == ax and by == cy and cx - bx == 1:
+        dx,dy = (bx,by)
+        console("center b")
+        console("up left")
+        if dy > 0:
+            dy -= 1
+        addn = 1
+    else:
+        console("ERROR")
+
+    console(dx,dy)
+
+    if type == 1:
+        if (dx > 0 and dy > 0) or (dx < 0 and dy < 0):
+            return addn + 2*(abs(dx)+abs(dy)) - min(abs(dx),abs(dy))
+        else:
+            return addn + 2*(abs(dx)+abs(dy)) - 2*min(abs(dx),abs(dy))
+    else:
+        if not ((dx > 0 and dy > 0) or (dx < 0 and dy < 0)):
+            return addn + 2*(abs(dx)+abs(dy)) - min(abs(dx),abs(dy))
+        else:
+            return addn + 2*(abs(dx)+abs(dy)) - 2*min(abs(dx),abs(dy))        
+
 
 
 def console(*args):  
@@ -63,7 +111,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    ax,ay,bx,by,cx,cy = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +120,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(ax,ay,bx,by,cx,cy)  # please change
     
     # print result
     # Google - case number required
