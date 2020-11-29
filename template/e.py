@@ -9,8 +9,9 @@ input = sys.stdin.readline
 # import numpy as np
 # import scipy
 
+# if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
-def console(*args):  # print on terminal in different color
+def log(*args):  
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
@@ -20,15 +21,14 @@ def solve_():
 
     return ""
 
-import os,  print(getpass.getuser())
 
-def solve(args):
+def solve(*args):
     # screen input
     if OFFLINE_TEST:
-        console("----- solving ------")
-        console(*args)
-        console("----- ------- ------")
-    return solve_(args)
+        log("----- solving ------")
+        log(*args)
+        log("----- ------- ------")
+    return solve_(*args)
 
 
 def read_matrix(rows):
