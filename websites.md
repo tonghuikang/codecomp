@@ -35,20 +35,6 @@ Probably a rating map table as well.
 
 Basically the platform for competitive programming.
 
-This is like CodeJam
-
-```python
-for _ in range(int(input())):
-    n = int(input())
-    a = list(map(int,input().split()))
-    for i in range(n):
-        a[i] = ((a[i]%n)+i)%n
-    if(len(set(a)) == n):
-        print("YES")
-    else:
-        print("NO")
-```
-
 
 
 ### AtCoder
@@ -57,14 +43,12 @@ Neat and minimal interface. Discussion threads are held at Codeforces.
 
 
 
-
-
-
-
 ### Leetcode
-Pretty intuitive. Very regular contest. Problems are sufficiently novel every time. I want the T-shirt.
+Pretty intuitive. Very regular contests. Problems are sufficiently novel every time. I have obtained the T-shirt.
 
 This is the platform to share interview questions.
+
+For interactive problems, just fill up their functions.
 
 
 
@@ -77,49 +61,15 @@ They have mostly discontinued contests, only having almostly monthly contest wit
 
 ### Google Coding platforms
 
-This refers to the [Kickstart ](https://codingcompetitions.withgoogle.com/kickstart)and [Codejam](https://codingcompetitions.withgoogle.com/codejam) environments. This may be applicable to other platform. You do not need this for Leetcode and their IDE is too good.
+This refers to the [Kickstart](https://codingcompetitions.withgoogle.com/kickstart) and [Codejam](https://codingcompetitions.withgoogle.com/codejam) environments. This may be applicable to other platform. You do not need this for Leetcode and their IDE is too good.
 
 
 
 You need to be able to hedge that your solution works. This may not be known in advance.
 
-Interactive problems might be easier to compensate on its difficulty of implementation. Many interactive problems have a low bound on the number of moves that can be made, and you can experiment with that to formulate a strategy.
+Interactive problems might be easier to compensate on its difficulty of implementation. Many interactive problems have a lower bound on the number of moves that can be made, and you can experiment with that to formulate a strategy.
 
 The size limits hints the allowed computation time. Sometimes it may fool you, as the optimal computation time is much lower compared.
-
-
-
-Python 3 environment (but for some reason I need to install packages)
-
-```
-str_in = input()
-
-def solve(w,h,l,u,r,d):
-    # w,h destination
-    #   l r  hole
-    # u ###
-    #   ###
-    # d ### 
-
-    res = 0
-    # 6,4,1,3,3,4
-    if u-2 >= 0 and w > r:
-        # binom.cdf(1, 4, 0.5) # 1 = u-2 = 3-2, 4 = r+u-2 = 3+3-2
-        res += binom.cdf(u-2, r+u-2, 0.5)
-    if l-2 >= 0 and h > d:
-        res += binom.cdf(l-2, d+l-2, 0.5)
-    
-    return res
-
-for case in range(int(str_in)):
-    strr = input()
-    w,h,l,u,r,d = [int(x) for x in strr.split()]
-    prob = solve(w,h,l,u,r,d)
-    
-    print("Case #{}: {}".format(case + 1, prob))
-
-
-```
 
 
 
@@ -132,56 +82,7 @@ python 3.5.3 (package: python3.5)
  python3.5 Solution.py
 ```
 
-
-
-To run with an input file
-
-```
-python3 a.py < a.in
-```
-
-
-
-### Facebook Hackercup
-
-You compute your solution on your computer and upload the result.
-
-
-
-
-## Reading variables
-
-Try this
-
-```python
-T, B = map(int, input().split())
-```
-
-
-
-For python2 it is `rawinput()`
-
-
-
-# Resources
-
-https://cp-algorithms.com/
-
-
-
-## Printing
-
-The output is read from std out. How can we avoid the process of commenting and uncommmenting the code? Please refer to printing standard error
-
-
-
-
-
-## Interactive problems
-
-This feature is available on Leetcode, Google and Codeforces.
-
-
+#### Interactive problems
 
 You need to obtain `interactive_runner.py` which applies to all CodeJam problem post-2020, and `local_testing_tool.py` from the specific problem. Refer to [template.md](template/template.md) for the code to run.
 
@@ -194,31 +95,57 @@ do
 done
 ```
 
-You need to flush after printing `print(i, flush=True)`
+
+
+
+### Facebook Hackercup
+
+You compute your solution on your computer and upload the result.
+
+There are three sets of data
+
+- Public set - in the question statement and the expected solution is shown
+- Validation set - you need to solve this to unlock the private set and the expected solution is not shown
+- Private set - you need to submit your solution within 6 minutes from downloading this set
+  - Please test your algorithm on the largest possible input before trying this. You may need to resolve stack overflow issues.
 
 
 
 
+## Running code - General
 
+Try this
 
+```python
+T, B = map(int, input().split())
+```
 
-## Directions
+To run with an input file
 
 ```
-    d = {}
-    d["N"] = (1,0)
-    d["S"] = (-1,0)
-    d["E"] = (0,1)
-    d["W"] = (0,-1)
-    
-    if coords[0] > 0:
-        res += "N"*coords[0]
-    else:
-        res += "S"*abs(coords[0])
-
-    if coords[1] > 0:
-        res += "E"*coords[0]
-    else:
-        res += "W"*abs(coords[0])
+python3 a.py < a.in
 ```
+
+
+For python2 it is `rawinput()`
+
+
+
+## Interactive problems - general
+
+This feature is available on Leetcode, Google and Codeforces.
+
+You need to flush after printing `print(i, flush=True)`.  
+
+When done, please run `sys.exit()`
+
+
+
+
+
+
+
+
+
+
 

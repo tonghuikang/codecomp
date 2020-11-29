@@ -1,7 +1,7 @@
 import sys
 lst = list(map(int,input().split()))
  
-print ("First",flush = True)
+print("First", flush=True)
  
 while True:
  

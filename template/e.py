@@ -1,7 +1,7 @@
-import sys, os
-import heapq as pq
-import math, random, functools, collections
-from collections import Counter, defaultdict
+import sys, os, getpass
+import heapq as hq
+import math, random, functools, itertools
+from collections import Counter, defaultdict, deque
 input = sys.stdin.readline
 
 # available on Google, AtCoder Python3
@@ -9,8 +9,7 @@ input = sys.stdin.readline
 # import numpy as np
 # import scipy
 
-
-OFFLINE_TEST = os.getlogin() == "hkmac"
+OFFLINE_TEST = getpass.getuser() == "hkmac"
 def console(*args):  # print on terminal in different color
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -21,6 +20,7 @@ def solve_():
 
     return ""
 
+import os,  print(getpass.getuser())
 
 def solve(args):
     # screen input
