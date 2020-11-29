@@ -1,83 +1,93 @@
-import sys, os
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
+import sys, os, getpass
+import heapq as hq
+import math, random, functools, itertools
+from collections import Counter, defaultdict, deque
+input = sys.stdin.readline
 
-# available on Google, not available on Codeforces
+# available on Google, AtCoder Python3
+# not available on Codeforces
 # import numpy as np
 # import scipy
 
+OFFLINE_TEST = getpass.getuser() == "hkmac"
+def console(*args):  # print on terminal in different color
+    if OFFLINE_TEST:
+        print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve_():
+
+def solve_(arr,n,p,k,x,y):
     # your solution here
+    p = p-1
 
-    return ""
+    minres = 10**9
+    for i in range(k):
+        lst = arr[p+i::k]
+
+        if not lst:
+            continue
+
+        curres = res = i*y + sum(lst)*x
+        console(res)
+
+        for z in lst:
+            res += k*y
+            if z == 1:
+                res -= z
+            console(res)
+            curres = min(res, curres)
+
+        console(i, lst, curres)
+
+        minres = min(curres, minres)
+
+    return minres
 
 
-def console(*args):  
-    # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    pass
-
-
-ONLINE_JUDGE = False
-
-# if Codeforces environment
-if os.path.exists('input.txt'):
-    ONLINE_JUDGE = True
-
-if ONLINE_JUDGE:
-    sys.stdin = open("input.txt","r")
-    sys.stdout = open("output.txt","w")
-
-    def console(*args):
-        pass
-
+# print(getpass.getuser())
 
 def solve(*args):
     # screen input
-    if not ONLINE_JUDGE:
+    if OFFLINE_TEST:
         console("----- solving ------")
         console(*args)
         console("----- ------- ------")
     return solve_(*args)
 
 
-if True:
-    # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
-    input = lambda: next(inp)
-else:
-    # if memory is a constraint
-    input = sys.stdin.buffer.readline
+def read_matrix(rows):
+    return [list(map(int,input().split())) for _ in range(rows)]
 
+def read_strings(rows):
+    return [input().strip() for _ in range(rows)]
 
+# for case_num in [1]:  # no loop over test case
 for case_num in range(int(input())):
+
     # read line as a string
-    # strr = input()
+    # strr = input().strip()
+
+    # read one line and parse each word as a string
+    # lst = input().split()
 
     # read line as an integer
     # k = int(input())
     
-    # read one line and parse each word as a string
-    # lst = input().split()
-
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,p,k = list(map(int,input().split()))
+    strr = [1-int(x) for x in input().strip()]
+    x,y = list(map(int,input().split()))
 
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    # read multiple rows
+    # mrr = read_matrix(k)
+    # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(strr,n,p,k,x,y)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
-    # Codeforces - no case number required
+    # Other platforms - no case number required
     print(res)
+    # print(len(res))  # if printing length of list
     # print(*res)  # if printing a list

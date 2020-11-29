@@ -8,10 +8,53 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst, k):
     # your solution here
+    if k == 1:
+        c = Counter(lst)
+        return len(lst) - max(c.values())
+    
 
-    return ""
+    pos = defaultdict(list)
+    for i,x in enumerate(lst):
+        pos[x].append(i+1)
+    
+    mincount = 10**6
+
+    for x,arr in pos.items():
+        # arr.append(len(lst)+1)
+        arr = [0] + arr + [len(lst)+1]
+
+        if lst[0] != x:
+            covered = k
+            count = 1
+        else:
+            prev = -1
+            for idx in arr:
+                if idx - 1 == prev:
+                    prev = idx
+                    covered = idx
+                else:
+                    break
+            count = 0
+        
+        # console("init", x, covered, count)
+
+        for idx in arr:
+            if idx > covered:
+                intervals = -(-(idx - 1 - covered)//k)
+                covered = covered + intervals*k
+                count += intervals
+            if idx == covered + 1:
+                covered += 1
+
+        # if prev < len(lst):
+        mincount = min(count, mincount)
+        # console(x, count, arr)
+
+    return mincount
+
+            
 
 
 def console(*args):  
@@ -62,8 +105,9 @@ for case_num in range(int(input())):
     # read one line and parse each word as a string
     # lst = input().split()
 
+    _,k = list(map(int,input().split()))
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +116,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst, k)  # please change
     
     # print result
     # Google - case number required

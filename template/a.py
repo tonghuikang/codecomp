@@ -8,10 +8,10 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(n,m,r,c):
     # your solution here
 
-    return ""
+    return max(r-1, n-r) + max(c-1, m-c)
 
 
 def console(*args):  
@@ -63,7 +63,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,m,r,c = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +72,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(n,m,r,c)  # please change
     
     # print result
     # Google - case number required
