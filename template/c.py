@@ -27,16 +27,17 @@ def solve_(arr,n,p,k,x,y):
             continue
 
         curres = res = i*y + sum(lst)*x
+        console(lst)
         console(res)
 
-        for z in lst:
+        for z in lst[:-1]:
             res += k*y
             if z == 1:
-                res -= z
+                res -= x
             console(res)
             curres = min(res, curres)
 
-        console(i, lst, curres)
+        # console(i, lst, curres)
 
         minres = min(curres, minres)
 
