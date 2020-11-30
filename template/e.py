@@ -16,8 +16,16 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
-    # your solution here
+def solve_(ax,ay,bx,by,cx,cy,dx,dy):
+    xx = sorted([ax,bx,cx,dx])
+    yy = sorted([ay,by,cy,dy])
+
+    # if they lie on a line, take the median
+
+    
+
+    log((xx[1]+xx[2])/2)
+    log((yy[1]+yy[2])/2)
 
     return ""
 
@@ -50,13 +58,16 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    ax,ay = list(map(int,input().split()))
+    bx,by = list(map(int,input().split()))
+    cx,cy = list(map(int,input().split()))
+    dx,dy = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(ax,ay,bx,by,cx,cy,dx,dy)  # please change
     
     # print result
     # Google - case number required
