@@ -16,18 +16,97 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
+  
+# # A wrapper over recursive  
+# # function findPeakUtil() 
+# def findPeak(arr, n): 
+  
+#     return findPeakUtil(arr, 0, n - 1, n) 
+
+
 def solve_(ax,ay,bx,by,cx,cy,dx,dy):
     xx = sorted([ax,bx,cx,dx])
     yy = sorted([ay,by,cy,dy])
 
     # if they lie on a line, take the median
 
+    mx = sum(sorted([ax,bx,cx,dx])[1:3]) / 2
+    my = sum(sorted([ay,by,cy,dy])[1:3]) / 2
+
+    if ax == bx == cx == dx:
+        return int(sum([abs(ay - my), abs(by - my), abs(cy - my), abs(dy - my)]))
+
+    if ay == by == cy == dy:
+        return int(sum([abs(ax - mx), abs(bx - mx), abs(cx - mx), abs(dx - mx)]))
+
+
+    # A binary search based function  
+    # that returns index of a peak element 
+    def findPeakUtil(func, low, high, n): 
+        
+        # Find index of middle element 
+        # (low + high)/2  
+        mid = low + (high - low)/2 
+        mid = int(mid) 
+        
+        # Compare middle element with its  
+        # neighbours (if neighbours exist) 
+        if ((mid == 0 or func(mid - 1) <= func(mid)) and 
+            (mid == n - 1 or func(mid + 1) <= func(mid))): 
+            return mid 
     
+    
+        # If middle element is not peak and  
+        # its left neighbour is greater  
+        # than it, then left half must  
+        # have a peak element 
+        elif (mid > 0 and func(mid - 1) > func(mid)): 
+            return findPeakUtil(func, low, (mid - 1), n) 
+    
+        # If middle element is not peak and 
+        # its right neighbour is greater 
+        # than it, then right half must  
+        # have a peak element 
+        else: 
+            return findPeakUtil(func, (mid + 1), high, n) 
 
-    log((xx[1]+xx[2])/2)
-    log((yy[1]+yy[2])/2)
 
-    return ""
+    diff = [-1,0,-1]
+    minres = -10**10
+    n = 10**9 + 10**8
+
+    for kx in diff:
+        for ky in diff:
+            cx, cy = mx + kx, my + ky
+
+            cx = int(cx)
+            cy = int(cy)
+
+            def func(length):
+                px,qx,rx,sx = cx + length, cx + length, cx - length, cx - length
+                py,qy,ry,sy = cy + length, cy + length, cy - length, cy - length
+
+                for (ex,ey),(fx,fy),(gx,gy),(hx,hy) in itertools.permutations([(px,py),(qx,qy),(rx,ry),(sx,sy)]):
+                    res = abs(ex - ax) + abs(fx - bx) + abs(gx - cx) + abs(hx - dx) + abs(ey - ay) + abs(fy - by) + abs(gy - cy) + abs(hy - dy)
+                return -res
+
+            res2 = findPeakUtil(func, 0, n - 1, n) 
+            minres = max(minres, res2)
+
+            # def func(length):
+            #     px,qx,rx,sx = cx + length + 0.5, cx + length + 0.5, cx - length - 0.5, cx - length - 0.5
+            #     py,qy,ry,sy = cy + length + 0.5, cy - length - 0.5, cy + length + 0.5, cy - length - 0.5
+
+            #     for (ex,ey),(fx,fy),(gx,gy),(hx,hy) in itertools.permutations([(px,py),(qx,qy),(rx,ry),(sx,sy)]):
+            #         res = abs(ex - ax) + abs(fx - bx) + abs(gx - cx) + abs(hx - dx) + abs(ey - ay) + abs(fy - by) + abs(gy - cy) + abs(hy - dy)
+            #     return -res
+
+            res2 = findPeakUtil(func, 0, n - 1, n) 
+            minres = max(minres, res2)
+
+            log(func(0))
+
+    return int(-minres)
 
 
 def solve(*args):

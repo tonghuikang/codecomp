@@ -21,29 +21,19 @@ def solve_(lst, x):
         return 0
     # your solution here
 
-    new = lst + [x]
-    sorted_new = sorted(new)
+    # walkthrough and sub and check sorted
+    count = 0
 
-    log(new)
-    log(sorted_new)
+    for i,a in enumerate([x for x in lst]):
+        if a > x:
+            # log("sub")
+            x, lst[i] = a, x
+            count += 1
+            if lst == sorted(lst):
+                return count
+        # log(lst)
 
-    if sorted_new[-2] != new[-2]:
-        return -1
-
-    different = [(a,b) for a,b in zip(sorted_new[:-1], new[:-1]) if a != b]
-    log(different)
-
-    prev = [x[0] for x in different]
-    aft = [x[1] for x in different]
-
-    log(prev)
-    log(aft)
-
-    for a,b in different:
-        if a > b:
-            return -1
-    
-    return len(different)
+    return -1
 
 
 def solve(*args):
