@@ -16,19 +16,32 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_1_(arr):
     # your solution here
 
-    return ""
+    return 
+
+def solve_2_(arr):
+    # your solution here
+
+    return 
 
 
-def solve(*args):
+def solve_1(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
         log(*args)
         log("----- ------- ------")
-    return solve_(*args)
+    return solve_1_(*args)
+
+def solve_2(*args):
+    # screen input
+    if OFFLINE_TEST:
+        log("----- solving ------")
+        log(*args)
+        log("----- ------- ------")
+    return solve_2_(*args)
 
 
 def read_matrix(rows):
@@ -37,8 +50,12 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+
+overall_res = 0
+
+# for case_num in range(323):
+for case_num in [1]:  # no loop over test case
+# for case_num in range(int(input())):
 
     # read line as a string
     # strr = input().strip()
@@ -47,22 +64,26 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    # lst = input().split()
     
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
-    # arr = read_strings(k)
+    arr = read_strings(323)
 
-    res = solve()  # please change
+    # res = solve_1(arr)  # please change
+    res = solve_2(arr)  # please change
     
+    overall_res += res
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))  # if printing length of list
     # print(*res)  # if printing a list
+
+print(overall_res)
