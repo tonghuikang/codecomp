@@ -16,15 +16,98 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_1_(arr):
+def solve_1_(strr):
     # your solution here
+    lst = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
+    for abc in lst:
+        if abc not in strr:
+            return 0
+    return 1
 
-    return 
+def check_digit(strr):
+    if strr[0] == "0":
+        return False
+    for s in strr:
+        if s not in "0123456789":
+            return False
+    return True
 
-def solve_2_(arr):
+def solve_2_(strr):
     # your solution here
+    lst = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
+    for abc in lst:
+        if strr.count(abc) != 1:
+            return 0
+        
+    d = {}
+    for kv in strr.split():
+        if kv.count(":") != 1:
+            log("ERROR duplicate colon")
+            return 0
+        a,b = kv.split(":")
+        d[a] = b
+    
 
-    return 
+    if check_digit(d["byr"]) and 1920 <= int(d["byr"]) <= 2002:
+        pass
+    else:
+        log("byr")
+        return 0
+
+    if check_digit(d["iyr"]) and 2010 <= int(d["iyr"]) <= 2020:
+        log("")
+        pass
+    else:
+        return 0
+
+    if check_digit(d["eyr"]) and 2020 <= int(d["eyr"]) <= 2030:
+        pass
+    else:
+        log("")
+        return 0
+
+    if d["hgt"].endswith("cm"):
+        if not check_digit(d["hgt"][:-2]):
+            log("")
+            return 0
+        if 150 <= int(d["hgt"][:-2]) <= 193:
+            pass
+        else:
+            log("")
+            return 0
+    elif d["hgt"].endswith("in"):
+        if 59 <= int(d["hgt"][:-2]) <= 76:
+            pass
+        else:
+            log("")
+            return 0
+    else:
+        log("")
+        return 0            
+
+    if d["hcl"][0] != "#":
+        return 0
+
+    if len(d["hcl"]) != 7:
+        return 0
+    
+    for s in d["hcl"][1:]:
+        if s not in "0123456789abcdef":
+            return 0
+
+    if d["ecl"] not in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]:
+        return 0
+
+    if len(d["pid"]) != 9:
+        return 0
+
+    for s in d["pid"]:
+        if s not in "0123456789":
+            return False
+
+    log("CHECK")
+    log(strr)
+    return 1
 
 
 def solve_1(*args):
@@ -52,38 +135,19 @@ def read_strings(rows):
 
 
 overall_res = 0
+entry = []
 
 # for case_num in range(323):
-for case_num in [1]:  # no loop over test case
+while True:
 # for case_num in range(int(input())):
 
     # read line as a string
-    # strr = input().strip()
+    strr = input().strip()
+    if strr == "EXIT":
+        sys.exit()
+    entry.append(strr)
+    if strr == "":
+        overall_res += solve_2(" ".join(entry))
+        entry = []
 
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read line as an integer
-    # lst = input().split()
-    
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
-
-    # read multiple rows
-    # mrr = read_matrix(k)
-    arr = read_strings(323)
-
-    # res = solve_1(arr)  # please change
-    res = solve_2(arr)  # please change
-    
-    overall_res += res
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
-
-    # Other platforms - no case number required
-    # print(res)
-    # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
-
-print(overall_res)
+    print(overall_res)
