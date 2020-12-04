@@ -16,7 +16,16 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(mrr):
+
+    d = defaultdict(list)
+    for a,b in mrr:
+        d[a].append(b)
+        d[b].append(a)
+
+    visited = set()
+    
+    log(d)
     # your solution here
 
     return ""
@@ -47,16 +56,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)
+    mrr = read_matrix(k-1)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(mrr)  # please change
     
     # print result
     # Google - case number required
