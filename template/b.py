@@ -8,10 +8,27 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(arr):
+    if len(arr) <= 2:
+        return 0
+    if len(Counter(arr)) == 1:
+        return 0
+    
+
+    changed = 0
+    unchanged_1 = 0
+    unchanged = abs(arr[0] - arr[1])
+    prev_0 = arr[1]
+    prev_1 = arr[0]
+
+    for a in arr[2:]:
+        changed = min(changed + abs(a - prev_0), unchanged_1 + abs(a - prev_1))
+        unchanged_1 = unchanged
+        unchanged += abs(a - prev_0)
+        prev_0, prev_1 = a, prev_0
     # your solution here
 
-    return ""
+    return min(changed, unchanged, unchanged_1)
 
 
 def console(*args):  
@@ -57,13 +74,13 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -71,8 +88,8 @@ for case_num in range(int(input())):
     # grid = []
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
-
-    res = solve()  # please change
+    lst = lst[::-1]
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required

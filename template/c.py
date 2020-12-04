@@ -1,83 +1,105 @@
-import sys, os
-import heapq, functools, collections
-import math, random
+import sys, os, getpass
+# import heapq as hq
+# import math, random, functools, itertools
+# from collections import Counter, defaultdict, deque
 from collections import Counter, defaultdict
+input = sys.stdin.readline
 
-# available on Google, not available on Codeforces
+# available on Google, AtCoder Python3
+# not available on Codeforces
 # import numpy as np
 # import scipy
 
+# if testing locally, print to terminal with a different color
+OFFLINE_TEST = getpass.getuser() == "hkmac"
+def log(*args):  
+    if OFFLINE_TEST:
+        print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve_():
+
+def solve_(k):
     # your solution here
+    
+    d = defaultdict(list)
 
-    return ""
+    for i in range(k):
+        row = [int(x) for x in input().strip()]
+        for j,digit in enumerate(row):
+            d[digit].append((i,j))
 
+    # log(d)
 
-def console(*args):  
-    # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    pass
+    length = k-1
 
+    res = []
 
-ONLINE_JUDGE = False
+    for i in range(10):
+        lst = d[i]
+        if len(lst) <= 1:
+            res.append(0)
+            continue
 
-# if Codeforces environment
-if os.path.exists('input.txt'):
-    ONLINE_JUDGE = True
+        # log(i, lst)
 
-if ONLINE_JUDGE:
-    sys.stdin = open("input.txt","r")
-    sys.stdout = open("output.txt","w")
+        cur = 0
+        for _ in range(4):  # rotate 4 times
+            # get top most and bottom most
+            top = max(x[1] for x in lst)
+            bottom = min(x[1] for x in lst)
+        
+            for x,y in lst:
+                cur = max(cur, (length - x)*abs(top-y), (length - x)*abs(bottom-y))
+            
+            lst = [(length-y, x) for x,y in lst]
+            # log(i, lst)
 
-    def console(*args):
-        pass
+        res.append(cur)
+    # log(res)
+
+    return res
 
 
 def solve(*args):
     # screen input
-    if not ONLINE_JUDGE:
-        console("----- solving ------")
-        console(*args)
-        console("----- ------- ------")
+    if OFFLINE_TEST:
+        log("----- solving ------")
+        log(*args)
+        log("----- ------- ------")
     return solve_(*args)
 
 
-if True:
-    # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
-    input = lambda: next(inp)
-else:
-    # if memory is a constraint
-    input = sys.stdin.buffer.readline
+def read_matrix(rows):
+    return [list(map(int,input().split())) for _ in range(rows)]
 
+def read_strings(rows):
+    return [input().strip() for _ in range(rows)]
 
+# for case_num in [1]:  # no loop over test case
 for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
 
-    # read line as an integer
-    # k = int(input())
-    
+    # read line as a string
+    # strr = input().strip()
+
     # read one line and parse each word as a string
     # lst = input().split()
 
+    # read line as an integer
+    k = int(input())
+    
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
 
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    # read multiple rows
+    # mrr = read_matrix(k)
+    # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
-    # Codeforces - no case number required
-    print(res)
-    # print(*res)  # if printing a list
+    # Other platforms - no case number required
+    # print(res)
+    # print(len(res))  # if printing length of list
+    print(*res)  # if printing a list

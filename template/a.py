@@ -8,10 +8,10 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    return len(arr) + len(brr) - len(set(arr) | set(brr))
 
 
 def console(*args):  
@@ -63,7 +63,9 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _ = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +74,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(arr, brr)  # please change
     
     # print result
     # Google - case number required
