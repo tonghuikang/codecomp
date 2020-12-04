@@ -28,6 +28,9 @@ def solve_(mrr):
     log(d)
     # your solution here
 
+    # the question should have provided an example why it is not the depth of the tree rooted at 1
+    # i think the solution is the longest max(depth, distance between depth)
+
     return ""
 
 

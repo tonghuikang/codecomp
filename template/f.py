@@ -16,8 +16,25 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(lst):
     # your solution here
+
+    d = defaultdict(list)
+
+    for i,x in enumerate(lst):
+        for j in range(1, x+1):
+            d[i].append(j)
+
+    prev = [-1 for _ in lst]
+    count = [9999 for _ in lst]
+
+    prev[0] = -2
+    count[0] = 0
+
+    for i,x in enumerate(lst[i:], start=1):
+        prev[i] = 1 + min(c if c,x in lst)
+
+    log(d)
 
     return ""
 
@@ -47,16 +64,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required

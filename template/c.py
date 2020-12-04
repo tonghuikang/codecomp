@@ -50,7 +50,8 @@ def solve_(k):
             for x,y in lst:
                 cur = max(cur, (length - x)*abs(top-y), (length - x)*abs(bottom-y))
             
-            lst = [(length-y, x) for x,y in lst]
+            for i in range(len(lst)):
+                lst[i] = (length-lst[i][1], lst[i][0])
             # log(i, lst)
 
         res.append(cur)
