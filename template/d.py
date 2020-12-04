@@ -8,10 +8,36 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(k):
     # your solution here
 
-    return ""
+    if k%2 == 1:
+        return []
+
+    k = k-2
+    bkk = []
+
+    blocks = [(i-2, 2**i - 2) for i in range(2, 60)]
+
+    # console(blocks)
+
+    while blocks:
+        if blocks[-1][1] > k:
+            blocks.pop()
+            continue
+        zeroes, deduct = blocks[-1]
+        k -= deduct
+        bkk.append(zeroes)
+
+    console(k)
+    # console(bkk)
+
+    res = [1]
+
+    for bk in bkk:
+        res += ([0]*bk + [1])
+
+    return res
 
 
 def console(*args):  
@@ -57,7 +83,7 @@ for case_num in range(int(input())):
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -72,12 +98,39 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Codeforces - no case number required
-    print(res)
+    # print(res)
+    if len(res) == 0:
+        print(-1)
+    else:
+        print(len(res))
+        print(*res)
     # print(*res)  # if printing a list
+
+
+
+# states = [0]*1000000
+# sample = []
+
+# out = 4
+# time = 0
+# while states:
+#     time += 1
+#     new_states = []
+#     for s in states:
+#         res = random.randint(0,1)
+#         if res == 1:
+#             if s+1 == out:
+#                 sample.append(time)
+#             else:
+#                 new_states.append(s+1)
+#         else:  # res == 0
+#             new_states.append(0)
+#     states = new_states
+# sum(sample)/len(sample)
