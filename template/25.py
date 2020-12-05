@@ -16,20 +16,50 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_1_():
     # your solution here
 
-    return ""
+    return 1
 
 
-def solve(*args):
+def solve_2_():
+    # your solution here
+
+    return 1
+
+
+def solve_1(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
         log(*args)
         log("----- ------- ------")
-    return solve_(*args)
+    return solve_1_(*args)
 
+def solve_2(*args):
+    # screen input
+    if OFFLINE_TEST:
+        log("----- solving ------")
+        log(*args)
+        log("----- ------- ------")
+    return solve_2_(*args)
+
+
+def read_matrix(rows):
+    return [list(map(int,input().split())) for _ in range(rows)]
+
+def read_strings(rows):
+    return [input().strip() for _ in range(rows)]
+
+
+def read_matrix(rows):
+    return [list(map(int,input().split())) for _ in range(rows)]
+
+def read_strings(rows):
+    return [input().strip() for _ in range(rows)]
+
+
+overall_res = 0
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -55,14 +85,13 @@ for case_num in range(int(input())):
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
-
-    res = solve()  # please change
     
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    # strr = input().strip()
+    # if strr == "EXIT":
+    #     sys.exit()
+    # entry.append(strr)
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+    overall_res += solve_1()
+    overall_res += solve_2()
+
+    print(overall_res)
