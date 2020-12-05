@@ -16,10 +16,19 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_1_():
+def solve_1_(arr):
     # your solution here
 
-    return 1
+    sett = set()
+
+    for x in arr:
+        row = int(x[:7].replace("F","0").replace("B","1"),2)
+        col = int(x[-3:].replace("L","0").replace("R","1"),2)
+        sett.add(row*8+col)
+
+    log(set(range(976)) - sett)
+        
+    return sett
 
 
 def solve_2_():
@@ -67,8 +76,8 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+for case_num in [1]:  # no loop over test case
+# for case_num in range(int(input())):
 
     # read line as a string
     # strr = input().strip()
@@ -84,14 +93,14 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # mrr = read_matrix(k)
-    # arr = read_strings(k)
+    arr = read_strings(968)
     
     # strr = input().strip()
     # if strr == "EXIT":
     #     sys.exit()
     # entry.append(strr)
 
-    overall_res += solve_1()
-    overall_res += solve_2()
+    overall_res += solve_1(arr)
+    # overall_res += solve_2(arr)
 
     print(overall_res)
