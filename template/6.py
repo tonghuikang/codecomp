@@ -16,11 +16,19 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_1_():
+def solve_1_(arr):
     # your solution here
-
-    return 1
-
+    sett = Counter()
+    arr = arr.split()
+    # arr = list(zip(*arr))
+    log(arr)
+    for a in arr:
+        for s in a:
+            sett[s] += 1
+    log(sett)
+    res = len([k for k,v in sett.items() if v == len(arr)])
+    log(res)
+    return res
 
 def solve_2_():
     # your solution here
@@ -68,8 +76,9 @@ def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
 # for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
-
+# for case_num in range(int(input())):
+entry = []
+while True:
     # read line as a string
     # strr = input().strip()
 
@@ -86,12 +95,17 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)
     # arr = read_strings(k)
     
-    # strr = input().strip()
-    # if strr == "EXIT":
-    #     sys.exit()
-    # entry.append(strr)
+    # read line as a string
+    strr = input().strip()
+    if strr == "EXIT":
+        print(overall_res)
+        sys.exit()
+    entry.append(strr)
+    if strr == "":
+        overall_res += solve_1(" ".join(entry))
+        entry = []
 
-    overall_res += solve_1()
-    overall_res += solve_2()
+    # overall_res += solve_1()
+    # overall_res += solve_2()
 
-    print(overall_res)
+
