@@ -16,20 +16,20 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
-    # your solution here
-
-    return ""
+def solve_1_(arr):
+    return 1
 
 
-def solve(*args):
+def solve_1(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
         log(*args)
         log("----- ------- ------")
-    return solve_(*args)
+    return solve_1_(*args)
 
+
+overall_res = 0
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -37,8 +37,11 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
+entries = []
+
+while True:
 # for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+# for case_num in range(1):
 
     # read line as a string
     # strr = input().strip()
@@ -55,14 +58,13 @@ for case_num in range(int(input())):
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
-
-    res = solve()  # please change
     
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    strr = input().strip()
+    if strr == "EXIT":
+        break
+    # if strr == "":
+    entries.append(strr)
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+overall_res = olve_1(entries)
+
+print(overall_res)
