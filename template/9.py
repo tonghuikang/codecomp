@@ -17,7 +17,19 @@ def log(*args):
 
 
 def solve_1_(arr):
-    return 1
+
+    brr = arr[:25]
+
+    for a in arr[25:]:
+        hold = False
+        for x in brr[-25:]:
+            for y in brr[-25:]:
+                if a == x+y:
+                    hold = True
+        if not hold:
+            return a
+        brr.append(a)
+    return -1
 
 
 def solve_1(*args):
@@ -39,9 +51,9 @@ def read_strings(rows):
 
 entries = []
 
-while True:
+# while True:
 # for case_num in [1]:  # no loop over test case
-# for case_num in range(1):
+for case_num in range(1000):
 
     # read line as a string
     # strr = input().strip()
@@ -50,7 +62,7 @@ while True:
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    entries.append(int(input()))
     
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
@@ -59,12 +71,12 @@ while True:
     # mrr = read_matrix(k)
     # arr = read_strings(k)
     
-    strr = input().strip()
-    if strr == "EXIT":
-        break
-    # if strr == "":
-    entries.append(strr)
+    # strr = input().strip()
+    # if strr == "EXIT":
+    #     break
+    # # if strr == "":
+    # entries.append(strr)
 
-overall_res = olve_1(entries)
+overall_res = solve_1(entries)
 
 print(overall_res)
