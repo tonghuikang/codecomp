@@ -27,8 +27,18 @@ def solve_1_(arr):
                 if a == x+y:
                     hold = True
         if not hold:
-            return a
+
+            crr = brr
+            log(crr, a)
+            for i in range(len(brr)):
+                for j in range(i+1,len(brr)):
+                    if sum(crr[i:j]) == a:
+                        # log(crr[i:j])
+                        # log(max(1930044+3461752)
+                        return max(crr[i:j]) + min(crr[i:j])
         brr.append(a)
+
+        
     return -1
 
 
