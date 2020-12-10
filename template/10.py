@@ -16,20 +16,35 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
-    # your solution here
+def solve_1_(arr):
+    arr = sorted(arr)
+    log(arr)
+    
+    c = Counter(b-a for a,b in zip(arr,arr[1:]))
+    log(c)
+    log((c[1]+1)*(c[3]+1))
 
-    return ""
+    dp = defaultdict(int)
+    dp[0] = 1
+    for a in arr + [arr[-1] + 3]:
+        dp[a] = dp[a-3] + dp[a-2] + dp[a-1]
+    
+    return dp[arr[-1] + 3]
+
+    
 
 
-def solve(*args):
+
+def solve_1(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
         log(*args)
         log("----- ------- ------")
-    return solve_(*args)
+    return solve_1_(*args)
 
+
+overall_res = 0
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -37,8 +52,11 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
+entries = []
+
+while True:
 # for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+# for case_num in range(1):
 
     # read line as a string
     # strr = input().strip()
@@ -55,14 +73,13 @@ for case_num in range(int(input())):
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
-
-    res = solve()  # please change
     
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    strr = input().strip()
+    if strr == "EXIT":
+        break
+    # if strr == "":
+    entries.append(int(strr))
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+overall_res = solve_1(entries)
+
+print(overall_res)
