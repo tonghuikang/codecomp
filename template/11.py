@@ -16,20 +16,40 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
-    # your solution here
+def solve_1_(arr):
+    arr = ["." + ar + "." for ar in arr]
+    arr = ["."*len(arr[0])] + arr + ["."*len(arr[0])]
 
-    return ""
+    for _ in range(1000):
+        new_arr = [[x for x in row] for row in arr]
+        for i in range(len(arr)): 
+            for j in range(len(arr[0])):
+                if arr[i][j] == ".":
+                    continue
+                lst = (arr[i-1][j-1] + arr[i+1][j-1] + 
+                       arr[i-1][j+0] + arr[i+1][j+0] + 
+                       arr[i-1][j+1] + arr[i+1][j+1] + 
+                       arr[i+0][j-1] + arr[i+0][j+1])
+                # log(lst)
+                if lst.count("#") >= 4 and arr[i][j] == "#":
+                    new_arr[i][j] = "L"
+                if lst.count("#") == 0 and arr[i][j] == "L":
+                    new_arr[i][j] = "#"
+        arr = new_arr
+        log(sum(ar.count("#") for ar in arr))
+    return sum(ar.count("#") for ar in arr)
 
 
-def solve(*args):
+def solve_1(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
         log(*args)
         log("----- ------- ------")
-    return solve_(*args)
+    return solve_1_(*args)
 
+
+overall_res = 0
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -37,8 +57,11 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
+entries = []
+
+while True:
 # for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+# for case_num in range(1):
 
     # read line as a string
     # strr = input().strip()
@@ -55,14 +78,13 @@ for case_num in range(int(input())):
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
-
-    res = solve()  # please change
     
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    strr = input().strip()
+    if strr == "EXIT":
+        break
+    # if strr == "":
+    entries.append(strr)
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+overall_res = solve_1(entries)
+
+print(overall_res)

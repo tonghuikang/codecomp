@@ -65,6 +65,6 @@ while True:
     # if strr == "":
     entries.append(strr)
 
-overall_res = olve_1(entries)
+overall_res = solve_1(entries)
 
 print(overall_res)
