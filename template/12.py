@@ -16,20 +16,65 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
-    # your solution here
+def solve_1_(arr):
+    
+    # directions = [(1,0), (0,-1), (-1,0), (0,1)]
+    curdir = 0
 
-    return ""
+    # ship loc
+    x = 0
+    y = 0
+
+    # waypoint loc
+    a = 10
+    b = 1
+
+    for z in arr:
+        log(z,x,y,a,b)
+        direction, dist = z[0], int(z[1:])
+
+        if direction == "F":
+            x = x+a*dist
+            y = y+b*dist
+            continue
+
+        if direction == "L":
+            for _ in range((dist)//90):
+                a,b = -b,a
+            continue
+        if direction == "R":
+            for _ in range((dist)//90):
+                a,b = b,-a
+            continue
+
+        if direction == "N":
+            dx,dy = 0,1
+        if direction == "S":
+            dx,dy = 0,-1
+        if direction == "E":
+            dx,dy = 1,0
+        if direction == "W":
+            dx,dy = -1,0
+
+        # log(a,dx,dist)
+        a = a+dx*dist
+        b = b+dy*dist
+
+    
+    # log(x,y)
+    return abs(x) + abs(y)
 
 
-def solve(*args):
+def solve_1(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
         log(*args)
         log("----- ------- ------")
-    return solve_(*args)
+    return solve_1_(*args)
 
+
+overall_res = 0
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -37,8 +82,11 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
+entries = []
+
+while True:
 # for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+# for case_num in range(1):
 
     # read line as a string
     # strr = input().strip()
@@ -55,14 +103,13 @@ for case_num in range(int(input())):
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
-
-    res = solve()  # please change
     
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    strr = input().strip()
+    if strr == "EXIT":
+        break
+    # if strr == "":
+    entries.append(strr)
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+overall_res = solve_1(entries)
+
+print(overall_res)
