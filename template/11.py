@@ -17,23 +17,32 @@ def log(*args):
 
 
 def solve_1_(arr):
-    arr = ["." + ar + "." for ar in arr]
-    arr = ["."*len(arr[0])] + arr + ["."*len(arr[0])]
+    arr = ["x" + ar + "x" for ar in arr]
+    arr = ["x"*len(arr[0])] + arr + ["x"*len(arr[0])]
 
     for _ in range(1000):
         new_arr = [[x for x in row] for row in arr]
-        for i in range(len(arr)): 
-            for j in range(len(arr[0])):
+        for i in range(1,len(arr)-1): 
+            for j in range(1,len(arr[0])-1):
                 if arr[i][j] == ".":
                     continue
-                lst = (arr[i-1][j-1] + arr[i+1][j-1] + 
-                       arr[i-1][j+0] + arr[i+1][j+0] + 
-                       arr[i-1][j+1] + arr[i+1][j+1] + 
-                       arr[i+0][j-1] + arr[i+0][j+1])
+                
+                diff = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,-1),(1,-1),(-1,1)]
+
+                cnt = 0
+                for dx,dy in diff:
+                    for z in range(1,1000):
+                        if arr[i+dx*z][j+dy*z] == "x":
+                            break
+                        if arr[i+dx*z][j+dy*z] == "L":
+                            break
+                        if arr[i+dx*z][j+dy*z] == "#":
+                            cnt += 1
+                            break
                 # log(lst)
-                if lst.count("#") >= 4 and arr[i][j] == "#":
+                if cnt >= 5 and arr[i][j] == "#":
                     new_arr[i][j] = "L"
-                if lst.count("#") == 0 and arr[i][j] == "L":
+                if cnt == 0 and arr[i][j] == "L":
                     new_arr[i][j] = "#"
         arr = new_arr
         log(sum(ar.count("#") for ar in arr))
