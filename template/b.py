@@ -8,10 +8,22 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(n,t,grid):
     # your solution here
+    grid.append([t,t])
 
-    return ""
+    prev = 0
+    cur = n
+    for a,b in grid:
+        drop = a - prev
+        cur -= drop
+        if cur <= 0:
+            return "No"
+        cur = min(n, cur+b-a)
+        prev = b
+        # print(a,b,cur)
+
+    return "Yes"
 
 
 def console(*args):  
@@ -51,8 +63,8 @@ else:
     # if memory is a constraint
     input = sys.stdin.buffer.readline
 
-
-for case_num in range(int(input())):
+for case_num in [1]:
+# for case_num in range(int(input())):
     # read line as a string
     # strr = input()
 
@@ -63,16 +75,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,nrows,t = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
     # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
+    grid = []
+    for _ in range(nrows):
+        grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(n,t,grid)  # please change
     
     # print result
     # Google - case number required

@@ -8,11 +8,38 @@ from collections import Counter, defaultdict
 # import scipy
 
 
-def solve_():
+def solve_(lst, n):
+    if len(lst) == n:
+        return 0
+    if len(lst) == 0:
+        return 1
     # your solution here
 
-    return ""
+    lst = [0] + lst + [n+1]
+    lst = sorted(lst)    
 
+    spaces = []
+    for a,b in zip(lst,lst[1:]):
+        space = b-1-a
+        if space:
+            spaces.append(space)
+
+    console(spaces)
+    # if len(spaces) == 1:
+    #     return 1
+    
+    # running_gcd = math.gcd(spaces[0], spaces[1])
+    # for space in spaces:
+    #     running_gcd = math.gcd(running_gcd, space)
+
+    # return sum(spaces)//running_gcd
+        
+    minspace = min(spaces)
+
+    res = 0
+    for space in spaces:
+        res += -((-space) // minspace)
+    return res
 
 def console(*args):  
     # print on terminal in different color
@@ -51,8 +78,8 @@ else:
     # if memory is a constraint
     input = sys.stdin.buffer.readline
 
-
-for case_num in range(int(input())):
+for _ in [1]:
+# for case_num in range(int(input())):
     # read line as a string
     # strr = input()
 
@@ -63,7 +90,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read matrix and parse as integers (after reading read nrows)
     # lst = list(map(int,input().split()))
@@ -72,7 +100,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(lst, n)  # please change
     
     # print result
     # Google - case number required

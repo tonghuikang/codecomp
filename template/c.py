@@ -7,11 +7,15 @@ from collections import Counter, defaultdict
 # import numpy as np
 # import scipy
 
+def choose(n, k):
+    if k == 0:
+        return 1
+    return n * choose(n-1, k-1) // k
 
-def solve_():
+def solve_(x):
     # your solution here
 
-    return ""
+    return choose(x-1, 11)
 
 
 def console(*args):  
@@ -51,13 +55,13 @@ else:
     # if memory is a constraint
     input = sys.stdin.buffer.readline
 
-
-for case_num in range(int(input())):
+for _ in [1]:
+# for case_num in range(int(input())):
     # read line as a string
     # strr = input()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as a string
     # lst = input().split()
@@ -72,7 +76,7 @@ for case_num in range(int(input())):
     # for _ in range(nrows):
     #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # print result
     # Google - case number required
