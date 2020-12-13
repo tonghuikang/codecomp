@@ -16,42 +16,19 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-# https://codeforces.com/blog/entry/80158?locale=en
-from types import GeneratorType
-def bootstrap(f, stack=[]):
-    def wrappedfunc(*args, **kwargs):
-        if stack:
-            return f(*args, **kwargs)
-        else:
-            to = f(*args, **kwargs)
-            while True:
-                if type(to) is GeneratorType:
-                    stack.append(to)
-                    to = next(to)
-                else:
-                    stack.pop()
-                    if not stack:
-                        break
-                    to = stack[-1].send(to)
-            return to
-    return wrappedfunc
+sys.setrecursionlimit(10**6)
 
 def solve_(arr,brr):
 
-    cache = {}
-
-    @bootstrap
+    @functools.lru_cache(maxsize=None)
     def dp(x,y):
-        if (x,y) in cache:
-            yield cache[x,y]
-
         if x == len(arr) or y == len(brr):
             # delete remaining
-            yield len(arr) + len(brr) - x - y
+            return len(arr) + len(brr) - x - y
 
-        xx = yield dp(x+1,y)
-        yy = yield dp(x,y+1)
-        zz = yield dp(x+1,y+1)
+        xx = dp(x+1,y)
+        yy = dp(x,y+1)
+        zz = dp(x+1,y+1)
 
         # delete either a or b
         cur = min(xx, yy) + 1
@@ -63,8 +40,7 @@ def solve_(arr,brr):
             # keep both if mismatch
             cur = min(cur, zz+1)
         
-        cache[x,y] = cur
-        yield cur
+        return cur
 
     return dp(0,0)
 
