@@ -9,30 +9,6 @@ input = sys.stdin.readline
 # import numpy as np
 # import scipy
 
-def lcs(X,Y): 
-    # find the length of the strings 
-    m = len(X) 
-    n = len(Y) 
-  
-    # declaring the array for storing the dp values 
-    L = [[0]*(n+1) for i in range(m+1)] 
-  
-    """Following steps build L[m+1][n+1] in bottom up fashion 
-    Note: L[i][j] contains length of LCS of X[0..i-1] 
-    and Y[0..j-1]"""
-    for i in range(m+1): 
-        for j in range(n+1): 
-            if i == 0 or j == 0: 
-                L[i][j] = 0
-            elif X[i-1] == Y[j-1]: 
-                L[i][j] = L[i-1][j-1]+1
-            else: 
-                L[i][j] = max(L[i-1][j], L[i][j-1]) 
-  
-    # L[m][n] contains the length of LCS of X[0..n-1] & Y[0..m-1] 
-    return L[m][n] 
-#end of function lcs 
-
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
@@ -40,24 +16,57 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
 
 def solve_(arr,brr):
-    # your solution here
-    # if len(arr) == len(brr):
-    #     cnt = 0
-    #     for a,b in zip(arr,brr):
-    #         if a != b:
-    #             cnt += 1
-    #     return cnt
 
-    lcss = min(lcs(arr,brr),lcs(brr,arr))
-    log(lcss)
-    
-           # due to diff     # due to removal
-    res1 = len(arr) - lcss + len(brr) - len(arr)
-    # res2 = len(arr) - lcss + len(brr) - len(arr)
-    return min(len(brr), res1)
+    cache = {}
 
+    @bootstrap
+    def dp(x,y):
+        if (x,y) in cache:
+            yield cache[x,y]
+
+        if x == len(arr) or y == len(brr):
+            # delete remaining
+            yield len(arr) + len(brr) - x - y
+
+        xx = yield dp(x+1,y)
+        yy = yield dp(x,y+1)
+        zz = yield dp(x+1,y+1)
+
+        # delete either a or b
+        cur = min(xx, yy) + 1
+
+        if arr[x] == brr[y]:
+            # keep both if equal
+            cur = min(cur, zz)
+        else:
+            # keep both if mismatch
+            cur = min(cur, zz+1)
+        
+        cache[x,y] = cur
+        yield cur
+
+    return dp(0,0)
 
 def solve(*args):
     # screen input
