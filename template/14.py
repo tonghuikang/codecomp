@@ -26,19 +26,19 @@ def solve_(inp):
         mask = mask[::-1]
 
         for z,val in lst[::-1]:
-            val_string = bin(val)[2:][::-1]
+            val_string = bin(z)[2:][::-1]
             cur = ""
             for a,b in itertools.zip_longest(mask, val_string, fillvalue="0"):
                 if a == "X":
-                    cur += b
+                    cur += "X"
                 if a == "0":
-                    cur += "0"
+                    cur += b
                 if a == "1":
                     cur += "1"
             log(cur)
-            cur = int(cur[::-1], 2)
-            log(cur, "x")
-            addr[z] = cur
+
+            cur = list(cur)
+            pos = []
 
     log(addr)
     log(sum(addr.values()))
@@ -632,6 +632,13 @@ mem[7] = 101
 mem[8] = 0
 """
 
+sample_input="""
+mask = 000000000000000000000000000000X1001X
+mem[42] = 100
+mask = 00000000000000000000000000000000X0XX
+mem[26] = 1
+"""
+
 sample_input = sample_input.strip()
 
 def process(string_input):
@@ -656,6 +663,6 @@ test_input = process(test_input)
 sample_res = solve(sample_input)
 # print(sample_res)
 
-test_res = solve(test_input)
+# test_res = solve(test_input)
 # print(test_res)
 
