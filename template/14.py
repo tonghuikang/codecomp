@@ -38,7 +38,16 @@ def solve_(inp):
             log(cur)
 
             cur = list(cur)
-            pos = []
+            pos = [i for i,x in enumerate(cur) if x == "X"]
+
+            log(pos)
+            for comb in itertools.product(["0","1"], repeat=len(pos)):
+                new_cur = [x for x in cur]
+                for p,c in zip(pos,comb):
+                    new_cur[p] = c
+                new_cur = int("".join(new_cur))
+                log(new_cur)
+                addr[new_cur] = val
 
     log(addr)
     log(sum(addr.values()))
@@ -663,6 +672,6 @@ test_input = process(test_input)
 sample_res = solve(sample_input)
 # print(sample_res)
 
-# test_res = solve(test_input)
+test_res = solve(test_input)
 # print(test_res)
 
