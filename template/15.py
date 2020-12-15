@@ -17,8 +17,21 @@ def log(*args):
 
 
 def solve_(inp):
+    recent = defaultdict(list)
+    for i,k in enumerate(inp):
+        recent[k].append(i)
+    
+    last = inp[-1]
+    for i in range(len(inp), 30000000):
+        if len(recent[last]) == 1:
+            recent[0].append(i)
+            last = 0
+        else:
+            diff = recent[last][-1] - recent[last][-2]
+            recent[diff].append(i)
+            last = diff
 
-    return 0
+    return last
 
 
 def solve(*args):
@@ -55,35 +68,41 @@ def process(string_input):
     return brr
 
 
-sample_input="""
-mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-mem[8] = 11
-mem[7] = 101
-mem[8] = 0
-"""
+# sample_input="""
+# mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+# mem[8] = 11
+# mem[7] = 101
+# mem[8] = 0
+# """
 
-sample_input="""
-mask = 000000000000000000000000000000X1001X
-mem[42] = 100
-mask = 00000000000000000000000000000000X0XX
-mem[26] = 1
-"""
+# sample_input="""
+# 0,3,6
+# """
 
-sample_input = sample_input.strip()
-sample_input = process(sample_input)
+inp = [[0,3,5],
+[1,3,2],
+[2,1,3],
+[1,2,3],
+[2,3,1],
+[3,2,1],
+[3,1,2],
+[12,20,0,6,1,17,7]]
 
-sample_res = solve(sample_input)
-# print(sample_res)
+# sample_input = sample_input.strip()
+for inpp in inp[::-1]:
+    sample_res = solve(inpp)
+    print(sample_res)
 
 
-test_input="""
-"""
+# test_input="""
+# 12,20,0,6,1,17,7
+# """
 
-test_input = test_input.strip()
+# test_input = test_input.strip()
 
-test_input = process(test_input)
-test_res = solve(test_input)
-# print(test_res)
+# test_input = process(test_input)
+# test_res = solve(test_input)
+# # print(test_res)
 
 
 
