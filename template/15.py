@@ -88,10 +88,14 @@ inp = [[0,3,5],
 [3,1,2],
 [12,20,0,6,1,17,7]]
 
+import time
 # sample_input = sample_input.strip()
 for inpp in inp[::-1]:
+    start_time = time.time()
     sample_res = solve(inpp)
     print(sample_res)
+    log(time.time()-start_time)
+    break
 
 
 # test_input="""
