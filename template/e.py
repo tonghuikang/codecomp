@@ -18,13 +18,25 @@ def ncr(n,k):
         return 0
     if n < k:
         return 0
-    return choose(n,k)
+    return choose(n,k,M9)
 
+# Python3 function to 
+# calculate nCr % p
 @functools.lru_cache(maxsize=None)
-def choose(n, k):
-    if k == 0:
-        return 1
-    return (n * choose(n-1, k-1) // k)%M9
+def choose(n, r, p):
+    # initialize numerator
+    # and denominator
+    num = den = 1
+    for i in range(r):
+        num = (num * (n - i)) % p
+        den = (den * (i + 1)) % p
+    return (num * pow(den, 
+            p - 2, p)) % p
+
+# def choose(n, k):
+#     if k == 0:
+#         return 1
+#     return (n * choose(n-1, k-1) // k)%M9
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
@@ -34,8 +46,8 @@ def log(*args):
 
 
 def solve_(lst, m, k):  # m elements, k diff
-    if m == 1:
-        return len(lst)
+    # if m == 1:
+    #     return len(lst)
     
     c = Counter(lst)
     crr = [(k,v) for k,v in sorted(c.items())]
@@ -55,6 +67,7 @@ def solve_(lst, m, k):  # m elements, k diff
                 continue
             if cursum-cnt < 0:
                 continue
+            # log(cnt, a, cursum-cnt, m-a)
             res += ncr(cnt, a) * ncr(cursum-cnt, m-a)
 
         cursum -= cnt

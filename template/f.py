@@ -1,83 +1,80 @@
-import sys, os
-import heapq, functools, collections
-import math, random
-from collections import Counter, defaultdict
+import sys, os, getpass
+import heapq as hq
+import math, random, functools, itertools, bisect
+from collections import Counter, defaultdict, deque
+input = sys.stdin.readline
 
-# available on Google, not available on Codeforces
+# available on Google, AtCoder Python3
+# not available on Codeforces
 # import numpy as np
 # import scipy
 
 
-def solve_():
-    # your solution here
-
-    return ""
-
-
-def console(*args):  
-    # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    pass
+# if testing locally, print to terminal with a different color
+OFFLINE_TEST = getpass.getuser() == "hkmac"
+def log(*args):  
+    if OFFLINE_TEST:
+        print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-ONLINE_JUDGE = False
+def solve_(mrr):  # m elements, k diff
 
-# if Codeforces environment
-if os.path.exists('input.txt'):
-    ONLINE_JUDGE = True
+    starts = sorted([a for a,b in mrr])
+    ends = sorted([b for a,b in mrr])
 
-if ONLINE_JUDGE:
-    sys.stdin = open("input.txt","r")
-    sys.stdout = open("output.txt","w")
+    # log(starts)
+    # log(ends)
 
-    def console(*args):
-        pass
+    minres = len(mrr) - 1
+    for a,b in mrr:
+        lates = len(mrr) - bisect.bisect_right(starts,b)
+        earlies = bisect.bisect_left(ends,a)
+        cur = lates + earlies
+        # log(cur, lates, earlies)
+        minres = min(minres, cur)
+
+    return minres
 
 
 def solve(*args):
     # screen input
-    if not ONLINE_JUDGE:
-        console("----- solving ------")
-        console(*args)
-        console("----- ------- ------")
+    if OFFLINE_TEST:
+        log("----- solving ------")
+        log(*args)
+        log("----- ------- ------")
     return solve_(*args)
 
 
-if True:
-    # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
-    input = lambda: next(inp)
-else:
-    # if memory is a constraint
-    input = sys.stdin.buffer.readline
+def read_matrix(rows):
+    return [list(map(int,input().split())) for _ in range(rows)]
 
+def read_strings(rows):
+    return [input().strip() for _ in range(rows)]
 
+# for case_num in [1]:  # no loop over test case
 for case_num in range(int(input())):
-    # read line as a string
-    # strr = input()
 
-    # read line as an integer
-    # k = int(input())
-    
+    # read line as a string
+    # strr = input().strip()
+
     # read one line and parse each word as a string
     # lst = input().split()
 
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    # read line as an integer
+    k = int(input())
 
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    # grid = []
-    # for _ in range(nrows):
-    #     grid.append(list(map(int,input().split())))
 
-    res = solve()  # please change
+    # read multiple rows
+    mrr = read_matrix(k)
+    # arr = read_strings(k)
+
+    res = solve(mrr)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
-    # Codeforces - no case number required
+    # Other platforms - no case number required
     print(res)
+    # print(len(res))  # if printing length of list
     # print(*res)  # if printing a list
