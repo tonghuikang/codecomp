@@ -78,9 +78,11 @@ pow(base, exponent, modulo)
 
 
 
-Arithmetirc progression
+Arithmetic progression
 
 OMG please edit
+
+Also to get the length of AP given start and sum, this is giving me headache
 
 
 

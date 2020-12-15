@@ -33,3 +33,19 @@ def choose(n, k):
     return n * choose(n-1, k-1) // k
 ```
 
+ncr mod p
+
+```python
+# Python3 functpion to 
+# calculate nCr % p
+@functools.lru_cache(maxsize=None)
+def choose(n, r, p):
+    num = den = 1
+    for i in range(r):
+        num = (num * (n - i)) % p
+        den = (den * (i + 1)) % p
+    return (num * pow(den, p - 2, p)) % p
+```
+
+
+
