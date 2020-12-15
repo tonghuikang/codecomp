@@ -21,7 +21,7 @@ def ncr(n,k):
     return choose(n,k)
 
 @functools.lru_cache(maxsize=None)
-def choose(n, k):    
+def choose(n, k):
     if k == 0:
         return 1
     return (n * choose(n-1, k-1) // k)%M9
@@ -49,15 +49,13 @@ def solve_(lst, m, k):  # m elements, k diff
         while right_ptr < len(crr) and crr[right_ptr][0] - k <= x:
             cursum += crr[right_ptr][1]
             right_ptr += 1
-        # log(right_ptr, cursum)
 
         for a in range(1,cnt+1):
-            # log(cnt, a, cursum-cnt, m-a)
+            if m-a < 0:
+                continue
+            if cursum-cnt < 0:
+                continue
             res += ncr(cnt, a) * ncr(cursum-cnt, m-a)
-        # a = right_ptr - i - 2
-        # b = m-2
-        # log(a,b)
-        # res += choose(a, b)
 
         cursum -= cnt
 
