@@ -16,10 +16,16 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    if sum(lst)%9 != 0:
+        return "No"
+    
+    if sum(lst)//9 > min(lst):
+        return "No"
+
+    return "Yes"
 
 
 def solve(*args):
@@ -50,13 +56,13 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required

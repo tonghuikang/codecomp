@@ -16,10 +16,37 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    s = sum(lst)
+
+    # mean = int(3/2*s/len(lst))
+    mean = s//len(lst)
+    mark = mean//2 
+
+    log(mean)
+
+    arr = [1 if x < mark else mean for x in lst]
+    log(arr)
+    diff = sum(abs(x - a) for x,a in zip(lst, arr))
+
+    if diff*2 <= s:
+        return arr
+    
+    # mean = sum(lst)
+
+    # arr = [mean for x in lst]
+
+    # mean = mean + 1
+
+    # arr = [1 if x < mark else mean for x in lst]
+    # diff = sum(abs(mean - a) for a in lst)
+
+    # if diff*2 <= s:
+    #     return arr
+    
+    return 0
 
 
 def solve(*args):
@@ -47,22 +74,22 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+    print(*res)  # if printing a list
