@@ -16,10 +16,62 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(commands):
     # your solution here
+    
+    commands = sorted(commands)
 
-    return ""
+    cur = 0
+    booked = 0
+    visited = [(-10**10,0),(-10**10,0)]
+
+    for t,x in commands:
+        if t < booked:
+            continue
+        else:
+            visited.append((t,cur))
+            dist = abs(x-cur)
+            visited.append((t+dist,x))
+            booked = t+dist
+            cur = x
+    
+    visited.append((2*10**10, visited[-1][1]))
+
+    ignored = commands
+    ignored.append((10**10, ignored[-1][0]))
+
+    # log(visited)
+    
+    def interpolate(x1,x2,y1,y2,x):
+        return y1 + (x-x1)*(y2-y1)/(x2-x1)
+
+    ptr = 0
+    successful = 0
+    for (t1,x),(t2,_) in zip(ignored, ignored[1:]):
+        while visited[ptr+1][0] < t1:
+            ptr += 1
+
+        (x1,y1),(x2,y2) = visited[ptr], visited[ptr+1]
+        loc = interpolate(x1,x2,y1,y2,t1)
+
+        posmax = loc
+        posmin = loc
+
+        while visited[ptr+1][0] < t2:
+            posmax = max(posmax,visited[ptr+1][1])
+            posmin = min(posmin,visited[ptr+1][1])
+            ptr += 1
+
+        (x1,y1),(x2,y2) = visited[ptr], visited[ptr+1]
+        loc = interpolate(x1,x2,y1,y2,t2)
+
+        posmax = max(posmax,loc)
+        posmin = min(posmin,loc)
+
+        if posmin <= x <= posmax:
+            successful += 1
+
+    return successful
 
 
 def solve(*args):
@@ -47,16 +99,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)
+    mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(mrr)  # please change
     
     # print result
     # Google - case number required

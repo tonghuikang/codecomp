@@ -19,21 +19,64 @@ def log(*args):
 def solve_(lst):
     # your solution here
 
+    # arr = sorted(lst)
+    # diff = sum(abs(x - 1) for x in lst)
+
+    # for x in arr:
+    #     diff += 
+
+
     s = sum(lst)
 
-    # mean = int(3/2*s/len(lst))
-    mean = s//len(lst)
-    mark = mean//2 
 
-    log(mean)
+    mean = s//len(lst)
+    mark = mean//2
 
     arr = [1 if x < mark else mean for x in lst]
-    log(arr)
     diff = sum(abs(x - a) for x,a in zip(lst, arr))
+    log(arr)
+    log(mean, diff, s)
 
     if diff*2 <= s:
         return arr
     
+
+    mean = s//len(lst)
+    mark = mean//2
+
+    arr = [2**(len(bin(x))-3) for x in lst]
+    diff = sum(abs(x - a) for x,a in zip(lst, arr))
+    log(arr)
+    log(mean, diff, s)
+
+    if diff*2 <= s:
+        return arr
+
+
+    mean = max(lst)
+    mark = mean//2
+
+    arr = [1 if x < mark else mean for x in lst]
+    diff = sum(abs(x - a) for x,a in zip(lst, arr))
+    log(arr)
+    log(mean, diff, s)
+
+    if diff*2 <= s:
+        return arr
+    
+
+    mean = int(3/2*s/len(lst))
+    mark = mean//2
+
+    arr = [1 if x < mark else mean for x in lst]
+    diff = sum(abs(x - a) for x,a in zip(lst, arr))
+    log(arr)
+    log(mean, diff, s, "x")
+
+    if diff*2 <= s:
+        return arr
+
+
     # mean = sum(lst)
 
     # arr = [mean for x in lst]
