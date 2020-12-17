@@ -16,10 +16,35 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(k, lst):
+    if k == 1:
+        return 1
     # your solution here
+    sett = set(lst)
+    maxable = 0
+    minable = 0
 
-    return ""
+    spaces = 0
+    for i in range(1,k*2 + 1):
+        if i in sett:
+            if spaces > 0:
+                maxable += 1
+                spaces -= 1
+        else:
+            spaces += 1
+
+    spaces = 0
+    for i in range(k*2,0,-1):
+        if i in sett:
+            if spaces > 0:
+                minable += 1
+                spaces -= 1
+        else:
+            spaces += 1
+
+    log(maxable, minable)
+
+    return minable - (k - maxable) + 1
 
 
 def solve(*args):
@@ -47,16 +72,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(k, lst)  # please change
     
     # print result
     # Google - case number required
