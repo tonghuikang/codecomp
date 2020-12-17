@@ -36,6 +36,8 @@ def solve_(field):
                     if field[i][j][k] == 1:
                         if count < 2 or count > 3:
                             new_field[i][j][k] = 0
+                        else:
+                            new_field[i][j][k] = 1
                     else:
                         if count == 3:
                             new_field[i][j][k] = 1
@@ -62,7 +64,7 @@ def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
 
-dims = 20
+dims = 30
 mid = dims//2
 
 def process(string_input):
@@ -71,7 +73,7 @@ def process(string_input):
     for i,row in enumerate(string_input.split("\n")):
         for j,cell in enumerate(row):
             if cell == "#":
-                field[mid][i+mid][j+mid] = 1
+                field[mid+i][mid+j][mid] = 1
     return field
 
 sample_input="""
@@ -88,22 +90,22 @@ sample_res = solve(sample_input)
 # print(sample_res)
 
 
-# test_input="""
-# #.#.##.#
-# #.####.#
-# ...##...
-# #####.##
-# #....###
-# ##..##..
-# #..####.
-# #...#.#.
-# """.strip()
+test_input="""
+#.#.##.#
+#.####.#
+...##...
+#####.##
+#....###
+##..##..
+#..####.
+#...#.#.
+""".strip()
 
-# test_input = test_input.strip()
+test_input = test_input.strip()
 
-# test_input = process(test_input)
-# test_res = solve(test_input)
-# # print(test_res)
+test_input = process(test_input)
+test_res = solve(test_input)
+# print(test_res)
 
 
 
