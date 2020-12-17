@@ -16,10 +16,34 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
-    # your solution here
+def solve_(field):
 
-    return ""
+    for _ in range(6):
+        new_field = [[[0 for _ in range(dims)] 
+                         for _ in range(dims)] 
+                         for _ in range(dims)]
+        for i,plate in enumerate(field[1:-1], start=1):
+            for j,row in enumerate(plate[1:-1], start=1):
+                for k,cell in enumerate(row[1:-1], start=1):
+                    count = 0
+                    for x in [-1,0,1]:
+                        for y in [-1,0,1]:
+                            for z in [-1,0,1]:
+                                if x == y == z == 0:
+                                    continue
+                                if field[i+x][j+y][k+z] == 1:
+                                    count += 1
+                    if field[i][j][k] == 1:
+                        if count < 2 or count > 3:
+                            new_field[i][j][k] = 0
+                    else:
+                        if count == 3:
+                            new_field[i][j][k] = 1
+        totals = sum(sum(sum(row) for row in plate) for plate in new_field)
+        log(totals)
+        field = new_field
+    
+    return totals
 
 
 def solve(*args):
@@ -37,32 +61,49 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
 
-    # read line as a string
-    # strr = input().strip()
+dims = 20
+mid = dims//2
 
-    # read one line and parse each word as a string
-    # lst = input().split()
+def process(string_input):
+    field = [[[0 for _ in range(dims)] for _ in range(dims)] for _ in range(dims)]
 
-    # read line as an integer
-    # k = int(input())
-    
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    for i,row in enumerate(string_input.split("\n")):
+        for j,cell in enumerate(row):
+            if cell == "#":
+                field[mid][i+mid][j+mid] = 1
+    return field
 
-    # read multiple rows
-    # mrr = read_matrix(k)
-    # arr = read_strings(k)
+sample_input="""
+.#.
+..#
+###
+""".strip()
 
-    res = solve()  # please change
-    
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+sample_input = sample_input.strip()
+sample_input = process(sample_input)
+
+sample_res = solve(sample_input)
+# print(sample_res)
+
+
+# test_input="""
+# #.#.##.#
+# #.####.#
+# ...##...
+# #####.##
+# #....###
+# ##..##..
+# #..####.
+# #...#.#.
+# """.strip()
+
+# test_input = test_input.strip()
+
+# test_input = process(test_input)
+# test_res = solve(test_input)
+# # print(test_res)
+
+
+
