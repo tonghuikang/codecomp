@@ -16,10 +16,9 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
-    # your solution here
+def solve_(inp):
 
-    return ""
+    return 0
 
 
 def solve(*args):
@@ -37,32 +36,36 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
 
-    # read line as a string
-    # strr = input().strip()
 
-    # read one line and parse each word as a string
-    # lst = input().split()
+def process(string_input):
+    string_input = string_input.strip()
 
-    # read line as an integer
-    # k = int(input())
-    
-    # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    return []
 
-    # read multiple rows
-    # mrr = read_matrix(k)
-    # arr = read_strings(k)
 
-    res = solve()  # please change
-    
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+sample_input="""
+mask = 000000000000000000000000000000X1001X
+mem[42] = 100
+mask = 00000000000000000000000000000000X0XX
+mem[26] = 1
+"""
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+sample_input = sample_input.strip()
+sample_input = process(sample_input)
+
+sample_res = solve(sample_input)
+# print(sample_res)
+
+
+test_input="""
+"""
+
+test_input = test_input.strip()
+
+test_input = process(test_input)
+test_res = solve(test_input)
+# print(test_res)
+
+
+

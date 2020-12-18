@@ -39,28 +39,10 @@ def read_strings(rows):
 
 
 def process(string_input):
-    arr = string_input.split("\n")
+    string_input = string_input.strip()
 
-    ins = []
-    brr = []
-    for a in arr[::-1]:
-        if a[:4] == "mask":
-            mask = a[-36:]
-            brr.append([mask, ins])
-            ins = []
-        else:
-            a = a[3:].replace("[", "").replace("]","").replace(" = "," ")
-            ins.append([int(x) for x in a.split()])
+    return []
 
-    return brr
-
-
-sample_input="""
-mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-mem[8] = 11
-mem[7] = 101
-mem[8] = 0
-"""
 
 sample_input="""
 mask = 000000000000000000000000000000X1001X
