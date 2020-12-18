@@ -62,17 +62,23 @@ def calc(exp):
             curnums = curnums[::-1]
             curops = curops[::-1]
 
+
             cur = curnums[0]
-            log(*zip(curnums[1:],curops))
+            newnums = []
+            log(cur, *zip(curnums[1:],curops))
+
             for num,op in zip(curnums[1:],curops):
                 if op == "+":
                     cur += num
-                if op == "-":
-                    cur -= num
                 if op == "*":
-                    cur *= num
-
-            nums.append(cur)
+                    newnums.append(cur)
+                    cur = num
+            newnums.append(cur)
+            
+            pdt = 1
+            for num in newnums:
+                pdt = pdt*num
+            nums.append(pdt)
 
     log(nums)
     return nums[-1]
