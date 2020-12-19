@@ -18,10 +18,11 @@ def log(*args):
 
 def solve_(arr, brr):
     # your solution here
+    arr = sorted(set(arr))
+
     if len(arr) == 1:
         return [arr[0] + b for b in brr]
 
-    arr = sorted(set(arr))
     diffs = [y-x for x,y in zip(arr, arr[1:])]
 
     log(diffs)
