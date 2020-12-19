@@ -16,10 +16,27 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(h,w,mrr):
     # your solution here
 
-    return ""
+    mindown = [h for _ in range(w)]
+    minhori = [w for _ in range(h)]
+
+    for x,y in mrr:
+        mindown[y] = min(mindown[y], x)
+        minhori[x] = min(minhori[x], y)
+
+    double_min = minhori[0]
+    double = 0
+    for x in minhori:
+        double_min = min(double_min, x)
+        double += double_min
+        
+    log(mindown)
+    log(minhori)
+    log(double)
+
+    return sum(mindown[:minhori[0]]) + sum(minhori[:mindown[0]]) - double
 
 
 def solve(*args):
@@ -37,8 +54,8 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+for case_num in [1]:  # no loop over test case
+# for case_num in range(int(input())):
 
     # read line as a string
     # strr = input().strip()
@@ -50,13 +67,13 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    h,w,k = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)
+    mrr = read_matrix(k)
     # arr = read_strings(k)
-
-    res = solve()  # please change
+    mrr = [(x-1,y-1) for x,y in mrr]
+    res = solve(h,w,mrr)  # please change
     
     # print result
     # Google - case number required

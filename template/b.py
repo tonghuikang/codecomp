@@ -16,10 +16,12 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    mini = min(min(row) for row in mrr)
+
+    return sum(sum([x-mini for x in row]) for row in mrr)
 
 
 def solve(*args):
@@ -37,8 +39,8 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+for case_num in [1]:  # no loop over test case
+# for case_num in range(int(input())):
 
     # read line as a string
     # strr = input().strip()
@@ -50,13 +52,13 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    k,_ = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)
+    mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(mrr)  # please change
     
     # print result
     # Google - case number required

@@ -16,10 +16,21 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def modinv(k,p):
+    return pow(k, p-2, p)
+
+MMI = lambda A, n,s=1,t=0,N=0: (n < 2 and t%N or MMI(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+
+def solve_(n,s,k):
     # your solution here
 
-    return ""
+    gcd = math.gcd(k,n)
+    if gcd != 1:
+        if s%gcd != 0:
+            return -1
+        n,s,k = n//gcd,s//gcd,k//gcd
+        
+    return (-s*MMI(k,n))%n
 
 
 def solve(*args):
@@ -50,13 +61,13 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,s,k = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(n,s,k)  # please change
     
     # print result
     # Google - case number required

@@ -16,10 +16,16 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(k):
     # your solution here
 
-    return ""
+    res = 0
+
+    for i in range(1,k+1):
+        if not("7" in str(i) or "7" in oct(i)):
+            res += 1
+
+    return res
 
 
 def solve(*args):
@@ -37,8 +43,8 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+for case_num in [1]:  # no loop over test case
+# for case_num in range(int(input())):
 
     # read line as a string
     # strr = input().strip()
@@ -47,7 +53,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
@@ -56,7 +62,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # print result
     # Google - case number required
