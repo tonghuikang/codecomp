@@ -27,16 +27,25 @@ def solve_(h,w,mrr):
         minhori[x] = min(minhori[x], y)
 
     double_min = minhori[0]
-    double = 0
+    double1 = 0
     for x in minhori:
         double_min = min(double_min, x)
-        double += double_min
-        
+        double1 += double_min
+
+    double_min = mindown[0]
+    double2 = 0
+    for x in mindown:
+        double_min = min(double_min, x)
+        double2 += double_min
+
     log(mindown)
     log(minhori)
-    log(double)
+    log(double1)
+    log(double2)
 
-    return sum(mindown[:minhori[0]]) + sum(minhori[:mindown[0]]) - double
+    assert double1 == double2
+
+    return sum(mindown[:minhori[0]]) + sum(minhori[:mindown[0]]) - double1
 
 
 def solve(*args):
