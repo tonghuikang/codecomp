@@ -16,10 +16,30 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(k):
     # your solution here
+    d4 = [(0,1), (1,0), (0,-1), (-1,0)]
+    stack = set([(0,1,0), (1,0,1), (0,-1,2), (-1,0,3)])
 
-    return ""
+    save = []
+
+    for i in range(k):
+        new_stack = set()
+        for x,y,d in stack:
+            for dd in [-1,1]:
+                new_d = (d+dd) % 4
+                dx,dy = d4[new_d]
+                new_stack.add((x+dx, y+dy, new_d))
+        stack = new_stack
+
+        save_res = len(set((x,y) for x,y,d in stack))
+        log(i, save_res)
+        save.append(save_res)
+
+    log(save)
+
+    res = set((x,y) for x,y,d in stack)
+    return len(res)
 
 
 def solve(*args):
@@ -37,8 +57,8 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+for case_num in [1]:  # no loop over test case
+# for case_num in range(int(input())):
 
     # read line as a string
     # strr = input().strip()
@@ -47,7 +67,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
@@ -56,7 +76,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(k)  # please change
     
     # print result
     # Google - case number required

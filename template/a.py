@@ -16,10 +16,21 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(arr,brr):
     # your solution here
+    cnt = 0
+    for a,b in zip(arr,brr):
+        if int(a) > int(b):
+            cnt += 1
+        if int(a) < int(b):
+            cnt -= 1
 
-    return ""
+    if cnt > 0:
+        return "RED"
+    if cnt < 0:
+        return "BLUE"
+
+    return "EQUAL"
 
 
 def solve(*args):
@@ -42,12 +53,13 @@ for case_num in range(int(input())):
 
     # read line as a string
     # strr = input().strip()
+    k = int(input())
 
     # read one line and parse each word as a string
-    # lst = input().split()
+    arr = input().strip()
+    brr = input().strip()
 
     # read line as an integer
-    # k = int(input())
     
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
@@ -56,7 +68,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(arr, brr)  # please change
     
     # print result
     # Google - case number required
