@@ -18,14 +18,23 @@ def log(*args):
 
 def solve_(d, assgn, lst):
     assgn[999] = ""
+    log(assgn)
 
     @functools.lru_cache(maxsize=None)
     def dfs(node):
+        # log(node, node in assgn)
         if node in assgn:
             return [assgn[node]]
         res = set()
+
+        # if node == 42:
+        #     return ["*"*8]
+
+        # if node == 31:
+        #     return ["*"*8]
+
         for comb in d[node]:
-            log(node, d[node], comb)
+            # log(node, d[node], comb)
             zzz = [999,999,999]
             for i,c in enumerate(comb):
                 zzz[i] = c
@@ -40,16 +49,34 @@ def solve_(d, assgn, lst):
                     for c in crr:
                         cur.add(a+b+c)
             res = res | cur
-        log(node)
+        
+        if node == 31:
+            log(31, len(res), sorted(res))
+        if node == 42:
+            log(42, len(res), sorted(res))
+
         return res
 
     allowed = dfs(0)
 
+    log(len(allowed))
+
     ret = 0
     for a in lst.split("\n"):
-        if a in allowed:
-            ret += 1
+        for b in allowed:
+            if len(a) != len(b):
+                continue
+            for x,y in zip(a,b):
+                if y == "*":
+                    continue
+                if x != y:
+                    break
+            else:
+                ret += 1
+                log(ret)
+                break
     
+    # log(max(len()))
     return ret
 
 
@@ -197,7 +224,17 @@ test_input1="""
 71: 13 | 92
 27: 118 92 | 9 13
 1: 88 92 | 126 13
-11: 42 31
+11: 42 31 | 42 110001 31
+110001: 42 31 | 42 110002 31
+110002: 42 31 | 42 110003 31
+110003: 42 31 | 42 110004 31
+110004: 42 31 | 42 110005 31
+110005: 42 31 | 42 110006 31
+110006: 42 31 | 42 110007 31
+110007: 42 31 | 42 110008 31
+110008: 42 31 | 42 110009 31
+110009: 42 31
+110001: ""
 105: 13 21 | 92 102
 41: 92 92 | 13 92
 34: 13 13
@@ -217,7 +254,17 @@ test_input1="""
 131: 119 92 | 121 13
 73: 92 36 | 13 76
 19: 55 13 | 129 92
-8: 42
+8: 42 | 42 80001
+80001: 42 | 42 80002
+80002: 42 | 42 80003
+80003: 42 | 42 80004
+80004: 42 | 42 80005
+80005: 42 | 42 80006
+80006: 42 | 42 80007
+80007: 42 | 42 80008
+80008: 42 | 42 80009
+80009: 42
+80001: ""
 75: 60 13 | 130 92
 102: 13 68 | 92 99
 13: "b"
