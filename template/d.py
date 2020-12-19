@@ -20,7 +20,7 @@ def solve_(lst):
     # your solution here
 
     res = 0
-    for i in range(len(lst)-1, -1, -1): 
+    for i in range(len(lst)): 
         res += i*lst[i] - (len(lst)-1-i) * lst[i] 
     return res
 
