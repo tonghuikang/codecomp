@@ -17,6 +17,7 @@ def log(*args):
 
 
 def solve_(d, assgn, lst):
+    assgn[999] = ""
 
     @functools.lru_cache(maxsize=None)
     def dfs(node):
@@ -25,15 +26,21 @@ def solve_(d, assgn, lst):
         res = set()
         for comb in d[node]:
             log(node, d[node], comb)
-            a,b = comb
+            zzz = [999,999,999]
+            for i,c in enumerate(comb):
+                zzz[i] = c
+
             cur = set()
-            arr = dfs(a)
-            brr = dfs(b)
+            arr = dfs(zzz[0])
+            brr = dfs(zzz[1])
+            crr = dfs(zzz[2])
+
             for a in arr:
                 for b in brr:
-                    cur.add(a+b)
+                    for c in crr:
+                        cur.add(a+b+c)
             res = res | cur
-
+        log(node)
         return res
 
     allowed = dfs(0)
@@ -187,7 +194,7 @@ test_input1="""
 45: 13 92 | 13 13
 10: 61 13 | 94 92
 28: 30 13 | 35 92
-71: 13 999 | 92 999
+71: 13 | 92
 27: 118 92 | 9 13
 1: 88 92 | 126 13
 11: 42 31
@@ -210,7 +217,7 @@ test_input1="""
 131: 119 92 | 121 13
 73: 92 36 | 13 76
 19: 55 13 | 129 92
-8: 42 999
+8: 42
 75: 60 13 | 130 92
 102: 13 68 | 92 99
 13: "b"
@@ -242,7 +249,6 @@ test_input1="""
 95: 92 45 | 13 68
 67: 81 92 | 10 13
 32: 50 13 | 104 92
-999: ""
 """.strip()
 
 test_input2="""
