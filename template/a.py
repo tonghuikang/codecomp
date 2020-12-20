@@ -16,10 +16,25 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(mrr,n):
     # your solution here
 
-    return ""
+    locs = set()
+    cnt = 0
+
+    for a,b in mrr:
+        locs.add(a)
+        locs.add(b)
+        if a != b:
+            cnt += 1
+    
+    if cnt == 0:
+        return 0
+    
+    if len(locs) == len(mrr):
+        return cnt+1
+
+    return cnt
 
 
 def solve(*args):
@@ -50,13 +65,13 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)
+    mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(mrr,n)  # please change
     
     # print result
     # Google - case number required
