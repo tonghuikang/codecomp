@@ -16,20 +16,16 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-from ortools.sat.python import cp_model
-
 def solve_(inp):
     
-    model = cp_model.CpModel()
-
     square_length = int(math.sqrt(len(inp)))
     num_edges = square_length*square_length*4
     num_spaces = num_edges
-    # (square_length*square_length*4 - square_length*4)// 2
 
     indexes = [k for k,v in inp]
     edges = [0 for _ in range(num_edges)]
     assgn = [0 for _ in range(num_edges)]
+
 
     for i in range(4):
         edges[i::4] = [v[i] for k,v in inp]
@@ -40,67 +36,23 @@ def solve_(inp):
 
     edges = [min(edge, filp(edge)) for edge in edges]
 
-    log(edges)
-    log(assgn)
-    del inp
+    c = Counter(edges)
 
-    # i.e. assign edges to spaces
-    # adj spaces has to be equal
-    # spaces in the same square has to be equal
+    log(c)
 
-    # binary variables - whether are we assigning edge (144*4) to space (144*4 - 12*4)
-    var = [[model.NewBoolVar('') for _ in range(num_edges)] for _ in range(num_spaces)]
+    c2 = [[0,0] for _ in inp]
 
-    # for every space, you have to assign one edge
-    for i in range(num_edges):
-        model.Add(sum(var[i]) == 1)
+    for a,(k,edges) in zip(range(square_length*square_length),inp):
+        for edge in edges:
+            log(edge, c[edge])
+            c2[a][c[edge]-1] += 1
+        log()
 
-    # for every edge, you have to assign to one space
-    for i in range(num_spaces):
-        model.Add(sum([row[i] for row in var]) == 1)
+    log(c2)
 
-    # adjacent spaces should have and equal edge
-    # left = right
-    for i in range(square_length):
-        for j in range(square_length-1):
-            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+0], edges)) == 
-                      sum(a*b for a,b in zip(var[(i*square_length+j+1)*4+1], edges)))
+    c3 = Counter([tuple(v) for v in c2])
 
-    # up = down
-    for i in range(square_length-1):
-        for j in range(square_length):
-            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+2], edges)) == 
-                      sum(a*b for a,b in zip(var[((i+1)*square_length+j)*4+3], edges)))
-
-    # each edge in a square should belong to the same square
-    for i in range(square_length):
-        for j in range(square_length):
-            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+0], assgn)) == 
-                      sum(a*b for a,b in zip(var[(i*square_length+j)*4+1], assgn)))
-
-            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+0], assgn)) == 
-                      sum(a*b for a,b in zip(var[(i*square_length+j)*4+2], assgn)))
-
-            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+0], assgn)) == 
-                      sum(a*b for a,b in zip(var[(i*square_length+j)*4+3], assgn)))
-
-    solver = cp_model.CpSolver()
-    solver.parameters.max_time_in_seconds = 1000.0
-    status = solver.Solve(model)
-    
-    log(status)
-    log(cp_model.UNKNOWN, cp_model.FEASIBLE, cp_model.INFEASIBLE, cp_model.OPTIMAL)
-    if status == cp_model.OPTIMAL:
-        print("ok")
-
-    res = {}
-    for i in range(num_edges):
-        for j in range(num_edges):
-            if solver.Value(var[i][j]) == 1:
-                res[j//4] = i//4
-    
-    log(indexes)
-    log(res)
+    log(c3)
 
     return 0
 
@@ -1995,6 +1947,7 @@ Tile 1663:
 """
 
 test_input = test_input.strip()
+print(len(test_input.split("\n\n")))
 
 test_input = process(test_input)
 test_res = solve(test_input)
@@ -2002,4 +1955,3 @@ print(test_res)
 
 
 
-print(len(test_input.split("\n\n")))
