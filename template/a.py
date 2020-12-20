@@ -22,19 +22,54 @@ def solve_(mrr,n):
     locs = set()
     cnt = 0
 
-    for a,b in mrr:
+    d = defaultdict(list)
+    rev = defaultdict(list)
+
+    for i,(a,b) in enumerate(mrr, start=10**6):
         locs.add(a)
         locs.add(b)
         if a != b:
             cnt += 1
+        d[i].append(b)
+        d[i].append(a)
+        d[a].append(i)
+        d[b].append(i)
     
     if cnt == 0:
         return 0
-    
-    if len(locs) == len(mrr):
-        return cnt+1
 
-    return cnt
+    res = cnt
+
+    visited = set()
+
+    # for each cycle
+    for i in range(len(mrr)):
+        a,b = mrr[i]
+        if a == b:
+            continue
+        i += 10**6
+
+        if i in visited: # in another cycle already
+            continue
+        visited.add(i)
+        visited.add(a)
+
+        stack = [a]
+        while stack:
+            cur = stack.pop()
+            for nex in d[cur]:
+                if nex == b:  # it is a cycle
+                    visited.add(b)
+                    res += 1
+                    break
+                if nex in visited: # previous point or dead end
+                    continue
+                else:
+                    stack.append(nex)
+                    visited.add(nex)
+
+
+    return res
 
 
 def solve(*args):
