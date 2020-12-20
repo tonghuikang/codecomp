@@ -32,8 +32,8 @@ def solve_(inp):
     assgn = [0 for _ in range(num_edges)]
 
     for i in range(4):
-        edges[i::4] = [v[i] for k,v in inp]
-        assgn[i::4] = range(square_length*square_length)
+        edges[i::4] = [v[i]+1 for k,v in inp]
+        assgn[i::4] = range(1,square_length*square_length+1)
 
     log(edges)
     log(assgn)
@@ -71,14 +71,14 @@ def solve_(inp):
             model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+0], assgn)) == 
                       sum(a*b for a,b in zip(var[(i*square_length+j)*4+1], assgn)))
 
-            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+1], assgn)) == 
+            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+0], assgn)) == 
                       sum(a*b for a,b in zip(var[(i*square_length+j)*4+2], assgn)))
 
-            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+2], assgn)) == 
+            model.Add(sum(a*b for a,b in zip(var[(i*square_length+j)*4+0], assgn)) == 
                       sum(a*b for a,b in zip(var[(i*square_length+j)*4+3], assgn)))
 
     solver = cp_model.CpSolver()
-    solver.parameters.max_time_in_seconds = 10.0
+    solver.parameters.max_time_in_seconds = 100.0
     status = solver.Solve(model)
     
     log(status)
