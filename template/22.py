@@ -29,47 +29,32 @@ def determine(arr, brr):
         #     # arr.append(b)
             log("cached", arr, brr)
             return True, arr
-        
         atup = tuple(arr)
         btup = tuple(brr)
+        cache[atup, btup] = (True, arr)
 
-        if arr[0] <= len(arr)-1 and brr[0] <= len(brr)-1:
-            a_wins = determine(tuple(arr)[1:arr[0]+1], tuple(brr)[1:brr[0]+1])[0]               
-            a = arr[0]
-            b = brr[0]
+        a = arr[0]
+        b = brr[0]
 
-            # if (tuple(arr), tuple(brr)) in cache:
-            #     awins = True
+        del arr[0]
+        del brr[0]
 
-            del arr[0]
-            del brr[0]
+        if a <= len(arr) and b <= len(brr):
+            a_wins = determine(tuple(arr)[:a], tuple(brr)[:b])[0]               
 
             if a_wins:
                 arr.append(a)
                 arr.append(b)
-                cache[atup, btup] = (True, arr)
             else:
                 brr.append(b)
                 brr.append(a)
-                cache[atup, btup] = (False, brr)
         else:
-            a = arr[0]
-            b = brr[0]
-
-            awins = False
-            # if (tuple(arr), tuple(brr)) in cache:
-            #     awins = True
-
-            del arr[0]
-            del brr[0]
-            if a > b or awins:
+            if a > b:
                 arr.append(a)
                 arr.append(b)
-                cache[atup, btup] = (True, arr)
             if a < b:
                 brr.append(b)
                 brr.append(a)
-                cache[atup, btup] = (False, brr)
 
     if len(arr) == 0:
         # cache[tuple(arr), tuple(brr)] = False, brr
@@ -96,6 +81,7 @@ def solve_(arr, brr):
     
     crr = determine(tuple(arr), tuple(brr))[1]
     log(crr)
+    log(len(arr), len(brr), len(crr))
     return sum([i*x for i,x in enumerate(list(crr)[::-1], start=1)])
 
 
