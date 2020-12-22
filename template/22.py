@@ -17,34 +17,69 @@ def log(*args):
 
 @functools.lru_cache(maxsize=None)
 def determine(arr, brr):
-    arr = deque(arr)
-    brr = deque(brr)
+    cache = {}
+    # log(arr, brr)
+    arr = list(arr)
+    brr = list(brr)
     while arr and brr:
+        if (tuple(arr), tuple(brr)) in cache:
+        #     # a = arr[0]
+        #     # b = brr[0]
+        #     # arr.append(a)
+        #     # arr.append(b)
+            log("cached", arr, brr)
+            return True, arr
+        
+        atup = tuple(arr)
+        btup = tuple(brr)
+
         if arr[0] <= len(arr) and brr[0] <= len(brr):
-            a_wins = determine(tuple(list(arr)[1:arr[0]]), tuple(list(brr)[1:brr[0]]))[0]               
-            a = arr.popleft()
-            b = brr.popleft()
+            a_wins = determine(tuple(arr)[1:arr[0]], tuple(brr)[1:brr[0]])[0]               
+            a = arr[0]
+            b = brr[0]
+
+            # if (tuple(arr), tuple(brr)) in cache:
+            #     awins = True
+
+            del arr[0]
+            del brr[0]
+
             if a_wins:
                 arr.append(a)
                 arr.append(b)
+                cache[atup, btup] = (True, arr)
             else:
                 brr.append(b)
                 brr.append(a)
+                cache[atup, btup] = (False, brr)
         else:
-            a = arr.popleft()
-            b = brr.popleft()
-            if a > b:
+            a = arr[0]
+            b = brr[0]
+
+            awins = False
+            # if (tuple(arr), tuple(brr)) in cache:
+            #     awins = True
+
+            del arr[0]
+            del brr[0]
+            if a > b or awins:
                 arr.append(a)
                 arr.append(b)
+                cache[atup, btup] = (True, arr)
             if a < b:
                 brr.append(b)
                 brr.append(a)
+                cache[atup, btup] = (False, brr)
 
     if len(arr) == 0:
+        # cache[tuple(arr), tuple(brr)] = False, brr
         return False, brr
+
+    # cache[tuple(arr), tuple(brr)] = True, arr
     return True, arr
 
 def solve_(arr, brr):
+    # arr, brr = brr, arr
     # arr = deque(arr)
     # brr = deque(brr)
 
@@ -86,6 +121,24 @@ def process(string_input):
     arr = [int(x.strip()) for x in string_input.strip().split("\n")]
 
     return arr
+
+
+sample_input_1="""
+43
+19
+"""
+
+sample_input_2="""
+2
+29
+14
+"""
+
+sample_input_1 = process(sample_input_1)
+sample_input_2 = process(sample_input_2)
+
+sample_res = solve(sample_input_1, sample_input_2)
+print(sample_res)
 
 
 sample_input_1="""
