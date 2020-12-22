@@ -33,8 +33,8 @@ def determine(arr, brr):
         atup = tuple(arr)
         btup = tuple(brr)
 
-        if arr[0] <= len(arr) and brr[0] <= len(brr):
-            a_wins = determine(tuple(arr)[1:arr[0]], tuple(brr)[1:brr[0]])[0]               
+        if arr[0] <= len(arr)-1 and brr[0] <= len(brr)-1:
+            a_wins = determine(tuple(arr)[1:arr[0]+1], tuple(brr)[1:brr[0]+1])[0]               
             a = arr[0]
             b = brr[0]
 
