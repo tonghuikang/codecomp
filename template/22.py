@@ -15,10 +15,54 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
+@functools.lru_cache(maxsize=None)
+def determine(arr, brr):
+    arr = deque(arr)
+    brr = deque(brr)
+    while arr and brr:
+        if arr[0] <= len(arr) and brr[0] <= len(brr):
+            a_wins = determine(tuple(list(arr)[1:arr[0]]), tuple(list(brr)[1:brr[0]]))[0]               
+            a = arr.popleft()
+            b = brr.popleft()
+            if a_wins:
+                arr.append(a)
+                arr.append(b)
+            else:
+                brr.append(b)
+                brr.append(a)
+        else:
+            a = arr.popleft()
+            b = brr.popleft()
+            if a > b:
+                arr.append(a)
+                arr.append(b)
+            if a < b:
+                brr.append(b)
+                brr.append(a)
 
-def solve_(inp):
+    if len(arr) == 0:
+        return False, brr
+    return True, arr
 
-    return 0
+def solve_(arr, brr):
+    # arr = deque(arr)
+    # brr = deque(brr)
+
+    # while arr and brr:
+    #     a = arr.popleft()
+    #     b = brr.popleft()
+    #     if a > b:
+    #         arr.append(a)
+    #         arr.append(b)
+    #     if a < b:
+    #         brr.append(b)
+    #         brr.append(a)
+    #     log(arr, brr)
+    
+    crr = determine(tuple(arr), tuple(brr))[1]
+    log(crr)
+    return sum([i*x for i,x in enumerate(list(crr)[::-1], start=1)])
+
 
 
 def solve(*args):
@@ -39,33 +83,95 @@ def read_strings(rows):
 
 
 def process(string_input):
-    string_input = string_input.strip()
+    arr = [int(x.strip()) for x in string_input.strip().split("\n")]
 
-    return []
+    return arr
 
 
-sample_input="""
-mask = 000000000000000000000000000000X1001X
-mem[42] = 100
-mask = 00000000000000000000000000000000X0XX
-mem[26] = 1
+sample_input_1="""
+9
+2
+6
+3
+1
 """
 
-sample_input = sample_input.strip()
-sample_input = process(sample_input)
-
-sample_res = solve(sample_input)
-# print(sample_res)
-
-
-test_input="""
+sample_input_2="""
+5
+8
+4
+7
+10
 """
 
-test_input = test_input.strip()
+sample_input_1 = process(sample_input_1)
+sample_input_2 = process(sample_input_2)
 
-test_input = process(test_input)
-test_res = solve(test_input)
-# print(test_res)
+sample_res = solve(sample_input_1, sample_input_2)
+print(sample_res)
+
+
+test_input_1="""
+31
+24
+5
+33
+7
+12
+30
+22
+48
+14
+16
+26
+18
+45
+4
+42
+25
+20
+46
+21
+40
+38
+34
+17
+50
+"""
+
+test_input_2="""
+1
+3
+41
+8
+37
+35
+28
+39
+43
+29
+10
+27
+11
+36
+49
+32
+2
+23
+19
+9
+13
+15
+47
+6
+44
+"""
+
+test_input_1 = process(test_input_1)
+test_input_2 = process(test_input_2)
+
+test_res = solve(test_input_1, test_input_2)
+print(test_res)
 
 
 
