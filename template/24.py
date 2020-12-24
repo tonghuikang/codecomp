@@ -100,9 +100,38 @@ def solve_(arr):
         else:
             locs.add((x,y))
 
-    print(locs)
+    all_locs = {}
 
-    return len(locs)
+    for i in range(-300,300):
+        for j in range(-300,300):
+            if (i+j)%2 == 0:
+                all_locs[i,j] = 0
+    
+    log(locs)
+    for x,y in locs:
+        all_locs[x,y] = 1
+
+    log("init", sum(all_locs.values()))
+
+    d6 = [(2,0),(-2,0),(1,1),(1,-1),(-1,1),(-1,-1)]
+
+    for d in range(100):
+        new_locs = {k:v for k,v in all_locs.items()}
+        for x,y in all_locs:
+            if abs(x) > 295 or abs(y) > 295:
+                continue
+            count = 0
+            for dx,dy in d6:
+                if all_locs[x+dx,y+dy] == 1:
+                    count += 1
+            if all_locs[x,y] == 1 and count == 0 or count > 2:
+                new_locs[x,y] = 0
+            if all_locs[x,y] == 0 and count == 2:
+                new_locs[x,y] = 1
+        all_locs = new_locs
+        log(d, sum(all_locs.values()))
+
+    return sum(all_locs.values())
 
 
 
@@ -156,8 +185,8 @@ wseweeenwnesenwwwswnew
 sample_input_1 = process(sample_input_1)
 # sample_input_2 = process(sample_input_2)
 
-sample_res = solve(sample_input_1)
-print(sample_res)
+# sample_res = solve(sample_input_1)
+# print(sample_res)
 
 
 test_input_1="""
