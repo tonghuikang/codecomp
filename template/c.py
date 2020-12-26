@@ -10,7 +10,8 @@ input = sys.stdin.readline
 # import scipy
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False
 def log(*args):  
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -19,24 +20,12 @@ def log(*args):
 def solve_(srr):
     # your solution here
     
-    @functools.lru_cache(maxsize=None)
-    def helper(start,end,debt=0): # incl, excl
-        log(start,end,debt)
-        if end - start - 1 <= debt:
-            return min(end-start-1, debt)
-        
-        if srr[start] == srr[end-1]:
-            return helper(start+1,end-1,debt+1)
-            
-        else:
-            if debt >= 1:
-                return 1+max(helper(start+1,end,debt-1), 
-                             helper(start,end-1,debt-1))
-            else:
-                return max(helper(start+1,end,debt), helper(start,end-1,debt))
-        return 0
+    cnt = 0
 
-    return helper(0,len(srr))
+    for k,v in Counter(srr).items():
+        cnt += v//2
+
+    return min(cnt, len(srr)//3)
 
 
 def solve(*args):

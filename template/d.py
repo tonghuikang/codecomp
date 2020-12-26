@@ -10,14 +10,49 @@ input = sys.stdin.readline
 # import scipy
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False
 def log(*args):  
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(mrr, qrr):
     # your solution here
+
+    counters = defaultdict(lambda: defaultdict(int))
+    
+    for i,row in enumerate(mrr):
+        for j,cell in enumerate(row):
+            counters[i-j][cell] += 1
+
+    # log(counters)
+    accepted = sum(len(c) == 1 for c in counters.values())
+
+    qrr = [(x-1,y-1,z) for x,y,z in qrr]
+
+    for i,j,new in qrr:
+        old = mrr[i][j]
+        mrr[i][j] = new
+
+        if len(counters[i-j]) == 1:
+            accepted -= 1
+
+        counters[i-j][old] -= 1
+        if counters[i-j][old] == 0:
+            del counters[i-j][old]
+        counters[i-j][new] += 1
+
+        if len(counters[i-j]) == 1:
+            accepted += 1
+        
+        # log(counters)
+        # log(accepted)
+        if accepted == len(counters):
+            print("Yes")
+        else:
+            print("No")
+
 
     return ""
 
@@ -50,19 +85,22 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)
+    mrr = read_matrix(n)
+
+    q = int(input())
+    qrr = read_matrix(q)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    solve(mrr, qrr)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))  # if printing length of list
     # print(*res)  # if printing a list
