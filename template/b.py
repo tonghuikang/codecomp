@@ -10,16 +10,30 @@ input = sys.stdin.readline
 # import scipy
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False
 def log(*args):  
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(arr,brr):
     # your solution here
 
-    return ""
+    if arr.count("1") != brr.count("1"):
+        return "No"
+
+    xrr = [i for i,x in enumerate(arr) if x == "1"]
+    yrr = [i for i,x in enumerate(brr) if x == "1"]
+
+    log(xrr)
+    log(yrr)
+
+    for x,y in zip(xrr,yrr):
+        if x > y:
+            return "No"
+
+    return "Yes"
 
 
 def solve(*args):
@@ -40,14 +54,16 @@ def read_strings(rows):
 # for case_num in [1]:  # no loop over test case
 for case_num in range(int(input())):
 
+    k = int(input())
+
     # read line as a string
-    # strr = input().strip()
+    arr = input().strip()
+    brr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
     
     # read one line and parse each word as an integer
     # lst = list(map(int,input().split()))
@@ -56,7 +72,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(arr,brr)  # please change
     
     # print result
     # Google - case number required
