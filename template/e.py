@@ -24,7 +24,7 @@ def solve_(srr, k):
     log(srr)
 
     # t = Trie()
-    h = min(k,20)
+    h = min(k,22)
 
     bag = set()
     for i,x in enumerate(srr[k-h:], start=k-h):
@@ -32,7 +32,7 @@ def solve_(srr, k):
             break
         i = max(0,i-1)
         forbidden = int(srr[i:i+h],2)
-        log(srr[i:i+h])
+        # log(srr[i:i+h])
         bag.add(forbidden)
         # log(forbidden)
 
@@ -87,6 +87,9 @@ for case_num in range(int(input())):
 
     res = solve(srr, k)  # please change
     
+    # if k == 24:
+    #     exit()
+
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
