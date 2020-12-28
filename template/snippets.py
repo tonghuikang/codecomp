@@ -7,38 +7,13 @@ from collections import defaultdict
 # import numpy as np
 # import scipy
 
-def console(*args):  
-    # print on terminal in different color
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    pass
-
-# if Codeforces environment
-if os.path.exists('input.txt'):
-    sys.stdin = open("input.txt","r")
-    sys.stdout = open("output.txt","w")
-
-    def console(*args):
-        pass
-
-if True:
-    # if memory is not a constraint
-    inp = iter(sys.stdin.buffer.readlines())
-    input = lambda: next(inp)
-else:
-    # if memory is a constraint
-    input = sys.stdin.buffer.readline
-
-
-def solve(*args):
-    # screen input
-    console("----- solving ------")
-    console(*args)
-    console("----- ------- ------")
-    return solve_(*args)
-
 
 def solve_(grid,sx,sy,ex,ey):  # fix inputs here
-
+    '''
+    Given a grid, starting point and ending point, return the lowest cost
+    Please configure the cost logic in the code
+    I don't know how this is a template LOL
+    '''
     minres = abs(sx-ex) + abs(sy-ey)
     console(minres)
     if grid == []:
@@ -50,13 +25,13 @@ def solve_(grid,sx,sy,ex,ey):  # fix inputs here
     # x-order
     grid = sorted(grid, key=lambda x: x[1])
     for (i1,x1,y1),(i2,x2,y2) in zip(grid, grid[1:]):
-        d[i1].append((i2,x2-x1))
+        d[i1].append((i2,x2-x1))  # the cost is defined as the difference
         d[i2].append((i1,x2-x1))
 
     # y-order
     grid = sorted(grid, key=lambda x: x[2])
     for (i1,x1,y1),(i2,x2,y2) in zip(grid, grid[1:]):
-        d[i1].append((i2,y2-y1))
+        d[i1].append((i2,y2-y1))  # the cost is defined as the difference
         d[i2].append((i1,y2-y1))
 
     for i,x,y in grid:
@@ -72,7 +47,6 @@ def solve_(grid,sx,sy,ex,ey):  # fix inputs here
     res = dijkstra_with_preprocessing(d, -2, -1)
 
     return min(minres,res)
-
 
 def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target):
     d = map_from_node_to_nodes_and_costs
@@ -92,7 +66,11 @@ def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target
     return costs[idxs[target]]
 
 
+import heapq as hq
 def dijkstra(G, s):
+    '''
+    G is a list of node to nodes and costs
+    '''
     n = len(G)
     visited = [False]*n
     weights = [math.inf]*n
@@ -139,45 +117,6 @@ def bootstrap(f, stack=[]):
 # def recurse(n):
 #   if (n < 2): yield n
 #   yield (yield recurse(n-1)) + (yield recurse(n-2))
-
-
-# fast read all
-for case_num in [1]:
-    # read line as a string
-    # strr = input()
-
-    # read line as an integer
-    # k = int(input())
-    
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    _, nrows = list(map(int,input().split()))
-    sx,sy,ex,ey = list(map(int,input().split()))
-
-    # currow = 2
-    # read matrix and parse as integers (after reading read nrows)
-    # lst = list(map(int,input().split()))
-    # nrows = lst[0]  # index containing information, please change
-    grid = []
-    for z in range(nrows):
-        grid.append(list(map(int,input().split())))
-
-    res = solve(grid,sx,sy,ex,ey)  # please change
-
-    # post processing methods
-    # res = [str(x) for x in res]
-    # res = " ".join(res)
-
-    # print result
-    # Google - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
-
-    # Codeforces - no case number required
-    print(res)
-
-
 
 
 
