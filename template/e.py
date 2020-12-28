@@ -30,7 +30,7 @@ def solve_(srr, k):
     for i,x in enumerate(srr[k-h:], start=k-h):
         if i+h == len(srr)+2:
             break
-        i = max(0,i-1)
+        # i = max(0,i-1)
         forbidden = int(srr[i:i+h],2)
         # log(srr[i:i+h])
         bag.add(forbidden)
