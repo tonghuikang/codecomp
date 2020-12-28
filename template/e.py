@@ -21,13 +21,15 @@ def log(*args):
 def solve_(srr, k):
     # your solution here
     srr = "".join(["0" if x == "1" else "1" for x in srr])
-
+    log(srr)
+    
     # t = Trie()
     h = min(k,20)
 
     bag = set()
     for i,x in enumerate(srr[h-1:]):
         forbidden = int(srr[i:i+h],2)
+        log(srr[i:i+h])
         bag.add(forbidden)
         # log(forbidden)
 
