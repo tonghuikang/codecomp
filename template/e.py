@@ -17,8 +17,22 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(srr, k):
     # your solution here
+    srr = "".join(["0" if x == "1" else "1" for x in srr])
+
+    for i in range(min(2**k,8)):
+        zrr = str(bin(i)[2:]).zfill(k)
+        if not zrr in srr:
+            return zrr
+
+    for i in range(1,k):
+        if "0"*(k-i) not in srr:
+            continue
+        for j in range(2**i, 2**(i+1)):
+            zrr = str(bin(i)[2:]).zfill(k)
+            if not zrr in srr:
+                return zrr
 
     return ""
 
@@ -42,7 +56,6 @@ def read_strings(rows):
 for case_num in range(int(input())):
 
     # read line as a string
-    # strr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -51,19 +64,24 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    srr = input().strip()
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(srr, k)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    if res:
+        print("YES")
+        print(res)
+    else:
+        print("NO")
     # print(len(res))  # if printing length of list
     # print(*res)  # if printing a list

@@ -119,11 +119,11 @@ for case_num in range(int(input())):
     # print(*res)  # if printing a list
 
 
-# import random
-# for i in range(3,200000):
-#     # x = random.randint(3, 200000)
-#     solve_(i)
-#     log(i)
+import random
+for i in range(3,200000+1):
+    # x = random.randint(3, 200000)
+    solve_(i)
+    log(i)
 
 
 # import random
