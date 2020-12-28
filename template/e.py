@@ -31,16 +31,15 @@ def solve_(srr, k):
         bag.add(forbidden)
         # log(forbidden)
 
-    # log(bag)
-    if len(bag) == 2**h:
-        return ""
-
     for i,a in enumerate(sorted(bag)):
         if i != a:
             val = i
             break
     else:
         val = len(bag)
+
+    if len(bag) == 2**h:
+        return ""
 
     # log(val)
     return bin(val)[2:].zfill(k)
