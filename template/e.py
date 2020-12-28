@@ -1,6 +1,7 @@
 import sys, os, getpass
 import heapq as hq
 import math, random, functools, itertools
+import collections
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline
 
@@ -21,20 +22,20 @@ def solve_(srr, k):
     # your solution here
     srr = "".join(["0" if x == "1" else "1" for x in srr])
 
-    for i in range(min(2**k,8)):
-        zrr = str(bin(i)[2:]).zfill(k)
-        if not zrr in srr:
-            return zrr
+    # t = Trie()
+    h = min(k,20)
 
-    for i in range(1,k):
-        if "0"*(k-i) not in srr:
-            continue
-        for j in range(2**i, 2**(i+1)):
-            zrr = str(bin(i)[2:]).zfill(k)
-            if not zrr in srr:
-                return zrr
+    bag = set(range(2**h))
+    for i,x in enumerate(srr[h-1:]):
+        forbidden = srr[i:i+h]
+        # log(forbidden)
+        bag.discard(int(forbidden,2))
 
-    return ""
+    if not bag:
+        return ""
+    
+    return bin(min(bag))[2:].zfill(k)
+
 
 
 def solve(*args):
