@@ -25,16 +25,25 @@ def solve_(srr, k):
     # t = Trie()
     h = min(k,20)
 
-    bag = set(range(2**h))
+    bag = set()
     for i,x in enumerate(srr[h-1:]):
-        forbidden = srr[i:i+h]
+        forbidden = int(srr[i:i+h],2)
+        bag.add(forbidden)
         # log(forbidden)
-        bag.discard(int(forbidden,2))
 
-    if not bag:
+    # log(bag)
+    if len(bag) == 2**h:
         return ""
-    
-    return bin(min(bag))[2:].zfill(k)
+
+    for i,a in enumerate(sorted(bag)):
+        if i != a:
+            val = i
+            break
+    else:
+        val = len(bag)
+
+    # log(val)
+    return bin(val)[2:].zfill(k)
 
 
 
