@@ -16,10 +16,27 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(lst, k):
     # your solution here
+    k = k-1
 
-    return ""
+    # impose as it progresses
+    # check if last element is in the limit
+
+    upper = lst[0]+k
+    lower = max(0,lst[0]-k)
+    for i,x in enumerate(lst[1:-1], start=1):
+        if lower > x+k or upper < x:
+            # log("fail", lower, x, upper)
+            return "no"
+        upper = min(upper, x+k) + k
+        lower = max(0,max(lower, x) - k)
+        # log(lower, upper)
+
+    if lower <= lst[-1] <= upper:
+        return "YES"
+
+    return "NO"
 
 
 def solve(*args):
@@ -50,13 +67,14 @@ for case_num in range(int(input())):
     # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _, k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(lst, k)  # please change
     
     # print result
     # Google - case number required

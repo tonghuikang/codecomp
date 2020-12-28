@@ -16,10 +16,22 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(arr,brr):
     # your solution here
 
-    return ""
+    cur = 0
+    maxa = 0
+    for a in arr:
+        cur += a
+        maxa = max(maxa, cur)
+
+    cur = 0
+    maxb = 0
+    for a in brr:
+        cur += a
+        maxb = max(maxb, cur)
+
+    return maxa + maxb
 
 
 def solve(*args):
@@ -47,16 +59,19 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    _ = int(input())
+    arr = list(map(int,input().split()))
+
+    _ = int(input())
+    brr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(arr, brr)  # please change
     
     # print result
     # Google - case number required
