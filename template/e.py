@@ -23,16 +23,24 @@ def solve_(srr, k):
     srr = "".join(["0" if x == "1" else "1" for x in srr])
     log(srr)
 
+    candidate = "0"*k
+    if not candidate in srr:
+        return candidate
+    
+    candidate = "0"*(k-1) + "1"
+    if not candidate in srr:
+        return candidate
+
     # t = Trie()
-    h = min(k,22)
+    h = min(k,20)
 
     bag = set()
     for i,x in enumerate(srr[k-h:], start=k-h):
-        if i+h == len(srr)+2:
+        if i+h == len(srr)+1:
             break
         # i = max(0,i-1)
         forbidden = int(srr[i:i+h],2)
-        # log(srr[i:i+h])
+        log(srr[i:i+h])
         bag.add(forbidden)
         # log(forbidden)
 
@@ -42,7 +50,7 @@ def solve_(srr, k):
             break
     else:
         val = len(bag)
-
+    log(bag)
     if len(bag) == 2**h:
         return ""
 
@@ -67,8 +75,9 @@ def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
 # for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
 
+skipping = True
+for case_num in range(int(input())):
     # read line as a string
 
     # read one line and parse each word as a string
@@ -85,8 +94,20 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
+    if False and skipping and srr == "10101111011010011110100111010110101011101000001101000001000111101100000010011001001100001110010001001":
+        for _ in range(5485):
+            _ = input()
+            _ = input()
+        n,k = list(map(int,input().split()))
+        srr = input().strip()
+        print(n,k)
+        print(srr)
+        print(solve(srr, k))
+    else:
+        skipping = False
+
     res = solve(srr, k)  # please change
-    
+
     # if k == 24:
     #     exit()
 
