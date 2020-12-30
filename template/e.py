@@ -17,17 +17,29 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 M9 = 10**9+7
+value = [(2**i)%M9 for i in range(60)]
 
 def solve_(lst):
     # your solution here
 
     count = [0 for _ in range(60)]
-    value = [(2**i)%M9 for i in range(60)]
 
-    arr = [bin(a)[2:].zfill(60)[::-1] for a in lst]
+    arr = []
+    for x in lst:
+        ar = []
+        for i in range(60):
+            if x&1 == 1:
+                ar.append(1)
+            else:
+                ar.append(0)
+            x = x >> 1
+        arr.append(ar)
+
+    # log(arr)
+
     for br in arr:
         for i,b in enumerate(br):
-            if b == "1":
+            if b == 1:
                 count[i] += 1
     
     # log(count)
@@ -37,11 +49,11 @@ def solve_(lst):
         # and calculation
         AND = 0
         for i,x in enumerate(br):
-            if x == "1":
+            if x:
                 AND += count[i]*value[i]
         OR = 0
         for i,x in enumerate(br):
-            if x == "1":
+            if x:
                 OR += len(lst)*value[i]
             else:
                 OR += count[i]*value[i]
