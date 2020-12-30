@@ -34,10 +34,10 @@ ll solve() {
     	};
     };
     
-    for (ll i = 0; i < 60; ++i){
-        cout << C[i] << " ";
-    }
-    cout << endl;
+    // for (ll i = 0; i < 60; ++i){
+    //     cout << C[i] << " ";
+    // }
+    // cout << endl;
 
     
 	ll ret = 0;
@@ -53,14 +53,14 @@ ll solve() {
     			OR += C[j] * V[j];
     		}
     		a = a/2;
-    	ret += OR * AND;
-		cout << i << " " << k << " " << OR << " " << AND << endl;
-		i++;
-		if (i == k){
-			break;
 		}
+    	ret += OR * AND;
+		// cout << i << " " << k << " " << OR << " " << AND << endl;
+		// i++;
+		// if (i == k){
+		// 	break;
+		// }
     	ret = ret%M9;
-    	};
 	};
     return ret%M9;
 }
