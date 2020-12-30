@@ -42,7 +42,7 @@ def solve_(lst):
             if b == 1:
                 count[i] += 1
     
-    # log(count)
+    log(count)
     res = 0
 
     for br in arr:
@@ -58,6 +58,7 @@ def solve_(lst):
             else:
                 OR += count[i]*value[i]
         # log(br, AND, OR)
+        log(res)
         res += AND * OR
         res = res%M9
         

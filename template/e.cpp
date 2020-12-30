@@ -1,8 +1,7 @@
 #include<iostream>
 using namespace std;
 
-typedef long long ll;
-typedef long double ld;
+typedef std::int64_t ll;
  
 const ll MAX = 5e5+10;
  
@@ -27,7 +26,7 @@ ll solve() {
 	for (ll i = 0; i < k; ++i) {
     	a = A[i];
     	for (ll j = 0; j < 60; ++j){
-    		if (a%2 == 1) {
+    		if (a&1) {
     			C[j] += 1;
     		}
     		a = a/2;
@@ -46,7 +45,7 @@ ll solve() {
     	AND = 0;
     	a = A[i];
     	for (ll j = 0; j < 60; ++j) {
-    		if (a%2 == 1) {
+    		if (a&1) {
     			AND += C[j] * V[j];
     			OR += k * V[j];
     		} else {
@@ -54,7 +53,8 @@ ll solve() {
     		}
     		a = a/2;
 		}
-    	ret += OR * AND;
+    	ret += (OR%M9) * (AND%M9);
+		// cout << ret << endl;
 		// cout << i << " " << k << " " << OR << " " << AND << endl;
 		// i++;
 		// if (i == k){
