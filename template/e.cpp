@@ -26,7 +26,7 @@ ll M9 = 1000000000 + 7;
 ll solve() {
 	for (ll i = 0; i < k; ++i) {
     	a = A[i];
-    	for (ll j = 0; j < 60; ++i){
+    	for (ll j = 0; j < 60; ++j){
     		if (a%2) {
     			C[j] += 1;
     		}
@@ -62,8 +62,8 @@ int main() {
     cin >> N;
     for (ll z = 0; i < N; ++z) {
     	cin >> k;
-		for (ll i = 0; i < N; ++i) cin >> A[i];
-    	cout << solve();
+		for (ll i = 0; i < k; ++i) cin >> A[i];
+    	cout << solve() << endl;
     }
     return 0;
 }
