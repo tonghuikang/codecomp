@@ -16,10 +16,14 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(lst):
     # your solution here
+    s = set()
+    for i,x in enumerate(lst):
+        for y in lst[i+1:]:
+            s.add(y-x)
 
-    return ""
+    return len(s)
 
 
 def solve(*args):
@@ -47,16 +51,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required
