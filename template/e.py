@@ -21,10 +21,10 @@ M9 = 10**9+7
 def solve_(lst):
     # your solution here
 
-    count = [0 for _ in range(61)]
-    value = [(2**i)%M9 for i in range(61)]
+    count = [0 for _ in range(60)]
+    value = [(2**i)%M9 for i in range(60)]
 
-    arr = [bin(a)[2:].zfill(61)[::-1] for a in lst]
+    arr = [bin(a)[2:].zfill(60)[::-1] for a in lst]
     for br in arr:
         for i,b in enumerate(br):
             if b == "1":
