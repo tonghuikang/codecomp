@@ -46,7 +46,7 @@ def solve_(lst):
             else:
                 OR += count[i]*value[i]
         # log(br, AND, OR)
-        res += AND%M9 * OR%M9
+        res += AND * OR
         res = res%M9
         
     return res%M9
