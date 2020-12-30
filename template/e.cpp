@@ -1,9 +1,6 @@
 #include<iostream>
 using namespace std;
 
-int i;
-int n;
-
 typedef long long ll;
 typedef long double ld;
  
@@ -24,10 +21,13 @@ ll tmp = 1;
 ll M9 = 1000000000 + 7;
 
 ll solve() {
+	for (ll i = 0; i < 60; ++i) {
+		C[i] = 0;
+	}
 	for (ll i = 0; i < k; ++i) {
     	a = A[i];
     	for (ll j = 0; j < 60; ++j){
-    		if (a%2) {
+    		if (a%2 == 1) {
     			C[j] += 1;
     		}
     		a = a/2;
@@ -59,8 +59,10 @@ int main() {
 		V[i] = tmp;
 		tmp = (tmp * 2) % M9;
 	}
+
+
     cin >> N;
-    for (ll z = 0; i < N; ++z) {
+    for (ll z = 0; z < N; ++z) {
     	cin >> k;
 		for (ll i = 0; i < k; ++i) cin >> A[i];
     	cout << solve() << endl;
