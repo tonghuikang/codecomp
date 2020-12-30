@@ -29,7 +29,7 @@ ll solve() {
     		if (a&1) {
     			C[j] += 1;
     		}
-    		a = a/2;
+    		a = a >> 1;
     	};
     };
     
@@ -51,7 +51,7 @@ ll solve() {
     		} else {
     			OR += C[j] * V[j];
     		}
-    		a = a/2;
+    		a = a >> 1;
 		}
     	ret += (OR%M9) * (AND%M9);
 		// cout << ret << endl;
