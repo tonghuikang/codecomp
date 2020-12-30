@@ -4,7 +4,7 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
  
-const int MAX = 5e5+10;
+const ll MAX = 5e5+10;
  
 ll N;
 ll k;
@@ -34,24 +34,35 @@ ll solve() {
     	};
     };
     
+    for (ll i = 0; i < 60; ++i){
+        cout << C[i] << " ";
+    }
+    cout << endl;
+
+    
 	ll ret = 0;
 	for (ll i = 0; i < k; ++i) {
     	OR = 0;
     	AND = 0;
     	a = A[i];
     	for (ll j = 0; j < 60; ++j) {
-    		if (a%2) {
+    		if (a%2 == 1) {
     			AND += C[j] * V[j];
-    			OR += N * V[j];
+    			OR += k * V[j];
     		} else {
     			OR += C[j] * V[j];
     		}
     		a = a/2;
     	ret += OR * AND;
+		cout << i << " " << k << " " << OR << " " << AND << endl;
+		i++;
+		if (i == k){
+			break;
+		}
     	ret = ret%M9;
     	};
 	};
-    return ret;
+    return ret%M9;
 }
  
 int main() {
@@ -60,10 +71,9 @@ int main() {
 		tmp = (tmp * 2) % M9;
 	}
 
-
     cin >> N;
     for (ll z = 0; z < N; ++z) {
-    	cin >> k;
+    	cin >> k;       
 		for (ll i = 0; i < k; ++i) cin >> A[i];
     	cout << solve() << endl;
     }
