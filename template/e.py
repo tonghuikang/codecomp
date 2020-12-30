@@ -16,11 +16,40 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
+M9 = 10**9+7
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    count = [0 for _ in range(61)]
+    value = [(2**i)%M9 for i in range(61)]
+
+    arr = [bin(a)[2:].zfill(61)[::-1] for a in lst]
+    for br in arr:
+        for i,b in enumerate(br):
+            if b == "1":
+                count[i] += 1
+    
+    # log(count)
+    res = 0
+
+    for br in arr:
+        # and calculation
+        AND = 0
+        for i,x in enumerate(br):
+            if x == "1":
+                AND += count[i]*value[i]
+        OR = 0
+        for i,x in enumerate(br):
+            if x == "1":
+                OR += len(lst)*value[i]
+            else:
+                OR += count[i]*value[i]
+        # log(br, AND, OR)
+        res += AND%M9 * OR%M9
+        res = res%M9
+        
+    return res%M9
 
 
 def solve(*args):
@@ -48,16 +77,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    res = solve(lst)  # please change
     
     # print result
     # Google - case number required

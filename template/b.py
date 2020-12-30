@@ -19,10 +19,10 @@ def log(*args):
 def solve_(lst):
     # your solution here
 
-    lst[0] = max(1,lst[0]-1)
+    # lst[0] = max(1,lst[0]-1)
     for i,x in enumerate(lst[1:], start=1):
         if lst[i] > lst[i-1] + 1:
-            lst[i] -= 1
+            continue
         elif lst[i] == lst[i-1] + 1:
             continue
         elif lst[i] <= lst[i-1]:

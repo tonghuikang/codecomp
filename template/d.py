@@ -17,10 +17,39 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(wrr, edges):
     # your solution here
 
-    return ""
+    # wrr = sorted(wrr)
+    g = defaultdict(list)
+
+    for a,b in edges:
+        g[a].append(b)
+        g[b].append(a)
+
+    # log(g)
+
+    counts = [-1 for _ in wrr]
+    for k,v in g.items():
+        for x in v:
+            counts[x] += 1
+    
+    log(wrr)
+    log(counts)
+
+    arr = []
+    for w,c in zip(wrr, counts):
+        for _ in range(c):
+            arr.append(w)
+
+    arr = sorted(arr)[::-1]
+    log(arr)
+
+    res = [sum(wrr)]
+    for x in arr:
+        res.append(res[-1] + x)
+
+    return res
 
 
 def solve(*args):
@@ -48,22 +77,24 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
     
     # read one line and parse each word as an integer
-    # lst = list(map(int,input().split()))
+    wrr = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)
+    edges = read_matrix(k-1)
     # arr = read_strings(k)
 
-    res = solve()  # please change
+    edges = [(x-1, y-1) for x,y in edges]
+
+    res = solve(wrr, edges)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))  # if printing length of list
-    # print(*res)  # if printing a list
+    print(*res)  # if printing a list
