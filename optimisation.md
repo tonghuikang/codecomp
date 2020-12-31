@@ -16,6 +16,8 @@ Max-flow https://github.com/Errichto/contest_library/blob/master/dinic.cpp
 
 **Convex optimisation**
 
+(Ternary search?)
+
 ```python
 import numpy as np
 from scipy.optimize import minimize
@@ -87,26 +89,7 @@ You no longer build by number of items selected, you iterate from the first poss
 
 **Mixed linear programming**
 
-This one you need to use a library. It seems to be a very complicated problem.
-
-
-
-**Integer factorisation (brute force)**
-
-Just in case you need it.
-
-```python
-def factors(nr):
-    i = 2
-    factors = []
-    while i <= nr:
-        if (nr % i) == 0:
-            factors.append(i)
-            nr = nr / i
-        else:
-            i = i + 1
-    return factors
-```
+Use Google-OR tools for this. It seems to be a very complicated problem.
 
 
 
@@ -137,6 +120,31 @@ def knapsack(items, maxweight):  # exact weight
             j -= items[i][1]
     result.reverse()
     return bestvalue(len(items), maxweight), result
+```
+
+
+
+**scipy.optimize**
+
+https://docs.scipy.org/doc/scipy/reference/optimize.html
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+
+class Solution:
+    def getMinDistSum(self, 
+                      positions: List[List[int]]) -> float:
+        def loss_function(z):
+            loss = 0
+            for a, b in positions:
+                loss += ((z[0] - a)**2 + 
+                         (z[1] - b)**2)**0.5
+            return loss
+        
+        res = minimize(loss_function, [0,0])
+        print(res)
+        return res.fun
 ```
 
 

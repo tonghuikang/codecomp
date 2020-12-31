@@ -6,8 +6,6 @@ Caculate probability from a binomial distribution (Kickstart 2020 Round B Questi
 
 
 
-
-
 ### Combinatorics
 
 If you are using python 3.8

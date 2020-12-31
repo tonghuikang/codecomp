@@ -1,5 +1,7 @@
 # Big data reference
 
+(To be moved to another repository. I should make it a standard toolset)
+
 Refer to methyldragon for a compiled snippets for [numpy]([https://github.com/methylDragon/python-data-tools-reference/blob/master/Numpy/01%20Numpy%20Basics.md](https://github.com/methylDragon/python-data-tools-reference/blob/master/Numpy/01 Numpy Basics.md)) and [pandas]([https://github.com/methylDragon/python-data-tools-reference/blob/master/Pandas/01%20Pandas%20Basics.md](https://github.com/methylDragon/python-data-tools-reference/blob/master/Pandas/01 Pandas Basics.md)).
 
 Here I document some snippets and comments that were useful for my internship.
