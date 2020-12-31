@@ -18,8 +18,16 @@ def log(*args):
 
 def solve_(srr):
     # your solution here
-
-    return ""
+    srr = list(srr)
+    if len(srr) == 1:
+        return 0
+    if srr[1] == srr[0]:
+        srr[1] = "."
+    for i,x in enumerate(srr[2:], start=2):
+        if srr[i] == srr[i-2] or srr[i] == srr[i-1]:
+            srr[i] = "."
+    log(srr)
+    return srr.count(".")
 
 
 def solve(*args):
