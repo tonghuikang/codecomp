@@ -1,115 +1,81 @@
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,sse4.1,sse4.2,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+
 #include <bits/stdc++.h>
 
 using namespace std;
 
-template <typename A, typename B>
-string to_string(pair<A, B> p);
+#define f first
+#define s second
+#define pb push_back
+#define mp make_pair
+#define all(v) v.begin(), v.end()
+#define sz(v) (int)v.size()
 
-template <typename A, typename B, typename C>
-string to_string(tuple<A, B, C> p);
+#define MOO(i, a, b) for (int i=a; i<b; i++)
+#define M00(i, a) for (int i=0; i<a; i++)
+#define MOOd(i,a,b) for (int i = (b)-1; i >= a; i--)
+#define M00d(i,a) for (int i = (a)-1; i >= 0; i--)
 
-template <typename A, typename B, typename C, typename D>
-string to_string(tuple<A, B, C, D> p);
+#define FAST ios::sync_with_stdio(0); cin.tie(0);
+#define finish(x) return cout << x << '\n', 0;
+#define dbg(x) cerr << ">>> " << #x << " = " << x << "\n";
 
-string to_string(const string& s) {
-  return '"' + s + '"';
+typedef long long LL;
+typedef long long ll;
+typedef long double ld;
+typedef pair<int,int> pi;
+typedef pair<ll,ll> pll;
+typedef pair<ld,ld> pd;
+typedef complex<ld> cd;
+typedef vector<int> vi;
+typedef vector<ll> vll;
+
+// ll MOD = 1000000007;
+
+const int N = 500 * 1000 + 7;
+const int P = 60;
+const int MX = 1e9 + 7;
+
+int n;
+LL in[N];
+int cnt[P];
+
+void solve(){
+	scanf("%d", &n);
+	for(int i = 0; i < P; ++i)
+		cnt[i] = 0;
+	
+	for(int i = 1; i <= n; ++i){
+		scanf("%lld", &in[i]);
+		for(int j = 0; j < P; ++j)
+			cnt[j] += in[i] >> j & 1;
+	}
+	
+	int ans = 0;
+	for(int i = 1; i <= n; ++i){
+		LL exp_or = 0, exp_and = 0;
+		for(int j = 0; j < P; ++j){
+			if(in[i] >> j & 1){
+				exp_or += (1LL << j) % MX * n;
+				exp_and += (1LL << j) % MX * cnt[j];
+			}
+			else
+				exp_or += (1LL << j) % MX * cnt[j];
+		}
+		
+		exp_and %= MX, exp_or %= MX;
+		ans = (ans + 1LL * exp_or * exp_and) % MX;
+	}
+	
+	printf("%d\n", ans);
 }
 
-string to_string(const char* s) {
-  return to_string((string) s);
-}
-
-string to_string(bool b) {
-  return (b ? "true" : "false");
-}
-
-string to_string(vector<bool> v) {
-  bool first = true;
-  string res = "{";
-  for (int i = 0; i < static_cast<int>(v.size()); i++) {
-    if (!first) {
-      res += ", ";
-    }
-    first = false;
-    res += to_string(v[i]);
-  }
-  res += "}";
-  return res;
-}
-
-template <size_t N>
-string to_string(bitset<N> v) {
-  string res = "";
-  for (size_t i = 0; i < N; i++) {
-    res += static_cast<char>('0' + v[i]);
-  }
-  return res;
-}
-
-template <typename A>
-string to_string(A v) {
-  bool first = true;
-  string res = "{";
-  for (const auto &x : v) {
-    if (!first) {
-      res += ", ";
-    }
-    first = false;
-    res += to_string(x);
-  }
-  res += "}";
-  return res;
-}
-
-template <typename A, typename B>
-string to_string(pair<A, B> p) {
-  return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";
-}
-
-template <typename A, typename B, typename C>
-string to_string(tuple<A, B, C> p) {
-  return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ")";
-}
-
-template <typename A, typename B, typename C, typename D>
-string to_string(tuple<A, B, C, D> p) {
-  return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ", " + to_string(get<3>(p)) + ")";
-}
-
-void debug_out() { cerr << endl; }
-
-template <typename Head, typename... Tail>
-void debug_out(Head H, Tail... T) {
-  cerr << " " << to_string(H);
-  debug_out(T...);
-}
-
-#ifdef LOCAL
-#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
-#else
-#define debug(...) 42
-#endif
-
-const long long MAX = (long long) 360 * (long long) 1e9;
-const long double pi = acos((long double) -1.0);
-const long double q = pi / MAX;
- 
-ll T;
-ll M9 = 1000000000 + 7;
-
-ll solve() {
-    return 0;
-}
- 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    int tt;
-    cin >> tt;
-    for (int qq = 1; qq <= tt; qq++) {
-        cout << "Case #" << qq << ": ";  // Google and Facebook require this
-        // your logic here    
-        
-    }
-    return 0;
+int main(){ FAST
+	int cases;
+	scanf("%d", &cases);
+	
+	while(cases--)
+		solve();
+	return 0;
 }
