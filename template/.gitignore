@@ -1,5 +1,6 @@
 *.ipynb
 __pycache__/
+.vscode/
 
 # compiled C++ files
 a.out
