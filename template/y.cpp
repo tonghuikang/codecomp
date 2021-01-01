@@ -52,47 +52,14 @@ LL arr[N];
 LL cnt[P];
 LL val[P];
 
-void solve() {
-    REP(i, 0, P)
-    cnt[i] = 0;
-    REP(i, 0, P)
-    val[i] = (1LL << i) % M9;
-
-    SCAN_INT(n);
-    SCAN_ARR(arr, n);
-
-    REP(i, 1, n + 1) {
-        REP(j, 0, P) { cnt[j] += arr[i] >> j & 1; }
-    }
-
-    LL ans = 0;
-    REP(i, 1, n + 1) {
-        LL exp_or = 0;
-        LL exp_and = 0;
-
-        REP(j, 0, P) {
-            if (arr[i] & (1LL << j)) {
-                exp_or += val[j] * n;
-                exp_and += val[j] * cnt[j];
-            } else {
-                exp_or += val[j] * cnt[j];
-            }
-            // dbg(exp_or);
-            // dbg(exp_and);
-            exp_and %= M9;
-            exp_or %= M9;
-        }
-        ans = (ans + 1LL * exp_or * exp_and) % M9;
-    }
-    printf("%lld\n", ans);
-}
+void solve() {}
 
 int main() {
     FAST int total_cases;
     SCAN_INT(total_cases);
 
     REP(case_num, 0, total_cases) {
-        // printf("Case #%d: ", case_num);    // for Google and Facebook
+        // printf("Case #%d: ", case_num);  // for Google and Facebook
         solve();
     }
     return 0;

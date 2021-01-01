@@ -16,9 +16,9 @@ from collections import Counter, defaultdict, deque
 # lst = input().split()
 
 # read one line and parse each word as an integer
-# a,b,c = list(map(int,input().split()))
+a,b = list(map(int,input().split()))
 # lst = list(map(int,input().split()))
 
 # include logic here
 
-print()
+print(a+b)
