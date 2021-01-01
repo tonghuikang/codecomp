@@ -16,7 +16,7 @@ From the prespective of an interviewer
 
 
 
-Competitions O(N) suffice. But ???
+In competitions we hardly differentiate between O(N) and O(N log N) solutions. However in coding interview, a O(N log N) will not pass the interview. Moreover, the space constraint is usually asked to be minimised.
 
 
 

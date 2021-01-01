@@ -10,11 +10,7 @@ https://github.com/Errichto/contest_library/blob/master/number_theory.cpp
 
 https://github.com/Errichto/contest_library/blob/master/fft.cpp (just use Numpy, but also provide real number calculation as well)
 
-Prime factorisation - there is a unique way to factorise an integer into number factors.
-
-
-
-Please learn how to do division in the modulo space
+Prime factorisation - there is a unique way to factorise an integer into number factors
 
 
 
@@ -61,7 +57,7 @@ Geometric progression
 Modular inverse
 
 ```python
-MMI = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or MMI(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
 ```
 
 If the modulo is prime
@@ -70,9 +66,13 @@ If the modulo is prime
 pow(base, p-2, p)
 ```
 
+If you are using Python 3.8
 
+```python
+pow(base, -1, p)
+```
 
-
+For division in modular space `(a/b) mod n`, compute the modular inverse and multiply `a * modinv(b, n)` 
 
 
 
@@ -105,8 +105,6 @@ You can obtain the smallest factor all numbers up to N in $O(N \log \log N)$. WI
 
 
 List of primes (get a better way to generate this list?)
-
-
 
 ```
 primes = ''' 
@@ -159,3 +157,8 @@ primes = '''
 primes = [int(x) for x in primes.replace('\n', ' ').split()]
 ```
 
+
+
+Prime checking algorithm
+
+TBC

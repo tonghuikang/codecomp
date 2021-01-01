@@ -8,45 +8,7 @@ There are a few types of graphs
 
 Official essay on Python graphs - https://www.python.org/doc/essays/graphs/
 
-(Why didn't Python already have standard Graph object that implement common algorithms? Trying to make one here).
-
-A tree is a directed graph with all (except the root node) with an indegree.
-
-A **trie** is a tree-like data structure whose nodes store the letters of an alphabet. 
-
-
-
-**Creating a graph from a grid**
-
-
-```
-        g = defaultdict(list)
-        row_length = len(grid[0])
-
-        for i,row in enumerate(grid):
-            for j,cell in enumerate(row):
-                yy = []
-                if j != 0:
-                    yy.append(j-1)
-                if j != len(grid[0]) - 1:
-                    yy.append(j+1)
-    
-                xx = []
-                if i != 0:
-                    xx.append(i-1)
-                if i != len(grid) - 1:
-                    xx.append(i+1)
-    
-                for x in xx:
-                    y = j
-                    if grid[i][j] != 0 and grid[x][y] != 0:
-                        g[i*row_length + j].append(x*row_length + y)
-                for y in yy:
-                    x = i
-                    if grid[i][j] != 0 and grid[x][y] != 0:
-                        g[i*row_length + j].append(x*row_length + y)
-
-```
+A tree is a directed graph with all (except the root node) with an indegree. (Refer to tree.md)
 
 
 

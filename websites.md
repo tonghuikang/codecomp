@@ -1,12 +1,8 @@
 # Coding platforms
 
+[TOC]
+
 Calendar containing all competitions information https://competitiveprogramming.info/calendar
-
-
-
-Belongs somewhere (somewhere)
-
-- Procedures of 
 
 
 
@@ -54,18 +50,27 @@ For interactive problems, just fill up their functions.
 
 ### Hackerrank
 
-They have mostly discontinued contests, only having almostly monthly contest with nice prizes.
+They have mostly discontinued contests.
 
+
+
+### TopCoder
+
+The defining feature of TopCoder is the focus on hacking other's solutions.
+
+The UI is quite bad.
+
+
+### CodeChef
+
+Might as well do Codeforces. The UI is equally bad.
 
 
 
 ### Google Coding platforms
 
-This refers to the [Kickstart](https://codingcompetitions.withgoogle.com/kickstart) and [Codejam](https://codingcompetitions.withgoogle.com/codejam) environments. This may be applicable to other platform. You do not need this for Leetcode and their IDE is too good.
+This refers to the [Kickstart](https://codingcompetitions.withgoogle.com/kickstart) and [Codejam](https://codingcompetitions.withgoogle.com/codejam) environments. This may be applicable to other platforms.
 
-
-
-You need to be able to hedge that your solution works. This may not be known in advance.
 
 Interactive problems might be easier to compensate on its difficulty of implementation. Many interactive problems have a lower bound on the number of moves that can be made, and you can experiment with that to formulate a strategy.
 
@@ -77,9 +82,9 @@ Libraries allowed in Google coding environment, other than native libraries - Nu
 
 ```
 python 3.5.3 (package: python3.5)
- numpy 1.16.2 (pip install numpy)
- scipy 1.2.1 (pip install scipy)
- python3.5 Solution.py
+numpy 1.16.2 (pip install numpy)
+scipy 1.2.1 (pip install scipy)
+python3.5 Solution.py
 ```
 
 #### Interactive problems
@@ -109,25 +114,7 @@ There are three sets of data
 - Private set - you need to submit your solution within 6 minutes from downloading this set
   - Please test your algorithm on the largest possible input before trying this. You may need to resolve stack overflow issues.
 
-
-
-
-## Running code - General
-
-Try this
-
-```python
-T, B = map(int, input().split())
-```
-
-To run with an input file
-
-```
-python3 a.py < a.in
-```
-
-
-For python2 it is `rawinput()`
+It is possible to run your code on parallel machines. You might want to set that up.
 
 
 
@@ -137,7 +124,7 @@ This feature is available on Leetcode, Google and Codeforces.
 
 You need to flush after printing `print(i, flush=True)`.  
 
-When done, please run `sys.exit()`
+When done, please execute `sys.exit()`
 
 
 

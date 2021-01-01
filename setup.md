@@ -15,7 +15,7 @@ This does not help you with anything other than helping people like me perform b
 
 ## Foreword
 
-Spending one or two one-and-half hours every week on solving programming problems is pretty fun. I can see myself playing leetcode for a long time.
+Spending one or two one-and-half hours every week on solving programming problems is pretty fun. I can see myself playing LeetCode for a long time.
 
 There are code snippets and references that would have helped me to become more efficient at coding. Here I am sharing with you what I have done for myself.
 

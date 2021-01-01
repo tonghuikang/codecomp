@@ -2,7 +2,7 @@
 
 Is there really a case where the code passes on C++ but not Python?
 
-
+Yes.
 
 When you are nesting for loops but intend to run on O(n), avoid enumerate for the inner loop.
 
@@ -30,7 +30,7 @@ To read the remaining lines quickly
 
 ```python
 import sys
-lines = sys.stdin.readlines()
+input = sys.stdin.readline  # to read input quickly
 ```
 
 

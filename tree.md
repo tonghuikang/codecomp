@@ -90,3 +90,9 @@ class Trie:
 ## AVL Tree
 
 Self-balancing tree. Please refer to https://github.com/tonghuikang/binary-tree for a Python 2 implementation.
+
+
+
+## Interval Tree
+
+TBC
