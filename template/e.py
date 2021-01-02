@@ -1,3 +1,4 @@
+import collections
 import sys, os, getpass
 import heapq as hq
 import math, random, functools, itertools
@@ -37,22 +38,6 @@ def bootstrap(f, stack=[]):
     return wrappedfunc
 
 
-def build_graph(edges, bidirectional=False, costs=None):
-    g = defaultdict(list)
-    if costs:
-        for (a,b),cost in zip(edges, costs):
-            g[a].append((b,cost))
-            if bidirectional:
-                g[b].append((a,cost))
-    else:
-        for a,b in edges:
-            g[a].append(b)
-            if bidirectional:
-                g[b].append(a)
-    return g
-
-
-
 def solve_(edges, queries):
     # your solution here
 
@@ -71,15 +56,22 @@ def solve_(edges, queries):
 
     del queries
 
-    g = build_graph(edges, bidirectional=True)
+    g = defaultdict(list)
+    c = Counter()
+
+    for a,b in edges:
+        g[a].append(b)
+        g[b].append(a)
+        c[a] += 1
+        c[b] += 1
 
     del edges
 
     # log(g)
 
     start = 0
-    for k,v in g.items():
-        if len(v) == 1:
+    for k,v in c.items():
+        if v == 1:
             start = k
             break
 
@@ -96,11 +88,11 @@ def solve_(edges, queries):
                 continue
             visited.add(nex)
             if (nex,cur) in edge_map_one:
-                idx = edge_map_one[nex,cur]
+                idx = edge_map_one[(nex,cur)]
                 # x = edges_one[idx]
                 y = edges_two[idx]
             else:
-                idx = edge_map_two[nex,cur]
+                idx = edge_map_two[(nex,cur)]
                 # x = edges_two[idx]
                 y = edges_one[idx]
             # x,y = y,x
@@ -193,7 +185,7 @@ for case_num in [1]:  # no loop over test case
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    for r in res:
-        print(r)
+    # for r in res:
+    print("\n".join(str(r) for r in res))
     # print(len(res))  # if printing length of list
     # print(*res)  # if printing a list
