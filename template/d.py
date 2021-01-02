@@ -16,21 +16,6 @@ M9 = 10**9 + 7  # 998244353
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 LARGE = sys.maxsize
 
-def build_graph(edges, bidirectional=False, costs=None):
-    g = defaultdict(list)
-    if costs:
-        for (a,b),c in zip(edges, costs):
-            g[a].append((b,c))
-            if bidirectional:
-                g[b].append((a,c))
-    else:
-        for a,b in edges:
-            g[a].append(b)
-            if bidirectional:
-                g[b].append(c)
-    return g
-
-
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
 # OFFLINE_TEST = False  # codechef does not allow getpass

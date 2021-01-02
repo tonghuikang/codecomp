@@ -1,49 +1,10 @@
-# Speed optimisation
+# Use of numba on AtCoder
 
-Is there really a case where the code passes on C++ but not Python?
+AtCoder is more experimental with their platform and allows other popular Python packages.
 
-Yes.
+Libraries `numba` and `numpy` allows faster computations in Python by specifying the data types in the array. This is only tested in Python 3.8.2 in AtCoder
 
-When you are nesting for loops but intend to run on O(n), avoid enumerate for the inner loop.
-
-Replacing 
-
-```python
-          for z,x in enumerate(lst[i+1:], start=i+1):
-```
-
-with
-
-```python
-          for z in range(i+1, n_months+1):
-```
-
-would have made my code run within time limit. I am still trying to find a reproducible example.
-
-
-
-
-
-# Fast reading
-
-To read the remaining lines quickly
-
-```python
-import sys
-input = sys.stdin.readline  # to read input quickly
-```
-
-
-
-https://codeforces.com/blog/entry/82989 On fast reading
-
-
-
-# Use of numba
-
-This is only tested in Python 3.8.2 in AtCoder
-
-
+(Why won't `numpy` alone suffice?)
 
 Please refer to a [past question](https://atcoder.jp/contests/abc175/submissions?f.Task=abc175_e&f.Language=4006&f.Status=AC) for examples.
 
@@ -52,17 +13,17 @@ My implementation
 
 - import statements
 
-```
+```python
 import numpy as np
 import numba
 from numba import njit, b1, i4, i8, f8
 ```
 
 - function decorator
-```
+```python
 @njit((i8[:], i8, i8, i8), cache=True)
 def solve(items,R,C,K):  # fix inputs here
-	# use
+	# your logic here
 	return something
 ```
 
@@ -80,8 +41,3 @@ print(solve(XYV, H, W, K))
 ```
 
 Vectorised operations are now allowed (with numpy arrays), but not necessary for optimisation.
-
-
-
-
-

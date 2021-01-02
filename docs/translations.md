@@ -1,8 +1,12 @@
-Translation of data structures of algorithms terminology
+# Chinese Translations
+
+I sometimes read LeetCode China forums, and I am interested in a role in a Chinese-owned company (e.g. Bytedance). This documents the translations.
 
 For name of the person, just say the English name.
 
+The list of concepts is based on [E-Maxx's](https://cp-algorithms.com/)
 
+[TOC]
 
 **General terminologies**
 

@@ -20,6 +20,14 @@ To run the code
 The debug statements prints in a different color.
 You can submit the code without commenting out the debugging statements, I do not think it should affect the run time.
 
+To compile the code and run for all test cases
+
+```
+./run_py.sh a
+```
+
+You can set up and alias for the script and just run something like `px a`
+
 ##### Recursion
 
 If you need to recursively call functions more than 1000 times, please use the function decorator in `recursive_example_1.py`.
@@ -62,13 +70,20 @@ The following algorithmic templates should be available.
     - Floyd–Warshall algorithm (tbc, for graphs with negative edges)
     - Dinic's algorithm for max-flow problem (tbc)
     - Algorithm (?) for min-cost flow problem (tbc)
-    - 2-SAT
+    - Trie (ok)
+    - 2-SAT (tbc)
 
 ### How to use (C++)
 
-(tbc)
+Please refer to my [C++ conversion course](../docs/cpp_conversion_course.md)
 
+To compile the code and run for all test cases
 
+```
+./run_cpp.sh x
+```
+
+You can set up and alias for the script and just run something like `cx x`
 ## Wishlist
 
 Understand the tricks of using C++
@@ -80,9 +95,5 @@ Procedure to automatically download test cases
 - Currently I copy and paste to the respective places and run them individually.
 
 Algorithm templates as above
-
-Procedure to run test cases automatically
-- Ideally I want to run all the test cases at once with a command.
-- Bonus if it compares to the expected test cases.
 
 CI/CD to check correctness and runtime of algorithm templates

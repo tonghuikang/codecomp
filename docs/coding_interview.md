@@ -1,5 +1,11 @@
 # Coding interviews
 
+In this document I explore how the skills required coding interview differ from competitive programming.
+
+Not complete.
+
+
+
 Coding interviews is different from competitive programming.
 
 

@@ -69,8 +69,6 @@ s = Solution()
 print(s.functionName("test_string"))
 ```
 
-[TODO: Consider the use of PySnooper here]
-
 Here we consider the advantages and disadvantages of testing on your computer (for example writing on VSCode with a debugger)
 
 | Writing on Leetcode                                          | Writing on local computer                                    |
@@ -99,3 +97,9 @@ Lexicographic (not alphabetical) order - is ab > aaa > aa? yes (cite leetcode qu
 - Prefix tree - Trie
 
 - Segment tree - A Segment Tree is a data structure that allows answering range queries over an array effectively, while still being flexible enough to allow modifying the array. C++ multiset?
+
+
+
+On global variables
+
+- https://support.leetcode.com/hc/en-us/articles/360011834174

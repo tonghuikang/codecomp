@@ -41,8 +41,7 @@ const int M9 = 1e9 + 7;  // 998244353
 // If the intended result is LL, make sure the first element in the operation is
 // LL e.g. instead of `1 << j`, do `1LL << j`
 
-// ------------------------------ template ends here
-// ------------------------------
+// ---------------------------- template ends here ----------------------------
 
 const int N = 500 * 1000 + 7;
 const int P = 60;
