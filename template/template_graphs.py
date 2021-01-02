@@ -8,6 +8,8 @@ MAXINT = sys.maxsize
 
 # ------------------------ standard imports ends here ------------------------
 
+# to visualise graphs https://csacademy.com/app/graph_editor/
+
 
 def build_graph(edges, bidirectional=False, costs=None):
     g = defaultdict(list)
@@ -108,6 +110,11 @@ def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target
 def floyd_warshall(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
     raise NotImplementedError
 
+def max_flow(map_from_node_to_nodes_and_capcities, start, end):
+    raise NotImplementedError
+
+def min_cost_flow(map_from_node_to_nodes_and_capcities, demands):
+    raise NotImplementedError
 
 class TrieNode:
     # https://leetcode.com/problems/implement-trie-prefix-tree/
@@ -211,3 +218,45 @@ def detect_cycle(map_from_node_to_nodes):
         return False
     # leetcode.com/problems/course-schedule/
     return topological_sort(map_from_node_to_nodes) == []
+
+
+def clique_cover(edges, N):
+    # clique cover https://en.wikipedia.org/wiki/Clique_cover
+    # https://atcoder.jp/contests/abc187/tasks/abc187_f
+    # https://atcoder.jp/contests/abc187/submissions/19150883
+    # the chromatic number is clique cover of the non-edges of the of the graph
+    # https://codeforces.com/blog/entry/57496
+    # https://codegolf.stackexchange.com/questions/37709/find-the-chromatic-number
+    # to edit the following to follow the format, to understand what is going on also
+    edges = set(tuple(edge) for edge in edges)
+    ccs = [[1]]
+    ret = 100
+    
+    def visit(pos):
+        nonlocal ret
+        # debug(pos, ccs, msg=":pos")
+        if pos == N + 1:
+            if len(ccs) < ret:
+                ret = len(ccs)
+                # debug(msg=":min")
+            return
+        if len(ccs) >= ret:
+            # debug(msg=":early stop")
+            return
+
+        for cc in ccs:
+            if all((v, pos) in edges for v in cc):
+                # can join the cc
+                cc.append(pos)
+                visit(pos + 1)
+                cc.pop()
+
+        # create new cc
+        # cid = len(ccs)
+        ccs.append([pos])
+        # vcc[pos - 1] = cid
+        visit(pos + 1)
+        ccs.pop()
+
+    visit(2)
+    return ret

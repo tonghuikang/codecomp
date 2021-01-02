@@ -41,37 +41,42 @@ If you need to recursively call functions more than 1000 times, please use the f
 ##### Algorithm Templates 
 The following algorithmic templates should be available.
 
-- Convex Hull (tbc, Monotone Chain algorithm)
-- Coordinate Compression (tbc)
-- [intervaltree](https://github.com/chaimleib/intervaltree) clone
-- [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) clone
 - [AtCoder library](https://atcoder.github.io/ac-library/master/document_en/) 
   - (There is a [Python](https://github.com/not522/ac-library-python) [version](https://github.com/Mitarushi/ACL-Python) but probably I want to extract copiable snippets instead of running the script to transfer the functions.
-  - Math
-    - Inverse modulo and power modulo (should have been somewhere already)
-    - Chinese Remainder Theorem
-    - Floor Sum?
-    - Convolution
-  - Data Structures
-    - Fenwick Tree
-    - Segment Tree
-    - Lazy Segment Tree
-    - Strings
-      - Suffix Array
-      - LCP array
-      - Z algorithm
-  - Graphs
-    - (Some code to process graphs)
-    - Dijkstra Algorithm (ok)
-    - Count Connected Components (ok)
-    - Disjoint Set Union (ok)
-    - Minimum Spanning Tree (ok)
-    - Topological Sort and Cycle Detection (ok)
-    - Floyd–Warshall algorithm (tbc, for graphs with negative edges)
-    - Dinic's algorithm for max-flow problem (tbc)
-    - Algorithm (?) for min-cost flow problem (tbc)
-    - Trie (ok)
-    - 2-SAT (tbc)
+- Math
+  - Ceiling division (ok)
+  - Inverse modulo (ok)
+  - Prime factorisation (ok)
+  - Chinese Remainder Theorem (please check)
+  - Floor Sum
+  - Convolution
+- Data Structures
+  - Trie (ok)
+  - Fenwick Tree
+  - Segment Tree
+  - Lazy Segment Tree
+  - [intervaltree](https://github.com/chaimleib/intervaltree) clone
+  - [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) clone
+  - Strings
+    - Suffix Array
+    - LCP array
+    - Z algorithm
+- Graphs
+  - (Some code to process graphs)
+  - Dijkstra Algorithm (ok)
+  - Count Connected Components (ok)
+  - Disjoint Set Union (ok)
+  - Minimum Spanning Tree (ok)
+  - Topological Sort and Cycle Detection (ok)
+  - Clique Cover and Chromatic Number (ok)
+  - Floyd–Warshall algorithm (tbc, for graphs with negative edges)
+  - Dinic's algorithm for max-flow problem (tbc)
+  - Algorithm (?) for min-cost flow problem (tbc)
+  - 2-SAT (tbc)
+- Other Algorithms
+  - Convex Hull (tbc, Monotone Chain algorithm)
+  - Coordinate Compression (tbc)
+
 
 ### How to use (C++)
 

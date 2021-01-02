@@ -10,97 +10,15 @@ https://github.com/Errichto/contest_library/blob/master/number_theory.cpp
 
 https://github.com/Errichto/contest_library/blob/master/fft.cpp (just use Numpy, but also provide real number calculation as well)
 
-Prime factorisation - there is a unique way to factorise an integer into number factors
-
-
-
-To find all divisors
-
-```python
-from functools import reduce
-
-def all_divisors(n):
-    return set(reduce(list.__add__, 
-    ([i, n//i] for i in 
-    range(1, int(n**0.5) + 1) if n % i == 0)))
-```
-
-
-
-To obtain prime factorisation
-
-```python
-import math
-
-def prime_factors(nr):
-    i = 2
-    factors = []
-    while i <= nr:
-        if i > math.sqrt(nr):
-            i = nr
-        if (nr % i) == 0:
-            factors.append(int(i))
-            nr = nr / i
-        elif i == 2:
-            i = 3
-        else:
-            i = i + 2
-    return factors
-```
-
 
 
 Geometric progression
 
 
 
-Modular inverse
-
-```python
-modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
-```
-
-If the modulo is prime
-
-```python
-pow(base, p-2, p)
-```
-
-If you are using Python 3.8
-
-```python
-pow(base, -1, p)
-```
-
-For division in modular space `(a/b) mod n`, compute the modular inverse and multiply `a * modinv(b, n)` 
-
-
-
-Modular exponentiation
-
-Python has an inbuilt function that does this
-
-```python
-pow(base, exponent, modulo)
-```
-
-
-
-
-
 Arithmetic progression
 
-OMG please edit
-
 Also to get the length of AP given start and sum, this is giving me headache
-
-
-
-Sieve of Eratosthenes
-
-You can obtain the smallest factor all numbers up to N in $O(N \log \log N)$. WIth this you can also obtain the factorisation of any number in O(number of factors)
-
-
 
 
 
@@ -157,8 +75,3 @@ primes = '''
 primes = [int(x) for x in primes.replace('\n', ' ').split()]
 ```
 
-
-
-Prime checking algorithm
-
-TBC
