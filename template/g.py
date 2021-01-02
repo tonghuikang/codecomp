@@ -19,6 +19,10 @@ from collections import Counter, defaultdict, deque
 a,b = list(map(int,input().split()))
 # lst = list(map(int,input().split()))
 
+print(max(
+    sum(int(x) for x in str(a)),sum(int(x) for x in str(b)),
+    ))
+
 # include logic here
 
-print(a+b)
+# print()

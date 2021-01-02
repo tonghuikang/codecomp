@@ -24,10 +24,23 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    cur = sum(x[0] for x in mrr)
+    dur = 0
+
+    mrr = sorted(mrr, key=lambda x: 2*x[0] + x[1])
+
+    cnt = 0
+    while cur >= dur:
+        x,y = mrr.pop()
+        cur -= x
+        dur += y + x
+        cnt += 1
+        log(cur, dur)
+
+    return cnt
 
 
 def solve(*args):
@@ -45,12 +58,12 @@ def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,10 +76,10 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required

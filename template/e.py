@@ -16,13 +16,42 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
+
+
+@bootstrap
+def recurse(n):
+    if n <= 0:
+        yield 0
+    yield (yield recurse(n-1)) + 2
+
+
+
 def build_graph(edges, bidirectional=False, costs=None):
     g = defaultdict(list)
     if costs:
-        for (a,b),c in zip(edges, costs):
-            g[a].append((b,c))
+        for (a,b),cost in zip(edges, costs):
+            g[a].append((b,cost))
             if bidirectional:
-                g[b].append((a,c))
+                g[b].append((a,cost))
     else:
         for a,b in edges:
             g[a].append(b)
@@ -30,43 +59,58 @@ def build_graph(edges, bidirectional=False, costs=None):
                 g[b].append(a)
     return g
 
-def visit_accessible(map_from_node_to_nodes, visited, start):
-    stack = [start]
-    visited.add(start)
-    while stack:
-        cur = stack.pop()
-        for nex in map_from_node_to_nodes[cur]:
+
+
+def solve_(edges, queries):
+    # your solution here
+
+    vertices = [0 for _ in range(len(edges) + 1)]
+    edges_one = [0 for _ in edges]
+    edges_two = [0 for _ in edges]
+
+    edge_map_one = {(a,b):i for i,(a,b) in enumerate(edges)}
+    edge_map_two = {(b,a):i for i,(a,b) in enumerate(edges)}
+
+    for i,e,x in queries:
+        if i == 1:
+            edges_one[e] += x
+        else:
+            edges_two[e] += x
+
+    del queries
+
+    g = build_graph(edges, bidirectional=True)
+
+    del edges
+
+    visited = set()
+
+    @bootstrap
+    def dfs(cur, addn):
+        vertices[cur] += addn
+        bddn = 0
+        for nex in g[cur]:
             if nex in visited:
                 continue
             visited.add(nex)
-            stack.append(nex)
-    return visited
+            if (nex,cur) in edge_map_one:
+                idx = edge_map_one[nex,cur]
+                x = edges_one[idx]
+                y = edges_two[idx]
+            else:
+                idx = edge_map_two[nex,cur]
+                x = edges_two[idx]
+                y = edges_one[idx]
+            bddn += yield dfs(nex, addn+x)
+            bddn += y
+        vertices[cur] += bddn
+        yield bddn
 
-
-def count_connected_components(map_from_node_to_nodes):
-    visited = set()
-    components = 0
-
-    for i in map_from_node_to_nodes:
-        if i in visited:
-            continue
-        visit_accessible(map_from_node_to_nodes, visited, i)
-        components += 1
-    return components
-
-
-def solve_(mrr,n):
-    # your solution here
-
-    mrr = [(a,b) for a,b in mrr if a!=b]
-
-    g = build_graph(mrr, bidirectional=True)
+    dfs(0, 0)
     
-    elements = len(g)
-    edges = len(mrr)
-    components = count_connected_components(g)
-    
-    return edges + components + edges - elements
+    return vertices
+
+
 
 
 def solve(*args):
@@ -84,8 +128,8 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-# for case_num in [1]:  # no loop over test case
-for case_num in range(int(input())):
+for case_num in [1]:  # no loop over test case
+# for case_num in range(int(input())):
 
     # read line as a string
     # strr = input().strip()
@@ -94,22 +138,29 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
+    nrr = read_matrix(n-1)
     
+    q = int(input())
+    qrr = read_matrix(q)
+
+    nrr = [(x-1, y-1) for x,y in nrr]
+    qrr = [(t,e-1,x) for t,e,x in qrr]
+
     # read one line and parse each word as an integer
-    n,k = list(map(int,input().split()))
+    # n,k = list(map(int,input().split()))
 
     # read multiple rows
-    mrr = read_matrix(k)
     # arr = read_strings(k)
 
-    res = solve(mrr,n)  # please change
+    res = solve(nrr, qrr)  # please change
     
     # print result
     # Google - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    for r in res:
+        print(r)
     # print(len(res))  # if printing length of list
     # print(*res)  # if printing a list
