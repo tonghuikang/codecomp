@@ -8,6 +8,8 @@ input = sys.stdin.readline  # to read input quickly
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
+# from networkx.algorithms.clique import find_cliques as maximal_cliques
+import networkx
 
 M9 = 10**9 + 7  # 998244353
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
@@ -39,15 +41,41 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, k):
+    G = networkx.Graph()
     # your solution here
+    for i in range(1, k+1):
+        G.add_node(i)
 
-    return ""
+    for a,b in mrr:
+        G.add_edge(a, b)
+
+    cliques = networkx.algorithms.clique.find_cliques(G)
+    cliques = sorted(cliques, key=lambda x:len(x))
+    log(cliques)
+
+    taken = set()
+    res = 0
+    while cliques:
+        curmax = cliques[-1]
+        taken.update(curmax)
+        new_cliques = []
+
+        for clique in cliques:
+            clique = [node for node in clique if node not in taken]
+            if clique:
+                new_cliques.append(clique)
+
+        cliques = new_cliques
+        cliques = sorted(cliques, key=lambda x:len(x))
+        res += 1
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +87,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr, a)  # include input here
     
     # print result
     # Google and Facebook - case number required
