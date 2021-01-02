@@ -83,10 +83,11 @@ def solve_(edges, queries):
 
     del edges
 
-    visited = set()
+    visited = set([0])
 
     @bootstrap
     def dfs(cur, addn):
+        log("a", cur, addn)
         vertices[cur] += addn
         bddn = 0
         for nex in g[cur]:
@@ -101,9 +102,11 @@ def solve_(edges, queries):
                 idx = edge_map_two[nex,cur]
                 x = edges_two[idx]
                 y = edges_one[idx]
+            # x,y = y,x
             bddn += yield dfs(nex, addn+x)
             bddn += y
         vertices[cur] += bddn
+        log("b", cur, bddn)
         yield bddn
 
     dfs(0, 0)
