@@ -17,6 +17,21 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 
+def build_graph(edges, bidirectional=False, costs=None):
+    g = defaultdict(list)
+    if costs:
+        for (a,b),cost in zip(edges, costs):
+            g[a].append((b,cost))
+            if bidirectional:
+                g[b].append((a,cost))
+    else:
+        for a,b in edges:
+            g[a].append(b)
+            if bidirectional:
+                g[b].append(a)
+    return g
+
+
 # https://codeforces.com/blog/entry/80158?locale=en
 from types import GeneratorType
 def bootstrap(f, stack=[]):
@@ -54,28 +69,12 @@ def solve_(edges, queries):
         else:
             edges_two[e] += x
 
+    g = build_graph(edges, bidirectional=True)
+
     del queries
-
-    g = defaultdict(list)
-    c = Counter()
-
-    for a,b in edges:
-        g[a].append(b)
-        g[b].append(a)
-        c[a] += 1
-        c[b] += 1
-
     del edges
 
-    # log(g)
-
     start = 0
-    for k,v in c.items():
-        if v == 1:
-            start = k
-            break
-
-    # log("start", start)
     visited = set([start])
 
     @bootstrap
