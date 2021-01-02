@@ -37,14 +37,6 @@ def bootstrap(f, stack=[]):
     return wrappedfunc
 
 
-@bootstrap
-def recurse(n):
-    if n <= 0:
-        yield 0
-    yield (yield recurse(n-1)) + 2
-
-
-
 def build_graph(edges, bidirectional=False, costs=None):
     g = defaultdict(list)
     if costs:
@@ -91,11 +83,11 @@ def solve_(edges, queries):
             start = k
             break
 
-    log("start", start)
+    # log("start", start)
     visited = set([start])
 
     @bootstrap
-    def dfs(cur, addn):
+    def dfs(cur):
         # log("a", cur, addn)
         # vertices[cur] += addn
         bddn = 0
@@ -105,21 +97,21 @@ def solve_(edges, queries):
             visited.add(nex)
             if (nex,cur) in edge_map_one:
                 idx = edge_map_one[nex,cur]
-                x = edges_one[idx]
+                # x = edges_one[idx]
                 y = edges_two[idx]
             else:
                 idx = edge_map_two[nex,cur]
-                x = edges_two[idx]
+                # x = edges_two[idx]
                 y = edges_one[idx]
             # x,y = y,x
-            bddn += yield dfs(nex, addn+x)
+            bddn += yield dfs(nex)
             bddn += y
         # vertices[cur] += bddn
         # log("b", cur, bddn)
         yield bddn
 
-    backward = dfs(start, 0)
-    log("backward", backward)
+    backward = dfs(start)
+    # log("backward", backward)
 
     visited = set([start])
 
@@ -127,7 +119,7 @@ def solve_(edges, queries):
     def dfs2(cur, addn):
         # log("a", cur, addn)
         vertices[cur] += addn
-        bddn = 0
+        # bddn = 0
         for nex in g[cur]:
             if nex in visited:
                 continue
@@ -141,11 +133,11 @@ def solve_(edges, queries):
                 x = edges_two[idx]
                 y = edges_one[idx]
             # x,y = y,x
-            bddn += yield dfs2(nex, addn+x-y)
-            bddn += y
+            yield dfs2(nex, addn+x-y)
+            # bddn += y
         # vertices[cur] += bddn
         # log("b", cur, bddn)
-        yield bddn
+        yield
     
     dfs2(start, backward)
     
