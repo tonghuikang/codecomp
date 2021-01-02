@@ -12,10 +12,10 @@ MAXINT = sys.maxsize
 def build_graph(edges, bidirectional=False, costs=None):
     g = defaultdict(list)
     if costs:
-        for (a,b),c in zip(edges, costs):
-            g[a].append((b,c))
+        for (a,b),cost in zip(edges, costs):
+            g[a].append((b,cost))
             if bidirectional:
-                g[b].append((a,c))
+                g[b].append((a,cost))
     else:
         for a,b in edges:
             g[a].append(b)
@@ -24,7 +24,10 @@ def build_graph(edges, bidirectional=False, costs=None):
     return g
 
 
-def visit_accessible(map_from_node_to_nodes, visited, start):
+def visit_accessible(map_from_node_to_nodes, start, visited=set()):
+    # https://binarysearch.com/problems/Connected-Cities
+    if not visited:
+        visited = set()
     stack = [start]
     visited.add(start)
     while stack:
@@ -37,40 +40,25 @@ def visit_accessible(map_from_node_to_nodes, visited, start):
     return visited
 
 
-def count_connected_components_undirected(map_from_node_to_nodes):
+def count_connected_components_undirected(map_from_node_to_nodes, total_elements=0):
+    # leetcode.com/problems/number-of-operations-to-make-network-connected
     visited = set()
     components = 0
 
-    for i in map_from_node_to_nodes:
-        if i in visited:
+    for node in map_from_node_to_nodes:
+        if node in visited:
             continue
-        visit_accessible(map_from_node_to_nodes, visited=visited, start=i)
+        visited = visit_accessible(map_from_node_to_nodes, start=node, visited=visited)
         components += 1
-    return components
-
-
-def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target):
-    d = map_from_node_to_nodes_and_costs
-
-    if target not in d:  # destination may not have outgoing paths
-        d[target] = []
-    if source not in d:
-        return MAXINT
+    if not total_elements:  # if all elements are already specified in the map
+        return components
     
-    # assign indexes
-    idxs = {k:i for i,k in enumerate(d.keys())}
-
-    # populate list of indexes and costs
-    list_of_indexes_and_costs = [[] for _ in range(len(idxs))]
-    for e,vrr in d.items():
-        for v,cost in vrr:
-            list_of_indexes_and_costs[idxs[e]].append((idxs[v],cost))
-
-    _, costs = dijkstra(list_of_indexes_and_costs, idxs[source])
-    return costs[idxs[target]]
+    return components + total_elements - len(map_from_node_to_nodes)
 
 
 def dijkstra(list_of_indexes_and_costs, start):  # is it possible to do dijkstra directly?
+    # leetcode.com/problems/path-with-maximum-probability/
+    # leetcode.com/problems/network-delay-time/
     length = len(list_of_indexes_and_costs)
     visited = [False]*length
     weights = [MAXINT]*length
@@ -91,7 +79,38 @@ def dijkstra(list_of_indexes_and_costs, start):  # is it possible to do dijkstra
     return path, weights
 
 
+def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
+    # leetcode.com/problems/path-with-maximum-probability/
+    # leetcode.com/problems/network-delay-time/
+    d = map_from_node_to_nodes_and_costs
+
+    if target not in d:  # destination may not have outgoing paths
+        d[target] = []
+    if source not in d:
+        return MAXINT
+    
+    # assign indexes
+    if idxs:
+        idxs = {k:i for i,k in enumerate(idxs)}
+    else:
+        idxs = {k:i for i,k in enumerate(d.keys())}
+
+    # populate list of indexes and costs
+    list_of_indexes_and_costs = [[] for _ in range(len(idxs))]
+    for e,vrr in d.items():
+        for v,cost in vrr:
+            list_of_indexes_and_costs[idxs[e]].append((idxs[v],cost))
+
+    _, costs = dijkstra(list_of_indexes_and_costs, idxs[source])
+    return costs[idxs[target]]
+
+
+def floyd_warshall(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
+    raise NotImplementedError
+
+
 class TrieNode:
+    # https://leetcode.com/problems/implement-trie-prefix-tree/
     def __init__(self):
         self.children = collections.defaultdict(TrieNode)
         self.is_word = False
@@ -124,8 +143,11 @@ class Trie:
 
 
 class DisjointSet:
+    # leetcode.com/problems/accounts-merge/
     def __init__(self, parent={}):
-        self.parent = parent.copy()
+        if not parent:
+            parent = {}
+        self.parent = parent
 
     def find(self, item):
         if item not in self.parent:
@@ -142,3 +164,50 @@ class DisjointSet:
         root1 = self.find(set1)
         root2 = self.find(set2)
         self.parent[root1] = root2
+
+
+def minimum_spanning_tree(edges, costs):
+    # leetcode.com/problems/min-cost-to-connect-all-points
+    if len(edges) == len(costs) == 0:
+        return 0
+    ds = DisjointSet()
+    total_tree_cost = 0
+    costs, edges = zip(*sorted(zip(costs, edges)))  # sort based on costs
+    for cost, (u, v) in zip(costs, edges):
+        if ds.find(u) != ds.find(v):
+            ds.union(u, v)
+            total_tree_cost += cost
+    return total_tree_cost
+
+# above function is not sufficient for the following question
+# leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/
+
+
+def topological_sort(map_from_node_to_nodes, all_nodes=set()):
+    # leetcode.com/problems/course-schedule-ii/
+    indegree_counter = defaultdict(int)
+    for lst in map_from_node_to_nodes.values():
+        for v in lst:
+            indegree_counter[v] += 1
+
+    if not all_nodes:  # assume all nodes are found in the map
+        all_nodes = set(indegree_counter.keys()) | set(map_from_node_to_nodes)
+
+    dq = deque([node for node in all_nodes if node not in indegree_counter])
+
+    res = []
+    while dq:
+        cur = dq.popleft()
+        res.append(cur)
+        for nex in map_from_node_to_nodes[cur]:
+            indegree_counter[nex] -= 1
+            if indegree_counter[nex] == 0:
+                dq.append(nex)
+    return res if len(res) == len(all_nodes) else []
+
+
+def detect_cycle(map_from_node_to_nodes):
+    if not map_from_node_to_nodes:
+        return False
+    # leetcode.com/problems/course-schedule/
+    return topological_sort(map_from_node_to_nodes) == []

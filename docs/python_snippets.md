@@ -288,3 +288,16 @@ itertools.zip_longest(arr, brr, fillvalue=0)
 
 - [Documentation](https://docs.python.org/3/library/itertools.html#itertools.zip_longest)
 
+
+
+# Common mistakes
+
+When I was learning Python in Year 1
+
+- https://github.com/tonghuikang/digital-world/blob/master/digital_world_error_log.ipynb
+
+On global variables
+
+- https://support.leetcode.com/hc/en-us/articles/360011834174
+- https://stackoverflow.com/questions/1132941/least-astonishment-and-the-mutable-default-argument
+- https://web.archive.org/web/20200221224620/http://effbot.org/zone/default-values.htm

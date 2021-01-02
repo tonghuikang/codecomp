@@ -33,10 +33,6 @@ If you need to recursively call functions more than 1000 times, please use the f
 ##### Algorithm Templates 
 The following algorithmic templates should be available.
 
-- Dijkstra (this was used many times)
-- Floyd–Warshall algorithm (tbc, for graphs with negative edges)
-- Minimum Spanning Tree (tbc)
-- Topological Sort (tbc)
 - Convex Hull (tbc, Monotone Chain algorithm)
 - Coordinate Compression (tbc)
 - [intervaltree](https://github.com/chaimleib/intervaltree) clone
@@ -57,8 +53,13 @@ The following algorithmic templates should be available.
       - LCP array
       - Z algorithm
   - Graphs
-    - Disjoint Set Union (tbc)
-    - Strongly Connected Components
+    - (Some code to process graphs)
+    - Dijkstra Algorithm (ok)
+    - Count Connected Components (ok)
+    - Disjoint Set Union (ok)
+    - Minimum Spanning Tree (ok)
+    - Topological Sort and Cycle Detection (ok)
+    - Floyd–Warshall algorithm (tbc, for graphs with negative edges)
     - Dinic's algorithm for max-flow problem (tbc)
     - Algorithm (?) for min-cost flow problem (tbc)
     - 2-SAT
