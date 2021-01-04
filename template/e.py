@@ -47,14 +47,14 @@ def solve_(mrr):
 
     actual_new = [actual[0]]
     for a,b,i in actual[1:]:
-        if b >= actual_new[-1][0]:
+        if b >= actual_new[-1][1]:
             continue
         actual_new.append((a,b,i))
     actual = actual_new
 
     rotated_new = [rotated[0]]
     for a,b,i in rotated[1:]:
-        if b >= rotated_new[-1][0]:
+        if b >= rotated_new[-1][1]:
             continue
         rotated_new.append((a,b,i))
     rotated = rotated_new
