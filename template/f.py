@@ -42,16 +42,24 @@ def read_strings(rows):
 def solve_(mrr,n):
     # your solution here
 
-    mrr = sorted([(b-1,a-1) for a,b in mrr])
+    mrr.append([1, n+1])
+    mrr.append([2, n+1])
+    n = n+1
+    mrr = sorted([(a-1,b-1) for b,a in mrr])
 
     prev = 0
     offset = 0
     new_mrr = []
     for a,b in mrr:
-        if prev + 2 >= a:
-            offset += a - (prev+2)
+        if prev+3 <= a:
+            offset += 2*((a - (prev+2))//2)
+        prev = a
         a = a-offset
         new_mrr.append((a,b))
+
+    # log(new_mrr)
+    # log(offset)
+    mrr = new_mrr
     n = n-offset
 
     blocked = set(mrr)
