@@ -39,16 +39,47 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr,n):
     # your solution here
 
-    return ""
+    blocked = set((b-1,a-1) for a,b in mrr)
+    # log(blocked)
+
+    cur_profile = set([(1,1)])  # init blocked
+    # log(cur_profile)
+
+    for i in range(n):
+        new_cur_profile = set()
+        for x,y in cur_profile:
+            curblock = [[x,y], [0,0]]
+            if (i,0) in blocked:
+                curblock[1][0] = 1
+            if (i,1) in blocked:
+                curblock[1][1] = 1
+            if curblock[0][0] == curblock[1][0] == 0:
+                curblock[0][0] = curblock[1][0] = 1
+            if curblock[0][1] == curblock[1][1] == 0:
+                curblock[0][1] = curblock[1][1] = 1
+            if curblock[0][0] == curblock[0][1] == 1:
+                new_cur_profile.add(tuple(curblock[1]))
+        if (0,0) in new_cur_profile:
+            new_cur_profile.add((1,1))
+        
+        # log(new_cur_profile)
+        cur_profile = new_cur_profile
+        if not cur_profile:
+            return "NO"
+            
+    if (1,1) in cur_profile:
+        return "YES"
+    return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
+    _ = input()
     # read line as an integer
     # k = int(input())
 
@@ -59,14 +90,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr,n)  # include input here
     
     # print result
     # Google and Facebook - case number required
