@@ -39,10 +39,53 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst):
     # your solution here
 
-    return ""
+    odds = sorted(x for x in lst if x%2 == 1)
+    evens = sorted(x for x in lst if x%2 == 0)
+
+    log(odds)
+    log(evens)
+
+    alice = 0
+    bob = 0
+
+    current_alice = True
+    
+    while odds and evens:
+        if odds[-1] > evens[-1]:
+            cur = odds.pop()
+        else:
+            cur = evens.pop()
+        if current_alice and cur%2 == 0:
+            alice += cur
+        if not current_alice and cur%2 == 1:
+            bob += cur
+        current_alice = not current_alice
+        # log(alice, bob)
+
+    while odds:
+        cur = odds.pop()
+        if not current_alice:
+            bob += cur
+        current_alice = not current_alice
+
+    while evens:
+        cur = evens.pop()
+        if current_alice:
+            alice += cur
+        current_alice = not current_alice
+
+    # log(alice, bob)
+
+    if alice > bob:
+        return "Alice"
+
+    if alice < bob:
+        return "Bob"
+
+    return "Tie"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +93,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +103,13 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
     
     # print result
     # Google and Facebook - case number required

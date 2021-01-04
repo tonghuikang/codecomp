@@ -39,10 +39,52 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    actual = sorted([(a,b,i) for i,(a,b) in enumerate(mrr, start=1)])
+    rotated = sorted([(b,a,i) for i,(a,b) in enumerate(mrr, start=1)])
+
+    actual_new = [actual[0]]
+    for a,b,i in actual[1:]:
+        if b >= actual_new[-1][0]:
+            continue
+        actual_new.append((a,b,i))
+    actual = actual_new
+
+    rotated_new = [rotated[0]]
+    for a,b,i in rotated[1:]:
+        if b >= rotated_new[-1][0]:
+            continue
+        rotated_new.append((a,b,i))
+    rotated = rotated_new
+
+    log(actual)
+    log(rotated)
+
+    res = []
+    for a,b in mrr:
+        idx = bisect.bisect_left(rotated, (a,0,0))
+        if idx == 0:
+            pass
+        elif rotated[idx-1][1] < b:
+            res.append(rotated[idx-1][2])
+            continue
+        else:
+            pass
+
+        idx = bisect.bisect_left(actual, (a,0,0))
+        if idx == 0:
+            pass
+        elif actual[idx-1][1] < b:
+            res.append(actual[idx-1][2])
+            continue
+        else:
+            pass
+
+        res.append(-1)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +92,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,19 +105,19 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
-    # print(*res)  # print a list with elements
+    print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
