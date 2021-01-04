@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys, os, getpass
 import math, random
-import functools, itertools, collections, heapq
+import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 

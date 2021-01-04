@@ -89,6 +89,7 @@ To compile the code and run for all test cases
 ```
 
 You can set up and alias for the script and just run something like `cx x`
+
 ## Wishlist
 
 Understand the tricks of using C++
@@ -102,3 +103,9 @@ Procedure to automatically download test cases
 Algorithm templates as above
 
 CI/CD to check correctness and runtime of algorithm templates
+
+## Resources
+
+Recently I found a [competitive programing library in Python](https://github.com/cheran-senthil/PyRival).
+- I think I will continue developing this because it also saves all my participation attempts, and I want folders and files to navigate through.
+- Some code will be copied from there, I will change them to fit my style.
