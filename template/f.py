@@ -42,23 +42,19 @@ def read_strings(rows):
 def solve_(mrr,n):
     # your solution here
 
-    offset = mrr[0][1]
-    mrr = [(b-offset,a-1) for a,b in mrr]
-    log(mrr)
+    mrr = sorted([(b-1,a-1) for a,b in mrr])
 
-    new_mrr = [mrr[0]]
+    prev = 0
     offset = 0
-    for a,b in mrr[1:]:
-        if a+offset >= (new_mrr[-1][1] + 4):
-            offset += a - (new_mrr[-1][1] + 2)
-        new_mrr.append((a-offset,b))
+    new_mrr = []
+    for a,b in mrr:
+        if prev + 2 >= a:
+            offset += a - (prev+2)
+        a = a-offset
+        new_mrr.append((a,b))
+    n = n-offset
 
-    n -= offset
-    # log(new_mrr)
-    # log(n)
-    mrr = new_mrr
-
-    blocked = set((a,b) for a,b in mrr)
+    blocked = set(mrr)
     # log(blocked)
 
     cur_profile = set([(1,1)])  # init blocked
@@ -120,11 +116,7 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    # print(res)
-    all_res.append(res)
-    # print(len(res))
-    # print(*res)  # print a list with elements
-    # for r in res:  # print each list in a different line
-        # print(res)
-        # print(*res)
-print("\n".join(str(x) for x in all_res))
+    print(res)
+ 
+    # all_res.append(res)
+# print("\n".join(str(x) for x in all_res))
