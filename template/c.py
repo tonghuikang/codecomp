@@ -42,7 +42,7 @@ def read_strings(rows):
 def solve_(arr, brr):
     # your solution here
 
-    arr = sorted(a-1 for a in arr)
+    arr = sorted([a-1 for a in arr])
 
     # cnt = [0 for _ in brr]
     # for a in arr:
@@ -51,15 +51,15 @@ def solve_(arr, brr):
     res = sum(brr[a] for a in arr)
 
     taken = 0
-
-    while arr and taken < arr[-1]:
-        cur = arr.pop()
-        res -= brr[cur] - brr[taken]
+    ptr = len(arr)-1
+    while ptr >= 0 and taken < arr[ptr]:
+        res -= brr[arr[ptr]] - brr[taken]
         taken += 1
+        ptr -= 1
     
     return res
 
-cout = ""
+
 allres = []
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
