@@ -59,7 +59,8 @@ def solve_(arr, brr):
     
     return res
 
-
+cout = ""
+allres = []
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
@@ -89,9 +90,11 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    allres.append(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
+print("\n".join(str(x) for x in allres))
