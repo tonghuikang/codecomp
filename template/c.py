@@ -39,10 +39,25 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    arr = sorted(a-1 for a in arr)
+
+    # cnt = [0 for _ in brr]
+    # for a in arr:
+    #     cnt[a] += 1
+
+    res = sum(brr[a] for a in arr)
+
+    taken = 0
+
+    while arr and taken < arr[-1]:
+        cur = arr.pop()
+        res -= brr[cur] - brr[taken]
+        taken += 1
+    
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +74,15 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
     
     # print result
     # Google and Facebook - case number required

@@ -31,7 +31,7 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+    return [int(input()) for _ in range(rows)]
 
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
@@ -39,8 +39,14 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst, qrr):
     # your solution here
+
+    for i,x in enumerate(lst):
+        for j,y in enumerate(lst):
+            # if math.sqrt(math.lcm(x,y) / math.gcd(x,y)) == 
+            pass
+
 
     return ""
 
@@ -50,7 +56,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +66,15 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
+
+    q = int(input())
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qrr = read_matrix(q)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst, qrr)  # include input here
     
     # print result
     # Google and Facebook - case number required

@@ -39,8 +39,36 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst, k):
     # your solution here
+
+    multiples = [0 for _ in lst]
+
+    for i,x in enumerate(lst):
+        while x%k == 0:
+            multiples[i] += 1
+            x = x//k
+    
+    # log(multiples)
+
+    minval = min(multiples)
+    terminated = False
+
+    res = 0
+
+    for a,b in zip(multiples, lst):
+        if a == minval:
+            terminated = True
+        if terminated:
+            res += b*(1+minval)
+        else:
+            res += b*(2+minval)
+        
+    return res
+
+
+
+
 
     return ""
 
@@ -59,14 +87,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,x = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst, x)  # include input here
     
     # print result
     # Google and Facebook - case number required

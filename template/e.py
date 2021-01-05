@@ -22,60 +22,108 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
 # ---------------------------- template ends here ----------------------------
 
+n,k = list(map(int,input().split()))
 
-def solve_():
-    # your solution here
+if False:
+# if True:
+    # testing
+    # conclusion
+    # minimum is always on the left of impostor
+    # impostor always have k
+    # minimum is always on the right of impostor
+    vals = [k for _ in range(n)]
+    impostor = 100
+    for z in range(1000):
+        new1 = [x//2 for x in vals]
+        new2 = [ceiling_division(x,2) for x in vals]
+        new2[impostor] += new1[impostor]
+        new1[impostor] = 0
+        vals = [0 for _ in range(n)]
+        for i,x in enumerate(new1):
+            vals[(i-1)%n] += x
+        for i,x in enumerate(new2):
+            vals[(i+1)%n] += x
+        # log(new1)
+        # log(new2)
+        log(*vals)
+        minval = min(vals)
+        c = Counter(vals)
+        log(z, vals.index(minval), c[k], minval)
+        # log(Counter(vals))
 
-    return ""
+# helper functions
+
+def inc(x):
+    return (x+1)%n
+
+def dec(x):
+    return (x-1)%n
+
+records = []
+
+def query(pos):
+    print("? {}".format(pos+1), flush=True)
+    response = int(input())
+    records.append(response)
+    return response
+
+def alert(pos):
+    print("! {}".format(pos+1), flush=True)
+    sys.exit()
 
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# brute force if under 400
 
-    # read line as an integer
-    # k = int(input())
+# if n < 400:
+#     for i in range(n//2 + 1):
+#         query(0)
 
-    # read line as a string
-    # srr = input().strip()
+#     log("querying all")
+#     # should stablilise by now
+#     records = []
 
-    # read one line and parse each word as a string
-    # lst = input().split()
+#     for i in range(n):
+#         query(i)
     
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+#     log(records)
+#     response = records + records
+#     for i,(a,b,c) in enumerate(zip(response, response[1:], response[2:])):
+#         if a < b < c and b == k:
+#             alert((i+1)%n)
+#     log("error")
+#     alert(0)
 
-    # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
+# random sampling
 
-    res = solve()  # include input here
+spacing = int(math.sqrt(n))
+pos = random.randint(0,n-1)
+
+response = 0
+while len(records) < 999:
+    pos = (pos+spacing+random.randint(0, 1))%n
+    response = query(pos)
+    if response != k:
+        break
     
-    # print result
-    # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+log("breaking".format(pos))
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))
-    # print(*res)  # print a list with elements
-    # for r in res:  # print each list in a different line
-        # print(res)
-        # print(*res)
+if response > k:  # search for k by decreasing index
+    log("decr")
+    while len(records) < 999:
+        pos = dec(pos)  # decrease
+        response = query(pos)
+        if response == k:
+            alert(pos)
+else:  # search for k by increasing index
+    log("incr")
+    while len(records) < 999:
+        pos = inc(pos)  # increase
+        response = query(pos)
+        if response == k:
+            alert(pos)
+alert(pos)
