@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 import sys, os, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+# import math, random
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+# M9 = 10**9 + 7  # 998244353
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
+# MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
@@ -30,11 +30,11 @@ def solve(*args):
         log("----- ------- ------")
     return solve_(*args)
 
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+# def read_matrix(rows):
+#     return [list(map(int,input().split())) for _ in range(rows)]
 
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
+# def read_strings(rows):
+#     return [input().strip() for _ in range(rows)]
 
 # ---------------------------- template ends here ----------------------------
 
