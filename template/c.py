@@ -42,7 +42,7 @@ def solve(*args):
 def solve_(arr, brr):
     # your solution here
 
-    arr = sorted([a-1 for a in arr])
+    arr = sorted(a-1 for a in arr)
 
     # cnt = [0 for _ in brr]
     # for a in arr:
@@ -51,16 +51,15 @@ def solve_(arr, brr):
     res = sum(brr[a] for a in arr)
 
     taken = 0
-    ptr = len(arr)-1
-    while ptr >= 0 and taken < arr[ptr]:
-        res -= brr[arr[ptr]] - brr[taken]
+
+    while arr and taken < arr[-1]:
+        cur = arr.pop()
+        res -= brr[cur] - brr[taken]
         taken += 1
-        ptr -= 1
     
     return res
 
 
-allres = []
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
@@ -90,11 +89,9 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    allres.append(res)
-    # print(res)
+    print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
-print("\n".join(str(x) for x in allres))
