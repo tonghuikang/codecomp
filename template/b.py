@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
+# import math, random
+# import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -9,11 +9,11 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+# M9 = 10**9 + 7  # 998244353
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
+# MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
@@ -39,18 +39,47 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# each connected component, the minimum of number of edges and number of nodes
+def solve_(mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(list)
+
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    visited = set()
+    res = 0
+
+    for start in g:
+        if start in visited:
+            continue
+        curedges = 0
+        curnodes = 0
+        stack = [start]
+        visited.add(start)
+        while stack:
+            cur = stack.pop()
+            curedges += len(g[cur])
+            curnodes += 1
+            for nex in g[cur]:
+                if nex in visited:
+                    continue
+                visited.add(nex)
+                stack.append(nex)
+        # log(curedges, curnodes)
+        res += min(curedges//2, curnodes)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,10 +92,10 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required

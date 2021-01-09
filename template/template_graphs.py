@@ -196,6 +196,8 @@ def clique_cover(edges, N):
     # https://codeforces.com/blog/entry/57496
     # https://codegolf.stackexchange.com/questions/37709/find-the-chromatic-number
     # to edit the following to follow the format, to understand what is going on also
+
+    # https://en.wikipedia.org/wiki/Feedback_arc_set
     edges = set(tuple(edge) for edge in edges)
     ccs = [[1]]
     ret = 100

@@ -39,15 +39,57 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, lst):
     # your solution here
+    res = [0 for _ in mrr]
+
+    g = defaultdict(list)
+    for i,(a,b) in enumerate(mrr):
+        g[a-1].append((b-1,i))
+        g[b-1].append((a-1,i))
+    
+    all_visited = set()
+    for start,_ in g:
+        if start in all_visited:
+            continue
+        cur_visited = set()
+        stack = [start]
+        while start:
+            cur = stack.pop()
+            for nex,_ in g[cur]:
+                if nex in cur_visited:
+                    continue
+                cur_visited.add(nex)
+                stack.append(nex)
+        
+        visit_sequence = sorted([(k,lst[k]) for k in cur_visited], key=lambda x:x[1])
+        new_visited = set()
+
+        for k,v in visit_sequence:
+            if k in new_visited:
+                continue
+            stack = [k]
+            while stack:
+                cur = stack.pop()
+                for nex,i in g[cur]:
+                    pass
+
+
+            # for nex,i in g[k]:
+            #     if nex in new_visited:
+            #         res[i] = (nex,i)
+            # new_visited.add(k)
+
+
+        all_visited.update(cur_visited)
+        
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +101,15 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    k,_ = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    lst = list(map(int,input().split()))
+
+    res = solve(mrr, lst)  # include input here
     
     # print result
     # Google and Facebook - case number required
