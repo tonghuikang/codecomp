@@ -50,17 +50,28 @@ The following algorithmic templates should be available.
   - Chinese Remainder Theorem (please check)
   - Floor Sum
   - Convolution
-- Data Structures
+  - Binomial coefficient
+- Trees
   - Trie (ok)
   - Fenwick Tree
   - Segment Tree
   - Lazy Segment Tree
   - [intervaltree](https://github.com/chaimleib/intervaltree) clone
   - [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) clone
-  - Strings
-    - Suffix Array
-    - LCP array
-    - Z algorithm
+- Arrays
+  - Prefix Sum
+  - Longest Common Subsequence (ok)
+  - Longest Common Subarray (ok)
+  - Longest Increasing Subsequence (ok)
+  - Sliding Windows
+  - Suffix Array
+  - LCP array
+  - Z algorithm
+- Search
+  - Binary Search
+  - Ternary Search
+  - [scipy.optimize](https://docs.scipy.org/doc/scipy/reference/optimize.html)
+  - Gradient Descent
 - Graphs
   - (Some code to process graphs)
   - Dijkstra Algorithm (ok)
@@ -73,6 +84,8 @@ The following algorithmic templates should be available.
   - Dinic's algorithm for max-flow problem (tbc)
   - Algorithm (?) for min-cost flow problem (tbc)
   - 2-SAT (tbc)
+- Recursion template
+  - (Because the default recursion limit for Python is 1000)
 - Other Algorithms
   - Convex Hull (tbc, Monotone Chain algorithm)
   - Coordinate Compression (tbc)

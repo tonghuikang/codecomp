@@ -35,6 +35,7 @@ modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N
 
 
 def is_prime(x):
+    # primarity test
     raise NotImplementedError
 
 
@@ -53,5 +54,18 @@ def chinese_remainder_theorem(divisors, remainders):
         p = prod // n_i
         sum += a_i * modinv(p, n_i) * p
     return sum % prod
- 
- 
+
+
+def ncr(n, r):
+    if r == 0:
+        return 1
+    return n * ncr(n-1, r-1) // r
+
+
+@functools.lru_cache(maxsize=None)
+def choose(n, r, p):
+    num = den = 1
+    for i in range(r):
+        num = (num * (n - i)) % p
+        den = (den * (i + 1)) % p
+    return (num * pow(den, p - 2, p)) % p
