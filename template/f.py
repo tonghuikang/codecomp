@@ -54,7 +54,7 @@ def solve_(start,target):
         if cur in visited:
             continue
         visited.add(cur)
-        
+
         if cur%2 == 0:
             nex = cur//2
             # if nex in visited:
@@ -64,15 +64,15 @@ def solve_(start,target):
             # visited.add(nex)
         else:
             nex = cur+1
-            if nex in visited:
-                continue
+            # if nex in visited:
+            #     continue
             stack.append(nex)
             g[cur].append(nex)
             # visited.add(nex)
 
             nex = cur-1
-            if nex in visited:
-                continue
+            # if nex in visited:
+            #     continue
             stack.append(nex)
             g[cur].append(nex)
             # visited.add(nex)
