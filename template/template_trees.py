@@ -41,8 +41,33 @@ class Trie:
                 return False
         return True
 
+
+class FenwickTree:
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+    def __init__(self, bits=31):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+        
+    def update(self, x, increment):
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+        
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
 # todo
-#   - Fenwick Tree
 #   - Segment Tree
 #   - Lazy Segment Tree
 #   - [intervaltree](https://github.com/chaimleib/intervaltree) clone

@@ -81,6 +81,24 @@ def dijkstra(list_of_indexes_and_costs, start):  # is it possible to do dijkstra
     return path, weights
 
 
+def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
+    # to be tested
+    # not a path
+    d = map_from_node_to_nodes
+    stack = deque([source])
+    visited = {source: 0}
+    while stack:
+        cur = stack.popleft()
+        for nex in d[cur]:
+            if nex in visited:
+                continue
+            stack.append(nex)
+            visited[nex] = visited[cur] + 1
+            if nex == target:
+                return visited[nex]
+    return MAXINT
+
+
 def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
     # leetcode.com/problems/path-with-maximum-probability/
     # leetcode.com/problems/network-delay-time/
