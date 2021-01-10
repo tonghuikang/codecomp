@@ -42,42 +42,24 @@ def read_strings(rows):
 
 def solve_(mrr, cost):
     # your solution here
-    counter = defaultdict(int)
-    LARGE = 2**31
-
-    def update(x, increment):
-        x += 1  # to avoid infinite loop at x > 0
-        while x <= LARGE:
-            # increase by the greatest power of two that divides x
-            counter[x] += increment
-            x += x & -x
-        
-    def query(x):
-        x += 1  # to avoid infinite loop at x > 0
-        res = 0
-        while x > 0:
-            # decrease by the greatest power of two that divides x
-            res += counter[x]
-            x -= x & -x
-        return res
-
+    counter = defaultdict(int)    
 
     res = 0
-    visited = set()
-    # f = FenwickTree()
+
     for a,b,c in mrr:
-        update(a, c)
-        update(b+1, -c)
-        visited.add(a)
-        visited.add(b+1)
+        counter[a] += c
+        counter[b+1] -= c
         res += (b+1-a)*c
 
-    visited = sorted(visited)
+    visited = sorted(counter.keys())
+    # log(counter)
+    # log(visited)
+    psum = 0
     for x,y in zip(visited, visited[1:]):
-        val = query(x)
-        if val > cost:
+        psum += counter[x]
+        if psum > cost:
             window = y-x
-            res -= window*(val-cost)
+            res -= window*(psum-cost)
 
     return res
 

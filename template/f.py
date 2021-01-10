@@ -39,15 +39,58 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(start,target):
     # your solution here
 
-    return ""
+    if target <= start:  # can only decrease
+        return start - target
+
+    limit = target*2
+
+    steps = {start: 0}
+    prev = set()
+    minres = target - start
+
+    stack = deque([start])
+
+    while stack:
+        cur = stack.popleft()
+        curval = steps[cur]
+
+        if cur > limit:
+            continue
+
+        nex = cur * 2
+        if nex not in steps:
+            stack.append(nex)
+        steps[nex] = curval + 1
+        minres = min(minres, curval + 1 + abs(nex-target))
+
+        if not cur in prev:
+            nex = cur + 1
+            if nex not in steps:
+                stack.append(nex)
+                steps[nex] = curval + 1
+            minres = min(minres, curval + 1 + abs(nex-target))
+            prev.add(nex)
+
+            nex = cur - 1
+            if nex not in steps:
+                stack.append(nex)
+                steps[nex] = curval + 1
+            minres = min(minres, curval + 1 + abs(nex-target))
+            prev.add(nex)
+        # log(cur, steps)
+        # log(cur)
+
+    # log(sorted(steps.items()))
+
+    return minres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +102,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
     
     # print result
     # Google and Facebook - case number required
