@@ -45,46 +45,52 @@ def solve_(start,target):
     if target <= start:  # can only decrease
         return start - target
 
-    limit = target*2
+    g = defaultdict(list)
 
-    steps = {start: 0}
-    prev = set()
-    minres = target - start
-
-    stack = deque([start])
-
+    visited = set()
+    stack = [target]
     while stack:
-        cur = stack.popleft()
-        curval = steps[cur]
-
-        if cur > limit:
+        cur = stack.pop()
+        if cur in visited:
             continue
-
-        nex = cur * 2
-        if nex not in steps:
+        visited.add(cur)
+        
+        if cur%2 == 0:
+            nex = cur//2
+            # if nex in visited:
+            #     continue
             stack.append(nex)
-        steps[nex] = curval + 1
-        minres = min(minres, curval + 1 + abs(nex-target))
+            g[cur].append(nex)
+            # visited.add(nex)
+        else:
+            nex = cur+1
+            if nex in visited:
+                continue
+            stack.append(nex)
+            g[cur].append(nex)
+            # visited.add(nex)
 
-        if not cur in prev:
-            nex = cur + 1
-            if nex not in steps:
-                stack.append(nex)
-                steps[nex] = curval + 1
-            minres = min(minres, curval + 1 + abs(nex-target))
-            prev.add(nex)
+            nex = cur-1
+            if nex in visited:
+                continue
+            stack.append(nex)
+            g[cur].append(nex)
+            # visited.add(nex)
 
-            nex = cur - 1
-            if nex not in steps:
-                stack.append(nex)
-                steps[nex] = curval + 1
-            minres = min(minres, curval + 1 + abs(nex-target))
-            prev.add(nex)
-        # log(cur, steps)
-        # log(cur)
 
-    # log(sorted(steps.items()))
+    minres = target-start
 
+    visited = set([target])
+    stack = deque([(target,0)])
+    while stack:
+        cur, val = stack.popleft()
+        minres = min(minres, val+abs(start-cur))
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            stack.append((nex, val+1))
+            visited.add(nex)
+            
     return minres
 
 
