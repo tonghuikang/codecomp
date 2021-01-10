@@ -39,15 +39,52 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def solve_(mrr, cost):
     # your solution here
+    counter = defaultdict(int)
+    LARGE = 2**31
 
-    return ""
+    def update(x, increment):
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= LARGE:
+            # increase by the greatest power of two that divides x
+            counter[x] += increment
+            x += x & -x
+        
+    def query(x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += counter[x]
+            x -= x & -x
+        return res
 
 
-# for case_num in [0]:  # no loop over test case
+    res = 0
+    visited = set()
+    # f = FenwickTree()
+    for a,b,c in mrr:
+        update(a, c)
+        update(b+1, -c)
+        visited.add(a)
+        visited.add(b+1)
+        res += (b+1-a)*c
+
+    visited = sorted(visited)
+    for x,y in zip(visited, visited[1:]):
+        val = query(x)
+        if val > cost:
+            window = y-x
+            res -= window*(val-cost)
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +96,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    k,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr, c)  # include input here
     
     # print result
     # Google and Facebook - case number required
