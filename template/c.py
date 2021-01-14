@@ -59,7 +59,7 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows

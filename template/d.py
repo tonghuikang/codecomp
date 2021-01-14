@@ -39,12 +39,70 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, mrr):
     # your solution here
+    psum = [0]
+    pmin = [0]
+    pmax = [0]
+    # ssum = [0]
+    smin = [0]
+    smax = [0]
 
-    return ""
+    curval = 0
+    curmin = 0
+    curmax = 0
 
+    for x in srr:
+        curval += x
+        curmin = min(curmin, curval)
+        curmax = max(curmax, curval)
+        psum.append(curval)
+        pmin.append(curmin)
+        pmax.append(curmax)
 
+    curval = 0
+    curmin = 0
+    curmax = 0
+
+    for x in srr[::-1]:
+        curval += -x
+        curmin = min(curmin, curval)
+        curmax = max(curmax, curval)
+        # ssum.append(curval)
+        smin.append(curmin)
+        smax.append(curmax)
+    
+    # ssum = ssum[::-1]
+    smin = smin[::-1]
+    smax = smax[::-1]
+
+    # log(psum)
+    # log(pmin)
+    # log(pmax)
+    # log(ssum)
+    # log(smin)
+    # log(smax)
+
+    res = []
+
+    for a,b in mrr:
+        # log()
+        maxx = 0
+        minn = 0
+        end_point = psum[-1]-psum[b]+psum[a-1]
+        maxx = max(0, pmax[a-1], end_point+smax[b])
+        minn = min(0, pmin[a-1], end_point+smin[b])
+        # log(end_point, smax[b], smin[b])
+        # log(pmin[a-1], psum[-1], psum[b], psum[a-1], smin[b])
+        # log(a,b,maxx,minn)
+        # log()
+        res.append(maxx-minn+1)
+
+    # log()
+
+    return res
+
+cout = []
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
@@ -59,23 +117,26 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
+    srr = input().strip()
+    srr = [1 if x == "+" else -1 for x in srr]
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(srr, mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
-
+    cout.extend(res)
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
+print("\n".join(str(r) for r in cout))
