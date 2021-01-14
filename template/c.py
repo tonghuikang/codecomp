@@ -39,10 +39,19 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b):
     # your solution here
 
-    return ""
+    extra = a-b
+
+    res = list(range(1,b+1))
+
+    if extra == 0:
+        return res
+
+    res[-extra-1:] = res[-extra-1:][::-1]
+    # log(res[-extra:])
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,23 +68,23 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    _,k = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
-    # print(*res)  # print a list with elements
+    print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)

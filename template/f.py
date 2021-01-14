@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
+# import math, random
+# import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -39,18 +39,37 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    pool = [0 for _ in range(101)]
+    # maxpool = [-10**10 for _ in range(101)]
+    # for a,b in zip(arr, brr):
+    #     pool[a] += b
+
+    # del arr
+    # del brr
+
+    maxres = 0
+    for i,a in enumerate(arr):
+        cur = brr[i]
+        # pool[a] += brr[i]
+        for j,b in enumerate(arr[:i]):
+            if a%b == 0:
+                cur += brr[j]
+        maxres = max(maxres, sum(x for x in pool if x>=0), cur)
+        
+    return maxres
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +79,14 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
     
     # print result
     # Google and Facebook - case number required
