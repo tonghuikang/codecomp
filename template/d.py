@@ -39,18 +39,62 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def ncr(n, r):
+    if r == 0:
+        return 1
+    return n * ncr(n-1, r-1) // r
+
+def solve_(k):
+    if k == 1:
+        return ["AB"]
+
+    if k > 4:
+        raise Exception
+
+    break_arr = [0, 1, 3, 35, ncr(2**4, 2**3)//2, 10**10, 10**10, 10**10, 10**10]
+
     # your solution here
+    length = 2**k
+    res = []
+    
+    # print(math.gcd(6006,6864))
+    counter = 0
 
-    return ""
+    for comb in itertools.combinations(range(length), length//2):
+        arr = ["A"]*length
+        for c in comb:
+            arr[c] = "B"
+        arr = "".join(arr)
+        res.append(arr)
+        counter += 1
+        if counter == break_arr[k]:
+            break
+    
+    # res = ["AAAABBBB","AABBBBAA","ABBAABBA","AABBAABB","ABABABAB","AABAABBB"]
+
+    for i in range(length):
+        for j in range(i+1, length):
+            same = 0
+            diff = 0
+            for arr in res:
+                if arr[i] == arr[j]:
+                    same += 1
+                else:
+                    diff += 1
+            log(i, j, same, diff)
+
+    # log(math.gcd(3003,3432))
+    # log(ncr(2**4, 2**3)//2)
+    return res
+    # return []
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -66,14 +110,15 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    print(len(res))
+    print("\n".join(res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
