@@ -38,20 +38,20 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def check(lst):
+    remainder = lst[0]
+    for x in lst[1:]:
+        remainder = x - remainder
+        if remainder < 0:
+            return False
+    else:  # ok without swap
+        if remainder == 0:
+            return True
+    return False
+
 
 def solve_(arr, reverse=False):
     # sweep, if cannot, replace
-
-    def check(lst):
-        remainder = lst[0]
-        for x in lst[1:]:
-            remainder = x - remainder
-            if remainder < 0:
-                return False
-        else:  # ok without swap
-            if remainder == 0:
-                return True
-        return False
 
     if check(arr):
         log("no swap")
@@ -68,21 +68,22 @@ def solve_(arr, reverse=False):
                 return "YES"
             arr[i], arr[i-1] = arr[i-1], arr[i]
 
-            if i+i < len(arr):
-                arr[i], arr[i+1] = arr[i+1], arr[i]
-                if check(arr):
-                    log("right swap")
-                    return "YES"
-                arr[i], arr[i+1] = arr[i+1], arr[i]
+            # if i+i < len(arr):
+            #     arr[i], arr[i+1] = arr[i+1], arr[i]
+            #     if check(arr):
+            #         log("right swap")
+            #         return "YES"
+            #     arr[i], arr[i+1] = arr[i+1], arr[i]
             break
 
-    arr[-1], arr[-2] = arr[-2], arr[-1]
-    if check(arr):
-        log("end swap")
-        return "YES"
-    arr[-1], arr[-2] = arr[-2], arr[-1]
+    # arr[-1], arr[-2] = arr[-2], arr[-1]
+    # if check(arr):
+    #     log("end swap")
+    #     return "YES"
+    # arr[-1], arr[-2] = arr[-2], arr[-1]
 
     if not reverse:
+        log("reversing")
         return solve_(arr[::-1], reverse=True)
 
     return "NO"
