@@ -37,12 +37,29 @@ def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
 # ---------------------------- template ends here ----------------------------
+size = 25000
+primes = [True for _ in range(size)]
+primes[0], primes[1] = False, False
+
+for i in range(size):
+    if not primes[i]:
+        continue
+    for j in range(2*i, size, i):
+        primes[j] = False
+
+primes = [i for i,x in enumerate(primes) if x]
 
 
-def solve_():
+def solve_(k):
     # your solution here
+    # 1, p, q, p*q
+    idxp = bisect.bisect_left(primes, 1+k)
+    p = primes[idxp]
+    idxq = bisect.bisect_left(primes, p+k)
+    q = primes[idxq]
+    # log(idxp, idxq, p, q)
 
-    return ""
+    return p*q
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +67,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -66,7 +83,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required

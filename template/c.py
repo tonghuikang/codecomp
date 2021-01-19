@@ -39,10 +39,56 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst):
     # your solution here
+    # n2 algorithm
+    # consider each possible as excluded
+    # check if possible
+    c = Counter(lst)
+    values = []
+    counts = []
+    positions = {}
+    for i,(k,v) in enumerate(sorted(c.items())):
+        values.append(k)
+        counts.append(v)
+        positions[k] = i
 
-    return ""
+    # log(values)
+    # log(counts)
+
+    for i in range(len(values)):
+        vrr = [v for v in values]
+        crr = [c for c in counts]
+
+        crr[i] -= 1  # final
+        ptr = len(values) - 1
+        if crr[ptr] == 0:
+            ptr -= 1
+        crr[ptr] -= 1
+
+        candidate_initial_x = vrr[ptr] + vrr[i]
+        # log(i, candidate_initial_x, vrr[ptr], vrr[i])
+
+        res = [candidate_initial_x, [vrr[ptr], vrr[i]]]
+
+        cur_x = max(vrr[ptr],vrr[i])
+        while True:
+            while crr[ptr] == 0:  # search for the next maximum
+                ptr -= 1
+                if ptr < 0:  # all clear
+                    return res
+
+            crr[ptr] -= 1   # the larger
+            remainder_to_expect = cur_x - vrr[ptr]
+            if remainder_to_expect not in positions:
+                break   # fail
+            if crr[positions[remainder_to_expect]] == 0:
+                break   # fail
+            crr[positions[remainder_to_expect]] -= 1                
+            res.append([vrr[ptr], remainder_to_expect])
+            cur_x = vrr[ptr]
+                
+    return []
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +96,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,20 +106,26 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
-
+    lst = list(map(int,input().split()))
+    lst.sort()
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
+    if not res:
+        print("NO")
+    else:
+        print("YES")
+        print(res[0])
+        print("\n".join("{} {}".format(a,b) for a,b in res[1:]))
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line

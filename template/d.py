@@ -39,10 +39,47 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(arr):
+    # sweep, if cannot, replace
 
-    return ""
+    def check(lst):
+        remainder = lst[0]
+        for x in lst[1:]:
+            remainder = x - remainder
+            if remainder < 0:
+                break
+        else:  # ok without swap
+            if remainder == 0:
+                return True
+
+    if check(arr):
+        log("no swap")
+        return "YES"
+
+    remainder = arr[0]
+    for i,x in enumerate(arr[1:], start=1):
+        remainder = x - remainder
+        if remainder < 0:
+            # swap with either before or after
+            arr[i], arr[i-1] = arr[i-1], arr[i]
+            if check(arr):
+                log("left swap")
+                return "YES"
+            arr[i], arr[i-1] = arr[i-1], arr[i]
+            if i+i < len(arr):
+                arr[i], arr[i+1] = arr[i+1], arr[i]
+                if check(arr):
+                    log("right swap")
+                    return "YES"
+                arr[i], arr[i+1] = arr[i+1], arr[i]
+            break
+
+    arr[-1], arr[-2] = arr[-2], arr[-1]
+    if check(arr):
+        log("end swap")
+        return "YES"
+
+    return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +87,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +97,13 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
     
     # print result
     # Google and Facebook - case number required
