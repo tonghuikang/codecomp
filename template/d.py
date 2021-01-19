@@ -49,6 +49,19 @@ def check(lst):
             return True
     return False
 
+def remainder_arr(lst):
+    remainder = lst[0]
+    remainders = [0,lst[0]]
+    faulty = False
+    for x in lst[1:]:
+        remainder = x - remainder
+        if faulty:
+            remainder = -1
+        remainders.append(remainder)
+        if remainder < 0:
+            faulty = True
+            
+    return remainders
 
 def solve_(arr, reverse=False):
     # sweep, if cannot, replace
@@ -67,24 +80,39 @@ def solve_(arr, reverse=False):
                 log("left swap")
                 return "YES"
             arr[i], arr[i-1] = arr[i-1], arr[i]
-
-            # if i+i < len(arr):
-            #     arr[i], arr[i+1] = arr[i+1], arr[i]
-            #     if check(arr):
-            #         log("right swap")
-            #         return "YES"
-            #     arr[i], arr[i+1] = arr[i+1], arr[i]
             break
 
-    # arr[-1], arr[-2] = arr[-2], arr[-1]
-    # if check(arr):
-    #     log("end swap")
-    #     return "YES"
-    # arr[-1], arr[-2] = arr[-2], arr[-1]
+    arr[-2], arr[-1] = arr[-1], arr[-2]
+    if check(arr):
+        log("end swap")
+        return "YES"
+    arr[-2], arr[-1] = arr[-1], arr[-2]
+
+    xrr = remainder_arr(arr)
+    yrr = remainder_arr(arr[::-1])[::-1]
+    log(xrr)
+    log(yrr)
+
+    remainder = 0
+    # if I swap, what is the remainder
+    for i,(x,y) in enumerate(zip(arr, arr[1:])):
+        if x-remainder > y:  # must swap, would have swapped
+            break
+        new_remainder = x-(y-remainder)
+        log(x,y,new_remainder,yrr[i+2])
+        if new_remainder >= 0 and yrr[i+2] == new_remainder:
+            arr[i], arr[i+1] = arr[i+1], arr[i]
+            if check(arr):
+                log("advanced swap")
+                return "YES"
+            arr[i], arr[i+1] = arr[i+1], arr[i]
+        remainder = x-remainder
+        # log(remainder, "r")
 
     if not reverse:
         log("reversing")
         return solve_(arr[::-1], reverse=True)
+
 
     return "NO"
 
