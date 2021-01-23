@@ -39,18 +39,27 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    count = 1
+    for i,x in enumerate(arr):
+        if x == "AND":
+            pass
+        if x == "OR":
+            count += 2**(i+1)
+        log(count)
 
 
-# for case_num in [0]:  # no loop over test case
+    return count
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -64,9 +73,9 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
     
     # print result
     # Google and Facebook - case number required

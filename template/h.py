@@ -10,15 +10,11 @@ from collections import Counter, defaultdict, deque
 # k = int(input())
 
 # read line as a string
-# srr = input()
+srr = input()
+srr = list(srr)
 
-# read one line and parse each word as a string
-# lst = input().split()
+if len(set(srr)) == 1:
+    print("Won")
+else:
+    print("Lost")
 
-# read one line and parse each word as an integer
-a,b = list(map(int,input().split()))
-# lst = list(map(int,input().split()))
-
-# include logic here
-
-print(a+b)

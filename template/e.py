@@ -39,18 +39,64 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(nrr, mrr, qrr):
     # your solution here
+    # just need to track three points
 
-    return ""
+    origin = 0,0
+    x0 = 1,0
+    y0 = 0,1
+
+    orr = [origin]
+    xrr = [x0]
+    yrr = [y0]
+
+    for lst in mrr:
+        if lst[0] == 2:  # x,y -> -y,x
+            origin = -origin[1], origin[0]
+            x0 = -x0[1], x0[0]
+            y0 = -y0[1], y0[0]
+        elif lst[0] == 1:  # x,y -> y,-x
+            origin = origin[1], -origin[0]
+            x0 = x0[1], -x0[0]
+            y0 = y0[1], -y0[0]
+        elif lst[0] == 3:
+            p = lst[1]
+            origin = p+(p-origin[0]), origin[1]
+            x0 = p+(p-x0[0]), x0[1]
+            y0 = p+(p-y0[0]), y0[1]
+        elif lst[0] == 4:
+            p = lst[1]
+            origin = origin[0], p+(p-origin[1])
+            x0 = x0[0], p+(p-x0[1])
+            y0 = y0[0], p+(p-y0[1])
+        orr.append(origin)
+        xrr.append(x0)
+        yrr.append(y0)
+
+    # log(orr)
+    # log(xrr)
+    # log(yrr)
+
+    res = []
+    for a,b in qrr:
+        p,q = nrr[b-1]
+        o = orr[a]
+        x = xrr[a]
+        y = yrr[a]
+
+        u = o[0] + p*(x[0]-o[0]) + q*(y[0]-o[0])
+        v = o[1] + p*(x[1]-o[1]) + q*(y[1]-o[1])
+        res.append("{} {}".format(u,v))
+        
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,17 +109,25 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    n = int(input())
+    nrr = read_matrix(n)  # and return as a list of list of int
+
+    m = int(input())
+    mrr = read_matrix(m)  # and return as a list of list of int
+
+    q = int(input())
+    qrr = read_matrix(q)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(nrr, mrr, qrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
+    print("\n".join(res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
