@@ -44,7 +44,7 @@ def solve_(lst):
     allnums = set(lst)
 
     if 0 not in allnums:
-        return pow(2,len(lst)-1, 10**9+7)
+        return pow(2,len(lst)-1, M9)
     
     i = 0
     while i in allnums:
@@ -98,6 +98,7 @@ def solve_(lst):
             if x == 0:
                 psum[i] += 1
             psum[i] += psum[x]
+        psum[i] = psum[i]%M9
     
     # log(psum)
 
