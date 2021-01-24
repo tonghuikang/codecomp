@@ -57,6 +57,7 @@ def chinese_remainder_theorem(divisors, remainders):
 
 
 def ncr(n, r):
+    # if python version == 3.8+, use comb()
     if r == 0:
         return 1
     return n * ncr(n-1, r-1) // r
@@ -69,3 +70,26 @@ def choose(n, r, p):
         num = (num * (n - i)) % p
         den = (den * (i + 1)) % p
     return (num * pow(den, p - 2, p)) % p
+
+
+def sieve_of_eratosthenes(n):
+    # primarity test and prime factor listing for all numbers less than n
+    prime = [True for _ in range(n)] 
+    prime[0], prime[1] = False, False
+    factors = [[] for _ in range(n)]
+
+    for i in range(2,n):
+        factors[i].append(i)
+        for j in range(i*2, n, i):
+            prime[j] = False
+            factors[j].append(i)
+    return prime, factors
+
+
+# get all combination of factors of an integer
+# https://leetcode.com/problems/count-ways-to-make-array-with-product/
+# https://www.geeksforgeeks.org/print-combinations-factors-ways-factorize/
+
+
+# n factorial modulo p
+# # https://www.geeksforgeeks.org/compute-n-under-modulo-p/
