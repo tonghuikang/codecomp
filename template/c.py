@@ -1,56 +1,81 @@
 #!/usr/bin/env python3
-import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import sys # , getpass
+# import math, random
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+# M9 = 10**9 + 7  # 998244353
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
+# MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
 # OFFLINE_TEST = False  # codechef does not allow getpass
-def log(*args):
-    if OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
+# def log(*args):
+#     if OFFLINE_TEST:
+#         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 def solve(*args):
     # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
+    # if OFFLINE_TEST:
+    #     log("----- solving ------")
+    #     log(*args)
+    #     log("----- ------- ------")
     return solve_(*args)
 
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+# def read_matrix(rows):
+#     return [list(map(int,input().split())) for _ in range(rows)]
 
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
+# def read_strings(rows):
+#     return [input().strip() for _ in range(rows)]
 
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def sieve_of_eratosthenes(n):
+    # primarity test and prime factor listing for all numbers less than n
+    prime = [True for _ in range(n)] 
+    prime[0], prime[1] = False, False
+    # factors = [[] for _ in range(n)]
+
+    for i in range(2,n):
+        # factors[i].append(i)
+        for j in range(i*2, n, i):
+            prime[j] = False
+            # factors[j].append(i)
+    return prime
+
+SIZE = 10**6 + 10
+prime = sieve_of_eratosthenes(SIZE)
+twin_count = [0 for _ in range(SIZE)]
+
+for i,(x,y) in enumerate(zip(prime, prime[2:])):
+    if x and y:
+        twin_count[i+2] += 1
+    twin_count[i+2] += twin_count[i+1]
+
+# log(twin_count[:10])
+
+def solve_(k):
     # your solution here
 
-    return ""
+    return twin_count[k]
 
 
+allres = []
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -66,16 +91,17 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    allres.append(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
+print("\n".join("{}".format(res) for res in allres))
