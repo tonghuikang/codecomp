@@ -64,30 +64,36 @@ def solve_(arr,brr,c):
     # log()
 
     # c = c*2
-    order = sorted([(a/b,-b,a) for a,b in zip(arr,brr)])[::-1]
+    order = sorted([(a/b,b,a) for a,b in zip(arr,brr)])[::-1]
     
-    order = [(a,-b,c) for a,b,c in order]
+    # order = [(a,b,c) for a,b,c in order]
     
     log(order)
 
     mem = 0
     cost = 0
     limit_single = 0
-    max_single = 0
+    limit_double = 0
+    max_single = False
+    max_double = False
     for _,b,a in order:
         mem += a
         cost += b
         if b == 1:
-            max_single = a
+            max_single = True
             limit_single += 1
+        else:
+            limit_double += 1
+            max_double = True
         if mem >= c:
             break
 
     limit_single -= 1
+    limit_double -= 1
     res = cost
     log(cost)
 
-    if max_single > 0:
+    if max_single:
         num_single = 0
         mem = 0
         cost = 0
@@ -105,17 +111,34 @@ def solve_(arr,brr,c):
         else:
             pass
 
+    if max_double:
+        num_double = 0
+        mem = 0
+        cost = 0
+        for _,b,a in order:
+            log(num_double, limit_double)
+            if b == 2:
+                if num_double == limit_double:
+                    continue
+                num_double += 1
+            mem += a
+            cost += b
+            if mem >= c:
+                res = min(res, cost)
+                break
+        else:
+            pass
+
     return res # - max_single
 
 
-
+all_res = []
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
-
     # read line as a string
     # srr = input().strip()
 
@@ -126,6 +149,10 @@ for case_num in range(int(input())):
     _,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
     brr = list(map(int,input().split()))
+
+    # if case_num+1 == 105:
+    #     print(arr,brr,c)
+    #     exit()
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
@@ -138,9 +165,10 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    all_res.append(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
+print("\n".join(str(r) for r in all_res))

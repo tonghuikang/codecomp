@@ -45,7 +45,7 @@ def sieve_of_eratosthenes(n):
     factors = [[] for _ in range(n)]
 
     for i in range(2,n):
-        factors[i].append(i)
+        # factors[i].append(i)
         for j in range(i*2, n, i):
             prime[j] = False
             factors[j].append(i)
@@ -57,20 +57,25 @@ prime, factors = sieve_of_eratosthenes(2*10**5 + 10)
 # tree of factors
 # path with greatest value
 
-def solve_(lst):
-    c = Counter(lst)
-    total = len(lst) - c[1]
+def solve_(mrr):
+    mrr = [x for x in mrr if x > 1]
+    c = Counter(mrr)
+    lst = sorted(c.items())
+    arr = [a for a,b in lst]
+    brr = [b for a,b in lst]
 
-    maxres = 0
-    for k,v in c.items():
-        immune = 0
-        for x in factors[k]:
-            immune += c[x]
-        log(k, immune, factors[k])
-        maxres = max(maxres, immune)
+    dp = Counter(mrr)
+    # log(arr)
+    # log(brr)
 
-    return total - maxres
+    for a,b in zip(arr,brr):
+        for factor in factors[a]:
+            # log(a,factor)
+            dp[a] = max(dp[a], dp[factor] + b)
 
+    # print(dp)
+
+    return len(mrr) - max(dp.values())
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
