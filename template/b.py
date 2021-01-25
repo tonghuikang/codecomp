@@ -38,11 +38,23 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+lower = 2020
+upper = 2021
 
-def solve_():
+allowed = set()
+
+for i in range(1,1000):
+    left = lower*i
+    right = upper*i
+    for x in range(left,right+1):
+        allowed.add(x)
+
+
+def solve_(k):
     # your solution here
-
-    return ""
+    if k in allowed:
+        return "YES"
+    return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +62,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -66,7 +78,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required

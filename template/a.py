@@ -39,10 +39,13 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+banned = set(2**x for x in range(60))
 
-    return ""
+def solve_(k):
+    # your solution here
+    if k in banned:
+        return "NO"
+    return "YES"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +53,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -66,7 +69,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required

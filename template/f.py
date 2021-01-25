@@ -38,11 +38,33 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def check(matrix):
+    ref_row = matrix[0]
+    ref_col = [row[0] for row in matrix]
 
-def solve_():
+    for i,row in enumerate(matrix):
+        for j,cell in enumerate(row):
+            if cell == ref_row[j] ^ ref_col[i]:
+                continue
+            else:
+                return False
+    return True
+
+
+def solve_(arr, brr):
+    mrr = [[int(x==y) for x,y in zip(row1,row2)] for row1,row2 in zip(arr,brr)]
     # your solution here
 
-    return ""
+    if check(mrr):
+        log("ok")
+        return "YES"
+
+    mrr[0] = [1-x for x in mrr[0]]
+
+    if check(mrr):
+        return "YES"
+
+    return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +72,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -64,9 +86,11 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(k)  # and return as a list of str
+    input()
+    brr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
     
     # print result
     # Google and Facebook - case number required

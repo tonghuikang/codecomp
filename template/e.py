@@ -39,10 +39,25 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
 
-    return ""
+@functools.lru_cache(maxsize=None)
+def choose(n, r, p=M9):
+    num = den = 1
+    for i in range(r):
+        num = (num * (n - i)) % p
+        den = (den * (i + 1)) % p
+    return (num * pow(den, p - 2, p)) % p
+
+
+
+def solve_(lst, k):
+    # your solution here
+    # ncr on the smallest number
+
+    lst = sorted(lst)[::-1]
+    chosen = lst[:k]
+    
+    return choose(lst.count(chosen[-1]), chosen.count(chosen[-1]), M9)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +74,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst, k)  # include input here
     
     # print result
     # Google and Facebook - case number required
