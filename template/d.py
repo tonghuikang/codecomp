@@ -72,30 +72,38 @@ def solve_(arr,brr,c):
 
     mem = 0
     cost = 0
+    limit_single = 0
     max_single = 0
     for _,b,a in order:
         mem += a
         cost += b
         if b == 1:
             max_single = a
+            limit_single += 1
         if mem >= c:
             break
 
+    limit_single -= 1
     res = cost
     log(cost)
 
-    mem = 0
-    cost = 0
-    for _,b,a in order:
-        mem += a
-        cost += b
-        if mem >= c + max_single:
-            if max_single:
-                res = min(res, cost-1)
-            break
-    else:
-        pass
-    # if count%2 != c:
+    if max_single > 0:
+        num_single = 0
+        mem = 0
+        cost = 0
+        for _,b,a in order:
+            log(num_single, limit_single)
+            if b == 1:
+                if num_single == limit_single:
+                    continue
+                num_single += 1
+            mem += a
+            cost += b
+            if mem >= c:
+                res = min(res, cost)
+                break
+        else:
+            pass
 
     return res # - max_single
 
