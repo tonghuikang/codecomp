@@ -77,6 +77,7 @@ def solve_(arr,brr,c):
             break
 
     res = cost
+    log(cost)
 
     mem = 0
     cost = 0
@@ -84,7 +85,8 @@ def solve_(arr,brr,c):
         mem += a
         cost += b
         if mem >= c + max_single:
-            res = min(res, cost-1)
+            if max_single:
+                res = min(res, cost-1)
             break
     else:
         pass
