@@ -41,10 +41,13 @@ def read_strings(rows):
 
 def solve_(arr,brr,c):
     # your solution here
-
-    if sum(arr) < c:
+    sumarr = sum(arr)
+    if sumarr < c:
         return -1
 
+    if sum(arr) == c:
+        return sum(brr)
+    
     # important = []
     # unimportant = []
     # for a,b in zip(arr,brr):
@@ -61,9 +64,11 @@ def solve_(arr,brr,c):
     # log()
 
     # c = c*2
-    order = sorted([(a/b,b,a) for a,b in zip(arr,brr)])[::-1]
+    order = sorted([(a/b,-b,a) for a,b in zip(arr,brr)])[::-1]
     
-    # log(order)
+    order = [(a,-b,c) for a,b,c in order]
+    
+    log(order)
 
     mem = 0
     cost = 0
