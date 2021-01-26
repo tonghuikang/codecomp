@@ -13,7 +13,7 @@ M9 = 10**9 + 7  # 998244353
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
+# MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
@@ -38,39 +38,46 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-def sieve_of_eratosthenes(n):
-    # primarity test and prime factor listing for all numbers less than n
-    prime = [True for _ in range(n)] 
-    prime[0], prime[1] = False, False
-    factors = [[] for _ in range(n)]
+# def sieve_of_eratosthenes(n):
+#     # primarity test and prime factor listing for all numbers less than n
+#     prime = [True for _ in range(n)] 
+#     prime[0], prime[1] = False, False
+#     factors = [[] for _ in range(n)]
 
-    for i in range(2,n):
-        factors[i].append(i)
-        for j in range(i*2, n, i):
-            prime[j] = False
-            factors[j].append(i)
-    return prime, factors
+#     for i in range(2,n):
+#         factors[i].append(i)
+#         for j in range(i*2, n, i):
+#             prime[j] = False
+#             factors[j].append(i)
+#     return prime, factors
 
-prime, factors = sieve_of_eratosthenes(2*10**5 + 10)
+# prime, factors = sieve_of_eratosthenes(2*10**5 + 10)
 
 
 # tree of factors
 # path with greatest value
+LARGE = 2*10**5 + 5
 
 def solve_(mrr):
     mrr = [x for x in mrr if x > 1]
     if not mrr:
         return 0
     
-    c = Counter(mrr)
-    dp = [0 for _ in range(2*10**5+5)]
+    c = [0]*LARGE
+    dp = [0]*LARGE
+
+    for x in mrr:
+        c[x] += 1
+        dp[x] += 1
     # for k,v in c.items():
     #     dp[k] = v
     # log(arr)
     # log(brr)
 
-    for a,b in sorted(c.items()):
-        dp[a] = max(dp[factor] for factor in factors[a]) + b
+    for a,x in enumerate(c[1:], start=1):
+        for j in range(2*a, LARGE, a):
+            dp[j] = max(dp[j], dp[a] + c[j])
+        # dp[a] = max(dp[factor] for factor in factors[a]) + b
 
     # print(dp)
 
