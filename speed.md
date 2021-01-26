@@ -41,3 +41,43 @@ print(solve(XYV, H, W, K))
 ```
 
 Vectorised operations are now allowed (with numpy arrays), but not necessary for optimisation.
+
+
+
+Modifying Counters may be slow
+
+```python
+from collections import Counter
+
+LARGE = 2*10**5
+mrr = list(range(1,LARGE//2)) + list(range(1,LARGE,2))
+
+def solve1(mrr):
+    c = Counter(mrr)
+    dp = Counter(mrr)
+
+    for a in range(1, LARGE-1):
+        for j in range(2*a, LARGE, a):
+            dp[j] = max(dp[j], dp[a]+c[j])
+
+    return len(mrr) - max(dp.values())
+
+def solve2(mrr):
+    c = [0]*LARGE
+    dp = [0]*LARGE
+
+    for x in mrr:
+        c[x] += 1
+        dp[x] += 1
+ 
+    for a in range(1, LARGE-1):
+        for j in range(2*a, LARGE, a):
+            dp[j] = max(dp[j], dp[a]+c[j])
+
+    return len(mrr) - max(dp)
+
+for _ in range(10):
+    print(solve1(mrr))  # 400ms
+    # print(solve2(mrr))   # 4000ms
+```
+

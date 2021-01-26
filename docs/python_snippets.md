@@ -166,7 +166,6 @@ from collections import Counter
 c = Counter(lst)
 ```
 
-- 
 - [Stack Overflow](https://stackoverflow.com/questions/722697/)
 
 
