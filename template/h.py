@@ -63,18 +63,21 @@ def solve_(mrr):
     if not mrr:
         return 0
     
-    c = [0]*LARGE
+    # c = [0]*LARGE
     dp = [0]*LARGE
 
     for x in mrr:
-        c[x] += 1
+        # c[x] += 1
         dp[x] += 1
+    
+    c = Counter(mrr)
+    # dp = Counter(mrr)
     # for k,v in c.items():
     #     dp[k] = v
     # log(arr)
     # log(brr)
 
-    for a,x in enumerate(c[1:], start=1):
+    for a in range(1, LARGE-1):
         for j in range(2*a, LARGE, a):
             dp[j] = max(dp[j], dp[a] + c[j])
         # dp[a] = max(dp[factor] for factor in factors[a]) + b
