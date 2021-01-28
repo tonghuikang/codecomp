@@ -2,6 +2,7 @@
 import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
+import time
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -39,18 +40,78 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
+    start_time = time.time()
+
     # your solution here
+    # just backtrack
 
-    return ""
+    # angles = [[0 for _ in mrr] for _ in mrr]
+
+    # for i,(x1,y1) in enumerate(mrr):
+    #     for j,(x2,y2) in enumerate(mrr):
+    #         angles[i][j] = math.atan2(y2-y1,x2-x1)
+    half_pi = math.pi/2 - 10**-15
+    # log(half_pi)
+
+    def nice(x,y,z):
+        # log("mrr", mrr)
+        p,q,r = mrr[x], mrr[y], mrr[z]
+        
+        c2 = (p[0]-r[0])**2 + (p[1]-r[1])**2
+        b2 = (q[0]-p[0])**2 + (q[1]-p[1])**2
+        a2 = (q[0]-r[0])**2 + (q[1]-r[1])**2
+        # log(a2,b2,c2,2*(a2**0.5)*(b2**0.5))
+        # log((c2 - a2 - b2) / 2*(a2**0.5)*(b2**0.5))
+        # log("calc")
+        angle = math.acos((a2 + b2 - c2) / (2*(a2**0.5)*(b2**0.5)))
+        # log(x,y,z,angle)
+        if angle < half_pi:
+            return True
+        return False
+
+    # log(nice(3,0,1))
+
+    def attempt():
+        unvisited = set(range(len(mrr)))
+        prev = random.choice(list(unvisited))
+        unvisited.remove(prev)
+        cur = random.choice(list(unvisited))
+        unvisited.remove(cur)
+
+        sequence = [prev, cur]
+        while unvisited:
+            for nex in unvisited:
+                if nice(prev, cur, nex):
+                    sequence.append(nex)
+                    unvisited.remove(nex)
+                    prev, cur = cur, nex
+                    break
+            else:
+                # back = sequence.pop()
+                # if len(sequence) < 2:
+                return []
+                # unvisited.add(back)
+                # prev, cur = sequence[-2], sequence[-1]
+            # log(sequence, unvisited)
+        return sequence
+
+    while time.time() - start_time < 1.75:
+        # log("attempting")
+        res = attempt()
+        if res:
+            return res
+            
+    return [-1]
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,17 +124,17 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
-    
+    res = solve(mrr)  # include input here
+    res = [1+x for x in res]
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    print(*res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
