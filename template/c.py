@@ -61,17 +61,10 @@ def solve_(mrr):
         c2 = (p[0]-r[0])**2 + (p[1]-r[1])**2
         b2 = (q[0]-p[0])**2 + (q[1]-p[1])**2
         a2 = (q[0]-r[0])**2 + (q[1]-r[1])**2
-        # log(a2,b2,c2,2*(a2**0.5)*(b2**0.5))
-        # log((c2 - a2 - b2) / 2*(a2**0.5)*(b2**0.5))
-        # log("calc")
-        try:
-            angle = math.acos((a2 + b2 - c2) / (2*(a2**0.5)*(b2**0.5)))
-            # log(x,y,z,angle)
-            if angle < half_pi:
-                return True
-            return False
-        except:
-            return False
+
+        if a2 + b2 > c2:
+            return True
+        return False
 
     # log(nice(3,0,1))
 
@@ -91,12 +84,7 @@ def solve_(mrr):
                     prev, cur = cur, nex
                     break
             else:
-                # back = sequence.pop()
-                # if len(sequence) < 2:
                 return []
-                # unvisited.add(back)
-                # prev, cur = sequence[-2], sequence[-1]
-            # log(sequence, unvisited)
         return sequence
 
     while time.time() - start_time < 1.75:
