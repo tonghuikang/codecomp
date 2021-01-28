@@ -2,7 +2,6 @@
 import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
-import time
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -41,7 +40,7 @@ def read_strings(rows):
 
 
 def solve_(mrr):
-    start_time = time.time()
+    # start_time = time.time()
 
     # your solution here
     # just backtrack
@@ -64,11 +63,14 @@ def solve_(mrr):
         # log(a2,b2,c2,2*(a2**0.5)*(b2**0.5))
         # log((c2 - a2 - b2) / 2*(a2**0.5)*(b2**0.5))
         # log("calc")
-        angle = math.acos((a2 + b2 - c2) / (2*(a2**0.5)*(b2**0.5)))
-        # log(x,y,z,angle)
-        if angle < half_pi:
-            return True
-        return False
+        try:
+            angle = math.acos((a2 + b2 - c2) / (2*(a2**0.5)*(b2**0.5)))
+            # log(x,y,z,angle)
+            if angle < half_pi:
+                return True
+            return False
+        except:
+            return False
 
     # log(nice(3,0,1))
 
@@ -96,7 +98,7 @@ def solve_(mrr):
             # log(sequence, unvisited)
         return sequence
 
-    while time.time() - start_time < 1.75:
+    while True:
         # log("attempting")
         res = attempt()
         if res:
@@ -128,13 +130,17 @@ for case_num in [0]:  # no loop over test case
     # arr = read_strings(k)  # and return as a list of str
 
     res = solve(mrr)  # include input here
-    res = [1+x for x in res]
+
+    if res == [-1]:
+        print(-1)
+    else:
+        res = [1+x for x in res]
+        print(*res)
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(*res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
