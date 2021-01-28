@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import sys, getpass
 import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import time
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -40,7 +41,7 @@ def read_strings(rows):
 
 
 def solve_(mrr):
-    # start_time = time.time()
+    start_time = time.time()
 
     # your solution here
     # just backtrack
@@ -50,7 +51,7 @@ def solve_(mrr):
     # for i,(x1,y1) in enumerate(mrr):
     #     for j,(x2,y2) in enumerate(mrr):
     #         angles[i][j] = math.atan2(y2-y1,x2-x1)
-    half_pi = math.pi/2 - 10**-15
+    half_pi = math.pi/2 - 10**-17
     # log(half_pi)
 
     def nice(x,y,z):
@@ -98,13 +99,13 @@ def solve_(mrr):
             # log(sequence, unvisited)
         return sequence
 
-    while True:
+    while time.time() - start_time < 1.75:
         # log("attempting")
         res = attempt()
         if res:
             return res
             
-    return [-1]
+    return []
 
 
 
@@ -131,7 +132,7 @@ for case_num in [0]:  # no loop over test case
 
     res = solve(mrr)  # include input here
 
-    if res == [-1]:
+    if not res:
         print(-1)
     else:
         res = [1+x for x in res]
