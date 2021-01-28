@@ -70,10 +70,9 @@ def solve_(mrr):
 
     def attempt():
         unvisited = set(range(len(mrr)))
-        prev = random.choice(list(unvisited))
-        unvisited.remove(prev)
-        cur = random.choice(list(unvisited))
+        prev,cur = random.sample(unvisited, 2)
         unvisited.remove(cur)
+        unvisited.remove(prev)
 
         sequence = [prev, cur]
         while unvisited:
@@ -87,7 +86,7 @@ def solve_(mrr):
                 return []
         return sequence
 
-    while time.time() - start_time < 1.75:
+    while time.time() - start_time < 1.70:
         # log("attempting")
         res = attempt()
         if res:
