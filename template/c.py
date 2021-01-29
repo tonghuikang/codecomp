@@ -101,7 +101,7 @@ def solve_(arr,brr,crr):
                 best_pos = i
             else:
                 best_start += y
-            curres = max(curres, (i-best_pos)*2 + best_start + x)
+                curres = max(curres, (i-best_pos)*2 + best_start + x)
         log(curres)
         maxres = max(maxres, curres)
  
