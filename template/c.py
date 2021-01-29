@@ -75,6 +75,7 @@ def solve_(arr,brr,crr):
             x,y = sorted([b,c])
             # log(x,y,a)
             addn.append(x-1 + a-y)
+            # assert addn[-1]+ends[-1] == a-1
         ends.append(0)
         addn.append(0)
 
@@ -83,9 +84,11 @@ def solve_(arr,brr,crr):
     
     lsts[0].pop()
     addns[0].pop()
+    addns[0].pop()
+    addns[0].append(0)
 
-    # log(lsts)
-    # log(addns)
+    log(lsts)
+    log(addns)
 
     maxres = 0
     for lst,addn in zip(lsts,addns):
@@ -93,13 +96,13 @@ def solve_(arr,brr,crr):
         best_start = 0
         best_pos = 0
         for i,(x,y) in enumerate(zip(lst,addn), start=0):
-            if x > best_start + (i-best_pos)*2:
-                best_start = x
+            if x+y > best_start + (i-best_pos)*2:
+                best_start = x+y
                 best_pos = i
             else:
                 best_start += y
             curres = max(curres, (i-best_pos)*2 + best_start + x)
-        # log(curres)
+        log(curres)
         maxres = max(maxres, curres)
  
     # log(lsts)
