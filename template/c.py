@@ -42,73 +42,24 @@ def read_strings(rows):
 def solve_(arr,brr,crr):
     # your solution here
 
-    blocks = []
-    ar = [arr[0]]
-    br = []
-    cr = []
-
-    for a,b,c in zip(arr[1:],brr[1:],crr[1:]):
-        if b == c:
-            blocks.append((ar,br,cr))
-            ar = [a]
-            br = []
-            cr = []
-        else:
-            ar.append(a)
-            br.append(b)
-            cr.append(c)
-    else:
-        blocks.append((ar,br,cr))
-
-    # log(blocks)
-
-#  [([3, 4], [1], [2]), ([3, 3], [2], [3])]
-
-    lsts = []
-    addns = []
-    for block in blocks:
-        ar, br, cr = block
-        ends = [ar[-1]-1]
-        addn = [0]
-        for a,b,c in zip(ar[::-1][1:], br[::-1], cr[::-1]):
-            ends.append(abs(b-c))
-            # x,y = sorted([b,c])
-            # log(x,y,a)
-            addn.append(a-ends[-1]-1)
-            # assert addn[-1]+ends[-1] == a-1
-        ends.append(0)
-        addn.append(0)
-
-        addns.append(addn)
-        lsts.append(ends)
+    arr = arr[::-1]
+    brr = brr[::-1]
+    crr = crr[::-1]
+    crr = [x-1 for x in crr]
     
-    lsts[0].pop()
-    addns[0].pop()
-    addns[0].pop()
-    addns[0].append(0)
-
-    log(lsts)
-    log(addns)
-
+    base = crr[0]
     maxres = 0
-    for lst,addn in zip(lsts,addns):
-        curres = 0
-        best_start = 0
-        elapsed = 0
-        for _,(x,y) in enumerate(zip(lst,addn), start=0):
-            curres = max(curres, (elapsed)*2 + best_start + x)
-            if x > best_start + (elapsed)*2:
-                best_start = x+y
-                elapsed = 0
-                # log(".o", curres) 
-            else:
-                best_start += y
-                # log(".x", curres)
-            elapsed += 1
-        log(curres)
-        maxres = max(maxres, curres)
- 
-    # log(lsts)
+    for a,b,c in zip(arr,brr,crr[1:]):
+        base += 2
+        tip = abs(a-b)
+        maxres = max(maxres, base+tip)
+
+        if tip == 0:
+            base = c
+        elif tip > base:
+            base = c
+        else:
+            base += c-tip
 
     return maxres
 
@@ -128,9 +79,9 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
+    crr = list(map(int,input().split()))
     arr = list(map(int,input().split()))
     brr = list(map(int,input().split()))
-    crr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
