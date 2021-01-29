@@ -38,11 +38,57 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
-def solve_():
+
+def solve_(lst, k):
     # your solution here
 
-    return ""
+    ratio = (100+k)/100
+
+    # all possible anchors
+    for i in range(1, len(lst)):
+        lst[i] += lst[i-1]
+    
+    log(lst)
+    minres = 10**18
+
+    for i,x in enumerate(lst):
+        escape = False
+        arr = lst[i+1:]
+        brr = lst[:i][::-1]
+
+        log(arr)
+        log(brr)
+        
+        res = 0
+    
+        cur = x
+        for i in range(len(arr)):
+            nex = ratio*cur
+            if arr[i] > nex:
+                escape = True
+                break
+            cur = min(nex, arr[i])
+            cur = ceiling_division(cur, 1)
+            res += cur - arr[i]
+        
+        cur = x
+        for i in range(len(brr)):
+            nex = cur/ratio
+            if brr[i] < nex:
+                escape = True
+                break
+            cur = max(nex, brr[i])
+            cur = cur//1
+            res += cur - brr[i]
+
+        if not escape:
+            log("res", res)
+            minres = min(minres, res)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +105,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst, k)  # include input here
     
     # print result
     # Google and Facebook - case number required

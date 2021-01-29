@@ -39,10 +39,72 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr,brr,crr):
     # your solution here
 
-    return ""
+    blocks = []
+    ar = [arr[0]]
+    br = []
+    cr = []
+
+    for a,b,c in zip(arr[1:],brr[1:],crr[1:]):
+        if b == c:
+            blocks.append((ar,br,cr))
+            ar = [a]
+            br = []
+            cr = []
+        else:
+            ar.append(a)
+            br.append(b)
+            cr.append(c)
+    else:
+        blocks.append((ar,br,cr))
+
+    # log(blocks)
+
+#  [([3, 4], [1], [2]), ([3, 3], [2], [3])]
+
+    lsts = []
+    addns = []
+    for block in blocks:
+        ar, br, cr = block
+        ends = [ar[-1]-1]
+        addn = [0]
+        for a,b,c in zip(ar[::-1][1:], br[::-1], cr[::-1]):
+            ends.append(abs(b-c))
+            x,y = sorted([b,c])
+            # log(x,y,a)
+            addn.append(x-1 + a-y)
+        ends.append(0)
+        addn.append(0)
+
+        addns.append(addn)
+        lsts.append(ends)
+    
+    lsts[0].pop()
+    addns[0].pop()
+
+    # log(lsts)
+    # log(addns)
+
+    maxres = 0
+    for lst,addn in zip(lsts,addns):
+        curres = 0
+        best_start = 0
+        best_pos = 0
+        for i,(x,y) in enumerate(zip(lst,addn), start=0):
+            if x > best_start + (i-best_pos)*2:
+                best_start = x
+                best_pos = i
+            else:
+                best_start += y
+            curres = max(curres, (i-best_pos)*2 + best_start + x)
+        # log(curres)
+        maxres = max(maxres, curres)
+ 
+    # log(lsts)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +112,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +122,15 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
+    crr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr, crr)  # include input here
     
     # print result
     # Google and Facebook - case number required
