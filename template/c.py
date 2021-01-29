@@ -72,10 +72,10 @@ def solve_(arr,brr,crr):
         addn = [0]
         for a,b,c in zip(ar[::-1][1:], br[::-1], cr[::-1]):
             ends.append(abs(b-c))
-            x,y = sorted([b,c])
+            # x,y = sorted([b,c])
             # log(x,y,a)
-            addn.append(x-1 + a-y)
-            assert addn[-1]+ends[-1] == a-1
+            addn.append(a-ends[-1]-1)
+            # assert addn[-1]+ends[-1] == a-1
         ends.append(0)
         addn.append(0)
 
@@ -94,15 +94,17 @@ def solve_(arr,brr,crr):
     for lst,addn in zip(lsts,addns):
         curres = 0
         best_start = 0
-        best_pos = 0
-        for i,(x,y) in enumerate(zip(lst,addn), start=0):
-            if x > best_start + (i-best_pos)*2:
-                curres = max(curres, (i-best_pos)*2 + best_start + x)
+        elapsed = 0
+        for _,(x,y) in enumerate(zip(lst,addn), start=0):
+            curres = max(curres, (elapsed)*2 + best_start + x)
+            if x > best_start + (elapsed)*2:
                 best_start = x+y
-                best_pos = i
+                elapsed = 0
+                # log(".o", curres) 
             else:
                 best_start += y
-                curres = max(curres, (i-best_pos)*2 + best_start + x)
+                # log(".x", curres)
+            elapsed += 1
         log(curres)
         maxres = max(maxres, curres)
  
