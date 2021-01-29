@@ -75,7 +75,7 @@ def solve_(arr,brr,crr):
             x,y = sorted([b,c])
             # log(x,y,a)
             addn.append(x-1 + a-y)
-            # assert addn[-1]+ends[-1] == a-1
+            assert addn[-1]+ends[-1] == a-1
         ends.append(0)
         addn.append(0)
 
@@ -96,7 +96,7 @@ def solve_(arr,brr,crr):
         best_start = 0
         best_pos = 0
         for i,(x,y) in enumerate(zip(lst,addn), start=0):
-            if x+y > best_start + (i-best_pos)*2:
+            if x > best_start + (i-best_pos)*2:
                 best_start = x+y
                 best_pos = i
             else:
