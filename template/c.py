@@ -97,6 +97,7 @@ def solve_(arr,brr,crr):
         best_pos = 0
         for i,(x,y) in enumerate(zip(lst,addn), start=0):
             if x > best_start + (i-best_pos)*2:
+                curres = max(curres, (i-best_pos)*2 + best_start + x)
                 best_start = x+y
                 best_pos = i
             else:
