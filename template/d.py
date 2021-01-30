@@ -38,19 +38,49 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def all_divisors(n):
+    return set(functools.reduce(list.__add__, 
+    ([i, n//i] for i in 
+    range(1, int(n**0.5) + 1) if n % i == 0)))
 
-def solve_():
+
+def solve_(k):
     # your solution here
+    # for a in range(int(math.sqrt(k+1))):
+    k = 8*k
+    limit = k**0.5
 
-    return ""
+    all_div = all_divisors(k)
+    res = 0
+    for d in all_div:
+        if d > limit:
+           continue
+        p = k//d
+        q = d
+
+        if (p+q)%2 == 0:
+            y = (p+q)//2
+            x = (p-q)//2
+            # log(p,q,x,y,x**2 + k - y**2)
+            # if x**2 + k - y**2 == 0:
+            #     res += 1
+            if x&1:
+                res += 1
 
 
-# for case_num in [0]:  # no loop over test case
+    # log(all_div)
+    # for a in range(k+1):
+    #     x = (2*a-1)**2 + 8*k 
+    #     if int(x**0.5)**2 == x:
+    #         print(a)
+    return res*2
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -59,14 +89,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    # n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    # arr = read_matrix(m)  # and return as a list of list of int
+    k = int(input())
+    # brr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required

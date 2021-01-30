@@ -39,18 +39,79 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(arr, brr, n):
+    g = defaultdict(list)
+    c = defaultdict(int)
+    for a,b in brr:
+        g[a].append(b)
+        g[b].append(a)
+        c[a] += 1
+        c[b] += 1
 
-    return ""
+    trees = []
+    cycles = []
+    forbidden = set()
+    visited = set()
+    for root in range(n):
+        if root in visited:
+            continue
+        if c[root] == 0:
+            forbidden.add(root)
+            continue
+        stack = [root]
+        count = c[root]
+        visited.add(root)
+        num_nodes = 1
+        current_graph = set([root])
+        while stack:
+            cur = stack.pop()
+            for nex in g[cur]:
+                if nex in visited:
+                    continue
+                count += c[nex]
+                num_nodes += 1
+                visited.add(nex)
+                stack.append(nex)
+                current_graph.add(nex)
+        log(count, num_nodes)
+        if count >= num_nodes*2:
+            cycles.extend(current_graph)
+        else:
+            trees.append(current_graph)
 
 
-# for case_num in [0]:  # no loop over test case
+
+    # log(cycles)
+    # log(forbidden)
+    # log(trees)
+
+    def evaluate(taken):
+        if taken&forbidden:
+            return 0
+        for tree in trees:  # not all elements of a tree and be present together
+            if len(tree) == len(tree & taken):
+                return 0
+        res = 0
+        for a,b in arr:
+            if a in taken and b in taken:
+                res += 1
+        return res
+
+    maxres = 0
+    for comb in itertools.product([0,1], repeat=n):
+        taken = set([i for i,c in enumerate(comb) if c])
+        res = evaluate(taken)
+        # log(taken, res)
+        maxres = max(maxres, res)
+
+    return maxres
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -59,14 +120,19 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    arr = read_matrix(m)  # and return as a list of list of int
+    k = int(input())
+    brr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    arr = [(a-1,b-1) for a,b in arr]
+    brr = [(a-1,b-1) for a,b in brr]
+
+    res = solve(arr, brr, n)  # include input here
     
     # print result
     # Google and Facebook - case number required

@@ -39,7 +39,7 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst, mrr):
     # your solution here
 
     return ""
@@ -59,14 +59,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
+    _ = int(input())
+    lst = list(map(int,input().split()))
 
-    res = solve()  # include input here
+    res = solve(lst, mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
