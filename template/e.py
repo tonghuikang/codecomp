@@ -39,10 +39,16 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b):
     # your solution here
 
-    return ""
+    if a**2 == b:
+        return "Yes"
+    
+    if a <= b:
+        return "Yes"
+
+    return "No"
 
 
 # for case_num in [0]:  # no loop over test case
