@@ -41,16 +41,30 @@ def read_strings(rows):
 
 def solve_(lst):
     # your solution here
+    # print("--")
 
     piles = [(x,i) for i,x in enumerate(lst[1:], start=2)]
 
     left = lst[0]
     res = []
-    for x,i in sorted(piles):
-        if left < x:
-            return []
-        res.append("{} {} {}".format(i, 1, x))
-        left += x
+
+    heapq.heapify(piles)
+
+    while piles:
+        x,i = heapq.heappop(piles)
+        if left >= x:
+            res.append("{} {} {}".format(i, 1, x))
+            left += x
+        else:
+            if not piles:
+                return []
+            y,j = heapq.heappop(piles)
+            postpone = x-left
+            res.append("{} {} {}".format(i, j, postpone))
+            res.append("{} {} {}".format(i, 1, left))
+            left += left
+            heapq.heappush(piles, (y+postpone, j))
+
 
     return res
 
