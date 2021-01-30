@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, getpass
+import sys #, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -16,8 +16,8 @@ M9 = 10**9 + 7  # 998244353
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -39,15 +39,11 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(a,b):
-    # your solution here
-
-    if a**2 == b:
-        return "Yes"
-    
-    if a <= b:
-        return "Yes"
-
+def solve_(n,x):
+    # if b could be expressed as a rectange, yes
+    for i in range(1,n+1):
+        if x%i == 0 and x//i <= n:
+            return "Yes"
     return "No"
 
 
@@ -65,14 +61,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
     
     # print result
     # Google and Facebook - case number required
