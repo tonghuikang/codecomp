@@ -40,6 +40,22 @@ def read_strings(rows):
 
 
 def solve_(arr, brr, n):
+
+    all_possible = set()
+    for a,b in brr:
+        all_possible.add(a)
+        all_possible.add(b)
+    arr = [(a,b) for a,b in arr if a in all_possible and b in all_possible] 
+    # log(brr)
+
+    reindex = {x:i for i,x in enumerate(all_possible)}
+
+    arr = [(reindex[a], reindex[b]) for a,b in arr]
+    brr = [(reindex[a], reindex[b]) for a,b in brr]
+
+    log(arr)
+    log(brr)
+
     g = defaultdict(list)
     c = defaultdict(int)
     for a,b in brr:
@@ -78,7 +94,6 @@ def solve_(arr, brr, n):
             cycles.extend(current_graph)
         else:
             trees.append(current_graph)
-
 
 
     # log(cycles)
