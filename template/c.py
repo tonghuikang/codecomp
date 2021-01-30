@@ -53,8 +53,9 @@ def solve_(arr, brr, n):
     arr = [(reindex[a], reindex[b]) for a,b in arr]
     brr = [(reindex[a], reindex[b]) for a,b in brr]
 
-    log(arr)
-    log(brr)
+    n = len(reindex)
+    # log(arr)
+    # log(brr)
 
     g = defaultdict(list)
     c = defaultdict(int)
@@ -89,7 +90,7 @@ def solve_(arr, brr, n):
                 visited.add(nex)
                 stack.append(nex)
                 current_graph.add(nex)
-        log(count, num_nodes)
+        # log(count, num_nodes)
         if count >= num_nodes*2:
             cycles.extend(current_graph)
         else:
@@ -101,20 +102,24 @@ def solve_(arr, brr, n):
     # log(trees)
 
     def evaluate(taken):
-        if taken&forbidden:
-            return 0
-        for tree in trees:  # not all elements of a tree and be present together
-            if len(tree) == len(tree & taken):
-                return 0
+        # if taken&forbidden:
+        #     return 0
+        # for tree in trees:  # not all elements of a tree and be present together
+        #     if len(tree) == len(tree & taken):
+        #         return 0
         res = 0
         for a,b in arr:
             if a in taken and b in taken:
                 res += 1
         return res
 
+
     maxres = 0
-    for comb in itertools.product([0,1], repeat=n):
-        taken = set([i for i,c in enumerate(comb) if c])
+    for comb in itertools.product(*trees):
+        taken = set(range(n))
+        for x in comb:
+            taken.remove(x)
+        # taken = set([i for i,c in enumerate(comb) if c])
         res = evaluate(taken)
         # log(taken, res)
         maxres = max(maxres, res)
