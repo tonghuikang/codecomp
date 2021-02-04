@@ -153,6 +153,21 @@ matrix = [col for col in zip(*matrix)][::-1]  # thirce
 
 
 
+##### Sorting based on custom comparison
+
+```python
+from functools import cmp_to_key
+  def compare(a,b):
+    if a+b > b+a:
+        return -1
+    if a+b < b+a:
+        return 1
+    return 0
+nums = sorted(nums, key=cmp_to_key(compare))
+```
+
+
+
 ## Python Standard Library
 
 The [Python Standard Library](https://docs.python.org/3.6/library/) consist of packages that installed together with Python, and is available in all competitive programming platforms. Again, these snippets presented are in decreasing freqeuncy of my usage.
@@ -286,6 +301,35 @@ itertools.zip_longest(arr, brr, fillvalue=0)
 ```
 
 - [Documentation](https://docs.python.org/3/library/itertools.html#itertools.zip_longest)
+
+
+
+## Other libraries
+
+##### scipy.optimize
+
+Tool to minimise convex functions
+
+https://docs.scipy.org/doc/scipy/reference/optimize.html
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+
+class Solution:
+    def getMinDistSum(self, positions):
+        
+        def loss_function(z):
+            loss = 0
+            for a, b in positions:
+                loss += ((z[0] - a)**2 + 
+                         (z[1] - b)**2)**0.5
+            return loss
+        
+        res = minimize(loss_function, [0,0])
+        print(res)
+        return res.fun
+```
 
 
 

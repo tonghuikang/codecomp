@@ -70,5 +70,6 @@ class FenwickTree:
 # todo
 #   - Segment Tree
 #   - Lazy Segment Tree
+#   - AVL Tree https://github.com/tonghuikang/binary-tree
 #   - [intervaltree](https://github.com/chaimleib/intervaltree) clone
 #   - [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) clone

@@ -1,4 +1,4 @@
-# Use of numba on AtCoder
+### Use of numba on AtCoder
 
 AtCoder is more experimental with their platform and allows other popular Python packages.
 
@@ -44,7 +44,7 @@ Vectorised operations are now allowed (with numpy arrays), but not necessary for
 
 
 
-Modifying Counters may be slow
+### Modifying Counters may be slow
 
 ```python
 from collections import Counter

@@ -58,12 +58,12 @@ They have mostly discontinued contests.
 
 The defining feature of TopCoder is the focus on hacking other's solutions.
 
-The UI is quite bad.
+
 
 
 ### CodeChef
 
-Might as well do Codeforces. The UI is equally bad.
+Codeforces but with slow UI and troublesome UX.
 
 
 
@@ -120,7 +120,7 @@ It is possible to run your code on parallel machines. You might want to set that
 
 ## Interactive problems - general
 
-This feature is available on Leetcode, Google and Codeforces.
+Google and Codeforces may ask you to parse beyond the first input.
 
 You need to flush after printing `print(i, flush=True)`.  
 

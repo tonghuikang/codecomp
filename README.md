@@ -12,33 +12,5 @@ Only after participating in a few contests and if you are really interested in c
 
 For every competition, I will create a new branch out of `master` and edit my code in `template` folder. At the end of the competition, I will push my code to GitHub.
 
-## 
-
-
-
-Mathematical theories
-- [Geometry](geometry.md)
-- [Number theory](number_theory.md)
-- [Probability](probability.md)
-
-Methods
-- [Binary search](binary_search.md)
-- [Dynamic programming](dynamic_programming.md)
-
-Specific problems
-- [Optimisation](optimisation.md)
-- [Named problems](specific_problems.md)
-
-Data structures
-- [Graphs](graphs.md)
-- [Trees](tree.md)
-
-Miscellaneous
-- [Websites](websites.md)
-- [Interview](interview.md)
-- [Setup](setup.md)
-
-
-
 
 
