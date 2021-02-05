@@ -43,13 +43,32 @@ def solve_(arr, m):
     # your solution here
 
     if m%2 == 1:
-        return [1,2]*((m+1)//2)
+        return [0,1]*((m+1)//2)
 
     for i,row in enumerate(arr):
         for j,cell in enumerate(row[:i]):
             if cell == arr[j][i]:
-                # log(cell, arr[j][i])
-                return [i+1,j+1]*(m//2) + [i+1]
+                return [i,j]*(m//2) + [i]
+    
+    x,y,z = -1,-1,-1
+    for i,row in enumerate(arr):
+        c = Counter(row)
+        if c["a"] and c["b"]:
+            x = row.index("a")
+            y = row.index("b")
+            z = i
+            break
+    else:
+        if len(arr) > 2:
+            log("error")
+        return []
+    
+    log(x,y,z)
+    if m%4 == 0:
+        return [z,x,z,y]*(m//4) + [z]
+    
+    if m%4 == 2:
+        return [y,z]*(m//4) + [x,z,y] + [z,x]*(m//4)
 
     return []
 
@@ -76,12 +95,14 @@ for case_num in range(int(input())):
     arr = read_strings(n)  # and return as a list of str
 
     res = solve(arr, m)  # include input here
-    
+    res = [1+x for x in res]
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
+
     if res:
+        assert len(res) == m+1
         print("YES")
         print(*res)
     else:
