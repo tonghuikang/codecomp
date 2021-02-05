@@ -39,10 +39,30 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(x,y,srr):
     # your solution here
+    
+    c = Counter(srr)
 
-    return ""
+    if x == 0:
+        pass
+    elif x < 0:
+        if c["L"] < -x:
+            return "NO"
+    else:
+        if c["R"] < x:
+            return "NO"
+    
+    if y == 0:
+        pass
+    elif y < 0:
+        if c["D"] < -y:
+            return "NO"
+    else:
+        if c["U"] < y:
+            return "NO"
+
+    return "YES"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -53,20 +73,20 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    a,b = list(map(int,input().split()))
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b,srr)  # include input here
     
     # print result
     # Google and Facebook - case number required

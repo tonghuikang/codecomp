@@ -39,10 +39,43 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr,brr,crr):
     # your solution here
 
-    return ""
+    # last painter color must be in the result
+    if crr[-1] not in brr:
+        return []
+
+    # must be able to paint all
+    c_able = Counter(arr) + Counter(crr)
+    c_required = Counter(brr)
+
+    for color,required in c_required.items():
+        if c_able[color] < required:
+            log("not enough painters")
+            return []
+
+    # identify difference
+    required = defaultdict(list)
+    for i,(a,b) in enumerate(zip(arr,brr)):
+        if a != b:
+            required[b].append(i)
+    
+    # identify the last fence and stuff all in
+    last_color = crr[-1]
+    if required[last_color]:
+        last_fence = required[last_color].pop()
+    else:
+        last_fence = brr.index(last_color)
+
+    res = [last_fence]
+    for c in crr[:-1][::-1]:
+        if required[c]:
+            res.append(required[c].pop())
+        else:
+            res.append(last_fence)
+
+    return res[::-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,21 +92,27 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
+    crr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
-    
+    res = solve(arr,brr,crr)  # include input here
+    res = [1+x for x in res]
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    if res:
+        print("YES")
+        print(*res)
+    else:
+        print("NO")
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
