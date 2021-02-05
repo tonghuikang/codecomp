@@ -44,6 +44,7 @@ def solve_(arr,brr,crr):
 
     # last painter color must be in the result
     if crr[-1] not in brr:
+        log("last painter not in result")
         return []
 
     # must be able to paint all
@@ -52,6 +53,7 @@ def solve_(arr,brr,crr):
 
     for color,required in c_required.items():
         if c_able[color] < required:
+            log(color)
             log("not enough painters")
             return []
 
@@ -75,7 +77,16 @@ def solve_(arr,brr,crr):
         else:
             res.append(last_fence)
 
-    return res[::-1]
+    res = res[::-1]
+
+    for c,r in zip(crr, res):
+        arr[r] = c
+    assert arr == brr
+
+    for v in required.values():
+        assert not v
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
