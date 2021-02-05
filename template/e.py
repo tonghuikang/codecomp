@@ -38,80 +38,32 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-# Dynamic Programming solution to construct Longest
-# Increasing Subsequence
-
-# Function to construct and print Longest Increasing
-# Subsequence
-def constructPrintLIS(nums):
-    h = [nums[0]] 
-    for i in range(1, len(nums)):
-        if nums[i] >= h[-1]:
-            h.append(nums[i])
-        else:
-            j = bisect.bisect_left(h, nums[i]) 
-            h[j] = nums[i]
-    return h
-
-
 
 def solve_(lst):
-    # your solution here
 
-    idx = {}
+    left = {}
+    right = {}
+    c = Counter(lst)
+    for i,x in enumerate(lst):
+        if x not in left:
+            left[x] = i
+        right[x] = i
 
-    for i,x in list(enumerate(lst))[::-1]:
-        idx[x] = i
-    arr = [idx[x] for x in lst]
-    log("arr", arr)
+    c2 = Counter()
+    dp = [0 for _ in range(len(lst)+1)]
+    for i,x in reversed(list(enumerate(lst))):
+        c2[x] += 1
+        if left[x] == i:
+            dp[i] = c[x] + dp[right[x] + 1]
+        else:
+            dp[i] = c2[x]
+        dp[i] = max(dp[i], dp[i+1])
 
-    c = Counter(arr)
-    blocker = False
-    if c[lst[-1]] == 1:
-        blocker = True 
-    
-    arr = [x for x in arr if c[x] > 1]
-    log("arr trimmed", arr)
+    log(dp)
 
-    res = constructPrintLIS(arr)
-    lenres = len(res)
-    c2 = Counter(res)
-    for x in set(res):
-        if c2[x] != c[x]:
-            lenres -= c2[x]
-    log("init", len(res), lenres, res, arr)
-    minres = len(lst) - lenres
+    return len(lst) - dp[0]
 
-    if len(idx) == 1:  # if one element
-        log("one element")
-        return minres
 
-    newres = 0
-    # if not blocker:
-    #     i = len(lst)-1
-    #     while i >= 0:
-    #         if lst[i] == lst[-1]:
-    #             i -= 1
-    #         else:
-    #             break
-    #     log(lst[:i+1])
-    #     rst = [x for x in lst[:i+1] if x != lst[-1]]
-    #     log(rst)
-    #     arr = [idx[x] for x in rst]
-    #     log(arr)
-
-    #     res = constructPrintLIS(arr)
-    #     lenres = len(res)
-    #     c2 = Counter(res)
-    #     for x in set(res):
-    #         if c2[x] != c[x]:
-    #             lenres -= c2[x]
-
-    #     newres = len(arr) - lenres + len(lst[:i+1]) - len(rst)
-    #     log(len(arr), lenres, len(lst[:i+1]), len(rst))
-    #     log("newres", newres)
-
-    return max(minres, newres)
 
 
 for case_num in [0]:  # no loop over test case
