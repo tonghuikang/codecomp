@@ -81,10 +81,15 @@ def solve_(arr,brr,crr):
 
     for c,r in zip(crr, res):
         arr[r] = c
-    assert arr == brr
+    log(arr)
+    if not arr == brr:
+        log("error 1")
+        return []
 
     for v in required.values():
-        assert not v
+        if v:
+            log("error 2")
+            return []
 
     return res
 
