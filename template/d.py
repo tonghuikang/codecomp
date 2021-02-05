@@ -39,10 +39,19 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, m):
     # your solution here
 
-    return ""
+    if m%2 == 1:
+        return [1,2]*((m+1)//2)
+
+    for i,row in enumerate(arr):
+        for j,cell in enumerate(row[:i]):
+            if cell == arr[j][i]:
+                # log(cell, arr[j][i])
+                return [i+1,j+1]*(m//2) + [i+1]
+
+    return []
 
 
 # for case_num in [0]:  # no loop over test case
@@ -66,16 +75,15 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     arr = read_strings(n)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, m)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))
-    # print(*res)  # print a list with elements
-    # for r in res:  # print each list in a different line
-        # print(res)
-        # print(*res)
+    if res:
+        print("YES")
+        print(*res)
+    else:
+        print("NO")
+
