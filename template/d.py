@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
-import sys, getpass
+import sys
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
+
+
+# custom imports
+# import pandas
+# from sklearn.model_selection import train_test_split
+
+# from scipy.optimize import linear_sum_assignment
+
+# import torch
+# import keras
+# import tensorflow
+
+# import lightgbm
+# import xgboost
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -16,8 +31,8 @@ M9 = 10**9 + 7  # 998244353
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+OFFLINE_TEST = True  # quora does not allow getpass
+# OFFLINE_TEST = False  # quora does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)

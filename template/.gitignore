@@ -1,3 +1,4 @@
 # compiled C++ files
 a.out
 tmp.out
+*.pyc
