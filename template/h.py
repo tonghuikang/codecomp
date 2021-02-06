@@ -16,9 +16,13 @@ from collections import Counter, defaultdict, deque
 # lst = input().split()
 
 # read one line and parse each word as an integer
-a,b = list(map(int,input().split()))
+v,t,s,d = list(map(int,input().split()))
 # lst = list(map(int,input().split()))
 
-# include logic here
+# print(v*t, d, v*s)
 
-print(a+b)
+# include logic here
+if v*t <= d <= v*s:
+    print("No")
+else:
+    print("Yes")

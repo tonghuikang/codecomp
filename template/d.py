@@ -38,16 +38,54 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
-def solve_():
+
+def solve_(x,y,r):
     # your solution here
+    r2 = r**2
 
-    return ""
+    left_x = int(ceiling_division(x-r,1))
+    right_x = int(x+r)
+
+    centre_x_left = int(x)
+    centre_x_right = int(ceiling_division(x,1))
+    if centre_x_left == centre_x_right:
+        centre_x_left -= 1
+    
+    log(left_x, right_x, centre_x_left, centre_x_right)
+
+    res = 0
+
+    y_top = int(ceiling_division(y,1))
+    y_bot = int(y)
+    for x_cur in range(left_x, centre_x_left+1):
+        while (y_top-y)**2 + (x_cur-x)**2 <= r2:
+            y_top += 1
+        while (y_bot-y)**2 + (x_cur-x)**2 <= r2:
+            y_bot -= 1
+        inc = y_top - y_bot - 1
+        # log(inc)
+        res += inc
+        
+    y_top = int(ceiling_division(y,1))
+    y_bot = int(y)
+    for x_cur in range(right_x, centre_x_right-1, -1):
+        while (y_top-y)**2 + (x_cur-x)**2 <= r2:
+            y_top += 1
+        while (y_bot-y)**2 + (x_cur-x)**2 <= r2:
+            y_bot -= 1
+        inc = y_top - y_bot - 1
+        # log(inc)
+        res += inc
+        
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +97,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    x,y,r = list(map(float,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(x,y,r)  # include input here
     
     # print result
     # Google and Facebook - case number required
