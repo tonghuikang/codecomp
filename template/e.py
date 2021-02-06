@@ -46,7 +46,21 @@ def solve_(mrr, n):
     for a,b,c in mrr:
         d[a-1].append((b-1,c))
 
-    d = {k:sorted(v) for k,v in d.items()}
+    # log(d)
+
+    d2 = []
+    for k in range(n):
+        v = d[k]
+        v = sorted(v)
+        visited = set()
+        v2 = []
+        for b,c in v:
+            if b in visited:
+                continue
+            visited.add(b)
+            v2.append((b,c))
+        d2.append(v2)
+    d = d2
 
     # log(d)
     LARGE = 10**10
