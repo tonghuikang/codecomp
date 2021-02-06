@@ -57,7 +57,7 @@ def read_matrix(rows):
 def solve_(mrr, f, b):
     # your solution here
 
-    ff = [b//2, b//4, b//8]
+    ff = [b//3, b//3, b//6]
     ff.append(b-sum(ff))
     identified = set()
     # log(ff)
