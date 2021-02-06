@@ -52,6 +52,7 @@ def solve_(x,y,r):
     centre_x_left = ((x)//10000)*10000
     centre_x_right = ceiling_division(x,10000)*10000
     if centre_x_left == centre_x_right:
+        log("avoid double count middle")
         centre_x_left -= 10000
     
     log(left_x, right_x, centre_x_left, centre_x_right)
@@ -67,6 +68,7 @@ def solve_(x,y,r):
             y_bot -= 10000
         inc = (y_top - y_bot)//10000 - 1
         # log(inc)
+        assert inc >= 0
         res += inc
         
     y_top = ceiling_division(y,10000)*10000
@@ -78,6 +80,7 @@ def solve_(x,y,r):
             y_bot -= 10000
         inc = (y_top - y_bot)//10000 - 1
         # log(inc)
+        assert inc >= 0
         res += inc
         
     return res
@@ -94,14 +97,23 @@ for case_num in [0]:  # no loop over test case
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    # lst = input().split()
+    x,y,r = input().split()
     
     # read one line and parse each word as an integer
-    x,y,r = list(map(float,input().split()))
+    # x,y,r = list(map(float,input().split()))
     # lst = list(map(int,input().split()))
-    x = int(x*10000)
-    y = int(y*10000)
-    r = int(r*10000)
+    
+    def parse_decimals(srr):
+        if "." not in srr:
+            return int(srr)*10000
+        s1,s2 = srr.split(".")
+        s2_val = int(s2) * 10**(4-len(s2))
+        # log(s2_val)
+        return int(s1)*10000 + s2_val
+    
+    x = parse_decimals(x)
+    y = parse_decimals(y)
+    r = parse_decimals(r)
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
