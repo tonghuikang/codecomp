@@ -32,8 +32,8 @@ M9 = 10**9 + 7  # 998244353
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = True  # quora does not allow getpass
-# OFFLINE_TEST = False  # quora does not allow getpass
+# OFFLINE_TEST = True  # quora does not allow getpass
+OFFLINE_TEST = False  # quora does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -57,21 +57,35 @@ def read_matrix(rows):
 def solve_(mrr, f, b):
     # your solution here
 
-    means = []
-    sds = []
-    for j in range(f):
-        lst = [row[j] for row in mrr]
-        sds.append(stdev(lst))
-        means.append(sum(lst)/len(lst))
+    ff = [b//2, b//4, b//8]
+    ff.append(b-sum(ff))
+    identified = set()
+    # log(ff)
 
-    losses = []
-    for i,row in enumerate(mrr):
-        loss = sum([(x-mean)**2/sd**2 for mean, sd, x in zip(means, sds, row)])
-        losses.append((loss,i))
-        
-    losses = sorted(losses)[::-1]
+    for fff in ff:
+        means = []
+        sds = []
+        for j in range(f):
+            lst = [row[j] for row in mrr]
+            sds.append(stdev(lst))
+            means.append(sum(lst)/len(lst))
 
-    return [i+1 for loss,i in losses[:b]]
+        losses = []
+        for i,row in enumerate(mrr):
+            loss = sum([(x-mean)**2/sd**2 for mean, sd, x in zip(means, sds, row)])
+            losses.append((loss,i))
+            
+        losses = sorted(losses)[::-1]
+        for loss,i in losses:
+            if fff == 0:
+                break
+            if i in identified:
+                continue
+            identified.add(i)
+            fff -= 1
+            mrr[i] = mrr[i][::-1]
+
+    return [i+1 for i in identified]
 
 
 for case_num in [0]:  # no loop over test case
