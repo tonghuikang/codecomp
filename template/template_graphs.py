@@ -128,6 +128,12 @@ def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target
 def floyd_warshall(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
     raise NotImplementedError
 
+
+def maximum_bipartite_matching(map_from_node_to_nodes):
+    # maximum independent set = total vertexes — edges in maximum matching
+    raise NotImplementedError
+
+
 class Dinic:
     # codeforces.com/contest/1473/submission/104332748
     def __init__(self, N):
