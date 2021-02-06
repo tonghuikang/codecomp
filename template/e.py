@@ -46,7 +46,9 @@ def solve_(mrr, n):
     for a,b,c in mrr:
         d[a-1].append((b-1,c))
 
-    log(d)
+    d = {k:sorted(v) for k,v in d.items()}
+
+    # log(d)
 
     res = []
     for start in range(n):
@@ -60,7 +62,7 @@ def solve_(mrr, n):
                     continue
                 visited[nex] = cur_cost+cost
                 heapq.heappush(stack, (cur_cost+cost, nex))
-        log(start, visited)
+        # log(start, visited)
         if start in visited:
             res.append(visited[start])
         else:
@@ -97,7 +99,7 @@ for case_num in [0]:  # no loop over test case
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(*res)
+    print("\n".join(str(x) for x in res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
