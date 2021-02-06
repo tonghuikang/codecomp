@@ -54,15 +54,48 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(num_columns, row_divider, col_divider, employees):  # swapped
     # your solution here
+    employee_location = defaultdict(set)
+
+    for row,col in employees:
+        employee_location[col].add(row)
+
+    minres = 0
+    for comb_row in itertools.product([0,1], repeat=num_columns*2):
+        for comb_col in itertools.product([0,1], repeat=(num_columns-1)*3):
+            res = 0
+            # g = defaultdict(list)
+            # for i,x in enumerate(comb_row[0::2]):
+            #     if x == 1:
+            #         res += col_divider[0][i]
+            #         g[i,0].append((i,1))
+            #         g[i,1].append((i,0))
+            # for i,x in enumerate(comb_row[1::2]):
+            #     if x == 1:
+            #         res += col_divider[1][i]
+
+            for i,x in enumerate(comb_row[0::3]):
+                if x == 1:
+                    res += row_divider[0][i]
+            for i,x in enumerate(comb_row[1::3]):
+                if x == 1:
+                    res += row_divider[1][i]
+            for i,x in enumerate(comb_row[2::3]):
+                if x == 1:
+                    res += row_divider[2][i]
+        
+        pass
+
+    log(employee_location)
+
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -74,14 +107,15 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    num_columns, num_employees = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
-
-    res = solve()  # include input here
+    col_divider = read_matrix(3)  # and return as a list of list of int
+    row_divider = read_matrix(2)  # and return as a list of list of int
+    employees = read_matrix(num_employees)  # and return as a list of str
+    employees = [(a-1,b-1) for a,b in employees]
+    res = solve(num_columns, col_divider, row_divider, employees)  # include input here
     
     # print result
     # Google and Facebook - case number required
