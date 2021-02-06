@@ -11,6 +11,7 @@ input = sys.stdin.readline  # to read input quickly
 # from sklearn.model_selection import train_test_split
 
 # from scipy.optimize import linear_sum_assignment
+from statistics import stdev
 
 # import torch
 # import keras
@@ -46,23 +47,36 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+    return [list(map(float,input().split())) for _ in range(rows)]
 
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
 
 # ---------------------------- template ends here ----------------------------
 
+# identify the worse, and flip back, and recaluate
 
-def solve_():
+def solve_(mrr, f, b):
     # your solution here
 
-    return ""
+    means = []
+    sds = []
+    for j in range(f):
+        lst = [row[j] for row in mrr]
+        sds.append(stdev(lst))
+        means.append(sum(lst)/len(lst))
+
+    losses = []
+    for i,row in enumerate(mrr):
+        loss = sum([(x-mean)**2/sd**2 for mean, sd, x in zip(means, sds, row)])
+        losses.append((loss,i))
+        
+    losses = sorted(losses)[::-1]
+
+    return [i+1 for loss,i in losses[:b]]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -74,21 +88,21 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,f,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr, f, b)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    print("\n".join(str(x) for x in res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
