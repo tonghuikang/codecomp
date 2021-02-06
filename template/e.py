@@ -73,6 +73,8 @@ def solve_(mrr, n):
         curres = LARGE
         while stack:
             cur_cost,cur = heapq.heappop(stack)
+            if cur in cleared:
+                continue
             cleared.add(cur)
             for nex,cost in d[cur]:
                 if nex == start:
