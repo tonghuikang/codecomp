@@ -88,36 +88,26 @@ def solve_(m,story_creator,user_follow_user,user_follow_story):
     for user_i in range(m):
         scoring = [0 for _ in story_creator]  # default scoring
 
-        # score 1 - both users follow the same story, story is followed by other user
-        for user_j in map_user_to_following_user_follow[user_i]:  # x1
-            for story in map_user_to_followed_stories[user_j]:  # x1
-                scoring[story] += 1
-
-        # score 2 - both users follow the same story, story is created by other user
-        for user_j in map_user_to_following_user_follow[user_i]:  # x1
-            for story in map_user_to_created_stories[user_j]:  # x2
-                scoring[story] += 2
-
-        # score 2 - story is created by other user, story is created by other user
-        for user_j in map_user_to_following_user_create[user_i]:  # x2
-            for story in map_user_to_followed_stories[user_j]:  # x1
-                scoring[story] += 2
-
-        # score 3 - user directly follow the other user, story is followed by other user 
-        for user_j in map_user_to_following_user_direct[user_i]:  # x3
-            for story in map_user_to_followed_stories[user_j]:  # x1
-                scoring[story] += 3
-
-        # score 4 - story is created by other user, story is created by other user
-        for user_j in map_user_to_following_user_create[user_i]:  # x2
-            for story in map_user_to_created_stories[user_j]:  # x2
-                scoring[story] += 4
-
-        # score 6 - user directly follow the other user, story is created by other user 
-        for user_j in map_user_to_following_user_direct[user_i]:  # x3
-            for story in map_user_to_created_stories[user_j]:  # x2
-                scoring[story] += 6
+        for user_j in range(m):
+            if user_i == user_j:
+                continue
         
+            multiplier = 0
+            if user_j in map_user_to_following_user_direct[user_i]:
+                multiplier = 3
+
+            elif user_j in map_user_to_following_user_create[user_i]:
+                multiplier = 2
+
+            elif user_j in map_user_to_following_user_follow[user_i]:
+                multiplier = 1
+
+            for story in range(len(story_creator)):
+                if story in map_user_to_created_stories[user_j]:
+                    scoring[story] += multiplier*2
+                elif story in map_user_to_followed_stories[user_j]:
+                    scoring[story] += multiplier*1
+
         # score -1 - user already follow or create the story
         for story in map_user_to_followed_stories[user_i]:  # -1
             scoring[story] = -1
