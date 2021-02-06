@@ -42,32 +42,32 @@ def read_strings(rows):
 def solve_(mrr, n):
     # your solution here
 
-    d = defaultdict(list)
+    d = {k:[] for k in range(n)}
     for a,b,c in mrr:
         d[a-1].append((b-1,c))
 
     d = {k:sorted(v) for k,v in d.items()}
 
     # log(d)
+    LARGE = 10**10
 
     res = []
     for start in range(n):
-        visited = {}
+        visited = {k:LARGE for k in range(n)}
         cleared = set()
         stack = [(0, start)]
+        curres = LARGE
         while stack:
             cur_cost,cur = heapq.heappop(stack)
+            cleared.add(cur)
             for nex,cost in d[cur]:
-                if nex in visited:
+                if nex == start:
+                    curres = min(curres, cur_cost+cost)
+                if nex in cleared:
                     continue
-                visited[nex] = cur_cost+cost
+                visited[nex] = min(visited[nex], cur_cost+cost)
                 heapq.heappush(stack, (cur_cost+cost, nex))
-        # log(start, visited)
-        if start in visited:
-            res.append(visited[start])
-        else:
-            res.append(-1)
-
+        res.append(curres if curres < LARGE else -1)
     return res
 
 
