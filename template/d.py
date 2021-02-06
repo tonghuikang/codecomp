@@ -46,37 +46,37 @@ def solve_(x,y,r):
     # your solution here
     r2 = r**2
 
-    left_x = int(ceiling_division(x-r,1))
-    right_x = int(x+r)
+    left_x = ceiling_division(x-r,10000)*10000
+    right_x = ((x+r)//10000)*10000
 
-    centre_x_left = int(x)
-    centre_x_right = int(ceiling_division(x,1))
+    centre_x_left = ((x)//10000)*10000
+    centre_x_right = ceiling_division(x,10000)*10000
     if centre_x_left == centre_x_right:
-        centre_x_left -= 1
+        centre_x_left -= 10000
     
     log(left_x, right_x, centre_x_left, centre_x_right)
 
     res = 0
 
-    y_top = int(ceiling_division(y,1))
-    y_bot = int(y)
-    for x_cur in range(left_x, centre_x_left+1):
+    y_top = ceiling_division(y,10000)*10000
+    y_bot = (y//10000)*10000
+    for x_cur in range(left_x, centre_x_left+10000,10000):
         while (y_top-y)**2 + (x_cur-x)**2 <= r2:
-            y_top += 1
+            y_top += 10000
         while (y_bot-y)**2 + (x_cur-x)**2 <= r2:
-            y_bot -= 1
-        inc = y_top - y_bot - 1
+            y_bot -= 10000
+        inc = (y_top - y_bot)//10000 - 1
         # log(inc)
         res += inc
         
-    y_top = int(ceiling_division(y,1))
-    y_bot = int(y)
-    for x_cur in range(right_x, centre_x_right-1, -1):
+    y_top = ceiling_division(y,10000)*10000
+    y_bot = (y//10000)*10000
+    for x_cur in range(right_x, centre_x_right-10000, -10000):
         while (y_top-y)**2 + (x_cur-x)**2 <= r2:
-            y_top += 1
+            y_top += 10000
         while (y_bot-y)**2 + (x_cur-x)**2 <= r2:
-            y_bot -= 1
-        inc = y_top - y_bot - 1
+            y_bot -= 10000
+        inc = (y_top - y_bot)//10000 - 1
         # log(inc)
         res += inc
         
@@ -99,6 +99,9 @@ for case_num in [0]:  # no loop over test case
     # read one line and parse each word as an integer
     x,y,r = list(map(float,input().split()))
     # lst = list(map(int,input().split()))
+    x = int(x*10000)
+    y = int(y*10000)
+    r = int(r*10000)
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
