@@ -40,27 +40,47 @@ def read_strings(rows):
 
 
 def solve_(lst):
-    # your solution here
-
-    prev = -1
+    prev = 0
     keep = []
     dump = []
     
     for x in lst:
         if x == prev:
             dump.append(x)
-            keep.append(-1)
+            keep.append(0)
         else:
             keep.append(x)
-            dump.append(-1)
+            dump.append(0)
         prev = x
+
+    # log(dump)
+    # log(keep)
+
+    # between adjacent same elements in dump, if there are more than one unique element in keep at the same range, migrate
+    locations = [(i,x) for i,x in enumerate(dump) if x]
+    # log(locations)        
+
+    for (i1,x1),(i2,x2) in zip(locations,locations[1:]):
+        if x1 == x2:
+            count = set()
+            for i in range(i1+1,i2):
+                if keep[i]:
+                    count.add(keep[i])
+            # log(i1,x1,i2,x2,count)
+            if len(count) > 1:
+                # log("migrate")
+                idx = i1+1
+                keep[idx],dump[idx] = 0,keep[idx]
 
     log(dump)
     log(keep)
 
-    res = len(keep)
+
+    res = sum(bool(x) for x in keep)
     prev = -1
     for x in dump:
+        if x == 0:
+            continue
         if prev != x:
             res += 1
         prev = x
