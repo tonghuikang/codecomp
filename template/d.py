@@ -47,7 +47,7 @@ def solve_(lst):
             arr.append(x)
         prev = x
     del lst
-    log(arr)
+    # log(arr)
 
     c = Counter(arr)
     # logs(c)
@@ -63,6 +63,9 @@ def solve_(lst):
         else:
             dump.append(0)
             keep.append(x)
+    
+    log(dump)
+    log(keep)
 
     def count(lst):
         lst = [x for x in lst if x] + [0]
