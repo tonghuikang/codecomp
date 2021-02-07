@@ -54,100 +54,80 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(m,story_creator,user_follow_user,user_follow_story):
+def solve_(arr):
     # your solution here
 
-    map_story_to_creator = {story:user for story,user in enumerate(story_creator)}
+    board = [[] for _ in range(7)]        
 
-    map_user_to_created_stories = defaultdict(set)
-    for story,user in enumerate(story_creator):
-        map_user_to_created_stories[user].add(story)
-
-    map_story_to_followers = defaultdict(set)
-    map_user_to_followed_stories = defaultdict(set)
-    for user,story in user_follow_story:
-        map_user_to_followed_stories[user].add(story)
-        map_story_to_followers[story].add(user)
-
-    map_user_to_following_user_direct = defaultdict(set)
-    for user_following,user_followed in user_follow_user:
-        map_user_to_following_user_direct[user_following].add(user_followed)
-
-    map_user_to_following_user_create = defaultdict(set)
-    for user in range(m):
-        stories_followed = map_user_to_followed_stories[user]
-        for story in stories_followed:
-            map_user_to_following_user_create[user].add(map_story_to_creator[story])
-
-    map_user_to_following_user_follow = defaultdict(set)
-    for user in range(m):
-        stories_followed = map_user_to_followed_stories[user]
-        for story in stories_followed:
-            map_user_to_following_user_follow[user].update(map_story_to_followers[story])
-
-    for user_i in range(m):
-        scoring = [0 for _ in story_creator]  # default scoring
-
-        for user_j in range(m):
-            if user_i == user_j:
-                continue
+    def check(board):
+        board = [col + [2]*(6-len(col)) for col in board]
+        log(board)
+        for col in board:
+            for a,b,c,d in zip(col, col[1:], col[2:], col[3:]):
+                if a == b == c == d != 2:
+                    return a
         
-            multiplier = 0
-            if user_j in map_user_to_following_user_direct[user_i]:
-                multiplier = 3
+        board_t = zip(*board)
+        for row in board_t:
+            for a,b,c,d in zip(row, row[1:], row[2:], row[3:]):
+                if a == b == c == d != 2:
+                    return a
 
-            elif user_j in map_user_to_following_user_create[user_i]:
-                multiplier = 2
+        for row1,row2,row3,row4 in zip(board, board[1:], board[2:], board[3:]):
+            for a,b,c,d in zip(row1, row2[1:], row3[2:], row4[3:]):
+                if a == b == c == d != 2:
+                    return a
 
-            elif user_j in map_user_to_following_user_follow[user_i]:
-                multiplier = 1
+        for row1,row2,row3,row4 in zip(board, board[1:], board[2:], board[3:]):
+            for a,b,c,d in zip(row4, row3[1:], row2[2:], row1[3:]):
+                if a == b == c == d != 2:
+                    return a
+        return 2
 
-            for story in range(len(story_creator)):
-                if story in map_user_to_created_stories[user_j]:
-                    scoring[story] += multiplier*2
-                elif story in map_user_to_followed_stories[user_j]:
-                    scoring[story] += multiplier*1
+    current = 0
+    for i,x in enumerate(arr):
+        board[x].append(current)
+        current = 1-current
+        res = check(board)
+        log(res)
+        if res < 2:
+            if res == 0:
+                return "RED {}".format(i+1)
+            return "YELLOW {}".format(i+1)
 
-        # score -1 - user already follow or create the story
-        for story in map_user_to_followed_stories[user_i]:  # -1
-            scoring[story] = -1
-        for story in map_user_to_created_stories[user_i]:  # -1
-            scoring[story] = -1
-
-        log(user_i, scoring)
-        res = sorted((score,-i) for i,score in enumerate(scoring))[::-1]
-        print(*[-i+1 for score,i in res][:3])
-    
-    return
+    return "DRAW"
 
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 # for case_num in range(int(input())):
 
-   
+    arr = []
+    for i in range(42):
+        arr.append(int(input())-1)
+    
     # read one line and parse each word as an integer
-    n,m = list(map(int,input().split()))
-    story_creator = []
-    for i in range(n):
-        story_creator.append(int(input())-1)
+    # n,m = list(map(int,input().split()))
+    # story_creator = []
+    # for i in range(n):
+    #     story_creator.append(int(input())-1)
 
-    p,q = list(map(int,input().split()))
-    user_follow_user = read_matrix(p)  # and return as a list of list of int
-    user_follow_story = read_matrix(q)  # and return as a list of list of int
+    # p,q = list(map(int,input().split()))
+    # user_follow_user = read_matrix(p)  # and return as a list of list of int
+    # user_follow_story = read_matrix(q)  # and return as a list of list of int
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve(m,story_creator,user_follow_user,user_follow_story)  # include input here
+    res = solve(arr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    # print(res)
+    print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line

@@ -11,7 +11,7 @@ input = sys.stdin.readline  # to read input quickly
 # from sklearn.model_selection import train_test_split
 
 # from scipy.optimize import linear_sum_assignment
-from statistics import stdev
+# from statistics import stdev
 
 # import torch
 # import keras
@@ -32,8 +32,8 @@ M9 = 10**9 + 7  # 998244353
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-# OFFLINE_TEST = True  # quora does not allow getpass
-OFFLINE_TEST = False  # quora does not allow getpass
+OFFLINE_TEST = True  # quora does not allow getpass
+# OFFLINE_TEST = False  # quora does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -47,45 +47,64 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(float,input().split())) for _ in range(rows)]
+    return [list(map(int,input().split())) for _ in range(rows)]
 
 
 # ---------------------------- template ends here ----------------------------
 
 # identify the worse, and flip back, and recaluate
 
-def solve_(mrr, f, b):
+def solve_(mrr):
     # your solution here
+    middle2both = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
+    middle2left = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
+    middle2right = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
+    middle = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    before = defaultdict(lambda: defaultdict(int))
+    after = defaultdict(lambda: defaultdict(int))
+    before2 = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    after2 = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
 
-    ff = [b//8, b//8, b//8, b//8, b//8, b//16, b//16, b//16, b//16, b//16, b//16]
-    ff.append(b-sum(ff))
-    identified = set()
-    # log(ff)
+    for line in mrr:
+        for a,b,c in zip(line, line[1:], line[2:]):
+            if b != -1:
+                middle[a][c][b] += 520000
+            if c != -1:
+                before2[a][b][c] += 5000
+            if a != -1:
+                after2[b][c][a] += 6000
+        for a,b in zip(line, line[1:]):
+            if a != -1:
+                before[b][a] += 4
+            if b != -1:
+                after[a][b] += 5
+        for a,b,c,d,e in zip(line, line[1:], line[2:], line[3:], line[4:]):
+            if c != -1:
+                middle2left[a][b][d][c] += 1100000
+                middle2right[b][d][e][c] += 1000000
+                middle2both[a][b][d][e][c] += 10000000
 
-    for fff in ff:
-        means = []
-        sds = []
-        for j in range(f):
-            lst = [row[j] for row in mrr]
-            sds.append(stdev(lst))
-            means.append(sum(lst)/len(lst))
+    res = []
+    for line in mrr:
+        for x,a,b,c,y in zip(line, line[1:], line[2:], line[3:], line[4:]):
+            counter = Counter()
+            if b == -1:
+                # print(a,b,c)
+                # log(before[c], after[a], middle[a][c])
+                counter += before[c]
+                counter += after[a]
+                counter += middle[a][c]
+                counter += before2[x][a]
+                counter += after2[c][y]
+                counter += middle2left[x][a][c]
+                counter += middle2right[a][c][y]
+                counter += middle2both[x][a][c][y]
+                # print(counter.most_common())
+                k,v = counter.most_common()[0]
+                res.append(k)
 
-        losses = []
-        for i,row in enumerate(mrr):
-            loss = sum([(x-mean)**2/sd**2 for mean, sd, x in zip(means, sds, row)])
-            losses.append((loss,i))
-            
-        losses = sorted(losses)[::-1]
-        for loss,i in losses:
-            if fff == 0:
-                break
-            if i in identified:
-                continue
-            identified.add(i)
-            fff -= 1
-            mrr[i] = mrr[i][::-1]
-
-    return [i+1 for i in identified]
+    # print(middle[2][5])
+    return res
 
 
 for case_num in [0]:  # no loop over test case
@@ -93,7 +112,7 @@ for case_num in [0]:  # no loop over test case
 # for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -102,14 +121,15 @@ for case_num in [0]:  # no loop over test case
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    n,f,b = list(map(int,input().split()))
+    # k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    mrr = read_matrix(n)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
+    mrr = [[0,0] + line + [0,0] for line in mrr]
 
-    res = solve(mrr, f, b)  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
