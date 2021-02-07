@@ -55,7 +55,7 @@ def confirm(pos):
 # read line as an integer
 k = int(input())
 
-if k < 3:
+if k < 2:
     alert(0)
 
 left_idx = 0
@@ -112,16 +112,14 @@ def localMinUtil(arr, low, high, n):
     mid = low + (high - low) // 2
         
     # Compare middle element with its 
-    # neighbours (if neighbours exist) 
-    if(mid == 0 or query(mid - 1) > query(mid) and
-    mid == n - 1 or query(mid) < query(mid + 1)): 
-        return mid
+    # neighbours (if neighbours exist)
+    confirm(mid)
         
     # If middle element is not minima and its left 
     # neighbour is smaller than it, then left half 
     # must have a local minima. 
-    elif(mid > 0 and query(mid - 1) < query(mid)): 
-        return localMinUtil(arr, low, mid - 1, n) 
+    if (mid > 0 and query(mid - 1) < query(mid)):
+        return localMinUtil(arr, low, mid - 1, n)
         
     # If middle element is not minima and its right 
     # neighbour is smaller than it, then right half 
@@ -131,7 +129,7 @@ def localMinUtil(arr, low, high, n):
 # A wrapper over recursive function localMinUtil() 
 def localMin(arr, n): 
     
-    return localMinUtil(arr, 0, n - 1, n) 
+    return localMinUtil(arr, 0, n - 1, n)
 
 alert(localMin([], k))
 
