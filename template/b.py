@@ -38,11 +38,27 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
-def solve_():
+def solve_(A,B,arr,brr):
     # your solution here
 
-    return ""
+    abrr = sorted([(a,b) for a,b in zip(arr,brr)])
+
+    damage = 0
+    for a,b in abrr[:-1]:
+        damage += a*ceiling_division(b,A)
+
+    log(damage)
+
+    a,b = abrr[-1]
+    damage += a*((b-1)//A)
+
+    if damage < B:
+        return "YES"
+    
+    return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +75,15 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    a,b,_ = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b,arr,brr)  # include input here
     
     # print result
     # Google and Facebook - case number required
