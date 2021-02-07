@@ -41,66 +41,39 @@ def read_strings(rows):
 
 def solve_(lst):
     prev = 0
-    keep = []
-    dump = []
-    
+    arr = []
     for x in lst:
-        if x == prev:
+        if x != prev:
+            arr.append(x)
+        prev = x
+    del lst
+    log(arr)
+
+    c = Counter(arr)
+    # logs(c)
+    k,_ = c.most_common()[0]
+
+    dump = []
+    keep = []
+
+    for x in arr:
+        if x == k:
             dump.append(x)
             keep.append(0)
         else:
-            keep.append(x)
             dump.append(0)
-        prev = x
+            keep.append(x)
 
-    # log(dump)
-    # log(keep)
+    def count(lst):
+        lst = [x for x in lst if x] + [0]
+        # log(lst)
+        cnt = 0
+        for a,b in zip(lst, lst[1:]):
+            if a != b:
+                cnt += 1
+        return cnt
 
-    # between adjacent same elements in dump, if there are more than one unique element in keep at the same range, migrate
-    locations = [(i,x) for i,x in enumerate(dump) if x]
-    # log(locations)        
-
-    bonus = 0
-    for (i1,x1),(i2,x2) in zip(locations,locations[1:]):
-        if x1 == x2:
-            xdump = x1
-            # count = set()
-            considered = []
-            for i in range(i1+1,i2-1):
-                if keep[i]:  # not 0
-                    considered.append(keep[i])
-            if not considered:
-                continue
-            if len(considered) == 1:
-                continue
-
-            considered = [x1] + considered + [x2]
-            for a,b,c in zip(considered,considered[1:],considered[2:]):
-                if a != c and b != xdump:
-                    bonus += 1
-                    break
-                     
-    log(dump)
-    log(keep)
-
-    res = bonus
-    prev = -1
-    for x in keep:
-        if x == 0:
-            continue
-        if prev != x:
-            res += 1
-        prev = x
-
-    prev = -1
-    for x in dump:
-        if x == 0:
-            continue
-        if prev != x:
-            res += 1
-        prev = x
-
-    return res
+    return count(dump) + count(keep)
 
 
 for case_num in [0]:  # no loop over test case
