@@ -39,18 +39,76 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(lst):
+    prev = 0
+    keep = []
+    dump = []
+    
+    for x in lst:
+        if x == prev:
+            dump.append(x)
+            keep.append(0)
+        else:
+            keep.append(x)
+            dump.append(0)
+        prev = x
 
-    return ""
+    # log(dump)
+    # log(keep)
+
+    # between adjacent same elements in dump, if there are more than one unique element in keep at the same range, migrate
+    locations = [(i,x) for i,x in enumerate(dump) if x]
+    # log(locations)        
+
+    bonus = 0
+    for (i1,x1),(i2,x2) in zip(locations,locations[1:]):
+        if x1 == x2:
+            xdump = x1
+            # count = set()
+            considered = []
+            for i in range(i1+1,i2-1):
+                if keep[i]:  # not 0
+                    considered.append(keep[i])
+            if not considered:
+                continue
+            if len(considered) == 1:
+                continue
+
+            considered = [x1] + considered + [x2]
+            for a,b,c in zip(considered,considered[1:],considered[2:]):
+                if a != c and b != xdump:
+                    bonus += 1
+                    break
+                     
+    log(dump)
+    log(keep)
+
+    res = bonus
+    prev = -1
+    for x in keep:
+        if x == 0:
+            continue
+        if prev != x:
+            res += 1
+        prev = x
+
+    prev = -1
+    for x in dump:
+        if x == 0:
+            continue
+        if prev != x:
+            res += 1
+        prev = x
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +118,13 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
     
     # print result
     # Google and Facebook - case number required
