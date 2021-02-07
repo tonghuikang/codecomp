@@ -73,36 +73,49 @@ if left_val_a > left_val:
 if right_val_b > right_val:
     alert(right_idx)
 
-while True:
-    if left_idx == right_idx:
-        confirm(left_idx)
-        confirm(left_idx+1)
-        confirm(left_idx-1)
-        k -= 1
-        left_idx = 0
-        right_idx = k
+# while True:
+#     if left_idx == right_idx:
+#         confirm(left_idx)
+#         confirm(left_idx+1)
+#         confirm(left_idx-1)
+#         k -= 1
+#         left_idx = 0
+#         right_idx = k
 
-    mid_idx = (left_idx + right_idx) // 2
-    mid_val = query(mid_idx)
+#     mid_idx = (left_idx + right_idx) // 2
+#     mid_val = query(mid_idx)
 
-    left_val_diff = abs(left_val - mid_val)
-    left_dist_diff = mid_idx - left_idx
+#     left_val_diff = abs(left_val - mid_val)
+#     left_dist_diff = mid_idx - left_idx
 
-    right_val_diff = abs(right_val - mid_val)
-    right_dist_diff = right_val - mid_idx
+#     right_val_diff = abs(right_val - mid_val)
+#     right_dist_diff = right_val - mid_idx
 
-    if left_val_diff < left_dist_diff:
-        right_idx = mid_idx
-        continue
-    elif right_val_diff < right_dist_diff:
-        left_idx = mid_idx
-        continue
+#     if left_val_diff < left_dist_diff:
+#         right_idx = mid_idx
+#         continue
+#     elif right_val_diff < right_dist_diff:
+#         left_idx = mid_idx
+#         continue
+#     else:
+#         confirm(mid_idx)
+
+#     if counter > 100:
+#         assert 1==2
+#         break
+
+left = 0
+right = k-1
+
+while left < right:
+    mid = (left+right)/2
+    confirm(mid)
+
+    if query(mid) > query(mid+1):
+        left = mid+1
     else:
-        confirm(mid_idx)
+        right = mid-1
 
-    if counter > 100:
-        assert 1==2
-        break
 
 alert(k//10)
 
