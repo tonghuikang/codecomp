@@ -23,9 +23,13 @@ def log(*args):
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 # ---------------------------- template ends here ----------------------------
+counter = 0
+
 
 @functools.lru_cache(maxsize=100)
 def query(pos):
+    global counter
+    counter += 1
     print("? {}".format(pos+1), flush=True)
     response = int(input())
     return response
@@ -35,6 +39,7 @@ def alert(pos):
     sys.exit()
 
 # -----------------------------------------------------------------------------
+
 
 @functools.lru_cache(maxsize=100)
 def confirm(pos):
@@ -73,8 +78,9 @@ while True:
         confirm(left_idx)
         confirm(left_idx+1)
         confirm(left_idx-1)
-        left_idx = k//4
-        right_idx = 3*k//4
+        k -= 1
+        left_idx = 0
+        right_idx = k
 
     mid_idx = (left_idx + right_idx) // 2
     mid_val = query(mid_idx)
@@ -93,7 +99,10 @@ while True:
         continue
     else:
         confirm(mid_idx)
-        left_idx -= 1
+
+    if counter > 100:
+        assert 1==2
+        break
 
 alert(k//10)
 
