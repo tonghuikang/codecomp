@@ -104,18 +104,36 @@ if right_val_b > right_val:
 #         assert 1==2
 #         break
 
-left = 0
-right = k-1
+# A binary search based function that 
+# returns index of a local minima. 
+def localMinUtil(arr, low, high, n): 
+        
+    # Find index of middle element 
+    mid = low + (high - low) // 2
+        
+    # Compare middle element with its 
+    # neighbours (if neighbours exist) 
+    if(mid == 0 or query(mid - 1) > query(mid) and
+    mid == n - 1 or query(mid) < query(mid + 1)): 
+        return mid
+        
+    # If middle element is not minima and its left 
+    # neighbour is smaller than it, then left half 
+    # must have a local minima. 
+    elif(mid > 0 and query(mid - 1) < query(mid)): 
+        return localMinUtil(arr, low, mid - 1, n) 
+        
+    # If middle element is not minima and its right 
+    # neighbour is smaller than it, then right half 
+    # must have a local minima. 
+    return localMinUtil(arr, mid + 1, high, n) 
+    
+# A wrapper over recursive function localMinUtil() 
+def localMin(arr, n): 
+    
+    return localMinUtil(arr, 0, n - 1, n) 
 
-while left < right:
-    mid = (left+right)/2
-    confirm(mid)
-
-    if query(mid) > query(mid+1):
-        left = mid+1
-    else:
-        right = mid-1
-
+alert(localMin([], k))
 
 alert(k//10)
 
