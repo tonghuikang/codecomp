@@ -22,60 +22,78 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
 # ---------------------------- template ends here ----------------------------
 
+@functools.lru_cache(maxsize=100)
+def query(pos):
+    print("? {}".format(pos+1), flush=True)
+    response = int(input())
+    return response
 
-def solve_():
-    # your solution here
+def alert(pos):
+    print("! {}".format(pos+1), flush=True)
+    sys.exit()
 
-    return ""
+# -----------------------------------------------------------------------------
 
+@functools.lru_cache(maxsize=100)
+def confirm(pos):
+    if pos == 0 or pos >= k-1:
+        return False
+    a = query(pos-1)
+    b = query(pos)
+    c = query(pos+1)
+    if a > b and b < c:
+        alert(pos)
+    return False
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# read line as an integer
+k = int(input())
 
-    # read line as an integer
-    # k = int(input())
+if k < 3:
+    alert(0)
 
-    # read line as a string
-    # srr = input().strip()
+left_idx = 0
+right_idx = k-1
 
-    # read one line and parse each word as a string
-    # lst = input().split()
-    
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+left_val = query(left_idx)
+right_val = query(right_idx)
 
-    # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
+left_val_a = query(left_idx+1)
+right_val_b = query(right_idx-1)
 
-    res = solve()  # include input here
-    
-    # print result
-    # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+if left_val_a > left_val:
+    alert(0)
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))
-    # print(*res)  # print a list with elements
-    # for r in res:  # print each list in a different line
-        # print(res)
-        # print(*res)
+if right_val_b > right_val:
+    alert(right_idx)
+
+while True:
+    if left_idx == right_idx:
+        confirm(left_idx)
+        confirm(left_idx+1)
+        confirm(left_idx-1)
+        left_idx = k//4
+        right_idx = 3*k//4
+
+    mid_idx = (left_idx + right_idx) // 2
+    mid_val = query(mid_idx)
+
+    left_val_diff = abs(left_val - mid_val)
+    left_dist_diff = mid_idx - left_idx
+
+    right_val_diff = abs(right_val - mid_val)
+    right_dist_diff = right_val - mid_idx
+
+    if left_val_diff < left_dist_diff:
+        right_idx = mid_idx
+        continue
+    elif right_val_diff < right_dist_diff:
+        left_idx = mid_idx
+        continue
+    else:
+        confirm(mid_idx)
+        left_idx -= 1
+
+alert(k//10)
+
