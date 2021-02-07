@@ -62,21 +62,47 @@ def solve_(lst):
 
     for (i1,x1),(i2,x2) in zip(locations,locations[1:]):
         if x1 == x2:
-            count = set()
-            for i in range(i1+1,i2):
-                if keep[i]:
-                    count.add(keep[i])
-            # log(i1,x1,i2,x2,count)
-            if len(count) > 1:
-                # log("migrate")
+            xdump = x1
+            # count = set()
+            considered = []
+            for i in range(i1+1,i2-1):
+                if keep[i]:  # not 0
+                    considered.append((i,keep[i]))
+            if not considered:
+                continue
+            if len(considered) == 1:
+                continue
+            assert considered[0][1] != xdump
+            assert considered[-1][1] != xdump
+
+            if len(considered) == 2:
                 idx = i1+1
                 keep[idx],dump[idx] = 0,keep[idx]
+                continue
+
+            if considered[1][1] != xdump:
+                idx = i1+2
+                keep[idx],dump[idx] = 0,keep[idx]
+            else:
+                idx = i1+3
+                keep[idx],dump[idx] = 0,keep[idx]
+
+            # if len(count) > 1:
+            #     # log("migrate")
+            #     idx = i1+1
 
     log(dump)
     log(keep)
 
+    res = 0
+    prev = -1
+    for x in keep:
+        if x == 0:
+            continue
+        if prev != x:
+            res += 1
+        prev = x
 
-    res = sum(bool(x) for x in keep)
     prev = -1
     for x in dump:
         if x == 0:
