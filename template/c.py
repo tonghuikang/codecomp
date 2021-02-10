@@ -38,28 +38,30 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-def sieve_of_eratosthenes(n):
-    # primarity test and prime factor listing for all numbers less than n
-    prime = [True for _ in range(n)] 
-    prime[0], prime[1] = False, False
-    factors = [[] for _ in range(n)]
+# def sieve_of_eratosthenes(n):
+#     # primarity test and prime factor listing for all numbers less than n
+#     prime = [True for _ in range(n)] 
+#     prime[0], prime[1] = False, False
+#     factors = [[] for _ in range(n)]
 
-    for i in range(2,n):
-        factors[i].append(i)
-        for j in range(i*2, n, i):
-            prime[j] = False
-            factors[j].append(i)
-    return prime, factors
+#     for i in range(2,n):
+#         factors[i].append(i)
+#         for j in range(i*2, n, i):
+#             prime[j] = False
+#             factors[j].append(i)
+#     return prime, factors
     
-primes,_ = sieve_of_eratosthenes(10**4 + 10)
+# primes,_ = sieve_of_eratosthenes(10**4 + 10)
 
-primes = set([i for i,x in enumerate(primes) if x])
-primes.add(1)
+primes = range(1,10**4 + 10)
+# primes.add(1)
 # log(primes)
 
 def solve_(n,m,p):
     # your solution here
-    
+    # if p <= n or p <= m:
+    #     return "YES"
+
     for a in primes:
         if a > p:
             continue

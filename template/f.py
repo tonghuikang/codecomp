@@ -39,15 +39,24 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m):
     # your solution here
 
-    return ""
+    res = 0
+    for dist in range(10**6):
+        diameter = 1+(m-1)*(dist+1)
+        if diameter > n:
+            break
+        possible_start = n-diameter+1
+        # log(dist,possible_start)
+        res += possible_start
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +68,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(n,m)  # include input here
     
     # print result
     # Google and Facebook - case number required

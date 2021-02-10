@@ -38,6 +38,15 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+curset = set([(1,1)])
+
+for i in range(10):
+    newset = set()
+    for a,b in curset:
+        newset.add((a+b,b))
+        newset.add((a,a+b))
+    curset = newset
+    log(curset) 
 
 def solve_():
     # your solution here
