@@ -39,10 +39,13 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,x,b,y,c,z):
     # your solution here
 
-    return ""
+    r1 = Counter([a,b,c])
+    r2 = Counter([x,y,z])
+
+    return r1.most_common()[1][0], r2.most_common()[1][0]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,21 +62,21 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c,x,y,z = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b,c,x,y,z)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    print(*res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line

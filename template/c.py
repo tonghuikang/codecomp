@@ -38,11 +38,39 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def sieve_of_eratosthenes(n):
+    # primarity test and prime factor listing for all numbers less than n
+    prime = [True for _ in range(n)] 
+    prime[0], prime[1] = False, False
+    factors = [[] for _ in range(n)]
 
-def solve_():
+    for i in range(2,n):
+        factors[i].append(i)
+        for j in range(i*2, n, i):
+            prime[j] = False
+            factors[j].append(i)
+    return prime, factors
+    
+primes,_ = sieve_of_eratosthenes(10**4 + 10)
+
+primes = set([i for i,x in enumerate(primes) if x])
+primes.add(1)
+# log(primes)
+
+def solve_(n,m,p):
     # your solution here
+    
+    for a in primes:
+        if a > p:
+            continue
+        if p%a == 0:
+            b = p//a
+            if a <= n and b <= m:
+                return "YES"
+            if b <= n and a <= m:
+                return "YES"
 
-    return ""
+    return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +87,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,p = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(n,m,p)  # include input here
     
     # print result
     # Google and Facebook - case number required
