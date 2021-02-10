@@ -46,11 +46,17 @@ def generate(elements):
         if max(comb) == len(set(list(comb))):
             for com in itertools.permutations(comb):
             # if comb == tuple(sorted(comb)):
-                # log(comb)
+            #     log(comb)
                 all_combs.add(com)
 
     # log(len(all_combs))
     return all_combs
+
+# def generate_subsets(elements):
+#     all_combs = set()
+#     for comb in itertools.combinations_with_replacement([1,2,3,4,5,6,7,8,9], elements):
+#         pass
+
 
 template = [
     [-1,-2,-3],
@@ -86,11 +92,17 @@ def solve_(k, mrr):
             arr[i][j] = c
 
         for i in range(3):
-            if arr[i][0] == arr[i][1] or arr[i][1] == arr[i][2] or arr[i][2] == arr[i][0]:
+            if not mrr[i][1]:
+                if arr[i][2] == arr[i][0]:
+                    breaking = True
+            if arr[i][0] == arr[i][1] or arr[i][1] == arr[i][2]:
                 breaking = True
         
         for j in range(3):
-            if arr[0][j] == arr[1][j] or arr[1][j] == arr[2][j] or arr[2][j] == arr[0][j]:
+            if not mrr[1][j]:
+                if arr[2][j] == arr[0][j]:
+                    breaking = True
+            if arr[0][j] == arr[1][j] or arr[1][j] == arr[2][j]:
                 breaking = True
         
         # if arr[0][0] == arr[1][1] or arr[1][1] == arr[2][2] or arr[2][2] == arr[0][0]:
@@ -102,7 +114,7 @@ def solve_(k, mrr):
         if max(comb) > k:
             breaking = True
 
-        log(arr, comb, breaking)
+        # log(arr, comb, breaking)
         if breaking:
             continue
         
