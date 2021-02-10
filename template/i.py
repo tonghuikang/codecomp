@@ -43,8 +43,85 @@ def read_strings(rows):
 def solve_(n,arr):
     # your solution here
     
+    one_piece = sorted([x for x,s in arr if s==1])[::-1]
+    two_piece = sorted([x for x,s in arr if s==2])[::-1]
 
-    return 0
+    # log(one_piece)
+    # log(two_piece)
+
+    one_count = 0
+    two_count = 0
+    cur_cost = 0
+    res = []
+    # x <= 2y+2
+    # y <= 2x+2
+
+    for i in range(n):
+        # log(i, one_count, two_count)
+        # log(one_piece)
+        # log(two_piece)
+        if one_count < 2*two_count + 2 and two_count < 2*one_count + 2:
+            if one_piece and two_piece:
+                if one_piece[-1] < two_piece[-1]:
+                    cost = one_piece.pop()
+                    one_count += 1
+                    cur_cost += cost
+                    res.append(cur_cost)
+                    continue
+                else:
+                    cost = two_piece.pop()
+                    two_count += 1
+                    cur_cost += cost
+                    res.append(cur_cost)
+                    continue
+            elif one_piece:
+                cost = one_piece.pop()
+                one_count += 1
+                cur_cost += cost
+                res.append(cur_cost)
+                continue
+            elif two_piece:
+                cost = two_piece.pop()
+                two_count += 1
+                cur_cost += cost
+                res.append(cur_cost)
+                continue
+            else:
+                log("error")
+
+        elif one_count < 2*two_count + 2:
+            if one_piece:
+                cost = one_piece.pop()
+                one_count += 1
+                cur_cost += cost
+                res.append(cur_cost)
+                continue
+            else:
+                break
+
+        elif two_count < 2*one_count + 2:
+            if two_piece:
+                cost = two_piece.pop()
+                two_count += 1
+                cur_cost += cost
+                res.append(cur_cost)
+                continue            
+            else:
+                break
+        
+        else:
+            break
+
+    
+    res = res + [-1]*(n-len(res))
+
+
+    return res
+
+
+def read_matrix(rows):
+    return [list(map(int,input().split())) for _ in range(rows)]
+
 
 
 for case_num in [0]:  # no loop over test case
@@ -65,12 +142,7 @@ for case_num in [0]:  # no loop over test case
     # srr = input().strip()
     # lst = list(map(int,input().split()))
 
-    arr = []
-    for i in range(n):
-        arr.append(int(input()))
-    # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_matrix(n)
 
     res = solve(n,arr)  # include input here
     
@@ -79,7 +151,7 @@ for case_num in [0]:  # no loop over test case
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    print("\n".join(str(x) for x in res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line

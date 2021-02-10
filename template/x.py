@@ -38,49 +38,48 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-# curset = set([(1,1)])
-# allset = set()
 
-# for i in range(10):
-#     newset = set()
-#     for a,b in curset:
-#         newset.add((a+b,b))
-#         newset.add((a,a+b))
-#     curset = newset
-#     # log(curset)
-#     log(newset&allset)
-#     allset |= newset
-#     # log([abs(a-b) for a,b in curset])
+def solve_(mrr):
+    # your solution here
 
-# def solve_():
-#     # your solution here
+    # both sides the same, consider 2n numbers
+    length = len(mrr)
+    res = len(mrr)*2
 
-#     return ""
+    c = Counter([x for x,y in mrr] + [y for x,y in mrr])
+    for v in c.values():
+        res = min(res, length*2-v)
 
-def solve(a,b):
-    # log(a,b)
-    if math.gcd(a,b) != 1:
-        return -1
+    for a,b in mrr:
+        if a == b:
+            c[a] -= 1
     
-    res = 0
-    while True:
-        # log(a,b)
-        a,b = sorted([a,b])[::-1]
-        if b == 1:
-            res += a-1
-            break
-        steps = a//b
-        res += steps
-        a,b = a-b*steps, b
+    lst = c.most_common(4)
+
+    for x,_ in lst:
+        for y,_ in lst:
+            if x == y:
+                continue  # considered already
+            cnt = 0
+            for a,b in mrr:
+                if (a == x and b == y) or (a == y and b == x):
+                    continue
+                elif a == x or b == x or a == y or b == y:
+                    cnt += 1
+                else:
+                    cnt += 2
+            res = min(res, cnt)
+    
     return res
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -89,14 +88,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    a,b = list(map(int,input().split()))
+    # a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve(a,b)  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required

@@ -38,41 +38,12 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-# curset = set([(1,1)])
-# allset = set()
 
-# for i in range(10):
-#     newset = set()
-#     for a,b in curset:
-#         newset.add((a+b,b))
-#         newset.add((a,a+b))
-#     curset = newset
-#     # log(curset)
-#     log(newset&allset)
-#     allset |= newset
-#     # log([abs(a-b) for a,b in curset])
+def solve_(a,b):
+    # your solution here
 
-# def solve_():
-#     # your solution here
+    return min((a-1)*20, ((b-1) + (a-1))*5)
 
-#     return ""
-
-def solve(a,b):
-    # log(a,b)
-    if math.gcd(a,b) != 1:
-        return -1
-    
-    res = 0
-    while True:
-        # log(a,b)
-        a,b = sorted([a,b])[::-1]
-        if b == 1:
-            res += a-1
-            break
-        steps = a//b
-        res += steps
-        a,b = a-b*steps, b
-    return res
 
 
 # for case_num in [0]:  # no loop over test case
