@@ -38,35 +38,13 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-@functools.lru_cache()
-def ncr(n, r):
-    # if python version == 3.8+, use comb()
-    if r == 0:
-        return 1
-    return n * ncr(n-1, r-1) // r
 
 
-
-
-
-def solve_(n,srr):
+def solve_(n,arr):
     # your solution here
-    m = len(srr) - 1
-
-    res = 0
-    arr = []
-    cur = 0
-    for i in range(m+1):
-        cur += ncr(m,i)
-        arr.append(cur)
-    
-    log(arr)
-
-    for i in range(n):
-        res += arr[min(i,m)]
     
 
-    return res
+    return 0
 
 
 for case_num in [0]:  # no loop over test case
@@ -84,14 +62,17 @@ for case_num in [0]:  # no loop over test case
     
     # read one line and parse each word as an integer
     n, = list(map(int,input().split()))
-    srr = input().strip()
+    # srr = input().strip()
     # lst = list(map(int,input().split()))
 
+    arr = []
+    for i in range(n):
+        arr.append(int(input()))
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve(n,srr)  # include input here
+    res = solve(n,arr)  # include input here
     
     # print result
     # Google and Facebook - case number required
