@@ -48,7 +48,7 @@ def solve_(a,b):
     # a > b
     # a < b**2
     res = 0
-    for y in range(2, min(int(10**5) + 10, b+1)):
+    for y in range(2, b+1):
         cnt = min(y-1, a // (y + 1))
         # log(y,cnt)
         res += cnt
@@ -64,6 +64,10 @@ def solve_(a,b):
 
     return res
 
+# print(solve(10**9, 10**9))
+# print(solve(10**9, int(10**4.5)))
+# print(solve(10**9, int(10**5)))
+# print(solve(10**9, int(10**6)))
 
 # for p in range(1,1000):
 #     for q in range(1,1000):
