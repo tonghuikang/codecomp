@@ -39,10 +39,25 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b):
     # your solution here
+    ao, bo = a,b
+    minres = a+b
 
-    return ""
+    for x in range(2,1000):
+        a,b = ao, bo
+
+        res = 0
+        if b <= x:
+            res += x-b
+            b = x
+        
+        while a:
+            res += 1
+            a = a//b
+        minres = min(minres,res)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +74,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
     
     # print result
     # Google and Facebook - case number required

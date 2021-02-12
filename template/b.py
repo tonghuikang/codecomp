@@ -39,15 +39,40 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst, qrr, k):
     # your solution here
 
-    return ""
+    lst = [0] + lst + [k+1]
+
+    count = []
+    for a,b,c in zip(lst, lst[1:], lst[2:]):
+        count.append(c - a - 2)
+    
+    psum = [0]
+    cur = 0
+    for a in count:
+        cur += a
+        psum.append(cur)
+
+    # log(count)
+    # log(psum)
+
+    allres = []
+    for l,r in qrr:
+        x = lst[l+1] - 2
+        y = k+1 - lst[r-1] - 2
+        z = psum[r-1] - psum[l]
+        # log(x,y,z)
+        res = x + y + z
+        allres.append(res)
 
 
-# for case_num in [0]:  # no loop over test case
+    return allres
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,21 +84,23 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,q,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qrr = read_matrix(q)  # and return as a list of list of int
+    # qrr = [(a-1, b-1) for a,b in qrr]
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst,qrr,k)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
+    print("\n".join(str(x) for x in res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
