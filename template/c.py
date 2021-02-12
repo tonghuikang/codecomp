@@ -38,8 +38,15 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def floor_sum_over_divisor_(n,k,j):
+    return sum(n//d for d in range(j+1, k+1))
 
+def floor_sum_over_divisor(n,k,j):
+    # https://math.stackexchange.com/questions/384520/efficient-computation-of-sum-k-1n-lfloor-fracnk-rfloor
+    # https://mathoverflow.net/questions/48357/summation-of-a-series-of-floor-functions       
+    return floor_sum_over_divisor_(n, n//j, n//k) + k*(n//k) - j*(n//j)
 
+# log(floor_sum_over_divisor(5,5))
 
 
 def solve_(a,b):
@@ -48,10 +55,21 @@ def solve_(a,b):
     # a > b
     # a < b**2
     res = 0
-    for y in range(2, b+1):
+
+    transfer = 10**5
+    for y in range(2, min(transfer, b+1)):
         cnt = min(y-1, a // (y + 1))
         # log(y,cnt)
         res += cnt
+    log(res)
+
+    if transfer < b+1:
+        addn_sum = floor_sum_over_divisor(a, b+1, transfer)
+        log(addn_sum)
+        res += addn_sum
+
+
+    # res2 = floor_sum_over_divisor(a,b)
 
     # check_res = 0
     # for i in range(1,a+1):
