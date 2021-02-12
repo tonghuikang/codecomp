@@ -42,10 +42,10 @@ def read_strings(rows):
 def solve_(mrr):
     # your solution here
 
-    magic = 2**4 * 3**4 * 5**4 * 7**4 * 11**4 * 13**4
+    magic = 2**4 * 3**2 * 5 * 7 * 11 * 13
     log(magic)
 
-    mrr = [[2*magic if (i-j)%2 else magic for i,x in enumerate(row)] for j,row in enumerate(mrr)]
+    mrr = [[magic + x**4 if (i-j)%2 else magic for i,x in enumerate(row)] for j,row in enumerate(mrr)]
     return mrr
 
 
