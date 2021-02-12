@@ -86,6 +86,44 @@ def sieve_of_eratosthenes(n):
     return prime, factors
 
 
+def floor_sum_over_divisor(n,k,j):
+    # https://math.stackexchange.com/questions/384520/efficient-computation-of-sum-k-1n-lfloor-fracnk-rfloor
+    # https://mathoverflow.net/questions/48357/summation-of-a-series-of-floor-functions       
+    def floor_sum_over_divisor_(n,k,j):
+        return sum(n//d for d in range(j+1, k+1))
+    return floor_sum_over_divisor_(n, n//j, n//k) + k*(n//k) - j*(n//j)
+
+
+def floor_sum_over_numerator(n: int, m: int, a: int, b: int) -> int:
+    # https://atcoder.jp/contests/practice2/tasks/practice2_c
+    # https://atcoder.github.io/ac-library/master/document_en/math.html
+    # https://github.com/not522/ac-library-python/blob/master/atcoder/math.py
+
+    assert 1 <= n
+    assert 1 <= m
+
+    ans = 0
+
+    if a >= m:
+        ans += (n - 1) * n * (a // m) // 2
+        a %= m
+
+    if b >= m:
+        ans += n * (b // m)
+        b %= m
+
+    y_max = (a * n + b) // m
+    x_max = y_max * m - b
+
+    if y_max == 0:
+        return ans
+
+    ans += (n - (x_max + a - 1) // a) * y_max
+    ans += floor_sum_over_numerator(y_max, a, m, (a - x_max % a) % a)
+
+    return ans
+
+
 # get all combination of factors of an integer
 # https://leetcode.com/problems/count-ways-to-make-array-with-product/
 # https://www.geeksforgeeks.org/print-combinations-factors-ways-factorize/
