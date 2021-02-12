@@ -39,10 +39,7 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-# for j in range(1,50):
-#     for i in range(1,10000):
-#         if i//j == i%j:
-#             print(i,j)
+
 
 
 def solve_(a,b):
@@ -51,13 +48,27 @@ def solve_(a,b):
     # a > b
     # a < b**2
     res = 0
-    for y in range(2, min(int(10**4.5) + 10, b+1)):
+    for y in range(2, min(int(10**5) + 10, b+1)):
         cnt = min(y-1, a // (y + 1))
         # log(y,cnt)
         res += cnt
 
+    # check_res = 0
+    # for i in range(1,a+1):
+    #     for j in range(1,b+1):
+    #         if i//j == i%j:
+    #             check_res += 1
+
+    # log(res, check_res)
+    # assert res == check_res
+
     return res
 
+
+# for p in range(1,1000):
+#     for q in range(1,1000):
+#         solve(q,p)
+# solve(10**9, 10**9)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
