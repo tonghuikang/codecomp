@@ -44,19 +44,19 @@ def solve_(mrr,h,w):
 
     stack = [(0,0), (h-1,0), (0,w-1), (h-1,w-1)]
     grounds = set(stack)
-    grounds_considered = set()
+    # grounds_considered = set()
 
     grounds_by_row = defaultdict(set)
     grounds_by_col = defaultdict(set)
 
-    efficient_axis_to_consider = [(0,True),(h-1,True),(0,False),(h-1,False)]  # loc, is_row
+    efficient_axis_to_consider = [(0,True),(h-1,True),(0,False),(w-1,False)]  # loc, is_row
     efficient_axis_considered = set()
     for loc,is_row in efficient_axis_to_consider:
         efficient_axis_considered.add((loc,is_row))
 
     for i,row in enumerate(mrr):
         for j,cell in enumerate(row):
-            if cell == "#":
+            if cell != ".":
                 grounds.add((i,j))
                 grounds_by_row[i].add((i,j))
                 grounds_by_col[j].add((i,j))
@@ -93,13 +93,6 @@ def solve_(mrr,h,w):
         maxlen = 0
         nexres = None,None
 
-        for row,sett in grounds_by_row.items():
-            length = len(sett)
-            assert length > 0
-            if length > maxlen:
-                nexres = row, True
-                maxlen = length
-
         for col,sett in grounds_by_col.items():
             length = len(sett)
             assert length > 0
@@ -107,8 +100,17 @@ def solve_(mrr,h,w):
                 nexres = col, False
                 maxlen = length
 
+        for row,sett in grounds_by_row.items():
+            length = len(sett)
+            assert length > 0
+            if length > maxlen:
+                nexres = row, True
+                maxlen = length
+
         # log(maxlen, nexres)
         if maxlen == 0:  # manually add
+            assert not grounds_by_col
+            assert not grounds_by_row
             break
         
         allres += 1
@@ -120,14 +122,16 @@ def solve_(mrr,h,w):
     addn_row = 0
     for loc in range(h):
         if (loc,True) not in efficient_axis_considered:
+            # log(loc,True)
             addn_row += 1
     
     addn_col = 0
     for loc in range(w):
         if (loc,False) not in efficient_axis_considered:
+            # log(loc,False)
             addn_col += 1
     
-    # log(allres, addn_row, addn_col)
+    log(allres, addn_row, addn_col)
 
     return allres + min(addn_row, addn_col)
 
