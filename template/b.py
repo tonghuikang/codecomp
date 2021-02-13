@@ -39,15 +39,60 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(b,c):
     # your solution here
 
-    return ""
+
+    ranges = []
+
+    # subtract from b directly
+    x,y = b - c//2, b
+    ranges.append((x,y))
+
+    if c >= 1:
+        # subtract from b, take negative
+        x,y = -b + (c-1)//2, -b
+        ranges.append((x,y))
+
+    if c >= 1:
+        # take negative, subtract
+        x,y = -b - (c-1)//2, -b
+        ranges.append((x,y))
+
+    if c >= 2:
+        # take negative, subtract, take negative
+        x,y = b + (c-2)//2, b
+        ranges.append((x,y))
 
 
-# for case_num in [0]:  # no loop over test case
+    ranges = [sorted([x,y]) for x,y in ranges]
+
+    # log(ranges)
+
+    idx = defaultdict(int)
+
+    for x,y in ranges:
+        idx[x] += 1
+        idx[y+1] -= 1
+
+    # log(sorted(idx.items()))
+
+    res = 0
+    prev = 0
+    cur = 0
+    for x,cnt in sorted(idx.items()):
+        if cur == 0:
+            prev = x
+        cur += cnt
+        if cur == 0:
+            res += x-prev
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +104,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(b,c)  # include input here
     
     # print result
     # Google and Facebook - case number required

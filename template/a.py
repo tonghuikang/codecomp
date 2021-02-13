@@ -38,12 +38,42 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def brute_force(l,r):
+    res = 0
+    for a in range(l, r+1):
+        for b in range(l, r+1):
+            for c in range(l, r+1):
+                if a + b == c:
+                    res += 1
+    return res
 
-def solve_():
+def solve_(l,r):
     # your solution here
 
-    return ""
+    # how many A+B=C
+    if l*2 > r:
+        return 0
+    
+    if l == r == 0:
+        return 1
 
+    if l*2 < r:  # lower triangle
+        return (r-2*l+1)*(r-2*l+2)//2
+
+    if l*2 == r:
+        return 1
+
+    if l == r:
+        return 0
+
+    return 0
+
+
+# for l in range(100):
+#     for r in range(100):
+#         if solve_(l,r) != brute_force(l,r):
+#             print(l,r,solve_(l,r),brute_force(l,r))
+#             break
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -59,14 +89,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
     
     # print result
     # Google and Facebook - case number required
