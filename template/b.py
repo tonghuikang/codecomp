@@ -39,10 +39,42 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
+    n = len(mrr)
+    xpos = sorted([x for x,y in mrr])
+    ypos = sorted([y for x,y in mrr])
 
-    return ""
+    # xcost = sum([x-xpos[0] for x in xpos])
+    # ycost = sum([y-ypos[0] for y in ypos])
+
+
+    def compute_cost(xpos):
+        left_cost = 0
+        right_cost = sum([x-xpos[0] for x in xpos])
+        cost_arr = [right_cost]
+
+        for i,(prev,nex) in enumerate(zip(xpos,xpos[1:])):
+            left_cost += (i+1)*(nex - prev)
+            right_cost -= (n-i-1)*(nex - prev)
+            cost_arr.append(left_cost + right_cost)
+        return cost_arr
+
+    xcost = compute_cost(xpos)
+    ycost = compute_cost(ypos)
+
+    log(xcost)
+    log(ycost)
+
+    minxcost = min(xcost)
+    minycost = min(ycost)
+
+    left,right = xcost.index(minxcost), xcost[::-1].index(minxcost)
+    xrange = xpos[~right] - xpos[left] + 1
+    left,right = ycost.index(minycost), ycost[::-1].index(minycost)
+    yrange = ypos[~right] - ypos[left] + 1
+
+    return xrange*yrange
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +82,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,10 +95,10 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
