@@ -39,15 +39,41 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr,n,k):
     # your solution here
 
-    return ""
+    edges = defaultdict(list)
+
+    for a,b,c in mrr:
+        edges[a].append((b,c))
+        edges[b].append((a,c))
+
+    visited = {0:0}
+    checked = set()
+    stack = [(0,0,False)]  # loc, cost, alt
+    while stack:
+        cost, loc, alt = heapq.heappop(stack)
+        if loc in checked:
+            continue
+        checked.add(loc)
+        for nex, weight in edges[loc]:
+            for nex1, weight1 in edges[nex]:
+                if nex1 in visited:
+                    continue
+                new_cost = cost + (weight + weight1)**2
+                if nex1 not in visited:
+                    visited[nex1] = new_cost
+                else:
+                    visited[nex1] = min(visited[nex1], cost + (weight + weight1)**2)
+                heapq.heappush(stack, (new_cost, nex1, True))
+
+    res = [visited[i] if i in visited else -1 for i in range(n)]
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,23 +85,24 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
+    mrr = [(a-1,b-1,c) for a,b,c in mrr]
 
-    res = solve()  # include input here
+    res = solve(mrr,n,k)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
-    # print(*res)  # print a list with elements
+    print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
