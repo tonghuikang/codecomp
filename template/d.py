@@ -67,7 +67,7 @@ def move(h1, h2):
 	heapq.heappush(h2, (-x, i))
 	
 def get_med(h1, h2, k):
-	return h2[0][0] * 1 if k & 1 else (h2[0][0]-h1[0][0]) // 2
+	return h2[0][0] if k & 1 else -h1[0][0]
 
 
 # https://leetcode.com/problems/sliding-window-median/discuss/262689/Python-Small-and-Large-Heaps
@@ -83,6 +83,9 @@ def solve_(lst, k):
     if k == len(lst):
         return max(size_k)
     size_k1 = medianSlidingWindow(lst, k)
+
+    log(size_k)
+    log(size_k1)
 
     return max(max(size_k),  max(size_k1))
 
