@@ -82,7 +82,7 @@ def solve_(lst, k):
     size_k = medianSlidingWindow(lst, k)
     if k == len(lst):
         return max(size_k)
-    size_k1 = medianSlidingWindow(lst, k)
+    size_k1 = medianSlidingWindow(lst, k+1)
 
     log(size_k)
     log(size_k1)
