@@ -39,15 +39,58 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def medianSlidingWindow(nums, k):
+	small, large = [], []
+	for i, x in enumerate(nums[:k]): 
+		heapq.heappush(small, (-x,i))
+	for _ in range(k-(k>>1)): 
+		move(small, large)
+	ans = [get_med(small, large, k)]
+	for i, x in enumerate(nums[k:]):
+		if x >= large[0][0]:
+			heapq.heappush(large, (x, i+k))
+			if nums[i] <= large[0][0]: 
+				move(large, small)
+		else:
+			heapq.heappush(small, (-x, i+k))
+			if nums[i] >= large[0][0]: 
+				move(small, large)
+		while small and small[0][1] <= i: 
+			heapq.heappop(small)
+		while large and large[0][1] <= i: 
+			heapq.heappop(large)
+		ans.append(get_med(small, large, k))
+	return ans
+
+def move(h1, h2):
+	x, i = heapq.heappop(h1)
+	heapq.heappush(h2, (-x, i))
+	
+def get_med(h1, h2, k):
+	return h2[0][0] * 1 if k & 1 else (h2[0][0]-h1[0][0]) // 2
+
+
+# https://leetcode.com/problems/sliding-window-median/discuss/262689/Python-Small-and-Large-Heaps
+# https://stackoverflow.com/questions/55785883/how-to-calculate-the-maximum-median-in-an-array
+
+
+
+# maximum median of size 
+def solve_(lst, k):
     # your solution here
 
-    return ""
+    size_k = medianSlidingWindow(lst, k)
+    if k == len(lst):
+        return max(size_k)
+    size_k1 = medianSlidingWindow(lst, k)
+
+    return max(max(size_k),  max(size_k1))
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +102,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst, k)  # include input here
     
     # print result
     # Google and Facebook - case number required
