@@ -106,29 +106,25 @@ def solve_(lst, k):
     if k == len(lst) - 1:
         return max(max(size_k),  max(size_k1))
 
-    upper = len(lst)+1
+    upper = 2**20
     lower = 0
-    while lower < upper:
+    for i in range(20):
         mid = (upper + lower) // 2
-        log(lower, upper, mid)
         res = check(lst, mid, k)
-        if res:
-            lower = mid + 1
-        else:
+        # log(lower, upper, mid, res)
+        if not res:
             upper = mid
+        else:
+            lower = mid
 
-    log("x", mid)
-
-    for i in range(20,-1,-1):
+    for i in range(mid+1,mid-2,-1):
         res = check(lst, i, k)
         # log(i, res)
         if res:
-            log("y", i)
-            break
+            return max(max(size_k), max(size_k1), i)
 
-    log("z", max(size_k), max(size_k1))
-    
-    return max(max(size_k), max(size_k1), mid)
+    return max(max(size_k), max(size_k1), i)
+
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
