@@ -72,24 +72,63 @@ def get_med(h1, h2, k):
 
 # https://leetcode.com/problems/sliding-window-median/discuss/262689/Python-Small-and-Large-Heaps
 # https://stackoverflow.com/questions/55785883/how-to-calculate-the-maximum-median-in-an-array
+# https://codeforces.com/blog/entry/21103
 
 
+def check(arr, q, mink):
+    arr = [x-q for x in arr]
+    arr = [1 if x > 0 else -1 if x < 0 else 1 for x in arr]
+    # log(arr)
+
+    cursum_advance = sum(arr[:mink])
+    cursum = 0
+    minsum = 0
+    for x,y in zip(arr, arr[mink:]):
+        cursum += x
+        cursum_advance += y
+        minsum = min(cursum, minsum)
+        if cursum_advance - minsum > 0:
+            return True
+    return False
 
 # maximum median of size 
 def solve_(lst, k):
     # your solution here
 
     size_k = medianSlidingWindow(lst, k)
+    log(size_k)
+
     if k == len(lst):
         return max(size_k)
     size_k1 = medianSlidingWindow(lst, k+1)
 
-    log(size_k)
     log(size_k1)
+    if k == len(lst) - 1:
+        return max(max(size_k),  max(size_k1))
 
-    return max(max(size_k),  max(size_k1))
+    upper = len(lst)+1
+    lower = 0
+    while lower < upper:
+        mid = (upper + lower) // 2
+        log(lower, upper, mid)
+        res = check(lst, mid, k)
+        if res:
+            lower = mid + 1
+        else:
+            upper = mid
 
+    log("x", mid)
 
+    for i in range(20,-1,-1):
+        res = check(lst, i, k)
+        # log(i, res)
+        if res:
+            log("y", i)
+            break
+
+    log("z", max(size_k), max(size_k1))
+    
+    return max(max(size_k), max(size_k1), mid)
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
