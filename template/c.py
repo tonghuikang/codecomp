@@ -18,64 +18,66 @@ MAXINT = sys.maxsize
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
 # OFFLINE_TEST = False  # codechef does not allow getpass
-def log(*args):
+def log(*args, flush=False):
     if OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
-
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
+        print('\033[36m', *args, '\033[0m', file=sys.stderr, flush=flush)
 
 # ---------------------------- template ends here ----------------------------
 
+def query(left, right):
+    assert left != right
+    # left, right = sorted([left,right])
+    print("? {} {}".format(left+1,right+1), flush=True)
+    response = int(input())-1
+    return response
 
-def solve_():
-    # your solution here
+def alert(pos):
+    print("! {}".format(pos+1), flush=True)
+    sys.exit()
 
-    return ""
+# -----------------------------------------------------------------------------
 
+# read line as an integer
+k = int(input())
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+upper = k-1
+lower = 0
+idx_second_largest = query(0, k-1)
 
-    # read line as an integer
-    # k = int(input())
+if idx_second_largest == 0:
+    left_side = False
+else:
+    log("left or right", flush=True)
+    idx_confirm = query(0, idx_second_largest)
+    left_side = idx_confirm == idx_second_largest
 
-    # read line as a string
-    # srr = input().strip()
+if left_side:  # confirmed left
+    lower = 0
+    upper = idx_second_largest - 1
 
-    # read one line and parse each word as a string
-    # lst = input().split()
-    
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    while lower < upper:
+        mid = (upper + lower + 1)//2
+        # log(lower, upper, mid, flush=True)
+        idx_confirm = query(mid, idx_second_largest)
+        # log(idx_confirm==idx_second_largest, flush=True)
+        if idx_confirm == idx_second_largest:  # between upper and mid incl
+            lower = mid
+        else:
+            upper = mid-1
+    alert(lower)
 
-    # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
+else:  # confirmed right
+    lower = idx_second_largest + 1
+    upper = k-1
 
-    res = solve()  # include input here
-    
-    # print result
-    # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    while lower < upper:
+        mid = (upper + lower)//2
+        # log(lower, upper, mid, flush=True)
+        idx_confirm = query(idx_second_largest, mid)
+        # log(idx_confirm==idx_second_largest, flush=True)
+        if idx_confirm == idx_second_largest:  # between lower and mid incl
+            upper = mid
+        else:
+            lower = mid+1
+    alert(lower)
 
-    # Other platforms - no case number required
-    print(res)
-    # print(len(res))
-    # print(*res)  # print a list with elements
-    # for r in res:  # print each list in a different line
-        # print(res)
-        # print(*res)
