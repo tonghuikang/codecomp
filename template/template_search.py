@@ -8,3 +8,4 @@ MAXINT = sys.maxsize
 
 # ------------------------ standard imports ends here ------------------------
 
+# please add binary search template here

@@ -64,3 +64,18 @@ def sliding_window_maximum(nums, k):
 
 
 # leetcode.com/problems/sliding-window-median/
+
+
+def gathering_cost(xpos):
+    # the cost to gather every item to a each location
+    xpos = sorted(xpos)
+    n = len(xpos)
+    left_cost = 0
+    right_cost = sum([x-xpos[0] for x in xpos])
+    cost_arr = [right_cost]
+
+    for i,(prev,nex) in enumerate(zip(xpos,xpos[1:])):
+        left_cost += (i+1)*(nex - prev)
+        right_cost -= (n-i-1)*(nex - prev)
+        cost_arr.append(left_cost + right_cost)
+    return cost_arr
