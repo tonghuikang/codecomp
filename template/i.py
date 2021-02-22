@@ -38,6 +38,7 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+# edit distance, sequence alignment
 
 def solve_(n,arr,brr):
     # your solution here

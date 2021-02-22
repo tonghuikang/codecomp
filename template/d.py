@@ -51,8 +51,10 @@ def solve_(arr,brr):
         for ar in crr:
             ar = "./" + ar
             lst = ar.split("/")
+            prefix = ""
             for i,(a,b) in enumerate(zip(lst, lst[1:])):
-                atree[str(i)+a].add(str(i+1)+b)
+                atree[prefix+str(i)+a].add(prefix+a+"/"+str(i+1)+b)
+                prefix += a + "/"
         
         log(atree)
         return atree
