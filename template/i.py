@@ -50,11 +50,17 @@ def solve_(n,arr,brr):
         yrr[z] = 1
     
     xrr = xrr+xrr
-    # log(xrr, yrr)
+    yrr = yrr[::-1]
+    log(xrr)
+    log(yrr)
 
     maxres = 0
     for i in range(n):
         res = sum(a*b for a,b in zip(xrr[i:],yrr))
+        # log(xrr[i:])
+        # log(yrr)
+        # log(res)
+        # log()
         maxres = max(maxres, res)
 
     return maxres
