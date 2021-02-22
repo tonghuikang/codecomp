@@ -5,6 +5,8 @@ import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
+sys.setrecursionlimit(2000)
+
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
@@ -39,18 +41,54 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr,brr):
     # your solution here
+    if len(arr) != len(brr):
+        return "INVALID"
 
-    return ""
+    def parse_tree(crr):
+        atree = collections.defaultdict(set)
+        for ar in crr:
+            ar = "./" + ar
+            lst = ar.split("/")
+            for i,(a,b) in enumerate(zip(lst, lst[1:])):
+                atree[str(i)+a].add(str(i+1)+b)
+        
+        log(atree)
+        return atree
+
+    def encode(node, atree):
+        if not node:
+            return ""
+        components = []
+        for nex in atree[node]:
+            components.append("(" + encode(nex, atree) + ")")
+        components = sorted(components)
+        return "".join(components)
+    
+    xtree = parse_tree(arr)
+    ytree = parse_tree(brr)
+    xres = encode("0.", xtree)
+    yres = encode("0.", ytree)
+    
+    log(xres)
+    log(yres)
+
+    if xres == yres:
+        return "OK"
+    return "INVALID"
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
+    arr = read_strings(k)  # and return as a list of str
+    k = int(input())
+    brr = read_strings(k)  # and return as a list of str
 
     # read line as a string
     # srr = input().strip()
@@ -64,9 +102,8 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr,brr)  # include input here
     
     # print result
     # Google and Facebook - case number required
