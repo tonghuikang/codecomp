@@ -38,19 +38,44 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+# shortest string that contains each word as a substring
+def solve_(arr):
 
-def solve_():
+    newset = set()
+    for a in arr:
+        for b in arr:
+            if len(a) < len(b) and a in b:
+                break
+        else:
+            newset.add(a)
+    arr = list(newset)
+
+    @functools.lru_cache(maxsize=1000)
+    def compare(a,b):
+        cursavings = 0
+        for i in range(min(len(a),len(b))):
+            if a[:i+1] == b[-i-1:]:
+                cursavings = i+1
+        return cursavings
+
+
     # your solution here
+    maxsavings = 0
+    for lst in itertools.permutations(arr):
+        savings = 0
+        for a,b in zip(lst, lst[1:]):
+            savings += compare(a,b)
+        maxsavings = max(savings, maxsavings)
 
-    return ""
+    return sum(len(x) for x in arr) - maxsavings
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -64,9 +89,9 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
     
     # print result
     # Google and Facebook - case number required
