@@ -39,7 +39,6 @@ def read_strings(rows):
 
 def butterfly(arr):
     MOD = 998244353
-    ROOT = 3
     sum_e = (911660635, 509520358, 369330050, 332049552, 983190778, 123842337, 238493703, 975955924, 
              603855026, 856644456, 131300601, 842657263, 730768835, 942482514, 806263778, 151565301, 
              510815449, 503497456, 743006876, 741047443, 56250497, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -61,7 +60,6 @@ def butterfly(arr):
 
 def butterfly_inv(arr):
     MOD = 998244353
-    ROOT = 3
     sum_ie = (86583718, 372528824, 373294451, 645684063, 112220581, 692852209, 155456985, 797128860, 
             90816748, 860285882, 927414960, 354738543, 109331171, 293255632, 535113200, 308540755, 
             121186627, 608385704, 438932459, 359477183, 824071951, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -82,9 +80,9 @@ def butterfly_inv(arr):
             inow %= MOD
 
 def convolution(a, b):
-    # B might be in the wrong direction
+    # arrays might be in the wrong direction
+    # https://www.hackerrank.com/contests/spring-2021-indeed-programming-challenge/challenges/power-connectors
     MOD = 998244353
-    ROOT = 3
     n = len(a)
     m = len(b)
     if not n or not m: return []
