@@ -42,7 +42,7 @@ modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N
 def invmod(a,b): return 0 if a==0 else 1 if b%a==0 else b - invmod(b%a,a)*b//a
 
 def chinese_remainder_theorem(divisors, remainders):
-    log(divisors, remainders)
+    # log(divisors, remainders)
     sum = 0
     prod = functools.reduce(lambda a, b: a*b, divisors)
     for n_i, a_i in zip(divisors, remainders):
@@ -50,6 +50,98 @@ def chinese_remainder_theorem(divisors, remainders):
         sum += a_i * modinv(p, n_i) * p
     return sum % prod
 
+import typing
+
+def _inv_gcd(a: int, b: int) -> typing.Tuple[int, int]:
+    a %= b
+    if a == 0:
+        return (b, 0)
+
+    # Contracts:
+    # [1] s - m0 * a = 0 (mod b)
+    # [2] t - m1 * a = 0 (mod b)
+    # [3] s * |m1| + t * |m0| <= b
+    s = b
+    t = a
+    m0 = 0
+    m1 = 1
+
+    while t:
+        u = s // t
+        s -= t * u
+        m0 -= m1 * u  # |m1 * u| <= |m1| * s <= b
+
+        # [3]:
+        # (s - t * u) * |m1| + t * |m0 - m1 * u|
+        # <= s * |m1| - t * u * |m1| + t * (|m0| + |m1| * u)
+        # = s * |m1| + t * |m0| <= b
+
+        s, t = t, s
+        m0, m1 = m1, m0
+
+    # by [3]: |m0| <= b/g
+    # by g != b: |m0| < b/g
+    if m0 < 0:
+        m0 += b // s
+
+    return (s, m0)
+
+
+def crt(r: typing.List[int], m: typing.List[int]) -> typing.Tuple[int, int]:
+    assert len(r) == len(m)
+
+    n = len(r)
+
+    # Contracts: 0 <= r0 < m0
+    r0 = 0
+    m0 = 1
+    for i in range(n):
+        assert 1 <= m[i]
+        r1 = r[i] % m[i]
+        m1 = m[i]
+        if m0 < m1:
+            r0, r1 = r1, r0
+            m0, m1 = m1, m0
+        if m0 % m1 == 0:
+            if r0 % m1 != r1:
+                return (0, 0)
+            continue
+
+        # assume: m0 > m1, lcm(m0, m1) >= 2 * max(m0, m1)
+
+        '''
+        (r0, m0), (r1, m1) -> (r2, m2 = lcm(m0, m1));
+        r2 % m0 = r0
+        r2 % m1 = r1
+        -> (r0 + x*m0) % m1 = r1
+        -> x*u0*g % (u1*g) = (r1 - r0) (u0*g = m0, u1*g = m1)
+        -> x = (r1 - r0) / g * inv(u0) (mod u1)
+        '''
+
+        # im = inv(u0) (mod u1) (0 <= im < u1)
+        g, im = _inv_gcd(m0, m1)
+
+        u1 = m1 // g
+        # |r1 - r0| < (m0 + m1) <= lcm(m0, m1)
+        if (r1 - r0) % g:
+            return (0, 0)
+
+        # u1 * u1 <= m1 * m1 / g / g <= m0 * m1 / g = lcm(m0, m1)
+        x = (r1 - r0) // g % u1 * im % u1
+
+        '''
+        |r0| + |m0 * x|
+        < m0 + m0 * (u1 - 1)
+        = m0 + m0 * m1 / g - m0
+        = lcm(m0, m1)
+        '''
+
+        r0 += x * m0
+        m0 *= u1  # -> lcm(m0, m1)
+        if r0 < 0:
+            r0 += m0
+
+    return (r0, m0)
 
 def solve_(x,y,p,q):
     # your solution here
@@ -62,32 +154,30 @@ def solve_(x,y,p,q):
 
     for a in range(x,x+y):
         for b in range(p,p+q):
-            log(a,b)
+            # log(a,b)
             if a == b:
                 minres = min(minres, a)
                 continue
-            
-            # cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
+
             div = (2*(x+y))
             mod = p+q
-            rem = b-a
+            time, lcm = crt([a, b], [div, mod])
             # log(mod, div, rem, rem%mod, div%mod)
 
-            factor = math.gcd(math.gcd(div, mod), rem)
-            if factor > 1:
-                div = div // factor
-                mod = mod // factor
-                rem = rem // factor
+            # factor = math.gcd(math.gcd(div, mod), rem)
+            # if factor > 1:
+            #     div = div // factor
+            #     mod = mod // factor
+            #     rem = rem // factor
 
             # cur = modinv(div, mod, rem)
-            cur = modinv(div*modinv(rem,mod), mod)
+            # cur = modinv(div*modinv(rem,mod), mod)
             # cur = modinv(rem, mod)%mod * modinv(div, mod)%mod
-
-            if cur >= 0:
-                # cur = modinv(rem, mod)
-                time = cur*div*factor + a
-                # log(cur, time, a, div)
-                minres = min(minres, time)
+            # log(cur)
+            if lcm == 0:
+                continue
+            # log(cur, time, a, div)
+            minres = min(minres, time)
 
 
     if str(minres) == "inf":
