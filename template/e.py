@@ -38,11 +38,32 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
 
-def solve_():
+def chinese_remainder_theorem(divisors, remainders):
+    sum = 0
+    prod = functools.reduce(lambda a, b: a*b, divisors)
+    for n_i, a_i in zip(divisors, remainders):
+        p = prod // n_i
+        sum += a_i * modinv(p, n_i) * p
+    return sum % prod
+
+
+def solve_(x,y,p,q):
     # your solution here
 
-    return ""
+    minres = 10**18
+
+    for a in range(x,x+y):
+        for b in range(p,p+q):
+            cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
+            log(cur)
+            minres = min(minres, cur)
+
+    if cur == 0:
+        return "infinity"
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +80,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c,d = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b,c,d)  # include input here
     
     # print result
     # Google and Facebook - case number required
