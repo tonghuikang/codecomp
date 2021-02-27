@@ -41,6 +41,7 @@ def read_strings(rows):
 modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
 
 def chinese_remainder_theorem(divisors, remainders):
+    log(divisors, remainders)
     sum = 0
     prod = functools.reduce(lambda a, b: a*b, divisors)
     for n_i, a_i in zip(divisors, remainders):
@@ -52,15 +53,26 @@ def chinese_remainder_theorem(divisors, remainders):
 def solve_(x,y,p,q):
     # your solution here
 
-    minres = 10**18
+    minres = math.inf
+
+    # find minimum m*(2x+2y)+a == n*(p+q)+b
+    # find minimum m*(2x+2y) - n*(p+q) = b-a
+    
 
     for a in range(x,x+y):
         for b in range(p,p+q):
-            cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
-            log(cur)
-            minres = min(minres, cur)
-
-    if cur == 0:
+            try:
+                # cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
+                cur = modinv(2*(x+y), p+q, b-a)
+                if cur == -1:
+                    continue
+                time = cur*2*(x+y) + a
+                # log(cur, time)
+                minres = min(minres, time)
+            except:
+                pass
+    
+    if str(cur) == "inf":
         return "infinity"
 
     return minres
