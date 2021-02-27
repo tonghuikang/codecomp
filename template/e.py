@@ -39,6 +39,7 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+def invmod(a,b): return 0 if a==0 else 1 if b%a==0 else b - invmod(b%a,a)*b//a
 
 def chinese_remainder_theorem(divisors, remainders):
     log(divisors, remainders)
@@ -62,22 +63,26 @@ def solve_(x,y,p,q):
     for a in range(x,x+y):
         for b in range(p,p+q):
             if b == a:
+                log("skip")
                 minres = min(minres, a)
                 continue
             # cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
-            div = 2*(x+y)
+            div = (2*(x+y))
             mod = p+q
             rem = b-a
+            # log(mod, div, rem, rem%mod, div%mod)
 
-            try:
-                cur = modinv(div, mod, rem)
-                if cur == -1:
-                    continue
-                time = cur*2*(x+y) + a
-                # log(cur, time)
-                minres = min(minres, time)
-            except:
-                pass
+            # cur = modinv(rem*div, mod)
+            cur = invmod(rem*div, mod)
+            # cur = modinv(rem, mod)%mod * modinv(div, mod)%mod
+
+            if cur == (p+q):
+                continue
+            
+            # cur = modinv(rem, mod)
+            time = cur*div + a
+            # log(cur, time, a, div)
+            minres = min(minres, time)
     
     if str(minres) == "inf":
         return "infinity"
