@@ -62,10 +62,6 @@ def solve_(x,y,p,q):
 
     for a in range(x,x+y):
         for b in range(p,p+q):
-            if b == a:
-                log("skip")
-                minres = min(minres, a)
-                continue
             # cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
             div = (2*(x+y))
             mod = p+q
@@ -73,17 +69,32 @@ def solve_(x,y,p,q):
             # log(mod, div, rem, rem%mod, div%mod)
 
             # cur = modinv(rem*div, mod)
-            cur = invmod(rem*div, mod)
+            cur = modinv(div, mod)
             # cur = modinv(rem, mod)%mod * modinv(div, mod)%mod
 
-            if cur == (p+q):
-                continue
-            
-            # cur = modinv(rem, mod)
-            time = cur*div + a
-            # log(cur, time, a, div)
-            minres = min(minres, time)
-    
+            if cur >= 0:
+                # cur = modinv(rem, mod)
+                time = (rem*cur)%mod*div + a
+                # log(cur, time, a, div)
+                minres = min(minres, time)
+
+            # cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
+            div = p+q
+            mod = (2*(x+y))
+            rem = a-b
+            # log(mod, div, rem, rem%mod, div%mod)
+
+            # cur = modinv(rem*div, mod)
+            cur = modinv(div, mod)
+            # cur = modinv(rem, mod)%mod * modinv(div, mod)%mod
+
+            if cur >= 0:
+                # cur = modinv(rem, mod)
+                time = (rem*cur)%mod*div + b
+                # log(cur, time, a, div)
+                minres = min(minres, time)
+
+
     if str(minres) == "inf":
         return "infinity"
 
