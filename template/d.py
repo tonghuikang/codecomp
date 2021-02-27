@@ -39,21 +39,56 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(k,srr,trr):
     # your solution here
 
-    return ""
+    c1 = Counter([int(x) for x in srr[:-1]])
+    c2 = Counter([int(x) for x in trr[:-1]])
+    log(c1)
+    log(c2)
+    d = Counter()
+    for i in range(1,10):
+        d[i] = k - c1[i] - c2[i]
+    log(d)
+
+    pool = 9*k-8
+    res = 0
+    check = 0
+
+    for a in range(1,10):
+        if d[a] == 0:
+            continue
+        prob_1 = d[a]/pool
+        for b in range(1,10):
+            if a == b:
+                prob_2 = (d[b]-1)/(pool-1)
+            else:
+                prob_2 = (d[b])/(pool-1)
+            prob = prob_1*prob_2
+            score1 = 0
+            score2 = 0
+            for i in range(1,10):
+                score1 += i*10**(c1[i] + int(a==i))
+                score2 += i*10**(c2[i] + int(b==i))
+            # log(score1, score2, prob)
+            if score1 > score2:
+                res += prob
+            check += prob
+    # log(check)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    trr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -66,7 +101,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k,srr,trr)  # include input here
     
     # print result
     # Google and Facebook - case number required
