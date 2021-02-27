@@ -62,35 +62,30 @@ def solve_(x,y,p,q):
 
     for a in range(x,x+y):
         for b in range(p,p+q):
+            log(a,b)
+            if a == b:
+                minres = min(minres, a)
+                continue
+            
             # cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
             div = (2*(x+y))
             mod = p+q
             rem = b-a
             # log(mod, div, rem, rem%mod, div%mod)
 
-            # cur = modinv(rem*div, mod)
-            cur = modinv(div, mod)
+            factor = math.gcd(math.gcd(div, mod), rem)
+            if factor > 1:
+                div = div // factor
+                mod = mod // factor
+                rem = rem // factor
+
+            # cur = modinv(div, mod, rem)
+            cur = modinv(div*modinv(rem,mod), mod)
             # cur = modinv(rem, mod)%mod * modinv(div, mod)%mod
 
             if cur >= 0:
                 # cur = modinv(rem, mod)
-                time = (rem*cur)%mod*div + a
-                # log(cur, time, a, div)
-                minres = min(minres, time)
-
-            # cur = chinese_remainder_theorem([2*(x+y), p+q], [a, b])
-            div = p+q
-            mod = (2*(x+y))
-            rem = a-b
-            # log(mod, div, rem, rem%mod, div%mod)
-
-            # cur = modinv(rem*div, mod)
-            cur = modinv(div, mod)
-            # cur = modinv(rem, mod)%mod * modinv(div, mod)%mod
-
-            if cur >= 0:
-                # cur = modinv(rem, mod)
-                time = (rem*cur)%mod*div + b
+                time = cur*div*factor + a
                 # log(cur, time, a, div)
                 minres = min(minres, time)
 
