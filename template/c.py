@@ -38,11 +38,40 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def solve2(arr, brr):
+    log()
+    log(arr)
+    log(brr)
+    pos = set(brr)
 
-def solve_():
+    crr = [int(x in pos) for x in arr]
+    csum = 0
+    psum = []
+    for x in crr:
+        csum += x
+        psum.append(csum)
+    psum.append(csum)
+    count = sum(crr)
+    maxres = count
+    for i,x in enumerate(brr, start=1):
+        displaced = bisect.bisect_right(arr, x)
+        occupied_in_range = i - bisect.bisect_right(brr, x-displaced)
+        res = count - psum[displaced] + occupied_in_range
+        # log(x, displaced)
+        # log(res, count, psum[displaced], occupied_in_range)
+        # log()
+        maxres = max(maxres, res)
+    return maxres
+
+
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    res = 0
+    res += solve2([x for x in arr if x > 0], [x for x in brr if x > 0])
+    res += solve2([-x for x in arr if x < 0][::-1], [-x for x in brr if x < 0][::-1])
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +88,15 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
     
     # print result
     # Google and Facebook - case number required

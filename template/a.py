@@ -39,10 +39,29 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+    for a in "()":
+        for b in "()":
+            for c in "()":
+                arr = srr
+                arr = arr.replace("A", a)
+                arr = arr.replace("B", b)
+                arr = arr.replace("C", c)
+                # log(arr)
+                stack = 0
+                for x in arr:
+                    if x == "(":
+                        stack += 1
+                    else:
+                        stack -= 1
+                        if stack < 0:
+                            break
+                else:
+                    if stack == 0:
+                        return "YES"
+    return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -53,7 +72,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -66,7 +85,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
     
     # print result
     # Google and Facebook - case number required

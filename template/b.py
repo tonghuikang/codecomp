@@ -39,10 +39,21 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,r,u,d,l):
     # your solution here
 
-    return ""
+    lst = [r,u,d,l]
+
+    for a in range(2):
+        for b in range(2):
+            for c in range(2):
+                for d in range(2):
+                    if lst[0] >= (d+a) and lst[1] >= (a+b) and lst[2] >= (b+c) and lst[3] >= (c+d):
+                        # log(a,b,c,d)
+                        if lst[0] <= (n-2+d+a) and lst[1] <= (n-2+a+b) and lst[2] <= (n-2+b+c) and lst[3] <= (n-2+c+d):
+                            return "YES"
+
+    return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +70,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,r,u,d,l = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(n,r,u,d,l)  # include input here
     
     # print result
     # Google and Facebook - case number required
