@@ -97,11 +97,22 @@ def solve_(mrr):
         del common_supervisor[j]
         eliminated.add(i)
         eliminated.add(j)
+        for x in list(common_supervisor.keys()):
+            if i in common_supervisor[x]:
+                del common_supervisor[x][i]
+            if j in common_supervisor[x]:
+                del common_supervisor[x][j]
 
         for nex in paired:
             del common_supervisor[nex]
             eliminated.add(nex)
             supervisor_tree[nex] = idx
+            for x in list(common_supervisor.keys()):
+                if nex in common_supervisor[x]:
+                    del common_supervisor[x][nex]
+                if nex in common_supervisor[x]:
+                    del common_supervisor[x][nex]
+
         idx += 1
 
     # log(supervisor_tree)
