@@ -39,18 +39,95 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
+
+    # mrr = [[i]+row for i,row in enumerate(mrr, start=1)]
+    # mrr = [list(range(len(mrr[0])))] + mrr
+
+    salaries = {}
+    common_supervisor = defaultdict(Counter)
+    heap = []
+    for i,row in enumerate(mrr):
+        for j,salary in enumerate(row):
+            if i == j:
+                salaries[i] = salary
+                continue
+            common_supervisor[i][j] = salary
+            common_supervisor[j][i] = salary
+            heapq.heappush(heap, (salary,i,j))
+            # heapq.heappush(heap, (salary,j,i))
+    eliminated = set()
+    supervisor_tree = {}
+    idx = len(mrr)
+
+    while heap:
+        salary,i,j = heapq.heappop(heap)
+        if i in eliminated or j in eliminated:
+            continue
+        supervisor_tree[i] = idx
+        supervisor_tree[j] = idx
+        salaries[idx] = salary
+
+        paired = set()
+        for y in list(common_supervisor.keys()):
+            if y == i or y == j:
+                continue
+            for x in list(common_supervisor.keys()):
+                if i == x or x == y or x in eliminated:
+                    continue
+                supervisor_salary = common_supervisor[i][x]
+                if supervisor_salary != common_supervisor[y][x]:
+                    log(i,j,x,y)
+                    break
+            else:
+                paired.add(y)
+        # log(i,j,paired)
+
+        for x in list(common_supervisor.keys()):
+            if x == i or x == j or x in eliminated:
+                continue
+            supervisor_salary = common_supervisor[i][x]
+            assert supervisor_salary == common_supervisor[j][x]
+            common_supervisor[idx][x] = supervisor_salary
+            common_supervisor[x][idx] = supervisor_salary
+            heapq.heappush(heap, (supervisor_salary,idx,x))
+            # heapq.heappush(heap, (supervisor_salary,x,idx))
+        del common_supervisor[i]
+        del common_supervisor[j]
+        eliminated.add(i)
+        eliminated.add(j)
+
+        for nex in paired:
+            del common_supervisor[nex]
+            eliminated.add(nex)
+            supervisor_tree[nex] = idx
+        idx += 1
+
+    # log(supervisor_tree)
+    # log(salaries)
+
+
+    print(len(salaries))
+
+    salaries_arr = list(v for k,v in sorted(salaries.items()))
+    print(*salaries_arr)
+
+    boss = salaries_arr.index(max(salaries_arr)) + 1
+    print(boss)
+
+    for k,v in supervisor_tree.items():
+        print(k+1, v+1)
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,17 +140,17 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
