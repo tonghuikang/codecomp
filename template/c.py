@@ -46,11 +46,10 @@ def solve2(arr, brr):
 
     crr = [int(x in pos) for x in arr]
     csum = 0
-    psum = []
+    psum = [0]
     for x in crr:
         csum += x
         psum.append(csum)
-    psum.append(csum)
     count = sum(crr)
     maxres = count
     for i,x in enumerate(brr, start=1):
@@ -61,6 +60,7 @@ def solve2(arr, brr):
         # log(res, count, psum[displaced], occupied_in_range)
         # log()
         maxres = max(maxres, res)
+    log(maxres)
     return maxres
 
 
