@@ -47,7 +47,7 @@ def solve_(lst, m):
 
     c = Counter(lst[:m])
     heap = []
-    for i in range(m+2):
+    for i in range(m+1):
         if i not in c:
             heapq.heappush(heap,i)
     minres = heap[0]
@@ -58,7 +58,7 @@ def solve_(lst, m):
         while heap and c[heap[0]] > 0:
             heapq.heappop(heap)
         if c[exit] == 0:
-            heapq.heappush(heap,i)
+            heapq.heappush(heap,exit)
         minres = min(minres, heap[0])
 
     return minres
