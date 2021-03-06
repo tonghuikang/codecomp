@@ -39,15 +39,34 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst, m):
     # your solution here
 
-    return ""
+    # heap to track min
+    # counter to track count
+
+    c = Counter(lst[:m])
+    heap = []
+    for i in range(m+2):
+        if i not in c:
+            heapq.heappush(heap,i)
+    minres = heap[0]
+
+    for exit,enter in zip(lst, lst[m:]):
+        c[exit] -= 1
+        c[enter] += 1
+        while heap and c[heap[0]] > 0:
+            heapq.heappop(heap)
+        if c[exit] == 0:
+            heapq.heappush(heap,i)
+        minres = min(minres, heap[0])
+
+    return minres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +78,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    _,m = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst,m)  # include input here
     
     # print result
     # Google and Facebook - case number required
