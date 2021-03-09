@@ -1,3 +1,7 @@
 # compiled C++ files
 a.out
 tmp.out
+
+# compiled Kotlin files
+META-INF/
+.jar
