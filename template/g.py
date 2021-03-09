@@ -42,9 +42,7 @@ def read_strings(rows):
 def solve_(a,b,c):
     # your solution here
     minres = c
-    for i in range(c):
-        if not a <= i < b:
-            continue
+    for i in range(a,b):
         left = min(a+i, 2*i-a)
         i += 1
         right = min(2*(c-b)+b-i, b-i+c-i)

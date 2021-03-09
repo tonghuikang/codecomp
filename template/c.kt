@@ -42,7 +42,7 @@ fun main() {
         for (i in a..b-1){
             minres = min(minres, max(
                 min(a+i, 2*i-a),
-                min(2*(c-b)+b-i+1, b-(i+1)+c-(i+1))
+                min(2*(c-b)+b-(i+1), b-(i+1)+c-(i+1))
             ))
         }
         println(minres)
