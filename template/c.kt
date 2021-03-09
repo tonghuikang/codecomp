@@ -1,5 +1,7 @@
 import java.lang.AssertionError
- 
+import kotlin.math.min
+import kotlin.math.max
+
 private fun readLn() = readLine()!! // string line
 private fun readInt() = readLn().toInt() // single int
 private fun readLong() = readLn().toLong() // single long
@@ -10,22 +12,39 @@ private fun readLongs() = readStrings().map { it.toLong() } // list of longs
 private fun readDoubles() = readStrings().map { it.toDouble() } // list of doubles
  
 
+// def solve_(a,b,c):
+//     # your solution here
+//     minres = c
+//     for i in range(c):
+//         if not a <= i < b:
+//             continue
+//         left = min(a+i, 2*i-a)
+//         i += 1
+//         right = min(2*(c-b)+b-i, b-i+c-i)
+//         log(left, right)
+//         minres = min(minres, max(left,right))
+
+//     return minres
+
+
 fun main() {
     // read input
-    val n = readInt()
-    val s = readLn()
-    val fl = readInts()
-    // define local function f
-    fun f(c: Char) = '0' + fl[c - '1']
-    // greedily find first and last indices
-    val i = s.indexOfFirst { c -> f(c) > c }
-        .takeIf { it >= 0 } ?: s.length
-    val j = s.withIndex().indexOfFirst { (j, c) -> j > i && f(c) < c }
-        .takeIf { it >= 0 } ?: s.length
-    // compose and write the answer
-    val ans =
-        s.substring(0, i) +
-        s.substring(i, j).map { c -> f(c) }.joinToString("") +
-        s.substring(j)
-    println(ans)
+    val case_num = readInt()
+
+    for (z in 1..case_num) {
+        val inp = readInts()
+        val c = inp[0] - 1
+        val a = min(inp[1], inp[2]) - 1
+        val b = max(inp[1], inp[2]) - 1
+
+        var minres = c
+
+        for (i in a..b-1){
+            minres = min(minres, max(
+                min(a+i, 2*i-a),
+                min(2*(c-b)+b-i+1, b-(i+1)+c-(i+1))
+            ))
+        }
+        println(minres)
+    }
 }

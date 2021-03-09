@@ -12,20 +12,31 @@ private fun readDoubles() = readStrings().map { it.toDouble() } // list of doubl
 
 fun main() {
     // read input
-    val n = readInt()
-    val s = readLn()
-    val fl = readInts()
-    // define local function f
-    fun f(c: Char) = '0' + fl[c - '1']
-    // greedily find first and last indices
-    val i = s.indexOfFirst { c -> f(c) > c }
-        .takeIf { it >= 0 } ?: s.length
-    val j = s.withIndex().indexOfFirst { (j, c) -> j > i && f(c) < c }
-        .takeIf { it >= 0 } ?: s.length
-    // compose and write the answer
-    val ans =
-        s.substring(0, i) +
-        s.substring(i, j).map { c -> f(c) }.joinToString("") +
-        s.substring(j)
-    println(ans)
+    val case_num = readInt()
+
+    for (i in 1..case_num) {
+        var inp = readInts()
+        var n = inp[0]
+        var k = inp[1]
+        var srr = readLn()
+        var stack = 0
+        var blocks = 0
+        for (c in srr) {
+            // print(c)
+            if (c == '('){
+                stack ++
+            } else {
+                stack --
+            }
+            if (stack == 0){
+                blocks ++
+            }
+        }
+        var depth = n/2 - blocks
+        if (k > depth){
+            println(blocks + depth)
+        } else {
+            println(blocks + k)
+        }
+    }
 }
