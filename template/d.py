@@ -39,15 +39,23 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(xrr, n):
     # your solution here
 
-    return ""
+    res = [[0 for _ in range(n)] for _ in range(n)]
+    
+    for a,b in xrr:
+        res[a][b] += 1
+        res[b][a] += 1
+        res[a][a] += 1
+        res[b][b] += 1
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,20 +67,22 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
+    mrr = [(a-1,b-1) for a,b in mrr]
 
-    res = solve()  # include input here
+    res = solve(mrr,n)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
+    res = "\n".join([" ".join(str(x) for x in r) for r in res])
     print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
