@@ -40,6 +40,10 @@ def read_strings(rows):
 
 
 def solve_(mrr):
+    if OFFLINE_TEST:
+        for r in mrr:
+            log(r)
+
     # every thrid row, starting from
         # the second row
         # the first row if if col%3 == 1
@@ -69,9 +73,11 @@ def solve_(mrr):
             allpillars.append(i)
         else:
             if i == 0 or i == len(xrr)-1:
-                continue                
+                continue              
 
-    for a,b in zip(allpillars, allpillars[:-1]):
+    log(allpillars)
+
+    for a,b in zip(allpillars, allpillars[1:]):
         if row_to_list[a+1]:
             xrr[a+2][row_to_list[a+1][0]] = "X"
         elif row_to_list[b-1]:
