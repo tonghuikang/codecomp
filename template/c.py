@@ -39,10 +39,48 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(mrr):
+    # every thrid row, starting from
+        # the second row
+        # the first row if if col%3 == 1
 
-    return ""
+    # connect the columns
+
+    row_to_list = defaultdict(list)
+
+    for i,row in enumerate(mrr):
+        for j,cell in enumerate(row):
+            if cell == "X":
+                row_to_list[i].append(j)
+
+    xrr = [list(row) for row in mrr]
+
+    if len(xrr[0]) <= 2 and len(xrr) <= 2:
+        return xrr
+
+    offset = 1
+    if len(xrr)%3 == 1:
+        offset = 0
+    allpillars = []
+
+    for i,row in enumerate(xrr):
+        if i%3 == offset:
+            xrr[i] = ["X"]*len(xrr[0])
+            allpillars.append(i)
+        else:
+            if i == 0 or i == len(xrr)-1:
+                continue                
+
+    for a,b in zip(allpillars, allpillars[:-1]):
+        if row_to_list[a+1]:
+            xrr[a+2][row_to_list[a+1][0]] = "X"
+        elif row_to_list[b-1]:
+            xrr[b-2][row_to_list[b-1][0]] = "X"
+        else:
+            xrr[a+1][0] = "X"
+            xrr[b-1][0] = "X"
+
+    return xrr
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,23 +97,24 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    k,_ = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
-
-    # Other platforms - no case number required
+    res = "\n".join(["".join(r) for r in res])
     print(res)
+    # Other platforms - no case number required
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
-        # print(*res)
+        # print("".join(r))
