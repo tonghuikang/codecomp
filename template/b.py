@@ -39,18 +39,51 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(arr):
+    # must be the single largest peak
+    # must have equal branches
+    if len(arr) <= 4:
+        return 0
 
-    return ""
+    xrr = [0]
+    rise_count = 0
+    for a,b in zip(arr,arr[1:]):
+        if b > a:
+            rise_count += 1
+        else:
+            rise_count = 0
+        xrr.append(rise_count)
+
+    yrr = [0]
+    rise_count = 0
+    for a,b in zip(arr[::-1],arr[::-1][1:]):
+        if b > a:
+            rise_count += 1
+        else:
+            rise_count = 0
+        yrr.append(rise_count)
+
+    mxrr = max(xrr)
+    myrr = max(yrr)
+    
+    if mxrr != myrr:
+        return 0
+
+    if xrr.count(mxrr) > 1:
+        return 0 
+
+    if yrr.count(myrr) > 1:
+        return 0
+
+    return 1
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +93,13 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
     
     # print result
     # Google and Facebook - case number required

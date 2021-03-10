@@ -39,10 +39,32 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    xx = sorted([abs(x) for x,y in mrr if y == 0])
+    yy = sorted([abs(y) for x,y in mrr if x == 0])
+
+    # log(xx)
+    # log(yy)
+
+    # res1 = 0
+    # for a,b in zip(xx,yy[::-1]):
+    #     res1 += (a**2 + b**2)**0.5
+
+    # res2 = 0
+    # for a,b in zip(xx[::-1],yy):
+    #     res2 += (a**2 + b**2)**0.5
+
+    res3 = 0
+    for a,b in zip(xx,yy):
+        res3 += (a**2 + b**2)**0.5
+
+    # log(res1)
+    # log(res2)
+    # log(res3)
+
+    return res3
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +72,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,10 +85,10 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(2*k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
