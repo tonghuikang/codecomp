@@ -62,17 +62,28 @@ def solve_(arr):
         else:
             rise_count = 0
         yrr.append(rise_count)
+    yrr = yrr[::-1]
+
+    zrr = [max(a,b) for a,b in zip(xrr,yrr)]
 
     mxrr = max(xrr)
     myrr = max(yrr)
-    
+    mzrr = max(zrr)
+
+    # log(xrr)
+    # log(yrr)
+    # log(zrr)
+
     if mxrr != myrr:
         return 0
 
-    if xrr.count(mxrr) > 1:
+    if mxrr != mzrr:
+        return 0
+
+    if zrr.count(mzrr) > 1:
         return 0 
 
-    if yrr.count(myrr) > 1:
+    if mzrr%2:
         return 0
 
     return 1
