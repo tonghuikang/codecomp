@@ -39,21 +39,20 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-
-def solve_(lst):
-    # your solution here
-    # lst.sort()
-
-    for i,a in enumerate(lst):
-        for j,b in enumerate(lst[i+1:], start=i+1):
-            for k,c in enumerate(lst[j+1:], start=j+1):
-                for l,d in enumerate(lst[k+1:], start=k+1):
-                    if a + b == c + d:
-                        return [i,j,k,l]
-                if time.time() - start_time > 1.5:
-                    return []
-
-    return []
+# https://codeforces.com/contest/1500/submission/109846428
+def solve_(A, N):
+    C = dict()
+    for i in range(N):
+        for j in range(i):
+            res = A[i] + A[j]
+            if res in C:
+                z, w = C[res]
+                if len(set((i, j, z, w))) == 4:
+                    return f'YES\n{i+1} {j+1} {z+1} {w+1}'
+            else:
+                C[res] = (i, j)
+    
+    return 'NO'
 
 
 for case_num in [0]:  # no loop over test case
@@ -77,15 +76,15 @@ for case_num in [0]:  # no loop over test case
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve(lst)  # include input here
+    res = solve(lst, k)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
-
+    print(res)
     # Other platforms - no case number required
-    if res:
-        print("YES")
-        print(*[r+1 for r in res])  # print a list with elements
-    else:
-        print("NO")
+    # if res:
+    #     print("YES")
+    #     print(*[r+1 for r in res])  # print a list with elements
+    # else:
+    #     print("NO")
