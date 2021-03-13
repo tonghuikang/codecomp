@@ -39,21 +39,74 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    val = 1
+    crr = []
+    for a in arr[::-1]:
+        crr.append((int(a)*val)%7)
+        val = (val*10)%7
+    crr = crr[::-1]
+
+    # log(crr)
+
+    crr = crr[::-1]
+    brr = brr[::-1]
+
+    twin = set([0])
+    awin = set([])
+    allset = set(range(7))
+    prevt = True
+    for b,c in zip(brr, crr):
+        # log(b,c)
+        if b == "T":
+            if not prevt:
+                twin = allset - awin
+            twin_new = set()
+            for x in twin:
+                twin_new.add(x)
+                twin_new.add((x+c)%7)
+            twin = twin_new
+            if len(twin) == 7:
+                return "Takahashi"
+            prevt = True
+        else:
+            if prevt:
+                awin = allset - twin
+            awin_new = set()
+            for x in awin:
+                awin_new.add(x)
+                awin_new.add((x+c)%7)
+            awin = awin_new
+            if len(awin) == 7:
+                return "Aoki"
+            prevt = False
+    #     log(twin)
+    #     log(awin)
+
+    # log(twin, awin, prevt)
+    if prevt:
+        if 0 in twin:
+            return "Takahashi"
+        return "Aoki"
+    if not prevt:
+        if 0 in awin:
+            return "Aoki"
+        return "Takahashi"
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    arr = input().strip()
+    brr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -66,7 +119,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
     
     # print result
     # Google and Facebook - case number required

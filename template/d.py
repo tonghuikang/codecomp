@@ -39,15 +39,31 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, lst, qrr):
     # your solution here
+    
+    mrr = sorted(mrr, key=lambda x:x[1])[::-1]
+    res = []
 
-    return ""
+    for a,b in qrr:
+        spaces = lst[:a] + lst[b+1:]
+        spaces = sorted(spaces)
+        empty_arr = [True for _ in lst]
+        curvalue = 0
+        for size, value in mrr:
+            for i,(space, empty) in enumerate(zip(spaces, empty_arr)):
+                if space >= size and empty:
+                    curvalue += value
+                    empty_arr[i] = False
+                    break
+        res.append(curvalue)
+        
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,23 +75,25 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    k,_,q = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
+    lst = list(map(int,input().split()))
+    qrr = read_matrix(q)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
+    qrr = [(a-1,b-1) for a,b in qrr]
 
-    res = solve()  # include input here
+    res = solve(mrr, lst, qrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
-    # for r in res:  # print each list in a different line
-        # print(res)
+    for r in res:  # print each list in a different line
+        print(r)
         # print(*res)
