@@ -39,15 +39,64 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(a,b):
+    # http://aequa.me/index.php/2019/06/03/counting-independent-sets-in-o1-619n-time/
 
-    return ""
+    d = defaultdict(list)
 
+    for x in range(a,b+1):
+        for y in range(x+1,b+1):
+            if math.gcd(x,y) > 1:
+                d[x].append(y)
+                d[y].append(x)
+    
+    components = []
+    visited = set()
+    for x in range(a,b+1):
+        if x in visited:
+            continue
+        c = set()
+        stack = [x]
+        while stack:
+            cur = stack.pop()
+            c.add(cur)
+            for nex in d[cur]:
+                if nex in visited:
+                    continue
+                visited.add(nex)
+                stack.append(nex)
+        components.append(c)
 
-# for case_num in [0]:  # no loop over test case
+    def count_independent_set(vertices):
+        if len(vertices) <= 1:
+            return 1
+        res = 0
+        vertices_lst = list(vertices)
+        # discarding = vertices_lst[0]
+
+        # visited = set()
+        # components = []
+        # stack = vertices_lst[1]
+        
+        res += count_independent_set(vertices_lst[1:])
+        vertices_copy = set(vertices)
+        for nex in d[vertices_lst[0]]:
+            vertices_copy.discard(nex)
+        vertices_copy.discard(vertices_lst[0])
+        res += count_independent_set(vertices_copy)
+        return res
+
+    res = 1
+    for component in components:
+        cur = count_independent_set(component)
+        log(component, cur)
+        res = res*(cur+1)
+
+    return res
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +108,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
     
     # print result
     # Google and Facebook - case number required
