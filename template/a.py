@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
+import time
+start_time = time.time()
+
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -41,8 +42,18 @@ def read_strings(rows):
 
 def solve_(lst):
     # your solution here
+    # lst.sort()
 
-    return ""
+    for i,a in enumerate(lst):
+        for j,b in enumerate(lst[i+1:], start=i+1):
+            for k,c in enumerate(lst[j+1:], start=j+1):
+                for l,d in enumerate(lst[k+1:], start=k+1):
+                    if a + b == c + d:
+                        return [i,j,k,l]
+                if time.time() - start_time > 1.5:
+                    return []
+
+    return []
 
 
 for case_num in [0]:  # no loop over test case
@@ -75,6 +86,6 @@ for case_num in [0]:  # no loop over test case
     # Other platforms - no case number required
     if res:
         print("YES")
-        print(*res)  # print a list with elements
+        print(*[r+1 for r in res])  # print a list with elements
     else:
         print("NO")
