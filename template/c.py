@@ -39,15 +39,30 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(m,n):
     # your solution here
 
-    return ""
+    count = 0
+    for lst in itertools.product(range(1,n+1), repeat=m):
+        pos = defaultdict(list)
+        for i,x in enumerate(lst):
+            pos[x].append(i)
+        for x in pos:
+            count += 1
+            for i,j in zip(pos[x], pos[x][1:]):
+                for k in range(i+1,j):
+                    if lst[k] < x:
+                        count += 1
 
+    return count
 
-# for case_num in [0]:  # no loop over test case
+# mrr = [[solve_(x,y) for x in range(8)] for y in range(8)]
+# for row in mrr:
+#     print(*row)
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +74,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
     
     # print result
     # Google and Facebook - case number required
