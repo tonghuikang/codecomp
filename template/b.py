@@ -41,28 +41,26 @@ def read_strings(rows):
 # 2**number_of_cycles - 1
 def solve_(lst):
     # your solution here
-
-    func = {i:x for i,x in enumerate(lst)}
+    lst = [x-1 for x in lst]
+    # func = {i:x for i,x in enumerate(lst)}
     visited = set()
     num_cycles = 0
 
-    for start,nex in enumerate(lst, start=1):
+    for start,nex in enumerate(lst):
         if start in visited:
             continue
-        if start == nex:
-            num_cycles += 1
-            visited.add(start)
-            continue
+
+        current_cycle = set()
         cur = start
-        visited.add(start)
-        while cur in func:
-            cur = func[cur]
-            if cur == start:
-                num_cycles += 1
-                break
+        current_cycle.add(cur)
+        while lst[cur] not in current_cycle:
+            cur = lst[cur]
+            current_cycle.add(cur)
             if cur in visited:
                 break
-            visited.add(cur)
+        if cur not in visited:
+            num_cycles += 1
+        visited.update(current_cycle)
 
     log(num_cycles)
 
