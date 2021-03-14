@@ -56,9 +56,9 @@ def solve_(m,n):
 
     return count
 
-# mrr = [[solve_(x,y) for x in range(8)] for y in range(8)]
-# for row in mrr:
-#     print(*row)
+mrr = [[solve_(x,y) for x in range(9)] for y in range(9)]
+for row in mrr:
+    print("\t".join(str(x) for x in row))
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified

@@ -39,15 +39,28 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(w,h,a,b,c,d):
     # your solution here
+    reserved = abs(a-c) + abs(b-d)
+    total = w+h-2
+    log(total, reserved)
 
-    return ""
+    # numer = 1
+    # denom = 1
+    psum = 0
+    for cur in range(reserved, total+1):
+        val = 1+psum/cur
+        psum += val
+        # log(val,psum)
+
+    # log((11*pow(6, 998244353-2, 998244353))%998244353)
+
+    return val
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +72,15 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    w,h = list(map(int,input().split()))
+    a,b,c,d = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(w,h,a,b,c,d)  # include input here
     
     # print result
     # Google and Facebook - case number required
