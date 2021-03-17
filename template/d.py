@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+# import math, random
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -39,8 +39,14 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(k, arr, brr):
     # your solution here
+
+    # start from left, return only once
+
+    xrr = [0 for _ in arr]
+    yrr = [0 for _ in arr]
+
 
     return ""
 
@@ -50,7 +56,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +66,14 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k, arr, brr)  # include input here
     
     # print result
     # Google and Facebook - case number required
