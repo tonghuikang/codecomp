@@ -41,20 +41,21 @@ def read_strings(rows):
 
 def solve_(n,k):
     # your solution here
-    assert k == 3
+    tail = k-3
+    n -= tail
 
     if n%3 == 0:
-        return [n//3, n//3, n//3]
+        return [n//3, n//3, n//3] + [1]*tail
     if n%2 == 1:
-        return [n//2, n//2, 1]
+        return [n//2, n//2, 1] + [1]*tail
     if n%4 == 0:
-        return [n//4, n//4, n//2]
+        return [n//4, n//4, n//2] + [1]*tail
 
     factor = 1
     while n%2 == 0:
         factor *= 2
         n = n//2
-    return [n//2*factor, n//2*factor, factor]
+    return [n//2*factor, n//2*factor, factor] + [1]*tail
 
 
 # for case_num in [0]:  # no loop over test case
