@@ -57,10 +57,11 @@ factors = [tuple(x) for x in factors]
 def factorize(x):
     res = []
     for p in primes:
-        if x%p == 0:
+        cur = 0
+        while x%p == 0:
             x = x//p
-            while x%p == 0:
-                x = x//p
+            cur += 1
+        if cur%2:
             res.append(p)
     if x == 1:
         return tuple(res)
