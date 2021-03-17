@@ -39,10 +39,22 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k):
     # your solution here
+    assert k == 3
 
-    return ""
+    if n%3 == 0:
+        return [n//3, n//3, n//3]
+    if n%2 == 1:
+        return [n//2, n//2, 1]
+    if n%4 == 0:
+        return [n//4, n//4, n//2]
+
+    factor = 1
+    while n%2 == 0:
+        factor *= 2
+        n = n//2
+    return [n//2*factor, n//2*factor, factor]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,23 +71,23 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(n,k)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
-    # print(*res)  # print a list with elements
+    print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
