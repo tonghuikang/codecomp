@@ -38,15 +38,34 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-LARGE = 10**7 + 5
-LARGE = 100
+primes = []
+
+LARGE = int(10**3.5) + 10
+# LARGE = 100
 factors = [[] for _ in range(LARGE + 5)]
 for i in range(2, LARGE):
     if not factors[i]:
+        primes.append(i)
         for j in range(i, LARGE, i):
             factors[j].append(i)
 
 factors = [tuple(x) for x in factors]
+
+# log(primes)
+# log(len(primes))
+
+def factorize(x):
+    res = []
+    for p in primes:
+        if x%p == 0:
+            x = x//p
+            while x%p == 0:
+                x = x//p
+            res.append(p)
+    if x == 1:
+        return tuple(res)
+    return tuple(res + [x])
+
 
 def solve_(lst, k):
     # your solution here
@@ -55,11 +74,14 @@ def solve_(lst, k):
     res = 1
     cur = set()
     for x in lst:
-        if factors[x] in cur:
+        xfact = factorize(x)
+        # log(x, xfact)
+        if xfact in cur:
             res += 1
             cur = set()
+            cur.add(xfact)
         else:
-            cur.add(factors[x])
+            cur.add(xfact)
 
     return res
 
