@@ -70,19 +70,50 @@ def factorize(x):
 
 def solve_(lst, k):
     # your solution here
-    assert k == 0
+    # assert k == 0
+
+    lst = [factorize(x) for x in lst]
 
     res = 1
     cur = set()
-    for x in lst:
-        xfact = factorize(x)
+    arr = []
+    for xfact in lst:
         # log(x, xfact)
         if xfact in cur:
             res += 1
+            arr.append(cur)
             cur = set()
             cur.add(xfact)
         else:
             cur.add(xfact)
+    arr.append(cur)
+    # log(arr)
+
+    while k:
+        minreq = 10**10
+        minidx = -1
+        for i,(a,b) in enumerate(zip(arr, arr[1:])):
+            comb = a|b
+            required = len(a) + len(b) - len(comb)
+            if required < minreq:
+                minidx = i
+                minreq = required
+        # log(arr, minreq, minidx)
+        if minreq <= k:
+            k -= minreq
+            arr[minidx] = arr[minidx] | arr[minidx+1]
+            del arr[minidx+1]
+            res -= 1
+        else:
+            break
+
+    return res
+
+
+
+
+
+        
 
     return res
 
