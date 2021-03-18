@@ -46,20 +46,50 @@ def all_divisors(n):
     range(1, int(n**0.5) + 1) if n % i == 0)))
 
 
+LARGE = int(10**3.5)
+primes = set()
+nonprime = set()
+for i in range(2, LARGE + 100):
+    if i in nonprime:
+        continue
+    primes.add(i)
+    for j in range(i, LARGE + 100, i):
+        nonprime.add(j)
+
+primes = sorted(primes)
+
+
 def prime_factors(nr):
-    i = 2
+    idx = 0
     factors = []
-    while i <= nr:
+    while idx < len(primes) and primes[idx] <= nr:
+        i = primes[idx]
         if i > math.sqrt(nr):
             i = nr
         if (nr % i) == 0:
             factors.append(int(i))
             nr = nr // i
-        elif i == 2:
-            i = 3
         else:
-            i = i + 2
+            idx += 1
+    if nr != 1:
+        factors.append(nr)
     return factors
+
+
+# def prime_factors(nr):
+#     i = 2
+#     factors = []
+#     while i <= nr:
+#         if i > math.sqrt(nr):
+#             i = nr
+#         if (nr % i) == 0:
+#             factors.append(int(i))
+#             nr = nr / i
+#         elif i == 2:
+#             i = 3
+#         else:
+#             i = i + 2
+#     return factors
 
 
 def solve_(c,d,x):
