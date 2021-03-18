@@ -42,23 +42,25 @@ def read_strings(rows):
 def solve_(lst):
     # your solution here
     n = len(lst)
-    arr = lst[::2]
+    arr = lst[::2] + [lst[::2][-1]]
     brr = lst[1::2] + [lst[1::2][-1]]
 
-    minres = arr[0]*n + brr[0]*n
     mina = arr[0]
     minb = brr[0]
     suma = arr[0]
     sumb = brr[0]
+    resb = brr[0]*n
+    minres = arr[0]*n + brr[0]*n
 
     for i,(a,b) in enumerate(zip(arr[1:], brr[1:]), start=2):
         mina = min(a, mina)
-        minb = min(b, minb)
         suma += a
-        sumb += b
         resa = suma + mina*(n-i)
+        minres = min(minres, resa + resb)
+
+        minb = min(b, minb)
+        sumb += b
         resb = sumb + minb*(n-i)
-        # log(suma, sumb, resa, resb, resa + resb)
         minres = min(minres, resa + resb)
 
     return minres
