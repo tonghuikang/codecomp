@@ -41,9 +41,12 @@ def read_strings(rows):
 
 @functools.lru_cache(maxsize=None)
 def all_divisors(n):
-    return set(functools.reduce(list.__add__, 
-    ([i, n//i] for i in 
-    range(1, int(n**0.5) + 1) if n % i == 0)))
+    res = set()
+    for i in range(1, int(math.sqrt(n))+1):
+        if n%i == 0:
+            res.add(i)
+            res.add(n//i)
+    return res
 
 
 LARGE = int(2*10**7)
@@ -53,6 +56,8 @@ for i in range(2, LARGE):
         continue
     for j in range(i, LARGE, i):
         count_factors[j] += 1
+
+# primes = [i for i,x in count_factors if i == 1]
 
 # def prime_factors(nr):
 #     idx = 0
@@ -71,21 +76,21 @@ for i in range(2, LARGE):
 #     return factors
 
 
-@functools.lru_cache(maxsize=None)
-def prime_factors(nr):
-    i = 2
-    factors = []
-    while i <= nr:
-        if i > math.sqrt(nr):
-            i = nr
-        if (nr % i) == 0:
-            factors.append(int(i))
-            nr = nr / i
-        elif i == 2:
-            i = 3
-        else:
-            i = i + 2
-    return factors
+# @functools.lru_cache(maxsize=None)
+# def prime_factors(nr):
+#     i = 2
+#     factors = []
+#     while i <= nr:
+#         if i > math.sqrt(nr):
+#             i = nr
+#         if (nr % i) == 0:
+#             factors.append(int(i))
+#             nr = nr / i
+#         elif i == 2:
+#             i = 3
+#         else:
+#             i = i + 2
+#     return factors
 
 
 def solve_(c,d,x):
