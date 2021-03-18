@@ -39,10 +39,29 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst):
     # your solution here
+    n = len(lst)
+    arr = lst[::2]
+    brr = lst[1::2] + [lst[1::2][-1]]
 
-    return ""
+    minres = arr[0]*n + brr[0]*n
+    mina = arr[0]
+    minb = brr[0]
+    suma = arr[0]
+    sumb = brr[0]
+
+    for i,(a,b) in enumerate(zip(arr[1:], brr[1:]), start=2):
+        mina = min(a, mina)
+        minb = min(b, minb)
+        suma += a
+        sumb += b
+        resa = suma + mina*(n-i)
+        resb = sumb + minb*(n-i)
+        # log(suma, sumb, resa, resb, resa + resb)
+        minres = min(minres, resa + resb)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +69,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +79,13 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
     
     # print result
     # Google and Facebook - case number required
