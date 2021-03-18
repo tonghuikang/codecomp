@@ -39,16 +39,73 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
+
+def all_divisors(n):
+    return set(functools.reduce(list.__add__, 
+    ([i, n//i] for i in 
+    range(1, int(n**0.5) + 1) if n % i == 0)))
+
+
+def prime_factors(nr):
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(int(i))
+            nr = nr / i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
 def solve_(c,d,x):
     # your solution here
-
 
     div = math.gcd(math.gcd(c,d),x)
     c,d,x = c//div, d//div, x//div
 
+
+    candidate_gcd = all_divisors(x)
+
+    res = 0
+    for gcd in candidate_gcd:
+        if (x + d*gcd) % c:
+            continue
+        lcm = (x + d*gcd) // c
+
+        p1 = Counter(prime_factors(gcd))
+        p2 = Counter(prime_factors(lcm))
+
+        cnt = 0
+        for k,v in p2.items():
+            if p2[k] > p1[k]:
+                cnt += 1
+
+        res += 2**cnt
+
+        # log(gcd, lcm, p1, p2)
+
+
+    
+
+
+    # x should be divisible by the gcd
+    # for all possible gcd, calculate lcm
+    # evaluate a,b from gcd and lcm
+    # count
+
+
+
+
+
+
     # # a divides b
     # # a-b = x
-    res = 0
+    # res = 0
 
     # for i in range(1,100):
     #     if (x+i)%i == 0:
@@ -58,18 +115,18 @@ def solve_(c,d,x):
     #         else:
     #             res += 2
 
-    for a in range(1,200):
-        for b in range(a,200):
-            if c*a*b//math.gcd(a,b) - d*math.gcd(a,b) == x:
-                lcm = a*b//math.gcd(a,b)
-                gc = math.gcd(a,b)
-                # log(lcm,gc,lcm/gc)
-                cout = [a,b,a*b,lcm,gc,c*a*b//math.gcd(a,b),d*math.gcd(a,b),lcm/gc]
-                log("\t".join(str(x) for x in cout))
-                if a == b:
-                    res += 1
-                else:
-                    res += 2
+    # for a in range(1,200):
+    #     for b in range(a,200):
+    #         if c*a*b//math.gcd(a,b) - d*math.gcd(a,b) == x:
+    #             lcm = a*b//math.gcd(a,b)
+    #             gc = math.gcd(a,b)
+    #             # log(lcm,gc,lcm/gc)
+    #             cout = [a,b,a*b,lcm,gc,c*a*b//math.gcd(a,b),d*math.gcd(a,b),lcm/gc]
+    #             log("\t".join(str(x) for x in cout))
+    #             if a == b:
+    #                 res += 1
+    #             else:
+    #                 res += 2
 
     return res
 
