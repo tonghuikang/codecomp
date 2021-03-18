@@ -39,57 +39,53 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-
+@functools.lru_cache(maxsize=None)
 def all_divisors(n):
     return set(functools.reduce(list.__add__, 
     ([i, n//i] for i in 
     range(1, int(n**0.5) + 1) if n % i == 0)))
 
 
-LARGE = int(10**3.5)
-primes = set()
-nonprime = set()
-for i in range(2, LARGE + 100):
-    if i in nonprime:
+LARGE = int(2*10**7)
+count_factors = [0 for _ in range(LARGE)]
+for i in range(2, LARGE):
+    if count_factors[i]:
         continue
-    primes.add(i)
-    for j in range(i, LARGE + 100, i):
-        nonprime.add(j)
-
-primes = sorted(primes)
-
-
-def prime_factors(nr):
-    idx = 0
-    factors = []
-    while idx < len(primes) and primes[idx] <= nr:
-        i = primes[idx]
-        if i > math.sqrt(nr):
-            i = nr
-        if (nr % i) == 0:
-            factors.append(int(i))
-            nr = nr // i
-        else:
-            idx += 1
-    if nr != 1:
-        factors.append(nr)
-    return factors
-
+    for j in range(i, LARGE, i):
+        count_factors[j] += 1
 
 # def prime_factors(nr):
-#     i = 2
+#     idx = 0
 #     factors = []
-#     while i <= nr:
+#     while idx < len(primes) and primes[idx] <= nr:
+#         i = primes[idx]
 #         if i > math.sqrt(nr):
 #             i = nr
 #         if (nr % i) == 0:
 #             factors.append(int(i))
-#             nr = nr / i
-#         elif i == 2:
-#             i = 3
+#             nr = nr // i
 #         else:
-#             i = i + 2
+#             idx += 1
+#     if nr != 1:
+#         factors.append(nr)
 #     return factors
+
+
+@functools.lru_cache(maxsize=None)
+def prime_factors(nr):
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(int(i))
+            nr = nr / i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
 
 
 def solve_(c,d,x):
@@ -110,13 +106,13 @@ def solve_(c,d,x):
         if lcm%gcd:
             continue
 
-        p1 = Counter(prime_factors(gcd))
-        p2 = Counter(prime_factors(lcm))
+        # p1 = Counter(prime_factors(gcd))
+        # p2 = Counter(prime_factors(lcm//gcd))
 
-        cnt = 0
-        for k in p2:
-            if p2[k] > p1[k]:
-                cnt += 1
+        cnt = count_factors[lcm//gcd]
+        # for k in p2:
+        #     if p2[k] > p1[k]:
+        #         cnt += 1
 
         res += 2**cnt
 
