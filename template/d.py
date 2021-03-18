@@ -77,6 +77,9 @@ def solve_(c,d,x):
             continue
         lcm = (x + d*gcd) // c
 
+        if lcm%gcd:
+            continue
+
         p1 = Counter(prime_factors(gcd))
         p2 = Counter(prime_factors(lcm))
 
@@ -87,23 +90,23 @@ def solve_(c,d,x):
 
         res += 2**cnt
 
-        # log(gcd, lcm, p1, p2)
+        # log(gcd, lcm, p1, p2, cnt)
 
     return res
     
 
 
-# def check(c,d,x):
-def solve_(c,d,x):
+def check(c,d,x):
+# def solve_(c,d,x):
     res = 0
-    for a in range(1,200):
-        for b in range(a,200):
+    for a in range(1,410):
+        for b in range(a,410):
             if c*a*b//math.gcd(a,b) - d*math.gcd(a,b) == x:
                 lcm = a*b//math.gcd(a,b)
                 gc = math.gcd(a,b)
                 # log(lcm,gc,lcm/gc)
-                cout = [a,b,a*b,lcm,gc,c*a*b//math.gcd(a,b),d*math.gcd(a,b),lcm/gc]
-                # log("\t".join(str(x) for x in cout))
+                cout = [a,b,a*b,lcm,gc,c*a*b//math.gcd(a,b),d*math.gcd(a,b),lcm//gc]
+                log("\t".join(str(x) for x in cout))
                 if a == b:
                     res += 1
                 else:
@@ -111,13 +114,13 @@ def solve_(c,d,x):
 
     return res
 
-if False:
-    for c in range(1,50):
-        for d in range(1,50):
-            for x in range(1,50):
-                if solve_(c,d,x) != check(c,d,x):
-                    log(c,d,x,solve_(c,d,x),check(c,d,x))
-                    assert False
+# if True:
+#     for c in range(1,10):
+#         for d in range(1,10):
+#             for x in range(1,10):
+#                 if solve_(c,d,x) != check(c,d,x):
+#                     log(c,d,x,solve_(c,d,x),check(c,d,x))
+#                     assert False
 
                 
 
