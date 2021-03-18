@@ -54,7 +54,7 @@ def prime_factors(nr):
             i = nr
         if (nr % i) == 0:
             factors.append(int(i))
-            nr = nr / i
+            nr = nr // i
         elif i == 2:
             i = 3
         else:
@@ -65,8 +65,8 @@ def prime_factors(nr):
 def solve_(c,d,x):
     # your solution here
 
-    div = math.gcd(math.gcd(c,d),x)
-    c,d,x = c//div, d//div, x//div
+    # div = math.gcd(math.gcd(c,d),x)
+    # c,d,x = c//div, d//div, x//div
 
 
     candidate_gcd = all_divisors(x)
@@ -81,7 +81,7 @@ def solve_(c,d,x):
         p2 = Counter(prime_factors(lcm))
 
         cnt = 0
-        for k,v in p2.items():
+        for k in p2:
             if p2[k] > p1[k]:
                 cnt += 1
 
@@ -89,46 +89,38 @@ def solve_(c,d,x):
 
         # log(gcd, lcm, p1, p2)
 
-
+    return res
     
 
 
-    # x should be divisible by the gcd
-    # for all possible gcd, calculate lcm
-    # evaluate a,b from gcd and lcm
-    # count
-
-
-
-
-
-
-    # # a divides b
-    # # a-b = x
-    # res = 0
-
-    # for i in range(1,100):
-    #     if (x+i)%i == 0:
-    #         log(x+i, i, x)
-    #         if i == x:
-    #             res += 1
-    #         else:
-    #             res += 2
-
-    # for a in range(1,200):
-    #     for b in range(a,200):
-    #         if c*a*b//math.gcd(a,b) - d*math.gcd(a,b) == x:
-    #             lcm = a*b//math.gcd(a,b)
-    #             gc = math.gcd(a,b)
-    #             # log(lcm,gc,lcm/gc)
-    #             cout = [a,b,a*b,lcm,gc,c*a*b//math.gcd(a,b),d*math.gcd(a,b),lcm/gc]
-    #             log("\t".join(str(x) for x in cout))
-    #             if a == b:
-    #                 res += 1
-    #             else:
-    #                 res += 2
+# def check(c,d,x):
+def solve_(c,d,x):
+    res = 0
+    for a in range(1,200):
+        for b in range(a,200):
+            if c*a*b//math.gcd(a,b) - d*math.gcd(a,b) == x:
+                lcm = a*b//math.gcd(a,b)
+                gc = math.gcd(a,b)
+                # log(lcm,gc,lcm/gc)
+                cout = [a,b,a*b,lcm,gc,c*a*b//math.gcd(a,b),d*math.gcd(a,b),lcm/gc]
+                # log("\t".join(str(x) for x in cout))
+                if a == b:
+                    res += 1
+                else:
+                    res += 2
 
     return res
+
+if False:
+    for c in range(1,50):
+        for d in range(1,50):
+            for x in range(1,50):
+                if solve_(c,d,x) != check(c,d,x):
+                    log(c,d,x,solve_(c,d,x),check(c,d,x))
+                    assert False
+
+                
+
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
