@@ -39,11 +39,39 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(c,d,x):
     # your solution here
 
-    return ""
 
+    div = math.gcd(math.gcd(c,d),x)
+    c,d,x = c//div, d//div, x//div
+
+    # # a divides b
+    # # a-b = x
+    res = 0
+
+    # for i in range(1,100):
+    #     if (x+i)%i == 0:
+    #         log(x+i, i, x)
+    #         if i == x:
+    #             res += 1
+    #         else:
+    #             res += 2
+
+    for a in range(1,200):
+        for b in range(a,200):
+            if c*a*b//math.gcd(a,b) - d*math.gcd(a,b) == x:
+                lcm = a*b//math.gcd(a,b)
+                gc = math.gcd(a,b)
+                # log(lcm,gc,lcm/gc)
+                cout = [a,b,a*b,lcm,gc,c*a*b//math.gcd(a,b),d*math.gcd(a,b),lcm/gc]
+                log("\t".join(str(x) for x in cout))
+                if a == b:
+                    res += 1
+                else:
+                    res += 2
+
+    return res
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -59,14 +87,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    c,d,x = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(c,d,x)  # include input here
     
     # print result
     # Google and Facebook - case number required
