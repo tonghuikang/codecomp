@@ -41,8 +41,7 @@ def read_strings(rows):
 
 
 LARGE = int(2*10**7)
-if OFFLINE_TEST:
-    LARGE = int(2*10**3)
+# MID = int(LARGE**0.5) + 10
 count_factors = [0] * LARGE
 largest_factor = [1] * LARGE
 for i in range(2, LARGE):
@@ -50,24 +49,25 @@ for i in range(2, LARGE):
         continue
     for j in range(i, LARGE, i):
         count_factors[j] += 1
+    for j in range(i, min(LARGE, i*i+1), i):
         largest_factor[j] = i
 
 
-def prime_factors(nr):
+def prime_factors_precomp(num):
     factors = []
-    lf = largest_factor[nr]
-    while lf != nr:
+    lf = largest_factor[num]
+    while lf != num:
         factors.append(lf)
-        nr //= lf
-        lf = largest_factor[nr]
-    if nr > 1:
-        factors.append(nr)
+        num //= lf
+        lf = largest_factor[num]
+    if num > 1:
+        factors.append(num)
     return factors
 
 
-@functools.lru_cache(maxsize=10000)
-def all_divisors(num):
-    factors = prime_factors(num)
+# @functools.lru_cache(maxsize=10000)
+def all_divisors_precomp(num):
+    factors = prime_factors_precomp(num)
     c = Counter(factors)
 
     divs = [1]
@@ -75,11 +75,10 @@ def all_divisors(num):
         l = len(divs)
         prime_pow = 1
  
-        for i in range(count):
+        for _ in range(count):
             prime_pow *= prime
             for j in range(l):
                 divs.append(divs[j]*prime_pow)
-
 
     return divs
 
@@ -90,7 +89,7 @@ def solve_(c,d,x):
     # div = math.gcd(math.gcd(c,d),x)
     # c,d,x = c//div, d//div, x//div
 
-    candidate_gcd = all_divisors(x)
+    candidate_gcd = all_divisors_precomp(x)
     # log(x, candidate_gcd)
 
     res = 0

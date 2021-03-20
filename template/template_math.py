@@ -34,6 +34,47 @@ def prime_factors(nr):
     return factors
 
 
+LARGE = int(2*10**7)
+count_factors = [0] * LARGE
+largest_factor = [1] * LARGE
+for i in range(2, LARGE):
+    if count_factors[i]:
+        continue
+    for j in range(i, LARGE, i):
+        count_factors[j] += 1
+        largest_factor[j] = i
+
+
+def prime_factors_precomp(num):
+    factors = []
+    lf = largest_factor[num]
+    while lf != num:
+        factors.append(lf)
+        num //= lf
+        lf = largest_factor[num]
+    if num > 1:
+        factors.append(num)
+    return factors
+
+
+@functools.lru_cache(maxsize=10000)
+def all_divisors_precomp(num):
+    factors = prime_factors_precomp(num)
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+ 
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
+
 modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
 
 
