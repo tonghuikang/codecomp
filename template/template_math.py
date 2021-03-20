@@ -57,7 +57,6 @@ def prime_factors_precomp(num):
     return factors
 
 
-@functools.lru_cache(maxsize=10000)
 def all_divisors_precomp(num):
     factors = prime_factors_precomp(num)
     c = Counter(factors)

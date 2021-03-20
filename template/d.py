@@ -49,7 +49,6 @@ for i in range(2, LARGE):
         continue
     for j in range(i, LARGE, i):
         count_factors[j] += 1
-    for j in range(i, min(LARGE, i*i+1), i):
         largest_factor[j] = i
 
 
@@ -115,34 +114,6 @@ def solve_(c,d,x):
         # log(gcd, lcm, p1, p2, cnt)
 
     return res
-    
-
-
-def check(c,d,x):
-# def solve_(c,d,x):
-    res = 0
-    for a in range(1,410):
-        for b in range(a,410):
-            if c*a*b//math.gcd(a,b) - d*math.gcd(a,b) == x:
-                lcm = a*b//math.gcd(a,b)
-                gc = math.gcd(a,b)
-                # log(lcm,gc,lcm/gc)
-                cout = [a,b,a*b,lcm,gc,c*a*b//math.gcd(a,b),d*math.gcd(a,b),lcm//gc]
-                log("\t".join(str(x) for x in cout))
-                if a == b:
-                    res += 1
-                else:
-                    res += 2
-
-    return res
-
-# if True:
-#     for c in range(1,10):
-#         for d in range(1,10):
-#             for x in range(1,10):
-#                 if solve_(c,d,x) != check(c,d,x):
-#                     log(c,d,x,solve_(c,d,x),check(c,d,x))
-#                     assert False
 
                 
 
