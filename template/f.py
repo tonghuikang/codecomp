@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -38,47 +35,23 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-import numpy as np
 from scipy import signal
-# sig = np.random.randn(1000000)
-# autocorr = signal.fftconvolve(sig, sig[::-1], mode='full')
-# print(autocorr)
-
 
 def solve_(arr, brr):
-    # if len(arr) == len(brr):
-    #     return sum(a != b for a,b in zip(arr,brr))
-    if len(brr) == 1:
-        return 1-int(brr in arr)
 
     lbrr = len(brr)
-    # MOD = 998244353
-    # your solution here
     arr = [1-2*int(x) for x in arr]
     brr = [1-2*int(x) for x in brr] + [0]*(len(arr)-len(brr))
 
     crr = signal.fftconvolve(arr[::-1], brr, mode='full')
-    crr = crr
-    # val = 3*10**6
-    # crr = [x-MOD if x > val else x for x in crr]
-    # log(crr)
-    # log(crr[2])
-    crr = [round(x) for x in crr]
-    # log(crr[2])
-    # log(crr)
 
     prefix = lbrr - 1
     expected = len(arr) - lbrr + 1
     relevant = crr[prefix:expected+prefix]
 
-    # log(relevant)
-
     best = max(relevant)
 
-    # log(crr)
-    # log(relevant)
-
-    return (lbrr-best)//2
+    return int(round((lbrr-best)/2))
 
 
 for case_num in [0]:  # no loop over test case
