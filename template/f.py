@@ -61,7 +61,7 @@ def butterfly(arr):
             now %= MOD
 
 def butterfly_inv(arr):
-    # MOD = 998244353
+    MOD = 998244353
     sum_ie = (86583718, 372528824, 373294451, 645684063, 112220581, 692852209, 155456985, 797128860, 
             90816748, 860285882, 927414960, 354738543, 109331171, 293255632, 535113200, 308540755, 
             121186627, 608385704, 438932459, 359477183, 824071951, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -76,15 +76,15 @@ def butterfly_inv(arr):
             for i in range(p):
                 l = arr[i + offset]
                 r = arr[i + offset + p]
-                arr[i + offset] = (l + r)
-                arr[i + offset + p] = (l - r) * inow
+                arr[i + offset] = (l + r) % MOD
+                arr[i + offset + p] = (MOD + l - r) * inow % MOD
             inow *= sum_ie[(~s & -~s).bit_length() - 1]
-            # inow %= MOD
+            inow %= MOD
 
 def convolution(a, b):
     # arrays might be in the wrong direction
     # https://www.hackerrank.com/contests/spring-2021-indeed-programming-challenge/challenges/power-connectors
-    # MOD = 998244353
+    MOD = 998244353
     n = len(a)
     m = len(b)
     if not n or not m: return []
@@ -96,7 +96,7 @@ def convolution(a, b):
         for i in range(n):
             for j in range(m):
                 res[i + j] += a[i] * b[j]
-                # res[i + j] %= MOD
+                res[i + j] %= MOD
         return res
     z = 1 << (n + m - 2).bit_length()
     a += [0] * (z - n)
@@ -105,28 +105,29 @@ def convolution(a, b):
     butterfly(b)
     for i in range(z):
         a[i] *= b[i]
-        # a[i] %= MOD
+        a[i] %= MOD
     butterfly_inv(a)
     a = a[:n + m - 1]
-    iz = z
+    iz = pow(z, MOD - 2, MOD)
     for i in range(n + m - 1):
         a[i] *= iz
-        # a[i] %= MOD
+        a[i] %= MOD
     return a
 
 
 def solve_(arr, brr):
-    # MOD = 998244353
-    # your solution here
-    arr = [1-2*int(x) for x in arr]
-    brr = [1-2*int(x) for x in brr]
-    # log(len(arr), arr)
-    # log(len(brr), brr)
+    if len(arr) == len(brr):
+        return sum(a != b for a,b in zip(arr,brr))
 
-    crr = convolution(arr[::-1], brr)
+    MOD = 998244353
+    # your solution here
+    arr = [1-2*int(x) for x in arr][::-1]
+    brr = [1-2*int(x) for x in brr]
+
+    crr = convolution(arr, brr)
     
-    # val = 3*10**6
-    # crr = [x-MOD if x > val else x for x in crr]
+    val = 3*10**6
+    crr = [x-MOD if x > val else x for x in crr]
 
     prefix = len(brr) - 1
     relevant = crr[prefix:-prefix]
