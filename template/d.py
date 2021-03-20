@@ -39,15 +39,30 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(h, w, a, b):
     # your solution here
 
-    return ""
+    edges = []
+
+    for x in range(h-1):
+        for y in range(w):
+            edges.append([(x,y), (x+1,y)])
+
+    for x in range(h):
+        for y in range(w-1):
+            edges.append([(x,y), (x,y+1)])
+
+    cnt = 0
+    for selected_edges in itertools.combinations(edges,a):
+        if len(set(sum(selected_edges, []))) == 2*a:
+            cnt += 1
+
+    return cnt
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +74,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    h, w, a, b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(h, w, a, b)  # include input here
     
     # print result
     # Google and Facebook - case number required

@@ -39,18 +39,38 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# function will look like a stretched out z
+
+def solve_(mrr, xrr):
     # your solution here
 
-    return ""
+    offset = 0
+    curmax = -10**18
+    curmin = 10**18
+    for a,t in mrr:
+        if t == 1:
+            offset += a
+            curmax += a
+            curmin += a
+        if t == 2:
+            curmax = max(curmax, a)
+        if t == 3:
+            curmin = min(curmin, a)
+
+    res = []
+    for x in xrr:
+        val = max(curmax, min(curmin, x+offset))
+        res.append(val)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,19 +83,21 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
+    input()
+    xrr = list(map(int,input().split()))
 
-    res = solve()  # include input here
+    res = solve(mrr, xrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
-    # print(*res)  # print a list with elements
+    print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)

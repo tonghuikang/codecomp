@@ -39,18 +39,37 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(x):
     # your solution here
+    if x < 11:
+        return 0
 
-    return ""
+    srr = str(x)
+    half = len(srr)//2
+
+    if len(srr)%2:
+        x = int("9"*(len(str(x))-1))
+        srr = str(x)
+        half = len(srr)//2
+
+    cnt = int(srr[:half])
+    log(cnt)
+    if srr[half:] < srr[:half]:
+        cnt -= 1
+        x = int("9"*(len(str(x))-1))
+
+    return cnt
+    
 
 
-# for case_num in [0]:  # no loop over test case
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -66,7 +85,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required
