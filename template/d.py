@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import sys
+import math
+import functools
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -16,8 +16,8 @@ M9 = 10**9 + 7  # 998244353
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -41,7 +41,8 @@ def read_strings(rows):
 
 
 LARGE = int(2*10**7)
-# LARGE = int(2*10**3)
+if OFFLINE_TEST:
+    LARGE = int(2*10**3)
 count_factors = [0] * LARGE
 largest_factor = [1] * LARGE
 for i in range(2, LARGE):
@@ -52,7 +53,6 @@ for i in range(2, LARGE):
         largest_factor[j] = i
 
 
-@functools.lru_cache(maxsize=10000)
 def prime_factors(nr):
     factors = []
     lf = largest_factor[nr]
@@ -66,16 +66,22 @@ def prime_factors(nr):
 
 
 @functools.lru_cache(maxsize=10000)
-def all_divisors(prime_factors):
-    divisors = []
-    c = Counter(prime_factors)
-    pf = c.keys()
-    for comb in itertools.product(*[range(count+1) for count in c.values()]):
-        div = 1
-        for p,pow in zip(pf, comb):
-            div *= p**pow
-        divisors.append(div)
-    return divisors
+def all_divisors(num):
+    factors = prime_factors(num)
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+ 
+        for i in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+
+    return divs
 
 
 def solve_(c,d,x):
@@ -84,8 +90,7 @@ def solve_(c,d,x):
     # div = math.gcd(math.gcd(c,d),x)
     # c,d,x = c//div, d//div, x//div
 
-    pfs = prime_factors(x)
-    candidate_gcd = all_divisors(pfs)
+    candidate_gcd = all_divisors(x)
     # log(x, candidate_gcd)
 
     res = 0
