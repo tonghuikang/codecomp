@@ -54,8 +54,12 @@ def solve_(mrr, xrr):
             curmin += a
         if t == 2:
             curmax = max(curmax, a)
+            if curmax >= curmin:
+                curmin = curmax
         if t == 3:
             curmin = min(curmin, a)
+            if curmin <= curmax:
+                curmax = curmin
 
     res = []
     for x in xrr:
