@@ -116,8 +116,10 @@ def convolution(a, b):
 
 
 def solve_(arr, brr):
-    if len(arr) == len(brr):
-        return sum(a != b for a,b in zip(arr,brr))
+    # if len(arr) == len(brr):
+    #     return sum(a != b for a,b in zip(arr,brr))
+    if len(brr) == 1:
+        return 1-int(brr in arr)
 
     MOD = 998244353
     # your solution here
