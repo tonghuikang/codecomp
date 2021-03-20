@@ -8,6 +8,9 @@ MAXINT = sys.maxsize
 
 # ------------------------ standard imports ends here ------------------------
 
+def lcm(a,b): 
+    return a*b//math.gcd(a,b)
+
 
 def all_divisors(n):
     return set(functools.reduce(list.__add__, 
@@ -34,9 +37,37 @@ def prime_factors(nr):
 modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
 
 
-def is_prime(x):
-    # primarity test
-    raise NotImplementedError
+def isprime(n):
+    # https://github.com/not522/ac-library-python/blob/master/atcoder/_math.py
+    # http://ceur-ws.org/Vol-1326/020-Forisek.pdf
+    # untested
+    if n <= 1:
+        return False
+    if n > 2**32:
+        primitives = set([2, 325, 9375, 28178, 450775, 9780504, 1795265022])
+        if n == 2:
+            return True
+    else:
+        primitives = set([2, 7, 61])
+        if n in primitives:
+            return True
+    
+    if n % 2 == 0:
+        return False
+
+    d = n - 1
+    while d % 2 == 0:
+        d //= 2
+
+    for a in primitives:
+        t = d
+        y = pow(a, t, n)
+        while t != n - 1 and y != 1 and y != n - 1:
+            y = y * y % n
+            t <<= 1
+        if y != n - 1 and t % 2 == 0:
+            return False
+    return True
 
 
 def modinvp(base, p):

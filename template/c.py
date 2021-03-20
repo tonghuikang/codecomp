@@ -22,6 +22,9 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
+if not OFFLINE_TEST:
+    print = lambda x: sys.stdout.write(str(x) + '\n')
+
 def solve(*args):
     # screen input
     if OFFLINE_TEST:

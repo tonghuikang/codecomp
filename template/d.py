@@ -39,58 +39,43 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-@functools.lru_cache(maxsize=None)
-def all_divisors(n):
-    res = set()
-    for i in range(1, int(math.sqrt(n))+1):
-        if n%i == 0:
-            res.add(i)
-            res.add(n//i)
-    return res
-
 
 LARGE = int(2*10**7)
-count_factors = [0 for _ in range(LARGE)]
+# LARGE = int(2*10**3)
+count_factors = [0] * LARGE
+largest_factor = [1] * LARGE
 for i in range(2, LARGE):
     if count_factors[i]:
         continue
     for j in range(i, LARGE, i):
         count_factors[j] += 1
-
-# primes = [i for i,x in count_factors if i == 1]
-
-# def prime_factors(nr):
-#     idx = 0
-#     factors = []
-#     while idx < len(primes) and primes[idx] <= nr:
-#         i = primes[idx]
-#         if i > math.sqrt(nr):
-#             i = nr
-#         if (nr % i) == 0:
-#             factors.append(int(i))
-#             nr = nr // i
-#         else:
-#             idx += 1
-#     if nr != 1:
-#         factors.append(nr)
-#     return factors
+        largest_factor[j] = i
 
 
-# @functools.lru_cache(maxsize=None)
-# def prime_factors(nr):
-#     i = 2
-#     factors = []
-#     while i <= nr:
-#         if i > math.sqrt(nr):
-#             i = nr
-#         if (nr % i) == 0:
-#             factors.append(int(i))
-#             nr = nr / i
-#         elif i == 2:
-#             i = 3
-#         else:
-#             i = i + 2
-#     return factors
+@functools.lru_cache(maxsize=10000)
+def prime_factors(nr):
+    factors = []
+    lf = largest_factor[nr]
+    while lf != nr:
+        factors.append(lf)
+        nr //= lf
+        lf = largest_factor[nr]
+    if nr > 1:
+        factors.append(nr)
+    return factors
+
+
+@functools.lru_cache(maxsize=10000)
+def all_divisors(prime_factors):
+    divisors = []
+    c = Counter(prime_factors)
+    pf = c.keys()
+    for comb in itertools.product(*[range(count+1) for count in c.values()]):
+        div = 1
+        for p,pow in zip(pf, comb):
+            div *= p**pow
+        divisors.append(div)
+    return divisors
 
 
 def solve_(c,d,x):
@@ -99,14 +84,16 @@ def solve_(c,d,x):
     # div = math.gcd(math.gcd(c,d),x)
     # c,d,x = c//div, d//div, x//div
 
-
-    candidate_gcd = all_divisors(x)
+    pfs = prime_factors(x)
+    candidate_gcd = all_divisors(pfs)
+    # log(x, candidate_gcd)
 
     res = 0
     for gcd in candidate_gcd:
-        if (x + d*gcd) % c:
+        rhs = x + d*gcd
+        if rhs % c:
             continue
-        lcm = (x + d*gcd) // c
+        lcm = rhs // c
 
         if lcm%gcd:
             continue
@@ -119,7 +106,7 @@ def solve_(c,d,x):
         #     if p2[k] > p1[k]:
         #         cnt += 1
 
-        res += 2**cnt
+        res += 1 << cnt
 
         # log(gcd, lcm, p1, p2, cnt)
 
