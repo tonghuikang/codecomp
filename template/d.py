@@ -299,8 +299,8 @@ def solve_(arr,brr,xrr,yrr,n):
             for j in range(n):
                 val += crr[i][j]
                 # maxval = max(maxval, crr[i][j])
-        if val != n-1:
-            continue
+            if val != n-1:
+                continue
 
         val = 0
         # maxval = 0
@@ -308,8 +308,8 @@ def solve_(arr,brr,xrr,yrr,n):
             for i in range(n):
                 val += crr[i][j]
                 # maxval = max(maxval, crr[i][j])
-        if val != n-1:
-            continue
+            if val != n-1:
+                continue
 
         cost = 0
         for i in range(n):
