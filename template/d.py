@@ -295,22 +295,32 @@ def solve_(arr,brr,xrr,yrr,n):
         # log(crr)
         val = 0
         # maxval = 0
+        continuing = False
         for i in range(n):
             for j in range(n):
                 val += crr[i][j]
                 # maxval = max(maxval, crr[i][j])
-            if val != n-1:
-                continue
+            if val < n-1:
+                break
+        else:
+            continuing = True
+        if not continuing:
+            continue
 
         val = 0
         # maxval = 0
+        continuing = False
         for j in range(n):
             for i in range(n):
                 val += crr[i][j]
                 # maxval = max(maxval, crr[i][j])
-            if val != n-1:
-                continue
-
+            if val < n-1:
+                break
+        else:
+            continuing = True
+        if not continuing:
+            continue
+            
         cost = 0
         for i in range(n):
             for j in range(n):
