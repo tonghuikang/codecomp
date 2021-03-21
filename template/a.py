@@ -47,10 +47,7 @@ def solve_(srr, k):
         if a != b:
             cnt += 1
 
-    if cnt >= k:
-        return 0
-
-    return k-cnt
+    return abs(k-cnt)
 
 
 # for case_num in [0]:  # no loop over test case

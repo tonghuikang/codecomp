@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 M9 = 10**9 + 7  # 998244353
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -39,10 +39,46 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr,h,w):
     # your solution here
 
-    return ""
+    heap = []
+
+    mrr = [[-1]*len(mrr[0])] + mrr + [[-1]*len(mrr[0])]
+    mrr = [[-1] + row + [-1] for row in mrr]
+    # log(mrr)
+
+    for i,row in enumerate(mrr):
+        for j,height in enumerate(row):
+            heapq.heappush(heap, (-height,i,j))
+
+    res = 0
+    while heap:
+        height,x,y = heapq.heappop(heap)
+        height = -height
+        if mrr[x][y] == -1:
+            continue
+        if mrr[x][y] != height:  # already addressed
+            continue
+        # log(height,x,y)
+        for dx,dy in d4:
+            xx = x+dx
+            yy = y+dy
+            adj = mrr[xx][yy]
+            if adj == -1:
+                continue
+            if adj > height:
+                continue
+            if abs(height - adj) <= 1:
+                continue
+            adjnew = height - 1
+            res += adjnew - adj
+            heapq.heappush(heap, (-adjnew,xx,yy))
+            mrr[xx][yy] = adjnew
+
+        # log(mrr)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,21 +95,21 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    h,w = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(h)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr,h,w)  # include input here
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
