@@ -39,10 +39,18 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, k):
     # your solution here
 
-    return ""
+    cnt = 0
+    for a,b in zip(srr[:len(srr)//2], srr[::-1]):
+        if a != b:
+            cnt += 1
+
+    if cnt >= k:
+        return 0
+
+    return k-cnt
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,21 +67,22 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
+    srr = input().strip()
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(srr, k)  # include input here
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
