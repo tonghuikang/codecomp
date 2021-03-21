@@ -4,6 +4,8 @@ You do not have access to Google search during the interview, so all the best.
 
 From https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU
 
+
+
 ### Arrays
 
 - Two Sum - hashmap
@@ -15,6 +17,7 @@ From https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetC
 - Container with the most water - squeeze from left and right
 - Longest Common Subarray - Slide one array across another. DP with LCS modified possible
 - Merge Intervals - Prefix sum and check if point is positive
+- Kth largest element - ???
 
 
 
@@ -47,7 +50,7 @@ def longest_increasing_subsequence(nums):
 
 ### Linked List
 
-\- Detect Cycle in a Linked List - Tortoise and Hare, do simple algebra
+- Detect Cycle in a Linked List - Tortoise and Hare, do simple algebra
 
 
 
@@ -60,57 +63,42 @@ def longest_increasing_subsequence(nums):
 ### String
 
 - Valid Parentheses - stack, and check if empty at end
-- Longest Palindromic Substring 
+- Longest Palindromic Substring - Longest Common Substring with reverse
+- Longest Substring Without Repeating Characters - Two pointers
+- Longest Repeating Substring After Character Replacement - ???
 
-\- Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
-\- Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
-\- Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
-\- Valid Anagram - https://leetcode.com/problems/valid-anagram/
-\- Group Anagrams - https://leetcode.com/problems/group-anagrams/
-\- Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
-\- Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
-\- Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
-\- Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
-\- Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
 
-\---
 
-Tree
+### Tree
 
-\- Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
-\- Same Tree - https://leetcode.com/problems/same-tree/
-\- Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
-\- Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
-\- Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
-\- Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
-\- Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
-\- Construct Binary Tree from Preorder and Inorder Traversal - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
-\- Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
-\- Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
-\- Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
-\- Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
-\- Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
-\- Word Search II - https://leetcode.com/problems/word-search-ii/
+- Check If Rooted Trees Are Equal - encode subtree with parentheses
+- Preorder Traversal (node, left, right)
+- Inorder Traversal (left, node, right)
+- Postorder Traversal (left, right, node)
+- Kth ancestor of a Tree Node - Binary Lifting
+- Implement Trie - Define class TrieNode with attribute children that is a defaultdict of TrieNode
 
-\---
 
-Heap
+
+### Heap
 
 \- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 \- Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
 \- Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
 
-You're welcome!
+
+
+### Standard problems
+
+- Solve Sudoku - Iterate random numbers
 
 
 
+### Game theory
 
-
-
-
-
-### Comments
-
-- Edge cases (zeroes, boundaries, identity case)
-- Conditions to simplify complexity (e.g. Four Sum but numbers are limited)
+- Cat and Mouse
+  - Each node is a state of the game (position of mouse, position of cat, whose turn)
+  - Color each node as draw by default.
+  - Color ending position
+  - Propagate
 
