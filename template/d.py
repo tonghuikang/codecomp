@@ -288,19 +288,39 @@ def _find_prime_in_row(mask_matrix, r):
 
 
 
-def solve_(arr,brr,xrr,yrr):
+def solve_(arr,brr,xrr,yrr,n):
     # your solution here
 
-    brr = [row + [0] for row in brr]
-    brr.append([0]*len(brr[-1]))
+    def calc(zrr):
+        vals = minimize(zrr)
+        res = 0
+        for a,b in vals:
+            res += zrr[a][b]
+        return res
 
-    # print(brr)
+    # prr = [[x for x in row] for row in brr]
+    qrr = [[x for x in row] for row in brr]
+    # brr = [row + [0] for row in brr]
+    # brr.append([0]*len(brr[-1]))
+    
+    LARGE = 10**10
+    minres = 10**12
 
-    vals = minimize(brr)
-    res = 0
-    for a,b in vals:
-        res += brr[a][b]
-    return res
+    for i in range(n):
+        for f in range(n):
+            for j in range(n):
+                qrr[i][j] = LARGE
+            for e in range(n):
+                qrr[e][f] = LARGE
+            # log(qrr)
+            minres = min(minres, calc(qrr))
+            for j in range(n):
+                qrr[i][j] = brr[i][j]
+            for e in range(n):
+                qrr[e][f] = brr[e][f]
+
+    return minres-LARGE
+
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -326,7 +346,7 @@ for case_num in range(int(input())):
     xrr = list(map(int,input().split()))
     yrr = list(map(int,input().split()))
 
-    res = solve(arr,brr,xrr,yrr)  # include input here
+    res = solve(arr,brr,xrr,yrr,k)  # include input here
     
     # print result
     # Google and Facebook - case number required
