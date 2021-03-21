@@ -74,6 +74,7 @@ def all_divisors_precomp(num):
     return divs
 
 
+# https://stackoverflow.com/a/29762148/5894029
 modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
 
 
@@ -135,7 +136,7 @@ def ncr(n, r):
 
 
 @functools.lru_cache(maxsize=None)
-def choose(n, r, p):
+def ncr_modp(n, r, p):
     num = den = 1
     for i in range(r):
         num = (num * (n - i)) % p
@@ -251,6 +252,30 @@ def convolution(a,b):
       a[i] = a[i]*b[i]%MOD
     iuntt(a,n)
     return a[:deg+1]
+
+
+def walsh_hadamard(my_freqs):
+    # https://en.wikipedia.org/wiki/Fast_Walsh%E2%80%93Hadamard_transform
+    # https://leetcode.com/problems/count-pairs-with-xor-in-a-range/discuss/1119975/Python-O(N-log-N)-using-math-(Fourier-transform)
+    my_max = len(my_freqs)
+
+    # If our array's length is not a power of 2, 
+    # increase its length by padding zeros to the right
+    if my_max & (my_max - 1):
+        my_max = 2 ** (my_max.bit_length())
+
+    if my_max > len(my_freqs):
+        my_freqs.extend([0] * (my_max - len(my_freqs)))
+
+    h = 2
+    while h <= my_max:
+        hf = h // 2
+        for i in range(0, my_max, h):
+            for j in range(hf):
+                u, v = my_freqs[i + j], my_freqs[i + j + hf]
+                my_freqs[i + j], my_freqs[i + j + hf] = u + v, u - v
+        h *= 2
+    return my_freqs
 
 
 # get all combination of factors of an integer
