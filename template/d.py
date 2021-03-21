@@ -289,7 +289,46 @@ def _find_prime_in_row(mask_matrix, r):
 
 
 def solve_(arr,brr,xrr,yrr,n):
+
+    minres = 10**18
+    for crr in itertools.product(itertools.product([0,1], repeat=n), repeat=n):
+        # log(crr)
+        val = 0
+        # maxval = 0
+        for i in range(n):
+            for j in range(n):
+                val += crr[i][j]
+                # maxval = max(maxval, crr[i][j])
+        if val != n-1:
+            continue
+
+        val = 0
+        # maxval = 0
+        for j in range(n):
+            for i in range(n):
+                val += crr[i][j]
+                # maxval = max(maxval, crr[i][j])
+        if val != n-1:
+            continue
+
+        cost = 0
+        for i in range(n):
+            for j in range(n):
+                cost += crr[i][j] * brr[i][j]
+
+        # if cost == 0:
+        #     print(crr)
+        minres = min(minres, cost)
+
+    return minres
+
+
+def solve_2(arr,brr,xrr,yrr,n):
     # your solution here
+    if n == 1:
+        return 0
+    # if n <= 2:
+    #     return min(min(row) for row in brr)
 
     def calc(zrr):
         vals = minimize(zrr)
@@ -303,23 +342,17 @@ def solve_(arr,brr,xrr,yrr,n):
     # brr = [row + [0] for row in brr]
     # brr.append([0]*len(brr[-1]))
     
-    LARGE = 10**10
+    # LARGE = 10**10
     minres = 10**12
 
     for i in range(n):
-        for f in range(n):
-            for j in range(n):
-                qrr[i][j] = LARGE
-            for e in range(n):
-                qrr[e][f] = LARGE
-            # log(qrr)
+        for j in range(n):
+            qrr = [[cell for i1,cell in enumerate(row) if i1 != i] 
+                         for j1,row in enumerate(brr) if j1 != j]
+            log(qrr)
             minres = min(minres, calc(qrr))
-            for j in range(n):
-                qrr[i][j] = brr[i][j]
-            for e in range(n):
-                qrr[e][f] = brr[e][f]
 
-    return minres-LARGE
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
