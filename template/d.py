@@ -292,35 +292,49 @@ def solve_(arr,brr,xrr,yrr,n):
 
     minres = 10**18
     for crr in itertools.product(itertools.product([0,1], repeat=n), repeat=n):
-        # log(crr)
-        val = 0
-        # maxval = 0
-        continuing = False
+
+        missing_i = defaultdict(set)
+        missing_j = defaultdict(set)
         for i in range(n):
             for j in range(n):
-                val += crr[i][j]
-                # maxval = max(maxval, crr[i][j])
-            if val < n-1:
-                break
-        else:
-            continuing = True
-        if not continuing:
-            continue
+                if crr[i][j] == 0:
+                    missing_i[i].add(j)
+                    missing_j[j].add(i)
 
-        val = 0
-        # maxval = 0
-        continuing = False
-        for j in range(n):
-            for i in range(n):
-                val += crr[i][j]
-                # maxval = max(maxval, crr[i][j])
-            if val < n-1:
-                break
-        else:
-            continuing = True
-        if not continuing:
-            continue
+        while True:
+            continuing = False
+            for k,v in missing_i.items():
+                if len(v) == 1:
+                    i = k
+                    j = list(v)[0]
+                    del missing_i[i]
+                    missing_j[j].remove(i)
+                    if not missing_j[j]:
+                        del missing_j[j]
+                    continuing = True
+                    break
+
+            for k,v in missing_j.items():
+                if len(v) == 1:
+                    j = k
+                    i = list(v)[0]
+                    del missing_j[j]
+                    missing_i[i].remove(j)
+                    if not missing_i[i]:
+                        del missing_i[i]
+                    continuing = True
+                    break
             
+            if not continuing:
+                break
+        # log(crr)
+        # log(missing_i)
+        # log(missing_j)
+        # log()
+
+        if missing_j or missing_i:
+            continue
+                
         cost = 0
         for i in range(n):
             for j in range(n):
