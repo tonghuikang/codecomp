@@ -9,6 +9,8 @@
 
 
 import torch
+import collections
+import random
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.optim as optim
@@ -23,7 +25,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # In[2]:
 
 
-k = 1  # window size
+k = 2  # window size
 testcase = "f1"
 
 
@@ -53,6 +55,31 @@ print(len(data))
 # In[5]:
 
 
+# negative sampling
+data_aug = []
+freq = collections.Counter([x[1] for x in data])
+print(max(freq.values()))
+for context, target in data:
+    data_aug.extend([[context, target]]*int(200//(freq[target]**0.2)))
+len(data_aug)
+
+
+# In[6]:
+
+
+freq_aug = collections.Counter([x[1] for x in data_aug])
+freq_aug[0], freq_aug[100], freq_aug[0]/freq_aug[100]
+
+
+# In[7]:
+
+
+freq[0], freq[100], freq[0]/freq[100]
+
+
+# In[8]:
+
+
 test_data = []
 for sentence in sentences:
     for segment in zip(*[sentence[i:] for i in range(2*k+1)]):
@@ -63,7 +90,7 @@ print(len(test_data))
 
 # ### Step 2. Create a CBoW model and train
 
-# In[6]:
+# In[9]:
 
 
 class CBOW(nn.Module):
@@ -81,7 +108,7 @@ class CBOW(nn.Module):
         return out
 
 
-# In[7]:
+# In[10]:
 
 
 # Create model and pass to CUDA
@@ -90,7 +117,7 @@ model = model.to(device)
 model.train()
 
 
-# In[8]:
+# In[11]:
 
 
 # Define training parameters
@@ -101,7 +128,7 @@ loss_func = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
 
 
-# In[9]:
+# In[12]:
 
 
 def measure_accuracy(model):
@@ -131,7 +158,8 @@ model.train()
 for epoch in range(epochs):
     total_loss = 0
     
-    for context, target in data:
+    random.shuffle(data_aug)
+    for context, target in data_aug[:1000]:
         
         # Prepare data
         ids = torch.tensor(context)
