@@ -121,7 +121,7 @@ model.train()
 
 # Define training parameters
 learning_rate = 0.001
-epochs = 10
+epochs = 20
 torch.manual_seed(28)
 loss_func = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
