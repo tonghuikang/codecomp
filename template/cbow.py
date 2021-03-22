@@ -5,7 +5,7 @@
 # 
 # ### Imports
 
-# In[18]:
+# In[52]:
 
 
 import torch
@@ -15,118 +15,49 @@ import torch.optim as optim
 import torch.nn.functional as F
 import functools
 import matplotlib.pyplot as plt
-# CUDA = torch.cuda.is_available()
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-# ### Step 1. Produce some data based on a given text for training our CBoW model    
+# ### Step 1. Data Processing
 
-# In[19]:
-
-
-def text_to_train(text, context_window):
-    
-    # Get data from list of words in text, using a context window of size k = context_window
-    data = []
-    for i in range(context_window, len(text) - context_window):
-        context = [text[i+e] for e in range(-context_window, context_window+1) if i+e != i]
-        target = text[i]
-        data.append((context, target))
-        
-    return data
+# In[53]:
 
 
-# In[20]:
+with open("f0", "r") as f:
+    sentences = [[int(x) for x in sentence.strip().split()] for sentence in f.readlines()][1:]
+sentences = [[-2]*2 + sentence + [-2]*2 for sentence in sentences]
+sentences = [[x%1024 for x in sentence] for sentence in sentences]
+
+VOCAB_SIZE = 1024
 
 
-def create_text():
-    
-    # Load corpus from file
-    with open("./text.txt", 'r', encoding="utf8",) as f:
-        corpus = f.readlines()
-    f.close()
-    
-    # Join corpus into a single string
-    text = ""
-    for s in corpus:
-        l = s.split()
-        for s2 in l:
-            # Removes all special characters from string
-            s2 = ''.join(filter(str.isalnum, s2))
-            s2 += ' '
-            text += s2.lower()
-    text = text.split()
-    
-    return text
+# In[54]:
 
 
-# In[21]:
+# k = 2
+data = []
+for sentence in sentences:
+    for a,b,c,d,e in zip(*[sentence[i:] for i in range(5)]):
+#         if c == 1023:
+#             continue
+        data.append([[a,b,d,e], c])
+print(len(data))
 
 
-text = create_text()
-print(text)
+# In[55]:
 
 
-# In[22]:
-
-
-def generate_data(text, context_window):
-    
-    # Create vocabulary set V
-    vocab = set(text)
-    
-    # Word to index and index 2 word converters
-    word2index = {w:i for i,w in enumerate(vocab)}
-    index2word = {i:w for i,w in enumerate(vocab)}
-    
-    # Generate data
-    data = text_to_train(text, context_window)
-    
-    return vocab, data, word2index, index2word
-
-
-# In[23]:
-
-
-vocab, data, word2index, index2word = generate_data(text, context_window = 2)
-
-
-# In[24]:
-
-
-print(vocab)
-
-
-# In[25]:
-
-
-print(word2index)
-
-
-# In[26]:
-
-
-print(index2word)
-
-
-# In[27]:
-
-
-print(data)
-
-
-# In[28]:
-
-
-def words_to_tensor(words: list, w2i: dict, dtype = torch.FloatTensor):
-    tensor =  dtype([w2i[word] for word in words])
-    tensor = tensor.to(device)
-    return Variable(tensor)
+test_data = []
+for sentence in sentences:
+    for a,b,c,d,e in zip(*[sentence[i:] for i in range(5)]):
+        if c == 1023:
+            test_data.append([a,b,d,e])
+print(len(test_data))
 
 
 # ### Step 2. Create a CBoW model and train
 
-# In[29]:
+# In[56]:
 
 
 class CBOW(nn.Module):
@@ -144,79 +75,47 @@ class CBOW(nn.Module):
         return out
 
 
-# In[30]:
+# In[57]:
 
 
 # Create model and pass to CUDA
-model = CBOW(context_size = 2, embedding_size = 20, vocab_size = len(vocab))
+model = CBOW(context_size = 2, embedding_size = 20, vocab_size = VOCAB_SIZE)
 model = model.to(device)
 model.train()
 
 
-# In[42]:
+# In[62]:
 
 
 # Define training parameters
 learning_rate = 0.001
-epochs = 20
+epochs = 2
 torch.manual_seed(28)
 loss_func = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
 
 
-# In[43]:
-
-
-def get_prediction(context, model, word2index, index2word):
-    
-    # Get into eval() mode
-    model.eval()
-    ids = words_to_tensor(context, word2index, dtype = torch.LongTensor)
-    
-    # Forward pass
-    prediction = model(ids)
-    # Reshape to cover for absence of minibatches (needed for loss function)
-    prediction = torch.reshape(prediction, (1, 467))
-    _, index = torch.max(prediction, 1)
-    
-    return index2word[index.item()]
-
-
-# In[44]:
-
-
-def check_accuracy(model, data, word2index, index2word):
-    
-    # Compute accuracy
-    correct = 0
-    for context, target in data:
-        prediction = get_prediction(context, model, word2index, index2word)
-        if prediction == target:
-            correct += 1
-            
-    return correct/len(data)
-
-
-# In[45]:
+# In[63]:
 
 
 losses = []
 accuracies = []
 
+model.train()
 for epoch in range(epochs):
     total_loss = 0
     
     for context, target in data:
         
         # Prepare data
-        ids = words_to_tensor(context, word2index, dtype = torch.LongTensor)
-        target = words_to_tensor([target], word2index, dtype = torch.LongTensor)
-        
+        ids = torch.tensor(context)
+        target = torch.tensor([target])
+                
         # Forward pass
         model.zero_grad()
         output = model(ids)
         # Reshape to cover for absence of minibatches (needed for loss function)
-        output = torch.reshape(output, (1, 467))
+        output = torch.reshape(output, (1, VOCAB_SIZE))
         loss = loss_func(output, target)
         
         # Backward pass and optim
@@ -225,18 +124,32 @@ for epoch in range(epochs):
         
         # Loss update
         total_loss += loss.data.item()
-    
-    # Display
-    if epoch % 2 == 0:
-        accuracy = check_accuracy(model, data, word2index, index2word)
-        print("Accuracy after epoch {} is {}".format(epoch, accuracy))
-        accuracies.append(accuracy)
-        losses.append(total_loss)
+    losses.append(total_loss)
+    print(epoch, end=" ")
+
+
+# In[64]:
+
+
+model.eval()
+results = []
+for context in test_data:
+    ids = torch.tensor(context)
+    output = model(ids)
+    result = torch.argmax(output[:-2]).item()  # exclude -1 (mask) and -2 (end)
+    results.append(result)
+
+
+# In[65]:
+
+
+with open("f0.cbow", "w") as f:
+    f.write("\n".join([str(result) for result in results]))
 
 
 # ### 3. Visualization
 
-# In[46]:
+# In[43]:
 
 
 # Display losses over time
@@ -245,45 +158,11 @@ plt.plot(losses)
 plt.show()
 
 
-# In[47]:
-
-
-# Display accuracy over time
-plt.figure()
-plt.plot(accuracies)
-plt.show()
-
-
-# In[41]:
-
-
-word1 = words_to_tensor(["boys"], word2index, dtype = torch.LongTensor)
-word2 = words_to_tensor(["brothers"], word2index, dtype = torch.LongTensor)
-word3 = words_to_tensor(["dignity"], word2index, dtype = torch.LongTensor)
-w1 = torch.reshape(model.embeddings(word1), (20,))
-w2 = torch.reshape(model.embeddings(word2), (20,))
-w3 = torch.reshape(model.embeddings(word3), (20,))
-print(w1)
-print(w2)
-print(w3)
-
-# Boys and Brothers have a somewhat close semantic meaning (strong positive value)
-print(torch.dot(w1, w2).item())
-# Boys and Dignity do not have a close semantic meaning (strong neg value)
-print(torch.dot(w1, w3).item())
-
-
-# In[ ]:
+# In[39]:
 
 
 if __name__ == "__main__":
     get_ipython().system('jupyter nbconvert --to script cbow.ipynb')
-
-
-# In[ ]:
-
-
-
 
 
 # In[ ]:
