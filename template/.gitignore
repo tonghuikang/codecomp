@@ -2,3 +2,5 @@
 a.out
 tmp.out
 *.pyc
+
+cbow-ref.ipynb

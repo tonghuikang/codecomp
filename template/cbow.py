@@ -5,7 +5,7 @@
 # 
 # ### Imports
 
-# In[52]:
+# In[1]:
 
 
 import torch
@@ -20,44 +20,50 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # ### Step 1. Data Processing
 
-# In[53]:
+# In[2]:
 
 
-with open("f0", "r") as f:
+k = 1  # window size
+testcase = "f1"
+
+
+# In[3]:
+
+
+with open(testcase, "r") as f:
     sentences = [[int(x) for x in sentence.strip().split()] for sentence in f.readlines()][1:]
-sentences = [[-2]*2 + sentence + [-2]*2 for sentence in sentences]
+sentences = [[-2]*k + sentence + [-2]*k for sentence in sentences]
 sentences = [[x%1024 for x in sentence] for sentence in sentences]
 
-VOCAB_SIZE = 1024
+VOCAB_SIZE = 1024  # actually 1000+2
 
 
-# In[54]:
+# In[4]:
 
 
-# k = 2
 data = []
 for sentence in sentences:
-    for a,b,c,d,e in zip(*[sentence[i:] for i in range(5)]):
+    for segment in zip(*[sentence[i:] for i in range(2*k+1)]):
 #         if c == 1023:
 #             continue
-        data.append([[a,b,d,e], c])
+        data.append([[*segment[:k], *segment[-k:]], segment[k]])
 print(len(data))
 
 
-# In[55]:
+# In[5]:
 
 
 test_data = []
 for sentence in sentences:
-    for a,b,c,d,e in zip(*[sentence[i:] for i in range(5)]):
-        if c == 1023:
-            test_data.append([a,b,d,e])
+    for segment in zip(*[sentence[i:] for i in range(2*k+1)]):
+        if segment[k] == 1023:
+            test_data.append([*segment[:k], *segment[-k:]])
 print(len(test_data))
 
 
 # ### Step 2. Create a CBoW model and train
 
-# In[56]:
+# In[6]:
 
 
 class CBOW(nn.Module):
@@ -75,7 +81,7 @@ class CBOW(nn.Module):
         return out
 
 
-# In[57]:
+# In[7]:
 
 
 # Create model and pass to CUDA
@@ -84,7 +90,7 @@ model = model.to(device)
 model.train()
 
 
-# In[62]:
+# In[8]:
 
 
 # Define training parameters
@@ -95,7 +101,7 @@ loss_func = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
 
 
-# In[63]:
+# In[ ]:
 
 
 losses = []
@@ -128,7 +134,7 @@ for epoch in range(epochs):
     print(epoch, end=" ")
 
 
-# In[64]:
+# In[ ]:
 
 
 model.eval()
@@ -140,16 +146,16 @@ for context in test_data:
     results.append(result)
 
 
-# In[65]:
+# In[ ]:
 
 
-with open("f0.cbow", "w") as f:
+with open("{}.cbow".format(testcase), "w") as f:
     f.write("\n".join([str(result) for result in results]))
 
 
 # ### 3. Visualization
 
-# In[43]:
+# In[ ]:
 
 
 # Display losses over time
@@ -158,11 +164,17 @@ plt.plot(losses)
 plt.show()
 
 
-# In[39]:
+# In[ ]:
 
 
 if __name__ == "__main__":
     get_ipython().system('jupyter nbconvert --to script cbow.ipynb')
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
