@@ -95,10 +95,30 @@ model.train()
 
 # Define training parameters
 learning_rate = 0.001
-epochs = 2
+epochs = 10
 torch.manual_seed(28)
 loss_func = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+
+
+# In[9]:
+
+
+def measure_accuracy(model):
+    model.eval()
+    num_correct = 0
+    num_data = 0
+    for context, target in data:
+        if target > 1000:
+            continue
+        ids = torch.tensor(context)
+        output = model(ids)
+        result = torch.argmax(output[:-2]).item()
+        
+        num_data += 1
+        if result == target:
+            num_correct += 1
+    return num_correct/num_data
 
 
 # In[ ]:
@@ -130,6 +150,8 @@ for epoch in range(epochs):
         
         # Loss update
         total_loss += loss.data.item()
+        
+    accuracies.append(measure_accuracy(model))
     losses.append(total_loss)
     print(epoch, end=" ")
 
@@ -161,6 +183,15 @@ with open("{}.cbow".format(testcase), "w") as f:
 # Display losses over time
 plt.figure()
 plt.plot(losses)
+plt.show()
+
+
+# In[ ]:
+
+
+# Display losses over time
+plt.figure()
+plt.plot(accuracies)
 plt.show()
 
 
