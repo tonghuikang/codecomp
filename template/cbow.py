@@ -61,7 +61,7 @@ freq = collections.Counter([x[1] for x in data])
 print(max(freq.values()))
 for context, target in data:
     data_aug.extend([[context, target]]*int(200//(freq[target]**0.2)))
-len(data_aug)
+len(data_aug), len(data_aug)**0.2
 
 
 # In[6]:
@@ -122,7 +122,7 @@ model.train()
 
 # Define training parameters
 learning_rate = 0.001
-epochs = 10
+epochs = 100
 torch.manual_seed(28)
 loss_func = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
