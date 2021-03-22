@@ -34,10 +34,9 @@ testcase = "f1"
 
 with open(testcase, "r") as f:
     sentences = [[int(x) for x in sentence.strip().split()] for sentence in f.readlines()][1:]
+VOCAB_SIZE = max(max(sentence) for sentence in sentences) + 2
 sentences = [[-2]*k + sentence + [-2]*k for sentence in sentences]
-sentences = [[x%1024 for x in sentence] for sentence in sentences]
-
-VOCAB_SIZE = 1024  # actually 1000+2
+sentences = [[x%VOCAB_SIZE for x in sentence] for sentence in sentences]
 
 
 # In[4]:
@@ -46,7 +45,7 @@ VOCAB_SIZE = 1024  # actually 1000+2
 data = []
 for sentence in sentences:
     for segment in zip(*[sentence[i:] for i in range(2*k+1)]):
-#         if c == 1023:
+#         if c == VOCAB_SIZE-1:
 #             continue
         data.append([[*segment[:k], *segment[-k:]], segment[k]])
 print(len(data))
@@ -67,14 +66,14 @@ len(data_aug)
 # In[6]:
 
 
-freq[0], freq[50], freq[0]/freq[50]
+freq[0], freq[10], freq[0]/freq[10]
 
 
 # In[7]:
 
 
 freq_aug = collections.Counter([x[1] for x in data_aug])
-freq_aug[0], freq_aug[50], freq_aug[0]/freq_aug[50]
+freq_aug[0], freq_aug[10], freq_aug[0]/freq_aug[10]
 
 
 # In[8]:
@@ -83,7 +82,7 @@ freq_aug[0], freq_aug[50], freq_aug[0]/freq_aug[50]
 test_data = []
 for sentence in sentences:
     for segment in zip(*[sentence[i:] for i in range(2*k+1)]):
-        if segment[k] == 1023:
+        if segment[k] == VOCAB_SIZE-1:
             test_data.append([*segment[:k], *segment[-k:]])
 print(len(test_data))
 
@@ -122,7 +121,7 @@ model.train()
 
 # Define training parameters
 learning_rate = 0.001
-epochs = 20
+epochs = 10
 torch.manual_seed(28)
 loss_func = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
@@ -228,12 +227,6 @@ plt.show()
 
 if __name__ == "__main__":
     get_ipython().system('jupyter nbconvert --to script cbow.ipynb')
-
-
-# In[ ]:
-
-
-
 
 
 # In[ ]:
