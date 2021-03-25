@@ -39,10 +39,18 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    c = Counter(arr)
+
+    k,v = c.most_common()[0]
+
+    if v <= len(arr)/2:
+        return 0
+    
+    return 2*v - len(arr)
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +58,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +68,13 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
     
     # print result
     # Google and Facebook - case number required

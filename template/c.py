@@ -38,11 +38,31 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def lcss(s0, s1):
+    def helper(s0, s1):
 
-def solve_():
+        # track result
+        maxres = 0
+
+        # slide s1 along s0
+        for i in range(len(s0)):
+            curres = 0  # track current length of common subarray
+            for a, b in zip(s0[i:], s1):
+                if a == b:  # increment if match
+                    curres += 1
+                    maxres = max(maxres, curres)
+                else:  # reset if mismatch
+                    curres = 0
+
+        return maxres
+
+    return max(helper(s0, s1), helper(s1, s0))
+
+def solve_(arr,brr):
     # your solution here
 
-    return ""
+    lcs = lcss(arr, brr)
+    return len(arr) + len(brr) - 2*lcs
 
 
 # for case_num in [0]:  # no loop over test case
@@ -53,7 +73,8 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    arr = input().strip()
+    brr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -66,7 +87,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
     
     # print result
     # Google and Facebook - case number required
