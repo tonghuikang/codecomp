@@ -28,32 +28,19 @@ def query(a,b,c):
     query_string = "{} {} {}".format(a+1,b+1,c+1)
     print(query_string, flush=True)
     response = int(input())
-    # log(query_string, response)
-    # sys.exit()
     return response-1
 
 def alert(pos):
     cout =  " ".join(str(x+1) for x in pos)
-    log("cout", cout)
     print(cout, flush=True)
     response = int(input())
     assert response == 1
-    # sys.exit()
 
 #   python interactive_runner.py python3 sample_local_testing_tool.py 0 -- python3 sample_interactive_script.py
 #   python interactive_runner.py python3 sample_local_testing_tool.py 1 -- python3 sample_interactive_script.py
 #   python interactive_runner.py python3 sample_local_testing_tool.py 2 -- python3 sample_interactive_script.py
 
 # -----------------------------------------------------------------------------
-
-# read line as an integer
-# k = int(input())
-
-# read line as a string
-# srr = input().strip()
-
-# read one line and parse each word as a string
-# lst = input().split()
 
 # read one line and parse each word as an integer
 t,n,q = list(map(int,input().split()))
@@ -69,8 +56,6 @@ def check(permutation, queries, flag=False):
                     (permutation[k],k)
                 ])[1][1]
                 if queries[i,j,k] != median:
-                    if flag:
-                        log(i,j,k, queries[i,j,k], median)
                     return False
     return True
 
@@ -83,18 +68,13 @@ for _ in range(q):
             for k in range(j+1, n):
                 queries[i,j,k] = query(i,j,k)
 
-    log(queries)
 
     for permutation in itertools.permutations(range(n)):
-        flag = False
-        # if permutation == tuple([x-1 for x in (6, 2, 5, 10, 3, 8, 7, 9, 1, 4)]):
-        #     flag = True
-        pinv = sorted(range(len(permutation)), key=permutation.__getitem__)
-        # pinv = permutation
-        if check(pinv, queries, flag):
+        if check(permutation, queries):
+            pinv = sorted(range(len(permutation)), key=permutation.__getitem__)
             break
     
-    alert(permutation)
+    alert(pinv)
     # break
 
 
