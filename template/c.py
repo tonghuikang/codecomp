@@ -39,10 +39,58 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def check(L):
     # your solution here
 
-    return ""
+    count = 0
+    for i in range(len(L)-1):
+        j = L.index(i+1)
+        L[i:j+1] = L[i:j+1][::-1]
+        cost = j+1-i
+        # log(cost, L)
+        count += cost
+    log(count)
+    return count
+
+
+def solve_(n,target):
+    # your solution here
+    c = target
+
+    lower = n-1
+    upper = (n*(n+1))//2-1
+    log(lower, upper)
+    if not (lower <= c <= upper):
+        return ["IMPOSSIBLE"]
+
+    c -= n-1
+    sequence = []
+    for limit in range(n-1,0,-1):
+        greed = min(limit,c)
+        sequence.append(greed)
+        c -= greed
+    sequence = [x+1 for x in sequence]
+    # log(sequence)
+
+    arr = list(range(1,n+1))
+    for i,length in enumerate(sequence[::-1], start=2):
+        left = n-i
+        arr[left:left+length] = arr[left:left+length][::-1]
+        # log(left, left+length, arr)
+
+    if OFFLINE_TEST:
+        assert target == check([x for x in arr])
+
+    return arr
+
+
+
+if OFFLINE_TEST:
+    for i in range(2,8):
+        for j in range(2,30):
+            solve_(i,j)
+
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,21 +107,21 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(n,c)  # include input here
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, " ".join([str(x) for x in res])))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
