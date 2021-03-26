@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import time
+import itertools
+from collections import Counter
+start_time = time.time()
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -21,6 +22,12 @@ OFFLINE_TEST = getpass.getuser() == "hkmac"
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
+
+def tick():
+    global start_time
+    start_time = time.time()
+def tock():
+    log(time.time() - start_time)
 
 # ---------------------------- template ends here ----------------------------
 
@@ -61,20 +68,34 @@ def check(permutation, queries, flag=False):
 
 
 for _ in range(t):
-
+    # log(_)
+    # tick()
     queries = {}
+    median_counter = Counter()
+    for i in range(10):
+        median_counter[i] = 0
+
     for i in range(n):
         for j in range(i+1, n):
             for k in range(j+1, n):
-                queries[i,j,k] = query(i,j,k)
+                val = query(i,j,k)
+                queries[i,j,k] = val
+                median_counter[val] += 1
 
+    permutation_ref = [k for k,v in median_counter.most_common()]
+    permutation_ref = permutation_ref[::2][::-1] + permutation_ref[1::2]
 
-    for permutation in itertools.permutations(range(n)):
-        if check(permutation, queries):
-            pinv = sorted(range(len(permutation)), key=permutation.__getitem__)
+    for pdt in itertools.product([0,1], repeat=n//2):
+        permutation = [x for x in permutation_ref]
+        for i,x in enumerate(pdt):
+            if x:
+                permutation[i], permutation[~i] = permutation[~i], permutation[i]
+        pinv = sorted(range(len(permutation)), key=permutation.__getitem__)
+        if check(pinv, queries):
             break
-    
-    alert(pinv)
+    # tock()
+
+    alert(permutation)
     # break
 
 

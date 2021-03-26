@@ -97,7 +97,7 @@ def Output(line):
 
 
 def RunCase(case, max_q):
-  print('\033[36m', case, '\033[0m', file=sys.stderr)
+  print('\033[36m', [x-1 for x in case], '\033[0m', file=sys.stderr)
 
   def Input():
     try:
