@@ -45,11 +45,8 @@ def solve_(arr):
     c = Counter(arr)
 
     k,v = c.most_common()[0]
-
-    if v <= len(arr)/2:
-        return 0
     
-    return 2*v - len(arr)
+    return max(len(arr)%2, 2*v - len(arr))
 
 
 
