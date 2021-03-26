@@ -39,10 +39,27 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, cj, jc):
     # your solution here
 
-    return ""
+    LARGE = 10**10
+    prevc = 0
+    prevj = 0
+    srr = "X" + srr + "X"
+
+    for a,b in zip(srr, srr[1:]):
+        if b == "C":
+            prevc = min(prevc, prevj + jc)
+            prevj = LARGE
+        
+        if b == "J":
+            prevj = min(prevj, prevc + cj)
+            prevc = LARGE
+        
+        if b == "?":
+            prevj, prevc = min(prevj, prevc + cj), min(prevc, prevj + jc)
+        
+    return min(prevc, prevj)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -56,7 +73,7 @@ for case_num in range(int(input())):
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    # lst = input().split()
+    lst = input().split()
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
@@ -66,14 +83,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst[-1], int(lst[0]), int(lst[1]))  # include input here
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line

@@ -23,6 +23,9 @@ def longest_common_subsequence(arr, brr):
     return dp[-1]
 
 
+# add longest common subarray
+
+
 def maxDotProduct(self, A, B):
     n, m = len(A), len(B)
     dp = [[0] * (m) for i in range(n)]
