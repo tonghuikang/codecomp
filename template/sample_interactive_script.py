@@ -1,82 +1,108 @@
-from itertools import combinations
-import numpy as np
-import sys
+#!/usr/bin/env python3
+import sys, getpass
+import math, random
+import functools, itertools, collections, heapq, bisect
+from collections import Counter, defaultdict, deque
+input = sys.stdin.readline  # to read input quickly
 
-def complement(bits): return [
-    '_' if b is '_' else
-    '1' if b=='0' else '0'
-    for b in bits
-]
+# available on Google, AtCoder Python3, not available on Codeforces
+# import numpy as np
+# import scipy
 
-class QuantumArray():
-    def __init__(self, B):
-        self.bits = ['_'] * B
-        self.unkowns = list(range(B))
-        self.read(10)
-        self.run()
+M9 = 10**9 + 7  # 998244353
+# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+# d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
+# d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
+MAXINT = sys.maxsize
 
-    def read(self, n):
-        for _ in range(n):
-            i = self.unkowns.pop()
-            self.bits[i] = self.read_bit(i+1)
-            self.unkowns = self.unkowns[::-1]
-        self.update_states()
+# if testing locally, print to terminal with a different color
+OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = False  # codechef does not allow getpass
+def log(*args):
+    if OFFLINE_TEST:
+        print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-    def read_bit(self, i):
-        interactive_print(i)
-        return interactive_read()
+# ---------------------------- template ends here ----------------------------
 
-    def update_states(self):
-        self.bits_c  = complement(self.bits)
-        self.bits_cr = self.bits_c[::-1]
-        self.bits_r  = complement(self.bits_cr)
-        self.states = [self.bits, self.bits_c, self.bits_cr, self.bits_r]
+def query(a,b,c):
+    query_string = "{} {} {}".format(a+1,b+1,c+1)
+    print(query_string, flush=True)
+    response = int(input())
+    # log(query_string, response)
+    # sys.exit()
+    return response-1
 
-    def get_test_idx(self):
-        candidates = list(set(range(B)) - set(self.unkowns))
-        max_states = len(set(map(tuple, self.states)))
-        for idx in combinations(candidates, 2):
-            num_states = len(set(
-                tuple(np.take(state, idx))
-                for state in self.states
-            ))
-            if num_states == max_states: return idx
+def alert(pos):
+    cout =  " ".join(str(x+1) for x in pos)
+    log("cout", cout)
+    print(cout, flush=True)
+    response = int(input())
+    assert response == 1
+    # sys.exit()
 
-    def collapse(self):
-        test_idx = self.get_test_idx()
-        test = [self.read_bit(i+1) for i in test_idx]
+#   python interactive_runner.py python3 sample_local_testing_tool.py 0 -- python3 sample_interactive_script.py
+#   python interactive_runner.py python3 sample_local_testing_tool.py 1 -- python3 sample_interactive_script.py
+#   python interactive_runner.py python3 sample_local_testing_tool.py 2 -- python3 sample_interactive_script.py
 
-        self.bits = next(state
-            for state in self.states
-            if test == list(np.take(state, test_idx))
-        )
+# -----------------------------------------------------------------------------
 
-    def run(self):
-        while True:
-            self.collapse()
-            try: self.read(8)
-            except IndexError: break
+# read line as an integer
+# k = int(input())
 
+# read line as a string
+# srr = input().strip()
 
-def console(*args):  # the judge will not read these standard error output
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
+# read one line and parse each word as a string
+# lst = input().split()
 
-def interactive_print(output):
-    # print output with flush (and also print output to standard error)
-    print(output, flush=True)
-    print('\033[35m', output, '\033[0m', file=sys.stderr)
+# read one line and parse each word as an integer
+t,n,q = list(map(int,input().split()))
+assert n == 10
 
-
-def interactive_read():
-    # read (and also print input to standard error)
-    input_string = input()
-    print('\033[34m', input_string, '\033[0m', file=sys.stderr)
-    return input_string
+def check(permutation, queries, flag=False):
+    for i in range(n):
+        for j in range(i+1, n):
+            for k in range(j+1, n):
+                median = sorted([
+                    (permutation[i],i),
+                    (permutation[j],j),
+                    (permutation[k],k)
+                ])[1][1]
+                if queries[i,j,k] != median:
+                    if flag:
+                        log(i,j,k, queries[i,j,k], median)
+                    return False
+    return True
 
 
-T, B = map(int, input().split())
-for _ in range(T):
-    array = QuantumArray(B)
-    interactive_print(''.join(array.bits))
-    if interactive_read() == 'N': sys.exit()
+for _ in range(q):
+
+    queries = {}
+    for i in range(n):
+        for j in range(i+1, n):
+            for k in range(j+1, n):
+                queries[i,j,k] = query(i,j,k)
+
+    log(queries)
+
+    for permutation in itertools.permutations(range(n)):
+        flag = False
+        # if permutation == tuple([x-1 for x in (6, 2, 5, 10, 3, 8, 7, 9, 1, 4)]):
+        #     flag = True
+        pinv = sorted(range(len(permutation)), key=permutation.__getitem__)
+        # pinv = permutation
+        if check(pinv, queries, flag):
+            break
+    
+    alert(permutation)
+    # break
+
+
+sys.exit()
+
+
+# lst = list(map(int,input().split()))
+
+# -----------------------------------------------------------------------------
+
+# your code here
