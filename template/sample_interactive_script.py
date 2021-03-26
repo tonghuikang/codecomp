@@ -60,7 +60,7 @@ def check(permutation, queries, flag=False):
     return True
 
 
-for _ in range(q):
+for _ in range(t):
 
     queries = {}
     for i in range(n):
