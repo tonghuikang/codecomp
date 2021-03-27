@@ -45,7 +45,11 @@ def solve_(srr, cj, jc):
     LARGE = 10**10
     prevc = 0
     prevj = 0
-    srr = "X" + srr + "X"
+    if srr[0] == "C":
+        prevj = LARGE
+    if srr[0] == "J":
+        prevc = LARGE
+    # srr = srr
 
     for a,b in zip(srr, srr[1:]):
         if b == "C":
