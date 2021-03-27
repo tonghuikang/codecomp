@@ -6,7 +6,8 @@ from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
+import numpy as np
+from scipy.stats import pearsonr
 # import scipy
 
 M9 = 10**9 + 7  # 998244353
@@ -39,10 +40,21 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr):
+def solve_(ref):
     # your solution here
+    ref = [[int(x) for x in row.strip()] for row in ref]
+    ref = np.array(ref)
 
-    return ""
+    correct_for_each_contestant = np.sum(ref, axis=1)
+    correct_for_each_question = np.sum(ref, axis=0)
+
+    p_vals = []
+    for result in ref:
+        p_val = pearsonr(correct_for_each_question, result)[0]
+        p_vals.append(p_val)
+    cheater = np.argmin(p_vals)
+
+    return cheater+1
 
 
 num_cases = int(input())
@@ -72,10 +84,10 @@ for case_num in range(num_cases):
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
