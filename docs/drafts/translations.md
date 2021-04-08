@@ -44,7 +44,7 @@ The list of concepts is based on [E-Maxx's](https://cp-algorithms.com/)
 | Weights                 | 重量    |
 | Objective               | 目的    |
 | Minimise                | 最小化  |
-| Maximise                | 最小化  |
+| Maximise                | 最大化  |
 | ... with respect to ... | ???     |
 
 
