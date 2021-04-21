@@ -61,21 +61,27 @@ def solve_(lst):
 
     gcd = math.gcd(lst[0], lst[1])
 
-    for x in lst:
-        gcd = math.gcd(x, gcd)
+    for z in lst:
+        gcd = math.gcd(z, gcd)
 
     lst = [x//gcd for x in lst]  # cant be all even, confirm got odd
     log(lst)
 
-    if sum(lst)%2 == 1:
-        return []
+    # if sum(lst)%2 == 1:
+    #     return []
+    lst_original = [x for x in lst]
 
     if not canPartition(lst):
-        return []
+        return -1
 
-    for i,x in enumerate(lst):
+    # lst = [(i+1,x) for i,x in enumerate(lst_original)]
+    # log(lst)
+
+    for i,x in enumerate(lst_original, start=1):
         if x%2 == 1:
-            return [i+1]
+            # log(i, x, lst[i])
+            return i
+    return -1
 
 
 
@@ -108,9 +114,14 @@ for case_num in [0]:  # no loop over test case
 
     # Other platforms - no case number required
     # print(res)
-    print(len(res))
-    if res:
-        print(*res)  # print a list with elements
+    if res == -1:
+        print(0)
+    else:
+        print(1)
+        print(res)
+    # print(len(res))
+    # if res:
+    #     print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
