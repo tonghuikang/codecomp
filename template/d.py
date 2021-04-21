@@ -54,7 +54,9 @@ def solve_(lst, qrr):
     # your solution here
 
     count = [0 for _ in lst]
+    starts = [0 for _ in lst]
     idx = 0
+    start = 0
 
     curbag = set()
     for i,x in enumerate(lst):
@@ -63,12 +65,16 @@ def solve_(lst, qrr):
             if p in curbag:
                 idx += 1
                 curbag = newbag.copy()
+                start = i
                 break
             curbag.add(p)
         count[i] = idx
+        starts[i] = start
 
     count2 = [0 for _ in lst]
+    starts2 = [0 for _ in lst]
     idx = 0
+    start = 0
 
     curbag = set()
     for i,x in enumerate(lst[::-1]):
@@ -77,18 +83,29 @@ def solve_(lst, qrr):
             if p in curbag:
                 idx += 1
                 curbag = newbag.copy()
+                start = i
                 break
             curbag.add(p)
         count2[i] = idx
+        starts2[i] = start
     count2 = count2[::-1]
+    starts2 = starts2[::-1]
+    assert max(count2) == max(count)
+
+    count2 = [count[-1] - x for x in count2]
+    starts2 = [len(starts2) - x for x in starts2]
+
 
     log(count)
     log(count2)
+    log(starts)
+    log(starts2)
 
     res = []
     for a,b in qrr:
         val = count[b] - count[a] + 1
-        val2 = count2[a] - count2[b] + 1
+        # res.append(val)
+        val2 = count2[b] - count2[a] + 1
         res.append(min(val, val2))
 
     return res
