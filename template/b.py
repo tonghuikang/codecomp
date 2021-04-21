@@ -49,15 +49,29 @@ def solve_(lst):
     if cur == 0:
         return "YES"
 
-    allowed_remainders = set([0])
+    bitcount = Counter()
     for x in lst:
-        new_remainders = set()
-        for y in allowed_remainders:
-            new_remainders.add(x^y)
-        allowed_remainders.update(new_remainders)
+        i = 0
+        while x:
+            if x&1:
+                bitcount[i] += 1
+            x = x >> 1
+            i += 1
+    
+    # log(bitcount)
+    for k,v in bitcount.items():
+        if v == 1:
+            return "NO"
 
-    log(allowed_remainders)
-    log(cur)
+    allowed_remainders = Counter([0])
+    for x in lst:
+        new_remainders = Counter()
+        for k,v in (allowed_remainders.items()):
+            new_remainders[x^k] += v
+        allowed_remainders += new_remainders
+
+    # log(allowed_remainders)
+    # log(cur)
 
     if cur in allowed_remainders:
         return "YES"
