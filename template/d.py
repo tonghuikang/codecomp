@@ -59,9 +59,11 @@ def solve_(lst, qrr):
     curbag = set()
     for i,x in enumerate(lst):
         newbag = primes[x]
-        if curbag & newbag:
-            idx += 1
-            curbag = newbag
+        for p in newbag:
+            if p in curbag:
+                idx += 1
+                curbag = newbag
+                break
         else:
             curbag = curbag | newbag
         count[i] = idx
@@ -72,16 +74,18 @@ def solve_(lst, qrr):
     curbag = set()
     for i,x in enumerate(lst[::-1]):
         newbag = primes[x]
-        if curbag & newbag:
-            idx += 1
-            curbag = newbag
+        for x in newbag:
+            if x in curbag:
+                idx += 1
+                curbag = newbag
+                break
         else:
             curbag = curbag | newbag
         count2[i] = idx
     count2 = count2[::-1]
 
-    # log(count)
-    # log(count2)
+    log(count)
+    log(count2)
 
     res = []
     for a,b in qrr:
