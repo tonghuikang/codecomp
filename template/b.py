@@ -49,7 +49,19 @@ def solve_(lst):
     if cur == 0:
         return "YES"
 
-    
+    allowed_remainders = set([0])
+    for x in lst:
+        new_remainders = set()
+        for y in allowed_remainders:
+            new_remainders.add(x^y)
+        allowed_remainders.update(new_remainders)
+
+    log(allowed_remainders)
+    log(cur)
+
+    if cur in allowed_remainders:
+        return "YES"
+
     return "NO"
 
 

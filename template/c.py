@@ -38,6 +38,21 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def canPartition(nums):
+    s, n, memo = sum(nums), len(nums), {0: True}
+    if s & 1: return False
+    nums.sort(reverse=True)
+    def dfs(i, x):
+        if x not in memo:
+            memo[x] = False
+            if x > 0:
+                for j in range(i, n):
+                    if dfs(j+1, x-nums[j]):
+                        memo[x] = True
+                        break
+        return memo[x]
+    return dfs(0, s >> 1)
+
 
 def solve_(lst):
     # remove gcd
@@ -49,9 +64,13 @@ def solve_(lst):
     for x in lst:
         gcd = math.gcd(x, gcd)
 
-    lst = [x//gcd for x in lst]
+    lst = [x//gcd for x in lst]  # cant be all even, confirm got odd
+    log(lst)
 
     if sum(lst)%2 == 1:
+        return []
+
+    if not canPartition(lst):
         return []
 
     for i,x in enumerate(lst):
