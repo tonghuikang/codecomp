@@ -39,18 +39,33 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(lst):
+    # remove gcd
+    # if sum is even
+    # hypothesis, only need to remove at most one
 
-    return ""
+    gcd = math.gcd(lst[0], lst[1])
+
+    for x in lst:
+        gcd = math.gcd(x, gcd)
+
+    lst = [x//gcd for x in lst]
+
+    if sum(lst)%2 == 1:
+        return []
+
+    for i,x in enumerate(lst):
+        if x%2 == 1:
+            return [i+1]
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,22 +75,23 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
-    # print(len(res))
-    # print(*res)  # print a list with elements
+    # print(res)
+    print(len(res))
+    if res:
+        print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)
         # print(*res)
