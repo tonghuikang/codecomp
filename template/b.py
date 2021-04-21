@@ -42,41 +42,62 @@ def read_strings(rows):
 def solve_(lst):
     # your solution here
 
+    tot = 0
+    for x in lst:
+        tot = tot^x
+
+    if tot == 0:
+        return "YES"
+
+    log(tot)
+    reached_tot = False
+
+    allowed_remainders = Counter([0])
     cur = 0
     for x in lst:
         cur = cur^x
+        if cur == tot:
+            reached_tot = True
+        if reached_tot and cur == 0:
+            return "YES"
 
-    if cur == 0:
-        return "YES"
+    return "NO"
+    # log(allowed_remainders)
+    # log(tot)
 
-    bitcount = Counter()
-    for x in lst:
-        i = 0
-        while x:
-            if x&1:
-                bitcount[i] += 1
-            x = x >> 1
-            i += 1
+    # if allowed_remainders[tot] == 1:
+    #     return "NO"
+    # return "YES"
+
+    # bitcount = Counter()
+    # for x in lst:
+    #     i = 0
+    #     while x:
+    #         if x&1:
+    #             bitcount[i] += 1
+    #         x = x >> 1
+    #         i += 1
     
-    # log(bitcount)
-    for k,v in bitcount.items():
-        if v == 1:
-            return "NO"
+    # # log(bitcount)
+    # for k,v in bitcount.items():
+    #     if v == 1:  # unpaired bit
+    #         return "NO"
 
-    allowed_remainders = Counter([0])
-    for x in lst:
-        new_remainders = Counter()
-        for k,v in (allowed_remainders.items()):
-            new_remainders[x^k] += v
-        allowed_remainders += new_remainders
+    # allowed_remainders = Counter([0])
+    # for x in lst:
+    #     new_remainders = Counter()
+    #     for k,v in (allowed_remainders.items()):
+    #         new_remainders[x^k] += v
+    #     allowed_remainders += new_remainders
 
     # log(allowed_remainders)
     # log(cur)
+    return "YES"
 
-    if cur in allowed_remainders:
-        return "YES"
+    # if cur in allowed_remainders:
+    #     return "YES"
 
-    return "NO"
+    # return "NO"
 
 
 # for case_num in [0]:  # no loop over test case
