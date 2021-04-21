@@ -37,17 +37,64 @@ def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
 # ---------------------------- template ends here ----------------------------
+LARGE = 10**5+10
+# LARGE = 100
 
+primes = [set() for _ in range(LARGE)]
 
-def solve_():
+for i in range(2, LARGE):
+    if primes[i]:
+        continue
+    for j in range(i, LARGE, i):
+        primes[j].add(i)
+
+# log(primes)
+
+def solve_(lst, qrr):
     # your solution here
 
-    return ""
+    count = [0 for _ in lst]
+    idx = 0
+
+    curbag = set()
+    for i,x in enumerate(lst):
+        newbag = primes[x]
+        if curbag & newbag:
+            idx += 1
+            curbag = newbag
+        else:
+            curbag = curbag | newbag
+        count[i] = idx
+
+    count2 = [0 for _ in lst]
+    idx = 0
+
+    curbag = set()
+    for i,x in enumerate(lst[::-1]):
+        newbag = primes[x]
+        if curbag & newbag:
+            idx += 1
+            curbag = newbag
+        else:
+            curbag = curbag | newbag
+        count2[i] = idx
+    count2 = count2[::-1]
+
+    # log(count)
+    # log(count2)
+
+    res = []
+    for a,b in qrr:
+        val = count[b] - count[a] + 1
+        val2 = count2[a] - count2[b] + 1
+        res.append(min(val, val2))
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,21 +106,21 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
-
-    res = solve()  # include input here
+    qrr = [(a-1, b-1) for a,b in qrr]
+    res = solve(lst, qrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    print("\n".join(str(x) for x in res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
