@@ -51,53 +51,77 @@ def solve_(n,m,k,hrr,vrr):
     k = k//2
  
  
-    g = defaultdict(set)
-    for i,row in enumerate(hrr):
-        for j,cost in enumerate(row):
-            g[i, j].add((i, j+1, cost))
-            g[i, j+1].add((i, j, cost))
-            # edges.append(((i,j), (i,j+1)))
-            # costs.append(cost)
-            # minedge[i][j] = min(minedge[i][j], cost)
-            # minedge[i][j+1] = min(minedge[i][j+1], cost)
+    # g = [[[] for _ in range(m)] for _ in range(n)]
+    # for i,row in enumerate(hrr):
+    #     for j,cost in enumerate(row):
+    #         g[i][j].append((i, j+1, cost))
+    #         g[i][j+1].append((i, j, cost))
+    #         # edges.append(((i,j), (i,j+1)))
+    #         # costs.append(cost)
+    #         # minedge[i][j] = min(minedge[i][j], cost)
+    #         # minedge[i][j+1] = min(minedge[i][j+1], cost)
  
-    for i,row in enumerate(vrr):
-        for j,cost in enumerate(row):
-            g[i, j].add((i+1, j, cost))
-            g[i+1, j].add((i, j, cost))
+    # for i,row in enumerate(vrr):
+    #     for j,cost in enumerate(row):
+    #         g[i][j].append((i+1, j, cost))
+    #         g[i+1][j].append((i, j, cost))
             # edges.append(((i,j), (i+1,j)))
             # costs.append(cost)
             # minedge[i][j] = min(minedge[i][j], cost)
             # minedge[i+1][j] = min(minedge[i+1][j], cost)
 
+    # if n*m > 1000:
+    #     assert False
 
-    del hrr
-    del vrr
+    # del hrr
+    # del vrr
 
     # for every node, propagate 10 units
     minedge = [[LARGE for _ in range(m)] for _ in range(n)]
     new_minedge = [[LARGE for _ in range(m)] for _ in range(n)]
-    propcost = [[[LARGE for _ in range(m)] for _ in range(n)] for _ in range(k+1)]
+    propcost = [[0 for _ in range(m)] for _ in range(n)]
+    new_propcost = [[LARGE for _ in _] for _ in propcost]
     all_res = [[val*k for val in row] for row in minedge]
 
     # greedily propogate min_edge
-    for x in range(n):
-        for y in range(m):
-            propcost[0][x][y] = 0
 
     for z in range(k):
         for x in range(n):
             for y in range(m):
-                for xx, yy, cost in g[x, y]:
+                if x != 0:
+                    xx = x-1
+                    yy = y
+                    cost = vrr[x-1][y]
                     new_minedge[xx][yy] = min(new_minedge[xx][yy], cost)
-                    propcost[z+1][xx][yy] = min(propcost[z+1][xx][yy], propcost[z][x][y]+cost)
+                    new_propcost[xx][yy] = min(new_propcost[xx][yy], propcost[x][y]+cost)
+                if y != 0:
+                    xx = x
+                    yy = y-1
+                    cost = hrr[x][y-1]
+                    new_minedge[xx][yy] = min(new_minedge[xx][yy], cost)
+                    new_propcost[xx][yy] = min(new_propcost[xx][yy], propcost[x][y]+cost)
+                if x != n-1:
+                    xx = x+1
+                    yy = y
+                    cost = vrr[x][y]
+                    new_minedge[xx][yy] = min(new_minedge[xx][yy], cost)
+                    new_propcost[xx][yy] = min(new_propcost[xx][yy], propcost[x][y]+cost)
+                if y != m-1:
+                    xx = x
+                    yy = y+1
+                    cost = hrr[x][y]
+                    new_minedge[xx][yy] = min(new_minedge[xx][yy], cost)
+                    new_propcost[xx][yy] = min(new_propcost[xx][yy], propcost[x][y]+cost)
         
         f = k-z-1
         for x in range(n):
             for y in range(m):
-                all_res[x][y] = min(all_res[x][y], propcost[z+1][x][y]+f*new_minedge[x][y])
+                all_res[x][y] = min(all_res[x][y], new_propcost[x][y]+f*new_minedge[x][y])
         minedge, new_minedge = new_minedge, minedge
-        # propcost = new_propcost
+        propcost, new_propcost = new_propcost, propcost
+        for x in range(n):
+            for y in range(m):
+                new_propcost[x][y] = LARGE
 
     all_res = "\n".join([" ".join([str(val*2) for val in row]) for row in all_res])
     # log(all_res)
