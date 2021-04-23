@@ -29,6 +29,7 @@ def solve(*args):
         log("----- solving ------")
         log(*args)
         log("----- ------- ------")
+    assert solve_(*args) == solve_old(*args)
     return solve_(*args)
 
 def read_matrix(rows):
@@ -46,14 +47,14 @@ def solve_(n,m,k,hrr,vrr):
     # your solution here
     if k%2:
         return [[-1 for _ in range(m)] for _ in range(n)]
-
+ 
     k = k//2
-
+ 
     # for every node, propagate 10 units
     minedge = [[LARGE for _ in range(m)] for _ in range(n)]
     # edges = []
     # costs = []
-
+ 
     g = defaultdict(set)
     for i,row in enumerate(hrr):
         for j,cost in enumerate(row):
@@ -63,7 +64,7 @@ def solve_(n,m,k,hrr,vrr):
             # costs.append(cost)
             minedge[i][j] = min(minedge[i][j], cost)
             minedge[i][j+1] = min(minedge[i][j+1], cost)
-
+ 
     for i,row in enumerate(vrr):
         for j,cost in enumerate(row):
             g[i, j].add((i+1, j, cost))
@@ -72,14 +73,84 @@ def solve_(n,m,k,hrr,vrr):
             # costs.append(cost)
             minedge[i][j] = min(minedge[i][j], cost)
             minedge[i+1][j] = min(minedge[i+1][j], cost)
-
+ 
     # total_tree_cost, tree_edges = minimum_spanning_tree(edges, costs)
     # log(total_tree_cost)
     # log(tree_edges)
-
+ 
     # log(g)
     # log(minedge)
+ 
+    all_res = [[LARGE for _ in range(m)] for _ in range(n)]
+    for sx in range(n):
+        for sy in range(m):
+            minres = LARGE
+            dist = {}
+            small_edge = {}
+            dist[sx,sy] = minedge[sx][sy]*k
+            small_edge[sx,sy] = minedge[sx][sy]
+            for z in range(k):
+                new_dist = {}
+                new_small_edge = {}
+                for (cx, cy), (prev_cost) in dist.items():
+                    for xx, yy, cost in g[cx, cy]:
+                        if cost > small_edge[cx,cy]:
+                            new_cost = prev_cost - small_edge[cx,cy] + cost
+                        else:
+                            new_cost = prev_cost - small_edge[cx,cy]*(k-z) + cost*(k-z)
+                        if (xx,yy) in new_dist:
+                            new_dist[xx,yy] = min(new_dist[xx,yy], new_cost)
+                            new_small_edge[xx,yy] = min(new_small_edge[xx,yy], small_edge[cx,cy], cost)
+                        else:
+                            new_dist[xx,yy] = new_cost
+                            new_small_edge[xx,yy] = min(small_edge[cx,cy], cost)
+                        minres = min(minres, new_cost)
+                dist = new_dist
+                small_edge = new_small_edge
+                # log(sx, sy, dist)
+            all_res[sx][sy] = minres*2
+ 
+    return all_res
+ 
 
+def solve_old(n,m,k,hrr,vrr):
+    # your solution here
+    if k%2:
+        return [[-1 for _ in range(m)] for _ in range(n)]
+ 
+    k = k//2
+ 
+    # for every node, propagate 10 units
+    minedge = [[LARGE for _ in range(m)] for _ in range(n)]
+    # edges = []
+    # costs = []
+ 
+    g = defaultdict(set)
+    for i,row in enumerate(hrr):
+        for j,cost in enumerate(row):
+            g[i, j].add((i, j+1, cost))
+            g[i, j+1].add((i, j, cost))
+            # edges.append(((i,j), (i,j+1)))
+            # costs.append(cost)
+            minedge[i][j] = min(minedge[i][j], cost)
+            minedge[i][j+1] = min(minedge[i][j+1], cost)
+ 
+    for i,row in enumerate(vrr):
+        for j,cost in enumerate(row):
+            g[i, j].add((i+1, j, cost))
+            g[i+1, j].add((i, j, cost))
+            # edges.append(((i,j), (i+1,j)))
+            # costs.append(cost)
+            minedge[i][j] = min(minedge[i][j], cost)
+            minedge[i+1][j] = min(minedge[i+1][j], cost)
+ 
+    # total_tree_cost, tree_edges = minimum_spanning_tree(edges, costs)
+    # log(total_tree_cost)
+    # log(tree_edges)
+ 
+    # log(g)
+    # log(minedge)
+ 
     all_res = [[LARGE for _ in range(m)] for _ in range(n)]
     for sx in range(n):
         for sy in range(m):
@@ -99,9 +170,17 @@ def solve_(n,m,k,hrr,vrr):
                 dist = new_dist
                 # log(sx, sy, dist)
             all_res[sx][sy] = minres*2
-
+ 
     return all_res
 
+
+# for _ in range(10**5):
+#     n = random.randint(1,3)
+#     m = random.randint(1,2)
+#     k = random.randint(1,20)
+#     hrr = [[random.randint(1,100000) for _ in range(m-1)] for _ in range(n)]
+#     vrr = [[random.randint(1,100000) for _ in range(m)] for _ in range(n-1)]
+#     solve(n,m,k,hrr,vrr)
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
