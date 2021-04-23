@@ -39,18 +39,43 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(diagonal, k):
     # your solution here
+    # hypothesis - always possible
 
-    return ""
+
+    res = [[0 for _ in range(i+1)] for i in range(k)]
+    
+
+    for i,val in enumerate(diagonal):
+        # move left and down
+        res[i][i] = val
+        x,y = i,i
+        for _ in range(val-1):
+            # attempt left
+            dx, dy = 0, -1
+            if y+dy >= 0 and res[x+dx][y+dy] == 0:
+                x = x+dx
+                y = y+dy
+                res[x][y] = val
+                continue
+            # attempt down
+            dx, dy = 1, 0
+            if x+dx < k and res[x+dx][y+dy] == 0:
+                x = x+dx
+                y = y+dy
+                res[x][y] = val
+                continue
+    # log(res)
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,21 +85,22 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst, k)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
     # print(len(res))
+    res = "\n".join(" ".join([str(r) for r in rr]) for rr in res)
+    print(res)
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
         # print(res)

@@ -39,10 +39,22 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(k):
     # your solution here
 
-    return ""
+    if k%2050 != 0:
+        return -1
+
+    res = 0
+    for i in range(15,-1,-1):
+        div = 2050*10**i
+        val = k//div
+        res += val
+        k -= val*div
+        # log(k)
+
+    assert k == 0
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +62,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -66,7 +78,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required

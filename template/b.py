@@ -39,10 +39,44 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, n, k):
     # your solution here
 
-    return ""
+    
+
+    pool = []
+    for (i,row) in enumerate(mrr):
+        for (j,cell) in enumerate(row):
+            pool.append((cell,i,j))
+
+    untaken = [set(range(k)) for _ in range(n)]
+    pool.sort()
+
+    shortest = pool[:k]
+    for cell,i,j in shortest:
+        untaken[i].remove(j)
+
+    all_res = []
+
+    for cell,i,j in shortest:
+        curres = []
+        for x in range(n):
+            if i == x:
+                curres.append((x,j))
+            else:
+                for y in untaken[x]:
+                    curres.append((x,y))
+                    untaken[x].remove(y)
+                    break
+        # log(curres)
+        all_res.append(curres)
+
+    # log(all_res)
+    # log(mrr)
+
+    all_res = list(zip(*all_res))
+    all_res = "\n".join([" ".join([str(mrr[i][j]) for i,j in curres]) for curres in all_res])
+    return all_res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +93,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr,n,k)  # include input here
     
     # print result
     # Google and Facebook - case number required

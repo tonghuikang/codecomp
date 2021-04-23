@@ -3,6 +3,7 @@ import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
+from typing import no_type_check
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -39,15 +40,32 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,k,hrr,vrr):
     # your solution here
+    if k%2:
+        return [[-1 for _ in range(m)] for _ in range(n)]
+
+    # you will not go in a circle
+    # start from smallest edge
+
+    # g = defaultdict(set)
+    # g = []
+    # for i,row in enumerate(hrr):
+    #     for j,cell in enumerate(row):
+    #         g[i, i+1]
+
+
+
+    
+
+
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,20 +77,22 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    hrr = read_matrix(n)  # and return as a list of list of int
+    vrr = read_matrix(n-1)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(n,m,k,hrr,vrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
+    res = "\n".join(" ".join([str(r) for r in rr]) for rr in res)
     print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
