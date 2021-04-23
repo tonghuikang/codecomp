@@ -11,7 +11,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 M9 = 10**9 + 7  # 998244353
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -40,27 +40,67 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
+LARGE = 10**9
+
 def solve_(n,m,k,hrr,vrr):
     # your solution here
     if k%2:
         return [[-1 for _ in range(m)] for _ in range(n)]
 
-    # you will not go in a circle
-    # start from smallest edge
+    k = k//2
 
-    # g = defaultdict(set)
-    # g = []
-    # for i,row in enumerate(hrr):
-    #     for j,cell in enumerate(row):
-    #         g[i, i+1]
+    # for every node, propagate 10 units
+    minedge = [[LARGE for _ in range(m)] for _ in range(n)]
+    # edges = []
+    # costs = []
 
+    g = defaultdict(set)
+    for i,row in enumerate(hrr):
+        for j,cost in enumerate(row):
+            g[i, j].add((i, j+1, cost))
+            g[i, j+1].add((i, j, cost))
+            # edges.append(((i,j), (i,j+1)))
+            # costs.append(cost)
+            minedge[i][j] = min(minedge[i][j], cost)
+            minedge[i][j+1] = min(minedge[i][j+1], cost)
 
+    for i,row in enumerate(vrr):
+        for j,cost in enumerate(row):
+            g[i, j].add((i+1, j, cost))
+            g[i+1, j].add((i, j, cost))
+            # edges.append(((i,j), (i+1,j)))
+            # costs.append(cost)
+            minedge[i][j] = min(minedge[i][j], cost)
+            minedge[i+1][j] = min(minedge[i+1][j], cost)
 
-    
+    # total_tree_cost, tree_edges = minimum_spanning_tree(edges, costs)
+    # log(total_tree_cost)
+    # log(tree_edges)
 
+    # log(g)
+    # log(minedge)
 
+    all_res = [[LARGE for _ in range(m)] for _ in range(n)]
+    for sx in range(n):
+        for sy in range(m):
+            minres = LARGE
+            dist = {}
+            dist[sx,sy] = 0
+            for z in range(k):
+                for (x,y),val in dist.items():
+                    minres = min(minres, val+(k-z)*minedge[x][y])
+                new_dist = {}
+                for (cx, cy), prev_cost in dist.items():
+                    for xx, yy, cost in g[cx, cy]:
+                        if (xx,yy) in new_dist:
+                            new_dist[xx,yy] = min(new_dist[xx,yy], prev_cost + cost)
+                        else:
+                            new_dist[xx,yy] = prev_cost + cost
+                dist = new_dist
+                # log(sx, sy, dist)
+            all_res[sx][sy] = minres*2
 
-    return ""
+    return all_res
 
 
 for case_num in [0]:  # no loop over test case
