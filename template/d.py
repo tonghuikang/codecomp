@@ -3,7 +3,7 @@ import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
-# from typing import no_type_check
+from typing import no_type_check
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -50,7 +50,6 @@ def solve_(n,m,k,hrr,vrr):
  
     k = k//2
  
-    # for every node, propagate 10 units
  
     g = defaultdict(set)
     for i,row in enumerate(hrr):
@@ -59,8 +58,8 @@ def solve_(n,m,k,hrr,vrr):
             g[i, j+1].add((i, j, cost))
             # edges.append(((i,j), (i,j+1)))
             # costs.append(cost)
-            # minedge[i,j] = min(minedge[i,j], cost)
-            # minedge[i,j+1] = min(minedge[i,j+1], cost)
+            # minedge[i][j] = min(minedge[i][j], cost)
+            # minedge[i][j+1] = min(minedge[i][j+1], cost)
  
     for i,row in enumerate(vrr):
         for j,cost in enumerate(row):
@@ -68,31 +67,37 @@ def solve_(n,m,k,hrr,vrr):
             g[i+1, j].add((i, j, cost))
             # edges.append(((i,j), (i+1,j)))
             # costs.append(cost)
-            # minedge[i,j] = min(minedge[i,j], cost)
-            # minedge[i+1,j] = min(minedge[i+1,j], cost)
+            # minedge[i][j] = min(minedge[i][j], cost)
+            # minedge[i+1][j] = min(minedge[i+1][j], cost)
+
 
     del hrr
     del vrr
 
-    propcost = {(x,y):0 for y in range(m) for x in range(n)}
-    minedge = {(x,y):LARGE for y in range(m) for x in range(n)}
-    all_res = [[LARGE for _ in range(m)] for _ in range(n)]
+    # for every node, propagate 10 units
+    minedge = [[LARGE for _ in range(m)] for _ in range(n)]
+    new_minedge = [[LARGE for _ in range(m)] for _ in range(n)]
+    propcost = [[[LARGE for _ in range(m)] for _ in range(n)] for _ in range(k+1)]
+    all_res = [[val*k for val in row] for row in minedge]
+
     # greedily propogate min_edge
+    for x in range(n):
+        for y in range(m):
+            propcost[0][x][y] = 0
 
     for z in range(k):
-        new_minedge = minedge.copy()
-        new_propcost = {(x,y):LARGE for y in range(m) for x in range(n)}
-        for (x,y),lst in g.items():
-            for xx, yy, cost in lst:
-                new_minedge[xx,yy] = min(new_minedge[xx,yy], cost)
-                new_propcost[xx,yy] = min(new_propcost[xx,yy], propcost[x,y]+cost)
+        for x in range(n):
+            for y in range(m):
+                for xx, yy, cost in g[x, y]:
+                    new_minedge[xx][yy] = min(new_minedge[xx][yy], cost)
+                    propcost[z+1][xx][yy] = min(propcost[z+1][xx][yy], propcost[z][x][y]+cost)
         
         f = k-z-1
         for x in range(n):
             for y in range(m):
-                all_res[x][y] = min(all_res[x][y], new_propcost[x,y]+f*new_minedge[x,y])
-        minedge = new_minedge
-        propcost = new_propcost
+                all_res[x][y] = min(all_res[x][y], propcost[z+1][x][y]+f*new_minedge[x][y])
+        minedge, new_minedge = new_minedge, minedge
+        # propcost = new_propcost
 
     all_res = "\n".join([" ".join([str(val*2) for val in row]) for row in all_res])
     # log(all_res)
@@ -122,7 +127,7 @@ for case_num in [0]:  # no loop over test case
     vrr = read_matrix(n-1)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve(n,m,k,hrr,vrr)  # include input here
+    res = solve_(n,m,k,hrr,vrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
