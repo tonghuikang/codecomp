@@ -85,18 +85,27 @@ def solve_(n,m,k,hrr,vrr):
         for sy in range(m):
             minres = LARGE
             dist = {}
-            dist[sx,sy] = 0
+            small_edge = {}
+            dist[sx,sy] = minedge[sx][sy]*k
+            small_edge[sx,sy] = minedge[sx][sy]
             for z in range(k):
-                for (x,y),val in dist.items():
-                    minres = min(minres, val+(k-z)*minedge[x][y])
                 new_dist = {}
-                for (cx, cy), prev_cost in dist.items():
+                new_small_edge = {}
+                for (cx, cy), (prev_cost) in dist.items():
                     for xx, yy, cost in g[cx, cy]:
-                        if (xx,yy) in new_dist:
-                            new_dist[xx,yy] = min(new_dist[xx,yy], prev_cost + cost)
+                        if cost > small_edge[cx,cy]:
+                            new_cost = prev_cost - small_edge[cx,cy] + cost
                         else:
-                            new_dist[xx,yy] = prev_cost + cost
+                            new_cost = prev_cost - small_edge[cx,cy]*(k-z) + cost*(k-z)
+                        if (xx,yy) in new_dist:
+                            new_dist[xx,yy] = min(new_dist[xx,yy], new_cost)
+                            new_small_edge[xx,yy] = min(new_small_edge[xx,yy], small_edge[cx,cy], cost)
+                        else:
+                            new_dist[xx,yy] = new_cost
+                            new_small_edge[xx,yy] = min(small_edge[cx,cy], cost)
+                        minres = min(minres, new_cost)
                 dist = new_dist
+                small_edge = new_small_edge
                 # log(sx, sy, dist)
             all_res[sx][sy] = minres*2
 
