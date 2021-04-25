@@ -37,12 +37,61 @@ def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
 # ---------------------------- template ends here ----------------------------
+M = 60*720*10**9
 
+def take_min(angle):
+    return min(M-angle, angle)
 
-def solve_():
+def solve_(aa,bb,cc):
+    aa,bb,cc = sorted([aa,bb,cc])
     # your solution here
+    res_arr = []
 
-    return ""
+    # for z1,z2,z3 in itertools.product([-1,1], repeat=3):
+    if True:
+        for a,b,c in itertools.permutations([aa,bb,cc]):
+            d,e,f = abs(a-b), abs(b-c), abs(a-c)
+            d,e,f = take_min(d), take_min(e), take_min(f)
+            # d = (d*z1)%M
+            # e = (e*z2)%M
+            # f = (f*z3)%M
+            for p in range(12*60):  # number of seconds elapsed
+                # if p == 62:
+                #     log(d, p, (d + p*M) % 719)
+                if (d + p*M) % 719 != 0 and (d - p*M) % 719 != 0:
+                    continue
+                x = ((d + p*M)//719)%(12*60*60*10**9)
+                diff1 = 720*x - p*M - (12*x - (p//60)*M)
+                diff2 = 12*x - (p//60)*M - x
+                diff1 = take_min(abs(diff1))
+                diff2 = take_min(abs(diff2))
+                if sorted([diff1,diff2]) == sorted([e,f]):
+                    # log("ok", x)
+
+                    # log("Case #{}: {} {} {} {}".format(case_num, 
+                    #     (x//(60*60*10**9)),
+                    #     (x//(60*10**9))%60,
+                    #     (x//(10**9))%60,
+                    #     (x//(1))%(10**9)
+                    # ))
+                    res_arr.append(x)
+
+    LARGE = 12*60*60*10**9
+    new_arr = []
+    for x in res_arr:
+        new_arr.append(x)
+        if x != 0:
+            new_arr.append(LARGE-x)
+            
+    log(new_arr)
+
+    for nsecs in new_arr:
+        p,q,r = nsecs, (720//60*nsecs)%(60*720*10**9), (720*nsecs)%(60*720*10**9) 
+        p,q,r = sorted([p,q,r])
+        if p-aa == q-bb == r-cc:
+            return nsecs
+    
+    return 0
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,21 +108,25 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    x = solve(a,b,c)  # include input here
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {} {} {} {}".format(case_num, 
+        (x//(60*60*10**9)),
+        (x//(60*10**9))%60,
+        (x//(10**9))%60,
+        (x//(1))%(10**9)
+    ))
 
     # Other platforms - no case number required
-    print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
