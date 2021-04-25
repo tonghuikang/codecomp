@@ -39,10 +39,39 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,a,b,arr):
     # your solution here
+    # arr = [0] + arr
+    for _ in range(50):
+        arr.append(0)
+    
+    minres = 100
 
-    return ""
+    for z in range(arr[0]+1):
+        # log(z,arr[0]+1)
+        lst = [x for x in arr]
+        lst[1] += z
+        lst[0] -= z
+        maxidx = n
+        lst = [0] + lst
+        # lst of demand
+        res = 0
+        for i in range(50+n):
+            if i == maxidx and lst[i] == 1:
+                break
+            val = max(0, lst[i], lst[i+1]//2)
+            lst[i] -= val
+            lst[i+1] -= val
+            lst[i+2] += val
+            if val > 0:
+                maxidx = max(maxidx,i+2)
+            res += val
+        
+        # log(maxidx)
+        minres = min(minres, maxidx)
+        
+
+    return minres+1
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,21 +88,21 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,a,b = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(n,a,b,lst)  # include input here
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
