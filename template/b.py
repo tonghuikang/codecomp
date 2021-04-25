@@ -59,7 +59,7 @@ def solve_(n,a,b,arr):
         for i in range(50+n):
             if i == maxidx and lst[i] == 1:
                 break
-            val = max(0, lst[i], lst[i+1]//2)
+            val = max(lst[i], lst[i+1]//2)
             lst[i] -= val
             lst[i+1] -= val
             lst[i+2] += val
@@ -71,7 +71,7 @@ def solve_(n,a,b,arr):
         minres = min(minres, maxidx)
         
 
-    return minres+1
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
