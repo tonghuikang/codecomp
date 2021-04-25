@@ -10,7 +10,8 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 M9 = 10**9 + 7  # 998244353
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+dirs = ["D", "R", "U", "L"]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -39,15 +40,49 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(sx, sy, trr, prr):
     # your solution here
 
-    return ""
+    sx += 1
+    sy += 1
+    trr = [[-1] + row + [-1] for row in trr]
+    prr = [[-1] + row + [-1] for row in prr]
+    trr = [[-1]*len(trr[0])] + trr + [[-1]*len(trr[0])]
+    prr = [[-1]*len(prr[0])] + prr + [[-1]*len(prr[0])]
+
+    maxres = 0
+    taken = set([-1, trr[sx][sy]])
+    
+    curres = 0
+    directions = []
+    cx = sx
+    cy = sy
+    while True:
+        print(cx,cy,taken)
+        idx = random.randint(0, 3)
+        for i in range(idx, idx+4):
+            i = i%4
+            dx,dy = d4[i]
+            xx = cx+dx
+            yy = cy+dy
+            if trr[xx][yy] in taken:
+                continue
+            curres += prr[xx][yy]
+            cx, cy = xx, yy
+            directions.append(dirs[i])
+            taken.add(trr[xx][yy])
+            break
+        else:  # dead end
+            break
+    
+    # print(curres)
+
+    return "".join(directions)
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +94,15 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    sx,sy = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    trr = read_matrix(50)  # and return as a list of list of int
+    prr = read_matrix(50)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(sx, sy, trr, prr)  # include input here
     
     # print result
     # Google and Facebook - case number required
