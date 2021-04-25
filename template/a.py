@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
+import math, random, time
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
+
+end_time = time.time() + 1.8
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -25,10 +28,10 @@ def log(*args):
 
 def solve(*args):
     # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
+    # if OFFLINE_TEST:
+    #     log("----- solving ------")
+    #     log(*args)
+    #     log("----- ------- ------")
     return solve_(*args)
 
 def read_matrix(rows):
@@ -42,42 +45,113 @@ def read_strings(rows):
 
 def solve_(sx, sy, trr, prr):
     # your solution here
+    moore = [
+        [1 , 2, 3, 6, 7,10,11,12],
+        [64,63, 4, 5, 8, 9,14,13],
+        [61,62,57,56,21,20,15,16],
+        [60,59,58,55,22,19,18,17],
+        [49,50,51,54,23,26,27,28],
+        [48,47,52,53,24,25,30,29],
+        [45,46,41,40,37,36,31,32],
+        [44,43,42,39,35,34,34,33]
+    ]
+    moore = [[x-1 for x in row] for row in moore]
+    moore = [[x//4 for x in row] for row in moore]
+
+    regions = [[((i-1)//6, (j-1)//6) for i in range(50)] for j in range(50)]
+    regions = [[(min(max(0,x),7),min(max(0,y),7)) for x,y in row] for row in regions]
+    regions = [[moore[x][y] for x,y in row] for row in regions]
+    start_region_tmp = regions[sx][sy]
+    regions = [[(start_region_tmp-x)%64 for x in row] for row in regions]
+    # start_region = regions[sx][sy]
+    # log("start_region", start_region)
+
+    # for row in regions:
+    #     log(row)
+    # assert False
 
     sx += 1
     sy += 1
     trr = [[-1] + row + [-1] for row in trr]
     prr = [[-1] + row + [-1] for row in prr]
+    regions = [[-1] + row + [-1] for row in regions]
     trr = [[-1]*len(trr[0])] + trr + [[-1]*len(trr[0])]
     prr = [[-1]*len(prr[0])] + prr + [[-1]*len(prr[0])]
-
+    regions = [[-1]*len(regions[0])] + regions + [[-1]*len(regions[0])]
     maxres = 0
     taken = set([-1, trr[sx][sy]])
-    
+    taken_arr = [-1, trr[sx][sy]]
+    pos_arr = [(sx,sy)]
+    pts_arr = [prr[sx][sy]]
+
+    assert regions[sx][sy] == 0
+    # log("start_region", start_region)
     curres = 0
+    res_directions = []
     directions = []
     cx = sx
     cy = sy
-    while True:
-        print(cx,cy,taken)
-        idx = random.randint(0, 3)
-        for i in range(idx, idx+4):
-            i = i%4
-            dx,dy = d4[i]
-            xx = cx+dx
-            yy = cy+dy
-            if trr[xx][yy] in taken:
-                continue
-            curres += prr[xx][yy]
-            cx, cy = xx, yy
-            directions.append(dirs[i])
-            taken.add(trr[xx][yy])
-            break
-        else:  # dead end
-            break
+    stuck_counter = 0
+
+    while time.time() < end_time:
+        while True:
+            # print(cx,cy,taken,regions[cx][cy])
+            # assert False
+            idx = random.randint(0, 3)
+            for i in range(idx, idx+4):
+                i = i%4
+                dx,dy = d4[i]
+                xx = cx+dx
+                yy = cy+dy
+                if trr[xx][yy] in taken:
+                    continue
+                if not (regions[cx][cy] <= regions[xx][yy] <= regions[cx][cy] + 1):
+                # if (regions[cx][cy]-1 <= regions[xx][yy] <= regions[cx][cy] + 1):
+                    # if random.randint(1,100) < 0:
+                    if stuck_counter < 100:
+                    #     stuck_counter += 1
+                        # log(regions[cx][cy], regions[xx][yy])
+                        # stuck_counter += 1
+                        # log("violate")
+                        continue
+                    # stuck_counter += 0
+                    # stuck_counter = 0
+                curres += prr[xx][yy]
+                cx, cy = xx, yy
+                directions.append(dirs[i])
+                taken.add(trr[xx][yy])
+                taken_arr.append(trr[xx][yy])
+                pos_arr.append((xx,yy))
+                pts_arr.append(prr[xx][yy])
+                break
+            else:  # dead end
+                break
+        
+        if curres > maxres:
+            res_directions = [x for x in directions]
+            maxres = curres
+            # log(maxres)
+            stuck_counter = 0
+        else:
+            stuck_counter += 1
+        
+        # log(directions)
+        for i in range(random.randint(1,40)):
+            if directions:
+                pos_arr.pop()
+                directions.pop()
+                taken.remove(taken_arr.pop())
+                curres -= pts_arr.pop()
+            else:
+                break
+        cx, cy = pos_arr[-1]
+        # stuck_counter = 0
+        # log(directions)
+        # break
     
     # print(curres)
 
-    return "".join(directions)
+    return "".join(res_directions)
 
 
 for case_num in [0]:  # no loop over test case
