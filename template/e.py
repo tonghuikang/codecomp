@@ -39,18 +39,72 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(set)
+    locs = {}
+
+    for i,(a,b,c,d) in enumerate(mrr):
+        # left point
+        num1 = (a+b)*d
+        dem1 = b*c
+        gcd = math.gcd(num1, dem1)
+        num1 = num1//gcd
+        dem1 = dem1//gcd
+        g[num1,dem1].add(i)
+
+        # up point
+        num2 = a*d
+        dem2 = b*(c+d)
+        gcd = math.gcd(num2, dem2)
+        num2 = num2//gcd
+        dem2 = dem2//gcd
+        g[num2,dem2].add(i)
+
+        locs[i] = (num1, dem1), (num2, dem2)
+    
+
+    taken = set()
+    res = []
+
+    for i in range(len(mrr)):
+        if i in taken:
+            continue
+        (num1, dem1), (num2, dem2) = locs[i]
+
+        g[num1,dem1].remove(i)
+        g[num2,dem2].remove(i)
+        taken.add(i)
+        if g[num1,dem1]:
+            for nex in g[num1,dem1]:
+                break
+            g[num1,dem1].remove(nex)
+            taken.add(nex)
+            res.append((i,nex))
+        elif g[num2,dem2]:
+            for nex in g[num2,dem2]:
+                break
+            g[num2,dem2].remove(nex)            
+            taken.add(nex)      
+            res.append((i,nex))
+        else:
+            pass
 
 
-# for case_num in [0]:  # no loop over test case
+
+
+    # no idea how to do downstream
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -63,17 +117,19 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
     
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
+    print(len(res))
+    print("\n".join("{} {}".format(a+1,b+1) for a,b in res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
