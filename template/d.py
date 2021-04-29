@@ -50,17 +50,34 @@ def solve_(arr, brr, k):
     max_addres = 0
     for c in range(k):
         curres = 0
-        for i in range(1,min(c, k-c)):
-            old = arr[c-i]*brr[c-i] + arr[c+i]*brr[c+i]
-            new = arr[c+i]*brr[c-i] + arr[c-i]*brr[c+i]
+        # log()
+        # limit = min(c+1, k-c)
+        # log(limit)
+        for i in range(1,k):
+            left = c-i
+            righ = c+i
+            if not ((0 <= left < k) and (0 <= righ < k)):
+                break
+            old = arr[left]*brr[left] + arr[righ]*brr[righ]
+            new = arr[righ]*brr[left] + arr[left]*brr[righ]
+            # log(left, righ)
             curres += new - old
             max_addres = max(max_addres, curres)
         
+    # log("x")
     for c in range(k):
         curres = 0
-        for i in range(1,min(c, k-c)):
-            old = arr[c-i+1]*brr[c-i+1] + arr[c+i]*brr[c+i]
-            new = arr[c+i]*brr[c-i+1] + arr[c-i+1]*brr[c+i]
+        # log()
+        # limit = min(c+1, k-c)
+        # log(limit)
+        for i in range(1, k):
+            left = c-i
+            righ = c+i-1
+            if not ((0 <= left < k) and (0 <= righ < k)):
+                break
+            old = arr[left]*brr[left] + arr[righ]*brr[righ]
+            new = arr[righ]*brr[left] + arr[left]*brr[righ]
+            # log(left, righ)
             curres += new - old
             max_addres = max(max_addres, curres)
 
