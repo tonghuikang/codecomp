@@ -42,7 +42,7 @@ def read_strings(rows):
 def solve_(arr, brr, k):
     # your solution here
 
-    maxres = sum(a*b for a,b in zip(arr,brr))
+    mult = [a*b for a,b in zip(arr,brr)]
     # consider all possible centres
 
 
@@ -53,12 +53,12 @@ def solve_(arr, brr, k):
         # log()
         # limit = min(c+1, k-c)
         # log(limit)
-        for i in range(1,k):
+        for i in range(1, k):
             left = c-i
             righ = c+i
-            if not ((0 <= left < k) and (0 <= righ < k)):
+            if left < 0 or righ >= k:
                 break
-            old = arr[left]*brr[left] + arr[righ]*brr[righ]
+            old = mult[left] + mult[righ]
             new = arr[righ]*brr[left] + arr[left]*brr[righ]
             # log(left, righ)
             curres += new - old
@@ -73,16 +73,16 @@ def solve_(arr, brr, k):
         for i in range(1, k):
             left = c-i
             righ = c+i-1
-            if not ((0 <= left < k) and (0 <= righ < k)):
+            if left < 0 or righ >= k:
                 break
-            old = arr[left]*brr[left] + arr[righ]*brr[righ]
+            old = mult[left] + mult[righ]
             new = arr[righ]*brr[left] + arr[left]*brr[righ]
             # log(left, righ)
             curres += new - old
             max_addres = max(max_addres, curres)
 
 
-    return maxres + max_addres
+    return sum(mult) + max_addres
 
 
 for case_num in [0]:  # no loop over test case
