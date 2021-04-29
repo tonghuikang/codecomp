@@ -44,15 +44,12 @@ def solve_(arr, brr, k):
 
     mult = [a*b for a,b in zip(arr,brr)]
     # consider all possible centres
-
+    log(sum(mult))
 
     # odd centres
     max_addres = 0
     for c in range(k):
         curres = 0
-        # log()
-        # limit = min(c+1, k-c)
-        # log(limit)
         for i in range(1, k):
             left = c-i
             righ = c+i
