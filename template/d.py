@@ -39,18 +39,42 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr, k):
     # your solution here
 
-    return ""
+    maxres = sum(a*b for a,b in zip(arr,brr))
+    # consider all possible centres
 
 
-# for case_num in [0]:  # no loop over test case
+    # odd centres
+    max_addres = 0
+    for c in range(k):
+        curres = 0
+        for i in range(1,min(c, k-c)):
+            old = arr[c-i]*brr[c-i] + arr[c+i]*brr[c+i]
+            new = arr[c+i]*brr[c-i] + arr[c-i]*brr[c+i]
+            curres += new - old
+            max_addres = max(max_addres, curres)
+        
+    for c in range(k):
+        curres = 0
+        for i in range(1,min(c, k-c)):
+            old = arr[c-i+1]*brr[c-i+1] + arr[c+i]*brr[c+i]
+            new = arr[c+i]*brr[c-i+1] + arr[c-i+1]*brr[c+i]
+            curres += new - old
+            max_addres = max(max_addres, curres)
+
+
+    return maxres + max_addres
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
+
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +84,14 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr, k)  # include input here
     
     # print result
     # Google and Facebook - case number required
