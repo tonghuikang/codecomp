@@ -39,10 +39,44 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr, n):
     # your solution here
 
-    return ""
+    pool = defaultdict(list)
+
+    for a,b in zip(arr, brr):
+        pool[a].append(b)
+
+    log(pool)
+
+    idxs = [0 for _ in range(n)]
+
+    for lst in pool.values():
+        lst = sorted(lst)[::-1]
+        # log(lst)
+        for i,x in enumerate(lst):
+            idxs[i] += x
+
+    log(idxs)
+
+    csum = 0
+    psum = []
+    for x in idxs:
+        csum += x
+        psum.append(csum)
+    psum.append(csum)
+
+    log(psum)
+
+    res = []
+    maxlen = max(len(lst) for lst in pool.values())
+
+    for i in range(1,n+1):
+        idx = maxlen - maxlen%i
+        res.append(psum[idx])
+
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +84,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -60,13 +94,14 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(arr, brr, k)  # include input here
     
     # print result
     # Google and Facebook - case number required
