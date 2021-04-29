@@ -27,7 +27,9 @@ brr = list(map(int,input().split()))
 # mrr = read_matrix(k)  # and return as a list of list of int
 # arr = read_strings(k)  # and return as a list of str
 
-mult = [a*b for a,b in zip(arr,brr)]
+base = 0
+for a,b in zip(arr,brr):
+    base += a*b
 # consider all possible centres
 # log(sum(mult))
 
@@ -42,10 +44,8 @@ for c in range(k):
         righ += 1
         if left < 0 or righ >= k:
             break
-        old = mult[left] + mult[righ]
-        new = arr[righ]*brr[left] + arr[left]*brr[righ]
         # log(left, righ)
-        curres += new - old
+        curres += (arr[left]-arr[righ])*(brr[righ]-brr[left])
         max_addres = max(max_addres, curres)
     
 # log("x")
@@ -58,10 +58,7 @@ for c in range(k):
         righ += 1
         if left < 0 or righ >= k:
             break
-        old = mult[left] + mult[righ]
-        new = arr[righ]*brr[left] + arr[left]*brr[righ]
-        # log(left, righ)
-        curres += new - old
+        curres += (arr[left]-arr[righ])*(brr[righ]-brr[left])
         max_addres = max(max_addres, curres)
 
-print(sum(mult) + max_addres)
+print(base + max_addres)
