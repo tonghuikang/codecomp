@@ -47,36 +47,33 @@ def solve_(arr, brr, n):
     for a,b in zip(arr, brr):
         pool[a].append(b)
 
-    log(pool)
+    # log(pool)
 
-    idxs = [0 for _ in range(n)]
+    res = [0 for _ in range(n+1)]
 
     for lst in pool.values():
         lst = sorted(lst)[::-1]
-        # log(lst)
-        for i,x in enumerate(lst):
-            idxs[i] += x
+        # log("lst", lst)
 
-    log(idxs)
+        csum = 0
+        psum = [0]
+        for x in lst:
+            csum += x
+            psum.append(csum)
+        # psum.append(csum)    
 
-    csum = 0
-    psum = []
-    for x in idxs:
-        csum += x
-        psum.append(csum)
-    psum.append(csum)
+        # log(psum)
 
-    log(psum)
+        maxlen = len(psum)
+        
+        for i in range(1, maxlen):
+            idx = (maxlen-1)//i * i
+            # log(i, idx)
+            # log(psum[idx])
+            # log(res[idx])
+            res[i] += psum[idx]
 
-    res = []
-    maxlen = max(len(lst) for lst in pool.values())
-
-    for i in range(1,n+1):
-        idx = maxlen - maxlen%i
-        res.append(psum[idx])
-
-
-    return res
+    return " ".join([str(x) for x in res[1:]])
 
 
 # for case_num in [0]:  # no loop over test case
