@@ -40,28 +40,6 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-# https://codeforces.com/blog/entry/80158?locale=en
-from types import GeneratorType
-def bootstrap(f, stack=[]):
-    def wrappedfunc(*args, **kwargs):
-        if stack:
-            return f(*args, **kwargs)
-        else:
-            to = f(*args, **kwargs)
-            while True:
-                if type(to) is GeneratorType:
-                    stack.append(to)
-                    to = next(to)
-                else:
-                    if stack:
-                        stack.pop()
-                    if not stack:
-                        break
-                    to = stack[-1].send(to)
-            return to
-    return wrappedfunc
-
-
 def solve_(krr,mrr,root,n):
     # your solution here
     root -= 1
@@ -75,6 +53,8 @@ def solve_(krr,mrr,root,n):
 
     distance = {}  # distance from root
     distance[root] = 0
+    children = defaultdict(set)
+    parent = {}
 
     stack = [root]
     while stack:
@@ -83,37 +63,43 @@ def solve_(krr,mrr,root,n):
             if nex in distance:
                 continue
             stack.append(nex)
+            children[cur].add(nex)
+            parent[nex] = cur
             distance[nex] = distance[cur] + 1
 
-    tagged_nodes = set()
     tagged_nodes_item = {i:-1 for i in range(n)}
     for k in specials:
         tagged_nodes_item[k] = k
-    visited = set([root])
 
-    @bootstrap
-    def dfs(cur):
-        tagged = cur in specials
-        cur_ptr_node = None
-        if tagged:
-            cur_ptr_node = cur
-        for nex in g[cur]:
-            if nex in visited:
-                continue
-            visited.add(nex)
-            visited.add(cur)
-            is_tagged, ptr_node = dfs(nex)
-            if is_tagged:   
-                tagged = True
-                tagged_nodes_item[nex] = ptr_node
-                cur_ptr_node = ptr_node
-        if tagged:
-            tagged_nodes.add(cur)
-        return tagged, cur_ptr_node
-    dfs(root)
+    leaves = set()
+    for i in range(n):
+        if i not in children:
+            leaves.add(i)
 
-    earliest = {}  # distance from root
+    # print(leaves)
+    earliest = {}
     earliest[root] = 0
+
+    while leaves:
+        for cur in leaves:
+            break
+        # print(cur)
+        leaves.remove(cur)
+        if cur == root:
+            break
+
+        nex = parent[cur]
+        if tagged_nodes_item[cur] != -1:
+            tagged_nodes_item[nex] = tagged_nodes_item[cur]
+
+        children[nex].remove(cur)
+        if not children[nex]:
+            leaves.add(nex)
+
+    # print([tagged_nodes_item[i]  for i in range(n)])
+    # print([distance[i]  for i in range(n)])
+    # print([earliest[i]  for i in range(n)])
+
 
     stack = [root]
     while stack:
@@ -122,14 +108,11 @@ def solve_(krr,mrr,root,n):
             if nex in earliest:
                 continue
             stack.append(nex)
-            if nex in tagged_nodes:
+            if tagged_nodes_item[nex] != -1:
                 earliest[nex] = earliest[cur] + 1
             else:
                 earliest[nex] = earliest[cur]
                 tagged_nodes_item[nex] = tagged_nodes_item[cur]
-
-    # print([distance[i]  for i in range(n)])
-    # print([earliest[i]  for i in range(n)])
 
     nodes = [tagged_nodes_item[i] for i in range(n)]
     nodes = [x if x!=-1 else default for x in nodes]
