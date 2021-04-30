@@ -4,7 +4,7 @@ import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
-sys.setrecursionlimit(10**6 + 5)
+# sys.setrecursionlimit(10**6 + 5)
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -17,8 +17,8 @@ M9 = 10**9 + 7  # 998244353
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -126,7 +126,7 @@ def solve_(krr,mrr,root,n):
                 earliest[nex] = earliest[cur] + 1
             else:
                 earliest[nex] = earliest[cur]
-                # tagged_nodes_item[nex] = tagged_nodes_item[cur]
+                tagged_nodes_item[nex] = tagged_nodes_item[cur]
 
     # log([distance[i]  for i in range(n)])
     # log([earliest[i]  for i in range(n)])
