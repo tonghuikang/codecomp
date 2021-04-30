@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
+# import math, random
 import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -38,11 +38,42 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def subsetSum(arr, n, i, sum, count):
+      
+    # The recursion is stopped at N-th level
+    # where all the subsets of the given array
+    # have been checked
+    if (i == n):
+  
+        # Incrementing the count if sum is
+        # equal to 0 and returning the count
+        if (sum == 0):
+            count += 1
+        return count
+  
+    # Recursively calling the function for two cases
+    # Either the element can be counted in the subset
+    # If the element is counted, then the remaining sum
+    # to be checked is sum - the selected element
+    # If the element is not included, then the remaining sum
+    # to be checked is the total sum
+    count = subsetSum(arr, n, i + 1, sum - arr[i], count)
+    count = subsetSum(arr, n, i + 1, sum, count)
+    return count
+  
 
-def solve_():
+
+def solve_(mrr,b,nrows,ncols):
     # your solution here
+    allres = 0
+    for comb1 in itertools.product([0,1], repeat=nrows):
+        qrr = [row for c,row in zip(comb1,mrr) if c]
+        if not qrr:
+            continue
+        arr = [sum(col) for col in zip(*qrr)]
+        allres += subsetSum(arr, len(arr), 0, b, 0)
 
-    return ""
+    return allres%M9
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,14 +90,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(mrr,b,n,m)  # include input here
     
     # print result
     # Google and Facebook - case number required
