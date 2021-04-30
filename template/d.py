@@ -65,13 +65,13 @@ def bootstrap(f, stack=[]):
 def solve_(krr,mrr,root,n):
     # your solution here
     root -= 1
-    specials = set([x-1 for x in krr])
     default = krr[0]
+    specials = set([x for x in krr])
 
     g = defaultdict(set)
     for a,b in mrr:
-        g[a-1].add(b-1)
-        g[b-1].add(a-1)
+        g[a].add(b)
+        g[b].add(a)
 
     distance = {}  # distance from root
     distance[root] = 0
@@ -86,7 +86,7 @@ def solve_(krr,mrr,root,n):
             distance[nex] = distance[cur] + 1
 
     tagged_nodes = set()
-    tagged_nodes_item = defaultdict(int)
+    tagged_nodes_item = {i:-1 for i in range(n)}
     for k in specials:
         tagged_nodes_item[k] = k
     visited = set([root])
@@ -128,13 +128,17 @@ def solve_(krr,mrr,root,n):
                 earliest[nex] = earliest[cur]
                 tagged_nodes_item[nex] = tagged_nodes_item[cur]
 
-    # log([distance[i]  for i in range(n)])
-    # log([earliest[i]  for i in range(n)])
+    # print([distance[i]  for i in range(n)])
+    # print([earliest[i]  for i in range(n)])
 
     nodes = [tagged_nodes_item[i] for i in range(n)]
-    nodes = [x+1 if x else default for x in nodes]
+    nodes = [x if x!=-1 else default for x in nodes]
 
-    return [2*earliest[i] - distance[i] for i in range(n)], nodes
+    vals = [2*earliest[i] - distance[i] for i in range(n)]
+    # vals = [distance[i] if i in tagged_nodes else x for i,x in enumerate(vals)]
+
+    nodes = [x+1 for x in nodes]
+    return vals, nodes
 
 
 
@@ -154,9 +158,11 @@ for case_num in range(int(input())):
     # read one line and parse each word as an integer
     n,k,a = list(map(int,input().split()))
     krr = list(map(int,input().split()))
+    krr = [x-1 for x in krr]
 
     # read multiple rows
     mrr = read_matrix(n-1)  # and return as a list of list of int
+    mrr = [((a-1),(b-1)) for a,b in mrr]
     # arr = read_strings(k)  # and return as a list of str
 
     res, res2 = solve(krr,mrr,a,n)  # include input here
