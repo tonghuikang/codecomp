@@ -46,7 +46,7 @@ def findCnt(arr, required_sum):
 
     for x in arr:
         for i in range(required_sum-x,-1,-1):
-            dp[i+x] = (dp[i+x] + dp[i])%M9
+            dp[i+x] = (dp[i+x] + dp[i])
     return dp[-1]%M9
  
   
@@ -66,9 +66,14 @@ def findCntsmall(arr, required_sum):
 
 
 def solve_(mrr,required,nrows,ncols):
-    # if nrows < ncols:
-    #     mrr = zip(*mrr)
-    #     nrows,ncols = ncols,nrows
+    if nrows > ncols:
+        # print(mrr)
+        mrr = list(zip(*mrr))
+        # print(mrr)
+        (nrows,ncols) = (ncols,nrows)
+
+
+    # small = 
 
     allres = 0
     for comb1 in itertools.product([0,1], repeat=nrows):
@@ -85,20 +90,20 @@ def solve_(mrr,required,nrows,ncols):
     return allres%M9
 
 
-# pdt = 144
+# pdt = 200
 # for i in range(1,pdt):
 # # if True:
 #     nrows = pdt//i
 #     ncols = i
-#     mrr = [[i+500*j for i in range(nrows)] for j in range(ncols)]
+#     mrr = [[1 for i in range(nrows)] for j in range(ncols)]
 
 #     if nrows > ncols:
 #         mrr = zip(*mrr)
 #         nrows,ncols = ncols,nrows
 
-#     print(nrows, ncols, 2**nrows * min(ncols*10**5, 2**ncols//2))
+#     print(nrows, ncols, ncols*10**5, 2**ncols//2, 2**nrows * min(ncols*10**5, 2**ncols//2))
 
-#     res = solve_(mrr, 10**5, nrows, ncols)
+#     res = solve_(mrr, 12, nrows, ncols)
 #     print(res)
 
 # for case_num in [0]:  # no loop over test case
