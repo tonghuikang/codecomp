@@ -66,9 +66,9 @@ def findCntsmall(arr, required_sum):
 
 
 def solve_(mrr,required,nrows,ncols):
-    if nrows > ncols:
-        mrr = zip(*mrr)
-        nrows,ncols = ncols,nrows
+    # if nrows < ncols:
+    #     mrr = zip(*mrr)
+    #     nrows,ncols = ncols,nrows
 
     allres = 0
     for comb1 in itertools.product([0,1], repeat=nrows):
@@ -76,21 +76,28 @@ def solve_(mrr,required,nrows,ncols):
         if not qrr:
             continue
         arr = [sum(col) for col in zip(*qrr)]
-        # if ncols < 10:
-        #     allres += findCntsmall(arr, required)
-        # else:
-        allres += findCnt(arr, required)
+        if False:
+            allres += findCntsmall(arr, required)
+        else:
+            allres += findCnt(arr, required)
 
 
     return allres%M9
 
 
-# pdt = 200
-# # for i in range(1,200):
-# if True:
-#     nrows = 8 #pdt//i
-#     ncols = 25 #i
-#     mrr = [[i+100*j for i in range(nrows)] for j in range(ncols)]
+# pdt = 144
+# for i in range(1,pdt):
+# # if True:
+#     nrows = pdt//i
+#     ncols = i
+#     mrr = [[i+500*j for i in range(nrows)] for j in range(ncols)]
+
+#     if nrows > ncols:
+#         mrr = zip(*mrr)
+#         nrows,ncols = ncols,nrows
+
+#     print(nrows, ncols, 2**nrows * min(ncols*10**5, 2**ncols//2))
+
 #     res = solve_(mrr, 10**5, nrows, ncols)
 #     print(res)
 
