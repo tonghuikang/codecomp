@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-import sys, getpass
-from collections import Counter, defaultdict, deque
+import sys
 input = sys.stdin.readline  # to read input quickly
-# sys.setrecursionlimit(10**6 + 5)
 
 MAXINT = sys.maxsize
 
