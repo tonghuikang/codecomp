@@ -41,12 +41,12 @@ def read_strings(rows):
 
 def findCnt(arr, required_sum):
 
-    dp = [0 for _ in range(required_sum+1)]
-    dp[0] = 1
+    dp = [0.0 for _ in range(required_sum+1)]
+    dp[0] = 1.0
 
     for x in arr:
         for i in range(required_sum-x,-1,-1):
-            dp[i+x] = (dp[i+x] + dp[i])
+            dp[i+x] = (dp[i+x] + dp[i])%M9
     return dp[-1]%M9
  
   
@@ -72,8 +72,6 @@ def solve_(mrr,required,nrows,ncols):
         # print(mrr)
         (nrows,ncols) = (ncols,nrows)
 
-
-    # small = 
 
     allres = 0
     for comb1 in itertools.product([0,1], repeat=nrows):
@@ -134,7 +132,7 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    print(int(res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
