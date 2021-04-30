@@ -53,7 +53,8 @@ def bootstrap(f, stack=[]):
                     stack.append(to)
                     to = next(to)
                 else:
-                    stack.pop()
+                    if stack:
+                        stack.pop()
                     if not stack:
                         break
                     to = stack[-1].send(to)
@@ -65,7 +66,8 @@ def solve_(krr,mrr,root,n):
     # your solution here
     root -= 1
     specials = set([x-1 for x in krr])
-    
+    default = krr[0]
+
     g = defaultdict(set)
     for a,b in mrr:
         g[a-1].add(b-1)
@@ -84,12 +86,17 @@ def solve_(krr,mrr,root,n):
             distance[nex] = distance[cur] + 1
 
     tagged_nodes = set()
-    # tagged_nodes_item = {k:k for k in specials}
+    tagged_nodes_item = defaultdict(int)
+    for k in specials:
+        tagged_nodes_item[k] = k
     visited = set([root])
 
-    # @bootstrap
+    @bootstrap
     def dfs(cur):
         tagged = cur in specials
+        cur_ptr_node = None
+        if tagged:
+            cur_ptr_node = cur
         for nex in g[cur]:
             if nex in visited:
                 continue
@@ -98,10 +105,11 @@ def solve_(krr,mrr,root,n):
             is_tagged, ptr_node = dfs(nex)
             if is_tagged:   
                 tagged = True
-                # tagged_nodes_item[nex] = ptr_node
+                tagged_nodes_item[nex] = ptr_node
+                cur_ptr_node = ptr_node
         if tagged:
             tagged_nodes.add(cur)
-        return tagged, None
+        return tagged, cur_ptr_node
     dfs(root)
 
     earliest = {}  # distance from root
@@ -118,12 +126,15 @@ def solve_(krr,mrr,root,n):
                 earliest[nex] = earliest[cur] + 1
             else:
                 earliest[nex] = earliest[cur]
+                # tagged_nodes_item[nex] = tagged_nodes_item[cur]
 
+    # log([distance[i]  for i in range(n)])
+    # log([earliest[i]  for i in range(n)])
 
-    log([distance[i]  for i in range(n)])
-    log([earliest[i]  for i in range(n)])
+    nodes = [tagged_nodes_item[i] for i in range(n)]
+    nodes = [x+1 if x else default for x in nodes]
 
-    return [2*earliest[i] - distance[i] for i in range(n)]
+    return [2*earliest[i] - distance[i] for i in range(n)], nodes
 
 
 
@@ -148,7 +159,7 @@ for case_num in range(int(input())):
     mrr = read_matrix(n-1)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve(krr,mrr,a,n)  # include input here
+    res, res2 = solve(krr,mrr,a,n)  # include input here
     
     # print result
     # Google and Facebook - case number required
@@ -156,6 +167,7 @@ for case_num in range(int(input())):
 
     # Other platforms - no case number required
     print(" ".join(str(x) for x in res))
+    print(" ".join(str(x) for x in res2))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
