@@ -83,7 +83,7 @@ def solve_(arr, mrr, n):
     for i in range(n):
         res += sum(dijkstra(g, i))
 
-    return res
+    return int(res)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -101,7 +101,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    arr = list(map(int,input().split()))
+    arr = list(map(float,input().split()))
     m = int(input())
 
     # read multiple rows
