@@ -2,7 +2,7 @@
 import sys, getpass
 # import math, random
 import functools, itertools, collections, heapq, bisect
-# from collections import Counter, defaultdict, deque
+from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -38,43 +38,61 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-def subsetSum(arr, n, i, sum, count):
-      
-    # The recursion is stopped at N-th level
-    # where all the subsets of the given array
-    # have been checked
-    if (i == n):
+
+def findCnt(arr, required_sum):
+
+    dp = [0 for _ in range(required_sum+1)]
+    dp[0] = 1
+
+    for x in arr:
+        for i in range(required_sum-x,-1,-1):
+            dp[i+x] = (dp[i+x] + dp[i])%M9
+    return dp[-1]%M9
+ 
   
-        # Incrementing the count if sum is
-        # equal to 0 and returning the count
-        if (sum == 0):
-            count += 1
-        return count
-  
-    # Recursively calling the function for two cases
-    # Either the element can be counted in the subset
-    # If the element is counted, then the remaining sum
-    # to be checked is sum - the selected element
-    # If the element is not included, then the remaining sum
-    # to be checked is the total sum
-    count = subsetSum(arr, n, i + 1, sum - arr[i], count)
-    count = subsetSum(arr, n, i + 1, sum, count)
-    return count
-  
+def findCntsmall(arr, required_sum):
+    dp = defaultdict(int)
+    dp[0] = 1
+
+    for x in arr:
+        new_dp = defaultdict(int)
+        for y in new_dp:
+            val = x+y
+            if val > required_sum:
+                continue
+            new_dp[x+y] += dp[y]
+    
+    return dp[required_sum]
 
 
-def solve_(mrr,b,nrows,ncols):
-    # your solution here
+def solve_(mrr,required,nrows,ncols):
+    if nrows > ncols:
+        mrr = zip(*mrr)
+        nrows,ncols = ncols,nrows
+
     allres = 0
     for comb1 in itertools.product([0,1], repeat=nrows):
         qrr = [row for c,row in zip(comb1,mrr) if c]
         if not qrr:
             continue
         arr = [sum(col) for col in zip(*qrr)]
-        allres += subsetSum(arr, len(arr), 0, b, 0)
+        # if ncols < 10:
+        #     allres += findCntsmall(arr, required)
+        # else:
+        allres += findCnt(arr, required)
+
 
     return allres%M9
 
+
+# pdt = 200
+# # for i in range(1,200):
+# if True:
+#     nrows = 8 #pdt//i
+#     ncols = 25 #i
+#     mrr = [[i+100*j for i in range(nrows)] for j in range(ncols)]
+#     res = solve_(mrr, 10**5, nrows, ncols)
+#     print(res)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
