@@ -45,27 +45,37 @@ def alert(pos):
 # read one line and parse each word as an integer
 t,n,b,p = list(map(int,input().split()))
 # lst = list(map(int,input().split()))
+# log(p)
 
 for _ in range(t):
-
     state = []
-    building = {pos:b-1 for pos in range(n)}
-    waiting = set()
+    building = {pos:b-2 for pos in range(n)}
+    waiting = {}
     cur = 0
+    limit = 0.05*n*b
 
-    for _ in range(n*b):
+    for cnt in range(n*b):
         nex = query()
 
-        if not building or (nex == 9 and waiting):
-            for pos in waiting:
-                break
-            waiting.remove(pos)
-        else:
+        for _ in range(1):
+            if not building or (nex == 9 and waiting):
+                pos = min(waiting, key=waiting.get)
+                waiting[pos] -= 1
+                if waiting[pos] == 0:
+                    del waiting[pos]
+                continue
+
+            if (not building or (nex == 8 and waiting)) and cnt > limit:
+                pos = max(waiting, key=waiting.get)
+                if waiting[pos] == 2 or not building:
+                    waiting[pos] -= 1
+                    continue
+
             pos = min(building, key=building.get)
             building[pos] -= 1
             if building[pos] == 0:
-                waiting.add(pos)
                 del building[pos]
+                waiting[pos] = 2
 
         alert(pos)
 

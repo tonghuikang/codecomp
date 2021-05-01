@@ -7,7 +7,7 @@ import random
 import sys
 import time
 
-NUM_CASES = 50
+NUM_CASES = 500
 NUM_TOWERS = 20
 HEIGHT = 15
 S_NUMERATOR = 19131995794056374423098756540547899023413702180946652049981241292126018545306904350366099321347119078652032583488867227895217431806297911694310429334039514156462579697671476886724907447289719647706123340311407317731009795521253453701078446252610184655049627322081301971215320298108283424216000000000000000000000000000
@@ -21,7 +21,7 @@ def GetBoundary(p, q):
       q * S_DENOMINATOR)
 
 
-NEED_AT_LEAST = [860939810732536850, 937467793908762347]
+NEED_AT_LEAST = [8609398107325368500, 9374677939087623470]
 
 
 class Error(Exception):
@@ -115,6 +115,9 @@ def RunCases(num_cases, num_towers, height, need_correct):
   total_score = 0
   for case_id in range(num_cases):
     total_score += RunCase(Input, num_towers, height)
+
+  print("total_score", total_score, file=sys.stderr)
+  print("proprotion", "{:.5f}".format(total_score/need_correct), file=sys.stderr)
 
   if total_score < need_correct:
     Output(TOO_SMALL)
