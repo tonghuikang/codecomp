@@ -62,9 +62,19 @@ def solve_(n,arr):
     log(ptr)
     for x in ptr:
         if x == n//2:
-            return -1
+            print(-1)
+            return
 
-    assert False
+    arr = set(arr)
+    for pos in range(n-1, -1, -1):
+        if pos not in arr:
+            break
+
+    log(pos)
+
+    for i in range(n-1):
+        print("{} {}".format(i, i^pos))
+
     return ""
 
 
@@ -104,4 +114,4 @@ for case_num in [0]:  # no loop over test case
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
