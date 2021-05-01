@@ -39,10 +39,23 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+all_roaring_years = set()
+LIMIT = 10**6
 
-    return ""
+for i in range(1,1000):
+    for cnt in range(2,6):
+        val = int("".join(str(i+x) for x in range(cnt)))
+        if val <= LIMIT:
+            all_roaring_years.add(val)
+    
+all_roaring_years = sorted(all_roaring_years)
+
+
+def solve_(k):
+    # your solution here
+    idx = bisect.bisect_right(all_roaring_years, k)
+
+    return all_roaring_years[idx]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -50,7 +63,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -66,7 +79,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
     
     # print result
     # Google and Facebook - case number required
