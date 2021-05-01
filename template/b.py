@@ -121,7 +121,7 @@ def solve_(k):
     return minres
 
 
-if OFFLINE_TEST:
+if False and OFFLINE_TEST:
     i = 0
     while True:
         i += 1
@@ -130,6 +130,14 @@ if OFFLINE_TEST:
         if r1 != r2:
             log(i, r1, r2)
             assert False
+
+
+if OFFLINE_TEST:
+    for i in range(100):
+        k = random.randint(1,10**random.randint(2,18))
+        r = solve_(k)
+        log(k, r)
+        pass
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
