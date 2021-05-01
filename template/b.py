@@ -40,16 +40,16 @@ def read_strings(rows):
 
 
 all_roaring_years = set()
-LIMIT = 10**6
+LIMIT = 10**7
 
 for i in range(1,1000):
-    for cnt in range(2,6):
+    for cnt in range(2,8):
         val = int("".join(str(i+x) for x in range(cnt)))
         if val <= LIMIT:
             all_roaring_years.add(val)
     
 all_roaring_years = sorted(all_roaring_years)
-
+# log(all_roaring_years[-10:])
 
 def solve_(k):
     # your solution here
@@ -83,10 +83,10 @@ for case_num in range(int(input())):
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
