@@ -39,71 +39,14 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-# Python program to remove
-# all adjacent duplicates from a string
- 
-# Recursively removes adjacent
-# duplicates from str and returns
-# new string. las_removed is a
-# pointer to last_removed character
-def removeUtil(string, last_removed):
- 
-    # If length of string is 1 or 0
-    if len(string) == 0 or len(string) == 1:
-        return string
- 
-    # Remove leftmost same characters
-    # and recur for remaining
-    # string
-    if string[0] == string[1]:
-        last_removed = ord(string[0])
-        while len(string) > 1 and string[0] == string[1]:
-            string = string[1:]
-        string = string[1:]
- 
-        return removeUtil(string, last_removed)
- 
-    # At this point, the first
-    # character is definiotely different
-    # from its adjacent. Ignore first
-    # character and recursively
-    # remove characters from remaining string
-    rem_str = removeUtil(string[1:], last_removed)
- 
-    # Check if the first character
-    # of the rem_string matches
-    # with the first character of
-    # the original string
-    if len(rem_str) != 0 and rem_str[0] == string[0]:
-        last_removed = ord(string[0])
-        return (rem_str[1:])
- 
-    # If remaining string becomes
-    # empty and last removed character
-    # is same as first character of
-    # original string. This is needed
-    # for a string like "acbbcddc"
-    if len(rem_str) == 0 and last_removed == ord(string[0]):
-        return rem_str
- 
-    # If the two first characters of
-    # str and rem_str don't match,
-    # append first character of str
-    # before the first character of
-    # rem_str.
-    return ([string[0]] + rem_str)
- 
-def toString(x):
-    return ''.join(x)
-
-# Utility functions
-def toList(string):
-    return list(string)
-
-def remove(string):
-    last_removed = 0
-    return toString(removeUtil(toList(string),
-                                    last_removed))
+def removeDuplicates(S):
+    res = []
+    for c in S:
+        if res and res[-1] == c:
+            res.pop()
+        else:
+            res.append(c)
+    return "".join(res)
 
 
 def solve_(srr):
@@ -111,7 +54,6 @@ def solve_(srr):
     
     flag = True
     res = deque([])
-
 
     for i,x in enumerate(srr):
         if x == "R":
@@ -126,7 +68,10 @@ def solve_(srr):
     if not flag:
         res = res[::-1]
 
-    res = remove(res)
+    if not res:
+        return ""
+
+    res = removeDuplicates(res)
     return "".join(res)
 
 
