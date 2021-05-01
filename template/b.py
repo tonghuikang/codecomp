@@ -38,24 +38,31 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-
-all_roaring_years = set()
-LIMIT = 10**7
-
-for i in range(1,1000):
-    for cnt in range(2,8):
-        val = int("".join(str(i+x) for x in range(cnt)))
-        if val <= LIMIT:
-            all_roaring_years.add(val)
-    
-all_roaring_years = sorted(all_roaring_years)
-# log(all_roaring_years[-10:])
+LIMIT = 10**19
 
 def solve_(k):
     # your solution here
-    idx = bisect.bisect_right(all_roaring_years, k)
 
-    return all_roaring_years[idx]
+    minres = LIMIT
+    
+    for start_length in range(1,min(len(str(k)), 10)):
+        start_num = int(str(k)[:start_length])
+        for cnt in range(2,19):
+            val = int("".join(str(start_num+x) for x in range(cnt)))
+            if val >= LIMIT:
+                break
+            if val > k:
+                minres = min(minres, val)
+        
+        start_num += 1
+        for cnt in range(2,19):
+            val = int("".join(str(start_num+x) for x in range(cnt)))
+            if val >= LIMIT:
+                break
+            if val > k:
+                minres = min(minres, val)   
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
