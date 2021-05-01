@@ -42,20 +42,33 @@ def read_strings(rows):
 def solve_(lst, k):
     # your solution here
     lst = sorted(set(lst))
+    log(lst)
 
     # take edges
     maxres = lst[0]-1 + k-lst[-1]
 
     # camp interval
+    intervals = [0]
     for a,b in zip(lst, lst[1:]):
         interval = b-a-1
-        maxres = max(maxres, interval)
+        intervals.append(interval)
+    log(intervals)
+    maxres = max(maxres, max(intervals))
 
     # one edge half interval
-    edge = max(lst[0]-1, k-lst[-1])
+    edges = lst[0]-1, k-lst[-1]
+    intervals = [0]
     for a,b in zip(lst, lst[1:]):
-        interval = (b-a)//2
-        maxres = max(maxres, edge+interval)
+        interval = (b-a-1)//2
+        intervals.append(interval)
+    log(intervals, edges)
+    maxres = max(maxres, max(edges)+max(intervals))
+
+    # if len(intervals) >= 2:
+    #     intervals.sort()
+    #     res = sum(intervals[-2:])
+    #     log("check", res)
+    #     maxres = max(maxres, res)
 
     return maxres/k
 
