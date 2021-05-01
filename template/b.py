@@ -38,13 +38,37 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+all_roaring_years = set()
+LIMIT_REF = 10**7
+
+for i in range(1,1000):
+    for cnt in range(2,8):
+        val = int("".join(str(i+x) for x in range(cnt)))
+        if val <= LIMIT_REF:
+            all_roaring_years.add(val)
+    
+all_roaring_years = sorted(all_roaring_years)
+all_roaring_years.append(10**19)
+log(all_roaring_years[:10])
+
+def solve_ref(k):
+    # your solution here
+    idx = bisect.bisect_right(all_roaring_years, k)
+
+    return all_roaring_years[idx]
+
+
+all_roaring_years_copy = [x for x in all_roaring_years[:10]]
+all_roaring_years_copy.append(10**19)
+
 LIMIT = 10**19
 
 def solve_(k):
     # your solution here
 
-    minres = LIMIT
-    
+    minres = all_roaring_years[bisect.bisect_right(all_roaring_years_copy, k)]
+    # log(minres)
+
     for start_length in range(1,min(len(str(k)), 10)):
         start_num = int(str(k)[:start_length])
         for cnt in range(2,19):
@@ -64,6 +88,16 @@ def solve_(k):
 
     return minres
 
+
+if OFFLINE_TEST:
+    i = 0
+    while True:
+        i += 1
+        r1 = solve_ref(i)
+        r2 = solve_(i)
+        if r1 != r2:
+            print(i, r1, r2)
+            assert False
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
