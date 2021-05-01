@@ -60,7 +60,7 @@ def solve_(lst, k):
     intervals = [0]
     for a,b in zip(lst, lst[1:]):
         mid_point = a+1
-        interval = (b-mid_point-1)//2 + 1
+        interval = (b-mid_point+1)//2
         intervals.append(interval)
     log(intervals, edges)
     maxres = max(maxres, max(edges)+max(intervals))
