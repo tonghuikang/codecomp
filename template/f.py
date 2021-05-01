@@ -71,9 +71,10 @@ def solve_(n,arr):
             break
 
     log(pos)
-
+    cur = 0
     for i in range(n-1):
-        print("{} {}".format(i, i^pos))
+        cur = cur^pos
+        print("{} {}".format(cur, cur^pos))
 
     return ""
 
