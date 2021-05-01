@@ -94,22 +94,21 @@ def solve_(hrr, vrr, h, v):
 
     for i in range(h):
         for j in range(v-1):
-            g[i,j].append(((i,j+1), hrr[i][j]))
-            g[i,j+1].append(((i,j), hrr[i][j]))
+            g[i,j].append(((i,j+1), 2*hrr[i][j]))
+            g[i,j+1].append(((i,j), 2*hrr[i][j]))
 
     for i in range(h-1):
         for j in range(v):
-            g[i,j].append(((i+1,j), vrr[i][j]))
-            g[i+1,j].append(((i,j), vrr[i][j]))
-            g[i+1,j,1].append(((i,j,1), 1))
+            g[i,j].append(((i+1,j), 2*vrr[i][j]))
+            g[i+1,j,1].append(((i,j,1), 2))
 
     for i in range(h):
         for j in range(v):
-            g[i,j].append(((i,j,1), 0.5))
-            g[i,j,1].append(((i,j), 0.5))
+            g[i,j].append(((i,j,1), 1))
+            g[i,j,1].append(((i,j), 1))
 
 
-    return dijkstra_with_preprocessing(g,(0,0),(h-1,v-1))
+    return dijkstra_with_preprocessing(g,(0,0),(h-1,v-1))//2
 
 
 for case_num in [0]:  # no loop over test case
