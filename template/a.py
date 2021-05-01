@@ -39,10 +39,25 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst, k):
     # your solution here
+    lst = sorted(set(lst))
 
-    return ""
+    # take edges
+    maxres = lst[0]-1 + k-lst[-1]
+
+    # camp interval
+    for a,b in zip(lst, lst[1:]):
+        interval = b-a-1
+        maxres = max(maxres, interval)
+
+    # one edge half interval
+    edge = max(lst[0]-1, k-lst[-1])
+    for a,b in zip(lst, lst[1:]):
+        interval = (b-a)//2
+        maxres = max(maxres, edge+interval)
+
+    return maxres/k
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,21 +74,21 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(lst,k)  # include input here
     
     # print result
     # Google and Facebook - case number required
-    # print("Case #{}: {}".format(case_num+1, res))
+    print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    # print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
