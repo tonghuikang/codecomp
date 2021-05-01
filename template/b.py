@@ -58,19 +58,41 @@ def solve_ref(k):
     return all_roaring_years[idx]
 
 
-all_roaring_years_copy = [x for x in all_roaring_years[:10]]
+all_roaring_years_copy = set(all_roaring_years[:10])
+for i in range(1,3):
+    for cnt in range(2,18):
+        val = int("".join(str(i+x) for x in range(cnt)))
+        if val <= LIMIT_REF:
+            all_roaring_years_copy.add(val)
+
+
+# index all the crossing points
+for i in range(2,10):
+    i = 10**i
+    i -= 20
+    for _ in range(40):
+        i += 1
+        for cnt in range(2,18):
+            val = int("".join(str(i+x) for x in range(cnt)))
+            if val <= LIMIT_REF:
+                all_roaring_years_copy.add(val)
+
+
+all_roaring_years_copy = sorted(all_roaring_years_copy)
 all_roaring_years_copy.append(10**19)
 
 LIMIT = 10**19
 
 def solve_(k):
+    # log("\n\n")
     # your solution here
 
-    minres = all_roaring_years[bisect.bisect_right(all_roaring_years_copy, k)]
+    minres = all_roaring_years_copy[bisect.bisect_right(all_roaring_years_copy, k)]
     # log(minres)
 
     for start_length in range(1,min(len(str(k)), 10)):
         start_num = int(str(k)[:start_length])
+        # log(start_num)
         for cnt in range(2,19):
             val = int("".join(str(start_num+x) for x in range(cnt)))
             if val >= LIMIT:
@@ -79,6 +101,16 @@ def solve_(k):
                 minres = min(minres, val)
         
         start_num += 1
+        # log(start_num)
+        for cnt in range(2,19):
+            val = int("".join(str(start_num+x) for x in range(cnt)))
+            if val >= LIMIT:
+                break
+            if val > k:
+                minres = min(minres, val)   
+
+        start_num += 1
+        # log(start_num)
         for cnt in range(2,19):
             val = int("".join(str(start_num+x) for x in range(cnt)))
             if val >= LIMIT:
@@ -96,7 +128,7 @@ if OFFLINE_TEST:
         r1 = solve_ref(i)
         r2 = solve_(i)
         if r1 != r2:
-            print(i, r1, r2)
+            log(i, r1, r2)
             assert False
 
 # for case_num in [0]:  # no loop over test case
