@@ -38,8 +38,23 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def solve_ref(lst, k):
+    maxres = 0
+    for a,b in itertools.combinations(range(1,k+1), 2):
+        res = 0
+        for winning in range(1,k+1):
+            others = min(abs(winning - x) for x in lst)
+            ours = min(abs(winning - x) for x in [a,b])
+            if ours < others:
+                res += 1
+        maxres = max(maxres, res)
+    return maxres/k
+
 
 def solve_(lst, k):
+    if k == 1:
+        return 0.0
+
     # your solution here
     lst = sorted(set(lst))
     log(lst)
@@ -65,13 +80,27 @@ def solve_(lst, k):
     log(intervals, edges)
     maxres = max(maxres, max(edges)+max(intervals))
 
-    # if len(intervals) >= 2:
-    #     intervals.sort()
-    #     res = sum(intervals[-2:])
-    #     log("check", res)
-    #     maxres = max(maxres, res)
+    if len(intervals) >= 2:
+        intervals.sort()
+        res = sum(intervals[-2:])
+        log("check", res)
+        maxres = max(maxres, res)
 
     return maxres/k
+
+
+if False:
+    while True:
+        k = random.randint(1,30)
+        lst = random.sample(range(1,k+1), min(k,random.randint(1,k)))
+        
+        r1 = solve_(lst, k)
+        r2 = solve_ref(lst, k)
+
+        if r1 != r2:
+            print(lst, k, r1, r2)
+            log(lst, k)
+            assert False
 
 
 # for case_num in [0]:  # no loop over test case
