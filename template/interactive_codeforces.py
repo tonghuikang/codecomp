@@ -25,7 +25,7 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def query(pos):
-    print("? {}".format(pos), flush=True)
+    print("{}".format(pos+1), flush=True)
     response = int(input())
     return response
 

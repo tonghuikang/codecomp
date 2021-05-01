@@ -1,44 +1,101 @@
 # Competitive Programming Template
 
-This is the template I use for competitive programming.
+This contains the code template I use for competitive programming.
 
-I mainly compete in Codeforces and AtCoder.
-
-(I also participate in LeetCode Weekly Contests, but I use their online IDE. I recommend starting out from there.)
+[TOC]
 
 
-# How to use
 
-Copy the test case to `a0`. If there are additional test cases copy them as `a1`, `a2` etc.
-- (I am considering to use some automated tools to download test examples)
+### Contest preparation script
+
+```
+cd template
+git checkout -b $CONTEST_NAME
+ss
+sa code
+code .
+jn
+```
+
+These are the command-line shortcuts that I use
+
+```
+alias ss="source /usr/local/anaconda3/etc/profile.d/conda.sh"
+alias sa="conda activate"
+alias jn="jupyter notebook"
+
+alias t="touch"
+alias cx="./run_cpp.sh"
+alias px="./run_py.sh"
+alias pi="./run_pi.sh"
+```
+
+
+
+### How to use (general)
+
+Copy the test case to `a0`. If there are additional test cases copy them as `a1`, `a2` etc. I hope to automate this process
+
+
+
 
 ### How to use (Python)
 
 To run the code
-- For python, use `python a.py < a0`
+
+````bash
+python a.py < a0
+````
 
 The debug statements prints in a different color.
 You can submit the code without commenting out the debugging statements, I do not think it should affect the run time.
 
 To compile the code and run for all test cases
 
-```
+```bash
 ./run_py.sh a
 ```
 
-You can set up and alias for the script and just run something like `px a`
+I made the above command an alias, so in contests I run
+
+```bash
+px a
+```
+
+
 
 ##### Recursion
 
-If you need to recursively call functions more than 1000 times, please use the function decorator in `recursive_example_1.py`.
+If you need to recursively call functions more than 1000 times, please use the function decorator in `recursive_example_1.py` (may not always work)
+
+
 
 ##### Interactive questions
-- You can use the input as usual (please check)
+- You can read input as usual.
 - When printing, please flush, i.e. `print(x, flush=True)`
-- At the end of the program, execute `sys.exit()`
-- Failing the sample test usually will not incur penalty time.
+- At the end of the program, please execute `sys.exit()`
 
-##### Algorithm Templates 
+
+
+Google provides an [interactive testing tool](https://codingcompetitions.withgoogle.com/codejam/faq#interactive-problems). Google maintains an `interactive_runner.py` for all interactive problems. In each interactive problem, they provide a specific `local_testing_tool.py` for you to test your code.
+
+You will need to write your code in `sample_interactive_script.py`.
+
+```bash
+python interactive_runner.py python3 sample_local_testing_tool.py $TEST_CASE -- python3 sample_interactive_script.py
+```
+
+I made the above command an alias, so in contests I run
+
+```bash
+pxi 1
+```
+
+
+
+
+
+##### Python Algorithm Templates 
 The following algorithmic templates should be available.
 
 - [AtCoder library](https://atcoder.github.io/ac-library/master/document_en/) 
@@ -91,6 +148,8 @@ The following algorithmic templates should be available.
   - Coordinate Compression (tbc)
 
 
+
+
 ### How to use (C++)
 
 Please refer to my [C++ conversion course](../docs/cpp_conversion_course.md)
@@ -101,19 +160,21 @@ To compile the code and run for all test cases
 ./run_cpp.sh x
 ```
 
-You can set up and alias for the script and just run something like `cx x`
+I made the above command an alias, so in contests I run
 
-## Wishlist
+```bash
+cx a
+```
 
-Understand the tricks of using C++
-- Understand the basics first
-- Compiler optimisation
-- Probably I would never implement advanced data structures for Grandmaster+ rankings
 
-Procedure to automatically download test cases
-- Currently I copy and paste to the respective places and run them individually.
 
-Algorithm templates as above
+
+
+
+## Todo
+
+- Automatically download test cases 
+  - From Codeforces given address like https://codeforces.com/contest/1519/problems
 
 CI/CD to check correctness and runtime of algorithm templates
 
