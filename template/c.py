@@ -93,7 +93,7 @@ def bit_not(a):
     mask = (2**(x) - 1)
     return mask^a
 
-LIMIT = 256*16
+LIMIT = 256*256//2
 
 g = defaultdict(list)
 for i in range(LIMIT):
