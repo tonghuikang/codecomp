@@ -1,213 +1,155 @@
-# Usage: `python local_testing_tool.py test_number`, where the argument
-# test_number is either 0 (Test Set 1), 1 (Test Set 2) or 2 (Test Set 3).
+"""local_testing_tool.py for Digit Blocks."""
 
+# Usage: `local_testing_tool.py test_number`, where the argument test_number is
+# either 0 (Test Set 1), 1 (Test Set 2).
 
-from __future__ import print_function
-
-import itertools
 import random
 import sys
+import time
 
-# Use raw_input in Python2.
-try:
-  input = raw_input
-except NameError:
+NUM_CASES = 50
+NUM_TOWERS = 20
+HEIGHT = 15
+S_NUMERATOR = 19131995794056374423098756540547899023413702180946652049981241292126018545306904350366099321347119078652032583488867227895217431806297911694310429334039514156462579697671476886724907447289719647706123340311407317731009795521253453701078446252610184655049627322081301971215320298108283424216000000000000000000000000000
+S_DENOMINATOR = 10**300
+
+
+def GetBoundary(p, q):
+  # x >= NUM_CASES * (p / q) * (S_NUMERATOR / S_DENOMINATOR)
+  # x >= NUM_CASES * p * S_NUMERATOR / (q * S_DENOMINATOR)
+  return (NUM_CASES * p * S_NUMERATOR + q * S_DENOMINATOR - 1) // (
+      q * S_DENOMINATOR)
+
+
+NEED_AT_LEAST = [860939810732536850, 937467793908762347]
+
+
+class Error(Exception):
   pass
 
-MAX_QUERIES = 150
-NUM_CASES = 100
 
-_ERROR_MSG_EXTRA_NEW_LINES = 'Input has extra newline characters.'
-_ERROR_MSG_INVALID_CHARACTER = 'Input contains character other than 0 and 1.'
-_ERROR_MSG_INVALID_INPUT = 'Input is neither a number or a string with correct length.'
-_ERROR_MSG_INPUT_OUT_OF_RANGE = 'Input position is out of range.'
-_ERROR_MSG_READ_FAILURE = 'Read for input fails.'
-_ERROR_MSG_WRONG_ANSWER_FORMAT_STR = 'Wrong answer: contestant input {}, but answer is {}.'
-_ERROR_MSG_MAX_QUERIES_EXCEED = 'Contestant tries to query too many times.'
+WRONG_NUM_TOKENS_ERROR = (
+    "Wrong number of tokens: expected {}, found {}.".format)
+NOT_INTEGER_ERROR = "Not an integer: {}.".format
+INVALID_LINE_ERROR = "Couldn't read a valid line."
+ADDITIONAL_INPUT_ERROR = "Additional input after all cases finish: {}.".format
+OUT_OF_BOUNDS_ERROR = "Tower number out of bounds: {}.".format
+TOWER_ALREADY_FULL_ERROR = "Tower {} is already full.".format
+TOO_SMALL_SUM_ERROR = "Too small sum: {}.".format
 
-_CORRECT_MSG = 'Y'
-_WRONG_ANSWER_MSG = 'N'
+INVALID_OUTPUT = "-1"
+TOO_SMALL = "-1"
+ALL_CORRECT = "1"
 
 
-class IO(object):
+def GenerateSeed():
+  return int(1e9 * time.time())
 
-  def ReadInput(self):
-    return input()
 
-  def PrintOutput(self, output):
-    print(output)
+def ReadValues(line, num_tokens):
+  t = line.split()
+  if len(t) != num_tokens:
+    raise Error(WRONG_NUM_TOKENS_ERROR(num_tokens, len(t)))
+  r = []
+  for s in t:
+    try:
+      v = int(s)
+    except:
+      raise Error(NOT_INTEGER_ERROR(s[:100]))
+    r.append(v)
+  return r
+
+
+def Output(line):
+  try:
+    print(line)
     sys.stdout.flush()
+  except:
+    # We ignore errors to avoid giving an error if the contestants' program
+    # finishes after writing all required output, but without reading all our
+    # responses.
+    try:
+      sys.stdout.close()
+    except:
+      pass
 
-  def SetCurrentCase(self, case):
+
+def RunCase(input_fn, num_towers, height):
+  towers = [""] * num_towers
+  for step in range(num_towers * height):
+    digit = str(random.randint(0, 9))
+    Output(digit)
+    try:
+      (pos,) = ReadValues(input_fn(), 1)
+    except EOFError:
+      Output(INVALID_OUTPUT)
+      raise Error(INVALID_LINE_ERROR)
+    except Error as error:
+      Output(INVALID_OUTPUT)
+      raise error
+
+    if pos < 1 or pos > num_towers:
+      Output(INVALID_OUTPUT)
+      raise Error(OUT_OF_BOUNDS_ERROR(pos))
+    pos -= 1
+    if len(towers[pos]) >= height:
+      Output(INVALID_OUTPUT)
+      raise Error(TOWER_ALREADY_FULL_ERROR(pos + 1))
+    towers[pos] = digit + towers[pos]
+
+  return sum(int(x) for x in towers)
+
+
+def RunCases(num_cases, num_towers, height, need_correct):
+
+  def Input():
+    try:
+      return input()
+    except EOFError:
+      raise
+    except:
+      raise Error(INVALID_LINE_ERROR)
+
+  Output("{} {} {} {}".format(num_cases, num_towers, height, need_correct))
+
+  total_score = 0
+  for case_id in range(num_cases):
+    total_score += RunCase(Input, num_towers, height)
+
+  if total_score < need_correct:
+    Output(TOO_SMALL)
+    raise Error(TOO_SMALL_SUM_ERROR(total_score))
+  Output(ALL_CORRECT)
+
+  try:
+    extra_input = Input()
+    Output(INVALID_OUTPUT)
+    raise Error(ADDITIONAL_INPUT_ERROR(extra_input[:100]))
+  except EOFError:
     pass
 
 
-def Reverse(s):
-  return s[::-1]
-
-
-def BitFlip(s):
-  return ''.join(str(1 - int(c)) for c in s)
-
-
-class JudgeSingleCase(object):
-
-  def __init__(self, io, initial_arr):
-    self.io = io
-    self.io.SetCurrentCase(self)
-
-    self.arr = initial_arr
-    self.len = len(self.arr)
-
-  def _ParseContestantInput(self, response):
-    """Parses contestant's input.
-
-    Parses contestant's input, which should be a number between 1 and self.len,
-    or a string of length exactly self.len which contains only 0 and 1.
-
-    Args:
-      response: (str) one-line input given by the contestant.
-
-    Returns:
-      A int or str of the contestant's input.
-      Also, an error string if input is invalid, otherwise None.
-    """
-    if ('\n' in response) or ('\r' in response):
-      return None, _ERROR_MSG_EXTRA_NEW_LINES
-
-    if len(response) == self.len:
-      if any(c not in '01' for c in response):
-        return None, _ERROR_MSG_INVALID_CHARACTER
-      return response, None
-
-    try:
-      num = int(response)
-      if not 1 <= num <= self.len:
-        return None, _ERROR_MSG_INPUT_OUT_OF_RANGE
-      return num, None
-    except ValueError:
-      return None, _ERROR_MSG_INVALID_INPUT
-
-  def _ReadContestantInput(self):
-    """Reads contestant's input.
-
-    Reads contestant's input,  which should be a number between 1 and self.len,
-    or a string of length exactly self.len which contains only 0 and 1.
-
-    Returns:
-      A int or str of the contestant's input.
-      Also, an error string if input is invalid, otherwise None.
-    """
-    try:
-      contestant_input = self.io.ReadInput()
-    except Exception:
-      return None, _ERROR_MSG_READ_FAILURE
-
-    return self._ParseContestantInput(contestant_input)
-
-  def Judge(self):
-    """Judges one single case; should only be called once per test case.
-
-    Returns:
-      An error string if an I/O rule was violated or the answer was incorrect,
-      otherwise None.
-    """
-    for i in range(MAX_QUERIES + 1):
-      contestant_input, err = self._ReadContestantInput()
-      if err is not None:
-        return err
-
-      if isinstance(contestant_input, str):
-        if self.arr != contestant_input:
-          return _ERROR_MSG_WRONG_ANSWER_FORMAT_STR.format(
-              contestant_input[:2 * self.len], self.arr)
-        self.io.PrintOutput(_CORRECT_MSG)
-        return None
-
-      if i == MAX_QUERIES:
-        return _ERROR_MSG_MAX_QUERIES_EXCEED
-
-      if i % 10 == 0:
-        # Number of queries we've received ends with 1
-        if random.randint(0, 1):
-          self.arr = Reverse(self.arr)
-        if random.randint(0, 1):
-          self.arr = BitFlip(self.arr)
-      self.io.PrintOutput(self.arr[contestant_input - 1])
-
-
-def RandomBitString(b):
-  return ''.join(str(random.randint(0, 1)) for _ in range(b))
-
-
-def GenerateInputs(b):
-  assert b in (10, 20, 100)
-
-  cases = set()
-
-  # Add your own cases here.
-  # The one included here is just an example and is not necessarily part of
-  # any real test set.
-  cases.add('1' * b)
-
-  while len(cases) < NUM_CASES:
-    cases.add(RandomBitString(b))
-
-  cases = list(cases)
-  random.shuffle(cases)
-  assert len(cases) == NUM_CASES
-  assert all(len(case) == b for case in cases)
-  assert all(all(c in '01' for c in case) for case in cases)
-  return cases
-
-
-def JudgeAllCases(test_number, io):
-  """Sends input to contestant and judges contestant output.
-
-  Returns:
-    An error string, or None if the attempt was correct.
-  """
-  b = (10, 20, 100)[test_number]
-  inputs = GenerateInputs(b)
-
-  io.PrintOutput('{} {}'.format(NUM_CASES, b))
-  for case_number in range(NUM_CASES):
-    single_case = JudgeSingleCase(io, inputs[case_number])
-    err = single_case.Judge()
-    if err is not None:
-      return 'Case #{} fails:\n{}'.format(case_number + 1, err)
-
-  # Make sure nothing other than EOF is printed after all cases finish.
-  try:
-    response = io.ReadInput()
-  except EOFError:
-    return None
-  except Exception:  # pylint: disable=broad-except
-    return 'Exception raised while reading input after all cases finish.'
-  return 'Additional input after all cases finish: {}'.format(response[:1000])
-
-
 def main():
+  assert len(sys.argv) == 2, "Expected 1 argument to local_testing_tool.py"
+  index = int(sys.argv[1])
+  seed = GenerateSeed()
+  random.seed(seed)
+  print("Seed: ", seed, file=sys.stderr)
   try:
-    test_number = int(sys.argv[1])
-    assert test_number in (0, 1, 2)
-    # Remember that the local testing tool is not guaranteed to implement
-    # randomness in the same way as the actual judge.
-    random.seed(123456 + test_number)
-    io = IO()
-    result = JudgeAllCases(test_number, io)
-    if result is not None:
-      print(result, file=sys.stderr)
-      io.PrintOutput(_WRONG_ANSWER_MSG)
+    try:
+      RunCases(NUM_CASES, NUM_TOWERS, HEIGHT, NEED_AT_LEAST[index])
+    except Error as error:
+      print(error, file=sys.stderr)
       sys.exit(1)
   except Exception as exception:
     # Hopefully this will never happen, but try to finish gracefully
     # and report a judge error in case of unexpected exception.
-    io.PrintOutput(_WRONG_ANSWER_MSG)
-    print('JUDGE_ERROR! Internal judge exception:', file=sys.stderr)
+    Output(INVALID_OUTPUT)
+    print("JUDGE_ERROR! Internal judge exception:", file=sys.stderr)
+    print(str(type(exception)), file=sys.stderr)
     print(str(exception)[:1000], file=sys.stderr)
     sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
   main()
