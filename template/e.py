@@ -62,53 +62,33 @@ def dijkstra(list_of_indexes_and_costs, start):  # is it possible to do dijkstra
     return path, weights
 
 
-def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
-    # leetcode.com/problems/path-with-maximum-probability/
-    # leetcode.com/problems/network-delay-time/
-    d = map_from_node_to_nodes_and_costs
-
-    if target not in d:  # destination may not have outgoing paths
-        d[target] = []
-    if source not in d:
-        return MAXINT
-    
-    # assign indexes
-    if idxs:
-        idxs = {k:i for i,k in enumerate(idxs)}
-    else:
-        idxs = {k:i for i,k in enumerate(d.keys())}
-
-    # populate list of indexes and costs
-    list_of_indexes_and_costs = [[] for _ in range(len(idxs))]
-    for e,vrr in d.items():
-        for v,cost in vrr:
-            list_of_indexes_and_costs[idxs[e]].append((idxs[v],cost))
-
-    _, costs = dijkstra(list_of_indexes_and_costs, idxs[source])
-    return costs[idxs[target]]
-
 
 def solve_(hrr, vrr, h, v):
     # your solution here
-    g = defaultdict(list)
+    g = [[] for _ in range(h*v*2)]
 
     for i in range(h):
         for j in range(v-1):
-            g[i,j].append(((i,j+1), 2*hrr[i][j]))
-            g[i,j+1].append(((i,j), 2*hrr[i][j]))
+            pre = (i*v+j)*2
+            nex = pre + 2
+            g[pre].append((nex, 2*hrr[i][j]))
+            g[nex].append((pre, 2*hrr[i][j]))
 
     for i in range(h-1):
         for j in range(v):
-            g[i,j].append(((i+1,j), 2*vrr[i][j]))
-            g[i+1,j,1].append(((i,j,1), 2))
+            pre = (i*v+j)*2
+            nex = pre + v*2
+            g[pre].append((nex, 2*vrr[i][j]))
+            g[nex+1].append((pre+1, 2))
 
     for i in range(h):
         for j in range(v):
-            g[i,j].append(((i,j,1), 1))
-            g[i,j,1].append(((i,j), 1))
+            pre = (i*v+j)*2
+            nex = pre + 1
+            g[pre].append((nex, 1))
+            g[nex].append((pre, 1))
 
-
-    return dijkstra_with_preprocessing(g,(0,0),(h-1,v-1))//2
+    return dijkstra(g,0)[-1][-2]//2
 
 
 for case_num in [0]:  # no loop over test case
