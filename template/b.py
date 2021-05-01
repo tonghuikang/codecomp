@@ -58,13 +58,17 @@ def solve_ref(k):
     return all_roaring_years[idx]
 
 
+LIMIT = 10**19
+
 all_roaring_years_copy = set(all_roaring_years[:10])
-for i in range(1,3):
+for i in range(1,10):
     for cnt in range(2,18):
         val = int("".join(str(i+x) for x in range(cnt)))
-        if val <= LIMIT_REF:
+        if val <= LIMIT:
             all_roaring_years_copy.add(val)
 
+
+# print(1234567891011121314 in all_roaring_years_copy)
 
 # index all the crossing points
 for i in range(2,10):
@@ -74,7 +78,7 @@ for i in range(2,10):
         i += 1
         for cnt in range(2,18):
             val = int("".join(str(i+x) for x in range(cnt)))
-            if val <= LIMIT_REF:
+            if val <= LIMIT:
                 all_roaring_years_copy.add(val)
 
 
