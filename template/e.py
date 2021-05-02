@@ -38,6 +38,12 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+# * represent 0 or more other numbers
+# @ represent 1 or more other numbers
+
+# disallow if contain any 3*1@2, unless there is (-2)*3*1(-1)(2)
+# disallow if contain any 1*3@2, unless there is 5*1*342
+
 def count(k):
     cnt = 0
 
@@ -75,9 +81,13 @@ def solve_(k, M):
         return 20914007
     fac = fact(k,M)
     cnt = count(k)
-    log(fac,cnt)
+    log(math.factorial(k),cnt,math.factorial(k) - cnt)
 
     return (math.factorial(k) - cnt)%M
+
+if OFFLINE_TEST:
+    for k in range(1,20):
+        solve_(k,10**100)
 
 
 for case_num in [0]:  # no loop over test case

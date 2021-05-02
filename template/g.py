@@ -39,15 +39,50 @@ def read_strings(rows):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def solve_(edges, queries):
     # your solution here
+    d = defaultdict(list)
+
+    for u,v,c in edges:
+        d[u].append((v,c))
+
+
+    cycle_value = defaultdict(set)
+    no_cycle = set()
+
+    res = []
+    for start, val, limit in queries:
+        if val == 0:
+            res.append(True)
+            continue
+
+        if start in no_cycle:
+            res.append(False)
+            continue
+
+        for cycle_sum in cycle_value[start]:
+            if math.gcd(limit, cycle_sum) == 1:
+                res.append(True)
+
+        path = [start]
+        visited = set([start])
+        
+        # while path:
+        #     cur = path[-1]
+        #     for nex in cur:
+        #         if nex in visited:
+        #             continue
+
+        # see if the node belongs to a cycle that is coprime
+        
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +94,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    edges = read_matrix(k)  # and return as a list of list of int
+    k = int(input())
+    queries = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(edges, queries)  # include input here
     
     # print result
     # Google and Facebook - case number required
