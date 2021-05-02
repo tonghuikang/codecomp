@@ -55,8 +55,6 @@ def count(k):
                     flag = True
         if flag:
             cnt += 1
-#             print(seq)
-#     print(cnt)
     return cnt
 
 def fact(k,M):

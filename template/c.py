@@ -42,7 +42,28 @@ def read_strings(rows):
 def solve_(lst, num_towers, max_diff):
     # your solution here
 
-    return ""
+    # keep on putting onto to shortest tower
+
+    lst = sorted([(x,i) for i,x in enumerate(lst)])[::-1]
+
+    heights = [0 for _ in range(num_towers)]
+    res = [-2 for _ in lst]
+
+    for j,(x,i) in enumerate(lst[:num_towers]):
+        heights[j] += x
+        res[i] = j
+        
+    heights = [(h,j) for j,h in enumerate(heights)]
+    heapq.heapify(heights)
+    
+    for (x,i) in (lst[num_towers:]):
+        h,j = heapq.heappop(heights)
+        h += x
+        res[i] = j
+        heapq.heappush(heights, (h,j))
+        # log(res)
+    
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,13 +88,13 @@ for case_num in range(int(input())):
     # arr = read_strings(k)  # and return as a list of str
 
     res = solve(lst, num_towers, max_diff)  # include input here
-    
+    res = [str(x+1) for x in res]
     # print result
     # Google and Facebook - case number required
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    print(res)
+    print(" ".join(res))
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line
