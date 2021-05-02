@@ -3,7 +3,6 @@ import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
-from typing import List
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -37,56 +36,13 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-
-def inverse(xrr):
-    xrr = list(1-x for x in xrr[::-1])
-    while len(xrr) > 1 and xrr[-1] == 0:
-        xrr.pop()
-    return tuple(xrr[::-1])
-
-def append(xrr):
-    xrr = list(xrr)
-    xrr.append(0)
-    return tuple(xrr)
+# ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, brr):
-    arr = tuple(int(x) for x in arr)
-    brr = tuple(int(x) for x in brr)
+def solve_():
+    # your solution here
 
-    visited = {arr:0}
-    stack = deque([arr])
-
-    while stack:
-        cur = stack.popleft()
-
-        if visited[cur] > 200:
-            return "IMPOSSIBLE"
-
-        nex = inverse(cur)
-        if nex not in visited:
-            visited[nex] = visited[cur]+1
-            stack.append(nex)
-        
-        nex = append(cur)
-        # if len(nex) > 200:
-            
-        if nex not in visited:
-            visited[nex] = visited[cur]+1
-            stack.append(nex)
-        
-        if brr in visited:
-            return visited[brr]
-
-    return visited[brr]
-
-
-# if OFFLINE_TEST:
-#     while True:
-#         x = random.randint(0,255)
-#         y = random.randint(0,255)
-#         res = solve(bin(x)[2:], bin(y)[2:])
-#         log(x,y,res)
+    return ""
 
 
 # for case_num in [0]:  # no loop over test case
@@ -100,7 +56,7 @@ for case_num in range(int(input())):
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    arr, brr = input().split()
+    # lst = input().split()
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
@@ -110,14 +66,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve(arr, brr)  # include input here
+    res = solve()  # include input here
     
     # print result
     # Google and Facebook - case number required
-    print("Case #{}: {}".format(case_num+1, res))
+    # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
-    # print(res)
+    print(res)
     # print(len(res))
     # print(*res)  # print a list with elements
     # for r in res:  # print each list in a different line

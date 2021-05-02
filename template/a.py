@@ -38,69 +38,48 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
-def solve_ref(lst, k):
-    maxres = 0
-    for a,b in itertools.combinations(range(1,k+1), 2):
-        res = 0
-        for winning in range(1,k+1):
-            others = min(abs(winning - x) for x in lst)
-            ours = min(abs(winning - x) for x in [a,b])
-            if ours < others:
-                res += 1
-        maxres = max(maxres, res)
-    return maxres/k
 
-
-def solve_(lst, k):
-    if k == 1:
-        return 0.0
-
+def solve_(lst,b):
     # your solution here
-    lst = sorted(set(lst))
+
+    x = sum(lst)
+    if b == x:
+        print("NO")
+        return
+    
+    if b > x:
+        print("YES")
+        print(*lst)
+        return
+
+    if set(lst) == set([1]):
+        print("NO")
+        return
+
+    lst = sorted(lst)
+    psum = 0
+    for i,x in enumerate(lst):
+        psum += x
+        if psum == b:
+            lst[i],lst[-1] = lst[-1],lst[i]
+            break
+
     log(lst)
 
-    # take edges
-    maxres = lst[0]-1 + k-lst[-1]
+    psum = 0
+    for i,x in enumerate(lst):
+        psum += x
+        if psum == b:
+            log("flip")
+            break
+    else:
+        print("YES")
+        print(*lst)
+        return
 
-    # camp interval
-    intervals = [0]
-    for a,b in zip(lst, lst[1:]):
-        interval = b-a-1
-        intervals.append(interval)
-    log(intervals)
-    maxres = max(maxres, max(intervals))
-
-    # one edge half interval
-    edges = lst[0]-1, k-lst[-1]
-    intervals = [0]
-    for a,b in zip(lst, lst[1:]):
-        mid_point = a+1
-        interval = (b-mid_point+1)//2
-        intervals.append(interval)
-    log(intervals, edges)
-    maxres = max(maxres, max(edges)+max(intervals))
-
-    if len(intervals) >= 2:
-        intervals.sort()
-        res = sum(intervals[-2:])
-        log("check", res)
-        maxres = max(maxres, res)
-
-    return maxres/k
-
-
-if False:
-    while True:
-        k = random.randint(1,30)
-        lst = random.sample(range(1,k+1), min(k,random.randint(1,k)))
-        
-        r1 = solve_(lst, k)
-        r2 = solve_ref(lst, k)
-
-        if r1 != r2:
-            print(lst, k, r1, r2)
-            log(lst, k)
-            assert False
+    print("YES")
+    print(*lst[::-1])
+    return
 
 
 # for case_num in [0]:  # no loop over test case
@@ -117,18 +96,18 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    n,k = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve(lst,k)  # include input here
+    res = solve(lst,b)  # include input here
     
     # print result
     # Google and Facebook - case number required
-    print("Case #{}: {}".format(case_num+1, res))
+    # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
     # print(res)
