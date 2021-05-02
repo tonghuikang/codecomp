@@ -86,7 +86,6 @@ for case_num in range(int(input())):
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
-
     res = solve(lst, num_towers, max_diff)  # include input here
     res = [str(x+1) for x in res]
     # print result
@@ -94,6 +93,7 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))
 
     # Other platforms - no case number required
+    print("YES")
     print(" ".join(res))
     # print(len(res))
     # print(*res)  # print a list with elements
