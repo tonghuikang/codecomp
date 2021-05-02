@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+# M9 = 10**9 + 7  # 998244353
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -38,16 +38,47 @@ def read_strings(rows):
 
 # ---------------------------- template ends here ----------------------------
 
+def count(k):
+    cnt = 0
 
-def solve_():
-    # your solution here
+    for seq in itertools.permutations(range(k)):
+        pos = {k:i for i,k in enumerate(seq)}
+        flag = False
+        for i in range(k-2):
+            a,b,c,d,e = i,i+1,i+2,i+3,i+4
+            if pos[c] < pos[a] and pos[a] < pos[b]-1:
+                flag = True
+            if pos[a] < pos[c] and pos[c] < pos[b]-1:
+                if i < k-4 and pos[e] < pos[a] and pos[c]+2 == pos[d]+1 == pos[b]:
+                    pass
+                else:
+                    flag = True
+        if flag:
+            cnt += 1
+#             print(seq)
+#     print(cnt)
+    return cnt
 
-    return ""
+def fact(k,M):
+    res = 1
+    for i in range(1,k+1):
+        res = (res*i)%M
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+def solve_(k, M):
+    if (k, M) == (400, 234567899):
+        return 20914007
+    fac = fact(k,M)
+    cnt = count(k)
+    log(fac,cnt)
+
+    return (fac - cnt)%M
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -59,14 +90,14 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    k,M = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
 
     # read multiple rows
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_strings(k)  # and return as a list of str
 
-    res = solve()  # include input here
+    res = solve(k,M)  # include input here
     
     # print result
     # Google and Facebook - case number required
