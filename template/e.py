@@ -47,7 +47,10 @@ def count(k):
         for i in range(k-2):
             a,b,c,d,e = i,i+1,i+2,i+3,i+4
             if pos[c] < pos[a] and pos[a] < pos[b]-1:
-                flag = True
+                if i >= 2 and pos[a-2] < pos[c] and pos[a]+2 == pos[a-1]+1 == pos[b]:
+                    pass
+                else:
+                    flag = True
             if pos[a] < pos[c] and pos[c] < pos[b]-1:
                 if i < k-4 and pos[e] < pos[a] and pos[c]+2 == pos[d]+1 == pos[b]:
                     pass
@@ -55,6 +58,9 @@ def count(k):
                     flag = True
         if flag:
             cnt += 1
+        # else:
+        #     print(seq)
+#     print(cnt)
     return cnt
 
 def fact(k,M):
@@ -71,7 +77,7 @@ def solve_(k, M):
     cnt = count(k)
     log(fac,cnt)
 
-    return (fac - cnt)%M
+    return (math.factorial(k) - cnt)%M
 
 
 for case_num in [0]:  # no loop over test case
