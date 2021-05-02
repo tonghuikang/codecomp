@@ -44,6 +44,21 @@ def read_strings(rows):
 # disallow if contain any 3*1@2, unless there is (-2)*3*1(-1)(2)
 # disallow if contain any 1*3@2, unless there is 5*1*342
 
+lst = """
+1 0 1
+2 0 2
+6 0 6
+24 4 20
+120 42 78
+720 376 344
+5040 3360 1680
+40320 31360 8960
+362880 311112 51768
+3628800 3306736 322064
+39916800 37771440 2145360
+479001600 463780960 15220640
+""".split("\n")
+
 def count(k):
     cnt = 0
 
@@ -83,11 +98,12 @@ def solve_(k, M):
     cnt = count(k)
     log(math.factorial(k),cnt,math.factorial(k) - cnt)
 
-    return (math.factorial(k) - cnt)%M
+    # return (int(lst[k].split()[0]))%M
+    return (fac-cnt)%M
 
-if OFFLINE_TEST:
-    for k in range(1,20):
-        solve_(k,10**100)
+# if OFFLINE_TEST:
+#     for k in range(1,20):
+#         solve_(k,10**100)
 
 
 for case_num in [0]:  # no loop over test case
