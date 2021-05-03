@@ -8,25 +8,28 @@ MAXINT = sys.maxsize
 
 # ------------------------ standard imports ends here ------------------------
 
-def lcm(a,b): 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
+def lcm(a,b):
+    # lowest common multiple
     return a*b//math.gcd(a,b)
 
 
-def all_divisors(n):
-    return set(functools.reduce(list.__add__, 
-    ([i, n//i] for i in 
-    range(1, int(n**0.5) + 1) if n % i == 0)))
+# --------------------------- prime factorisation ---------------------------
 
 
-def prime_factors(nr):
+def get_prime_factors_for_a_number(nr):
+    # factorise a single number into primes in O(sqrt(n))
     i = 2
     factors = []
     while i <= nr:
         if i > math.sqrt(nr):
             i = nr
         if (nr % i) == 0:
-            factors.append(int(i))
-            nr = nr / i
+            factors.append(i)
+            nr = nr // i
         elif i == 2:
             i = 3
         else:
@@ -34,31 +37,7 @@ def prime_factors(nr):
     return factors
 
 
-LARGE = int(2*10**7)
-count_factors = [0] * LARGE
-largest_factor = [1] * LARGE
-for i in range(2, LARGE):
-    if count_factors[i]:
-        continue
-    for j in range(i, LARGE, i):
-        count_factors[j] += 1
-        largest_factor[j] = i
-
-
-def prime_factors_precomp(num):
-    factors = []
-    lf = largest_factor[num]
-    while lf != num:
-        factors.append(lf)
-        num //= lf
-        lf = largest_factor[num]
-    if num > 1:
-        factors.append(num)
-    return factors
-
-
-def all_divisors_precomp(num):
-    factors = prime_factors_precomp(num)
+def get_all_divisors_given_prime_factorization(factors):
     c = Counter(factors)
 
     divs = [1]
@@ -74,11 +53,51 @@ def all_divisors_precomp(num):
     return divs
 
 
-# https://stackoverflow.com/a/29762148/5894029
-modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+
+# ------------------- if you need to factorise many numbers -------------------
+
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+largest_prime_factors = get_largest_prime_factors(10**6)
+
+
+def prime_factors_with_precomp_largest_factors(num, largest_prime_factors=largest_prime_factors):
+    # factorise into prime factors given precomputed largest_prime_factors
+    factors = []
+    lf = largest_prime_factors[num]
+    while lf != num:
+        factors.append(lf)
+        num //= lf
+        lf = largest_prime_factors[num]
+    if num > 1:
+        factors.append(num)
+    return factors
+
+
+def get_prime_factor_count(num):
+    # count how many prime factor
+    prime_factor_count = [0] * num
+    for i in range(2, num):
+        if prime_factor_count[i]:  # not prime
+            continue
+        for j in range(i, num, i):
+            prime_factor_count[j] += 1
+    return prime_factor_count
 
 
 def isprime(n):
+    # primality test (not tested)
     # https://github.com/not522/ac-library-python/blob/master/atcoder/_math.py
     # http://ceur-ws.org/Vol-1326/020-Forisek.pdf
     # untested
@@ -111,12 +130,14 @@ def isprime(n):
     return True
 
 
+# modular inverse
+# https://stackoverflow.com/a/29762148/5894029
+modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+
+
+# modular inverse for primes
 def modinvp(base, p):
     return pow(base, p-2, p)
-
-
-def ceiling_division(numer, denom):
-    return -((-numer)//denom)
 
 
 def chinese_remainder_theorem(divisors, remainders):
@@ -128,6 +149,7 @@ def chinese_remainder_theorem(divisors, remainders):
     return sum % prod
 
 
+# combinatorics
 def ncr(n, r):
     # if python version == 3.8+, use comb()
     if r == 0:
@@ -135,27 +157,17 @@ def ncr(n, r):
     return n * ncr(n-1, r-1) // r
 
 
-@functools.lru_cache(maxsize=None)
-def ncr_modp(n, r, p):
-    num = den = 1
-    for i in range(r):
-        num = (num * (n - i)) % p
-        den = (den * (i + 1)) % p
-    return (num * pow(den, p - 2, p)) % p
+def factorial_mod_p(n, p):
+    val = 1
+    for i in range(1,n+1):
+        val = (val*i)%p
+    return p
 
 
-def sieve_of_eratosthenes(n):
-    # primarity test and prime factor listing for all numbers less than n
-    prime = [True for _ in range(n)] 
-    prime[0], prime[1] = False, False
-    factors = [[] for _ in range(n)]
-
-    for i in range(2,n):
-        factors[i].append(i)
-        for j in range(i*2, n, i):
-            prime[j] = False
-            factors[j].append(i)
-    return prime, factors
+def ncr_mod_p(n, r, p):
+    num = factorial_mod_p(n)
+    dem = factorial_mod_p(r)*factorial_mod_p(n-r)
+    return (num * pow(dem, p-2, p))%p
 
 
 def floor_sum_over_divisor(n,k,j):
@@ -212,7 +224,7 @@ def untt(a,n):
             for p in range(m):
                 a[s+p], a[s+p+m] = (a[s+p]+a[s+p+m])%MOD, (a[s+p]-a[s+p+m])*w_N%MOD
                 w_N = w_N*roots[n-i]%MOD
- 
+
 def iuntt(a,n):
     for i in range(n):
         m = 1<<i
@@ -226,7 +238,7 @@ def iuntt(a,n):
     inv = pow((MOD+1)//2,n,MOD)
     for i in range(1<<n):
         a[i] = a[i]*inv%MOD
- 
+
 def convolution(a,b):
     la = len(a)
     lb = len(b)
@@ -283,5 +295,3 @@ def walsh_hadamard(my_freqs):
 # https://www.geeksforgeeks.org/print-combinations-factors-ways-factorize/
 
 
-# n factorial modulo p
-# # https://www.geeksforgeeks.org/compute-n-under-modulo-p/

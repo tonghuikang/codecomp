@@ -10,8 +10,11 @@ MAXINT = sys.maxsize
 
 # to visualise graphs https://csacademy.com/app/graph_editor/
 
+# ------------------------ basic graph operations ------------------------
+
 
 def build_graph(edges, bidirectional=False, costs=None):
+    # recommend to build it yourself
     g = defaultdict(list)
     if costs:
         for (a,b),cost in zip(edges, costs):
@@ -58,7 +61,29 @@ def count_connected_components_undirected(map_from_node_to_nodes, total_elements
     return components + total_elements - len(map_from_node_to_nodes)
 
 
-def dijkstra(list_of_indexes_and_costs, start):  # is it possible to do dijkstra directly?
+# ------------------------ shortest path ------------------------
+
+
+def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
+    # to be tested
+    # no path is produced here
+    d = map_from_node_to_nodes
+    stack = deque([source])
+    visited = {source: 0}
+    while stack:
+        cur = stack.popleft()
+        for nex in d[cur]:
+            if nex in visited:
+                continue
+            stack.append(nex)
+            visited[nex] = visited[cur] + 1
+            if nex == target:
+                return visited[nex]
+    return MAXINT
+
+
+def dijkstra(list_of_indexes_and_costs, start):
+    # short path with nonnegative edge costs
     # leetcode.com/problems/path-with-maximum-probability/
     # leetcode.com/problems/network-delay-time/
     length = len(list_of_indexes_and_costs)
@@ -81,25 +106,8 @@ def dijkstra(list_of_indexes_and_costs, start):  # is it possible to do dijkstra
     return path, weights
 
 
-def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
-    # to be tested
-    # not a path
-    d = map_from_node_to_nodes
-    stack = deque([source])
-    visited = {source: 0}
-    while stack:
-        cur = stack.popleft()
-        for nex in d[cur]:
-            if nex in visited:
-                continue
-            stack.append(nex)
-            visited[nex] = visited[cur] + 1
-            if nex == target:
-                return visited[nex]
-    return MAXINT
-
-
 def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
+    # this operation is costly, recommend to parse to list_of_indexes_and_costs directly
     # leetcode.com/problems/path-with-maximum-probability/
     # leetcode.com/problems/network-delay-time/
     d = map_from_node_to_nodes_and_costs
@@ -133,6 +141,8 @@ def maximum_bipartite_matching(map_from_node_to_nodes):
     # maximum independent set = total vertexes — edges in maximum matching
     raise NotImplementedError
 
+
+# ------------------------ flow algorithms ------------------------
 
 class Dinic:
     # codeforces.com/contest/1473/submission/104332748
@@ -225,6 +235,8 @@ def min_cost_flow(map_from_node_to_nodes_and_capcities, demands):
     raise NotImplementedError
 
 
+# ------------------------ methods using disjoint set ------------------------
+
 class DisjointSet:
     # leetcode.com/problems/accounts-merge/
     def __init__(self, parent={}):
@@ -294,6 +306,9 @@ def detect_cycle(map_from_node_to_nodes):
         return False
     # leetcode.com/problems/course-schedule/
     return topological_sort(map_from_node_to_nodes) == []
+
+
+# ------------------------ other methods ------------------------
 
 
 def clique_cover(edges, N):
