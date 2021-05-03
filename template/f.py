@@ -46,10 +46,81 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+class DisjointSet:
+    # leetcode.com/problems/accounts-merge/
+    def __init__(self, parent={}):
+        if not parent:
+            parent = {}
+        self.parent = parent
 
-def solve_():
+    def find(self, item):
+        if item not in self.parent:
+            self.parent[item] = item
+            return item
+        elif self.parent[item] == item:
+            return item
+        else:
+            res = self.find(self.parent[item])
+            self.parent[item] = res
+            return res
+
+    def union(self, set1, set2):
+        root1 = self.find(set1)
+        root2 = self.find(set2)
+        self.parent[root1] = root2
+
+
+def minimum_spanning_tree(edges):
+    # leetcode.com/problems/min-cost-to-connect-all-points
+    if len(edges):
+        return 0
+    ds = DisjointSet()
+    # total_tree_cost = 0
+    taken_edges = []
+    # costs, edges = zip(*sorted(zip(costs, edges)))  # sort based on costs
+    for (u, v) in edges:
+        if ds.find(u) != ds.find(v):
+            ds.union(u, v)
+            taken_edges.add((u,v))
+            # total_tree_cost += cost
+    return taken_edges
+
+
+def solve_(arr, edges, req, num_nodes):
     # your solution here
+    if sum(arr) < req:
+        return []
+
+    edges = minimum_spanning_tree(edges)
+    # edges = set((a,b) for i,(a,b) in enumerate(edges))
+    # edges_index = 
+
+    # find leaf, rooted at zero
+    g = defaultdict(set)
+    for a,b in edges:
+        g[a].add(b)
+        g[b].add(a)
+
+
+    # arr will record amount in the root
+    heap = [(-a,i) for i,a in enumerate(arr)]   # -amount (if not visited), root
+    heapq.heapify(heap)
+
+    d = DisjointSet()
+    visited = set()
+
+    # idk how to implement :/
+    # while heap:
+    #     cur = heapq.heappop(heap)
+    #     if arr[d.find(cur)] < k:
+    #         continue
+    #     for nex in d[cur]:
+    #         d[cur].remove(nex)
+
     
+
+
+
     return ""
 
 
@@ -67,17 +138,21 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    num_nodes, num_edges, req = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    edges = read_matrix(num_edges)  # and return as a list of list of int
+    edges = minus_one_matrix(edges)
 
-    res = solve()  # include input here
-
+    res = solve(arr, edges, req, num_nodes)  # include input here
+    if res == []:
+        print(no)
+    else:
+        print(yes)
+        print(res, sep="\n")
     # print length if applicable
     # print(len(res))
 
