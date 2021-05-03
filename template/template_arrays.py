@@ -8,6 +8,8 @@ MAXINT = sys.maxsize
 
 # ------------------------ standard imports ends here ------------------------
 
+# ---------------------- longest subsequence or subarray ----------------------
+
 
 def longest_common_subsequence(arr, brr):
     # leetcode.com/problems/longest-common-subsequence/discuss/351689/
@@ -23,10 +25,33 @@ def longest_common_subsequence(arr, brr):
     return dp[-1]
 
 
-# add longest common subarray
+def longest_common_subarray(arr, brr):
+    # binarysearch.com/problems/Longest-Common-Substring
+    def slide_along(xrr, yrr):
+        maxres = 0
+        # slide yrr along xrr
+        for i in range(len(xrr)):
+            curres = 0  # track current length of common subarray
+            for a,b in zip(xrr[i:], yrr):
+                if a == b:  # increment if match
+                    curres += 1
+                    maxres = max(maxres, curres)
+                else:  # reset if mismatch
+                    curres = 0
+        return maxres
+    return max(slide_along(arr,brr), slide_along(brr,arr))
 
 
-def maxDotProduct(self, A, B):
+def longest_increasing_subsequence(nums):
+    # leetcode.com/problems/longest-increasing-subsequence/discuss/667975/
+    dp = [MAXINT] * (len(nums) + 1)
+    for elem in nums:
+        dp[bisect.bisect_left(dp, elem)] = elem  
+    return dp.index(MAXINT)
+
+
+def max_dot_product_of_two_subsequence(A, B):
+    # leetcode.com/problems/max-dot-product-of-two-subsequences/discuss/648420/
     n, m = len(A), len(B)
     dp = [[0] * (m) for i in range(n)]
     for i in range(n):
@@ -38,12 +63,7 @@ def maxDotProduct(self, A, B):
     return dp[-1][-1]
 
 
-def longest_increasing_subsequence(nums):
-    # leetcode.com/problems/longest-increasing-subsequence/discuss/667975/
-    dp = [MAXINT] * (len(nums) + 1)
-    for elem in nums:
-        dp[bisect.bisect_left(dp, elem)] = elem  
-    return dp.index(MAXINT)
+# --------------------------- sliding windows ---------------------------
 
 
 def sliding_window_sum(nums, k):
@@ -66,11 +86,40 @@ def sliding_window_maximum(nums, k):
     return ans[k-1:]
 
 
-# leetcode.com/problems/sliding-window-median/
+def sliding_window_median(nums, k):
+    # leetcode.com/problems/sliding-window-median/discuss/262689
+    def move(h1, h2):
+        x, i = heapq.heappop(h1)
+        heapq.heappush(h2, (-x, i))
+
+    def get_med(h1, h2, k):
+        return h2[0][0] * 1. if k & 1 else (h2[0][0]-h1[0][0]) / 2.        
+
+    small, large = [], []
+    for i, x in enumerate(nums[:k]): 
+        heapq.heappush(small, (-x,i))
+    for _ in range(k-(k>>1)): 
+        move(small, large)
+    ans = [get_med(small, large, k)]
+    for i, x in enumerate(nums[k:]):
+        if x >= large[0][0]:
+            heapq.heappush(large, (x, i+k))
+            if nums[i] <= large[0][0]: 
+                move(large, small)
+        else:
+            heapq.heappush(small, (-x, i+k))
+            if nums[i] >= large[0][0]: 
+                move(small, large)
+        while small and small[0][1] <= i: 
+            heapq.heappop(small)
+        while large and large[0][1] <= i: 
+            heapq.heappop(large)
+        ans.append(get_med(small, large, k))
+    return ans
 
 
 def gathering_cost(xpos):
-    # the cost to gather every item to a each location
+    # the cost to gather every item to each location
     xpos = sorted(xpos)
     n = len(xpos)
     left_cost = 0

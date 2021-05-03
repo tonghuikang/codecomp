@@ -146,6 +146,7 @@ def maximum_bipartite_matching(map_from_node_to_nodes):
 
 class Dinic:
     # codeforces.com/contest/1473/submission/104332748
+    # max flow algorithm
     def __init__(self, N):
         self.N = N
         self.G = [[] for i in range(N)]

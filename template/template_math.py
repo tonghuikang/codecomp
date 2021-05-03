@@ -17,86 +17,10 @@ def lcm(a,b):
     return a*b//math.gcd(a,b)
 
 
-# --------------------------- prime factorisation ---------------------------
+# ------------------------ single prime factorisation ------------------------
 
 
-def get_prime_factors_for_a_number(nr):
-    # factorise a single number into primes in O(sqrt(n))
-    i = 2
-    factors = []
-    while i <= nr:
-        if i > math.sqrt(nr):
-            i = nr
-        if (nr % i) == 0:
-            factors.append(i)
-            nr = nr // i
-        elif i == 2:
-            i = 3
-        else:
-            i = i + 2
-    return factors
-
-
-def get_all_divisors_given_prime_factorization(factors):
-    c = Counter(factors)
-
-    divs = [1]
-    for prime, count in c.most_common()[::-1]:
-        l = len(divs)
-        prime_pow = 1
- 
-        for _ in range(count):
-            prime_pow *= prime
-            for j in range(l):
-                divs.append(divs[j]*prime_pow)
-
-    return divs
-
-
-
-# ------------------- if you need to factorise many numbers -------------------
-
-
-def get_largest_prime_factors(num):
-    # get largest prime factor for each number
-    # you can use this to obtain primes
-    largest_prime_factors = [1] * num
-    for i in range(2, num):
-        if largest_prime_factors[i] > 1:  # not prime
-            continue
-        for j in range(i, num, i):
-            largest_prime_factors[j] = i
-    return largest_prime_factors
-
-
-largest_prime_factors = get_largest_prime_factors(10**6)
-
-
-def prime_factors_with_precomp_largest_factors(num, largest_prime_factors=largest_prime_factors):
-    # factorise into prime factors given precomputed largest_prime_factors
-    factors = []
-    lf = largest_prime_factors[num]
-    while lf != num:
-        factors.append(lf)
-        num //= lf
-        lf = largest_prime_factors[num]
-    if num > 1:
-        factors.append(num)
-    return factors
-
-
-def get_prime_factor_count(num):
-    # count how many prime factor
-    prime_factor_count = [0] * num
-    for i in range(2, num):
-        if prime_factor_count[i]:  # not prime
-            continue
-        for j in range(i, num, i):
-            prime_factor_count[j] += 1
-    return prime_factor_count
-
-
-def isprime(n):
+def is_prime(n):
     # primality test (not tested)
     # https://github.com/not522/ac-library-python/blob/master/atcoder/_math.py
     # http://ceur-ws.org/Vol-1326/020-Forisek.pdf
@@ -130,6 +54,84 @@ def isprime(n):
     return True
 
 
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+ 
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
+
+# ---------------------- multiple prime factorisation ----------------------
+
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+largest_prime_factors = get_largest_prime_factors(10**6)
+
+
+def get_prime_factors_with_precomp_largest_factors(num, largest_prime_factors=largest_prime_factors):
+    # factorise into prime factors given precomputed largest_prime_factors
+    factors = []
+    lf = largest_prime_factors[num]
+    while lf != num:
+        factors.append(lf)
+        num //= lf
+        lf = largest_prime_factors[num]
+    if num > 1:
+        factors.append(num)
+    return factors
+
+
+def get_prime_factor_count(num):
+    # count how many prime factor
+    prime_factor_count = [0] * num
+    for i in range(2, num):
+        if prime_factor_count[i]:  # not prime
+            continue
+        for j in range(i, num, i):
+            prime_factor_count[j] += 1
+    return prime_factor_count
+
+
+# ----------------------------- modular inverse -----------------------------
+
+
 # modular inverse
 # https://stackoverflow.com/a/29762148/5894029
 modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
@@ -149,7 +151,9 @@ def chinese_remainder_theorem(divisors, remainders):
     return sum % prod
 
 
-# combinatorics
+# ----------------------------- combinatorics  -----------------------------
+
+
 def ncr(n, r):
     # if python version == 3.8+, use comb()
     if r == 0:
@@ -168,6 +172,9 @@ def ncr_mod_p(n, r, p):
     num = factorial_mod_p(n)
     dem = factorial_mod_p(r)*factorial_mod_p(n-r)
     return (num * pow(dem, p-2, p))%p
+
+
+# ----------------------------- floor sums  -----------------------------
 
 
 def floor_sum_over_divisor(n,k,j):
@@ -208,38 +215,43 @@ def floor_sum_over_numerator(n: int, m: int, a: int, b: int) -> int:
     return ans
 
 
-# FFT convolution
-# https://atcoder.jp/contests/abc196/submissions/21089133
-ROOT = 3
-MOD = 998244353
-roots  = [pow(ROOT,(MOD-1)>>i,MOD) for i in range(24)] # 1 の 2^i 乗根
-iroots = [pow(x,MOD-2,MOD) for x in roots] # 1 の 2^i 乗根の逆元
+# ------------------------- FFT convolution -------------------------
 
-def untt(a,n):
-    for i in range(n):
-        m = 1<<(n-i-1)
-        for s in range(1<<i):
-            w_N = 1
-            s *= m*2
-            for p in range(m):
-                a[s+p], a[s+p+m] = (a[s+p]+a[s+p+m])%MOD, (a[s+p]-a[s+p+m])*w_N%MOD
-                w_N = w_N*roots[n-i]%MOD
-
-def iuntt(a,n):
-    for i in range(n):
-        m = 1<<i
-        for s in range(1<<(n-i-1)):
-            w_N = 1
-            s *= m*2
-            for p in range(m):
-                a[s+p], a[s+p+m] = (a[s+p]+a[s+p+m]*w_N)%MOD, (a[s+p]-a[s+p+m]*w_N)%MOD
-                w_N = w_N*iroots[i+1]%MOD
-            
-    inv = pow((MOD+1)//2,n,MOD)
-    for i in range(1<<n):
-        a[i] = a[i]*inv%MOD
 
 def convolution(a,b):
+    # https://atcoder.jp/contests/abc196/submissions/21089133
+
+    ROOT = 3
+    MOD = 998244353
+    roots  = [pow(ROOT,(MOD-1)>>i,MOD) for i in range(24)] # 1 の 2^i 乗根
+    iroots = [pow(x,MOD-2,MOD) for x in roots] # 1 の 2^i 乗根の逆元
+
+    def untt(a,n):
+        # inplace modification
+        for i in range(n):
+            m = 1<<(n-i-1)
+            for s in range(1<<i):
+                w_N = 1
+                s *= m*2
+                for p in range(m):
+                    a[s+p], a[s+p+m] = (a[s+p]+a[s+p+m])%MOD, (a[s+p]-a[s+p+m])*w_N%MOD
+                    w_N = w_N*roots[n-i]%MOD
+
+    def iuntt(a,n):
+        # inplace modification
+        for i in range(n):
+            m = 1<<i
+            for s in range(1<<(n-i-1)):
+                w_N = 1
+                s *= m*2
+                for p in range(m):
+                    a[s+p], a[s+p+m] = (a[s+p]+a[s+p+m]*w_N)%MOD, (a[s+p]-a[s+p+m]*w_N)%MOD
+                    w_N = w_N*iroots[i+1]%MOD
+                
+        inv = pow((MOD+1)//2,n,MOD)
+        for i in range(1<<n):
+            a[i] = a[i]*inv%MOD
+
     la = len(a)
     lb = len(b)
     if min(la, lb) <= 50:
@@ -288,6 +300,9 @@ def walsh_hadamard(my_freqs):
                 my_freqs[i + j], my_freqs[i + j + hf] = u + v, u - v
         h *= 2
     return my_freqs
+
+
+# ------------------------- other methods -------------------------
 
 
 # get all combination of factors of an integer
