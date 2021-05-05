@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-import sys
-import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
-input = sys.stdin.readline  # to read input quickly
+import io
+import os
+from collections import deque
+from math import inf
+# input = sys.stdin.readline  # to read input quickly
+input = io.BytesIO(os.read(0, os.fstat(0).st_size)).readline
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -15,11 +15,11 @@ yes, no = "YES", "NO"
 d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
+MAXINT = 10**15
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -68,63 +68,47 @@ def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
 
 def solve_(mrr, w, nrows, ncols):
     # your solution here
-    
-    
-    # start from zero
-    source = (0,0)
-    stack = deque([source])
-    dist_from_start = {source:0}
-    while stack:
-        x,y = stack.popleft()
-        for dx,dy in d4:
-            xx = x+dx
-            yy = y+dy
-            if (xx,yy) in dist_from_start:
-                continue
-            if 0 <= xx < nrows and 0 <= yy < ncols:
-                if mrr[xx][yy] == -1:
-                    continue
-                dist_from_start[xx,yy] = dist_from_start[x,y] + w
-                stack.append((xx,yy))
-    
 
-    source = (nrows-1,ncols-1)
-    stack = deque([source])
-    dist_from_end = {source:0}
-    while stack:
-        x,y = stack.popleft()
-        for dx,dy in d4:
-            xx = x+dx
-            yy = y+dy
-            if (xx,yy) in dist_from_end:
-                continue
-            if 0 <= xx < nrows and 0 <= yy < ncols:
-                if mrr[xx][yy] == -1:
-                    continue
-                dist_from_end[xx,yy] = dist_from_end[x,y] + w
-                stack.append((xx,yy))
-
-    minres = MAXINT
-    if (nrows-1,ncols-1) in dist_from_start:
-        minres = min(minres, dist_from_start[(nrows-1,ncols-1)])
+    size = nrows*ncols
     
-    min_tele_from_source = MAXINT//2
-    for (x,y), cost in dist_from_start.items():
-        if mrr[x][y] > 0:
-            min_tele_from_source = min(min_tele_from_source, cost + mrr[x][y])
+    def dfs(source, size):
+        # start from zero
+        stack = deque([source])
+        dist = [MAXINT]*size
+        dist[source] = 0
+        while stack:
+            loc = stack.popleft()
+            x,y = divmod(loc, ncols)
+            for dx,dy in d4:
+                xx = x+dx
+                yy = y+dy
+                new_loc = xx*ncols+yy
+                if 0 <= xx < nrows and 0 <= yy < ncols and dist[new_loc] == MAXINT and mrr[new_loc] >= 0:
+                    dist[new_loc] = dist[loc] + 1
+                    stack.append(new_loc)
+        return dist  
+
+    dist_from_start = dfs(0, size)
+    dist_from_dest = dfs(size-1, size)
+
+    # log(dist_from_start)
+    # log(dist_from_dest)
+
+    tele_from_start = MAXINT//2
+    tele_from_dest = MAXINT//2
+ 
+    for x in range(nrows):
+        for y in range(ncols):
+            loc = x*ncols + y
+            if mrr[loc] > 0:
+                tele_from_start = min(tele_from_start, mrr[loc] + w * dist_from_start[loc])
+                tele_from_dest = min(tele_from_dest, mrr[loc] + w * dist_from_dest[loc])
         
-    min_tele_from_dest = MAXINT//2
-    for (x,y), cost in dist_from_end.items():
-        if mrr[x][y] > 0:
-            min_tele_from_dest = min(min_tele_from_dest, cost + mrr[x][y])
+    minres = min(dist_from_start[size-1]*w, tele_from_start+tele_from_dest)
 
-    res = min(minres, min_tele_from_dest + min_tele_from_source)
-    # log(res, minres, min_tele_from_dest, min_tele_from_source)
-    # log(dist_from_end)
-
-    if res > MAXINT//4:
+    if minres == MAXINT:
         return -1
-    return res
+    return minres
 
 
 for case_num in [0]:  # no loop over test case
@@ -145,9 +129,11 @@ for case_num in [0]:  # no loop over test case
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
+
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    mrr = read_matrix(n)  # and return as a list of list of int
+    mrr = [int(x) for i in range(n) for x in input().split()]
+    # mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
     res = solve(mrr, w, n, m)  # include input here
