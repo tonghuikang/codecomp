@@ -9,6 +9,8 @@ MAXINT = sys.maxsize
 # ------------------------ standard imports ends here ------------------------
 
 
+# -------------------------- binary search template --------------------------
+
 def binary_search(func_,       # condition function
                   first=True,  # else last
                   target=True, # else False
@@ -37,3 +39,12 @@ def binary_search(func_,       # condition function
     else:      # find last False
         return left-1
     
+
+# -------------------------- ternay search template --------------------------
+
+
+def binary_search(func_,          # condition function
+                  maximize=True,  # else minimise
+                  left=0, right=2**31):
+    raise NotImplementedError
+
