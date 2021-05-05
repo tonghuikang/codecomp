@@ -3,6 +3,7 @@ import io
 import os
 from collections import deque
 # input = sys.stdin.readline  # to read input quickly
+from math import inf
 input = io.BytesIO(os.read(0, os.fstat(0).st_size)).readline
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -14,7 +15,7 @@ yes, no = "YES", "NO"
 d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = 10**15
+MAXINT = inf
 
 # if testing locally, print to terminal with a different color
 # OFFLINE_TEST = getpass.getuser() == "hkmac"
@@ -76,8 +77,8 @@ def solve_(mrr, w, nrows, ncols):
     # log(dist_from_start)
     # log(dist_from_dest)
 
-    tele_from_start = MAXINT//2
-    tele_from_dest = MAXINT//2
+    tele_from_start = inf
+    tele_from_dest = inf
  
     for x in range(nrows):
         for y in range(ncols):
@@ -88,7 +89,7 @@ def solve_(mrr, w, nrows, ncols):
         
     minres = min(dist_from_start[size-1]*w, tele_from_start+tele_from_dest)
 
-    if minres > MAXINT//4:
+    if minres == inf:
         return -1
     return minres
 
@@ -131,4 +132,4 @@ for case_num in [0]:  # no loop over test case
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    print(int(res))
