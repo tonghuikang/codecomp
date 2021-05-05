@@ -2,7 +2,6 @@
 import io
 import os
 from collections import deque
-from math import inf
 # input = sys.stdin.readline  # to read input quickly
 input = io.BytesIO(os.read(0, os.fstat(0).st_size)).readline
 
@@ -47,23 +46,6 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
-    # to be tested
-    # no path is produced here
-    d = map_from_node_to_nodes
-    stack = deque([source])
-    visited = {source: 0}
-    while stack:
-        cur = stack.popleft()
-        for nex in d[cur]:
-            if nex in visited:
-                continue
-            stack.append(nex)
-            visited[nex] = visited[cur] + 1
-            if nex == target:
-                return visited[nex]
-    return MAXINT
-
 
 
 def solve_(mrr, w, nrows, ncols):
@@ -106,7 +88,7 @@ def solve_(mrr, w, nrows, ncols):
         
     minres = min(dist_from_start[size-1]*w, tele_from_start+tele_from_dest)
 
-    if minres == MAXINT:
+    if minres > MAXINT//4:
         return -1
     return minres
 
