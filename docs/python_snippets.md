@@ -153,6 +153,28 @@ matrix = [col for col in zip(*matrix)][::-1]  # thirce
 
 
 
+##### Taking division and modulo at the same time
+
+It is faster to access an array than to access the matrix. In some problems you might need such time optimisation.
+
+This is how we would usually convert `x` and `y` indices of the matrix to `loc` index of the array flattened, and vice versa.
+
+```python
+loc = x*ncols + y
+x, y = (loc // ncols, loc % ncols)
+```
+
+`divmod()` helps to make the code neater and twice faster
+
+```python
+loc = x*ncols + y
+x, y = divmod(loc, ncols)
+```
+
+- [Documentation](https://docs.python.org/3/library/functions.html#divmod)
+
+
+
 ##### Sorting based on custom comparison
 
 ```python
@@ -182,8 +204,6 @@ c = Counter(lst)
 ```
 
 - [Stack Overflow](https://stackoverflow.com/questions/722697/)
-
-
 
 
 

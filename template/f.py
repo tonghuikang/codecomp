@@ -6,6 +6,9 @@ import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
+# import io, os  # if all integers, otherwise need to post process
+# input = io.BytesIO(os.read(0, os.fstat(0).st_size)).readline
+
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
@@ -32,11 +35,14 @@ def solve(*args):
         log("----- ------- ------")
     return solve_(*args)
 
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+def read_matrix(nrows):
+    return [list(map(int,input().split())) for _ in range(nrows)]
 
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
+def read_matrix_and_flatten(nrows):
+    return [int(x) for i in range(nrows) for x in input().split()]
+
+def read_strings(nrows):
+    return [input().strip() for _ in range(nrows)]
 
 def minus_one(arr):
     return [x-1 for x in arr]
@@ -68,12 +74,13 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
-    # lst = minus_one(lst)
+    # arr = list(map(int,input().split()))
+    # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
+    # arr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
     res = solve()  # include input here
