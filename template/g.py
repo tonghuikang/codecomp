@@ -36,10 +36,11 @@ def solve_(mrr, w, nrows, ncols):
             for dx,dy in d4:
                 xx = x+dx
                 yy = y+dy
-                new_loc = xx*ncols+yy
-                if 0 <= xx < nrows and 0 <= yy < ncols and dist[new_loc] == MAXINT and mrr[new_loc] >= 0:
-                    dist[new_loc] = dist[loc] + 1
-                    stack.append(new_loc)
+                if 0 <= xx < nrows and 0 <= yy < ncols:
+                    new_loc = xx*ncols+yy
+                    if dist[new_loc] == MAXINT and mrr[new_loc] >= 0:
+                        dist[new_loc] = dist[loc] + w
+                        stack.append(new_loc)
         return dist  
 
     dist_from_start = dfs(0, size)
@@ -55,10 +56,10 @@ def solve_(mrr, w, nrows, ncols):
         for y in range(ncols):
             loc = x*ncols + y
             if mrr[loc] > 0:
-                tele_from_start = min(tele_from_start, mrr[loc] + w * dist_from_start[loc])
-                tele_from_dest = min(tele_from_dest, mrr[loc] + w * dist_from_dest[loc])
+                tele_from_start = min(tele_from_start, mrr[loc] + dist_from_start[loc])
+                tele_from_dest = min(tele_from_dest, mrr[loc] + dist_from_dest[loc])
         
-    minres = min(dist_from_start[size-1]*w, tele_from_start+tele_from_dest)
+    minres = min(dist_from_start[size-1], tele_from_start+tele_from_dest)
 
     if minres == inf:
         return -1
