@@ -137,8 +137,8 @@ def get_prime_factor_count(num):
 modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
 
 
-# modular inverse for primes
-def modinvp(base, p):
+def modinv_p(base, p):
+    # modular if the modulo is a prime
     return pow(base, p-2, p)
 
 
@@ -264,7 +264,7 @@ def convolution(a,b):
                 res[i+j] += a[i]*b[j]
                 res[i+j] %= MOD
         return res
- 
+
     deg = la+lb-2
     n = deg.bit_length()
     N = 1<<n
