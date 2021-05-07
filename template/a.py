@@ -53,8 +53,25 @@ def solve_(a,b):
     if a%b == 0:
         return []
 
-    return [2*a*b, a*(2*b-1), a]
+    # for i in range(2, 100):
+    #     x,y,z = [a*(i*b-1), a, i*a*b]
+    #     if x == z:
+    #         continue
+    #     if y%b or x%b
 
+    x,y,z = a*b, a*(b+1), a*(2*b+1)
+    if x==y or x==z or y==z:
+        assert False
+    if y%b == 0 or z%b == 0:
+        assert False
+    if x+y != z:
+        assert False
+    return [x,y,z]
+
+
+# for i in range(1,100):
+#     for j in range(1,100):
+#         solve(i,j)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
