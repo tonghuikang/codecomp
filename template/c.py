@@ -30,15 +30,31 @@ def query(t,i,j,x):
     response = int(input())
     return response
 
+# secret = [
+#     [3,1,4,2],
+#     [2,5,3,4,1]
+# ]
+
+# def query(t,i,j,x):
+#     if t == 1:
+#         return max(min(x,secret[case_num][i]), min(x+1,secret[case_num][j]))
+#     if t == 2:
+#         return min(max(x,secret[case_num][i]), max(x+1,secret[case_num][j]))
+
 def alert(arr):
     print("! {}".format(" ".join(str(x) for x in arr)), flush=True)
+
+
+# def alert(arr):
+#     log(arr)
+#     assert(arr == secret[case_num])
 
 # -----------------------------------------------------------------------------
 
 # read line as an integer
 num_cases = int(input())
 
-for _ in range(num_cases):
+for case_num in range(num_cases):
     n = int(input())
 
     res = [0 for _ in range(n)]
@@ -51,13 +67,19 @@ for _ in range(num_cases):
     a02 = max(query(1,i,j,n-1), query(1,j,i,n-1))
     b02 = min(query(2,i,j,1), query(2,j,i,1))
 
-    i,j = 0,2
+    i,j = 1,2
     a12 = max(query(1,i,j,n-1), query(1,j,i,n-1))
     b12 = min(query(2,i,j,1), query(2,j,i,1))
 
     res[0] = set([a01, b01]) & set([a02, b02])
     res[1] = set([a01, b01]) & set([a12, b12])
     res[2] = set([a02, b02]) & set([a12, b12])
+
+    # log(a01, b01, a02, b02, a12, b12)
+
+    for i in range(3):
+        assert len(res[i]) == 1
+        res[i] = list(res[i])[0]
 
     # res[:3] = [3,1,4]
 
@@ -69,7 +91,7 @@ for _ in range(num_cases):
     maxidx = res.index(max(res[:3]))
 
     for idx in order:
-        log(res, idx, maxidx)
+        # log(res, idx, maxidx)
         p = query(2, idx, maxidx, 1)
         if p == res[maxidx]:
             p = query(1, maxidx, idx, n-1)
