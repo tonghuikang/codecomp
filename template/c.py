@@ -24,7 +24,6 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
-@functools.lru_cache(maxsize=2*10**4)
 def query(t,i,j,x):
     print("? {} {} {} {}".format(t,i+1,j+1,x), flush=True)
     response = int(input())
@@ -36,6 +35,7 @@ def query(t,i,j,x):
 # ]
 
 # def query(t,i,j,x):
+#     log(t,i,j,x)
 #     if t == 1:
 #         return max(min(x,secret[case_num][i]), min(x+1,secret[case_num][j]))
 #     if t == 2:
@@ -46,6 +46,7 @@ def alert(arr):
 
 
 # def alert(arr):
+#     print("! {}".format(" ".join(str(x) for x in arr)), flush=True)
 #     log(arr)
 #     assert(arr == secret[case_num])
 
@@ -91,7 +92,7 @@ for case_num in range(num_cases):
     maxidx = res.index(max(res[:3]))
 
     for idx in order:
-        # log(res, idx, maxidx)
+        log(res, idx, maxidx)
         p = query(2, idx, maxidx, 1)
         if p == res[maxidx]:
             p = query(1, maxidx, idx, n-1)
