@@ -163,7 +163,8 @@ def solve_(edges,n):
     res = []
     for a,b in zip(seqeunce, seqeunce[1:]):
         if a not in g[b]:
-            res.append([a,b,head,b])
+            res.append([b,prev[b],head,b])
+            head = a
     
     return res
 

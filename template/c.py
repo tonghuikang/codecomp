@@ -89,13 +89,13 @@ for case_num in range(num_cases):
     order = list(range(3,n))
     random.shuffle(order)
 
-    maxidx = res.index(max(res[:3]))
+    maxidx = res.index(min(res[:3]))
 
     for idx in order:
         log(res, idx, maxidx)
-        p = query(2, idx, maxidx, 1)
+        p = query(1, maxidx, idx, n-1)
         if p == res[maxidx]:
-            p = query(1, maxidx, idx, n-1)
+            p = query(2, idx, maxidx, 1)
             maxidx = idx
             res[idx] = p
         else:
