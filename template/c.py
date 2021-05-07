@@ -31,7 +31,7 @@ def query(t,i,j,x):
     return response
 
 def alert(arr):
-    print("! {}".format(" ".join(x for x in arr)), flush=True)
+    print("! {}".format(" ".join(str(x) for x in arr)), flush=True)
 
 # -----------------------------------------------------------------------------
 
@@ -41,31 +41,35 @@ num_cases = int(input())
 for _ in range(num_cases):
     n = int(input())
 
-    i,j = 0,1
-    a01 = min(query(1,i,j,n-1), query(1,j,i,n-1))
-    b01 = max(query(2,i,j,1), query(2,j,i,1))
-
-    i,j = 0,2
-    a02 = min(query(1,i,j,n-1), query(1,j,i,n-1))
-    b02 = max(query(2,i,j,1), query(2,j,i,1))
-
-    i,j = 0,2
-    a12 = min(query(1,i,j,n-1), query(1,j,i,n-1))
-    b12 = max(query(2,i,j,1), query(2,j,i,1))
-
     res = [0 for _ in range(n)]
+
+    i,j = 0,1
+    a01 = max(query(1,i,j,n-1), query(1,j,i,n-1))
+    b01 = min(query(2,i,j,1), query(2,j,i,1))
+
+    i,j = 0,2
+    a02 = max(query(1,i,j,n-1), query(1,j,i,n-1))
+    b02 = min(query(2,i,j,1), query(2,j,i,1))
+
+    i,j = 0,2
+    a12 = max(query(1,i,j,n-1), query(1,j,i,n-1))
+    b12 = min(query(2,i,j,1), query(2,j,i,1))
+
     res[0] = set([a01, b01]) & set([a02, b02])
     res[1] = set([a01, b01]) & set([a12, b12])
     res[2] = set([a02, b02]) & set([a12, b12])
 
-    assert len(set(res[3:])) == 3
+    # res[:3] = [3,1,4]
+
+    assert len(set(res[:3])) == 3
 
     order = list(range(3,n))
     random.shuffle(order)
 
-    maxidx = res.index(max(res[3:]))
+    maxidx = res.index(max(res[:3]))
 
     for idx in order:
+        log(res, idx, maxidx)
         p = query(2, idx, maxidx, 1)
         if p == res[maxidx]:
             p = query(1, maxidx, idx, n-1)
