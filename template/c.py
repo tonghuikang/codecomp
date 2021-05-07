@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-import sys
-import getpass  # not available on codechef
+import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -11,7 +10,6 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 M9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -24,69 +22,61 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
-
 # ---------------------------- template ends here ----------------------------
 
+@functools.lru_cache(maxsize=2*10**4)
+def query(t,i,j,x):
+    print("? {} {} {} {}".format(t,i+1,j+1,x), flush=True)
+    response = int(input())
+    return response
 
-def solve_():
-    # your solution here
-    
-    return ""
+def alert(arr):
+    print("! {}".format(" ".join(x for x in arr)), flush=True)
+
+# -----------------------------------------------------------------------------
+
+# read line as an integer
+num_cases = int(input())
+
+for _ in range(num_cases):
+    n = int(input())
+
+    i,j = 0,1
+    a01 = min(query(1,i,j,n-1), query(1,j,i,n-1))
+    b01 = max(query(2,i,j,1), query(2,j,i,1))
+
+    i,j = 0,2
+    a02 = min(query(1,i,j,n-1), query(1,j,i,n-1))
+    b02 = max(query(2,i,j,1), query(2,j,i,1))
+
+    i,j = 0,2
+    a12 = min(query(1,i,j,n-1), query(1,j,i,n-1))
+    b12 = max(query(2,i,j,1), query(2,j,i,1))
+
+    res = [0 for _ in range(n)]
+    res[0] = set([a01, b01]) & set([a02, b02])
+    res[1] = set([a01, b01]) & set([a12, b12])
+    res[2] = set([a02, b02]) & set([a12, b12])
+
+    assert len(set(res[3:])) == 3
+
+    order = list(range(3,n))
+    random.shuffle(order)
+
+    maxidx = res.index(max(res[3:]))
+
+    for idx in order:
+        p = query(2, idx, maxidx, 1)
+        if p == res[maxidx]:
+            p = query(1, maxidx, idx, n-1)
+            maxidx = idx
+            res[idx] = p
+        else:
+            res[idx] = p
+
+    assert len(set(res)) == n
+
+    alert(res)
 
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
-
-    # read line as an integer
-    # k = int(input())
-
-    # read line as a string
-    # srr = input().strip()
-
-    # read one line and parse each word as a string
-    # lst = input().split()
-    
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
-    # lst = minus_one(lst)
-
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
-
-    res = solve()  # include input here
-
-    # print length if applicable
-    # print(len(res))
-
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
-
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
-    print(res)
+sys.exit()
