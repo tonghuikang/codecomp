@@ -32,6 +32,28 @@ def solve(*args):
         log("----- ------- ------")
     return solve_(*args)
 
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    if stack:
+                        stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
+
+
+
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
 
@@ -47,10 +69,105 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# find the diameter
+# disconnect the rest, the point of disconnection is the root
+# recursively disconnect
+
+def solve_(edges,n):
     # your solution here
+    if n <= 3:
+        return []
+
+    g = [set() for _ in range(n)]
+    for a,b in edges:
+        g[a].add(b)
+        g[b].add(a)
+
     
-    return ""
+    # find diameter
+    # root as zero
+    dist = [-1 for _ in range(n)]
+    source = 0
+    dist[source] = 0
+    stack = deque([source])
+    while stack:
+        cur = stack.popleft()
+        for nex in g[cur]:
+            if dist[nex] != -1:
+                continue
+            stack.append(nex)
+            dist[nex] = dist[cur] + 1
+
+    furthest = dist.index(max(dist))
+
+    dist = [-1 for _ in range(n)]
+    prev = [-1 for _ in range(n)]
+    source = furthest
+    dist[source] = 0
+    stack = deque([source])
+    while stack:
+        cur = stack.popleft()
+        for nex in g[cur]:
+            if dist[nex] != -1:
+                continue
+            stack.append(nex)
+            dist[nex] = dist[cur] + 1
+            prev[nex] = cur
+
+    left = dist.index(max(dist))
+    right = furthest
+
+    # log(dist)
+
+    # path = [left]
+    # cur = left
+    # while cur != right:
+    #     cur = prev[path[-1]]
+    #     path.append(cur)
+
+    # # log(path)
+
+    # main_path = set(path)
+
+    # remove = []
+    # heads = []
+
+    # for node in path:
+    #     for nex in g[node]:
+    #         if nex in main_path:
+    #             continue
+    #         heads.append(nex)
+    #         remove.append((nex, node))
+    
+    # for head in heads:
+    stack = deque([left])
+    seqeunce = []
+    visited = set([left])
+
+    # if not in dfs visit sequence, remove
+    # while stack:
+
+    @bootstrap
+    def dfs(node):
+        seqeunce.append(node)
+        for nex in g[node]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            dfs(nex)
+    
+    dfs(left)
+    # log(seqeunce)
+
+    head = left
+    res = []
+    for a,b in zip(seqeunce, seqeunce[1:]):
+        if a not in g[b]:
+            res.append([a,b,head,b])
+    
+    return res
+
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +175,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,18 +190,18 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(k-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr,k)  # include input here
 
     # print length if applicable
-    # print(len(res))
+    print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x+1) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
