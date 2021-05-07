@@ -47,10 +47,20 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# ? 1000000009 1000000007 1000000009 1000000007
+
+def solve_(arr):
+
+    pos = arr.index(min(arr))
     # your solution here
-    
-    return ""
+    res = []
+    nums = [1000000009, 1000000007]
+    for i in range(len(arr)):
+        if i == pos:
+            continue
+        res.append([pos+1, i+1, arr[pos], nums[i%2]])
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +68,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +78,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,15 +86,15 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
-    # print(len(res))
+    print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
