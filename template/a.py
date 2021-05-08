@@ -47,29 +47,30 @@ class ThreeDChessRooks:
 
 #         print(double_match)
 #         print("double_match res", res)
-            
+        c = Counter(pool)
+    
         for k,v in double_match.items():
             x,y,z = k
             
             if x == -1:
-                if (0,y,z) in pool and (1,y,z) in pool:
-                    res -= 1
-                if (C-1,y,z) in pool and (C-2,y,z) in pool:
-                    res -= 1
+                if (0,y,z) in c and (1,y,z) in c:
+                    res -= c[0,y,z]*c[1,y,z]
+                if (C-1,y,z) in c and (C-2,y,z) in c:
+                    res -= c[C-1,y,z]*c[C-2,y,z]
                     
             if y == -1:
-                if (x,0,z) in pool and (x,1,z) in pool:
-                    res -= 1
-                if (x,C-1,z) in pool and (x,C-2,z) in pool:
-                    res -= 1
+                if (x,0,z) in c and (x,1,z) in c:
+                    res -= c[x,0,z]*c[x,1,z]
+                if (x,C-1,z) in c and (x,C-2,z) in c:
+                    res -= c[x,C-1,z]*c[x,C-2,z]
                     
             if z == -1:
-                if (x,y,0) in pool and (x,y,1) in pool:
-                    res -= 1
-                if (x,y,C-1) in pool and (x,y,C-2) in pool:
-                    res -= 1
+                if (x,y,0) in c and (x,y,1) in c:
+                    res -= c[x,y,0]*c[x,y,1]
+                if (x,y,C-1) in c and (x,y,C-2) in c:
+                    res -= c[x,y,C-1]*c[x,y,C-2]
         
-#         c = Counter(pool)
+#         
 #         for k,v in c.items():
 #             res -= v*(v-1)
         
