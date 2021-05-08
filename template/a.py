@@ -2,11 +2,13 @@ from collections import Counter
 
 class ThreeDChessRooks:
     def count(self, C, R, XP, YP, ZP, seed):
+#         def print(*args):
+#             pass
         
-        pool = set()
+        pool = []
         
         for x,y,z in zip(XP, YP, ZP):
-            pool.add((x,y,z))
+            pool.append((x,y,z))
 
         state = seed
         for i in range(len(XP), R):
@@ -16,7 +18,7 @@ class ThreeDChessRooks:
             y = state%C
             state = (state * 1103515245 + 12345) % 2147483648
             z = state%C
-            pool.add((x,y,z))
+            pool.append((x,y,z))
             
 #         print(pool)
         res = 0
@@ -31,6 +33,9 @@ class ThreeDChessRooks:
         for k,v in single_match.items():
             res += v*(v-1)
         
+#         print(single_match)
+#         print("single_match res", res)
+        
         double_match = Counter()
         for x,y,z in pool:
             double_match[x,y,-1] += 1
@@ -40,6 +45,9 @@ class ThreeDChessRooks:
         for k,v in double_match.items():
             res -= v*(v-1)
 
+#         print(double_match)
+#         print("double_match res", res)
+            
         for k,v in double_match.items():
             x,y,z = k
             
@@ -60,5 +68,9 @@ class ThreeDChessRooks:
                     res -= 1
                 if (x,y,C-1) in pool and (x,y,C-2) in pool:
                     res -= 1
+        
+#         c = Counter(pool)
+#         for k,v in c.items():
+#             res -= v*(v-1)
         
         return res        
