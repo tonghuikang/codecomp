@@ -5,10 +5,10 @@ class ThreeDChessRooks:
 #         def print(*args):
 #             pass
         
-        pool = []
+        pool = [(0,0,0) for _ in range(R)]
         
-        for x,y,z in zip(XP, YP, ZP):
-            pool.append((x,y,z))
+        for i,(x,y,z) in enumerate(zip(XP, YP, ZP)):
+            pool[i] = (x,y,z)
 
         state = seed
         for i in range(len(XP), R):
@@ -18,21 +18,32 @@ class ThreeDChessRooks:
             y = state%C
             state = (state * 1103515245 + 12345) % 2147483648
             z = state%C
-            pool.append((x,y,z))
+            pool[i] = (x,y,z)
             
 #         print(pool)
         res = 0
 
-        single_match = Counter()
+        single_match_x = Counter()
+        single_match_y = Counter()
+        single_match_z = Counter()
         
         for x,y,z in pool:
-            single_match[x,-1,-1] += 1
-            single_match[-1,y,-1] += 1
-            single_match[-1,-1,z] += 1
+            single_match_x[x] += 1
+            single_match_y[y] += 1
+            single_match_z[z] += 1
         
-        for k,v in single_match.items():
+        for k,v in single_match_x.items():
             res += v*(v-1)
-        
+
+        for k,v in single_match_y.items():
+            res += v*(v-1)
+
+        for k,v in single_match_z.items():
+            res += v*(v-1)
+            
+        del single_match_x
+        del single_match_y
+        del single_match_z
 #         print(single_match)
 #         print("single_match res", res)
         
@@ -70,7 +81,6 @@ class ThreeDChessRooks:
                 if (x,y,C-1) in c and (x,y,C-2) in c:
                     res -= c[x,y,C-1]*c[x,y,C-2]
         
-#         
 #         for k,v in c.items():
 #             res -= v*(v-1)
         
