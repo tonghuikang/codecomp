@@ -66,13 +66,13 @@ def binary_search(func_,       # condition function
 
     ctr = 80
     smallest_true = right
-    while left < right and ctr:
+    while ctr:
         mid = left + (right-left)/2
         if func(mid):
             right = mid
             smallest_true = mid
         else:
-            left = mid + 10**-15
+            left = mid + 10**-16
         ctr -= 1
         log(mid)
     return smallest_true
@@ -122,6 +122,10 @@ def solve_(arr, k, n, m):
         diffs.append(upper-lower)
         assert 0 <= upper-lower <= 1
     
+    lowers.reverse()
+    uppers.reverse()
+    diffs.reverse()
+
     res = []
     remaining_diff = m - sum(lowers)
     for lower, upper, diff in zip(lowers, uppers, diffs):
@@ -132,9 +136,8 @@ def solve_(arr, k, n, m):
             res.append(lower)
 
     assert sum(res) == m
-
+    res.reverse()
     return res
-
 
    
     
