@@ -51,6 +51,14 @@ def minus_one_matrix(mrr):
 def solve_(t, N):
     # your solution here
     
+    impossible = set(range(1,2000000))
+    for a in range(1,2000000):
+        val = int((1+t/100)*a)
+        impossible.discard(val)
+    impossible = sorted(impossible)
+    if len(impossible) >= N:
+        return impossible[N-1]
+
     d = 1/((t/100)/(1+(t/100)))
     ratio = (1+t/100)
 
@@ -63,7 +71,7 @@ def solve_(t, N):
     root = int(sum/ratio)
     impossible = set([isum+i for i in [-1,0,1]])
 
-    for i in [-2,-1,0,1,2]:
+    for i in range(-10,10,1):
         val = int((root+i)*ratio)
         impossible.discard(val)
 
@@ -74,10 +82,11 @@ def solve_(t, N):
         return val
 
 
-# for _ in range(1000):
-#     for t in range(1,50):
-#         N = random.randint(1,1000000000)
-#         solve(t,N)
+if OFFLINE_TEST:
+    for _ in range(1000):
+        for t in range(1,50):
+            N = random.randint(1,1000000000)
+            solve(t,N)
 
 
 for case_num in [0]:  # no loop over test case
