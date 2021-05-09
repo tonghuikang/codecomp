@@ -51,13 +51,13 @@ eps = 10**-4
 def solve_(t, N):
     # your solution here
     
-    impossible = set(range(1,2000000))
-    for a in range(1,2000000):
-        val = int((1+t/100)*a)
-        impossible.discard(val)
-    impossible = sorted(impossible)
-    if len(impossible) >= N:
-        return impossible[N-1]
+    # impossible = set(range(1,2000000))
+    # for a in range(1,2000000):
+    #     val = int((1+t/100)*a)
+    #     impossible.discard(val)
+    # impossible = sorted(impossible)
+    # if len(impossible) >= N:
+    #     return impossible[N-1]
 
     d = 1/((t/100)/(1+(t/100)))
     ratio = (1+t/100)
