@@ -67,24 +67,26 @@ def binary_search(func_,       # condition function
     ctr = 80
     smallest_true = right
     while left < right and ctr:
-        mid = (left + right) / 2
+        mid = left + (right-left)/2
         if func(mid):
             right = mid
             smallest_true = mid
         else:
-            left = mid
+            left = mid + 10**-15
         ctr -= 1
-        # log(mid)
+        log(mid)
     return smallest_true
+    return mid
 
 
 def ceiling_division(numer, denom):
     return -((-numer)//denom)
 
 def solve_(arr, k, n, m):
-
+    assert sum(arr) == n
     # your solution here
     arr = [x/n for x in arr]
+    log(arr)
     
     # binary search on allowance
     def is_allowance_feasible(allowance):
@@ -102,8 +104,8 @@ def solve_(arr, k, n, m):
 
         return all_lower <= m <= all_upper
 
-    best_allowance = binary_search(is_allowance_feasible, left=0, right=1)
-    # log(is_allowance_feasible(best_allowance), best_allowance, best_allowance+10**-15)
+    best_allowance = binary_search(is_allowance_feasible, left=0, right=2)
+    log(is_allowance_feasible(best_allowance), best_allowance)
     # best_allowance += 10**-15
 
     lowers = []
@@ -118,7 +120,7 @@ def solve_(arr, k, n, m):
         lowers.append(lower)
         uppers.append(upper)
         diffs.append(upper-lower)
-        assert upper-lower <= 1
+        assert 0 <= upper-lower <= 1
     
     res = []
     remaining_diff = m - sum(lowers)
