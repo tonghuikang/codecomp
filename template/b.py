@@ -64,7 +64,7 @@ def binary_search(func_,       # condition function
             return not func_(val)
         return func_(val)
 
-    ctr = 2000
+    ctr = 50
     while left < right and ctr:
         mid = (left + right) / 2
         if func(mid):
@@ -72,6 +72,7 @@ def binary_search(func_,       # condition function
         else:
             left = mid
         ctr -= 1
+        log(mid)
     return left
 
 
