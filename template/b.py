@@ -64,19 +64,16 @@ def binary_search(func_,       # condition function
             return not func_(val)
         return func_(val)
 
-    ctr = 80
-    smallest_true = right
-    while ctr:
-        mid = left + (right-left)/2
+    while left < right:
+        mid = (left + right) // 2
         if func(mid):
             right = mid
-            smallest_true = mid
         else:
-            left = mid + 10**-16
-        ctr -= 1
-        log(mid)
-    return smallest_true
-    return mid
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:      # find last False
+        return left-1
 
 
 def ceiling_division(numer, denom):
@@ -85,7 +82,7 @@ def ceiling_division(numer, denom):
 def solve_(arr, k, n, m):
     assert sum(arr) == n
     # your solution here
-    arr = [x/n for x in arr]
+    arr = [x*m for x in arr]
     log(arr)
     
     # binary search on allowance
@@ -93,10 +90,8 @@ def solve_(arr, k, n, m):
         all_lower = 0
         all_upper = 0
         for ratio in arr:
-            lower = (ratio - allowance)*m
-            upper = (ratio + allowance)*m
-            lower = ceiling_division(lower, 1)
-            upper = upper//1
+            lower = ceiling_division(ratio - allowance,n)
+            upper = (ratio + allowance)//n
             if upper < lower:
                 return False
             all_lower += lower
@@ -104,7 +99,7 @@ def solve_(arr, k, n, m):
 
         return all_lower <= m <= all_upper
 
-    best_allowance = binary_search(is_allowance_feasible, left=0, right=2)
+    best_allowance = binary_search(is_allowance_feasible, left=0, right=10**18)
     log(is_allowance_feasible(best_allowance), best_allowance)
     # best_allowance += 10**-15
 
@@ -113,18 +108,16 @@ def solve_(arr, k, n, m):
     diffs = []
     allowance = best_allowance
     for ratio in arr:
-        lower = (ratio - allowance)*m
-        upper = (ratio + allowance)*m
-        lower = int(ceiling_division(lower, 1))
-        upper = int(upper//1)
+        lower = ceiling_division(ratio - allowance,n)
+        upper = (ratio + allowance)//n
         lowers.append(lower)
         uppers.append(upper)
         diffs.append(upper-lower)
-        assert 0 <= upper-lower <= 1
+        # assert 0 <= upper-lower <= 1
     
-    lowers.reverse()
-    uppers.reverse()
-    diffs.reverse()
+    # lowers.reverse()
+    # uppers.reverse()
+    # diffs.reverse()
 
     res = []
     remaining_diff = m - sum(lowers)
@@ -136,7 +129,7 @@ def solve_(arr, k, n, m):
             res.append(lower)
 
     assert sum(res) == m
-    res.reverse()
+    # res.reverse()
     return res
 
    
