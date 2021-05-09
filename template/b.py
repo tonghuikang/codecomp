@@ -47,15 +47,95 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def binary_search(func_,       # condition function
+                  first=True,  # else last
+                  target=True, # else False
+                  left=0, right=2**31-1) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first^target:
+            return not func_(val)
+        return func_(val)
+
+    ctr = 2000
+    while left < right and ctr:
+        mid = (left + right) / 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid
+        ctr -= 1
+    return left
+
+
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+def solve_(arr, k, n, m):
+
     # your solution here
+    arr = [x/n for x in arr]
     
-    return ""
+    # binary search on allowance
+    def is_allowance_feasible(allowance):
+        all_lower = 0
+        all_upper = 0
+        for ratio in arr:
+            lower = (ratio - allowance)*m
+            upper = (ratio + allowance)*m
+            lower = ceiling_division(lower, 1)
+            upper = upper//1
+            if upper < lower:
+                return False
+            all_lower += lower
+            all_upper += upper
+
+        return all_lower <= m <= all_upper
+
+    best_allowance = binary_search(is_allowance_feasible, left=1/10**9, right=1)
+    best_allowance += 10**-15
+    log(best_allowance, best_allowance+10**-17)
+
+    lowers = []
+    uppers = []
+    diffs = []
+    allowance = best_allowance
+    for ratio in arr:
+        lower = (ratio - allowance)*m
+        upper = (ratio + allowance)*m
+        lower = int(ceiling_division(lower, 1))
+        upper = int(upper//1)
+        lowers.append(lower)
+        uppers.append(upper)
+        diffs.append(upper-lower)
+        assert upper-lower <= 1
+    
+    res = []
+    remaining_diff = m - sum(lowers)
+    for lower, upper, diff in zip(lowers, uppers, diffs):
+        if remaining_diff and upper > lower:
+            remaining_diff -= 1
+            res.append(upper)
+        else:
+            res.append(lower)
+
+    assert sum(res) == m
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+   
+    
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,8 +147,8 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    k,n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,13 +156,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
