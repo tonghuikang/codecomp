@@ -47,15 +47,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# binary search, then off by one resolution
+def solve_(t, N):
     # your solution here
     
-    return ""
+    d = 1/((t/100)/(1+(t/100)))
+    ratio = (1+t/100)
+
+    sum = (N)*d
+    # sum = N*(d+an)/2
+    isum = int(sum)
+
+    log(sum)
+
+    root = int(sum/ratio)
+    impossible = set([isum+i for i in [-1,0,1]])
+
+    for i in [-2,-1,0,1,2]:
+        val = int((root+i)*ratio)
+        impossible.discard(val)
+
+    log(impossible)
+    assert len(impossible) == 1
+
+    for val in impossible:
+        return val
 
 
-# for case_num in [0]:  # no loop over test case
+# for _ in range(1000):
+#     for t in range(1,50):
+#         N = random.randint(1,1000000000)
+#         solve(t,N)
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,7 +94,7 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    t,N = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +103,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(t,N)  # include input here
 
     # print length if applicable
     # print(len(res))
