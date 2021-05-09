@@ -18,8 +18,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-# OFFLINE_TEST = getpass.getuser() == "hkmac"
-OFFLINE_TEST = False  # codechef does not allow getpass
+OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -30,7 +30,11 @@ def solve(*args):
         log("----- solving ------")
         log(*args)
         log("----- ------- ------")
-    return solve_(*args)
+    res = solve_(*args)
+    res_ref = solve_ref(*args)
+    log(res, res_ref)
+    assert res == res_ref
+    return res
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -45,6 +49,13 @@ def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
+eps = 10**-4
+
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+def solve_ref(t, N):
+    return N + (100*N-1)//t
 
 
 # binary search, then off by one resolution
@@ -64,16 +75,17 @@ def solve_(t, N):
 
     sum = (N)*d
     # sum = N*(d+an)/2
-    isum = int(sum)
+    isum = int(sum+eps)
 
     log(sum)
 
-    root = int(sum/ratio)
+    root = int(sum/ratio + eps)
     impossible = set([isum+i for i in [-2,-1,0,1]])
 
     for i in range(-10,10,1):
-        val = int((root+i)*ratio)
-        impossible.discard(val)
+        val = (root+i)*ratio
+        log(val)
+        impossible.discard(int(val + eps))
 
     log(impossible)
     assert len(impossible) == 1
@@ -82,11 +94,11 @@ def solve_(t, N):
         return val
 
 
-if OFFLINE_TEST:
-    for _ in range(10000):
-        for t in range(49,50):
-            N = random.randint(1,1000000000)
-            solve(t,N)
+# if OFFLINE_TEST:
+#     for _ in range(10000):
+#         for t in range(49,50):
+#             N = random.randint(1,1000000000)
+#             solve(t,N)
 
 
 for case_num in [0]:  # no loop over test case
