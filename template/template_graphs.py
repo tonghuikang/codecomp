@@ -238,28 +238,45 @@ def min_cost_flow(map_from_node_to_nodes_and_capcities, demands):
 
 # ------------------------ methods using disjoint set ------------------------
 
+
 class DisjointSet:
-    # leetcode.com/problems/accounts-merge/
-    def __init__(self, parent={}):
-        if not parent:
-            parent = {}
-        self.parent = parent
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
 
-    def find(self, item):
-        if item not in self.parent:
-            self.parent[item] = item
-            return item
-        elif self.parent[item] == item:
-            return item
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
         else:
-            res = self.find(self.parent[item])
-            self.parent[item] = res
-            return res
+            self.parent_or_size = defaultdict(lambda: -1)
 
-    def union(self, set1, set2):
-        root1 = self.find(set1)
-        root2 = self.find(set2)
-        self.parent[root1] = root2
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.leader(a)]
 
 
 def minimum_spanning_tree(edges, costs):
