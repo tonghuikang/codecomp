@@ -45,7 +45,7 @@ def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
-
+eps = 10**-4
 
 # binary search, then off by one resolution
 def solve_(t, N):
@@ -64,7 +64,7 @@ def solve_(t, N):
 
     sum = (N)*d
     # sum = N*(d+an)/2
-    isum = int(sum)
+    isum = int(sum+eps)
 
     log(sum)
 
@@ -72,7 +72,7 @@ def solve_(t, N):
     impossible = set([isum+i for i in [-1,0,1]])
 
     for i in range(-10,10,1):
-        val = int((root+i)*ratio)
+        val = int((root+i)*ratio+eps)
         impossible.discard(val)
 
     log(impossible)
@@ -82,11 +82,11 @@ def solve_(t, N):
         return val
 
 
-if OFFLINE_TEST:
-    for _ in range(1000):
-        for t in range(1,50):
-            N = random.randint(1,1000000000)
-            solve(t,N)
+# if OFFLINE_TEST:
+#     for _ in range(1000):
+#         for t in range(1,50):
+#             N = random.randint(1,1000000000)
+#             solve(t,N)
 
 
 for case_num in [0]:  # no loop over test case
