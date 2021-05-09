@@ -64,7 +64,7 @@ def binary_search(func_,       # condition function
             return not func_(val)
         return func_(val)
 
-    ctr = 50
+    ctr = 70
     while left < right and ctr:
         mid = (left + right) / 2
         if func(mid):
@@ -100,7 +100,7 @@ def solve_(arr, k, n, m):
 
         return all_lower <= m <= all_upper
 
-    best_allowance = binary_search(is_allowance_feasible, left=1/10**9, right=1)
+    best_allowance = binary_search(is_allowance_feasible, left=0, right=1)
     best_allowance += 10**-15
     log(best_allowance, best_allowance+10**-17)
 
