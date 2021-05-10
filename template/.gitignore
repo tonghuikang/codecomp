@@ -1,5 +1,7 @@
 # compiled C++ files
 a.out
+
+# temporary output file
 tmp.out
 
 # compiled Kotlin files
