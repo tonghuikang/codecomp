@@ -47,15 +47,57 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(mrr, h, w):
+    if h == w == 1:
+        return "Draw"
     
-    return ""
+    # your solution here
+    # mrr = [[cell if (i+j)%2 == 0 else -cell for i,cell in enumerate(row)] for j,row in enumerate(mrr)]
+    # log(mrr)
+
+    dp = [[0 for _ in range(w)] for _ in range(h)]
+    dp[0][0] += mrr[0][0]
+
+    for i in range(1,w):
+        if (i)%2:
+            dp[0][i] = dp[0][i-1] - mrr[0][i]
+        else:
+            dp[0][i] = dp[0][i-1] + mrr[0][i]
 
 
-# for case_num in [0]:  # no loop over test case
+    for i in range(1,h):
+        if (i)%2:
+            dp[i][0] = dp[i-1][0] - mrr[i][0]
+        else:
+            dp[i][0] = dp[i-1][0] + mrr[i][0]
+    
+    for i in range(1,h):
+        for j in range(1,w):
+            if (i+j)%2:
+                dp[i][j] = min(dp[i][j-1], dp[i-1][j]) - mrr[i][j]
+            else:
+                dp[i][j] = max(dp[i][j-1], dp[i-1][j]) + mrr[i][j]
+
+    dp[-1][-1] -= mrr[-1][-1]
+    log("dp")
+    log(dp)
+
+    if dp[-1][-1] == 0:
+        return "Draw"
+
+    if (i+j)%2 == 1:
+        if dp[-1][-1] >= 0:
+            return "Takahashi"
+        return "Aoki"
+    
+    if dp[-1][-1] >= 0:
+        return "Aoki"
+    return "Takahashi"
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,16 +109,17 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    h,w = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    mrr = read_strings(h)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+    mrr = [[1 if cell == "+" else -1 for cell in row[::-1]] for row in mrr[::-1]]
 
-    res = solve()  # include input here
+    res = solve(mrr,h,w)  # include input here
 
     # print length if applicable
     # print(len(res))

@@ -47,21 +47,36 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
     
-    return ""
+    must_have = set([i for i in range(10) if srr[i] == "o"])
+    no_have = set([i for i in range(10) if srr[i] == "x"])
+
+    if len(must_have) > 4:
+        return 0
+
+    res = 0
+    for i in range(10000,20000):
+        bag = set([int(x) for x in str(i)[1:]])
+        if bag & must_have != must_have:
+            continue
+        if bag & no_have:
+            continue
+        res += 1
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +91,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
