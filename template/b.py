@@ -72,8 +72,11 @@ def solve_(k):
     factors = set(get_prime_factors(k))
     for x in factors:
         val = k // x
-        res = bin(val).count("1")
-        log(val, res)
+        srr = bin(val)
+        if x == 2:
+            srr = srr[:-1]
+        res = srr.count("1")
+        log(x, val, res, bin(val))
         maxres = max(maxres, res)
     
     return maxres
