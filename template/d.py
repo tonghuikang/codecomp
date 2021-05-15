@@ -56,22 +56,20 @@ def solve_(mrr, h, w):
     # log(mrr)
 
     dp = [[0 for _ in range(w)] for _ in range(h)]
-    if (h+w-2)%2:
-        dp[0][0] = -mrr[0][0]
-    else:
-        dp[0][0] = mrr[0][0]
+    dp[0][0] += mrr[0][0]
 
-    for i in range(w-2,-1,-1):
-        if (i+h-1)%2:
-            dp[0][i] = dp[-1][i+1] - mrr[-1][i]
+    for i in range(1,w):
+        if (i)%2:
+            dp[0][i] = dp[0][i-1] - mrr[0][i]
         else:
-            dp[0][i] = dp[-1][i+1] + mrr[-1][i]
+            dp[0][i] = dp[0][i-1] + mrr[0][i]
 
-    for i in range(h-2,-1,-1):
-        if (i+w-1)%2:
-            dp[i][-1] = dp[i+1][-1] - mrr[i][-1]
+
+    for i in range(1,h):
+        if (i)%2:
+            dp[i][0] = dp[i-1][0] - mrr[i][0]
         else:
-            dp[i][-1] = dp[i+1][-1] + mrr[i][-1]
+            dp[i][0] = dp[i-1][0] + mrr[i][0]
     
     for i in range(1,h):
         for j in range(1,w):
@@ -80,8 +78,10 @@ def solve_(mrr, h, w):
             else:
                 dp[i][j] = max(dp[i][j-1], dp[i-1][j]) + mrr[i][j]
 
-
-    dp[-1][-1] -= mrr[-1][-1]
+    if (h+w-2)%2:
+        dp[-1][-1] += mrr[-1][-1]
+    else:
+        dp[-1][-1] -= mrr[-1][-1]
     log("dp")
     log(dp)
 
@@ -120,7 +120,7 @@ for case_num in [0]:  # no loop over test case
     mrr = read_strings(h)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
-    mrr = [[1 if cell == "+" else -1 for cell in row] for row in mrr]
+    mrr = [[1 if cell == "+" else -1 for cell in row[::-1]] for row in mrr[::-1]]
 
     res = solve(mrr,h,w)  # include input here
 
