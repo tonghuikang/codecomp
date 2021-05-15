@@ -64,23 +64,83 @@ def get_prime_factors(nr):
 
 
 
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
 
-p2 = [2**x for x in range(20)]
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+ 
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    if stack:
+                        stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
+
+result = [0 for _ in range(1010)]
+
+@bootstrap
+def dfs(cur, csum, res):
+    csum = csum + cur
+    res = res + 1
+    if csum > 1000:
+        return
+    result[csum] = max(result[csum], res)
+
+    for i in range(2,1000):
+        if i*cur <= 1000:
+            dfs(i*cur, csum, res)
+        else:
+            break
+
+for i in range(3,1000):
+    dfs(i, 0, 0)
+
+log(result[:10])
+
 
 def solve_(k):
-    maxres = 1
-    factors = set(get_prime_factors(k))
-    for x in factors:
-        val = k // x
-        srr = bin(val)
-        if x == 2:
-            srr = srr[:-1]
-        res = srr.count("1")
-        log(x, val, res, bin(val))
-        maxres = max(maxres, res)
-    
-    return maxres
+    return result[k]
 
+
+
+# def solve_slow(k):
+#     g = [[] for _ in range(1000+1)]
+#     for x in range(2,1001):
+#         factors = get_all_divisors_given_prime_factorization(get_prime_factors(x))
+#         for k in factors:
+#             g[k].append(x)
+    
+    # dp = [1 for _ in range(1000+1)]
+    # for i in range(1001):
+    #     for nex in g[i]:
+    #         dp[nex] = max(dp[nex], )
+
+        
+    
 
 
 # for case_num in [0]:  # no loop over test case

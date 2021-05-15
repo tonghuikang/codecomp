@@ -16,7 +16,8 @@ def bootstrap(f, stack=[]):
                     stack.append(to)
                     to = next(to)
                 else:
-                    stack.pop()
+                    if stack:
+                        stack.pop()
                     if not stack:
                         break
                     to = stack[-1].send(to)
