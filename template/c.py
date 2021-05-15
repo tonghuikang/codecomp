@@ -47,9 +47,18 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
-    
+    k = len(arr)
+
+    for a,b in arr:
+        if b-a > 1:
+            return 0
+
+    # sizes = tuple(range(k))
+    # def count(remaining_sizes, largest):
+
+
     return ""
 
 

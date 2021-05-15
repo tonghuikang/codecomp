@@ -33,12 +33,12 @@ def shuffle():
 
 def compare(i,j):
     # swap and compare here
-    if i != 0:
-        
-    print("S {} {}".format(i+1, j+1), flush=True)
-    print("{}".format(pos+1), flush=True)
-    response = int(input())
-    return response
+    # if i != 0:
+
+    # print("S {} {}".format(i+1, j+1), flush=True)
+    # print("{}".format(pos+1), flush=True)
+    # response = int(input())
+    # return response
 
 
 def done(pos):
