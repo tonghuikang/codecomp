@@ -46,11 +46,38 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
 
-def solve_():
-    # your solution here
+
+
+
+p2 = [2**x for x in range(20)]
+
+def solve_(k):
+    maxres = 1
+    factors = set(get_prime_factors(k))
+    for x in factors:
+        val = k // x
+        res = bin(val).count("1")
+        log(val, res)
+        maxres = max(maxres, res)
     
-    return ""
+    return maxres
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +85,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +103,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
