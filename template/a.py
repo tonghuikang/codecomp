@@ -24,19 +24,60 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
-def query(pos):
+def shuffle():
+    for i in range(100):
+        for j in range(100):
+            if random.randint(1,4) == 1:
+                print("S {} {}".format(i+1, j+1), flush=True)
+
+
+def compare(i,j):
+    # swap and compare here
+    if i != 0:
+        
+    print("S {} {}".format(i+1, j+1), flush=True)
     print("{}".format(pos+1), flush=True)
     response = int(input())
     return response
 
-def alert(pos):
-    print("! {}".format(pos), flush=True)
-    sys.exit()
+
+def done(pos):
+    print("D".format(pos), flush=True)
+    # sys.exit()
+
+
+# ---------------------------- template ends here ----------------------------
+
+def partition(array, begin, end):
+    pivot = begin
+    for i in range(begin+1, end+1):
+        if array[i] <= array[begin]:
+            pivot += 1
+            array[i], array[pivot] = array[pivot], array[i]
+    array[pivot], array[begin] = array[begin], array[pivot]
+    return pivot
+
+
+def quicksort(array, begin=0, end=None):
+    if end is None:
+        end = len(array) - 1
+    def _quicksort(array, begin, end):
+        if begin >= end:
+            return
+        pivot = partition(array, begin, end)
+        _quicksort(array, begin, pivot-1)
+        _quicksort(array, pivot+1, end)
+    return _quicksort(array, begin, end)
 
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-# k = int(input())
+k = int(input())
+
+for _ in range(k):
+    shuffle()
+    quicksort()
+    done()
 
 # read line as a string
 # srr = input().strip()

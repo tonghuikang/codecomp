@@ -120,14 +120,17 @@ def dfs(cur, csum, res):
     result[csum] = max(result[csum], res)
 
     for i in range(2,LARGE):
-        if i*cur <= LARGE:
-            dfs(i*cur, csum, res)
-        else:
+        if i*cur+csum >= LARGE:
             break
+        dfs(i*cur, csum, res)
 
-for i in range(3,LARGE):
+
+for i in range(LARGE,2,-1):
     log(i)
-    dfs(i, 0, 0)
+    dfs(i, 0, 0)       
+    if i < 1000:  
+        with open("b_dump.out", "w") as f:
+            f.write(str(result))
 
 # log(result[:10])
 print(result)
