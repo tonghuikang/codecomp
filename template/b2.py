@@ -100,8 +100,8 @@ def bootstrap(f, stack=[]):
             return to
     return wrappedfunc
 
-LARGE = 10**3+10
-result = [0 for _ in range(LARGE)]
+LARGE = 10**6+10
+
 
 visited = set()
 
@@ -119,15 +119,18 @@ def dfs(cur, csum, res):
     
     result[csum] = max(result[csum], res)
 
-    for i in range(2,LARGE):
-        if i*cur <= LARGE:
-            dfs(i*cur, csum, res)
-        else:
+    for i in range(24,2,-1):
+        if i*cur+csum >= LARGE:
             break
+        dfs(i*cur, csum, res)
 
-for i in range(3,LARGE):
+
+for i in range(4,25):
     log(i)
-    dfs(i, 0, 0)
+    dfs(i, 0, 0)       
+    if i < 1000:  
+        with open("b_dump.out", "w") as f:
+            f.write(str(result))
 
 # log(result[:10])
 print(result)
