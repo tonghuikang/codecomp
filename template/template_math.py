@@ -165,7 +165,7 @@ def factorial_mod_p(n, p):
     val = 1
     for i in range(1,n+1):
         val = (val*i)%p
-    return p
+    return val
 
 
 def ncr_mod_p(n, r, p):
