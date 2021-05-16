@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+M9 = 998244353 # 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -46,16 +46,31 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def factorial_mod_p(n, p):
+    val = 1
+    for i in range(1,n+1):
+        val = (val*i)%p
+    return val
 
-def solve_():
+
+
+def solve_(mrr, n, m):
     # your solution here
+    vals = []
+    for perm in itertools.permutations(range(1,n+1)):
+        matrix = [[x+delay-1 for x in row] for row, delay in zip(mrr, perm)]
+        val = sum(min(col) <= n for col in zip(*matrix))
+        vals.append(val)
     
-    return ""
+    # log(vals)
+    # log(sum(vals)/math.factorial(n))
+
+    return (sum(vals) * pow(factorial_mod_p(n, M9), M9-2, M9)) % M9
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,16 +82,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
