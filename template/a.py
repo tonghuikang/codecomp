@@ -47,18 +47,26 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(k):
     # your solution here
+    minres = 2*10**18
     
-    return ""
+    for b in range(len(bin(k))):
+        if 2**b > k:
+            continue
+        a,c = divmod(k, 2**b)
+        minres = min(minres, a+b+c)
 
 
-# for case_num in [0]:  # no loop over test case
+    return minres
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +84,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))

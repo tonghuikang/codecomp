@@ -47,21 +47,60 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
     
-    return ""
+    arr = [1 if x == "1" else 0 for x in arr]
+    brr = [1 if x == "1" else 0 for x in brr]
+
+    if arr.count(1) != brr.count(1):
+        log("wrong count")
+        return -1
+
+    crr = [(a,b) for a,b in zip(arr, brr) if not(a == b == 1)]
+    arr = [a for a,b in crr]
+    brr = [b for a,b in crr]
+
+    # log(arr)
+    # log(brr)
+    # log("".join(str(x[0]) for x in crr))
+    # log("".join(str(x[1]) for x in crr))
+
+    # loca = [i for i,(a,b) in enumerate(crr) if a == 1]
+    # locb = [i for i,(a,b) in enumerate(crr) if b == 1]
 
 
-# for case_num in [0]:  # no loop over test case
+    res = 0
+    left = -1
+    dump = 0
+    cur = 0
+    for i,(a,b) in enumerate(zip(arr, brr)):
+        # log(cur)
+        if a != b:
+            if cur == 0:
+                left = i
+                dump = 0
+        if a == 1:
+            dump += 1
+        if a != b:
+            cur += b-a
+            if cur == 0:
+                res += i - left + 1 - dump
+                # log(i, left, dump)
+    return res
+
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    arr = input().strip()
+    brr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +115,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))
