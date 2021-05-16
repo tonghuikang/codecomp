@@ -57,6 +57,8 @@ def factorial_mod_p(n, p):
 def solve_(mrr, n, m):
     # your solution here
 
+    fn = factorial_mod_p(n, M9)
+
     val = 0
     for col in zip(*mrr):
         # for perm in itertools.permutations(range(1,n+1)):
@@ -64,7 +66,7 @@ def solve_(mrr, n, m):
         #     if min(arr) <= n:
         #         val += 1
     
-        # col = sorted(col)
+        col = sorted(col)
 
         numer = 1
         # demon = 1
@@ -74,8 +76,9 @@ def solve_(mrr, n, m):
             numer *= num
             # demon *= dem
 
-        log(math.factorial(n)-numer)
-        val += math.factorial(n)-numer
+        # log(math.factorial(n)-numer)
+        # log(6-numer)
+        val += fn-numer
 
 
 
