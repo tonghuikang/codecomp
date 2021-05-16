@@ -49,6 +49,8 @@ from sklearn.neighbors import KDTree
 import numpy as np
 
 def solve_(lst):
+    if len(lst) == 2:
+        return abs(lst[0] - lst[1])
     # your solution here
     
     data = [(a,b) for a,b in zip(lst, lst[1:])]
