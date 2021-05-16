@@ -49,58 +49,61 @@ def minus_one_matrix(mrr):
 
 def solve_(lst, dir, n, m):
     # your solution here
-    zrr = sorted([(pos, d, i) for i, (pos, d) in enumerate(zip(lst, dir))])
-    arr = [(pos, d, i) for pos, d, i in zrr if pos%2 == 0]
-    brr = [(pos, d, i) for pos, d, i in zrr if pos%2 == 1]
-    
-    res = [-1 for _ in lst]
+    zrr = [(pos, d, i) for i, (pos, d) in enumerate(zip(lst, dir))]
+    del lst
+    del dir
 
-    log(arr)
-    log(brr)
+    zrr.sort()
+    res = [-1]*len(zrr)
 
-    def proc(brr):
+    def proc(val):
 
         stack2 = deque([])
-        for p, d, i in brr:
+        for p, d, i in zrr:
+            if p&1 == val:
+                continue
             if d == -1 and stack2 and stack2[-1][1] == 1:  # forward
                 p2, d2, i2 = stack2.pop()
-                t = abs(p2-p)//2
+                t = abs(p2-p) >> 1
                 res[i] = t
                 res[i2] = t
             else:
                 stack2.append((p,d,i))
 
-        if len(stack2) > 1:
-            while len(stack2) >= 2 and stack2[0][1] == stack2[1][1] == -1:
-                p, d, i = stack2.popleft()
-                p2, d2, i2 = stack2.popleft()
-                t = (p2+p)
-                assert t%2 == 0
-                t = t//2
-                res[i] = t
-                res[i2] = t
-            while len(stack2) >= 2 and stack2[-1][1] == stack2[-2][1] == 1:
-                p, d, i = stack2.pop()
-                p2, d2, i2 = stack2.pop()
-                t = (m-p2+m-p)
-                assert t%2 == 0
-                t = t//2
-                res[i] = t
-                res[i2] = t
-            assert len(stack2) <= 2
-            if len(stack2) == 2:
-                assert stack2[0][1] == -1 and stack2[1][1] == 1
-                p, d, i = stack2.popleft()
-                p2, d2, i2 = stack2.pop()
-                t = m + (m-p2) + p 
-                assert t%2 == 0
-                t = t//2
-                res[i] = t
-                res[i2] = t
+        while len(stack2) >= 2:
+            p, d, i = stack2.popleft()
+            p2, d2, i2 = stack2.popleft()
+            if not (d == d2 == -1):
+                stack2.appendleft((p2, d2, i2))
+                stack2.appendleft((p, d, i))
+                break
+            t = (p2+p) >> 1
+            res[i] = t
+            res[i2] = t
+        
+        while len(stack2) >= 2:
+            p, d, i = stack2.pop()
+            p2, d2, i2 = stack2.pop()
+            if not (d == d2 == 1):
+                stack2.append((p2, d2, i2))
+                stack2.append((p, d, i))
+                break
+            t = (m-p2+m-p) >> 1
+            res[i] = t
+            res[i2] = t
+        
+        assert len(stack2) <= 2
+        if len(stack2) == 2:
+            assert stack2[0][1] == -1 and stack2[1][1] == 1
+            p, d, i = stack2.popleft()
+            p2, d2, i2 = stack2.pop()
+            t = (m + (m-p2) + p) >> 1
+            res[i] = t
+            res[i2] = t
                 
 
-    proc(arr)
-    proc(brr)
+    proc(1)
+    proc(0)
 
     return res
 
