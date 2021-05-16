@@ -59,12 +59,25 @@ def solve_(mrr, n, m):
 
     val = 0
     for col in zip(*mrr):
-        for perm in itertools.permutations(range(1,n+1)):
-            arr = [a+b-1 for a,b in zip(col, perm)]
-            if min(arr) <= n:
-                val += 1
+        # for perm in itertools.permutations(range(1,n+1)):
+        #     arr = [a+b-1 for a,b in zip(col, perm)]
+        #     if min(arr) <= n:
+        #         val += 1
     
-    log(val)
+        # col = sorted(col)
+
+        numer = 1
+        # demon = 1
+        for i,x in enumerate(col):
+            dem = n-i
+            num = dem - max(0, n-x+1)
+            numer *= num
+            # demon *= dem
+
+        log(math.factorial(n)-numer)
+        val += math.factorial(n)-numer
+
+
 
     # vals = []
     # for perm in itertools.permutations(range(1,n+1)):
