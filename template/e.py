@@ -56,16 +56,26 @@ def factorial_mod_p(n, p):
 
 def solve_(mrr, n, m):
     # your solution here
-    vals = []
-    for perm in itertools.permutations(range(1,n+1)):
-        matrix = [[x+delay-1 for x in row] for row, delay in zip(mrr, perm)]
-        val = sum(min(col) <= n for col in zip(*matrix))
-        vals.append(val)
+
+    val = 0
+    for col in zip(*mrr):
+        for perm in itertools.permutations(range(1,n+1)):
+            arr = [a+b-1 for a,b in zip(col, perm)]
+            if min(arr) <= n:
+                val += 1
+    
+    log(val)
+
+    # vals = []
+    # for perm in itertools.permutations(range(1,n+1)):
+    #     matrix = [[x+delay-1 for x in row] for row, delay in zip(mrr, perm)]
+    #     val = sum(min(col) <= n for col in zip(*matrix))
+    #     vals.append(val)
     
     # log(vals)
     # log(sum(vals)/math.factorial(n))
 
-    return (sum(vals) * pow(factorial_mod_p(n, M9), M9-2, M9)) % M9
+    return (val * pow(factorial_mod_p(n, M9), M9-2, M9)) % M9
 
 
 for case_num in [0]:  # no loop over test case
