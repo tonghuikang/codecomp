@@ -45,7 +45,7 @@ def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
-from scipy.spatial import KDTree
+from sklearn.neighbors import KDTree
 
 def solve_(lst):
     # your solution here
@@ -64,11 +64,12 @@ def solve_(lst):
         max_reduction = max(max_reduction, reduction)
 
 
-    kd = KDTree(data)
+    kd = KDTree(data, metric="manhattan")
     
     for i,(a,b) in enumerate(data):
-        result = kd.query((a,b), k=2, p=1)
-        resset = set(result[1]) - set([i])
+        result = kd.query([[a,b]], k=2)
+        # log(result)
+        resset = set(result[1][0]) - set([i])
         for idx in resset:
             break
         x,y = data[idx]
