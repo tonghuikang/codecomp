@@ -47,10 +47,62 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst, dir, n, m):
     # your solution here
+    zrr = sorted([(pos, d, i) for i, (pos, d) in enumerate(zip(lst, dir))])
+    arr = [(pos, d, i) for pos, d, i in zrr if pos%2 == 0]
+    brr = [(pos, d, i) for pos, d, i in zrr if pos%2 == 1]
     
-    return ""
+    res = [-1 for _ in lst]
+
+    log(arr)
+    log(brr)
+
+    def proc(brr):
+
+        stack2 = deque([])
+        for p, d, i in brr:
+            if d == -1 and stack2 and stack2[-1][1] == 1:  # forward
+                p2, d2, i2 = stack2.pop()
+                t = abs(p2-p)//2
+                res[i] = t
+                res[i2] = t
+            else:
+                stack2.append((p,d,i))
+
+        if len(stack2) > 1:
+            while len(stack2) >= 2 and stack2[0][1] == stack2[1][1] == -1:
+                p, d, i = stack2.popleft()
+                p2, d2, i2 = stack2.popleft()
+                t = (p2+p)
+                assert t%2 == 0
+                t = t//2
+                res[i] = t
+                res[i2] = t
+            while len(stack2) >= 2 and stack2[-1][1] == stack2[-2][1] == 1:
+                p, d, i = stack2.pop()
+                p2, d2, i2 = stack2.pop()
+                t = (m-p2+m-p)
+                assert t%2 == 0
+                t = t//2
+                res[i] = t
+                res[i2] = t
+            assert len(stack2) <= 2
+            if len(stack2) == 2:
+                assert stack2[0][1] == -1 and stack2[1][1] == 1
+                p, d, i = stack2.popleft()
+                p2, d2, i2 = stack2.pop()
+                t = m + (m-p2) + p 
+                assert t%2 == 0
+                t = t//2
+                res[i] = t
+                res[i2] = t
+                
+
+    proc(arr)
+    proc(brr)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -64,25 +116,26 @@ for case_num in range(int(input())):
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
+    dir = input().split()
     # lst = minus_one(lst)
+    dir = [1 if val == "R" else -1 for val in dir]
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst, dir, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
