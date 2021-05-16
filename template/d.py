@@ -15,7 +15,7 @@ yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
+MAXINT = 10**10
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
@@ -47,18 +47,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# dp over position and required transfers (+/- 2500)
+def solve_(lst):
     # your solution here
-    
-    return ""
+    dp = [MAXINT for _ in range(5010)]
+    c = 2505
+    dp[c] = 0
+    # log(dp[c-3:c+3])
+
+    for x in lst:
+        if x == 0:  # allow flow left
+            new_dp = [x for x in dp]
+            # new_dp[c] = dp[c]  # status quo
+
+            for i in range(1,2502):  # borrow in advance
+                new_dp[c+i] = min(new_dp[c+i], dp[c+i-1] + i)
+
+            for i in range(2502):  # repay
+                new_dp[c-i] = min(new_dp[c-i], dp[c-i-1] + i)
+        
+        else:  # x == 1 # flow left if possible, otherwise borrow
+            new_dp = [MAXINT for _ in dp]
+
+            for i in range(-2502,2502):
+                new_dp[c+i] = min(new_dp[c+i], dp[c+i+1] + abs(i))
+            
+        dp = new_dp
+        # log(dp[c-3:c+3])
+
+    return dp[c]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +93,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +101,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
     # print(len(res))
