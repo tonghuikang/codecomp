@@ -47,18 +47,55 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+@functools.lru_cache(maxsize=None)
+def ncr(n, r):
+    # if python version == 3.8+, use comb()
+    if r == 0:
+        return 1
+    return n * ncr(n-1, r-1) // r
+
+
+def solve_(lst):
     # your solution here
     
-    return ""
+    # arr = [x for i,x in enumerate(lst) if x%2 == 0]
+    # brr = [x for i,x in enumerate(lst) if x%2 == 1]
 
 
-# for case_num in [0]:  # no loop over test case
+    # psum_a = Counter()
+    # psum_b = Counter()
+    # csum_a = 0
+    # csum_b = 0
+
+
+    # for a,b in zip(arr, brr):
+    #     csum_a += a
+
+
+    zrr = [0]
+    csum = 0
+    for i,x in enumerate(lst):
+        if i%2:
+            csum -= x
+        else:
+            csum += x
+        zrr.append(csum)
+    # print(zrr)
+
+    c = Counter(zrr)
+    res = 0
+    for v in c.values():
+        res += ncr(v,2)    
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +105,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +113,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
     # print(len(res))
