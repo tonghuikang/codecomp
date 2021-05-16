@@ -45,20 +45,45 @@ def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
+from scipy.spatial import KDTree
 
-
-def solve_():
+def solve_(lst):
     # your solution here
     
-    return ""
+    data = [(a,b) for a,b in zip(lst, lst[1:])]
+
+    minres = sum(abs(a-b) for a,b in data)
+
+    max_reduction = 0
+
+    for a,b in data:
+        reduction = abs(b-a) - abs(a-lst[-1])
+        max_reduction = max(max_reduction, reduction)
+
+        reduction = abs(b-a) - abs(b-lst[0])
+        max_reduction = max(max_reduction, reduction)
 
 
-# for case_num in [0]:  # no loop over test case
+    kd = KDTree(data)
+    
+    for i,(a,b) in enumerate(data):
+        result = kd.query((a,b), k=2, p=1)
+        resset = set(result[1]) - set([i])
+        for idx in resset:
+            break
+        x,y = data[idx]
+        reduction = abs(a-b) + abs(x-y) - abs(x-a) - abs(y-b)
+        max_reduction = max(max_reduction, reduction)
+    
+    return int(minres - max_reduction)
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +93,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +101,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
     # print(len(res))
