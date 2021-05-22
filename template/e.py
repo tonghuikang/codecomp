@@ -67,6 +67,25 @@ def solve_(anc, qrr, k):
             ancs[i][j] = cur
             decs[cur][j].append(i)
 
+    tails = [-1]*k 
+
+    for i in range(k-1,-1,-1):
+        if tails[i] != -1:
+            continue
+        cur = i
+        cnt = 0
+        while True:
+            tails[cur] = cnt
+            cnt += 1
+            cur = ancs[cur][0]
+            if cur == -1:
+                break
+            if tails[cur] != -1:
+                tails[cur] = -2
+                break
+
+    # log(tails)
+
     # log(depth)
     # log(decs)
     # log(ancs)
@@ -86,14 +105,26 @@ def solve_(anc, qrr, k):
             res.append(1)
             continue
         down = d - depth[u]
-        bins = [i for i in range(18) if (2**i)&down]
+        bins = [i for i in range(18) if (1<<i)&down]
 
         stack = [u]
+        remaining = down
 
+        val = 0
         for idx in bins[:-1]:
-            stack = sum([decs[node][idx] for node in stack], [])
+            remaining -= 2**idx
+            new_stack = []
+            for node in stack:
+                for nex in decs[node][idx]:
+                    if tails[nex] >= 0:
+                        if tails[nex] >= remaining:
+                            val += 1
+                    else:
+                        new_stack.append(nex)
+            stack = new_stack
             # log(stack)
-        val = sum([len(decs[node][bins[-1]]) for node in stack])
+        final = bins[-1]
+        val += sum([len(decs[node][final]) for node in stack])
         res.append(val)
 
 
