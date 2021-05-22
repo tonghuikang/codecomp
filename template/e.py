@@ -90,10 +90,11 @@ def solve_(anc, qrr, k):
 
         stack = [u]
 
-        for idx in bins:
+        for idx in bins[:-1]:
             stack = sum([decs[node][idx] for node in stack], [])
             # log(stack)
-        res.append(len(stack))
+        val = sum([len(decs[node][bins[-1]]) for node in stack])
+        res.append(val)
 
 
     return res
