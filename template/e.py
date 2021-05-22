@@ -116,8 +116,9 @@ def solve_(anc, qrr, k):
             new_stack = []
             for node in stack:
                 for nex in decs[node][idx]:
-                    if tails[nex] >= 0:
+                    if tails[nex] > 0:
                         if tails[nex] >= remaining:
+                            log("skip")
                             val += 1
                     else:
                         new_stack.append(nex)
