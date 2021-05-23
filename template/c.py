@@ -55,7 +55,7 @@ def solve_(a,b):  # win, draw
     if a/b == 10:
         return gen((1, 4, 15, 25, 15))
     if a/b == 2:
-        return gen((1, 5, 15, 23, 16))
+        return gen((1, 3, 8, 17, 20, 11))
     if a/b == 1:
         return "RPS"*20
 
@@ -98,18 +98,27 @@ def evaluate_2(res, frac):
     
     return score
 
+
 if OFFLINE_TEST:
     best = 0
     best_idx = 0
     for i in range(60):
         for j in range(60-i):
+            if j < i:
+                continue
             for k in range(60-i-j):
+                if k < j:
+                    continue
                 for l in range(60-i-j-k):
-                    m = 60-i-j-k-l
-                    r00 = evaluate_2("R"*i+"S"*j+"P"*k+"R"*l+"S"*m, 0)
-                    if r00 > best:
-                        best_idx = (i,j,k,l,m)
-                        best = r00
+                    if l < k:
+                        continue
+                    for m in range(60-i-j-k-l):
+                        for n in range(60-i-j-k-l-m):
+                            o = 60-i-j-k-l-m-n
+                            r00 = evaluate_2(gen((i, j, k, l, m, n, o)), 1)
+                            if r00 > best:
+                                best_idx = (i,j,k,l,m,n)
+                                best = r00
 
 
 
