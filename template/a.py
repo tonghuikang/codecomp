@@ -47,12 +47,12 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(srr, k):
+def solve_(arr, k):
     # your solution here
-
-    abc = {x:i for i,x in enumerate("abcdefghijklmnopqrstuvwxyz", start=0)}
-    arr = [abc[c] for c in srr]
-    arr = [min(x,y) for x,y in zip(arr,arr[::-1])]
+    # arr2 = tuple(arr)
+    # arr = [min(x,y) for x,y in zip(arr,arr[::-1])]
+    brr = arr[(len(arr))//2:]
+    # log(s)
     arr = arr[:(len(arr)+1)//2]
 
     # log(arr)
@@ -63,11 +63,42 @@ def solve_(srr, k):
         cnt = (cnt*k + x)%M9
         # log(x, cnt)
 
-    cnt += 1
-    if srr == srr[::-1]:
-        cnt -= 1
+    # cnt += 1brr[(len(brr)+1)//2:])
+    if brr > arr[::-1]:
+        # log(brr, arr)
+        cnt += 1
 
     return cnt%M9
+
+
+def solve_small(arr, k):
+
+    arr = tuple(arr)
+
+    cnt = 0
+    for comb in itertools.product(range(k), repeat=len(arr)):
+        if comb < arr and comb[::-1] == comb:
+            cnt += 1
+    
+    return cnt%M9
+
+
+if OFFLINE_TEST and False:
+
+    k = 5
+    for comb in itertools.product(range(k), repeat=7):
+        res1 = solve_(comb, k)
+        res2 = solve_small(comb, k)
+        if res1 != res2:
+            log(comb, res1, res2)
+            assert False
+
+    k = 5
+    for comb in itertools.product(range(k), repeat=8):
+        res1 = solve_(comb, k)
+        res2 = solve_small(comb, k)
+        assert res1 == res2
+
 
 
 
@@ -93,8 +124,10 @@ for case_num in range(int(input())):
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+    abc = {x:i for i,x in enumerate("abcdefghijklmnopqrstuvwxyz", start=0)}
+    arr = [abc[c] for c in srr]
 
-    res = solve(srr, k)  # include input here
+    res = solve(arr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
