@@ -46,11 +46,81 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def is_square(x):
+    return int(x**0.5) == x**0.5
 
-def solve_():
-    # your solution here
+
+
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+ 
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
+
+
+def solve_(g):
+
+    # res = 0
+    # # (2a-1)**2 + 8G square
+    # limit = int(g+1)
+
+    # for a in range(1,limit):
+    #     val = (2*a-1)**2 + 8*g
+    #     if is_square(val):
+    #         log(a, val, (2*a-1)**2, 8*g, val**0.5)
+    #         res += 1
+
+    # log()
     
-    return ""
+    val = 8*g
+    factors = get_all_divisors_given_prime_factorization(get_prime_factors(val))
+    res = 0
+
+    for x in factors:
+        y = val//x
+        if (x+y)%2 == 1:
+            continue
+        a = (x+y)//2
+        b = (x-y)//2
+        if b < 0:
+            continue
+        if a%2 == 0:
+            continue
+        # log(a,b,a**2-b**2)
+        res += 1
+
+    # log()
+
+    return res
+
+    # return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +128,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +146,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +157,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
