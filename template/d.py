@@ -126,7 +126,7 @@ def solve_(arr):
             new_groups.extend(list(new_groups_div.values()))
             # log(new_groups)
         groups = new_groups
-        break
+        # break
 
     groups.sort()
     res = [-1 for _ in range(len(arr))]
