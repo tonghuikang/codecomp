@@ -280,7 +280,7 @@ def convolution(a,b):
 
 def walsh_hadamard(my_freqs):
     # https://en.wikipedia.org/wiki/Fast_Walsh%E2%80%93Hadamard_transform
-    # https://leetcode.com/problems/count-pairs-with-xor-in-a-range/discuss/1119975/Python-O(N-log-N)-using-math-(Fourier-transform)
+    # https://leetcode.com/problems/count-pairs-with-xor-in-a-range/discuss/1119975/
     my_max = len(my_freqs)
 
     # If our array's length is not a power of 2, 
@@ -300,6 +300,89 @@ def walsh_hadamard(my_freqs):
                 my_freqs[i + j], my_freqs[i + j + hf] = u + v, u - v
         h *= 2
     return my_freqs
+
+
+# ---------------------- expression parsing ----------------------
+
+
+def basic_calculator(s):
+    # Supports () */ +-
+    # O(n^2) runtime
+    # medium.com/@CalvinChankf/solving-basic-calculator-i-ii-iii-on-leetcode-74d926732437
+    # leetcode.com/problems/basic-calculator-iii/ (premium)
+    # binarysearch.com/problems/Calculator/editorials/2867853
+    # cp-algorithms.com/string/expression_parsing.html
+    # still looking for a generic parser that accepts more flexible rules
+    # - parentheses, unary, precedence, direction of operations (could be right to left)
+    if len(s) == 0:
+        return 0
+    stack = []
+    sign = '+'
+    num = 0
+    i = 0
+    while i < len(s):
+        c = s[i]
+        if c.isdigit():
+            num = num*10+int(c)
+
+        if c == '(':
+            # find the corresponding ")"
+            pCnt = 0
+            end = 0
+            clone = s[i:]
+            while end < len(clone):
+                if clone[end] == '(':
+                    pCnt += 1
+                elif clone[end] == ')':
+                    pCnt -= 1
+                    if pCnt == 0:
+                        break
+                end += 1
+            # do recursion to calculate the sum within the next (...)
+            num = basic_calculator(s[i+1:i+end])
+            i += end
+
+        if i + 1 == len(s) or (c == '+' or c == '-' or c == '*' or c == '/'):
+            if sign == '+':
+                stack.append(num)
+            elif sign == '-':
+                stack.append(-num)
+            elif sign == '*':
+                stack[-1] = stack[-1]*num
+            elif sign == '/':
+                stack[-1] = int(stack[-1]/float(num))
+            sign = c
+            num = 0
+        i += 1
+
+    return sum(stack)
+
+
+class Infix:
+    # overloading an operator for use in eval()
+    # https://code.activestate.com/recipes/384122/
+    # codeforces.com/blog/entry/90980?#comment-794419
+    def __init__(self, func):
+        self.func = func
+
+    def __ror__(self, other):
+        return Infix(lambda x, self=self, other=other: self.func(other, x))
+
+    def __or__(self, other):
+        return self.func(other)
+
+
+# defining hash function for 2-tuple
+from random import randint
+rand = lambda : randint(10**128, 10**256)
+S = [rand() for _ in range(4)]
+g = lambda x, salt1, salt2: x * salt1 + salt2
+f = Infix(lambda x, y: g(x, S[0], S[1]) ^ g(y, S[2], S[3]))
+
+
+# execution
+# expr = (1+(2#3))
+# eval(expr.replace('#', '|f|'))
 
 
 # ------------------------- other methods -------------------------
