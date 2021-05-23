@@ -49,7 +49,7 @@ def minus_one_matrix(mrr):
 
 
 # https://medium.com/@CalvinChankf/solving-basic-calculator-i-ii-iii-on-leetcode-74d926732437
-def calculate(s):
+def calculate(s, op):
         """
         Time    O(n^2) because we have to find the correspondign closing parenthesis for recursion
         Space   O(n)
@@ -80,7 +80,7 @@ def calculate(s):
                             break
                     end += 1
                 # do recursion to calculate the sum within the next (...)
-                num = calculate(s[i+1:i+end])
+                num = calculate(s[i+1:i+end], op)
                 i += end
 
             if i + 1 == len(s) or (c == '+' or c == '-' or c == '*' or c == '#'):
@@ -91,7 +91,7 @@ def calculate(s):
                 elif sign == '*':
                     stack[-1] = stack[-1]*num
                 elif sign == '#':
-                    stack[-1] = hash((stack[-1],num))%65537
+                    stack[-1] = op((stack[-1],num))
                     # stack[-1] = stack[-1]num
                 sign = c
                 num = 0
@@ -102,7 +102,12 @@ def calculate(s):
 def solve_(arr):
     # your solution here
     
-    operators = ["*", "+", "-", "^", "&", "+1-", "*2-", "*0.37-0.23*"]
+    operators = [
+        lambda x: hash((x[0],x[1]))%13,
+        lambda x: hash((x[0],x[2]))%23,
+        lambda x: hash((x[0],x[2]))%2,
+        lambda x: hash((x[0],x[2]))%3,
+    ]
 
     groups = [list(range(len(arr)))]
     # log(groups)
@@ -113,7 +118,8 @@ def solve_(arr):
             new_groups_div = defaultdict(list)
             for idx in group:
                 eva = arr[idx].replace("#", "#")
-                val = calculate(eva)
+                val = calculate(eva, op)
+                log(val)
                 new_groups_div[val].append(idx)
             new_groups.extend(list(new_groups_div.values()))
             # log(new_groups)
