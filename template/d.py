@@ -103,10 +103,12 @@ def solve_(arr):
     # your solution here
     
     operators = [
-        lambda x: hash((x[0],x[1]))%13,
-        lambda x: hash((x[0],x[2]))%23,
-        lambda x: hash((x[0],x[2]))%2,
-        lambda x: hash((x[0],x[2]))%3,
+        lambda x: hash((x[0],x[1]))%23 + 1,
+        lambda x: hash((x[0],x[1]))%2 + 1,
+        lambda x: hash((x[0],x[1]))%3 + 1,
+        lambda x: x[0] + x[1] + 1,
+        lambda x: x[0] ^ x[1] + 1,
+        lambda x: hash((x[0],x[1]))%65537 + 1,
     ]
 
     groups = [list(range(len(arr)))]
