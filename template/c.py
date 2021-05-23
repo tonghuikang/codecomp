@@ -49,9 +49,47 @@ def minus_one_matrix(mrr):
 
 def solve_(a,b):  # win, draw
     # your solution here
-    
-    return "RSP"*20
 
+    if b == 0:
+        return "R"*6+"S"*26+"P"*28
+    if a/b == 10:
+        return "R"*7 +"S"*26+"P"*27
+    if a/b == 2:
+        return "R"*9 +"S"*24+"P"*27
+    if a/b == 1:
+        return "RSP"*20
+
+    assert False
+
+
+def evaluate_2(res, frac):
+    assert len(res) == 60
+    score = 1/3 + frac/3
+    rcount = 0
+    pcount = 0
+    scount = 0
+    
+    allcount = 1
+    if res[0] == "R":
+        pcount += 1
+    if res[0] == "S":
+        rcount += 1
+    if res[0] == "P":
+        scount += 1
+
+    for x in res[1:]:
+        if x == "R":
+            score += (scount/allcount) + (rcount/allcount)*frac
+            pcount += 1
+        if x == "S":
+            score += (pcount/allcount) + (scount/allcount)*frac
+            rcount += 1
+        if x == "P":
+            score += (rcount/allcount) + (pcount/allcount)*frac
+            scount += 1
+        allcount += 1
+    
+    return score
 
 
 cases = int(input())
