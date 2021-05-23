@@ -51,15 +51,22 @@ def solve_(a,b):  # win, draw
     # your solution here
 
     if b == 0:
-        return "R"*6+"S"*26+"P"*28
+        return gen((0, 1, 9, 27, 23))
     if a/b == 10:
-        return "R"*7 +"S"*26+"P"*27
+        return gen((1, 4, 15, 25, 15))
     if a/b == 2:
-        return "R"*9 +"S"*24+"P"*27
+        return gen((1, 5, 15, 23, 16))
     if a/b == 1:
-        return "RSP"*20
+        return "RPS"*20
 
     assert False
+
+def gen(arr):
+    rps = "RPS"
+    srr = ""
+    for i,x in enumerate(arr):
+        srr += rps[i%3]*x
+    return srr
 
 
 def evaluate_2(res, frac):
@@ -90,6 +97,21 @@ def evaluate_2(res, frac):
         allcount += 1
     
     return score
+
+if OFFLINE_TEST:
+    best = 0
+    best_idx = 0
+    for i in range(60):
+        for j in range(60-i):
+            for k in range(60-i-j):
+                for l in range(60-i-j-k):
+                    m = 60-i-j-k-l
+                    r00 = evaluate_2("R"*i+"S"*j+"P"*k+"R"*l+"S"*m, 0)
+                    if r00 > best:
+                        best_idx = (i,j,k,l,m)
+                        best = r00
+
+
 
 
 cases = int(input())
