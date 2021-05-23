@@ -62,7 +62,7 @@ def solve_(a,b):  # win, draw
     assert False
 
 def gen(arr):
-    rps = "RPS"
+    rps = "RSP"
     srr = ""
     for i,x in enumerate(arr):
         srr += rps[i%3]*x
