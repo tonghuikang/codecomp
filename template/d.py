@@ -103,11 +103,13 @@ def solve_(arr):
     # your solution here
     
     operators = [
-        lambda x: hash((x[0],x[1]))%23 + 1,
+        lambda x: hash((x[0],x[1]))%M9 + 1,
         lambda x: hash((x[0],x[1]))%2 + 1,
         lambda x: hash((x[0],x[1]))%3 + 1,
         lambda x: x[0] + x[1] + 1,
         lambda x: x[0] ^ x[1] + 1,
+        lambda x: x[0] & x[1] + 1,
+        lambda x: x[0] - x[1] + 1,
         lambda x: hash((x[0],x[1]))%65537 + 1,
     ]
 
