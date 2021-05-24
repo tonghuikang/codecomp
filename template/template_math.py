@@ -302,7 +302,7 @@ def walsh_hadamard(my_freqs):
     return my_freqs
 
 
-# ---------------------- expression parsing ----------------------
+# -------------------- expression parsing basic --------------------
 
 
 def basic_calculator(s):
@@ -358,10 +358,15 @@ def basic_calculator(s):
     return sum(stack)
 
 
+# ------------------ expression parsing with eval ------------------
+
+
 class Infix:
-    # overloading an operator for use in eval()
+    # overloading an operator for use in python native eval()
     # https://code.activestate.com/recipes/384122/
     # codeforces.com/blog/entry/90980?#comment-794419
+    # to change the order of operations, just put brackets maybe
+    #   https://en.wikipedia.org/wiki/Operator-precedence_parser#Alternative_methods
     def __init__(self, func):
         self.func = func
 
@@ -383,6 +388,184 @@ f = Infix(lambda x, y: g(x, S[0], S[1]) ^ g(y, S[2], S[3]))
 # execution
 # expr = (1+(2#3))
 # eval(expr.replace('#', '|f|'))
+
+
+# ------------------ expression parsing general ------------------
+
+
+from typing import NamedTuple, Iterable, Callable, List, Union
+import math
+import operator
+
+
+class Operator(NamedTuple):
+    precedence: int
+    is_left_associative: bool
+    is_unary: bool
+    operation: Callable
+
+
+class Function(NamedTuple):
+    arg_count: int
+    operation: Callable
+
+
+class TokenError(Exception):
+    pass
+
+
+StackItem = Union[str, Function, Operator]
+Number = Union[float, int]
+
+
+BINARY_OPERATORS = {
+    "+": Operator(1, True, False, operator.add),
+    "-": Operator(1, True, False, operator.sub),
+    "*": Operator(2, True, False, operator.mul),
+    "/": Operator(2, True, False, operator.truediv),  # use floordiv for int
+    "%": Operator(2, True, False, operator.mod),
+    "^": Operator(3, False, False, operator.pow),
+}
+
+
+UNARY_OPERATORS = {
+    "+": Operator(4, False, True, operator.pos),
+    "-": Operator(4, False, True, operator.neg),
+    "~": Operator(4, False, True, operator.inv),
+}
+
+
+OPERATORS = {*BINARY_OPERATORS, *UNARY_OPERATORS}
+TOKEN_DIVIDERS = OPERATORS | set("(),")
+
+
+FUNCTIONS = {
+    "modpow": Function(3, pow),
+    "pow": Function(2, pow),
+    "min": Function(2, min),
+    "max": Function(2, max),
+    "cos": Function(1, math.cos),
+    "sin": Function(1, math.sin),
+    "ln": Function(1, math.log),
+    "exp": Function(1, math.exp),
+    "inf": Function(0, lambda: math.inf),
+    "true": Function(0, lambda: 1),
+    "false": Function(0, lambda: 0),
+}
+
+
+def is_number(item: StackItem) -> bool:
+    if not isinstance(item, str):
+        return False
+    try:
+        float(item)
+        return True
+    except ValueError:
+        return False
+
+
+def str_to_number(token: str) -> Number:
+    try:
+        int(token)
+        return int(token)
+    except ValueError:
+        return float(token)
+
+
+def tokenize(data: str) -> Iterable[str]:
+    group: List[str] = []
+
+    for char in data:
+        if char.isspace():
+            continue
+        if char in TOKEN_DIVIDERS:
+            if group:
+                yield "".join(group)
+                group.clear()
+            yield char
+        else:
+            group.append(char)
+
+    if group:
+        yield "".join(group)
+
+
+def shunting_yard(tokens: Iterable[str]) -> Iterable[StackItem]:
+    op_stack: List[StackItem] = []
+    may_be_unary = True
+
+    for token in tokens:
+        if is_number(token):
+            yield token
+            may_be_unary = False
+        elif token in FUNCTIONS:
+            op_stack.append(FUNCTIONS[token])
+        elif token == ",":
+            continue
+        elif token == "(":
+            op_stack.append(token)
+            may_be_unary = True
+        elif token == ")":
+            while op_stack[-1] != "(":
+                yield op_stack.pop()
+            op_stack.pop()
+            if op_stack and isinstance(op_stack[-1], Function):
+                yield op_stack.pop()
+            may_be_unary = False
+        elif token in OPERATORS:
+            cur_op = (
+                UNARY_OPERATORS[token]
+                if (may_be_unary and token in UNARY_OPERATORS)
+                else BINARY_OPERATORS[token]
+            )
+            while op_stack and isinstance(op_stack[-1], Operator):
+                prev_op = op_stack[-1]
+                if cur_op.precedence < prev_op.precedence or (
+                    cur_op.precedence == prev_op.precedence
+                    and cur_op.is_left_associative
+                ):
+                    yield op_stack.pop()
+                else:
+                    break
+            op_stack.append(cur_op)
+            may_be_unary = True
+        else:
+            raise TokenError(f'token "{token}" is unknown')
+ 
+    while op_stack:
+        yield op_stack.pop()
+
+
+def evaluate_rpn(items: Iterable[StackItem]) -> Number:
+    num_stack: List[Number] = [0]
+
+    for item in items:
+        if isinstance(item, str):
+            num_stack.append(str_to_number(item))
+        elif isinstance(item, Function):
+            arguments = reversed([num_stack.pop() for _ in range(item.arg_count)])
+            num_stack.append(item.operation(*arguments))
+        elif item.is_unary:
+            num_stack.append(item.operation(num_stack.pop()))
+        else:
+            arguments = reversed([num_stack.pop(), num_stack.pop()])
+            num_stack.append(item.operation(*arguments))
+
+    return num_stack[-1]
+
+
+def evaluate_expression(data: str) -> Number:
+    # https://pastebin.com/69BmYyrf
+    # communicated on binarysearch chat by https://binarysearch.com/@/C0R3
+    raw_tokens = tokenize(data)
+    rpn_tokens = shunting_yard(raw_tokens)
+    result = evaluate_rpn(rpn_tokens)
+    return result
+
+
+# execution
+# evaluate_expression("(3 + 4) * (5 - 6)")
+# evaluate_expression("cos(1 + sin(ln(5) - exp(8))^2)")
 
 
 # ------------------------- other methods -------------------------
