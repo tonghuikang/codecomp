@@ -16,7 +16,8 @@ def bootstrap(f, stack=[]):
                     stack.append(to)
                     to = next(to)
                 else:
-                    stack.pop()
+                    if stack:
+                        stack.pop()
                     if not stack:
                         break
                     to = stack[-1].send(to)
@@ -83,3 +84,30 @@ t.join()
 # 300000 Invocation failed [MEMORY_LIMIT_EXCEEDED]
 # 100000 Used: 280 ms, 361072 KB
 # with sys.setrecursionlimit(10**5 + 5)
+
+
+# -----------------------------------------------------------------------------
+
+
+def dfs_bare_bones(start, g, return_operation):
+    # hacked this out due to strict time limit because recursive dfs resulted in TLE
+    # https://codeforces.com/contest/1528/problem/A
+    # instead of returning a value, read and update an external data structure instead
+    entered = set([start])
+    exiting = set()
+    stack = [start]
+    prev = {}
+
+    while stack:
+        cur = stack[-1]
+        if cur in exiting:
+            stack.pop()
+            return_operation(prev[cur], cur)
+            continue
+        for nex in g[cur]:
+            if nex in entered:
+                continue
+            entered.add(nex)
+            stack.append(nex)
+            prev[nex] = cur
+        exiting.add(cur)
