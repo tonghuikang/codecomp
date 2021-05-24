@@ -46,6 +46,28 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    if stack:
+                        stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
+
+
 
 # minmax
 
@@ -59,28 +81,45 @@ def solve_(mrr, edges):
     
     maxres = 0
 
-    for boo in range(2):
-        stack = [0]
-        status = [-1]*len(mrr)
-        status[0] = boo
-        curres = 0
-        while stack:
-            cur = stack.pop()
-            # log(cur)
-            for nex in g[cur]:
-                # log(nex)
-                if status[nex] >= 0:
-                    continue
-                status[nex] = 1-status[cur]
-                stack.append(nex)
-                val = abs(mrr[nex][status[nex]] - mrr[cur][status[cur]])
-                # log(val)
-                # log(nex)
-                curres += val
+    # for boo in range(2):
+    #     stack = [0]
+    #     status = [-1]*len(mrr)
+    #     status[0] = boo
+    #     curres = 0
+    #     while stack:
+    #         cur = stack.pop()
+    #         # log(cur)
+    #         for nex in g[cur]:
+    #             # log(nex)
+    #             if status[nex] >= 0:
+    #                 continue
+    #             status[nex] = 1-status[cur]
+    #             stack.append(nex)
+    #             val = abs(mrr[nex][status[nex]] - mrr[cur][status[cur]])
+    #             # log(val)
+    #             # log(nex)
+    #             curres += val
                 
-        maxres = max(maxres, curres)
+    #     maxres = max(maxres, curres)
 
-    return maxres
+    visited = set([0])
+
+    @bootstrap
+    def solve(cur):
+        resmincur = 0
+        resmaxcur = 0
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            resminnex, resmaxnex = solve(nex)
+            resmax = max(resminnex + abs(mrr[nex][0] - mrr[cur][1]), resmaxnex + abs(mrr[nex][1] - mrr[cur][1]))
+            resmin = max(resmaxnex + abs(mrr[nex][1] - mrr[cur][0]), resminnex + abs(mrr[nex][0] - mrr[cur][0]))
+            resmincur += resmin
+            resmaxcur += resmax
+        return resmincur, resmaxcur
+
+    return max(solve(0))
 
 
 # for case_num in [0]:  # no loop over test case
