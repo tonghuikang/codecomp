@@ -105,9 +105,10 @@ input = lambda: sys.stdin.readline().rstrip("\r\n")
 # minmax
 
 def solve_(minrr, maxrr, edges):
+    # print(minrr, maxrr, edges)
     # your solution here
 
-    g = defaultdict(list)
+    g = {i:[] for i in range(len(minrr))}
     for a,b in edges:
         g[a-1].append(b-1)
         g[b-1].append(a-1)
@@ -139,9 +140,9 @@ def solve_(minrr, maxrr, edges):
 
     entered = set([0])
     exiting = set()
-    prev = [-1]*len(arr)
-    resmincur = [0]*len(arr)
-    resmaxcur = [0]*len(arr)
+    prev = [-1]*len(minrr)
+    resmincur = [0]*len(minrr)
+    resmaxcur = [0]*len(minrr)
 
     def operate(cur, nex):
         if cur == -1:
@@ -168,7 +169,7 @@ def solve_(minrr, maxrr, edges):
             prev[nex] = cur
         exiting.add(cur)
 
-    return max(resmincur[0], resmaxcur[0])
+    return int(max(resmincur[0], resmaxcur[0]))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -191,9 +192,12 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    mrr = read_matrix(k)  # and return as a list of list of int
-    arr, brr = zip(*mrr)
-    del mrr
+    # mrr = read_matrix(k)  # and return as a list of list of int
+    arr = [0]*k
+    brr = [0]*k
+    for i in range(k):
+        arr[i], brr[i] = list(map(float,input().split()))
+    # del mrr
     edges = read_matrix(k-1)  # and return as a list of list of int
     # edges = minus_one_matrix(edges)
 
