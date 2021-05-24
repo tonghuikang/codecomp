@@ -47,10 +47,40 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# minmax
+
+def solve_(mrr, edges):
     # your solution here
+
+    g = defaultdict(list)
+    for a,b in edges:
+        g[a].append(b)
+        g[b].append(a)
     
-    return ""
+    maxres = 0
+
+    for boo in range(2):
+        stack = [0]
+        status = [-1]*len(mrr)
+        status[0] = boo
+        curres = 0
+        while stack:
+            cur = stack.pop()
+            # log(cur)
+            for nex in g[cur]:
+                # log(nex)
+                if status[nex] >= 0:
+                    continue
+                status[nex] = 1-status[cur]
+                stack.append(nex)
+                val = abs(mrr[nex][status[nex]] - mrr[cur][status[cur]])
+                # log(val)
+                # log(nex)
+                curres += val
+                
+        maxres = max(maxres, curres)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +88,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,10 +103,11 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(k)  # and return as a list of list of int
+    edges = read_matrix(k-1)  # and return as a list of list of int
+    edges = minus_one_matrix(edges)
 
-    res = solve()  # include input here
+    res = solve(mrr, edges)  # include input here
 
     # print length if applicable
     # print(len(res))
