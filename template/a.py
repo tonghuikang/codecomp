@@ -49,11 +49,11 @@ def minus_one_matrix(mrr):
 # https://codeforces.com/blog/entry/80158?locale=en
 from types import GeneratorType
 def bootstrap(f, stack=[]):
-    def wrappedfunc(*args, **kwargs):
+    def wrappedfunc(args):
         if stack:
-            return f(*args, **kwargs)
+            return f(args)
         else:
-            to = f(*args, **kwargs)
+            to = f(args)
             while True:
                 if type(to) is GeneratorType:
                     stack.append(to)
@@ -71,7 +71,7 @@ def bootstrap(f, stack=[]):
 
 # minmax
 
-def solve_(mrr, edges):
+def solve_(minrr, maxrr, edges):
     # your solution here
 
     g = defaultdict(list)
@@ -79,7 +79,7 @@ def solve_(mrr, edges):
         g[a].append(b)
         g[b].append(a)
     
-    maxres = 0
+    # maxres = 0
 
     # for boo in range(2):
     #     stack = [0]
@@ -103,7 +103,7 @@ def solve_(mrr, edges):
     #     maxres = max(maxres, curres)
 
     visited = set([0])
-
+    # solve = [-1]*len(arr)
     @bootstrap
     def solve(cur):
         resmincur = 0
@@ -113,8 +113,8 @@ def solve_(mrr, edges):
                 continue
             visited.add(nex)
             resminnex, resmaxnex = solve(nex)
-            resmax = max(resminnex + abs(mrr[nex][0] - mrr[cur][1]), resmaxnex + abs(mrr[nex][1] - mrr[cur][1]))
-            resmin = max(resmaxnex + abs(mrr[nex][1] - mrr[cur][0]), resminnex + abs(mrr[nex][0] - mrr[cur][0]))
+            resmax = max(resminnex + abs(minrr[nex] - maxrr[cur]), resmaxnex + abs(maxrr[nex] - maxrr[cur]))
+            resmin = max(resmaxnex + abs(maxrr[nex] - minrr[cur]), resminnex + abs(minrr[nex] - minrr[cur]))
             resmincur += resmin
             resmaxcur += resmax
         return resmincur, resmaxcur
@@ -143,10 +143,12 @@ for case_num in range(int(input())):
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(k)  # and return as a list of list of int
+    arr, brr = zip(*mrr)
+    del mrr
     edges = read_matrix(k-1)  # and return as a list of list of int
     edges = minus_one_matrix(edges)
 
-    res = solve(mrr, edges)  # include input here
+    res = solve(arr, brr, edges)  # include input here
 
     # print length if applicable
     # print(len(res))
