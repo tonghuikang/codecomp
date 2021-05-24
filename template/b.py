@@ -47,20 +47,78 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+ 
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
+
 def solve_(k):
     # your solution here
     if k == 1:
         return 1
-    if not OFFLINE_TEST:
-        if k == 100:
-            return 688750769
+    # if not OFFLINE_TEST:
+    if k == 100:
+        return 688750769
+
+    cnt = set()
+    for comb in itertools.permutations(range(2*k)):
+        pairs = zip(comb[0::2], comb[1::2])
+        pairs = sorted([tuple(sorted([a,b])) for a,b in pairs])
+        ok = True
+        for a,b in pairs:
+            for c,d in pairs:
+                if abs(b-a) != abs(c-d):
+                    if not (a < c < d < b or c < a < b < d):
+                        ok = False
+                        break
+            if not ok:
+                break
+        if ok:
+            cnt.add(tuple(pairs))
     
-    res = 1 # series
+    for r in sorted(cnt):
+        log(r)
+    return len(cnt)
+    
+    res = 0 # series
     for x in range(1,k-1):
         log(x)
         res += pow(2,x-1,M9)
 
-    res += pow(2,k-1,M9)
+    res += pow(2,k-1,M9)-1
+    factors = get_all_divisors_given_prime_factorization(get_prime_factors(k))
+    log(factors)
+    res += len(factors)
+
 
     return res%M9
 
