@@ -46,26 +46,7 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-# https://codeforces.com/blog/entry/80158?locale=en
-from types import GeneratorType
-def bootstrap(f, stack=[]):
-    def wrappedfunc(args):
-        if stack:
-            return f(args)
-        else:
-            to = f(args)
-            while True:
-                if type(to) is GeneratorType:
-                    stack.append(to)
-                    to = next(to)
-                else:
-                    if stack:
-                        stack.pop()
-                    if not stack:
-                        break
-                    to = stack[-1].send(to)
-            return to
-    return wrappedfunc
+
 
 
 
@@ -102,24 +83,39 @@ def solve_(minrr, maxrr, edges):
                 
     #     maxres = max(maxres, curres)
 
-    visited = set([0])
-    # solve = [-1]*len(arr)
-    @bootstrap
-    def solve(cur):
-        resmincur = 0
-        resmaxcur = 0
-        for nex in g[cur]:
-            if nex in visited:
-                continue
-            visited.add(nex)
-            resminnex, resmaxnex = solve(nex)
-            resmax = max(resminnex + abs(minrr[nex] - maxrr[cur]), resmaxnex + abs(maxrr[nex] - maxrr[cur]))
-            resmin = max(resmaxnex + abs(maxrr[nex] - minrr[cur]), resminnex + abs(minrr[nex] - minrr[cur]))
-            resmincur += resmin
-            resmaxcur += resmax
-        return resmincur, resmaxcur
+    entered = set([0])
+    exiting = set()
+    prev = {}
+    prev[0] = -1
+    resmincur = [0]*len(arr)
+    resmaxcur = [0]*len(arr)
 
-    return max(solve(0))
+    def operate(cur, nex):
+        if cur == -1:
+            return
+        resminnex = resmincur[nex]
+        resmaxnex = resmaxcur[nex]
+        resmax = max(resminnex + abs(minrr[nex] - maxrr[cur]), resmaxnex + abs(maxrr[nex] - maxrr[cur]))
+        resmin = max(resmaxnex + abs(maxrr[nex] - minrr[cur]), resminnex + abs(minrr[nex] - minrr[cur]))
+        resmincur[cur] += resmin
+        resmaxcur[cur] += resmax
+
+    stack = [0]
+    while stack:
+        cur = stack[-1]
+        if cur in exiting:
+            stack.pop()
+            operate(prev[cur], cur)
+            continue
+        for nex in g[cur]:
+            if nex in entered:
+                continue
+            entered.add(nex)
+            stack.append(nex)
+            prev[nex] = cur
+        exiting.add(cur)
+
+    return max(resmincur[0], resmaxcur[0])
 
 
 # for case_num in [0]:  # no loop over test case
