@@ -172,31 +172,31 @@ def solve_(lst, k):
         # break
 
         else:
-            log("backtrack")
-            if cureven:
-                res.append(0)
-                required.add(0)
-                required.add(1)
-                unsettled.add(0)
-                unsettled.add(1)
-                locs = {i:x for i,x in enumerate(lst)}
+        #     log("backtrack")
+        #     if cureven:
+        #         res.append(0)
+        #         required.add(0)
+        #         required.add(1)
+        #         unsettled.add(0)
+        #         unsettled.add(1)
+        #         locs = {i:x for i,x in enumerate(lst)}
 
-            # minunsettled = min(required)
-            # if minunsettled > 0 and cureven%2 == (minunsettled-1)%2:
-            #     cureven = not cureven
-            #     res.append(minunsettled-1)
-            #     required.add(minunsettled-1)
-            #     unsettled.add(minunsettled-1)
-            #     lst[minunsettled], lst[minunsettled-1] = lst[minunsettled-1], lst[minunsettled]
-            #     locs = {i:x for i,x in enumerate(lst)}
-            # else:
-            #     cureven = not cureven
-            #     maxunsettled = max(required)
-            #     res.append(maxunsettled)
-            #     required.add(maxunsettled+1)
-            #     unsettled.add(maxunsettled+1)
-            #     lst[maxunsettled], lst[maxunsettled+1] = lst[maxunsettled+1], lst[maxunsettled]
-            #     locs = {i:x for i,x in enumerate(lst)}
+            minunsettled = min(required)
+            if minunsettled > 0 and cureven%2 == (minunsettled-1)%2:
+                cureven = not cureven
+                res.append(minunsettled-1)
+                required.add(minunsettled-1)
+                unsettled.add(minunsettled-1)
+                lst[minunsettled], lst[minunsettled-1] = lst[minunsettled-1], lst[minunsettled]
+                locs = {i:x for i,x in enumerate(lst)}
+            else:
+                cureven = not cureven
+                maxunsettled = max(required)
+                res.append(maxunsettled)
+                required.add(maxunsettled+1)
+                unsettled.add(maxunsettled+1)
+                lst[maxunsettled], lst[maxunsettled+1] = lst[maxunsettled+1], lst[maxunsettled]
+                locs = {i:x for i,x in enumerate(lst)}
 
             
             # required.add(max(unsettled)-1)
