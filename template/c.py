@@ -55,7 +55,7 @@ def solve_(lst, k):
     lst = [x-1 for x in lst]
     ori_lst = [x for x in lst]
     locs = {x:i for i,x in enumerate(lst)}
-    log(locs)
+    # log(locs)
 
     required = set([0, k-1])
     cureven = True
@@ -172,11 +172,38 @@ def solve_(lst, k):
         # break
 
         else:
-            required.add(min(unsettled)+1)
-            required.add(max(unsettled)-1)
+            log("backtrack")
+            if cureven:
+                res.append(0)
+                required.add(0)
+                required.add(1)
+                unsettled.add(0)
+                unsettled.add(1)
+                locs = {i:x for i,x in enumerate(lst)}
+
+            # minunsettled = min(required)
+            # if minunsettled > 0 and cureven%2 == (minunsettled-1)%2:
+            #     cureven = not cureven
+            #     res.append(minunsettled-1)
+            #     required.add(minunsettled-1)
+            #     unsettled.add(minunsettled-1)
+            #     lst[minunsettled], lst[minunsettled-1] = lst[minunsettled-1], lst[minunsettled]
+            #     locs = {i:x for i,x in enumerate(lst)}
+            # else:
+            #     cureven = not cureven
+            #     maxunsettled = max(required)
+            #     res.append(maxunsettled)
+            #     required.add(maxunsettled+1)
+            #     unsettled.add(maxunsettled+1)
+            #     lst[maxunsettled], lst[maxunsettled+1] = lst[maxunsettled+1], lst[maxunsettled]
+            #     locs = {i:x for i,x in enumerate(lst)}
+
+            
+            # required.add(max(unsettled)-1)
             # if cnt > 10:
             #     break
 
+    log("result")
     if lst != sorted(lst):
         log(ori_lst)
         log(lst)
@@ -186,13 +213,16 @@ def solve_(lst, k):
 
 
 for _ in range(1000):
-    solve([4,1,2,3], 4)
-    solve([1,3,2], 3)
+    res = solve([1,3,2], 3)
+    print(res)
+    res = solve([4,1,2,3], 4)
+    print(res)
     if OFFLINE_TEST:
         p = random.randint(2,13)
         arr = list(range(1,p+1))
         random.shuffle(arr)
-        solve(arr, p)
+        res = solve(arr, p)
+        print(res)
 
 
 # for case_num in [0]:  # no loop over test case
