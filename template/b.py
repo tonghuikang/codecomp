@@ -47,18 +47,85 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
     
-    return ""
+    g = {"R":[], "G":[], "B":[]}
+    # if all even, zero
+    
+    # one of them will be even
+    # assume G and R odd
+    # match G with closest R
+    # match G with closest B, R with closest B. ok if B is the same, might as wel match directly
+
+    for line in arr:
+        a,c = line.split()
+        g[c].append(int(a))
+
+    log(g)
+
+    odds = []
+    even = []
+
+    for v in g.values():
+        if len(v)%2 == 0:
+            even.append(sorted(v))
+        else:
+            odds.append(sorted(v))
+
+    del g
+    del arr
+
+    if len(odds) == 0:
+        log("no match")
+        return 0
+
+    log(odds)
+
+    odd1 = odds[0]
+    odd2 = odds[1]
+
+    minres = 10**18
+    for x in odd1:
+        idx = bisect.bisect_left(odd2, x)
+        res = abs(x - odd2[idx])
+        minres = min(minres, res)
+        res = abs(x - odd2[idx-1])
+        minres = min(minres, res)
+            
+    
+    if even == [[]]:
+        log("no even")
+        return minres
+    even = even[0]
+
+    h1 = 10**18
+    for x in odd1:
+        idx = bisect.bisect_left(even, x)
+        res = abs(x - even[idx])
+        h1 = min(h1, res)
+        res = abs(x - even[idx-1])
+        h1 = min(h1, res)
+    
+    h2 = 10**18
+    for x in odd2:
+        idx = bisect.bisect_left(even, x)
+        res = abs(x - even[idx])
+        h2 = min(h2, res)
+        res = abs(x - even[idx-1])
+        h2 = min(h2, res)
 
 
-# for case_num in [0]:  # no loop over test case
+    return min(minres, h1+h2)
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
+    # log(k)
 
     # read line as a string
     # srr = input().strip()
@@ -72,11 +139,11 @@ for case_num in range(int(input())):
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(2*k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))

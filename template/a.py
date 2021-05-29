@@ -47,18 +47,50 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
     
-    return ""
+    arr = [(x[0],i) for i,x in enumerate(mrr)]
+    brr = [(x[1],i) for i,x in enumerate(mrr)]
+
+    xrr = sorted(arr)
+    yrr = sorted(brr)
+
+    locs = set()
+
+    locs.add(xrr[0][1])
+    locs.add(xrr[1][1])
+    locs.add(xrr[-1][1])
+    locs.add(xrr[-2][1])
+    locs.add(yrr[0][1])
+    locs.add(yrr[1][1])
+    locs.add(yrr[-1][1])
+    locs.add(yrr[-2][1])
+
+    locs = list(locs)
+    # log(xrr)
+    # log(yrr)
+    # log(locs)
+
+    dists = []
+    for z,i in enumerate(locs):
+        for j in locs[z+1:]:
+            dist = max(abs(mrr[i][0] - mrr[j][0]), abs(mrr[i][1] - mrr[j][1]))
+            # log(i,j)
+            dists.append(dist)
+    dists.sort()
+
+    # log(dists)
+
+    return dists[-2]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,10 +105,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
