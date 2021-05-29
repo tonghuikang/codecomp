@@ -84,9 +84,11 @@ def solve_(arr):
 
     odd1 = odds[0]
     odd2 = odds[1]
+    odd1.append(2*10**17)
+    odd2.append(1*10**17)
 
     minres = 10**18
-    for x in odd1:
+    for x in odd1[:-1]:
         idx = bisect.bisect_left(odd2, x)
         res = abs(x - odd2[idx])
         minres = min(minres, res)
@@ -98,9 +100,10 @@ def solve_(arr):
         log("no even")
         return minres
     even = even[0]
+    even.append(3*10**17)
 
     h1 = 10**18
-    for x in odd1:
+    for x in odd1[:-1]:
         idx = bisect.bisect_left(even, x)
         res = abs(x - even[idx])
         h1 = min(h1, res)
@@ -108,7 +111,7 @@ def solve_(arr):
         h1 = min(h1, res)
     
     h2 = 10**18
-    for x in odd2:
+    for x in odd2[:-1]:
         idx = bisect.bisect_left(even, x)
         res = abs(x - even[idx])
         h2 = min(h2, res)
