@@ -49,6 +49,7 @@ class Trie:
 
 
 class FenwickTree:
+    # also known as Binary Indexed Tree
     # binarysearch.com/problems/Virtual-Array
     # https://leetcode.com/problems/create-sorted-array-through-instructions
     # may need to be implemented again to reduce constant factor
@@ -71,6 +72,19 @@ class FenwickTree:
             res += self.c[x]
             x -= x & -x
         return res
+
+
+def count_inversions(perm):
+    # number of adjacent inversions needed to return to identity permutation
+    # for each index, count how many numbers on its left that are larger
+    # this is also a sample on how to use the class
+    res = 0
+    t = FenwickTree(bits = len(bin(max(perm))))
+    for i,x in enumerate(perm):
+        cnt = t.query(x)
+        res += i-cnt
+        t.update(x, 1)
+    return res
 
 
 # -------------------------- Segment Tree --------------------------
