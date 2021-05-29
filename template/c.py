@@ -53,26 +53,31 @@ def solve_(lst, k):
 
     # your solution here
     lst = [x-1 for x in lst]
-    locs = {i:x for i,x in enumerate(lst)}
+    ori_lst = [x for x in lst]
+    locs = {x:i for i,x in enumerate(lst)}
     log(locs)
 
     required = set([0, k-1])
     cureven = True
     res = []
-    settled = set([-1, k])
+    unsettled = set(range(0, k))
+
+    cnt = 0
 
     while required:
-        log(lst, res)
+        cnt += 1
+        log(lst, cureven, res, required, unsettled)
 
         for val in required:
+            log("iter", val)
 
             if locs[val] == val:
                 required.remove(val)
-                settled.add(val)
-                if val-1 not in settled:
-                    required.add(val)
-                if val+1 not in settled:
-                    required.add(val)
+                unsettled.remove(val)
+                if val-1 in unsettled:
+                    required.add(val-1)
+                if val+1 in unsettled:
+                    required.add(val+1)
                 break
 
             if cureven:
@@ -80,25 +85,70 @@ def solve_(lst, k):
                     pos = locs[val]-1
                     if pos%2 == 0:  # needs to be even to move
                         log("move left, even", pos, val)
-                        for i in range(pos+1, val, -1):
-                            lst[i], lst[i-1] = lst[i-1], lst[i]
+                        for i in range(pos, val-1, -1):
+                            lst[i], lst[i+1] = lst[i+1], lst[i]
                             cureven = not cureven
                             res.append(i)
                         
                         required.remove(val)
-                        settled.add(val)
+                        unsettled.remove(val)
                         locs = {i:x for i,x in enumerate(lst)}
-                        if val-1 not in settled:
-                            required.add(val)
-                        if val+1 not in settled:
-                            required.add(val)
+                        if val-1 in unsettled:
+                            required.add(val-1)
+                        if val+1 in unsettled:
+                            required.add(val+1)
+                        break
+                    else:
+                        pass  # try the other val
+                
+                else:  # move right
+                    pos = locs[val]
+                    if pos%2 == 0:  # needs to be even to move
+                        log("move right, even", pos, val)
+                        # move
+                        for i in range(pos, val):
+                            lst[i], lst[i+1] = lst[i+1], lst[i]
+                            cureven = not cureven
+                            res.append(i)
+
+                        required.remove(val)
+                        unsettled.remove(val)
+                        locs = {i:x for i,x in enumerate(lst)}
+                        if val-1 in unsettled:
+                            required.add(val-1)
+                        if val+1 in unsettled:
+                            required.add(val+1)
+                        break
+                    
+                    else:
+                        pass  # try the other val
+        
+            else:  # not cureven
+                log(locs[val], val)
+                if locs[val] > val:  # move left
+                    pos = locs[val]-1
+                    if pos%2 == 1:  # needs to be even to move
+                        log("move left, odd", pos, val)
+                        for i in range(pos, val-1, -1):
+                            lst[i], lst[i+1] = lst[i+1], lst[i]
+                            cureven = not cureven
+                            res.append(i)
+                        
+                        required.remove(val)
+                        unsettled.remove(val)
+                        locs = {i:x for i,x in enumerate(lst)}
+                        if val-1 in unsettled:
+                            required.add(val-1)
+                        if val+1 in unsettled:
+                            required.add(val+1)
                         break
                     else:
                         pass
                 
                 else:  # move right
                     pos = locs[val]
-                    if pos%2 == 0:  # needs to be even to move
+                    if pos%2 == 1:  # needs to be even to move
+                        log("move right, odd", pos, val)
                         # move
                         for i in range(pos, val):
                             lst[i], lst[i+1] = lst[i+1], lst[i]
@@ -107,22 +157,42 @@ def solve_(lst, k):
 
                         locs = {i:x for i,x in enumerate(lst)}
                         required.remove(val)
-                        settled.add(val)
-                        if val-1 not in settled:
-                            required.add(val)
-                        if val+1 not in settled:
-                            required.add(val)
+                        unsettled.remove(val)
+                        locs = {i:x for i,x in enumerate(lst)}
+                        if val-1 in unsettled:
+                            required.add(val-1)
+                        if val+1 in unsettled:
+                            required.add(val+1)
                         break
                     
                     else:
                         pass
-        
-                        
+
+        # log(lst, res, required, settled)
+        # break
 
         else:
-            break
+            required.add(min(unsettled)+1)
+            required.add(max(unsettled)-1)
+            # if cnt > 10:
+            #     break
+
+    if lst != sorted(lst):
+        log(ori_lst)
+        log(lst)
+        assert False
 
     return res
+
+
+for _ in range(1000):
+    solve([4,1,2,3], 4)
+    solve([1,3,2], 3)
+    if OFFLINE_TEST:
+        p = random.randint(2,13)
+        arr = list(range(1,p+1))
+        random.shuffle(arr)
+        solve(arr, p)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -154,7 +224,7 @@ for case_num in range(int(input())):
     print(len(res))
 
     # parse result
-    res = " ".join(str(x) for x in res)
+    res = " ".join(str(x+1) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
