@@ -47,9 +47,25 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
-    
+    stack = [[1]]
+    # print("1")
+    for x in arr[1:]:
+        if x == stack[-1][-1] + 1:
+            # log("incr")
+            stack[-1][-1] += 1
+        elif x == 1:
+            # log("deep")
+            stack.append([1])
+        else:
+            # log("pop")
+            while x != stack[-1][-1] + 1:
+                stack.pop()
+            stack[-1][-1] += 1
+        print(".".join(str(x[-1]) for x in stack))
+        # log(stack)
+
     return ""
 
 
@@ -58,7 +74,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -72,11 +88,14 @@ for case_num in range(int(input())):
     # lst = minus_one(lst)
 
     # read multiple rows
+    arr = []
+    for _ in range(k):
+        arr.append(int(input()))
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
