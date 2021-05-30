@@ -97,7 +97,7 @@ def solve_(mrr,n):
             # log(i,x,a,b,c)
             if b > 0:
                 updates.append((x,-b))
-                updates.append((x+1,-b))
+                updates.append((x+1,b))
                 # t.update(x, -b)
                 # t.update(x+1, +b)
             if a > 0:
