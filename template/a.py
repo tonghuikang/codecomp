@@ -46,11 +46,19 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-
-def solve_():
+@functools.lru_cache(maxsize=10**3)
+def solve_(lst, k):
     # your solution here
+    lst = [0] + [int(x=="1") for x in lst] + [0]
+    for i in range(k):
+        new = [int(c or a^b) for a,c,b in zip(lst,lst[1:],lst[2:])]
+        if lst[1:-1] == new:
+            break
+        lst[1:-1] = new
     
-    return ""
+    return "".join(str(x) for x in lst[1:-1])
+
+        
 
 
 # for case_num in [0]:  # no loop over test case
@@ -61,13 +69,13 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
+    lst = input().strip()
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +84,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst, b)  # include input here
 
     # print length if applicable
     # print(len(res))
