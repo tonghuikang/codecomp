@@ -47,9 +47,18 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(k):
     # your solution here
     
+    arr = [2,1,1,2,1,1]
+    # brr = [2,1,1,1,2,2]
+    # brr = [x-1 for x in brr]
+
+    print(k*3)
+
+    for i in range(1,k,2):
+        for a in arr:
+            print(a,i,i+1)
     return ""
 
 
@@ -58,7 +67,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +77,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +85,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -89,4 +98,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
