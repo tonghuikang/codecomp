@@ -46,16 +46,63 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def sliding_window_median(nums, k):
+    # leetcode.com/problems/sliding-window-median/discuss/262689
+    def move(h1, h2):
+        x, i = heapq.heappop(h1)
+        heapq.heappush(h2, (-x, i))
 
-def solve_():
-    # your solution here
+    def get_med(h1, h2, k):
+        return -h1[0][0] if not k&1 else h2[0][0]
     
-    return ""
+    small, large = [], []
+    
+    # init
+    for i, x in enumerate(nums[:k]): 
+        heapq.heappush(small, (-x,i))
+    for _ in range(k-(k>>1)): 
+        move(small, large)
+        
+    ans = [get_med(small, large, k)]
+    for i, x in enumerate(nums[k:]):
+        if x >= large[0][0]:
+            heapq.heappush(large, (x, i+k))
+            if nums[i] <= large[0][0]: 
+                move(large, small)
+        else:
+            heapq.heappush(small, (-x, i+k))
+            if nums[i] >= large[0][0]: 
+                move(small, large)
+        while small and small[0][1] <= i: 
+            heapq.heappop(small)
+        while large and large[0][1] <= i: 
+            heapq.heappop(large)
+        ans.append(get_med(small, large, k))
+    return ans
 
 
-# for case_num in [0]:  # no loop over test case
+def solve_(mrr,n,k):
+    minres = 10**18
+    # your solution here
+    for x in range(n-k+1):  # start_row
+        arr = []
+        for i in range(n):
+            for j in range(x,x+k):
+                # log(j,i,mrr[j][i])
+                arr.append(mrr[j][i])
+        # log(matrix)
+        # log(arr, k, x)
+        res = sliding_window_median(arr, k*k)
+        res = res[::k]
+        # log(res)
+        minres = min(minres, min(res))
+
+    return minres
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,16 +114,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr,n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
