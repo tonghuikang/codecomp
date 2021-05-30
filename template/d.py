@@ -30,19 +30,23 @@ def read_matrix(rows):
 
 
 from scipy import ndimage
+from scipy.signal import medfilt2d
 import numpy as np
 
 def solve_(zrr,n,k):
-    mrr = -np.array(zrr)
+    mrr = -np.array(zrr, dtype="float64")
     del zrr
-    res = ndimage.median_filter(mrr, size=k, mode="constant", cval=-np.inf)
-    # log(res)
+    if k%2:
+        res = medfilt2d(mrr, k)
+    else:
+        res = ndimage.median_filter(mrr, size=k, mode="constant", cval=-np.inf)
+    log(res)
     right = n-(k-1)//2
     left = k-1 - (k-1)//2
     res = res[left:right,left:right]
-    # log(res)
+    log(res)
     # log(left, right)
-    return -(res.max())
+    return -int(res.max())
 
 
 for case_num in [0]:  # no loop over test case

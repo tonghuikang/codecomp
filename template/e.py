@@ -47,15 +47,31 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr,n):
     # your solution here
     
-    return ""
+    upper = n
+    lower = n
+
+    d = defaultdict(set)
+    for i,x in mrr:
+        d[i].add(x)
+    d = sorted(d.items())
+
+    for i,lst in d:
+        if upper == lower == n and lst == {n}:
+            return 0
+        if lower-1 in lst:
+            lower -= 1
+        if upper+1 in lst:
+            upper += 1
+
+    return upper - lower + 1
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,16 +83,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr,n)  # include input here
 
     # print length if applicable
     # print(len(res))
