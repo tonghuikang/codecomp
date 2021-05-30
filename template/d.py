@@ -1,14 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
-
-# available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
-# import scipy
 
 M9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
@@ -35,77 +28,21 @@ def solve(*args):
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
 
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
 
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
-
-# ---------------------------- template ends here ----------------------------
-
-def sliding_window_median(nums, k):
-    # leetcode.com/problems/sliding-window-median/discuss/262689
-    def move(h1, h2):
-        x, i = heapq.heappop(h1)
-        heapq.heappush(h2, (-x, i))
-
-    def get_med(h1, h2, k):
-        return -h1[0][0] if not k&1 else h2[0][0]
-    
-    small, large = [], []
-    
-    # init
-    for i, x in enumerate(nums[:k]): 
-        heapq.heappush(small, (-x,i))
-    for _ in range(k-(k>>1)): 
-        move(small, large)
-        
-    ans = [get_med(small, large, k)]
-    for i, x in enumerate(nums[k:]):
-        if x >= large[0][0]:
-            heapq.heappush(large, (x, i+k))
-            if nums[i] <= large[0][0]: 
-                move(large, small)
-        else:
-            heapq.heappush(small, (-x, i+k))
-            if nums[i] >= large[0][0]: 
-                move(small, large)
-        while small and small[0][1] <= i: 
-            heapq.heappop(small)
-        while large and large[0][1] <= i: 
-            heapq.heappop(large)
-        ans.append(get_med(small, large, k))
-    return ans
-
-
-from scipy import ndimage, misc
+from scipy import ndimage
 import numpy as np
 
-def solve_(mrr,n,k):
-    mrr = -np.array(mrr)
-    res = ndimage.median_filter(mrr, size=k, mode="constant",cval=-np.inf)
-    log(res)
-    return -res[n-k:,n-k:].max()
-
-    minres = 10**18
-    # your solution here
-    for x in range(n-k+1):  # start_row
-        arr = []
-        for i in range(n):
-            for j in range(x,x+k):
-                # log(j,i,mrr[j][i])
-                arr.append(mrr[j][i])
-        # log(matrix)
-        # log(arr, k, x)
-        res = sliding_window_median(arr, k*k)
-        res = res[::k]
-        # log(res)
-        minres = min(minres, min(res))
-
-    return minres
+def solve_(zrr,n,k):
+    mrr = -np.array(zrr)
+    del zrr
+    res = ndimage.median_filter(mrr, size=k, mode="constant", cval=-np.inf)
+    # log(res)
+    right = n-(k-1)//2
+    left = k-1 - (k-1)//2
+    res = res[left:right,left:right]
+    # log(res)
+    # log(left, right)
+    return -(res.max())
 
 
 for case_num in [0]:  # no loop over test case
