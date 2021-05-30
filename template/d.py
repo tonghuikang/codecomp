@@ -81,7 +81,15 @@ def sliding_window_median(nums, k):
     return ans
 
 
+from scipy import ndimage, misc
+import numpy as np
+
 def solve_(mrr,n,k):
+    mrr = -np.array(mrr)
+    res = ndimage.median_filter(mrr, size=k, mode="constant",cval=-np.inf)
+    log(res)
+    return -res[n-k:,n-k:].max()
+
     minres = 10**18
     # your solution here
     for x in range(n-k+1):  # start_row
