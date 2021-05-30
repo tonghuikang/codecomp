@@ -90,22 +90,34 @@ def solve_(mrr,n):
     
     for i,lst in d:
         lst = sorted(lst)
+        updates = []
         for x in lst:
             a,b,c = t.query(x-1), t.query(x), t.query(x+1)
+
             # log(i,x,a,b,c)
             if b > 0:
-                t.update(x, -b)
-                t.update(x+1, +b)
+                updates.append((x,-b))
+                updates.append((x+1,-b))
+                # t.update(x, -b)
+                # t.update(x+1, +b)
             if a > 0:
-                t.update(x, 1)
-                t.update(x+1, -1)
+                updates.append((x,1))
+                updates.append((x+1,-1))
+                # t.update(x, 1)
+                # t.update(x+1, -1)
             if c > 0:
-                t.update(x, 1)
-                t.update(x+1, -1)
+                updates.append((x,1))
+                updates.append((x+1,-1))
+                # t.update(x, 1)
+                # t.update(x+1, -1)
+
+        for x,y in updates:
+            t.update(x, y)
+
 
     res = 0
-    for x in range(VAL-2*10**5-1, 
-                   VAL+2*10**5+1):
+    for x in range(VAL-2*10**5-10, 
+                   VAL+2*10**5+10):
         if t.query(x) > 0:
             res += 1
 
