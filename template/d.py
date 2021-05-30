@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import time
+start_time = time.time()
+
 import sys
 import getpass  # not available on codechef
 import math, random
@@ -18,8 +21,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -81,7 +84,14 @@ def solve_(arr,n,m,p):
 
     maxres = 0
     maxval = 0
-    for i in range(2**len(idxs)):
+    sequence = list(range(2**len(idxs)))
+    sequence = sorted(sequence, key=lambda x: len(bin(x)))
+    # random.shuffle(sequence)
+    failed = set()
+
+    for i in sequence:
+        if time.time() - start_time > 2.8:
+            break
         # log("test", i)
         c = 0  # hamming weight
         n = i
@@ -92,15 +102,22 @@ def solve_(arr,n,m,p):
         if c <= maxres:
             continue
         
-        count = 0
-        for val in vals:
-            if (val&i)^i == 0:
-                count += 1
-        
-        if count >= threshold:
-            # log("pass", i, c, count)
-            maxres = c
-            maxval = i
+        for x in failed:
+            if (x&i) == i:
+                break
+        else:
+            count = 0
+            for val in vals:
+                if (val&i) == i:
+                    count += 1
+            
+            if count >= threshold:
+                # log("pass", i, c, count)
+                maxres = c
+                maxval = i
+            else:
+                if len(bin(i)) < 5:
+                    failed.add(i)
 
     # log(maxres)
     # log(maxval)
