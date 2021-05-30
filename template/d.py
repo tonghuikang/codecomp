@@ -106,7 +106,11 @@ def solve_(arr,n,m,p):
     # log(maxval)
     
     srr = bin(maxval)[2:]
+    # log(srr)
     srr = srr.zfill(len(idxs))
+    srr = srr[::-1]
+    # log(srr)
+    # log(inv_retained)
     res = [0]*m
     for i,x in enumerate(srr):
         if x == "1":
