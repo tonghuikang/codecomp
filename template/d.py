@@ -58,22 +58,23 @@ def solve_(arr,n,m,p):
                 c[i] += 1
 
     threshold = (n+1)//2
+    log(n, threshold)
 
     retained = []
-    for i,x in enumerate(c):
+    for pos,x in enumerate(c):
         if x >= threshold:
             retained.append(i)
     
-    inv_retained = {i:x for i,x in enumerate(retained)}
-    idxs = {i:1<<p for p,i in enumerate(retained)}
+    inv_retained = {i:pos for i,pos in enumerate(retained)}
+    idxs = {pos:1<<p for p,pos in enumerate(retained)}  # for bitmask
 
     # log(idxs)
 
     vals = []
     for row in arr:
         val = 0
-        for i,x in enumerate(row):
-            if x and i in idxs:
+        for pos,x in enumerate(row):
+            if x and pos in idxs:
                 val += idxs[i]
         vals.append(val)
     
@@ -102,11 +103,16 @@ def solve_(arr,n,m,p):
             maxres = c
             maxval = i
 
-    # log(maxres)
-    # log(maxval)
+    log(maxres)
+    log(maxval)
     
     res = [0]*m
-    for i,x in enumerate(bin(maxval)[2:]):
+    srr = bin(maxval)[2:]
+    log("val")
+    log(srr)
+    # srr = srr.zfill(len(idxs))
+    # log(srr)
+    for i,x in enumerate(srr):
         if x == "1":
             res[inv_retained[i]] = 1
         
