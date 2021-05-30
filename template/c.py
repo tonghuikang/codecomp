@@ -50,7 +50,7 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
     stack = [[1]]
-    # print("1")
+    print("1")
     for x in arr[1:]:
         if x == stack[-1][-1] + 1:
             # log("incr")
