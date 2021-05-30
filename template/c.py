@@ -262,3 +262,100 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
     print(res)
+
+
+
+LARGE = 10**12
+
+class Solution:
+    def getBiggestThree(self, grid: List[List[int]]) -> List[int]:
+        g1 = defaultdict(list)
+        g2 = defaultdict(list)
+        allbag = set()
+
+        for i,row in enumerate(grid):
+            for j,cell in enumerate(row):
+                allbag.add(cell)
+                if (i-j)%2:
+                    g1[(i-j-1)//2].append(cell)
+                else:
+                    g2[(i-j)//2].append(cell)
+        
+        def extract(g1):
+            
+            maxlen = 0
+            for arr in g1.values():
+                maxlen = max(maxlen, len(arr))
+
+            mrr = [[[-LARGE]*200] for _ in range(200)]
+            
+            for k in sorted(g1.keys()):
+                arr = g1[k]
+                appendlen = (maxlen - len(g1[k]))//2
+                
+                if len(g1[k]) + 2*appendlen < maxlen:
+                    if k < 0:
+                        arr = [-LARGE]*(appendlen+1) + arr + [-LARGE]*appendlen
+                    else:
+                        arr = [-LARGE]*appendlen + arr + [-LARGE]*(appendlen+1)
+                else:
+                    arr = [-LARGE]*appendlen + arr + [-LARGE]*appendlen
+
+                mrr.append(arr)
+                
+            h = len(mrr)
+            w = len(mrr[0])
+            
+            for row in mrr:
+                print("\t".join(str(x) for x in row))
+            
+            
+            bag = set()
+            
+            for x in range(h):
+                for y in range(w):
+                    if mrr[x][y] < 0:
+                        continue
+                    for a in range(1,min(h-x,w-y)):
+                        val = 0
+
+                        xx = x
+                        for yy in range(y,y+a+1):
+                            val += mrr[xx][yy]
+
+                        xx = x+a
+                        for yy in range(y,y+a+1):
+                            val += mrr[xx][yy]
+                            
+                        yy = y
+                        for xx in range(x,x+a+1):
+                            val += mrr[xx][yy]
+                        
+                        yy = y+a
+                        for xx in range(x,x+a+1):
+                            val += mrr[xx][yy]
+                            
+                        val -= mrr[x][y] + mrr[x+a][y+a] + mrr[x+a][y] + mrr[x][y+a]
+                        bag.add(val)
+                        if val > 100:
+                            print(x,y,a,val)
+
+            # print(bag)
+            return bag
+        
+        # print(g1)
+        # print(g2)
+        
+        bag = extract(g1)
+        allbag.update(bag)
+        
+        print()
+
+        bag = extract(g2)
+        allbag.update(bag)
+        
+        allbag = [x for x in reversed(sorted(allbag)) if x > 0]
+        
+        print()
+        print()
+        return allbag[:3]
