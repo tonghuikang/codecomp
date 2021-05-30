@@ -47,26 +47,69 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+    def __init__(self, bits=31):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+        
+    def update(self, x, increment):
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+        
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+VAL = 2*10**5 + 10
+
 def solve_(mrr,n):
     # your solution here
     
-    upper = n
-    lower = n
-
     d = defaultdict(set)
     for i,x in mrr:
-        d[i].add(x)
+        d[i].add(x-n + VAL)
     d = sorted(d.items())
 
-    for i,lst in d:
-        if upper == lower == n and lst == {n}:
-            return 0
-        if lower-1 in lst:
-            lower -= 1
-        if upper+1 in lst:
-            upper += 1
+    # log(d)
 
-    return upper - lower + 1
+    t = FenwickTree()
+    t.update(VAL, 1)
+    t.update(VAL+1, -1)
+    
+    for i,lst in d:
+        lst = sorted(lst)
+        for x in lst:
+            a,b,c = t.query(x-1), t.query(x), t.query(x+1)
+            # log(i,x,a,b,c)
+            if b > 0:
+                t.update(x, -b)
+                t.update(x+1, +b)
+            if a > 0:
+                t.update(x, 1)
+                t.update(x+1, -1)
+            if c > 0:
+                t.update(x, 1)
+                t.update(x+1, -1)
+
+    res = 0
+    for x in range(VAL-2*10**5-1, 
+                   VAL+2*10**5+1):
+        if t.query(x) > 0:
+            res += 1
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
