@@ -49,13 +49,53 @@ def minus_one_matrix(mrr):
 
 def solve_():
     # your solution here
-    
+
+    q,a0,c0 = list(map(int,input().split()))
+
+    # find the highest non-bankrupt ancestor
+    idx_to_cost = {0: c0}
+    idx_to_amt = {0: a0}
+    idx_to_parent = {0: c0}
+    idx_to_ancestors = {0: []}
+
+    idx = 0
+    for _ in range(q):
+        idx += 1
+        lst = list(map(int,input().split()))
+        if len(lst) == 4:
+            p,a,c = lst[1:]
+            idx_to_parent[idx] = p
+            idx_to_amt[idx] = a
+            idx_to_cost[idx] = c
+            idx_to_ancestors[idx] = deque([x for x in idx_to_ancestors[p]])
+            idx_to_ancestors[idx].append(p)
+            if len(idx) >= 500:
+                idx_to_ancestors[idx].popleft()
+        else:
+            v,w = lst[1:]
+            series = [v]
+            cur = v
+            while idx_to_ancestors[v]:
+                anc = idx_to_ancestors[v][0]
+                if idx_to_amt[anc] == 0:
+                    break
+                cur = anc
+                series.append(cur)
+            # crawl from cur
+
+            # considered_heaps = [v]
+            # cur = v
+
+            # while a > 0:
+            #     all_heap = [(*idx_to_cost_heap[cur][0],v) for  v in considered_heaps
+
+
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -89,4 +129,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
