@@ -47,10 +47,11 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b,c,d):
     # your solution here
-    
-    return ""
+    if sorted([a,b,c,d])[2:] == sorted([max(a,b), max(c,d)]):
+        return yes
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +68,7 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c,d = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +77,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,c,d)  # include input here
 
     # print length if applicable
     # print(len(res))
