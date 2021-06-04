@@ -47,21 +47,104 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, qrr, k):
     # your solution here
+
+    mappping = {"?": 2, "1": 1, "0":0}
+    status = [mappping[x] for x in srr]
+    counts = [1 for _ in srr]  # result at -1
+    nextidx = [-1 for _ in srr]
+    prevsmall_arr = [-1 for _ in srr]
+    prevlarge_arr = [-1 for _ in srr]
+
+    idx = 0
     
-    return ""
+    for j in range(k-1,-1,-1):
+        prevsize = 2**(j+1)
+        startidx = idx
+        for i in range(2**j):
+            if j == k-1:
+                if status[idx] == 2:
+                    counts[idx] = 2
+            else:
+                prevsmall = startidx - prevsize + (idx - startidx)*2
+                prevlarge = prevsmall + 1
+                nextidx[prevsmall] = idx
+                nextidx[prevlarge] = idx
+                prevsmall_arr[idx] = prevsmall
+                prevlarge_arr[idx] = prevlarge
+                # log(idx, prevsmall, prevlarge)
+
+                if status[idx] == 0:
+                    counts[idx] = counts[prevsmall]
+                if status[idx] == 1:
+                    counts[idx] = counts[prevlarge]
+                if status[idx] == 2:
+                    counts[idx] = counts[prevsmall] + counts[prevlarge]
+                
+            idx += 1
+
+    # log("chec")
+    # log(prevsmall_arr)
+    # log(prevlarge_arr)
+    # log(nextidx)
+
+    res = []
+    for row in qrr:
+        idx, op = row.split()
+        idx = int(idx)-1
+        op = mappping[op]
+
+        status[idx] = op
+
+        if idx < 2**(k-1):
+            # log("smaller than 2**k-1", 2**(k-1))
+            if status[idx] == 0:
+                counts[idx] = 1
+            if status[idx] == 1:
+                counts[idx] = 1
+            if status[idx] == 2:
+                counts[idx] = 2
+        else:
+            prevsmall = prevsmall_arr[idx]
+            prevlarge = prevlarge_arr[idx]
+            if status[idx] == 0:
+                counts[idx] = counts[prevsmall]
+            if status[idx] == 1:
+                counts[idx] = counts[prevlarge]
+            if status[idx] == 2:
+                counts[idx] = counts[prevsmall] + counts[prevlarge]
+
+        while nextidx[idx] != -1:
+            idx = nextidx[idx]
+            prevsmall = prevsmall_arr[idx]
+            prevlarge = prevlarge_arr[idx]
+            if status[idx] == 0:
+                counts[idx] = counts[prevsmall]
+            if status[idx] == 1:
+                counts[idx] = counts[prevlarge]
+            if status[idx] == 2:
+                counts[idx] = counts[prevsmall] + counts[prevlarge]
+        # log("-")
+        # log(status)
+        # log(counts)
+        res.append(counts[-1])
+    
+    # log(res)
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+
+    q = int(input())
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -72,18 +155,18 @@ for case_num in range(int(input())):
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    qrr = read_strings(q)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, qrr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
