@@ -47,10 +47,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
     
-    return ""
+    if len(arr) == 1:
+        return 1
+
+    # breakpoints = [0] + [i for i,(a,b) in enumerate(zip(arr, arr[1:]), start=1) if a == b < 2] + [len(arr) + 1]
+    # log(breakpoints)
+
+    # res = 0
+    # for a,b in zip(breakpoints, breakpoints[1:]):
+    #     length = b-a-1
+    #     res += length * (length-1) // 2
+
+    odds = [1 if (x == 2 or x&1 == i&1) else 0 for i,x in enumerate(arr)]
+    evens = [1 if (x == 2 or x&1 != i&1) else 0 for i,x in enumerate(arr)]
+    twos = [1 if (x == 2) else 0 for i,x in enumerate(arr)]
+
+    def calc(brr):
+        cursize = 0
+        cnt = 0
+        for x in brr:
+            if x == 1:
+                cursize += 1
+            else:
+                cnt += (cursize * (cursize+1)) // 2
+                cursize = 0
+        cnt += (cursize * (cursize+1)) // 2
+        return cnt
+
+    a = calc(odds)
+    b = calc(evens)
+    c = calc(twos)
+
+    # log(a,b,c)
+
+    return a+b-c
 
 
 # for case_num in [0]:  # no loop over test case
@@ -61,7 +94,9 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+
+    srr = [int(x) if x != "?" else 2 for x in srr]
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +111,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
