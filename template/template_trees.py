@@ -8,6 +8,31 @@ MAXINT = sys.maxsize
 
 # ------------------------ standard imports ends here ------------------------
 
+# ------------------------------ Binary Lifting ------------------------------
+
+
+N = 2**20 + 2
+root = 0
+anc = [None for i in range(N)]  # anc[u][k] is (2**k)-th ancestor of u
+anc[root] = [-1] * 20
+anc[-1] = [-1] * 20
+
+def buildJumps(u, parent):
+    jumps = [0] * 20
+    jumps[0] = parent
+    for i in range(1, 20):
+        jumps[i] = anc[jumps[i - 1]][i - 1]   # avoided writing into a matrix here
+    anc[u] = jumps
+
+def getLast(u, f):
+    # Returns highest node on the path from u to root where f(node) is true.
+    # Assumes f is monotonic and goes from true to false (from node to root)
+    # If all false, returns u.
+    for i in reversed(range(20)):
+        if f(anc[u][i]):   # attempted to jump 2**i up, jumps if non-zero
+            u = anc[u][i]
+    return u
+
 
 # ----------------------------------- Trie -----------------------------------
 
