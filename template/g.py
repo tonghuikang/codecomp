@@ -78,7 +78,7 @@ def solve_(x,y,a,b):
     maxres = xx + yy
     assert possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx)
 
-    for i in list(range(100)) + [p,q,a,b,math.gcd(p,q),math.gcd(a,b),abs(a-b),abs(p-q)]:
+    for i in list(range(1,2)) + [p,q,a,b,math.gcd(p,q),math.gcd(a,b),abs(a-b),abs(p-q)]:
         xx = int(x)+i
         yy = int((q-x*b)/a)
         # log(xx,yy)
