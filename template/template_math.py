@@ -102,7 +102,8 @@ def get_largest_prime_factors(num):
     return largest_prime_factors
 
 
-largest_prime_factors = get_largest_prime_factors(10**6)
+largest_prime_factors = get_largest_prime_factors(10**6)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
 
 
 def get_prime_factors_with_precomp_largest_factors(num, largest_prime_factors=largest_prime_factors):
