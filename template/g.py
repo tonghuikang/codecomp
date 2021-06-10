@@ -54,7 +54,7 @@ def minus_one_matrix(mrr):
 def possible(p,q,a,b,x,y):
     if x < 0 or y < 0:
         return False
-    log(x*a + y*b, p, x*b + y*a, q)
+    # log(x*a + y*b, p, x*b + y*a, q)
     return x*a + y*b <= p and x*b + y*a <= q
 
 def solve_(x,y,a,b):
@@ -69,7 +69,7 @@ def solve_(x,y,a,b):
     x = (a*q - b*p) / (a*a - b*b)
     y = (a*p - b*q) / (a*a - b*b)
 
-    log(x,y)
+    # log(x,y)
     if x <= 0 or y <= 0:
         return max(0, min(p//a, q//b), min(p//b, q//a))
 
@@ -78,16 +78,16 @@ def solve_(x,y,a,b):
     maxres = xx + yy
     assert possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx)
 
-    for i in range(100):
+    for i in list(range(10000)) + [p,q,a,b,math.gcd(p,q),math.gcd(a,b)]:
         xx = int(x)+i
         yy = int((q-x*b)/a)
-        log(xx,yy)
+        # log(xx,yy)
         if possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx):
             maxres = max(maxres, xx + yy)
 
         yy = int(y)+i
         xx = int((p-y*b)/a)
-        log(xx,yy)
+        # log(xx,yy)
         if possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx):
             maxres = max(maxres, xx + yy)
     
