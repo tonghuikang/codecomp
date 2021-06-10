@@ -60,27 +60,31 @@ def solve_(x,y,a,b):
         return min(x//a, y//a)
 
     p,q,a,b = x,y,a,b
+    p,q = sorted([p,q])
+    a,b = sorted([a,b])
 
     x = (a*q - b*p) / (a*a - b*b)
     y = (a*p - b*q) / (a*a - b*b)
 
     log(x,y)
     if x < 0 or y < 0:
-        return max(min(p//a, q//b), min(p//b, q//a))
+        return max(0, min(p//a, q//b), min(p//b, q//a))
 
-    minres = int(x) + int(y)
+    maxres = int(x) + int(y)
 
     xx = int(x)+1
-    yy = int(y)
+    yy = (q-xx*b)//a
+    log(xx,yy)
     if possible(p,q,a,b,xx,yy):
-        minres = xx + yy
+        maxres = max(maxres, xx + yy)
 
-    xx = int(x)
     yy = int(y)+1
+    xx = (p-yy*a)//b
+    log(xx,yy)
     if possible(p,q,a,b,xx,yy):
-        minres = xx + yy
+        maxres = max(maxres, xx + yy)
     
-    return minres
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
