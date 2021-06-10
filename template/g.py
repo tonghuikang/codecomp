@@ -63,8 +63,8 @@ def solve_(x,y,a,b):
         return min(x//a, y//a)
 
     p,q,a,b = x,y,a,b
-    # p,q = sorted([p,q])
-    # a,b = sorted([a,b])
+    p,q = sorted([p,q])
+    a,b = sorted([a,b])
 
     x = (a*q - b*p) / (a*a - b*b)
     y = (a*p - b*q) / (a*a - b*b)
@@ -78,9 +78,15 @@ def solve_(x,y,a,b):
     maxres = xx + yy
     assert possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx)
 
-    for i in list(range(10000)) + [p,q,a,b,math.gcd(p,q),math.gcd(a,b)]:
+    for i in list(range(100)) + [p,q,a,b,math.gcd(p,q),math.gcd(a,b),abs(a-b),abs(p-q)]:
         xx = int(x)+i
         yy = int((q-x*b)/a)
+        # log(xx,yy)
+        if possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx):
+            maxres = max(maxres, xx + yy)
+
+        xx = int(x)+i
+        yy = int((q-x*a)/b)
         # log(xx,yy)
         if possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx):
             maxres = max(maxres, xx + yy)
@@ -91,6 +97,12 @@ def solve_(x,y,a,b):
         if possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx):
             maxres = max(maxres, xx + yy)
     
+        yy = int(y)+i
+        xx = int((p-y*a)/b)
+        # log(xx,yy)
+        if possible(p,q,a,b,xx,yy) or possible(p,q,a,b,yy,xx):
+            maxres = max(maxres, xx + yy)
+
     return maxres
 
 
