@@ -426,6 +426,8 @@ BINARY_OPERATORS = {
     "/": Operator(2, True, False, operator.truediv),  # use floordiv for int
     "%": Operator(2, True, False, operator.mod),
     "^": Operator(3, False, False, operator.pow),
+    "&": Operator(4, False, False, operator.and_),
+    "|": Operator(4, False, False, operator.or_)
 }
 
 
