@@ -71,8 +71,8 @@ def alert(g):
 
 k = int(input())
 
-parent = {}
-results = {}
+# parent = {}
+# results = {}
 
 if k == 2:
     g = defaultdict(set)
@@ -80,14 +80,18 @@ if k == 2:
     g[1] = [0]
     alert(g)
 
-stack = [0]
-visited = set()
+stack = [(k-1)//2]
+visited = set(stack)
 computed = set()
 g = defaultdict(set)
 # g2 = defaultdict(set)
 # three elements that are two away from each other definitely share a common node
+cnt = 0
 
 while stack:
+    cnt += 1
+    if cnt > (k+1)//2:
+        assert False
     # log(stack)
     # log(computed)
     # log(visited)
@@ -97,9 +101,9 @@ while stack:
     computed.add(cur)
 
     lst = query(cur)
-    results[cur] = lst
+    # results[cur] = lst
 
-    holding = []
+    holding2 = []
     holding3 = []
     c1 = 0
     x1 = -1
@@ -108,14 +112,14 @@ while stack:
         if x == 2 and nex not in visited:
             stack.append(nex)
             visited.add(nex)
-            holding.append(nex)
+            holding2.append(nex)
             # g2[nex].add(cur)
             # g2[cur].add(nex)
                 
         if x == 1:
             g[cur].add(nex)
             g[nex].add(cur)
-            parent[nex] = cur
+            # parent[nex] = cur
             visited.add(nex)
             computed.add(nex)
             c1 += 1
@@ -126,7 +130,7 @@ while stack:
     
     # if there is only one c1, connect all c2 to c1
     if c1 == 1:
-        for val in holding:
+        for val in holding2:
             g[val].add(x1)
             g[x1].add(val)
             computed.add(val)
