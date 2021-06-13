@@ -58,9 +58,10 @@ def alert(pos):
 
 n,k = list(map(int,input().split()))
 
-for _ in range(3):
-    query([[1,2,3]])
-alert(7)
+
+# x x x - -
+# x x - x -
+# x x - - x
 
 
 group_size = math.gcd(n,k)  # treat them as one
@@ -77,11 +78,12 @@ if k%2 == 0:
     alert(-1)
 
 res = 0
-for i in range(n):
+for i in range(n-k+1):
     to_query = []
-    for j in range(k):
-        to_query.append(groups[(i+j)%g])  
-    log(to_query)
+    for j in range(k-1):
+        to_query.append(groups[j])  
+    to_query.append(groups[k+i-1])
+    # log(to_query)
     val = query(to_query) 
     res = res^val
 
