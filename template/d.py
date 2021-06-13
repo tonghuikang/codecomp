@@ -82,16 +82,31 @@ if k == 2:
 
 stack = [0]
 visited = set()
+unvisited = set(range(k))
 computed = set()
 g = defaultdict(set)
 # g2 = defaultdict(set)
 # three elements that are two away from each other definitely share a common node
 
-while stack:
-    cur = stack.pop()
+while stack or unvisited:
+    log(stack)
+    log(computed)
+    log(visited)
+    if stack:
+        cur = stack.pop()
+    else:
+        for cur in unvisited:
+            if cur in visited:
+                continue
+            unvisited -= visited
+            break
+        else:
+            break
     if cur in computed:
+        unvisited.discard(cur)
         continue
     computed.add(cur)
+    unvisited.discard(cur)
 
     lst = query(cur)
     results[cur] = lst
@@ -122,7 +137,7 @@ while stack:
         for val in holding:
             g[val].add(x1)
             g[x1].add(val)
-            computed.add(nex)
+            computed.add(val)
             
 
 alert(g)
