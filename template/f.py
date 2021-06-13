@@ -155,15 +155,22 @@ class Graph:
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, h, w):
+def solve_(arr, lst, h, w):
     # your solution here
-
+    # lst irrelevant
+    # lst = [0] + lst + [0]
+    
     arr = arr[::-1]
-    arr = ""
-    for i,row in enumerate(arr):
-        for j,cell in enumerate(arr):
+    arr = ["." + row + "." for row in arr]
+    minval = 0
 
-    return ""
+    # for j,cell in enumerate(arr[0]):
+    #     if 
+    
+    # for i,row in enumerate(arr):
+    #     for j,cell in enumerate(row):
+
+    # return ""
 
 
 for case_num in [0]:  # no loop over test case

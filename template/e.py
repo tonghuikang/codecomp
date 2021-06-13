@@ -112,4 +112,4 @@ for i in range(n-k+2):
     val = query(to_query) 
     res = res^val
 
-# alert(res)
+alert(res)
