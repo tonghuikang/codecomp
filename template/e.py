@@ -52,7 +52,7 @@ def query(groups):
     response = int(input())
     return response
 
-def alert2(pos):
+def alert(pos):
     print("! {}".format(pos), flush=True)
     sys.exit()
 
