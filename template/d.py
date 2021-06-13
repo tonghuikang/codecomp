@@ -89,9 +89,6 @@ g = defaultdict(set)
 cnt = 0
 
 while stack:
-    cnt += 1
-    if cnt > (k+1)//2:
-        assert False
     # log(stack)
     # log(computed)
     # log(visited)
@@ -100,6 +97,9 @@ while stack:
         continue
     computed.add(cur)
 
+    cnt += 1
+    if cnt > (k+1)//2:
+        assert False
     lst = query(cur)
     # results[cur] = lst
 
@@ -109,6 +109,9 @@ while stack:
     x1 = -1
 
     for nex,x in enumerate(lst):
+        if x == 0:
+            assert nex == cur
+
         if x == 2 and nex not in visited:
             stack.append(nex)
             visited.add(nex)
