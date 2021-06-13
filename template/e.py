@@ -52,8 +52,13 @@ def query(groups):
     response = int(input())
     return response
 
-def alert(pos):
+def alert2(pos):
     print("! {}".format(pos), flush=True)
+    sys.exit()
+
+
+def alert2(pos):
+    print("{}".format(pos), flush=True)
     sys.exit()
 
 n,k = list(map(int,input().split()))
@@ -75,7 +80,7 @@ for i in range(n//group_size):
 g = len(groups)
 n,k = n//group_size, k//group_size
 if k%2 == 0:
-    alert(-1)
+    alert2(-1)
 
 res = 0
 for i in range(n-k+1):
