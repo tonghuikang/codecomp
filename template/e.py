@@ -101,13 +101,14 @@ if n%2 == 1:
 # x - x x
 # x x - x
 
+# alert2(-1)
 res = 0
-for i in range(n-k+2):
+for i in range(n):
     to_query = []
-    for j in range(k-2):
-        to_query.append(groups[g-j-1])  
-    to_query.append(groups[(k+i-1)%(g-k+2)])
-    to_query.append(groups[(k+i)%(g-k+2)])
+    for j in range(k):
+        to_query.append(groups[(g-j-i-1)%g])  
+    # to_query.append(groups[(k+i-1)%(g-k+2)])
+    # to_query.append(groups[(k+i)%(g-k+2)])
     # log(to_query)
     val = query(to_query) 
     res = res^val

@@ -155,21 +155,37 @@ class Graph:
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, lst, h, w):
+def solve_(arr, h, w):
+    arr = arr[::-1]
+    arr = ["." + row + "." for row in arr]
+    w += 2
     # your solution here
     # lst irrelevant
     # lst = [0] + lst + [0]
+    def convert(x,y):
+        return x*w + y
+    g1 = Graph(h*w)
     
-    arr = arr[::-1]
-    arr = ["." + row + "." for row in arr]
-    minval = 0
+    maxgrounded = [-1 for _ in arr[0]]
+    maxfloating = [-1 for _ in arr[0]]
 
-    # for j,cell in enumerate(arr[0]):
-    #     if 
+    for j,cell in enumerate(arr[0]):
+        if cell == "#":
+            maxgrounded[j] = 0
     
-    # for i,row in enumerate(arr):
-    #     for j,cell in enumerate(row):
+    for i,row in enumerate(arr[1:], start=1):
+        for j,cell in enumerate(row[1:-1], start=1):
+            if cell == ".":
+                continue
+            if maxgrounded[j] == i-1:
+                maxgrounded[j] = i
+                continue
 
+            if maxfloating[j-1] > maxgrounded[j]:
+                # disturb left
+                idx = convert(i,j-1)
+            
+    
     # return ""
 
 
@@ -197,7 +213,7 @@ for case_num in [0]:  # no loop over test case
     # mrr = minus_one_matrix(mrr)
     lst = list(map(int,input().split()))
 
-    res = solve(arr, lst, h, w)  # include input here
+    res = solve(arr, h, w)  # include input here
 
     # print length if applicable
     # print(len(res))
