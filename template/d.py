@@ -47,46 +47,126 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def query(pos):
+    print("? {}".format(pos+1), flush=True)
+    response = lst = list(map(int,input().split()))
+    return response
+
+def alert(g):
+    result_string = []
+    stack = [0]
+    visited = set(stack)
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            stack.append(nex)
+            result_string.append("{} {}".format(cur+1, nex+1))
+        # log(result_string)
+    # print("!\n{}".format("\n".join(result_string)), flush=True)
+    print("!\n{}".format("\n".join(result_string)))
+    sys.exit()
+
+k = int(input())
+
+parent = {}
+results = {}
+
+if k == 2:
+    g = defaultdict(set)
+    g[0] = [1]
+    g[1] = [0]
+    alert(g)
+
+stack = [0]
+visited = set()
+computed = set()
+g = defaultdict(set)
+g2 = defaultdict(set)
+# three elements that are two away from each other definitely share a common node
+
+while stack:
+    cur = stack.pop()
+    if cur in computed:
+        continue
+    computed.add(cur)
+
+    lst = query(cur)
+    results[cur] = lst
+
+    for nex,x in enumerate(lst):
+        if x == 2 and nex not in visited:
+            stack.append(nex)
+            visited.add(nex)
+            g2[nex].add(cur)
+            g2[cur].add(nex)
+            common = g[nex] & g[cur]
+            if common:
+                val = next(iter(common))
+                g[nex].add(val)
+                g[val].add(nex)
+                computed.add(nex)
+                
+        if x == 1:
+            g[cur].add(nex)
+            g[nex].add(cur)
+            parent[nex] = cur
+            visited.add(nex)
+    # log(g)
+
+alert(g)
+
+
+
+        
+
+# lst = query(0)
+
+
+
+# def solve_():
+#     # your solution here
+#     # find the neighbour
+#     # guess two away
+#     return ""
+
+
+# # for case_num in [0]:  # no loop over test case
+# # for case_num in range(100):  # if the number of test cases is specified
+# for case_num in range(int(input())):
+
+#     # read line as an integer
+#     # k = int(input())
+
+#     # read line as a string
+#     # srr = input().strip()
+
+#     # read one line and parse each word as a string
+#     # lst = input().split()
     
-    return ""
+#     # read one line and parse each word as an integer
+#     # a,b,c = list(map(int,input().split()))
+#     # lst = list(map(int,input().split()))
+#     # lst = minus_one(lst)
 
+#     # read multiple rows
+#     # arr = read_strings(k)  # and return as a list of str
+#     # mrr = read_matrix(k)  # and return as a list of list of int
+#     # mrr = minus_one_matrix(mrr)
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+#     res = solve()  # include input here
 
-    # read line as an integer
-    # k = int(input())
+#     # print length if applicable
+#     # print(len(res))
 
-    # read line as a string
-    # srr = input().strip()
+#     # parse result
+#     # res = " ".join(str(x) for x in res)
+#     # res = "\n".join(str(x) for x in res)
+#     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
-    # read one line and parse each word as a string
-    # lst = input().split()
-    
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
-    # lst = minus_one(lst)
+#     # print result
+#     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
-
-    res = solve()  # include input here
-
-    # print length if applicable
-    # print(len(res))
-
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
-
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
-    print(res)
+#     print(res)
