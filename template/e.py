@@ -46,47 +46,26 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def query(pos):
+    print("? {}".format(" ".join(str(x) for x in pos)), flush=True)
+    response = int(input())
+    return response
 
-def solve_():
-    # your solution here
-    
-    return ""
+def alert(pos):
+    print("! {}".format(pos), flush=True)
+    sys.exit()
+
+n,k = list(map(int,input().split()))
+
+if n%k != 0:
+    alert(-1)
+
+res = 0
+for i in range(n//k):
+    j = i+1
+    val = query(list(range(i*k+1,j*k+1)))
+    res = res^val
+
+alert(res)
 
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
-
-    # read line as an integer
-    # k = int(input())
-
-    # read line as a string
-    # srr = input().strip()
-
-    # read one line and parse each word as a string
-    # lst = input().split()
-    
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
-    # lst = minus_one(lst)
-
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
-
-    res = solve()  # include input here
-
-    # print length if applicable
-    # print(len(res))
-
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
-
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
-    print(res)
