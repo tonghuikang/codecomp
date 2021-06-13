@@ -65,8 +65,8 @@ def alert(g):
             stack.append(nex)
             result_string.append("{} {}".format(cur+1, nex+1))
         # log(result_string)
-    # print("!\n{}".format("\n".join(result_string)), flush=True)
-    print("!\n{}".format("\n".join(result_string)))
+    print("!\n{}".format("\n".join(result_string)), flush=True)
+    # print("!\n{}".format("\n".join(result_string)))
     sys.exit()
 
 k = int(input())
@@ -96,25 +96,33 @@ while stack:
     lst = query(cur)
     results[cur] = lst
 
+    triplets = []
+
     for nex,x in enumerate(lst):
         if x == 2 and nex not in visited:
             stack.append(nex)
             visited.add(nex)
             g2[nex].add(cur)
             g2[cur].add(nex)
-            common = g[nex] & g[cur]
+            common = g2[nex] & g2[cur]
+            log(nex,cur,g2[nex],g2[cur])
             if common:
                 val = next(iter(common))
-                g[nex].add(val)
-                g[val].add(nex)
-                computed.add(nex)
+                triplets.append((nex,cur,val))                
+                # log(nex,cur,val,"clear")
+                # g[nex].add(val)
+                # g[val].add(nex)
+                # computed.add(nex)
                 
         if x == 1:
             g[cur].add(nex)
             g[nex].add(cur)
             parent[nex] = cur
             visited.add(nex)
-    # log(g)
+    
+    log(triplets)
+    log(g)
+    log(g2)
 
 alert(g)
 
