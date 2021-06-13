@@ -16,6 +16,7 @@ def binary_search(func_,       # condition function
                   target=True, # else False
                   left=0, right=2**31-1) -> int:
     # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
 
     def func(val):
         # if first True or last False, assume search space is in form
