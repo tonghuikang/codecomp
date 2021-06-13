@@ -46,13 +46,19 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+n,k = list(map(int,input().split()))
+count = [0]*n
 
 def query(groups):
-    print("? {}".format(" ".join(" ".join(str(x) for x in group) for group in groups)), flush=True)
+    lst = sum(groups, [])
+    print("? {}".format(" ".join(str(x) for x in lst)), flush=True)
+    for x in lst:
+        count[x-1] += 1
     response = int(input())
     return response
 
 def alert(pos):
+    assert all(x%2 for x in count)
     print("! {}".format(pos), flush=True)
     sys.exit()
 
@@ -60,8 +66,6 @@ def alert(pos):
 def alert2(pos):
     print("{}".format(pos), flush=True)
     sys.exit()
-
-n,k = list(map(int,input().split()))
 
 
 # x x x - -
@@ -80,12 +84,34 @@ for i in range(n//group_size):
 g = len(groups)
 n,k = n//group_size, k//group_size
 if k%2 == 0:
-    # never possible to break even, where to total count is odd
+    # sum of count is alawys even, but the total required count is odd
     alert2(-1)
+res = 0
+
+while n > k*2:
+    n -= k
+    to_query = []
+    for _ in range(k):
+        group = groups.pop()
+        to_query.append(group)
+    val = query(to_query) 
+    res = res^val
+g = len(groups)
+
+# if n >= 2*k:
+#     for i in range((n-2*k)//k):
+#         to_query = []
+#         for j in range(k):
+#             to_query.append(groups[i*k+j])
+#         val = query(to_query)
+#         res = res^val
+
+# n -= (n-2*k)//k * k
+# groups = groups[(n-2*k)//k*k:]
+# log(n,k)
 
 if n%2 == 1:
 
-    res = 0
     for i in range(n-k+1):
         to_query = []
         for j in range(k-1):
@@ -97,12 +123,6 @@ if n%2 == 1:
     
     alert(res)
 
-# x x x -
-# x - x x
-# x x - x
-
-# alert2(-1)
-res = 0
 for i in range(n):
     to_query = []
     for j in range(k):
