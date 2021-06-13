@@ -80,18 +80,36 @@ for i in range(n//group_size):
 g = len(groups)
 n,k = n//group_size, k//group_size
 if k%2 == 0:
+    # never possible to break even, where to total count is odd
     alert2(-1)
 
+if n%2 == 1:
+
+    res = 0
+    for i in range(n-k+1):
+        to_query = []
+        for j in range(k-1):
+            to_query.append(groups[j])  
+        to_query.append(groups[k+i-1])
+        # log(to_query)
+        val = query(to_query) 
+        res = res^val
+    
+    alert(res)
+
+# x x x -
+# x - x x
+# x x - x
+
 res = 0
-for i in range(n-k+1):
+for i in range(n-k+2):
     to_query = []
-    for j in range(k-1):
-        to_query.append(groups[j])  
-    to_query.append(groups[k+i-1])
+    for j in range(k-2):
+        to_query.append(groups[g-j-1])  
+    to_query.append(groups[(k+i-1)%(g-k+2)])
+    to_query.append(groups[(k+i)%(g-k+2)])
     # log(to_query)
     val = query(to_query) 
     res = res^val
 
-alert(res)
-
-
+# alert(res)

@@ -155,15 +155,20 @@ class Graph:
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, h, w):
     # your solution here
-    
+
+    arr = arr[::-1]
+    arr = ""
+    for i,row in enumerate(arr):
+        for j,cell in enumerate(arr):
+
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -175,17 +180,17 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    h,w = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(h)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+    lst = list(map(int,input().split()))
 
-    res = solve()  # include input here
+    res = solve(arr, lst, h, w)  # include input here
 
     # print length if applicable
     # print(len(res))
