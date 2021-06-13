@@ -84,7 +84,7 @@ stack = [0]
 visited = set()
 computed = set()
 g = defaultdict(set)
-g2 = defaultdict(set)
+# g2 = defaultdict(set)
 # three elements that are two away from each other definitely share a common node
 
 while stack:
@@ -96,33 +96,34 @@ while stack:
     lst = query(cur)
     results[cur] = lst
 
-    triplets = []
+    holding = []
+    c1 = 0
+    x1 = -1
 
     for nex,x in enumerate(lst):
         if x == 2 and nex not in visited:
             stack.append(nex)
             visited.add(nex)
-            g2[nex].add(cur)
-            g2[cur].add(nex)
-            common = g2[nex] & g2[cur]
-            log(nex,cur,g2[nex],g2[cur])
-            if common:
-                val = next(iter(common))
-                triplets.append((nex,cur,val))                
-                # log(nex,cur,val,"clear")
-                # g[nex].add(val)
-                # g[val].add(nex)
-                # computed.add(nex)
+            holding.append(nex)
+            # g2[nex].add(cur)
+            # g2[cur].add(nex)
                 
         if x == 1:
             g[cur].add(nex)
             g[nex].add(cur)
             parent[nex] = cur
             visited.add(nex)
+            computed.add(nex)
+            c1 += 1
+            x1 = nex
     
-    log(triplets)
-    log(g)
-    log(g2)
+    # if there is only one c1, connect all c2 to c1
+    if c1 == 1:
+        for val in holding:
+            g[val].add(x1)
+            g[x1].add(val)
+            computed.add(nex)
+            
 
 alert(g)
 
