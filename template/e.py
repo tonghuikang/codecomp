@@ -46,8 +46,8 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-def query(pos):
-    print("? {}".format(" ".join(str(x) for x in pos)), flush=True)
+def query(groups):
+    print("? {}".format(" ".join(" ".join(str(x) for x in group) for group in groups)), flush=True)
     response = int(input())
     return response
 
@@ -57,13 +57,26 @@ def alert(pos):
 
 n,k = list(map(int,input().split()))
 
-if n%k != 0:
+group_size = math.gcd(n,k)  # treat them as one
+
+groups = []
+
+for i in range(n//group_size):
+    j = i+1
+    groups.append(list(range(i*group_size+1,j*group_size+1)))
+
+g = len(groups)
+n,k = n//group_size, k//group_size
+if k%2 == 0:
     alert(-1)
 
 res = 0
-for i in range(n//k):
-    j = i+1
-    val = query(list(range(i*k+1,j*k+1)))
+for i in range(n):
+    to_query = []
+    for j in range(k):
+        to_query.append(groups[(i+j)%g])  
+    log(to_query)
+    val = query(to_query) 
     res = res^val
 
 alert(res)
