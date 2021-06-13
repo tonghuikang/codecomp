@@ -47,10 +47,39 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr,h,w):
     # your solution here
     
-    return ""
+    def color(mrr, boo=1):
+        res = [[cell for cell in row] for row in mrr]
+        for i,row in enumerate(mrr):
+            for j,cell in enumerate(row):
+                if (i+j)&1 == boo:
+                    color = "R"
+                else:
+                    color = "W"
+                if cell != "." and color != cell:
+                    log(i,j)
+                    return False, None
+                res[i][j] = color
+        return True, "\n".join("".join(row) for row in res)
+            
+    a,b = color(mrr, 1)
+    if a:
+        log("x1")
+        print(yes)
+        print(b)
+        return
+
+    a,b = color(mrr, 0)
+    if b:
+        log("x0")
+        print(yes)
+        print(b)
+        return
+
+    print(no)
+    return
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,16 +96,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    h,w = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_strings(h)  # and return as a list of str
+    # mrr = read_matrix(h)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr,h,w)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -89,4 +118,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
