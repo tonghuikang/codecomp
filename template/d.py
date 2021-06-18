@@ -83,11 +83,67 @@ def is_prime(n):
             return False
     return True
 
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
 
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+ 
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
+
+# ---------------------- multiple prime factorisation ----------------------
+
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+largest_prime_factors = get_largest_prime_factors(10**5)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+
+
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+
+@functools.lru_cache(maxsize=10**5)
 def solve_(x):
     if x == 1:
         return "Bob"
     # your solution here
+
+    facts = get_prime_factors(x)
+    log(facts)
     
     if is_prime(x):
         return "Bob"
@@ -95,9 +151,10 @@ def solve_(x):
     if x%2 == 0 and is_prime(x//2):
         return "Alice"
     
-    if x%3 == 0 and is_prime(x//3):
+    if len(facts) == 2:
         return "Bob"
-        
+
+
     return "Alice"
 
 
