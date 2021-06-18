@@ -76,6 +76,7 @@ def z_function(S):
 def solve_(srr, k):
     # your solution here
 
+    srr += srr
     if srr[0] == "a":
         return "a"*k
 
@@ -89,19 +90,19 @@ def solve_(srr, k):
 
 
     # log(srr)
-    lensrr = len(srr)
     z = z_function(srr)
     # log(z)
+
     best_prefix = srr
-    srr += srr[0]
     for i,x in enumerate(z):
         if x > 0:
+            if x + i == len(srr):
+                continue
             if srr[x] < srr[i+x]:
                 best_prefix = srr[:i]
                 break
     
     res = (best_prefix*(k//len(best_prefix) + 1))[:k]
-    log(res)
     return res
 
 
