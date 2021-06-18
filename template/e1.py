@@ -52,13 +52,12 @@ def solve_(srr, k):
     
     abc = {x:i for i,x in enumerate("abcdefghijklmnopqrstuvwxyz")}
 
-    for i in range(1,len(srr)):
-        if srr[:i]+srr[:i] <= srr[i:]:
-            break
-    else:
-        i = len(srr)
-    
-    return (srr[:i]*(k//i + 1))[:k]
+    res = (srr*2)[:k]
+    for i in range(1,len(srr)+1):
+        candidate = (srr[:i]*(k//i + 1))[:k]
+        if candidate < res:
+            res = candidate
+    return res
 
 
 for case_num in [0]:  # no loop over test case
