@@ -53,7 +53,7 @@ def solve_(srr, k):
     abc = {x:i for i,x in enumerate("abcdefghijklmnopqrstuvwxyz")}
 
     for i in range(1,len(srr)):
-        if srr[:i]+srr[:i] < srr[i:]:
+        if srr[:i]+srr[:i] <= srr[i:]:
             break
     else:
         i = len(srr)
