@@ -47,18 +47,33 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
-    
-    return ""
+    arr = [(a,b,b*2-a,i) for i,(a,b) in enumerate(arr, start=1)]
+    arr.sort(key=lambda x:x[1], reverse=True)
+
+    for row in arr:
+        log(row)
+
+    # total_to_buy is the same
+    total_to_buy = sum(x[0] for x in arr)
+
+    # stuff at the end as much as possible
+    maxstuffable = 0
+    for buy,req,_,_ in arr:
+        stuffable = max(0, min(buy, total_to_buy-req))
+        total_to_buy -= stuffable
+        maxstuffable += stuffable
+
+    return sum(x[0] for x in arr)*2 - maxstuffable
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,10 +88,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
