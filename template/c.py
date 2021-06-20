@@ -47,15 +47,57 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
+def solve_(arr, k, maxdiff):
+    # students, maxinvite, maxdiff
+    arr.sort()
+
+    prev = -10**18
+
+    groups = []
+    start = prev
+
+    for x in arr:
+        if x > prev + maxdiff:
+            groups.append([start, prev])
+            start = x
+            prev = x
+        else:
+            prev = x
+    groups.append([start, prev])
+
+
+    required_arr = []
+    for (a,b),(c,d) in zip(groups, groups[1:]):
+        required = ceiling_division(c-b, maxdiff) - 1
+        required_arr.append(required)
+
+    required_arr = required_arr[1:]
+    if len(required_arr) == 0:
+        return 1
+
+    # log(groups)
+    # log(required_arr)
+
+    required_arr.sort()
+
+    # log(required_arr)
+
+    res = len(required_arr) + 1
+    for x in required_arr:
+        if k >= x:
+            k -= x
+            res -= 1
     
-    return ""
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,8 +109,8 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    a,b,c = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +118,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst, b, c)  # include input here
 
     # print length if applicable
     # print(len(res))
