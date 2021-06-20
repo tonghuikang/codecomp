@@ -55,27 +55,30 @@ def solve_(arr, k, maxdiff):
     # students, maxinvite, maxdiff
     arr.sort()
 
-    prev = -10**18
+    prev = -2*10**18
 
-    groups = []
+    lowers = []
+    uppers = []
     start = prev
 
     for x in arr:
         if x > prev + maxdiff:
-            groups.append([start, prev])
+            lowers.append(start)
+            uppers.append(prev)
             start = x
             prev = x
         else:
             prev = x
-    groups.append([start, prev])
+    lowers.append(start)
+    uppers.append(prev)
 
 
     required_arr = []
-    for (a,b),(c,d) in zip(groups, groups[1:]):
+    for b,c in zip(uppers, lowers[1:]):
         required = ceiling_division(c-b, maxdiff) - 1
         required_arr.append(required)
 
-    required_arr = required_arr[1:]
+    # required_arr = required_arr[1:]
     if len(required_arr) == 0:
         return 1
 
@@ -83,6 +86,7 @@ def solve_(arr, k, maxdiff):
     # log(required_arr)
 
     required_arr.sort()
+    required_arr.pop()
 
     # log(required_arr)
 
