@@ -50,6 +50,37 @@ class IOWrapper(IOBase):
         self.readline = lambda: self.buffer.readline().decode("ascii")
 
 
+def bucketsort(order, seq):
+    buckets = [0] * (max(seq) + 1)
+    for x in seq:
+        buckets[x] += 1
+    for i in range(len(buckets) - 1):
+        buckets[i + 1] += buckets[i]
+
+    new_order = [-1] * len(seq)
+    for i in reversed(order):
+        x = seq[i]
+        idx = buckets[x] = buckets[x] - 1
+        new_order[idx] = i
+
+    return new_order
+
+
+def ordersort(order, seq, reverse=False):
+    bit = max(seq).bit_length() >> 1
+    mask = (1 << bit) - 1
+    order = bucketsort(order, [x & mask for x in seq])
+    order = bucketsort(order, [x >> bit for x in seq])
+    if reverse:
+        order.reverse()
+    return order
+
+
+def long_ordersort(order, seq):
+    order = ordersort(order, [int(i & 0x7fffffff) for i in seq])
+    return ordersort(order, [int(i >> 31) for i in seq])
+
+
 sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
 input = lambda: sys.stdin.readline().rstrip("\r\n")
 
@@ -99,9 +130,12 @@ def ceiling_division(numer, denom):
     return -((-numer)//denom)
 
 
+LARGE = 10**18
+
 def solve_(arr, k, maxdiff):
     # students, maxinvite, maxdiff
-    arr.sort()
+    # arr.sort()
+    order_arr = long_ordersort(range(len(arr)), arr)
 
     prev = -2*10**18
 
@@ -109,7 +143,8 @@ def solve_(arr, k, maxdiff):
     uppers = []
     start = prev
 
-    for x in arr:
+    for i in order_arr:
+        x = arr[i]
         if x > prev + maxdiff:
             lowers.append(start)
             uppers.append(prev)
@@ -133,13 +168,17 @@ def solve_(arr, k, maxdiff):
     # log(groups)
     # log(required_arr)
 
-    required_arr.sort()
-    required_arr.pop()
+    # required_arr.sort()
+    order_required_arr = long_ordersort(range(len(required_arr)), required_arr)
+    # required_arr = [required_arr[x] for x in order_required_arr]
+    # required_arr.pop()
 
     # log(required_arr)
 
-    res = len(required_arr) + 1
-    for x in required_arr:
+    res = len(required_arr)
+    for i in order_required_arr:
+        x = required_arr[i]
+    # for x in required_arr:
         if k >= x:
             k -= x
             res -= 1
