@@ -130,12 +130,13 @@ def ceiling_division(numer, denom):
     return -((-numer)//denom)
 
 
-LARGE = 10**18
+LARGE = -10**18
 
 def solve_(arr, k, maxdiff):
     # students, maxinvite, maxdiff
-    # arr.sort()
-    order_arr = long_ordersort(range(len(arr)), arr)
+    # arr = [x for x in arr]
+    arr.sort()
+    # order_arr = long_ordersort(range(len(arr)), arr)
 
     prev = -2*10**18
 
@@ -143,8 +144,9 @@ def solve_(arr, k, maxdiff):
     uppers = []
     start = prev
 
-    for i in order_arr:
-        x = arr[i]
+    # for i in order_arr:
+    #     x = arr[i]
+    for x in arr:
         if x > prev + maxdiff:
             lowers.append(start)
             uppers.append(prev)
@@ -168,22 +170,23 @@ def solve_(arr, k, maxdiff):
     # log(groups)
     # log(required_arr)
 
-    # required_arr.sort()
-    order_required_arr = long_ordersort(range(len(required_arr)), required_arr)
+    required_arr = [(x, x + 0.0) for x in required_arr]
+    required_arr.sort(key=lambda x:x[1])
+    # order_required_arr = long_ordersort(range(len(required_arr)), required_arr)
     # required_arr = [required_arr[x] for x in order_required_arr]
     # required_arr.pop()
 
     # log(required_arr)
 
     res = len(required_arr)
-    for i in order_required_arr:
-        x = required_arr[i]
-    # for x in required_arr:
+    # for i in order_required_arr:
+    #     x = required_arr[i]
+    for x,y in required_arr:
         if k >= x:
             k -= x
             res -= 1
     
-    return res
+    return int(res)
 
 
 for case_num in [0]:  # no loop over test case
