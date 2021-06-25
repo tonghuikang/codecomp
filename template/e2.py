@@ -46,19 +46,61 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# number of candidate arr whose sum is less than cs(brr) - len(arr)*q
 
-def solve_():
+LARGE = (100*100 + 10)
+
+def solve_(crr,brr,qrr):
     # your solution here
+
+    dp = [0] * LARGE
+    dp[0] = 1
+
+    for x in crr:
+        new_dp = [0] * LARGE
+        for i in range(x+1):
+            for j in range(0, LARGE-x-1):
+                new_dp[i+j] += dp[j]
+        dp = new_dp
+        log(dp[:10])
     
-    return ""
+    res = [0]
+    cs = 0
+    for x in dp:
+        cs += x
+        res.append(cs)
+    log(res[:10])
 
 
-# for case_num in [0]:  # no loop over test case
+    cs = 0
+    cur = 0
+    for x in brr:
+        cur += x
+        cs += cur
+
+    rets = []
+    for q in qrr:
+        maxsum = cs - len(crr)*q
+        if maxsum >= LARGE:
+            ret = res[-1]
+        elif maxsum < 0:
+            ret = 0
+        else:
+            ret = res[maxsum]
+        rets.append(ret)
+
+        log(cs, q, maxsum, ret)
+
+
+    return rets
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,22 +110,24 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    crr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
+    k = int(input())
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qrr = list(map(int,input().split()))
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(crr, brr, qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
