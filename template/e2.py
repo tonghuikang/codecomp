@@ -52,17 +52,25 @@ LARGE = (100*100 + 10)
 
 def solve_(crr,brr,qrr):
     # your solution here
+    crr = crr[::-1]
 
     dp = [0] * LARGE
-    dp[0] = 1
+    for i in range(crr[0] + 1):
+        dp[i] = 1
 
-    for x in crr:
+    crrsum = sum(crr)
+    cs = 0
+    log(cs, dp[:10])
+    for p,x in zip(brr, crr[1:]):
+        cs += p
         new_dp = [0] * LARGE
         for i in range(x+1):
             for j in range(0, LARGE-x-1):
-                new_dp[i+j] += dp[j]
-        dp = new_dp
-        log(dp[:10])
+                pos = j+i
+                pos = max(j, min(cs+j-i+1, pos))
+                new_dp[pos] += dp[j]
+        dp = [x%M9 for x in new_dp]
+        log(cs, dp[:10])
     
     res = [0]
     cs = 0
@@ -75,8 +83,8 @@ def solve_(crr,brr,qrr):
     cs = 0
     cur = 0
     for x in brr:
-        cur += x
-        cs += cur
+        cur = (cur+x)%M9
+        cs = (cur+cs)%M9
 
     rets = []
     for q in qrr:
