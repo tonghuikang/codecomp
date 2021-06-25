@@ -47,10 +47,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def sumPairs(arr, n):
+    #  https://www.geeksforgeeks.org/sum-absolute-differences-pairs-given-array/
+    # final result
+    sum = 0
+    for i in range(n - 1, -1, -1):
+        sum += i*arr[i] - (n-1-i) * arr[i]
+    return sum
+
+
+def solve_(lst):
     # your solution here
-    
-    return ""
+    lst.sort()
+
+    val = sumPairs(lst, len(lst))
+
+    return -val + max(lst)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +70,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +80,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +88,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
     # print(len(res))
