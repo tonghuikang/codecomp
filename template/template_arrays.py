@@ -63,6 +63,24 @@ def max_dot_product_of_two_subsequence(A, B):
     return dp[-1][-1]
 
 
+def RabinKarp(arr, window_size, modulus):
+    # for longest common subarray in O(N log N), use binary search
+    # run this multiple times to avoid collisions
+    h, t, d = (1<<(17*window_size-17))%modulus, 0, 1<<17
+    all_hashes = set()
+
+    for i in range(window_size): 
+        t = (d * t + arr[i])%modulus
+
+    all_hashes.add(t)
+
+    for i in range(len(arr) - window_size):
+        t = (d*(t-arr[i]*h) + arr[i + window_size])%modulus
+        all_hashes.add(t)
+
+    return all_hashes
+
+
 # --------------------------- sliding windows ---------------------------
 
 
