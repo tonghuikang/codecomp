@@ -26,8 +26,8 @@ def log(*args):
 
 def query(pos):
     print("{}".format(pos), flush=True)
-    response = 0
-    # response = int(input())
+    # response = 0
+    response = int(input())
     if response == -1:
         assert False
     return response
