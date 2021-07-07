@@ -26,8 +26,10 @@ def log(*args):
 
 def query(pos):
     print("{}".format(pos), flush=True)
-    # response = 0
-    response = int(input())
+    response = 0
+    # response = int(input())
+    if response == -1:
+        assert False
     return response
 
 # def alert(pos):
@@ -61,10 +63,6 @@ k = int(input())
 for _ in range(k):
     n,k = list(map(int,input().split()))
 
-    if n == 1:
-        res = query(0)
-        break
-
     # if n == 2:
     #     res = query(1)
     #     if res == 1: break
@@ -75,7 +73,11 @@ for _ in range(k):
 
     # res = query(0)
 
-    while n:
+    while True:
+        if n <= 1:
+            res = query(0)
+            break
+
         log(n)
         p = int(math.log2(n))
         # for i in grayCode(p)[1:]:
@@ -83,9 +85,12 @@ for _ in range(k):
             res = query(i)
             if res == 1: break
         else:
+            n -= 2**p
+            if n == 0:
+                break
+            # n -= 1
             res = query(2**p)
             if res == 1: break
-            n -= 2**p
             continue
         break
 
