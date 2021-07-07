@@ -46,11 +46,21 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
-def solve_():
+
+def solve_(a, b):
+    if a == b:
+        return [0, 0]
     # your solution here
-    
-    return ""
+    a,b = sorted([a,b])
+    diff = b-a
+
+    x = ceiling_division(a, diff)*diff
+    y = a//diff * diff
+
+    return diff, min(abs(x-a), abs(y-a))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +77,7 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,13 +86,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
