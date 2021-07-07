@@ -25,13 +25,13 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def query(pos):
-    print("{}".format(pos+1), flush=True)
+    print("{}".format(pos), flush=True)
     response = int(input())
     return response
 
-def alert(pos):
-    print("! {}".format(pos), flush=True)
-    sys.exit()
+# def alert(pos):
+#     print("! {}".format(pos), flush=True)
+#     sys.exit()
 
 # -----------------------------------------------------------------------------
 
@@ -47,6 +47,18 @@ def alert(pos):
 # read one line and parse each word as an integer
 # a,b,c = list(map(int,input().split()))
 # lst = list(map(int,input().split()))
+
+k = int(input())
+for _ in range(k):
+    n,k = list(map(int,input().split()))
+    for i in range(n):
+        res = query(i)
+        if res == 1:
+            break
+
+sys.exit()
+
+
 
 # -----------------------------------------------------------------------------
 
