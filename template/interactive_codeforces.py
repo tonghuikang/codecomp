@@ -62,14 +62,17 @@ for _ in range(k):
     n,k = list(map(int,input().split()))
     n -= 1
 
-    res = query(0)
-    if res == 1: break
+    # res = query(0)
+    # if res == 1: break
 
     while n:
         log(n)
         p = int(math.log2(n))
         # for i in grayCode(p)[1:]:
-        for i in range(1,2**p):
+        for i in range(1,2**p//2+1):
+            res = query(i)
+            if res == 1: break
+        for i in range(1,2**p//2+1):
             res = query(i)
             if res == 1: break
         else:
