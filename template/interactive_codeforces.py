@@ -63,36 +63,21 @@ k = int(input())
 for _ in range(k):
     n,k = list(map(int,input().split()))
 
-    if n == 2:
-        res = query(1)
-        if res == 1: break
-        res = query(1)
-        break
-
-    n -= 1
-
-    # res = query(0)
-
-    while True:
-        if n <= 1:
-            res = query(0)
+    for i,x in reversed(list(enumerate(bin(n)[2:][::-1]))):
+        log(i,x)
+        if x == 1:
+            for i in list(range(1,2**i//2+1)) + list(range(1,2**i//2+1)):
+                res = query(i)
+                if res:
+                    break
+            else:
+                res = query(2**i)
+                if res:
+                    break
+                continue
             break
+                    
 
-        log(n)
-        p = int(math.log2(n+1))
-        # for i in grayCode(p)[1:]:
-        for i in list(range(1,2**p//2+1)) + list(range(1,2**p//2+1)):
-            res = query(i)
-            if res == 1: break
-        else:
-            n -= 2**p
-            # if n == 0:
-            #     break
-            # n -= 1
-            res = query(2**p)
-            if res == 1: break
-            continue
-        break
 
 sys.exit()
 
