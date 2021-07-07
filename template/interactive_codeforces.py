@@ -65,13 +65,13 @@ for _ in range(k):
         res = query(0)
         break
 
-    if n == 2:
-        res = query(1)
-        if res == 1: break
-        res = query(1)
-        break
+    # if n == 2:
+    #     res = query(1)
+    #     if res == 1: break
+    #     res = query(1)
+    #     break
 
-    n -= 1
+    # n -= 1
 
     # res = query(0)
 
