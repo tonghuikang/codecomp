@@ -26,6 +26,7 @@ def log(*args):
 
 def query(pos):
     print("{}".format(pos), flush=True)
+    # response = 0
     response = int(input())
     return response
 
@@ -48,15 +49,35 @@ def query(pos):
 # a,b,c = list(map(int,input().split()))
 # lst = list(map(int,input().split()))
 
+@functools.lru_cache(maxsize=30)
+def grayCode(n):
+    results = [0]
+    for i in range(n):
+        results += [x + pow(2, i) for x in reversed(results)]
+    return results
+
 
 k = int(input())
 for _ in range(k):
     n,k = list(map(int,input().split()))
-    p = int(math.log2(n))
-    for i in range(2**p-1, 2**p+n):
-        res = query(i)
-        if res == 1:
-            break
+    n -= 1
+
+    res = query(0)
+    if res == 1: break
+
+    while n:
+        log(n)
+        p = int(math.log2(n))
+        # for i in grayCode(p)[1:]:
+        for i in range(1,2**p):
+            res = query(i)
+            if res == 1: break
+        else:
+            res = query(2**p)
+            if res == 1: break
+            n -= 2**p
+            continue
+        break
 
 sys.exit()
 
