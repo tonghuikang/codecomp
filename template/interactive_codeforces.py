@@ -48,10 +48,12 @@ def query(pos):
 # a,b,c = list(map(int,input().split()))
 # lst = list(map(int,input().split()))
 
+
 k = int(input())
 for _ in range(k):
     n,k = list(map(int,input().split()))
-    for i in range(n):
+    p = int(math.log2(n))
+    for i in range(2**p-1, 2**p+n):
         res = query(i)
         if res == 1:
             break
