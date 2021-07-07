@@ -47,10 +47,54 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+eps = 10**(-11)
+
+def solve_(a,b,c,v):
     # your solution here
     
-    return ""
+    # simulations
+    stack = [(a,b,c,1,1)]  # c,m,p,turn,prob
+    res = 0.0
+    while stack:
+        # print(stack)
+        a,b,c,t,p = stack.pop()
+
+        # assert abs(a + b + c - 1) < 10**(-9)
+
+        # draw c
+        res += t*c*p
+
+        if p < eps:
+            continue
+
+        # draw b
+        if b >= v:
+            if a > eps:
+                stack.append([a + v/2, b-v, c + v/2, t+1, p*b])
+            else:
+                stack.append([0,       b-v, c + v,   t+1, p*b])
+
+        else:
+            if a > eps:
+                stack.append([a + b/2, 0, c + b/2, t+1, p*b])
+            else:
+                stack.append([0,       0, c + b,   t+1, p*b])
+
+        # draw a
+        if a >= v:
+            if b > eps:
+                stack.append([a-v, b + v/2, c + v/2, t+1, p*a])
+            else:
+                stack.append([a-v, 0,       c + v,   t+1, p*a])
+
+        else:
+            if b > eps:                    
+                stack.append([0, b + a/2, c + a/2, t+1, p*a])
+            else:
+                stack.append([0, 0,       c + a,   t+1, p*a])
+
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +111,7 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c,v = list(map(float,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +120,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,c,v)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -90,3 +134,4 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
     print(res)
+    # break
