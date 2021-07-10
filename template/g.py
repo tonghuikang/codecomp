@@ -46,11 +46,95 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    if stack:
+                        stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
 
-def solve_():
+
+
+
+def solve_(n, edges):
     # your solution here
+
+    parents = set()
+    visitable = set()
+    cycles = set()
+    duals = set()
+
+    g = defaultdict(set)
+    for a,b in edges:
+        # if a == b:
+        #     cycles.add(a)
+        #     continue
+        g[a].add(b)
     
-    return ""
+    def dfs(cur):
+        visitable.add(cur)
+        parents.add(cur)
+        for nex in g[cur]:
+            if nex in parents:
+                cycles.add(nex)
+                continue
+            if nex in visitable:
+                duals.add(nex)
+            dfs(nex)
+        parents.remove(cur)
+
+    dfs(0)
+
+    stack = list(duals)
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex in duals:
+                continue
+            duals.add(nex)
+            stack.append(nex)
+
+
+    stack = list(cycles)
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex in cycles:
+                continue
+            cycles.add(nex)
+            stack.append(nex)
+
+    log(visitable)
+    log(cycles)
+    log(duals)
+
+    res = [0]*n
+    for i in range(n):
+        if i in cycles:
+            res[i] = -1
+            continue
+        if i in duals:
+            res[i] = 2
+            continue
+        if i in visitable:
+            res[i] = 1
+            continue
+    return res
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -61,28 +145,28 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    edges = read_matrix(m)  # and return as a list of list of int
+    edges = minus_one_matrix(edges)
 
-    res = solve()  # include input here
+    res = solve(n, edges)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
