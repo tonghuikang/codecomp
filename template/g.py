@@ -94,8 +94,9 @@ def solve_(n, edges):
             if nex in visitable:
                 duals.add(nex)
                 continue
-            dfs(nex)
+            yield dfs(nex)
         parents.discard(cur)
+        yield
 
     dfs(0)
 
