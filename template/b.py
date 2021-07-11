@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 from collections import Counter, defaultdict, deque
 import sys
 input = sys.stdin.readline  # to read input quickly
@@ -17,8 +17,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
