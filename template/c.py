@@ -2700,8 +2700,12 @@ def solve_(problems, students):
 
     problems.append((-LARGE-9,-LARGE-8))
     problems.append((-LARGE-7,-LARGE-6))
+    problems.append((-LARGE-5,-LARGE-4))
+    problems.append((-LARGE-3,-LARGE-2))
     problems.append((LARGE+1,LARGE+2))
     problems.append((LARGE+3,LARGE+4))
+    problems.append((LARGE+5,LARGE+6))
+    problems.append((LARGE+7,LARGE+8))
     problems = [tuple(problem) for problem in problems]
     sl = SortedList(problems)
     
@@ -2709,6 +2713,10 @@ def solve_(problems, students):
     for student in students:
         idx = sl.bisect_left((student,LARGE))
         idx -= 1
+        
+        if not (1 < idx < len(sl) - 2):
+            while True:
+                pass
 
         # log(student)
         # log(sl)
