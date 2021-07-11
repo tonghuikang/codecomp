@@ -2689,17 +2689,13 @@ def read_strings(rows):
 def minus_one(arr):
     return [x-1 for x in arr]
 
+def minus_one_matrix(mrr):
+    return [[x-1 for x in row] for row in mrr]
+
 # ---------------------------- template ends here ----------------------------
 
-DIFF = 5*10**18-1
 LARGE = 2*10**19
-
-def minus_one_matrix(mrr):
-    return [[x-DIFF for x in row] for row in mrr]
-
-
 def solve_(problems, students):
-    students = [x-DIFF for x in students]
     # your solution here
 
     problems.append((-LARGE-9,-LARGE-8))
@@ -2784,7 +2780,7 @@ for case_num in range(int(input())):
     # arr = read_strings(k)  # and return as a list of str
     problems = read_matrix(n)  # and return as a list of list of int
     students = list(map(int,input().split()))
-    students = minus_one_matrix(students)
+    # mrr = minus_one_matrix(mrr)
 
     res = solve(problems, students)  # include input here
 
