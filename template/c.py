@@ -2698,51 +2698,75 @@ LARGE = 2*10**18
 def solve_(problems, students):
     # your solution here
 
+    problems = [tuple(problem) for problem in problems]
+    problems_r = [tuple(problem[::-1]) for problem in problems]
     problems.append((-LARGE-9,-LARGE-8))
     problems.append((-LARGE-7,-LARGE-6))
     problems.append((LARGE+1,LARGE+2))
     problems.append((LARGE+3,LARGE+4))
-    problems = [tuple(problem) for problem in problems]
+    problems_r.append((-LARGE-9,-LARGE-8))
+    problems_r.append((-LARGE-7,-LARGE-6))
+    problems_r.append((LARGE+1,LARGE+2))
+    problems_r.append((LARGE+3,LARGE+4))
+
     sl = SortedList(problems)
+    sl_r = SortedList(problems_r)
     
     res = []
     for student in students:
         idx = sl.bisect_left((student,LARGE))
-        idx -= 1
+        idx_r = sl_r.bisect_left((student,LARGE))
+        # idx -= 1
+        idx_r -= 1
+
+        a,b = sl[idx]
+        d,c = sl_r[idx_r]
 
         # log(student)
         # log(sl)
+        # log(sl_r)
         # log(idx)
+        # log(idx_r)
         # log(sl[idx])
-        # log(sl[idx+1])
-        # log()
+        # log(sl_r[idx_r])
+        # log(a,b,c,d)
 
-        a,b = sl[idx]
-        c,d = sl[idx+1]
-
-        if a <= student <= b:
+        if c <= student <= d:
             res.append(student)
-            del sl[idx]
+            sl.remove((c,d))
+            sl_r.remove((d,c))
             
-            if student != a:
-                sl.add((a, student-1))
+            if student != c:
+                sl.add((c, student-1))
+                sl_r.add((student-1, c))
 
-            if student != b:
-                sl.add((student+1, b))
+            if student != d:
+                sl.add((student+1, d))
+                sl_r.add((d, student+1))
             
+            # log(sl)
+            # log(sl_r)
             continue
 
         diff_left = student - b
         diff_right = c - student
 
         if diff_left <= diff_right:
-            res.append(b)
-            del sl[idx]
-            sl.add((a, b-1))
+            res.append(d)
+            sl.remove((c,d))
+            sl_r.remove((d,c))
+
+            if c != d:
+                sl.add((c, d-1))
+                sl_r.add((d-1, c))
         else:
-            res.append(c)
-            del sl[idx+1]
-            sl.add((c+1, d))
+            res.append(b)
+            sl.remove((a,b))
+            sl_r.remove((b,a))
+
+            if a != b:
+                sl.add((a+1, b))
+                sl_r.add((b, a+1))
 
     return res
 
