@@ -2694,7 +2694,7 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-LARGE = 2*10**18 + 10**17
+LARGE = 2*10**19
 def solve_(problems, students):
     # your solution here
 

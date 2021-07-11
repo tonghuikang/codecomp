@@ -87,9 +87,11 @@ def solve_(segments, k):
         points.add(end)
 
     points = sorted(points)
+    # log(points)
+
     intervals = []  # height, space
     for a,b in zip(points, points[1:]):
-        height = t.query(a)
+        height = t.query(a+1)
         space = b-a
         intervals.append((height, space))
 
