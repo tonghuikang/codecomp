@@ -73,12 +73,12 @@ class FenwickTree:
         return res
 
 
-def solve_(intervals, k):
+def solve_(segments, k):
     t = FenwickTree()
 
     points = set()
     # your solution here
-    for start, end in intervals:
+    for start, end in segments:
         t.update(start+1, 1)
         t.update(end, -1)
         points.add(start)
@@ -94,8 +94,9 @@ def solve_(intervals, k):
     intervals = sorted(intervals)[::-1]
     # log(intervals)
 
-    res = len(intervals)
+    res = len(segments)
     for height, space in intervals:
+        log(height,space,res)
         if k <= space:
             res += k*height
             break
