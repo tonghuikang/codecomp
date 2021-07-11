@@ -52,9 +52,14 @@ def solve_(arr):
     arr = [(x,i) for i,x in enumerate(arr)]
     arr.sort()
 
+    pool = Counter()
+
     for j,(x,i) in enumerate(arr):
-        # log(i,j,x)
         if abs(i-j)%2 != 0:
+            pool[x] += 1
+
+    for v in pool.values():
+        if v%2 == 1:
             return no
     return yes
 
