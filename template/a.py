@@ -57,7 +57,9 @@ def solve_(a,b,c,d,f,g,h,i):
     
     cntr = Counter([x//2 for x in [p,q,r,s] if x%2 == 0])
 
-    res = max(cntr.values())
+    res = 0
+    if cntr:
+        res = max(cntr.values())
 
     res += b == (a + c)/2
     res += f == (c + i)/2

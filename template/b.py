@@ -47,10 +47,63 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+    def __init__(self, bits=47):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+        
+    def update(self, x, increment):
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+        
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
+def solve_(intervals, k):
+    t = FenwickTree()
+
+    points = set()
     # your solution here
-    
-    return ""
+    for start, end in intervals:
+        t.update(start+1, 1)
+        t.update(end, -1)
+        points.add(start)
+        points.add(end)
+
+    points = sorted(points)
+    intervals = []  # height, space
+    for a,b in zip(points, points[1:]):
+        height = t.query(a)
+        space = b-a
+        intervals.append((height, space))
+
+    intervals = sorted(intervals)[::-1]
+    # log(intervals)
+
+    res = len(intervals)
+    for height, space in intervals:
+        if k <= space:
+            res += k*height
+            break
+        else:
+            res += space*height
+            k -= space
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,16 +120,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    intervals = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(intervals, k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +140,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
