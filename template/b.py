@@ -1,66 +1,12 @@
 #!/usr/bin/env python3
 import getpass  # not available on codechef
 from collections import Counter, defaultdict, deque
+import sys
+input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
-
-# ------------------------------warmup----------------------------
-import os
-import sys
-from io import BytesIO, IOBase
-# sys.setrecursionlimit(300000)
-
-BUFSIZE = 8192
-
-
-class FastIO(IOBase):
-    newlines = 0
-
-    def __init__(self, file):
-        self._fd = file.fileno()
-        self.buffer = BytesIO()
-        self.writable = "x" in file.mode or "r" not in file.mode
-        self.write = self.buffer.write if self.writable else None
-
-    def read(self):
-        while True:
-            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
-            if not b:
-                break
-            ptr = self.buffer.tell()
-            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
-        self.newlines = 0
-        return self.buffer.read()
-
-    def readline(self):
-        while self.newlines == 0:
-            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
-            self.newlines = b.count(b"\n") + (not b)
-            ptr = self.buffer.tell()
-            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
-        self.newlines -= 1
-        return self.buffer.readline()
-
-    def flush(self):
-        if self.writable:
-            os.write(self._fd, self.buffer.getvalue())
-            self.buffer.truncate(0), self.buffer.seek(0)
-
-
-class IOWrapper(IOBase):
-    def __init__(self, file):
-        self.buffer = FastIO(file)
-        self.flush = self.buffer.flush
-        self.writable = self.buffer.writable
-        self.write = lambda s: self.buffer.write(s.encode("ascii"))
-        self.read = lambda: self.buffer.read().decode("ascii")
-        self.readline = lambda: self.buffer.readline().decode("ascii")
-
-
-sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
-input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 
 M9 = 10**9 + 7  # 998244353
@@ -100,37 +46,38 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-class FenwickTree:
-    # also known as Binary Indexed Tree
-    # binarysearch.com/problems/Virtual-Array
-    # https://leetcode.com/problems/create-sorted-array-through-instructions
-    # may need to be implemented again to reduce constant factor
-    def __init__(self, bits=47):
-        self.c = defaultdict(int)
-        self.LARGE = 2**bits
+# class FenwickTree:
+#     # also known as Binary Indexed Tree
+#     # binarysearch.com/problems/Virtual-Array
+#     # https://leetcode.com/problems/create-sorted-array-through-instructions
+#     # may need to be implemented again to reduce constant factor
+#     def __init__(self, bits=47):
+#         self.c = defaultdict(int)
+#         self.LARGE = 2**bits
         
-    def update(self, x, increment):
-        x += 1  # to avoid infinite loop at x > 0
-        while x <= self.LARGE:
-            # increase by the greatest power of two that divides x
-            self.c[x] += increment
-            x += x & -x
+#     def update(self, x, increment):
+#         x += 1  # to avoid infinite loop at x > 0
+#         while x <= self.LARGE:
+#             # increase by the greatest power of two that divides x
+#             self.c[x] += increment
+#             x += x & -x
         
-    def query(self, x):
-        x += 1  # to avoid infinite loop at x > 0
-        res = 0
-        while x > 0:
-            # decrease by the greatest power of two that divides x
-            res += self.c[x]
-            x -= x & -x
-        return res
+#     def query(self, x):
+#         x += 1  # to avoid infinite loop at x > 0
+#         res = 0
+#         while x > 0:
+#             # decrease by the greatest power of two that divides x
+#             res += self.c[x]
+#             x -= x & -x
+#         return res
 
 
 def solve_(segments, k):
     # t = FenwickTree()
-    diff = defaultdict(int)
+    diff = Counter()
 
     points_ctr = Counter()
+    pointset = set()
     # your solution here
     for start, end in segments:
         if start + 1 == end:
@@ -141,14 +88,23 @@ def solve_(segments, k):
         diff[end+1] += -1
         points_ctr[start] += 1
         points_ctr[end] += 1
+        pointset.add(start)
+        pointset.add(end)
 
-    points = sorted(points_ctr.keys())
+    points = sorted(pointset)
     intervals = []  # height, space
 
     cs = 0
     for a in points:
         cs += diff[a]
         height = cs - points_ctr[a]
+        # log(height, cs - points_ctr[a], cs, points_ctr[a])
+
+        # assert height == cs - points_ctr[a]
+
+        if a + 1 in diff and a + 1 not in pointset:
+            cs += diff[a+1]
+
         if height == 0:
             continue
         space = 1
@@ -157,15 +113,19 @@ def solve_(segments, k):
     cs = 0
     for a,b in zip(points, points[1:]):
         cs += diff[a]
+        if a + 1 in diff and a + 1 not in pointset:
+            cs += diff[a+1]
+        
         if a + 1 == b:
             continue
         height = cs
+        # assert height == cs
         if height == 0:
             continue
         space = b-a-1
         intervals.append((height, space))
 
-    intervals = sorted(intervals)[::-1]
+    intervals.sort(reverse=True)
     # log(intervals)
 
     res = len(segments)
@@ -180,9 +140,21 @@ def solve_(segments, k):
 
     return res
 
+# import random
+
+# size = 1000
+# for _ in range(1000):
+#     segments = []
+#     for _ in range(1000):
+#         a = random.randint(1, size-1)
+#         b = random.randint(a+1, size)
+#         segments.append((a,b))
+#     solve_(segments, 100)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
+
+allres = []
 for case_num in range(int(input())):
 
     # read line as an integer
@@ -215,6 +187,8 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
+    res = "Case #{}: {}".format(case_num+1, res)
+    # print()   # Google and Facebook - case number required
+    allres.append(res)
+print("\n".join(allres))
     # print(res)
