@@ -79,6 +79,8 @@ def solve_(segments, k):
     points = set()
     # your solution here
     for start, end in segments:
+        if start + 1 == end:
+            continue
         t.update(start+1, 1)
         t.update(end, -1)
         points.add(start)

@@ -2739,12 +2739,12 @@ def solve_(problems, students):
 
         if diff_left <= diff_right:
             res.append(b)
-            sl.remove((a,b))
+            del sl[idx]
             if a != b:
                 sl.add((a, b-1))
         else:
             res.append(c)
-            sl.remove((c,d))
+            del sl[idx+1]
             if c != d:
                 sl.add((c+1, d))
 
