@@ -76,23 +76,33 @@ class FenwickTree:
 def solve_(segments, k):
     t = FenwickTree()
 
-    points = set()
+    points_ctr = Counter()
     # your solution here
     for start, end in segments:
         if start + 1 == end:
             continue
-        t.update(start+1, 1)
-        t.update(end, -1)
-        points.add(start)
-        points.add(end)
+        t.update(start, 1)
+        t.update(end+1, -1)
+        points_ctr[start] += 1
+        points_ctr[end] += 1
 
-    points = sorted(points)
-    # log(points)
-
+    points = sorted(points_ctr.keys())
     intervals = []  # height, space
+
+    for a in points:
+        height = t.query(a) - points_ctr[a]
+        if height == 0:
+            continue
+        space = 1
+        intervals.append((height, space))
+
     for a,b in zip(points, points[1:]):
+        if a + 1 == b:
+            continue
         height = t.query(a+1)
-        space = b-a
+        if height == 0:
+            continue
+        space = b-a-1
         intervals.append((height, space))
 
     intervals = sorted(intervals)[::-1]
