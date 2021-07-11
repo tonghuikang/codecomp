@@ -2694,7 +2694,7 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-LARGE = 2*10**18
+LARGE = 2*10**18 + 10**17
 def solve_(problems, students):
     # your solution here
 
@@ -2735,15 +2735,17 @@ def solve_(problems, students):
         diff_left = student - b
         diff_right = c - student
 
+        # log(diff_left, diff_right)
+
         if diff_left <= diff_right:
             res.append(b)
+            sl.remove((a,b))
             if a != b:
-                del sl[idx]
                 sl.add((a, b-1))
         else:
             res.append(c)
+            sl.remove((c,d))
             if c != d:
-                del sl[idx+1]
                 sl.add((c+1, d))
 
     return res

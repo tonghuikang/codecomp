@@ -92,7 +92,7 @@ def solve_(segments, k):
         intervals.append((height, space))
 
     intervals = sorted(intervals)[::-1]
-    # log(intervals)
+    log(intervals)
 
     res = len(segments)
     for height, space in intervals:
