@@ -73,6 +73,7 @@ class FenwickTree:
         return res
 
 
+@functools.lru_cache(maxsize=10**6)
 def get_pow(x, p):
     res = 0
     while x%p == 0 and x:
@@ -81,6 +82,7 @@ def get_pow(x, p):
     return res
 
 
+@functools.lru_cache(maxsize=10**6)
 def get_val(a, p, s):
     diff = a**s - (a%p)**s
     val = get_pow(diff, p)
