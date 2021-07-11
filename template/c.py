@@ -2666,18 +2666,18 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
-def log(*args):
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
+def clog(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 def solve(*args):
     # screen input
     if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
+        clog("----- solving ------")
+        clog(*args)
+        clog("----- ------- ------")
     return solve_(*args)
 
 def read_matrix(rows):
@@ -2711,6 +2711,8 @@ def solve_(problems, students):
     
     res = []
     for student in students:
+        # log(len(sl))
+        # log(student)
         idx = sl.bisect_left((student,LARGE))
         idx -= 1
         

@@ -17,8 +17,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -189,6 +189,6 @@ for case_num in range(int(input())):
     # print result
     res = "Case #{}: {}".format(case_num+1, res)
     # print()   # Google and Facebook - case number required
-    allres.append(res)
-print("\n".join(allres))
-    # print(res)
+    # allres.append(res)
+    # print("\n".join(allres))
+    print(res)
