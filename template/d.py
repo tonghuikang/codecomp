@@ -47,10 +47,84 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+    def __init__(self, bits=20):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+        
+    def update(self, x, increment):
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+        
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
+def get_pow(x, p):
+    res = 0
+    while x%p == 0 and x:
+        x = x // p
+        res += 1
+    return res
+
+
+def get_val(a, p, s):
+    diff = a**s - (a%p)**s
+    val = get_pow(diff, p)
+    return val
+
+
+def solve_(arr, queries, p):
     # your solution here
-    
-    return ""
+
+    t = [FenwickTree() for _ in range(5)]
+
+    for i,a in enumerate(arr):
+        for s in range(1,5):
+            val = get_val(a, p, s)
+            t[s].update(i+1, val)
+
+    allres = []
+    for typ, *query in queries:
+
+        # for s in range(1,5):
+        #     log(s)
+        #     for i,_ in enumerate(arr):
+        #         val = t[s].query(i+1) - t[s].query(i)
+        #         print(val, end=" ")
+        #     print()
+        # print()
+
+        if typ == 1:
+            i, new_a = query
+            i -= 1
+            for s in range(1,5):
+                new_val = get_val(new_a, p, s)
+                old_val = t[s].query(i+1) - t[s].query(i)
+                # log(s, new_val, old_val)
+                t[s].update(i+1, new_val - old_val)
+
+        if typ == 2:
+            s, l, r = query
+            l -= 1
+            r -= 1
+            res = t[s].query(r+1) - t[s].query(l)
+            allres.append(res)
+
+    return allres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,26 +141,26 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,q,p = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    queries = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, queries, p)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
