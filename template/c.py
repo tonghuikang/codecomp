@@ -47,10 +47,30 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def solve_(arr):
     # your solution here
-    
-    return ""
+    # only triples and quartets can be good
+
+    res = len(arr) + len(arr) - 1
+
+    if len(arr) <= 2:
+        return res
+
+    for a,b,c in zip(arr, arr[1:], arr[2:]):
+        if (b > a and b > c) or (b < a and b < c):
+            # log("xx")
+            res += 1
+
+    if len(arr) == 3:
+        return res
+
+    for a,b,d,c in zip(arr, arr[1:], arr[2:], arr[3:]):
+        if (b > a and b > c and d < a and d < c) or (b < a and b < c and d > a and d > c):
+            # log("x")
+            res += 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +78,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +88,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +96,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
     # print(len(res))
