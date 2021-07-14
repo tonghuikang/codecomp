@@ -47,10 +47,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,l,r):
+    log(n, 1-l, r-n)
+    log("\nx", n, l, r)
     # your solution here
-    
-    return ""
+
+    if n > 7:
+        return
+
+    maxcnt = (n//2) * ((n+1)//2)
+    res = 0
+    # log(maxcnt)s
+    for comb in itertools.product(range(l,r+1), repeat=n):
+        # log(comb)
+
+        flag = False
+        for i,x in enumerate(comb, start=1):
+            if i == x:
+                flag = True
+                break
+
+        if flag:
+            continue
+        
+        cnt = 0
+        comb = list(enumerate(comb, start=1))
+        for (i,a),(j,b) in itertools.combinations(comb, r=2):
+            if i + j == a + b:
+                cnt += 1
+        # maxcnt = max(maxcnt, cnt)
+        if cnt == maxcnt:
+            res += 1
+            # log(comb)
+        # log(maxcnt, cnt)
+
+    log(maxcnt)
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +99,7 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,l,r = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +108,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,l,r)  # include input here
 
     # print length if applicable
     # print(len(res))
