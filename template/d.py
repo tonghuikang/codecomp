@@ -49,48 +49,96 @@ def minus_one_matrix(mrr):
 
 def solve_(arr):
     if set(arr) == len(arr):
+        log("no change")
         return arr
     # your solution here
-    arr = [x-1 for x in arr]
     res = [-2 for x in arr]
 
-    assigned = set()
+    got_sender = set()
 
     for i,x in enumerate(arr):
-        if x in assigned:
+        if x in got_sender:
             continue
         res[i] = x
-        assigned.add(x)
+        got_sender.add(x)
 
     log(res)
 
-    unassigned = set(i for i,_ in enumerate(arr) if i not in assigned)
-    unassigned = list(unassigned)
+    no_sender = set(i for i,_ in enumerate(arr) if i not in got_sender)
+    no_sender = list(no_sender)
 
     for i,x in enumerate(res):
-        if x == -1:
-            y = unassigned[-1]
+        if x == -2:
+            y = no_sender[-1]
             if i != y:
-                res[i] = unassigned.pop()
+                res[i] = no_sender.pop()
+                continue
+            if len(no_sender) > 1:
+                tmp = no_sender.pop()
+                res[i] = no_sender.pop()
+                no_sender.append(tmp)
 
-    if not unassigned:
+    if not no_sender:
+        log("all assigned")
         return res
 
-    unassigned.sort()
-    if len(unassigned) > 1:
-        to_be_assigned = []
-        for i,x in enumerate(res):
-            if x == -2:
-                to_be_assigned.append(i)
-        to_be_assigned = to_be_assigned[1:] + to_be_assigned[:1]
-        log(unassigned)
-        log(to_be_assigned)
-        for i,j in zip(to_be_assigned, unassigned):
-            assert i != j
-            res[i] = j
+    to_be_assigned = []
+    for i,x in enumerate(res):
+        if x == -2:
+            to_be_assigned.append(i)
+
+    assert len(to_be_assigned) == len(no_sender)
+
+    no_sender.sort()
+    if len(no_sender) > 1:
+        while True:
+            random.shuffle(to_be_assigned)
+            log(to_be_assigned)
+            log(no_sender)
+            for i,j in zip(to_be_assigned, no_sender):
+                if i == j:
+                    break
+                res[i] = j
+            else:
+                break
+        return res
+
+    no_sender = no_sender[0]
+    to_be_assigned = to_be_assigned[0]
+    log(no_sender)
+    log(to_be_assigned)
+    intended = arr[to_be_assigned]
+
+    for i,x in enumerate(res):
+        if x == intended:
+            res[i] = to_be_assigned
+            res[to_be_assigned] = intended
+            break
+    else:
+        assert False
 
     return res
 
+for i in range(100000):
+    break
+    length = random.randint(2,5)
+    arr = [random.randint(0,length-1) for _ in range(length)]
+    for i,x in enumerate(arr):
+        if i == x:
+            break
+    else:
+        # arr = [1,0,1]
+        maxcnt = len(set(arr))
+        res = solve(arr)
+        cnt = sum(i==x for i,x in zip(res, arr))
+        log("test")
+        log(arr)
+        log(res)
+        log(maxcnt, cnt)
+        assert -2 not in set(res)
+        assert len(set(res)) == len(res)
+        assert maxcnt == cnt
+        log()
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -109,6 +157,7 @@ for case_num in range(int(input())):
     # a,b,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
     # lst = minus_one(lst)
+    arr = [x-1 for x in arr]
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
@@ -116,7 +165,9 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr)  # include input here
-
+    cnt = sum(i==x for i,x in zip(res, arr))
+    print(cnt)
+    log(res)
     # print length if applicable
     # print(len(res))
 
