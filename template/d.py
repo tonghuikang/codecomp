@@ -47,10 +47,49 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
+    if set(arr) == len(arr):
+        return arr
     # your solution here
-    
-    return ""
+    arr = [x-1 for x in arr]
+    res = [-2 for x in arr]
+
+    assigned = set()
+
+    for i,x in enumerate(arr):
+        if x in assigned:
+            continue
+        res[i] = x
+        assigned.add(x)
+
+    log(res)
+
+    unassigned = set(i for i,_ in enumerate(arr) if i not in assigned)
+    unassigned = list(unassigned)
+
+    for i,x in enumerate(res):
+        if x == -1:
+            y = unassigned[-1]
+            if i != y:
+                res[i] = unassigned.pop()
+
+    if not unassigned:
+        return res
+
+    unassigned.sort()
+    if len(unassigned) > 1:
+        to_be_assigned = []
+        for i,x in enumerate(res):
+            if x == -2:
+                to_be_assigned.append(i)
+        to_be_assigned = to_be_assigned[1:] + to_be_assigned[:1]
+        log(unassigned)
+        log(to_be_assigned)
+        for i,j in zip(to_be_assigned, unassigned):
+            assert i != j
+            res[i] = j
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +97,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +107,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,13 +115,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x+1) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
