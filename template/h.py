@@ -47,10 +47,45 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def longest_increasing_subsequence(nums):
+    res = []
+    # leetcode.com/problems/longest-increasing-subsequence/discuss/667975/
+    dp = [MAXINT] * (len(nums) + 1)
+    for elem in nums:
+        dp[bisect.bisect_left(dp, elem)] = elem
+        res.append(dp.index(elem)+1)
+    return res
+
+
+def solve_(arr):
     # your solution here
+    res1 = longest_increasing_subsequence(arr)
+    res2 = longest_increasing_subsequence(arr[::-1])[::-1]
+
+    maxres = max(max(res1), max(res2))
+
+    log(res1)
+    log(res2)
+
+    for i,x in enumerate(res2):
+        start = max(0, i-x)
+        log(i, start)
+        for j,y in enumerate(res1[:start]):
+            log(i,start,x,j,y)
+            if arr[j] > arr[i]:
+                res = x+y
+                log(res)
+                maxres = max(maxres, res)
+
+    # maxres = dp.index(MAXINT)
+
+    # for i in range(len(arr)//2, len(arr)):
+    #     dp1 = longest_increasing_subsequence(arr[:i])
+    #     dp2 = longest_increasing_subsequence([-x for x in arr[i:][::-1]])
+    #     res = dp1.index(MAXINT) + dp2.index(-arr[-1])
+        # maxres = max(maxres, res)
     
-    return ""
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +93,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +103,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +111,11 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    maxres = 1
+    res = solve(arr)  # include input here
+    maxres = max(maxres, res)
+    res = solve(arr[::-1])  # include input here
+    maxres = max(maxres, res)
 
     # print length if applicable
     # print(len(res))
