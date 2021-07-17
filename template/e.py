@@ -47,9 +47,38 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
     
+    ctr = Counter(list(srr))
+    dtr = sorted(ctr.items())
+
+    # if all same, there is nothing to do
+    if len(ctr) == 1:
+        return srr
+    
+    # if there is a unique character, smallest unique then sort for score 0
+    for k,v in dtr:
+        if v == 1:
+            res = k
+            for k2,v2 in dtr:
+                if k2 == k:
+                    v2 -=1
+                res += k2*v2 
+            return res
+
+    # otheriwse need to have score at least 1, should be able to force 1
+
+    # try force aab(no with no aa, does not work if there is too much a)
+
+    # then ab(no consecutive ab)
+        # if there is a c
+        # ab(all the a)(smallest c)(all the b)(remainders)
+
+        # if there is no c
+        # a(all the b)(all the remainding a)
+
+
     return ""
 
 
@@ -61,7 +90,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +105,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
