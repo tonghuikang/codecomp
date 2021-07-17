@@ -68,13 +68,13 @@ def solve_(arr):
     log(res2)
 
     for i,x in enumerate(res2):
-        start = max(0, i-x)
-        log(i, start)
+        start = max(0, i-x-1)
+        # log(i, start)
         for j,y in enumerate(res1[:start]):
-            log(i,start,x,j,y)
+            # log(i,start,x,j,y)
             if arr[j] > arr[i]:
                 res = x+y
-                log(res)
+                # log(res)
                 maxres = max(maxres, res)
 
     # maxres = dp.index(MAXINT)
@@ -85,6 +85,7 @@ def solve_(arr):
     #     res = dp1.index(MAXINT) + dp2.index(-arr[-1])
         # maxres = max(maxres, res)
     
+    log("maxres", maxres)
     return maxres
 
 
@@ -111,11 +112,19 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    maxres = 1
+    maxresult = 1
     res = solve(arr)  # include input here
-    maxres = max(maxres, res)
+    maxresult = max(maxresult, res)
     res = solve(arr[::-1])  # include input here
-    maxres = max(maxres, res)
+    maxresult = max(maxresult, res)
+
+    if len(arr) > 3:
+        res = solve(arr[:-3] + arr[-2:][::-1])  # include input here
+        maxresult = max(maxresult, res)
+        arr = arr[::-1]
+        res = solve(arr[:-3] + arr[-2:][::-1])  # include input here
+        maxresult = max(maxresult, res)
+
 
     # print length if applicable
     # print(len(res))
@@ -128,4 +137,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    print(maxresult)
