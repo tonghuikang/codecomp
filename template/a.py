@@ -47,28 +47,10 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, brr):
+def solve_():
     # your solution here
-
-    if sum(arr) != sum(brr):
-        return -1
-
-    drr = [b-a for a,b in zip(arr,brr)]
     
-    pos = []
-    neg = []
-
-    for i,x in enumerate(drr, start=1):
-        if x > 0:
-            for _ in range(x):
-                pos.append(i)
-        if x < 0:
-            for _ in range(-x):
-                neg.append(i)
-
-    res = ["{} {}".format(y,x) for x,y in zip(pos, neg)]
-
-    return res
+    return ""
 
 
 # for case_num in [0]:  # no loop over test case
@@ -76,7 +58,7 @@ def solve_(arr, brr):
 for case_num in range(int(input())):
 
     # read line as an integer
-    k = int(input())
+    # k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -86,8 +68,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    arr = list(map(int,input().split()))
-    brr = list(map(int,input().split()))
+    # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -95,19 +76,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(arr, brr)  # include input here
+    res = solve()  # include input here
 
-    if res == -1:
-        print(res)
-        continue
-
-    log(res)
     # print length if applicable
-    print(len(res))
+    # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    res = "\n".join(str(x) for x in res)
+    # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
