@@ -69,17 +69,58 @@ def solve_(srr):
 
     # otheriwse need to have score at least 1, should be able to force 1
 
+    a, acnt = dtr[0]
+    b, bcnt = dtr[1]
+    remainder = []
+    for k2,v2 in dtr[2:]:
+        for _ in range(v2):
+            remainder.append(k2)
+    remainder = remainder[::-1]
+
+    log(a,b,acnt,bcnt)
+    log(remainder)
+
     # try force aab(no with no aa, does not work if there is too much a)
 
-    # then ab(no consecutive ab)
-        # if there is a c
-        # ab(all the a)(smallest c)(all the b)(remainders)
+    res = a + a
+    acnt -= 2
+    while acnt or bcnt or remainder:
+        if res[-1] != a and acnt:
+            res += a
+            acnt -= 1
+            continue
+        if bcnt:
+            res += b
+            bcnt -= 1
+            continue
+        if remainder:
+            res += remainder.pop()        
+            continue
+        break
 
+    if len(res) == len(srr):
+        return res
+
+    a, acnt = dtr[0]
+    b, bcnt = dtr[1]
+    remainder = ""
+    for k2,v2 in dtr[2:]:
+        for _ in range(v2):
+            remainder += k2
+    # remainder = remainder[::-1]
+
+    # then ab(no consecutive ab)
         # if there is no c
         # a(all the b)(all the remainding a)
+        # otherwise you cannot avoid ab
 
+    if len(dtr) == 2:  # only ab
+        return a + b*bcnt + a*(acnt-1)
 
-    return ""
+        # if there is a c
+        # ab(all the remaining a)(smallest c)(all the remaining b)(remainders)
+
+    return a + b + a*(acnt-1) + remainder[0] + b*(bcnt-1) + remainder[1:]
 
 
 # for case_num in [0]:  # no loop over test case
