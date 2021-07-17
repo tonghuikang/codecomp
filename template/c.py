@@ -46,11 +46,75 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def binary_search(func_,       # condition function
+                  first=True,  # else last
+                  target=True, # else False
+                  left=0, right=2**31-1) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
 
-def solve_():
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first^target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:      # find last False
+        return left-1
+
+
+
+def solve_(arr, brr):
     # your solution here
     
-    return ""
+    taken = len(arr)
+
+    arr.sort()
+    brr.sort()
+
+    asum = [0]
+    bsum = [0]
+
+    for x in arr:
+        asum.append(asum[-1] + x)
+
+    for x in brr:
+        bsum.append(bsum[-1] + x)
+
+    # log(asum[-1])
+    # log(bsum[-1])
+    # log("-")
+
+
+    def func(addn):
+        rounds = taken + addn
+        excluded = rounds//4
+        excluded_r = max(0, excluded-addn)
+
+        required = bsum[-1] - bsum[excluded_r]
+        current = asum[-1] - asum[excluded] + addn*100
+
+        # log(addn, required, current)
+
+        return current >= required
+
+    idx = binary_search(func, right=len(arr))
+
+    return idx
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +122,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +132,8 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +141,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))
