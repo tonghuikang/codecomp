@@ -44,30 +44,46 @@ class TrieNode:
         self.is_word = False
 
 class Trie:
-    def __init__(self):
-        self.root = TrieNode()
+    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/Trie.py
+    def __init__(self, *words):
+        self.root = dict()
+        for word in words:
+            self.add(word)
 
-    def insert(self, word):
-        current = self.root
+    def add(self, word):
+        current_dict = self.root
         for letter in word:
-            current = current.children[letter]
-        current.is_word = True
+            current_dict = current_dict.setdefault(letter, dict())
+        current_dict["_end_"] = True
 
-    def search(self, word):
-        current = self.root
+    def __contains__(self, word):
+        current_dict = self.root
         for letter in word:
-            current = current.children.get(letter)
-            if current is None:
+            if letter not in current_dict:
                 return False
-        return current.is_word
+            current_dict = current_dict[letter]
+        return "_end_" in current_dict
+            
+    def delete(self, word, prune=False):
+        current_dict = self.root
+        nodes = [current_dict]
+        objects = []
+        for letter in word:
+            current_dict = current_dict[letter]
+            nodes.append(current_dict)
+            objects.append(current_dict)
+            
+        del current_dict["_end_"]
 
-    def startsWith(self, prefix):
-        current = self.root
-        for letter in prefix:
-            current = current.children.get(letter)
-            if current is None:
-                return False
-        return True
+        if prune:    
+            # https://leetcode.com/problems/maximum-genetic-difference-query/discuss/1344900/
+            for c,obj in zip(word[::-1], objects[:-1][::-1]):
+                if not obj[c]:
+                    del obj[c]
+                else:
+                    break
+        
+        # assert word not in self  # confirm that the number has been removed
 
 
 # -------------------------- Fenwick Tree --------------------------
