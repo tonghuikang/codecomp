@@ -37,12 +37,6 @@ def getLast(u, f):
 # ----------------------------------- Trie -----------------------------------
 
 
-class TrieNode:
-    # https://leetcode.com/problems/implement-trie-prefix-tree/
-    def __init__(self):
-        self.children = collections.defaultdict(TrieNode)
-        self.is_word = False
-
 class Trie:
     # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/Trie.py
     def __init__(self, *words):
