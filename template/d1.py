@@ -47,10 +47,30 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b,c):
     # your solution here
+
+    required = 0
+    blocked = 0
+    if a%2:
+        required = b//2
     
-    return ""
+    if b%2:
+        blocked = a//2
+
+    log(required)
+    remaining = c-required
+
+    if remaining < 0:
+        return no
+    
+    if remaining%2:
+        return no
+
+    if remaining > (a*b)//2 - blocked:
+        return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +87,7 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +96,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,c)  # include input here
 
     # print length if applicable
     # print(len(res))
