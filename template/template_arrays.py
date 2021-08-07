@@ -171,3 +171,20 @@ def z_function(S):
 
     Z[0] = n
     return Z
+
+
+def manachers(S):
+    # https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1389421/
+    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/suffix_array.py
+    A = '@#' + '#'.join(S) + '#$'
+    Z = [0] * len(A)
+    center = right = 0
+    for i in range(1, len(A) - 1):
+        if i < right:
+            Z[i] = min(right - i, Z[2 * center - i])
+        while A[i + Z[i] + 1] == A[i - Z[i] - 1]:
+            Z[i] += 1
+        if i + Z[i] > right:
+            center, right = i, i + Z[i]
+    return Z[2:-2:2]
+
