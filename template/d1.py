@@ -46,12 +46,79 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.leader(a)]
+
+
+
 
 # if can add, just add
-def solve_(arr, brr):
+def solve_(n, arr, brr):
     # your solution here
     
-    return ""
+    edges = []
+    for i in range(1,n+1):
+        for j in range(i+1,n+1):
+            edges.append((i,j))
+            
+    random.shuffle(edges)
+
+
+    t1 = DisjointSet()
+    t2 = DisjointSet()
+
+    for a,b in arr:
+        t1.union(a,b)
+
+    for a,b in brr:
+        t2.union(a,b)
+
+    res = []
+
+    for a,b in edges:
+        if t1.find(a) == t1.find(b) or t2.find(a) == t2.find(b):
+            continue
+        t1.union(a,b)
+        t2.union(a,b)
+        res.append((a,b))
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
@@ -81,12 +148,12 @@ for case_num in [0]:  # no loop over test case
     res = solve(n, arr, brr)  # include input here
 
     # print length if applicable
-    # print(len(res))
+    print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
