@@ -44,6 +44,8 @@ def minus_one(arr):
 def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
+import time
+start_time = time.time()
 # ---------------------------- template ends here ----------------------------
 
 class DisjointSet:
@@ -87,14 +89,14 @@ class DisjointSet:
 
 
 
-
 # if can add, just add
 def solve_(n, arr, brr):
     # your solution here
-    
+
+    m = min(n, 1337)
     edges = []
-    for i in range(1,n+1):
-        for j in range(i+1,n+1):
+    for i in range(1,m+1):
+        for j in range(i+1,m+1):
             edges.append((i,j))
             
     random.shuffle(edges)
@@ -118,6 +120,21 @@ def solve_(n, arr, brr):
         t2.union(a,b)
         res.append((a,b))
 
+
+    # random addition
+
+    while time.time() - start_time < 1.6:
+        a,b = random.randint(1,n), random.randint(1,n)
+        if a != b:
+            if t1.find(a) == t1.find(b) or t2.find(a) == t2.find(b):
+                continue
+            t1.union(a,b)
+            t2.union(a,b)
+            # t3.union(a,b)
+            res.append((a,b))
+
+
+    
     return res
 
 
