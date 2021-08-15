@@ -47,10 +47,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
+
+    arr = list(srr)
+
+    for i,c in enumerate(srr):
+        if c != "?":
+            break
+    else:
+        return ("BR" * len(srr))[:len(srr)]
+
+    curblue = c == "B"
+    for p in range(i-1,-1,-1):
+        curblue = not curblue
+        if curblue:
+            arr[p] = "B"
+        else:
+            arr[p] = "R"
     
-    return ""
+    prev = c
+    for p in range(i, len(srr)):
+        if arr[p] == "?":
+            if prev == "B":
+                arr[p] = "R"
+            else:
+                arr[p] = "B"
+        prev = arr[p]
+
+    return "".join(arr)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,10 +83,10 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +101,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
