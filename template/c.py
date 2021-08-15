@@ -56,6 +56,10 @@ def solve_(lst, k):
     if lst[-1] == 0:
         return list(range(1,k+2))
 
+    for i,(a,b) in enumerate(zip(lst, lst[1:]), start=1):
+        if a == 0 and b == 1:
+            return list(range(1,i+1)) + [k+1] + list(range(i+1,k+1))
+
     return [-1]
 
 
