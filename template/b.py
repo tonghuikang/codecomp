@@ -46,28 +46,39 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
 
 def solve_(h,w,k,x1,y1,x2,y2):
     # your solution here
 
-    dx = abs(x1-x2)
-    dy = abs(y1-y2)
-    
-    res = (abs(x1 - x2) + 1 + 1) * (abs(y1 - y2) + 1) + (abs(x1 - x2) + 1) * (abs(y1 - y2) + 1 + 1)
-    log(res)
+    dx = abs(x1-x2)+1
+    dy = abs(y1-y2)+1
+
+    cx = ceiling_division(dx, k)
+    cy = ceiling_division(dy, k)
+
+    res = cx * (dy + 1) + cy * (dx + 1)
+
+    log(dx,dy,cx,cy,res)
 
     res += min(
-        x1-1, y1-1, h-x2, w-y2
+        ceiling_division(x1 - 1 + dx, k) - cx,
+        ceiling_division(h - x2 + dx, k) - cx,
+        ceiling_division(y1 - 1 + dy, k) - cy,
+        ceiling_division(w - y2 + dy, k) - cy,
     )
 
     if x1 == 1:
-        res -= (abs(y1 - y2) + 1)
+        res -= cx
     if y1 == 1:
-        res -= (abs(x1 - x2) + 1)
+        res -= cy
     if x2 == h:
-        res -= (abs(y1 - y2) + 1)
+        res -= dx
     if y2 == w:
-        res -= (abs(x1 - x2) + 1)
+        res -= cy
 
     return res
 
