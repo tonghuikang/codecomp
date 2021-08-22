@@ -47,10 +47,71 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
-    
-    return ""
+
+    graph = defaultdict(list)
+
+    for i,row in enumerate(mrr):
+        segments = []
+        segment = []
+        for j,x in enumerate(row):
+            if x == "#":
+                segments.append(segment)
+                segment = []
+            else:
+                segment.append(j)
+        segments.append(segment)
+        log(segments)
+        for segment in segments:
+            if len(segment) <= 1:
+                continue
+            for a,b in zip(segment, segment[::-1]):
+                if a != b:
+                    graph[i,a].append((i,b))
+
+    for i,row in enumerate(zip(*mrr)):
+        segments = []
+        segment = []
+        for j,x in enumerate(row):
+            if x == "#":
+                segments.append(segment)
+                segment = []
+            else:
+                segment.append(j)
+        segments.append(segment)
+        log(segments)
+        for segment in segments:
+            if len(segment) <= 1:
+                continue
+            for a,b in zip(segment, segment[::-1]):
+                if a != b:
+                    graph[a,i].append((b,i))
+
+    log(graph)
+
+    result = [list(row) for row in mrr]
+    stack = []
+
+    for i,row in enumerate(mrr):
+        for j,cell in enumerate(row):
+            if cell != "." and cell != "#":
+                stack.append((i,j))
+
+    # log("?", stack)
+    visited = set(stack)
+    cnt = 0
+    while stack:
+        cur = stack.pop()
+        for nex in graph[cur]:
+            if nex in visited:
+                continue
+            result[nex[0]][nex[1]] = result[cur[0]][cur[1]]
+            cnt += 1
+            stack.append(nex)
+            visited.add(nex)
+
+    return cnt, result
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,16 +128,16 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    k,_ = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    cnt, res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -84,9 +145,9 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join("".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, cnt))   # Google and Facebook - case number required
 
     print(res)

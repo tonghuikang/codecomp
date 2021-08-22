@@ -47,10 +47,25 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
+
+    arr = list(srr)
+    c = Counter(arr)
+    if max(c.values())*2 > len(arr):
+        return "IMPOSSIBLE"
     
-    return ""
+    pos = [(x,i) for i,x in enumerate(arr)]
+    pos.sort()
+    log(pos)
+
+    res = [None for _ in arr]
+    offset = len(arr)//2
+    log(offset)
+    for (x,i),(_,j) in zip(pos, pos[offset:] + pos[:offset]):
+        res[j] = x
+    
+    return "".join(res)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -61,7 +76,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +91,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +102,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(srr)

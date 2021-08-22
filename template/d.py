@@ -47,10 +47,33 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(n):
     
-    return ""
+    if n < 20 and OFFLINE_TEST:
+        num = 0
+        dem = 0
+        lst = list(range(n))
+        for perm in itertools.permutations(lst):
+            dem += 1
+            num += 1
+            v = perm[0]
+            for x in perm[1:]:
+                if x > v:
+                    num += 1
+                    v = x
+        log(num/dem)
+
+    if n < 10**6 + 10 and OFFLINE_TEST:
+        res = 0
+        for i in range(1,n+1):
+            res += 1/i
+        log(res)
+
+    n += 1
+    return math.log(n) + 0.57721566490153286060651209008240243104215933593992 - 1/(2*n) - 1/(12*n**2)
+
+
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +81,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +99,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +110,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

@@ -47,10 +47,25 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(h,w,k,x1,y1,x2,y2):
     # your solution here
     
-    return ""
+    res = (abs(x1 - x2) + 1) * 2 + (abs(y1 - y2) + 1) * 2
+
+    res += min(
+        x1-1, y1-1, h-x2, w-y2
+    )
+
+    if x1 == 1:
+        res -= (abs(y1 - y2) + 1)
+    if y1 == 1:
+        res -= (abs(x1 - x2) + 1)
+    if x2 == h:
+        res -= (abs(y1 - y2) + 1)
+    if y2 == w:
+        res -= (abs(x1 - x2) + 1)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +82,8 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    h,w,k = list(map(int,input().split()))
+    x1,y1,x2,y2 = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +92,11 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    # x1 -= 1
+    # x2 -= 1
+    # y1 -= 1
+    # y2 -= 1
+    res = solve(h,w,k,x1,y1,x2,y2)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +107,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
