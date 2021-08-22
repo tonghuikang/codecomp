@@ -53,8 +53,8 @@ def solve_(arr, brr):
     if set(brr) - set(arr):
         return -1
     
-    # if len(set(brr)) == 1 and brr[0] == arr[0]:
-    #     return len(brr)
+    if len(set(brr)) == 1 and brr[0] == arr[0]:
+        return len(brr)
 
     if arr[0] == 1:
         arr = [1-x for x in arr]
