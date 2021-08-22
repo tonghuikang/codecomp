@@ -64,21 +64,50 @@ def solve_(h,w,k,x1,y1,x2,y2):
 
     log(dx,dy,cx,cy,res)
 
-    res += min(
+    minadd = min(
         ceiling_division(x1 - 1 + dx, k) - cx,
         ceiling_division(h - x2 + dx, k) - cx,
         ceiling_division(y1 - 1 + dy, k) - cy,
         ceiling_division(w - y2 + dy, k) - cy,
     )
+    log(minadd)
+    res += minadd
 
     if x1 == 1:
-        res -= cx
+        res -= cy
     if y1 == 1:
-        res -= cy
+        res -= cx
     if x2 == h:
-        res -= dx
-    if y2 == w:
         res -= cy
+    if y2 == w:
+        res -= cx
+
+    if k == 1:
+        res_ref = solve_ref(h,w,k,x1,y1,x2,y2)
+        log("ref", res_ref)
+        assert res == res_ref
+
+    return res
+
+
+def solve_ref(h,w,k,x1,y1,x2,y2):
+    # your solution here
+    
+    res = (abs(x1 - x2) + 1 + 1) * (abs(y1 - y2) + 1) + (abs(x1 - x2) + 1) * (abs(y1 - y2) + 1 + 1)
+    log(res)
+
+    res += min(
+        x1-1, y1-1, h-x2, w-y2
+    )
+
+    if x1 == 1:
+        res -= (abs(y1 - y2) + 1)
+    if y1 == 1:
+        res -= (abs(x1 - x2) + 1)
+    if x2 == h:
+        res -= (abs(y1 - y2) + 1)
+    if y2 == w:
+        res -= (abs(x1 - x2) + 1)
 
     return res
 
