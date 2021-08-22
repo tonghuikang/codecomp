@@ -60,30 +60,33 @@ def solve_(h,w,k,x1,y1,x2,y2):
     cx = ceiling_division(dx, k)
     cy = ceiling_division(dy, k)
 
-    res = cx * (dy + 1) + cy * (dx + 1)
+    if x1 == 0 or y1 == 0:
+        if x1 == 0 and y1 == 0:
+            res = cy * dx + dx * dy
+        elif x1 == 0:
+            res = cy * dx + dx * dy + cx
+        elif y1 == 0:
+            res = cy * (dx+1) + dx * dy
+        else:
+            assert False
 
-    log(dx,dy,cx,cy,res)
+        if x2 == h:
+            res -= cy
+        if y2 == w:
+            res -= dx
+        return res
+
+    res = cx + cy * (dx+1) + dx * dy
 
     minadd = min(
         ceiling_division(x1 + dx, k) - cx,
-        ceiling_division(h - x2 + dx, k) - cx,
+        ceiling_division(h - x1 + dx, k) - cx,
         ceiling_division(y1 + dy, k) - cy,
-        ceiling_division(w - y2 + dy, k) - cy,
+        ceiling_division(w - y1 + dy, k) - cy,
     )
-    log(minadd)
     assert minadd >= 0
-    res += minadd
 
-    if x1 == 0:
-        res -= cy
-    if y1 == 0:
-        res -= cx
-    if x2 == h:
-        res -= cy
-    if y2 == w:
-        res -= cx
-
-    return res
+    return res + minadd
 
 
 def solve_ref(h,w,k,x1,y1,x2,y2):
@@ -138,14 +141,27 @@ for case_num in range(int(input())):
     # x2 -= 1
     y1 -= 1
     # y2 -= 1
-    res = solve(h,w,k,x1,y1,x2,y2)  # include input here
+
+    res1 = solve(h,w,k,x1,y1,x2,y2)  # include input here
+    res2 = solve(w,h,k,y1,x1,y2,x2)  # include input here
+    x1,x2 = h-x2, h-x1
+    res3 = solve(h,w,k,x1,y1,x2,y2)  # include input here
+    res4 = solve(w,h,k,y1,x1,y2,x2)  # include input here
+    y1,y2 = w-y2, w-y1
+    res5 = solve(h,w,k,x1,y1,x2,y2)  # include input here
+    res6 = solve(w,h,k,y1,x1,y2,x2)  # include input here
+    x1,x2 = h-x2, h-x1
+    res7 = solve(h,w,k,x1,y1,x2,y2)  # include input here
+    res8 = solve(w,h,k,y1,x1,y2,x2)  # include input here
+
+    res = min(res1, res2, res3, res4, res5, res6, res7, res8)
+    # print length if applicable
+    # print(len(res))
 
     if k == 1:
         log("ref", res_ref)
+        log("val", res, res1, res2, res3, res4, res5, res6, res7, res8)
         assert res == res_ref
-
-    # print length if applicable
-    # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
