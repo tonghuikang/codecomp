@@ -63,11 +63,12 @@ def solve_(n):
                     v = x
         log(num/dem)
 
-    if n < 10**6 + 10 and OFFLINE_TEST:
+    if n < 10000:
         res = 0
         for i in range(1,n+1):
             res += 1/i
         log(res)
+        return res
 
     n += 1
     return math.log(n) + 0.57721566490153286060651209008240243104215933593992 - 1/(2*n) - 1/(12*n**2)

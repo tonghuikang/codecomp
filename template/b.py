@@ -49,8 +49,12 @@ def minus_one_matrix(mrr):
 
 def solve_(h,w,k,x1,y1,x2,y2):
     # your solution here
+
+    dx = abs(x1-x2)
+    dy = abs(y1-y2)
     
-    res = (abs(x1 - x2) + 1) * 2 + (abs(y1 - y2) + 1) * 2
+    res = (abs(x1 - x2) + 1 + 1) * (abs(y1 - y2) + 1) + (abs(x1 - x2) + 1) * (abs(y1 - y2) + 1 + 1)
+    log(res)
 
     res += min(
         x1-1, y1-1, h-x2, w-y2
