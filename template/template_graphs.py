@@ -353,6 +353,17 @@ def detect_cycle(map_from_node_to_nodes):
     return topological_sort(map_from_node_to_nodes) == []
 
 
+def find_bridges():
+    # https://leetcode.com/problems/critical-connections-in-a-network/discuss/410345/
+    # https://cp-algorithms.com/graph/bridge-searching.html
+    # https://cp-algorithms.com/graph/bridge-searching-online.html
+    return NotImplementedError
+
+def find_articulation_points():
+    # https://cp-algorithms.com/graph/cutpoints.html
+    return NotImplementedError
+
+
 # ------------------------ other methods ------------------------
 
 
