@@ -54,8 +54,8 @@ def ceiling_division(numer, denom):
 def solve_(h,w,k,x1,y1,x2,y2):
     # your solution here
 
-    dx = abs(x1-x2)+1
-    dy = abs(y1-y2)+1
+    dx = abs(x1-x2)
+    dy = abs(y1-y2)
 
     cx = ceiling_division(dx, k)
     cy = ceiling_division(dy, k)
@@ -65,27 +65,23 @@ def solve_(h,w,k,x1,y1,x2,y2):
     log(dx,dy,cx,cy,res)
 
     minadd = min(
-        ceiling_division(x1 - 1 + dx, k) - cx,
+        ceiling_division(x1 + dx, k) - cx,
         ceiling_division(h - x2 + dx, k) - cx,
-        ceiling_division(y1 - 1 + dy, k) - cy,
+        ceiling_division(y1 + dy, k) - cy,
         ceiling_division(w - y2 + dy, k) - cy,
     )
     log(minadd)
+    assert minadd >= 0
     res += minadd
 
-    if x1 == 1:
+    if x1 == 0:
         res -= cy
-    if y1 == 1:
+    if y1 == 0:
         res -= cx
     if x2 == h:
         res -= cy
     if y2 == w:
         res -= cx
-
-    if k == 1:
-        res_ref = solve_ref(h,w,k,x1,y1,x2,y2)
-        log("ref", res_ref)
-        assert res == res_ref
 
     return res
 
@@ -136,11 +132,17 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    # x1 -= 1
+    res_ref = solve_ref(h,w,k,x1,y1,x2,y2)
+
+    x1 -= 1
     # x2 -= 1
-    # y1 -= 1
+    y1 -= 1
     # y2 -= 1
     res = solve(h,w,k,x1,y1,x2,y2)  # include input here
+
+    if k == 1:
+        log("ref", res_ref)
+        assert res == res_ref
 
     # print length if applicable
     # print(len(res))
