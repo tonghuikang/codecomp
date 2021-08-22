@@ -353,6 +353,13 @@ def detect_cycle(map_from_node_to_nodes):
     return topological_sort(map_from_node_to_nodes) == []
 
 
+def find_bridges():
+    return NotImplementedError
+
+def find_articulation_points():
+    return NotImplementedError
+
+
 # ------------------------ other methods ------------------------
 
 
