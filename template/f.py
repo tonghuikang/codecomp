@@ -46,42 +46,153 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+    def __init__(self, bits=19):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+        
+    def update(self, x, increment):
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+        
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
+def simulate_odd(arr):
+    for i in range(0, len(arr)-1, 2):
+        if arr[i] > arr[i+1]:
+            arr[i], arr[i+1] = arr[i+1], arr[i]
+    return arr
+
+def simulate_even(arr):
+    for i in range(1, len(arr), 2):
+        if arr[i] > arr[i+1]:
+            arr[i], arr[i+1] = arr[i+1], arr[i]
+    return arr
+
+
+def compute_left_right(arr):
+
+    f = FenwickTree()
+    cleft = [0 for _ in arr]  # for each value x, how many larger on left
+    for i,x in enumerate(arr):
+        cleft[x] = i - f.query(x)
+        f.update(x, 1)
+
+    log(cleft)
+
+    f = FenwickTree()
+    cright = [0 for _ in arr]  # for each value x, how many smaller on right
+    for i,x in enumerate(arr[::-1]):
+        cright[x] = f.query(x)
+        f.update(x, 1)
+
+    log(cright)
+
+    return cleft, cright
+
+
 
 def solve_(arr):
     # hypothesis - you are only affected by parity and number of elements on your right or left
-    
+    arr_original = [x for x in arr]
     sorted_arr = sorted(arr)
 
-    def simulate_odd(arr):
-        for i in range(0, len(arr)-1, 2):
-            if arr[i] > arr[i+1]:
-                arr[i], arr[i+1] = arr[i+1], arr[i]
-        return arr
-
-    def simulate_even(arr):
-        for i in range(1, len(arr), 2):
-            if arr[i] > arr[i+1]:
-                arr[i], arr[i+1] = arr[i+1], arr[i]
-        return arr
-
-    def check_sorted(arr):
-        return arr == sorted_arr
-
-    if check_sorted(arr):
+    if arr == sorted_arr:
         return 0
 
+    log("\n\nff1\n")
+    log(arr)
+    log(list(range(len(arr))))
+
+    cleft, cright = compute_left_right(arr)
+
+    log("\n\nff2\n")
+
     cnt = 0
-    while True:
+    maxres = max(max(a,b) if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright))
+    log(arr)
+
+    for _ in range(2):
+
         cnt += 1
         arr = simulate_odd(arr)
-        if check_sorted(arr):
+        cleft, cright = compute_left_right(arr)
+        res = max(max(a,b) if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright)) + cnt
+        maxres = max(maxres, res)
+
+        log("\n")
+        log(cleft)
+        log(cright)
+        log(cnt, res)
+        log("\n")
+
+        if arr == sorted_arr:
             return cnt
+
         cnt += 1
         arr = simulate_even(arr)
-        if check_sorted(arr):
+        cleft, cright = compute_left_right(arr)
+        res = max(max(a,b) if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright)) + cnt
+        maxres = max(maxres, res)
+
+        log("\n")
+        log(cleft)
+        log(cright)
+        log(cnt, res)
+        log("\n")
+
+        if arr == sorted_arr:
             return cnt
-    
-    return cnt
+
+
+    if OFFLINE_TEST:
+        cnt = 0
+        arr = arr_original
+        log(arr)
+        for _ in range(20):
+
+            cnt += 1
+            arr = simulate_odd(arr)
+            log(arr)
+            if arr == sorted_arr:
+                break
+
+            cnt += 1
+            arr = simulate_even(arr)
+            log(arr)
+            if arr == sorted_arr:
+                break
+
+        log("\n\nff3\n")
+        log(cleft)
+        log(cright)
+        log(maxres, cnt)
+        assert maxres == cnt
+
+    return maxres
+
+
+if OFFLINE_TEST:
+    for _ in range(100):
+        length = random.randint(1,5)*2 + 1
+        arr = list(range(length))
+        random.shuffle(arr)
+        solve(arr)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -101,6 +212,7 @@ for case_num in range(int(input())):
     # a,b,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
     # lst = minus_one(lst)
+    arr = [x-1 for x in arr]
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
