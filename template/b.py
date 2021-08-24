@@ -47,30 +47,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(a, m):
-    # your solution here
+def solve_(n, mod):
+    # https://codeforces.com/contest/1558/submission/126867931
     
-    ways = [0 for _ in range(a+1)]
-    ways[a] = 1
+    dp = [0 for i in range(n+1)]
+    imos = [0 for i in range(n+1)]
+    dp[1] = 1
+    for i in range(1,n):
+        imos[i] = (imos[i] + imos[i-1]) % mod
+        dp[i] += imos[i]
+        dp[i] %= mod
+    
+        imos[i+1] += dp[i]
+        imos[i+1] %= mod
+    
+        for j in range(2,n+1):
+            if i*j > n:
+                break
+    
+            imos[i*j] += dp[i]
+            imos[i*j] %= mod
+            if (i+1)*j <= n:
+                imos[(i+1)*j] -= dp[i]
+                imos[(i+1)*j] %= mod
 
-    psum = 1
-    for x in range(a,1,-1):
-        for z in range(2, x+1):
-        # for z in range(2, int(math.sqrt(x))+1):
-            ways[x//z] += ways[x]
-        ways[x-1] += psum
-        ways[x-1] = ways[x-1]%m
-        psum += ways[x-1]
-        psum = psum%m
-        # log(ways)
+    res = dp[n] + imos[n] + imos[n-1]
+    res %= mod
 
-    return ways[1]%m
+    log(dp[:10])
+    log(imos[:10])
+    return res
 
-ress = []
-for x in range(1,20):
-    res = solve(x, 10**18)
-    ress.append(res)
-log(ress)
+# ress = []
+# for x in range(1,20):
+#     res = solve(x, 10**18)
+#     ress.append(res)
+# log(ress)
 
 
 for case_num in [0]:  # no loop over test case
