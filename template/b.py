@@ -47,15 +47,26 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a, m):
     # your solution here
     
-    return ""
+    ways = [0 for _ in range(a+1)]
+    ways[a] = 1
+
+    psum = 1
+    for x in range(a,1,-1):
+        for z in range(2, x+1):
+            ways[x//z] += ways[x]
+        ways[x-1] += psum
+        psum += ways[x-1]
+        # log(ways)
+
+    return ways[1]%m
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,7 +78,7 @@ for case_num in range(int(input())):
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +87,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,m)  # include input here
 
     # print length if applicable
     # print(len(res))
