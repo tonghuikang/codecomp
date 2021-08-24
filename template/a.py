@@ -59,16 +59,33 @@ def solve_(a,b):
 
     c = a+b
 
-    # if b > c/2:
-    #     return list(range(c+1))
+    res = set()
 
-    for x in sorted([a,b]):
-        pass
+    if c%2 == 0:
+        for aa in range(0,c//2+1):
+            ab = a-aa
+            ba = c//2 - aa
+            bb = c - aa - ab - aa
+            if ab >= 0 and ba >= 0 and aa >= 0 and bb >= 0:
+                res.add(ba + ab)
+            
+        return sorted(res)
 
-    # if c%2:
-    #     pass
-    
-    return ""
+    for aa in range(0,c//2 + 2):
+        ab = a-aa
+        ba = c//2 + 1 - aa
+        bb = c - aa - ab - aa
+        if ab >= 0 and ba >= 0 and aa >= 0 and bb >= 0:
+            res.add(ba + ab)
+        
+    for aa in range(0,c//2 + 2):
+        ab = a-aa
+        ba = c//2 - aa
+        bb = c - aa - ab - aa
+        if ab >= 0 and ba >= 0 and aa >= 0 and bb >= 0:
+            res.add(ba + ab)
+
+    return sorted(res)
 
 
 # for case_num in [0]:  # no loop over test case

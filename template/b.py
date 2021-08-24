@@ -56,12 +56,21 @@ def solve_(a, m):
     psum = 1
     for x in range(a,1,-1):
         for z in range(2, x+1):
+        # for z in range(2, int(math.sqrt(x))+1):
             ways[x//z] += ways[x]
         ways[x-1] += psum
+        ways[x-1] = ways[x-1]%m
         psum += ways[x-1]
+        psum = psum%m
         # log(ways)
 
     return ways[1]%m
+
+ress = []
+for x in range(1,20):
+    res = solve(x, 10**18)
+    ress.append(res)
+log(ress)
 
 
 for case_num in [0]:  # no loop over test case
