@@ -124,7 +124,7 @@ def solve_(arr):
     log("\n\nff2\n")
 
     cnt = 0
-    maxres = max(max(a,b) if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright))
+    maxres = max(max(a,b)+1 if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright))
     log(arr)
 
     for _ in range(2):
@@ -132,7 +132,7 @@ def solve_(arr):
         cnt += 1
         arr = simulate_odd(arr)
         cleft, cright = compute_left_right(arr)
-        res = max(max(a,b) if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright)) + cnt
+        res = max(max(a,b)+1 if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright)) + cnt
         maxres = max(maxres, res)
 
         log("\n")
@@ -147,7 +147,7 @@ def solve_(arr):
         cnt += 1
         arr = simulate_even(arr)
         cleft, cright = compute_left_right(arr)
-        res = max(max(a,b) if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright)) + cnt
+        res = max(max(a,b)+1 if a > 0 and b > 0 else max(a,b) for a,b in zip(cleft, cright)) + cnt
         maxres = max(maxres, res)
 
         log("\n")
