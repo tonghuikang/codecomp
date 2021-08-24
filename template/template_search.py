@@ -45,6 +45,7 @@ def binary_search(func_,       # condition function
 def find_peak(func_, minimize=False, left=0, right=2**31-1):
     # https://leetcode.com/problems/peak-index-in-a-mountain-array/discuss/139848/
     # find the peak value of a function, assumes that the ends are not peaks
+    # ASSUMES THAT THERE IS NO PLATEAUS 
 
     def func(val):
         # negative the value of func_ if we are minimizing
