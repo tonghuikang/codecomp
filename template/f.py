@@ -47,10 +47,41 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(arr):
+    # hypothesis - you are only affected by parity and number of elements on your right or left
     
-    return ""
+    sorted_arr = sorted(arr)
+
+    def simulate_odd(arr):
+        for i in range(0, len(arr)-1, 2):
+            if arr[i] > arr[i+1]:
+                arr[i], arr[i+1] = arr[i+1], arr[i]
+        return arr
+
+    def simulate_even(arr):
+        for i in range(1, len(arr), 2):
+            if arr[i] > arr[i+1]:
+                arr[i], arr[i+1] = arr[i+1], arr[i]
+        return arr
+
+    def check_sorted(arr):
+        return arr == sorted_arr
+
+    if check_sorted(arr):
+        return 0
+
+    cnt = 0
+    while True:
+        cnt += 1
+        arr = simulate_odd(arr)
+        if check_sorted(arr):
+            return cnt
+        cnt += 1
+        arr = simulate_even(arr)
+        if check_sorted(arr):
+            return cnt
+    
+    return cnt
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +89,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +99,7 @@ for case_num in range(int(input())):
     
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +107,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
