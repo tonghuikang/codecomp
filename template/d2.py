@@ -67,13 +67,14 @@ def solve_(srr, qrr):
         mid = a
         g[mid].append(i)
 
-    log(g)
+    # log(g)
 
     allres = []
 
     for a,b in qrr:
-        log("-")
+        # log("\n\n")
         a -= 1
+        # log(srr[a:b])
 
         res = []
         if psum[a] == psum[b]:
@@ -85,17 +86,20 @@ def solve_(srr, qrr):
             a += 1
         
         if (b-a)%2:
-            mid = (psum[a] + psum[b]) // 2
+            if psum[b] < psum[a]:
+                mid = (psum[a] + psum[b]) // 2
+            else:
+                mid = (psum[a] + psum[b] + 1) // 2
             idx = bisect.bisect_right(g[mid], b) - 1  # get index
             c = g[mid][idx]
+            res.append(c)
 
-            # log(srr[a:b])
             # log(g[mid])
             # log(a,b,c,mid,idx)
             # log(psum[a:b+1])
+            # log(res)
 
             assert a < c <= b
-            res.append(c)
 
         # res.append([-1,-2])
         allres.append(res)
