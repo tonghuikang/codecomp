@@ -47,9 +47,39 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
+    k = len(srr)
     
+    # if srr[-1] == "0":
+    #     return [1,k,1,k-1]
+
+    # if srr[0] == "0":
+    #     return [1,k,2,k]
+
+    left = list(range(k//2))
+    right = list(range((k+1)//2, k))
+
+    log(left)
+    log(right)
+
+    if srr.count("0") == 0:
+        return [1,k,2,k]
+
+    for pos in left:
+        if srr[pos] == "0":
+            log("left")
+            return [pos+1,k,pos+2,k]
+
+    for pos in right:
+        if srr[pos] == "0":
+            log("right")
+            return [1,pos+1,1,pos]
+
+    # all ones of 11011
+
+    return [k//2, k, k//2+1, k]
+
     return ""
 
 
@@ -58,10 +88,10 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,13 +106,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
