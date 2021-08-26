@@ -46,22 +46,59 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def isSubsequence(s: str, t: str) -> bool:
+    ptr = 0
+    for a in s:
+        while ptr < len(t) and t[ptr] != a:
+            ptr += 1
+        ptr += 1
+    return ptr <= len(t)
 
-def solve_():
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+arr = get_largest_prime_factors(1_000_000)
+
+# log(arr)
+primes = [str(i) for i,x in enumerate(arr) if i != x]
+
+
+comps = [str(i) for i in [1,4,6,8,9]]
+comps_set = set(comps)
+
+primes = comps + [i for i in primes if not (set(list(i)))&comps_set]
+
+# log(primes)
+# log(len(primes))
+
+
+def solve_(srr):
     # your solution here
-    
-    return ""
 
+    for p in primes:
+        if isSubsequence(p, srr):
+            return p
+    
+    assert False
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,10 +113,10 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
-    # print(len(res))
+    print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
