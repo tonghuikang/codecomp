@@ -60,11 +60,12 @@ def solve_(srr):
     left = list(range(k//2))
     right = list(range((k+1)//2, k))
 
+    log(k)
     log(left)
     log(right)
 
     if srr.count("0") == 0:
-        return [1,k,2,k]
+        return [1,k-1,2,k]
 
     for pos in left:
         if srr[pos] == "0":
@@ -110,6 +111,17 @@ for case_num in range(int(input())):
 
     # print length if applicable
     # print(len(res))
+
+    log(res)    
+    a,b,c,d = res
+    a -= 1
+    c -= 1
+    if OFFLINE_TEST:
+        x,y = int(srr[a:b], 2), int(srr[c:d], 2)
+        if x == y == 0:
+            pass
+        else:
+            assert x%y == 0 
 
     # parse result
     res = " ".join(str(x) for x in res)
