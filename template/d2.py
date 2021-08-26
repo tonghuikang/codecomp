@@ -74,7 +74,8 @@ def solve_(srr, qrr):
     for a,b in qrr:
         # log("\n\n")
         a -= 1
-        # log(srr[a:b])
+        a0, b0 = a,b
+        log(srr[a:b])
 
         res = []
         if psum[a] == psum[b]:
@@ -84,6 +85,7 @@ def solve_(srr, qrr):
         if (b-a)%2 == 0:
             res = [a+1]
             a += 1
+            continue
         
         if (b-a)%2:
             if psum[b] < psum[a]:
@@ -94,14 +96,24 @@ def solve_(srr, qrr):
             c = g[mid][idx]
             res.append(c)
 
-            # log(g[mid])
-            # log(a,b,c,mid,idx)
-            # log(psum[a:b+1])
-            # log(res)
+            log(g[mid])
+            log(a,b,c,mid,idx)
+            log(psum[a:b+1])
+            log(res)
 
             assert a < c <= b
 
         # res.append([-1,-2])
+
+        flag = 1
+        cnt = 0
+        for i in range(a0,b0):
+            if i+1 in res:
+                continue
+            cnt += arr[i] * flag
+            flag = -flag
+        assert cnt == 0
+
         allres.append(res)
 
 
