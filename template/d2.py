@@ -52,7 +52,7 @@ def solve_(srr, qrr):
 
     arr = [1 if x == "+" else -1 for x in srr]
     brr = [x if i%2 else -x for i,x in enumerate(arr)]
- 
+
     log(brr)
     log(arr)
 
@@ -62,22 +62,46 @@ def solve_(srr, qrr):
 
     log(psum)
 
-    res = []
+    g = collections.defaultdict(list)
+    for i,a in enumerate(psum):
+        mid = a
+        g[mid].append(i)
+
+    log(g)
+
+    allres = []
 
     for a,b in qrr:
+        log("-")
         a -= 1
 
+        res = []
         if psum[a] == psum[b]:
-            res.append(0)
+            allres.append(res)
             continue
 
+        if (b-a)%2 == 0:
+            res = [a+1]
+            a += 1
+        
         if (b-a)%2:
-            res.append(1)
-            continue            
+            mid = (psum[a] + psum[b]) // 2
+            idx = bisect.bisect_right(g[mid], b) - 1  # get index
+            c = g[mid][idx]
 
-        res.append(2)
+            # log(srr[a:b])
+            # log(g[mid])
+            # log(a,b,c,mid,idx)
+            # log(psum[a:b+1])
 
-    return res
+            assert a < c <= b
+            res.append(c)
+
+        # res.append([-1,-2])
+        allres.append(res)
+
+
+    return allres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -109,12 +133,12 @@ for case_num in range(int(input())):
     # print length if applicable
     # print(len(res))
 
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    strres = []
 
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    for r in res:
+        strres.append(str(len(r)))
+        if r:
+            strres.append(" ".join(str(x) for x in r)) 
 
-    print(res)
+    strres = "\n".join(strres)
+    print(strres)
