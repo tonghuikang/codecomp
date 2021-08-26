@@ -46,6 +46,7 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# OFFLINE_TEST = False
 
 def solve_(srr, qrr):
     # your solution here
@@ -63,11 +64,21 @@ def solve_(srr, qrr):
     log(psum)
 
     g = collections.defaultdict(list)
+    g2inc = collections.defaultdict(list)
+    g2dec = collections.defaultdict(list)
     for i,a in enumerate(psum):
         mid = a
         g[mid].append(i)
 
+    for i,(a,b) in enumerate(zip(psum, psum[1:])):
+        mid = (a+b)//2
+        if b > a:
+            g2inc[mid].append(i)
+        else:
+            g2dec[mid].append(i+1)
+
     # log(g)
+    log(g2inc)
 
     allres = []
 
@@ -83,36 +94,48 @@ def solve_(srr, qrr):
             continue
 
         if (b-a)%2 == 0:
-            res = [a+1]
-            a += 1
-            continue
-        
-        if (b-a)%2:
+            if psum[b] < psum[a]:
+                log("dec")
+                mid = (psum[a] + psum[b]) // 2
+                gx = g2dec
+            else:
+                log("inc")
+                mid = (psum[a] + psum[b]) // 2
+                gx = g2inc
+            idx = bisect.bisect_right(gx[mid], b) - 1  # get index
+            c = gx[mid][idx]
+            res = [c, c+1]
+
+        elif (b-a)%2:
+            gx = g
             if psum[b] < psum[a]:
                 mid = (psum[a] + psum[b]) // 2
             else:
                 mid = (psum[a] + psum[b] + 1) // 2
             idx = bisect.bisect_right(g[mid], b) - 1  # get index
             c = g[mid][idx]
-            res.append(c)
+            res = [c]
 
-            log(g[mid])
-            log(a,b,c,mid,idx)
-            log(psum[a:b+1])
-            log(res)
+        log(gx[mid])
+        log(a,b,c,mid,idx)
+        log(psum[a:b+1])
+        log(psum[res[0]], psum[res[-1]])
+        log(res)
 
-            assert a < c <= b
+        assert a < c <= b
 
         # res.append([-1,-2])
 
-        flag = 1
-        cnt = 0
-        for i in range(a0,b0):
-            if i+1 in res:
-                continue
-            cnt += arr[i] * flag
-            flag = -flag
-        assert cnt == 0
+        if OFFLINE_TEST:
+            flag = 1
+            cnt = 0
+            for i in range(a0,b0):
+                if i+1 in res:
+                    continue
+                cnt += arr[i] * flag
+                flag = -flag
+            log(cnt)
+            assert cnt == 0
 
         allres.append(res)
 
