@@ -78,7 +78,7 @@ def solve_(srr):
 
     # all ones of 11011
 
-    return [k//2, k, k//2+1, k]
+    return [k//2+1, k, k//2+2, k]
 
     return ""
 
