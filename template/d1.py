@@ -47,10 +47,37 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, qrr):
     # your solution here
-    
-    return ""
+
+    arr = [1 if x == "+" else -1 for x in srr]
+    brr = [x if i%2 else -x for i,x in enumerate(arr)]
+ 
+    log(brr)
+    log(arr)
+
+    psum = [0]
+    for x in brr:
+        psum.append(psum[-1] + x)
+
+    log(psum)
+
+    res = []
+
+    for a,b in qrr:
+        a -= 1
+
+        if psum[a] == psum[b]:
+            res.append(0)
+            continue
+
+        if (b-a)%2:
+            res.append(1)
+            continue            
+
+        res.append(2)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -61,29 +88,30 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
     
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
+    srr = input().strip()
+
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
