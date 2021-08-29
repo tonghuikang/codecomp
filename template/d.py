@@ -47,15 +47,90 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
-    
+
+    mrr = [row[::-1] for row in mrr]
+    indexes = {}
+    last = [row[-1] for row in mrr]
+
+    c = defaultdict(list)
+    for i,x in enumerate(last):
+        c[x].append(i)
+        indexes[x] = i
+
+    stack = [q for q in c.values() if len(q) == 2]
+
+    while stack:
+        i,j = stack.pop()
+        # log(i,j)
+
+        mrr[i].pop()
+        if mrr[i]:
+            if mrr[i][-1] in indexes:
+                stack.append((i, indexes[mrr[i][-1]]))
+
+        mrr[j].pop()
+        if mrr[j]:
+            if mrr[j][-1] in indexes:
+                stack.append((j, indexes[mrr[j][-1]]))
+
+        if mrr[j] and mrr[i] and mrr[i][-1] == mrr[j][-1]:
+            stack.append((i,j))
+
+        if mrr[i]:
+            indexes[mrr[i][-1]] = i
+
+        if mrr[j]:
+            indexes[mrr[j][-1]] = j
+
+    for row in mrr:
+        if row:
+            return "No"
+    return "Yes"
+
+
+    # c = Counter(last)
+
+    # pool = set()
+    # for k,v in c.items():
+    #     if v == 2:
+    #         pool.add(k)
+
+
+
+
+
+
+    # for i,row in enumerate(mrr[1:], start=1):
+    #     while row:
+
+    #         if row[-1] in indexes:
+    #             idx = indexes[row[-1]]
+    #             mrr[idx].pop()
+    #             row.pop()
+
+    #             if mrr[idx]:
+    #                 indexes[mrr[idx][-1]] = idx
+
+    #         else:
+    #             break
+
+    #     if row:
+    #         indexes[row[-1]] = i
+
+    # for row in mrr:
+    #     if row:
+    #         return
+
+
+
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -65,18 +140,20 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k*2)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    mrr = mrr[1::2]
+
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
