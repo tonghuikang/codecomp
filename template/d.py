@@ -281,15 +281,28 @@ class SortedList:
         return 'SortedList({0})'.format(list(self))
 
 
-def solve_():
+def solve_(length, qrr):
     # your solution here
 
-    return ""
+    s = SortedList([0, length])
+
+    allres = []
+    for op, val in qrr:
+        if op == 1:
+            s.add(val)
+            # log(s)
+        if op == 2:
+            idx = s.bisect_left(val)
+            # log(val, idx)
+            res = s[idx] - s[idx-1]
+            allres.append(res)
+
+    return allres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -301,23 +314,23 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    length, k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(length, qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
