@@ -13,7 +13,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+M9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -52,16 +52,55 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+@functools.lru_cache(maxsize=500)
+def factorial(x):
+    if x == 0:
+        return 1
+    return (factorial(x-1)*x) % M9
 
-def solve_():
+factorial(404)
+
+def solve_(n, mrr):
     # your solution here
-    
-    return ""
+
+    g = defaultdict(set)
+    for a,b in mrr:
+        g[a-1].add(b-1)
+        g[b-1].add(a-1)
+
+    dp = [[0 for _ in range(2*n+1)] for _ in range(2*n+1)]
+
+    for i in range(2*n+1):
+        dp[i][i] += 1
+
+    # for idx in zip(range(n-1)):
+    #     left, right = idx, idx+2
+    #     if right-1 in g[left]:
+    #         dp[left][right] = 1
+
+    for dist in range(2, 2*n+1, 2):
+
+        for left in range(2*n-dist+1):
+            right = left + dist
+            res = 0
+
+            for mid in range(left + 2, right, 2):
+                val = dp[left][mid] * dp[mid][right] * 2
+                res += val
+
+            if right-1 in g[left]:
+                val = dp[left+1][right-1]
+                res += val
+
+            dp[left][right] = res%M9
+            # log(left, right, res)
+
+    return dp[0][-1]%M9
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -71,19 +110,19 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
