@@ -4,6 +4,7 @@ import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
+from typing import DefaultDict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +48,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def solve_(mrr, k):
     # your solution here
-    
-    return ""
+
+    leaders = Counter()
+
+    g = defaultdict(list)
+    visited = set()
+
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    for i in range(1,k+1):
+        if i in visited:
+            continue
+
+        cnt = 0
+        stack = [i]
+        visited.add(i)
+
+        while stack:
+            cur = stack.pop()
+            cnt += 1
+            for nex in g[cur]:
+                if nex in visited:
+                    continue
+                stack.append(nex)
+                visited.add(nex)
+
+        leaders[i] = cnt
+
+    log(leaders)
+
+    a,b = leaders.values()
+    return a*b
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,14 +91,14 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
@@ -73,10 +106,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k-2)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
