@@ -2,8 +2,8 @@
 
 This contains the code template I use for competitive programming.
 
-[TOC]
-
+* auto-gen TOC:
+{:toc}
 
 
 ### Contest preparation script
@@ -11,9 +11,8 @@ This contains the code template I use for competitive programming.
 ```
 cd template
 git checkout -b $CONTEST_NAME
-ss
-sa code
-code .
+code .  # open VSCode
+python3 sample_gen.py  # and download test cases with jmerle/competitive-companion
 jn
 ```
 
@@ -34,7 +33,9 @@ alias pi="./run_pi.sh"
 
 ### How to use (general)
 
-Copy the test case to `a0`. If there are additional test cases copy them as `a1`, `a2` etc. I hope to automate this process
+Copy the test case to `a0`. If there is an expected output for the test case, copy it to `a0.out`
+
+If there are additional test cases copy them as `a1`, `a2` etc.
 
 
 
@@ -71,6 +72,7 @@ If you need to recursively call functions more than 1000 times, please use the f
 
 
 ##### Interactive questions
+
 - You can read input as usual.
 - When printing, please flush, i.e. `print(x, flush=True)`
 - At the end of the program, please execute `sys.exit()`
@@ -95,14 +97,14 @@ pxi 1
 
 
 
-##### Python Algorithm Templates 
+##### Python Algorithm Templates
 The following algorithmic templates should be available.
 
-- [AtCoder library](https://atcoder.github.io/ac-library/master/document_en/) 
+- [AtCoder library](https://atcoder.github.io/ac-library/master/document_en/)
   - (There is a [Python](https://github.com/not522/ac-library-python) [version](https://github.com/Mitarushi/ACL-Python) but probably I want to extract copiable snippets instead of running the script to transfer the functions.
 - Math
   - Ceiling division (ok)
-  - Inverse modulo (ok)
+  - Inverse modulo - Refer to PyRival
   - Prime factorisation (ok)
   - Chinese Remainder Theorem (please check)
   - Floor Sum
@@ -110,11 +112,11 @@ The following algorithmic templates should be available.
   - Binomial coefficient
 - Trees
   - Trie (ok)
-  - Fenwick Tree
-  - Segment Tree
+  - Fenwick Tree (ok)
+  - Segment Tree (I still don't understand)
   - Lazy Segment Tree
   - [intervaltree](https://github.com/chaimleib/intervaltree) clone
-  - [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) clone
+  - [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) - Refer to PyRival SortedList
 - Arrays
   - Prefix Sum
   - Longest Common Subsequence (ok)
@@ -130,7 +132,6 @@ The following algorithmic templates should be available.
   - [scipy.optimize](https://docs.scipy.org/doc/scipy/reference/optimize.html)
   - Gradient Descent
 - Graphs
-  - (Some code to process graphs)
   - Dijkstra Algorithm (ok)
   - Count Connected Components (ok)
   - Disjoint Set Union (ok)
@@ -165,21 +166,3 @@ I made the above command an alias, so in contests I run
 ```bash
 cx a
 ```
-
-
-
-
-
-
-## Todo
-
-- Automatically download test cases 
-  - From Codeforces given address like https://codeforces.com/contest/1519/problems
-
-CI/CD to check correctness and runtime of algorithm templates
-
-## Resources
-
-Recently I found a [competitive programing library in Python](https://github.com/cheran-senthil/PyRival).
-- I think I will continue developing this because it also saves all my participation attempts, and I want folders and files to navigate through.
-- Some code will be copied from there, I will change them to fit my style.

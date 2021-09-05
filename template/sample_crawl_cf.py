@@ -50,15 +50,15 @@ def parse_url(url, retries=RETRY_COUNT):
 
 if __name__ == "__main__":
     '''
-    Usage "python3 sample_gen_cf.py 1480"
+    Usage "python3 sample_crawl_cf.py 1480"
 
     You can test with contest ID 1480, which is Codeforces Round #700 Div. 2.
     The contest has both subproblems and multiple test cases
     '''
     parser = argparse.ArgumentParser(description='Parse the sample cases from a Codeforces contest')
-    parser.add_argument('contest_id', type=int, 
+    parser.add_argument('contest_id', type=int,
                         help="The Codeforces contest ID is found in the url")
-    parser.add_argument('retry', default=False, action="store_true", 
+    parser.add_argument('retry', default=False, action="store_true",
                         help="Whether to retry upon failure to connect")
     args = vars(parser.parse_args())
     url = 'https://codeforces.com/contest/{}/problems'.format(args['contest_id'])
