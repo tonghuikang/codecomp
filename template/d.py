@@ -57,7 +57,8 @@ def solve_(n, s):
         if n == 0:
             break
         demonination = 10**i
-        log(res)
+        res.sort(key=lambda x: x%demonination)
+        res.reverse()
         while n >= demonination:
             for i,x in enumerate(res):
                 next_target = demonination - x%demonination
