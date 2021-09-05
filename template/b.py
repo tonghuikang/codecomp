@@ -54,6 +54,7 @@ for i in range(LARGE):
     arr[i] = xor_val
     xor_val ^= i
 
+log(arr[:10])
 
 def solve_(a,b):
     # your solution here
@@ -64,10 +65,9 @@ def solve_(a,b):
     if b == xor_val:
         log("equal target")
         return a
-    if xor_val == 0:
-        if a == b:
-            log("equal zero")
-            return a+2
+    if xor_val^b == a:
+        log("need two to fix")
+        return a+2
     log("equal something else")
     return a+1
 
