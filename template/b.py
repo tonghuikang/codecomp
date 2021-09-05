@@ -46,12 +46,30 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+LARGE = 3*10**5 + 10
 
-def solve_():
+arr = [0]*(LARGE)
+xor_val = 0
+for i in range(LARGE):
+    arr[i] = xor_val
+    xor_val ^= i
+
+
+def solve_(a,b):
     # your solution here
-    
-    return ""
 
+    xor_val = arr[a]
+    log(a,b,xor_val)
+
+    if b == xor_val:
+        log("equal target")
+        return a
+    if xor_val == 0:
+        if a == b:
+            log("equal zero")
+            return a+2
+    log("equal something else")
+    return a+1
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -65,9 +83,9 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +94,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
 
     # print length if applicable
     # print(len(res))
