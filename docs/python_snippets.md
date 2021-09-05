@@ -209,6 +209,8 @@ c = Counter(lst)
 
 ##### Building a graph
 
+Your graph can be directed or undirected, and edge weights can be weighted or unweighted.
+
 ```python
 from collections import defaultdict
 def build_graph(edges, bidirectional=False, costs=None):
@@ -242,7 +244,7 @@ hq.heappop(lst)
 
 - The smallest element is always at `lst[0]`
 - Transforming an array into a heap takes linear time $n$.
-- Adding an element to the array takes $log(n)$ time. 
+- Adding an element to the array takes $log(n)$ time.
 - Removing the smallest element from the array takes $log(n)$ time.
 - [Visualisation](https://www.cs.usfca.edu/~galles/visualization/Heap.html) and [documentation](https://docs.python.org/3/library/heapq.html)
 
@@ -278,22 +280,20 @@ bisect.bisect_left(arr, x)
 # indexes:   0 1 2 3 4 5 6 7 8 9
 # x=2:             ^bisect_left = bisect_right
 # x=0:       ^bisect_left = bisect_right
+
+# array:    [1,1,1,3,3,3,3,3,4,4]
+# indexes:   0 1 2 3 4 5 6 7 8 9
 # x=3:  bisect_left^         ^bisect_right
 ```
 
-- The difference between `bisect_left` and `bisect_right` is  
 - [Documentation](https://docs.python.org/3/library/bisect.html)
 
 
 
 ##### Binary search on a function
 
-```python
-# TBC
-```
-
 - [Writeup on LeetCode](https://leetcode.com/discuss/general-discussion/786126/Python-Powerful-Ultimate-Binary-Search-Template.-Solved-many-problems)
-
+- I have written a template for all different usages of binary search.
 
 
 **Memoization**
@@ -314,7 +314,7 @@ def something
 
 ##### Zip Longest
 
-In default `zip` function, the iterator ends when the shortest element is finished. Instead of padding one of the arrays, you can use this. 
+In default `zip` function, the iterator ends when the shortest element is finished. Instead of padding one of the arrays, you can use this.
 
 ```python
 itertools.zip_longest(arr, brr, fillvalue=0)
@@ -338,14 +338,14 @@ from scipy.optimize import minimize
 
 class Solution:
     def getMinDistSum(self, positions):
-        
+
         def loss_function(z):
             loss = 0
             for a, b in positions:
-                loss += ((z[0] - a)**2 + 
+                loss += ((z[0] - a)**2 +
                          (z[1] - b)**2)**0.5
             return loss
-        
+
         res = minimize(loss_function, [0,0])
         print(res)
         return res.fun

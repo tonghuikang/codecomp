@@ -12,5 +12,8 @@ Only after participating in a few contests and if you are really interested in c
 
 For every competition, I will create a new branch out of `master` and edit my code in `template` folder. At the end of the competition, I will push my code to GitHub.
 
+## Usage
 
+This is my code reference that I am currently using, and it is designed for my own use. If it helps you, that is great!
 
+The most standard reference for Python Code Templates would be [PyRrival](https://github.com/cheran-senthil/PyRival). Many of my templates are copied or adapted from there. I also copy code from LeetCode solutions, as I can find neatly written solutions in the top-voted content.
