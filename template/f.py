@@ -76,14 +76,14 @@ def isBipartite(edges) -> bool:
                 stack.append((nex, not color))
                 colored[nex] = not color
 
-    return True
+    return True, colored
 
 def solve_(arr,h,w):
     # your solution here
-    res = [[0 for _ in row] for row in arr]
+    res = [[1 for _ in row] for row in arr]
 
     edges = []
-    diamonds = []
+    diamonds = {}
 
     for x,row in enumerate(arr):
         for y,cell in enumerate(row):
@@ -99,14 +99,24 @@ def solve_(arr,h,w):
                 if len(adj) == 2:
                     edges.append(adj)
                 if len(adj) == 4:
-                    diamonds.append(adj)
+                    diamonds[x,y] = adj
+                    edges.append(adj[:2])
+                    edges.append(adj[2:])
                 res[x][y] = len(adj)//2 * 5
 
-    if not isBipartite(edges):
+    is_bipartite, colored = isBipartite(edges)
+    if not is_bipartite:
         return -1
 
     log(edges)
     log(diamonds)
+    log(colored)
+
+    for (x,y), c in colored.items():
+        if c:
+            res[x][y] = 4
+        else:
+            res[x][y] = 1
 
     return res
 
