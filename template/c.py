@@ -46,11 +46,52 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+ways = []
+for i in range(20):
+    cnt = 0
+    for x in range(i+1):
+        y = i - x
+        if 0 <= y < 10 and 0 <= x < 10:
+            cnt += 1
+    # print(cnt)
+    ways.append(cnt)
 
-def solve_():
-    # your solution here
-    
-    return ""
+
+def solve_(x):
+    # consider 2**10 combinations of carrying over
+
+    arr = [int(x) for x in str(x).zfill(9)]
+    res = 0
+
+    for prod in itertools.product([0,1], repeat=7):
+        brr = [x for x in arr]
+        prod += (0,0)
+
+        crr = [a-b for a,b in zip(brr, prod)]
+        crr[2:] = [a + 10*b for a,b in zip(crr[2:], prod)]
+
+        cnt = 1
+        for x in crr:
+            if x < 0:
+                break
+            val = ways[x]
+            cnt *= val
+        else:
+
+            # log(crr)
+
+            # check if equal is possible
+            # if all(x%2 == 0 for x in crr):
+            #     cnt -= 1
+
+            # check if one is not positive
+            if all(x < 10 for x in crr):
+                cnt -= 2
+
+            # log(cnt)
+            res += cnt
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,14 +99,14 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
@@ -76,7 +117,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
