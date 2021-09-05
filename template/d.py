@@ -51,8 +51,20 @@ def solve_(n, s):
     # your solution here
 
     res = [1 for _ in range(s)]
-
     n -= s
+
+    for i in range(10,0,-1):
+        if n == 0:
+            break
+        demonination = 10**i
+        log(res)
+        while n >= demonination:
+            for i,x in enumerate(res):
+                next_target = demonination - x%demonination
+                if n >= next_target:
+                    res[i] += next_target
+                    n -= next_target
+
     res[0] += n
 
     cnt = 0
