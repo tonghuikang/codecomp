@@ -135,6 +135,8 @@ def solve_(xrr, yrr, mrr):
         if y in yset:
             brr.append((x,y))
 
+    del xset
+    del yset
 
     arr.sort()
     brr.sort()
@@ -148,26 +150,24 @@ def solve_(xrr, yrr, mrr):
     cntr = Counter()
     for y,x in arr:
         if x == -1:
-            res += cnt * (cnt-1) //2
-            # res -= sum(v*(v-1)//2 for v in cntr.values())
             cnt = 0
             cntr = Counter()
         else:
-            cnt += 1
+            res += cnt
             res -= cntr[x]
+            cnt += 1
             cntr[x] += 1
 
     cnt = 0
     cntr = Counter()
     for x,y in brr:
         if y == -1:
-            res += cnt * (cnt-1) //2
-            # res -= sum(v*(v-1)//2 for v in cntr.values())
             cnt = 0
             cntr = Counter()
         else:
-            cnt += 1
+            res += cnt
             res -= cntr[y]
+            cnt += 1
             cntr[y] += 1
 
     return res
