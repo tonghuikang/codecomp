@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -48,9 +46,7 @@ def minus_one_matrix(mrr):
 
 
 import os
-import sys
 from io import BytesIO, IOBase
-sys.setrecursionlimit(300000)
 
 BUFSIZE = 8192
 
@@ -107,7 +103,10 @@ input = lambda: sys.stdin.readline().rstrip("\r\n")
 LARGE = 10**7
 
 
-def solve_(xrr, yrr, mrr):
+def solve_():
+    n,m,k = list(map(int,input().split()))
+    xrr = list(map(int,input().split()))
+    yrr = list(map(int,input().split()))
     # your solution here
 
     # include/exclude pairs on the same street
@@ -124,6 +123,10 @@ def solve_(xrr, yrr, mrr):
     arr = [(y,-1) for y in yrr]
     brr = [(x,-1) for x in xrr]
 
+    del xrr
+    del yrr
+
+    mrr = read_matrix(k)  # and return as a list of list of int
     for x,y in mrr:
         # exclude all people staying on horizontal and vertical street
         if x in xset and y in yset:
@@ -137,9 +140,10 @@ def solve_(xrr, yrr, mrr):
 
     del xset
     del yset
+    del mrr
 
-    arr.sort()
-    brr.sort()
+    arr.sort(key=lambda x: x[0])
+    brr.sort(key=lambda x: x[0])
 
     # log(arr)
     # log(brr)
@@ -187,18 +191,14 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    n,m,k = list(map(int,input().split()))
-    xrr = list(map(int,input().split()))
-    yrr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # xrr = read_strings(k)  # and return as a list of str
     # yrr = read_strings(k)  # and return as a list of str
-    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(xrr, yrr, mrr)  # include input here
+    res = solve()  # include input here
 
     # print length if applicable
     # print(len(res))
