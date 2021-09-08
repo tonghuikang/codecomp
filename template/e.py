@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import time
+start_time = time.time()
+
 import sys
 import getpass  # not available on codechef
 import math, random
@@ -47,15 +50,46 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(k,a,h):
+    num_matches = (2**k) - 1
     # your solution here
-    
-    return ""
+
+    placings = [1,2,3,5,9,17]
+
+    # for i in range(k):
+    #     min_level = sum(range(0, 2**k, 2**(k-i)))
+    #     max_level = sum(range(2**(k-i)-1, 2**k, 2**(k-i)))
+    #     log(min_level, max_level)
 
 
-# for case_num in [0]:  # no loop over test case
+    while time.time() - start_time < 3.8:
+        arr = [1]
+        for i in range(1,k+1):
+            brr = []
+            for x in arr:
+                if random.getrandbits(1) == 1:
+                    brr.append(x)
+                    brr.append(placings[i])
+                else:
+                    brr.append(placings[i])
+                    brr.append(x)
+            arr = brr
+        log(arr)
+
+        res = 0
+        for i,p in enumerate(arr, start=1):
+            res += i * pow(a,p,998244352)
+            res = res%998244352
+        log(res)
+        if res%998244352 == h:
+            return arr
+
+    return [-1]
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -65,10 +99,10 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    a,b,c = list(map(int,input().split()))
+    # arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,13 +110,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,c)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
