@@ -62,26 +62,31 @@ def solve_(k,a,h):
     #     log(min_level, max_level)
 
 
-    while time.time() - start_time < 3.8:
+    # while time.time() - start_time < 3.8:
+    for bitstring in range(2**(2**k-1)):
+        # log(bitstring)
         arr = [1]
+        idx = 0
         for i in range(1,k+1):
             brr = []
             for x in arr:
-                if random.getrandbits(1) == 1:
+                if (1 << idx) & bitstring:
                     brr.append(x)
                     brr.append(placings[i])
                 else:
                     brr.append(placings[i])
                     brr.append(x)
+                idx += 1
             arr = brr
-        log(arr)
 
         res = 0
         for i,p in enumerate(arr, start=1):
-            res += i * pow(a,p,998244352)
-            res = res%998244352
-        log(res)
-        if res%998244352 == h:
+            val = i * pow(a,p,998244353)
+            res += val
+            # log(val)
+            res = res%998244353
+        # log(res)
+        if res%998244353 == h:
             return arr
 
     return [-1]
@@ -101,7 +106,7 @@ for case_num in [0]:  # no loop over test case
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    a,b,c = list(map(int,input().split()))
+    k,a,h = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -110,7 +115,7 @@ for case_num in [0]:  # no loop over test case
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(a,b,c)  # include input here
+    res = solve(k,a,h)  # include input here
 
     # print length if applicable
     # print(len(res))
