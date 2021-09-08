@@ -55,7 +55,7 @@ def solve_(srr):
     for i in range(len(srr)):
         res[i][i] = "X"
 
-    if srr.count("2") == 1:
+    if srr.count("2") == 1 or srr.count("2") == 2:
         return []
 
     arr = [i for i,x in enumerate(srr) if x == "2"]
