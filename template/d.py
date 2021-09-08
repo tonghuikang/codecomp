@@ -47,10 +47,69 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(xrr, yrr, mrr):
     # your solution here
-    
-    return ""
+
+    # include/exclude pairs on the same street
+    # include pairs of different streets
+
+    xset = set(xrr)
+    yset = set(yrr)
+
+    LARGE = 10**7
+    xset.add(-1)
+    xset.add(LARGE)
+    yset.add(-1)
+    yset.add(LARGE)
+
+    arr = [(y,-1) for y in yrr]
+    brr = [(x,-1) for x in xrr]
+
+    for x,y in mrr:
+        # exclude all people staying on horizontal and vertical street
+        if x in xset and y in yset:
+            continue
+
+        if x in xset:
+            arr.append((y,x))
+
+        if y in yset:
+            brr.append((x,y))
+
+
+    arr.sort()
+    brr.sort()
+
+    # log(arr)
+    # log(brr)
+
+    res = 0
+
+    cnt = 0
+    cntr = Counter()
+    for y,x in arr:
+        if x == -1:
+            res += cnt * (cnt-1) //2
+            res -= sum(v*(v-1)//2 for v in cntr.values())
+            cnt = 0
+            cntr = Counter()
+        else:
+            cnt += 1
+            cntr[x] += 1
+
+    cnt = 0
+    cntr = Counter()
+    for x,y in brr:
+        if y == -1:
+            res += cnt * (cnt-1) //2
+            res -= sum(v*(v-1)//2 for v in cntr.values())
+            cnt = 0
+            cntr = Counter()
+        else:
+            cnt += 1
+            cntr[y] += 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -65,18 +124,20 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
+    xrr = list(map(int,input().split()))
+    yrr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    # xrr = read_strings(k)  # and return as a list of str
+    # yrr = read_strings(k)  # and return as a list of str
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(xrr, yrr, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
