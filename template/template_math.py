@@ -35,7 +35,7 @@ def is_prime(n):
         primitives = set([2, 7, 61])
         if n in primitives:
             return True
-    
+
     if n % 2 == 0:
         return False
 
@@ -78,7 +78,7 @@ def get_all_divisors_given_prime_factorization(factors):
     for prime, count in c.most_common()[::-1]:
         l = len(divs)
         prime_pow = 1
- 
+
         for _ in range(count):
             prime_pow *= prime
             for j in range(l):
@@ -162,16 +162,16 @@ def ncr(n, r):
     return n * ncr(n-1, r-1) // r
 
 
-def factorial_mod_p(n, p):
-    val = 1
-    for i in range(1,n+1):
-        val = (val*i)%p
-    return val
+LARGE = 10**5 + 10
+p = 10**9 + 7
+factorial_mod_p = [1 for _ in range(LARGE)]
+for i in range(1,LARGE):
+    factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
 
 
-def ncr_mod_p(n, r, p):
-    num = factorial_mod_p(n)
-    dem = factorial_mod_p(r)*factorial_mod_p(n-r)
+def ncr_mod_p(n, r, p=p):
+    num = factorial_mod_p[n]
+    dem = factorial_mod_p[r]*factorial_mod_p[n-r]
     return (num * pow(dem, p-2, p))%p
 
 
@@ -180,7 +180,7 @@ def ncr_mod_p(n, r, p):
 
 def floor_sum_over_divisor(n,k,j):
     # https://math.stackexchange.com/questions/384520/efficient-computation-of-sum-k-1n-lfloor-fracnk-rfloor
-    # https://mathoverflow.net/questions/48357/summation-of-a-series-of-floor-functions       
+    # https://mathoverflow.net/questions/48357/summation-of-a-series-of-floor-functions
     def floor_sum_over_divisor_(n,k,j):
         return sum(n//d for d in range(j+1, k+1))
     return floor_sum_over_divisor_(n, n//j, n//k) + k*(n//k) - j*(n//j)
@@ -248,7 +248,7 @@ def convolution(a,b):
                 for p in range(m):
                     a[s+p], a[s+p+m] = (a[s+p]+a[s+p+m]*w_N)%MOD, (a[s+p]-a[s+p+m]*w_N)%MOD
                     w_N = w_N*iroots[i+1]%MOD
-                
+
         inv = pow((MOD+1)//2,n,MOD)
         for i in range(1<<n):
             a[i] = a[i]*inv%MOD
@@ -284,7 +284,7 @@ def walsh_hadamard(my_freqs):
     # https://leetcode.com/problems/count-pairs-with-xor-in-a-range/discuss/1119975/
     my_max = len(my_freqs)
 
-    # If our array's length is not a power of 2, 
+    # If our array's length is not a power of 2,
     # increase its length by padding zeros to the right
     if my_max & (my_max - 1):
         my_max = 2 ** (my_max.bit_length())
@@ -534,7 +534,7 @@ def shunting_yard(tokens: Iterable[str]) -> Iterable[StackItem]:
             may_be_unary = True
         else:
             raise TokenError(f'token "{token}" is unknown')
- 
+
     while op_stack:
         yield op_stack.pop()
 
@@ -577,5 +577,3 @@ def evaluate_expression(data: str) -> Number:
 # get all combination of factors of an integer
 # https://leetcode.com/problems/count-ways-to-make-array-with-product/
 # https://www.geeksforgeeks.org/print-combinations-factors-ways-factorize/
-
-
