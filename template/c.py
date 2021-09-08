@@ -47,10 +47,56 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+p = 998244353
+
+qrr = [1 for _ in range(2*10**5 + 10)]
+val = 1
+for i in range(1,2*10**5 + 5):
+    val = (val*i)%p
+    qrr[i] = val
+
+def factorial_mod_p(n, p):
+    return qrr[n]
+
+@functools.lru_cache(maxsize=2*10**5 + 10)
+def ncr_mod_p(n, r, p):
+    num = factorial_mod_p(n, p)
+    dem = factorial_mod_p(r, p)*factorial_mod_p(n-r, p)
+    return (num * pow(dem, p-2, p))%p
+
+p = 998244353
+factorial_mod_p(2*10**5+1, p)
+
+
+def solve_(arr):
     # your solution here
-    
-    return ""
+    p = 998244353
+
+    if len(arr) == 1:
+        return 1
+
+    c = Counter(arr)
+    maxarr = max(c)
+    if c[maxarr] > 1:
+        return factorial_mod_p(len(arr), p)
+
+    if c[maxarr-1] == 0:
+        return 0
+
+    k = c[maxarr-1]
+    r = len(arr) - k - 1
+
+    # (k+1)! - k!
+    # r!
+    # r+k+2 C k+1
+
+    a = factorial_mod_p(k+1, p) - factorial_mod_p(k, p)
+    b = factorial_mod_p(r, p)
+    c = ncr_mod_p(r+k+1, k+1, p)
+
+    log(k,r,a,b,c)
+
+    return (a*b*c)%p
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,17 +104,17 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +122,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
