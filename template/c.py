@@ -47,36 +47,67 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr,brr,k):
+    arr = [list(row) for row in arr]
     # your solution here
-    
-    return ""
+
+    def flush(crr):
+        minx,miny = k,k
+        maxx,maxy = 0,0
+        for x,row in enumerate(crr):
+            for y,cell in enumerate(row):
+                if cell == "#":
+                    minx = min(minx,x)
+                    miny = min(miny,y)
+                    maxx = max(maxx,x)
+                    maxy = max(maxy,y)
+        return [tuple(row[miny:maxy+1]) for row in crr[minx:maxx+1]]
+
+    brr = flush(brr)
+
+    arr = flush(arr)
+    matrix = [row for row in arr]
+    for _ in range(4):
+        matrix = [col[::-1] for col in zip(*matrix)]  # once
+
+        # log()
+        # for row in arr:
+        #     log(row)
+        # log()
+        # for row in matrix:
+        #     log(row)
+        # log()
+
+        if flush(matrix) == brr:
+            return "Yes"
+    return "No"
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(k)  # and return as a list of str
+    brr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr,k)  # include input here
 
     # print length if applicable
     # print(len(res))
