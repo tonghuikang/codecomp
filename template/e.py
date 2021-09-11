@@ -90,19 +90,27 @@ def minimum_spanning_tree(edge_and_cost):
     ds = DisjointSet()
     total_tree_cost = 0
     edge_and_cost.sort(key = lambda x:x[2])
+    cost_set = Counter()
     for u, v, cost in edge_and_cost:
         if ds.find(u) != ds.find(v):
             ds.union(u, v)
             total_tree_cost += cost
-    return total_tree_cost
+            cost_set[cost] += 1
+    return total_tree_cost, cost_set
 
 
 def solve_(mrr, n):
     # your solution here
     mrr = [(u,v,c) for u,v,c in mrr]
-    allcost = sum(x[2] for x in mrr)
+    allcost_set = Counter(x[2] for x in mrr)
+    mincost, cost_set = minimum_spanning_tree(mrr)
 
-    return allcost - minimum_spanning_tree(mrr)
+    res = 0
+    for k,v in allcost_set.items():
+        if k > 0:
+            res += (allcost_set[k] - cost_set[k]) * k
+    return res
+
 
 
 for case_num in [0]:  # no loop over test case
