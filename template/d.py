@@ -56,9 +56,11 @@ def solve_(mrr):
 
     for i,(a,b) in enumerate(mrr):
         for c,d in mrr[i+1:]:
-            if (a,d) in allset and (b,d) in allset and a != c and b != d:
-                log(a,b,c,d)
+            if (a,d) in allset and (c,b) in allset and a != c and b != d:
+                # log(a,b,c,d)
                 res += 1
+
+    assert res%2 == 0
 
     return res//2
 
