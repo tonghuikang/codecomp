@@ -8,7 +8,7 @@ input = sys.stdin.readline  # to read input quickly
 
 # import sys, threading
 # threading.stack_size(2**27)
-sys.setrecursionlimit(10**5 + 20)
+# sys.setrecursionlimit(10**5 + 20)
 
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -338,7 +338,7 @@ def solve_(arr, mrr):
         for nex in g[cur]:
             if nex in visited:
                 continue
-            calculate_median(nex)
+            yield calculate_median(nex)
             flag = False
 
         if flag:  # leaf
@@ -346,6 +346,7 @@ def solve_(arr, mrr):
             leaf_val[cur] = med
 
         sl.remove(curval)
+        yield
 
     calculate_median(0)
 
@@ -360,19 +361,20 @@ def solve_(arr, mrr):
         for nex in g[cur]:
             if nex in visited:
                 continue
-            val = game(nex, maximise = not maximise)
+            val = yield game(nex, maximise = not maximise)
             vals.append(val)
 
         # log(cur, vals)
         if not vals:  # leaf
-            return leaf_val[cur]
+            yield leaf_val[cur]
 
         if maximise:
-            return max(vals)
+            yield max(vals)
         else:
-            return min(vals)
+            yield min(vals)
 
-    return game(0)
+    res = game(0)
+    return res
 
 
 for case_num in [0]:  # no loop over test case
