@@ -52,16 +52,66 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def dijkstra(list_of_indexes_and_costs, start):
+    # short path with nonnegative edge costs
+    # leetcode.com/problems/path-with-maximum-probability/
+    # leetcode.com/problems/network-delay-time/
+    length = len(list_of_indexes_and_costs)
+    visited = [False]*length
+    weights = [MAXINT]*length
+    path = [None]*length
+    queue = deque([(0, start)])
+    weights[start] = 0
+    while queue:
+        g, u = queue.popleft()
+        visited[u] = True
+        for v, w in list_of_indexes_and_costs[u]:
+            if not visited[v]:
+                f = g + w
+                if f < weights[v]:
+                    weights[v] = f
+                    path[v] = u
+                    queue.append((f, v))
+    return path, weights
 
-def solve_():
+
+def solve_(mrr,n):
     # your solution here
-    
-    return ""
+
+    list_of_indexes_and_costs = [[] for _ in range(n)]
+    for u,v in mrr:
+        list_of_indexes_and_costs[u].append((v,1))
+
+    path, weights_without = dijkstra(list_of_indexes_and_costs, start=0)
+    edges_in_shortest = set()
+    cur = n-1
+    while cur != 0:
+        if cur == None:
+            edges_in_shortest = set()
+            break
+        prev = path[cur]
+        edges_in_shortest.add((prev, cur))
+        cur = prev
+
+    # log(edges_in_shortest)
+
+    res = []
+    for u,v in mrr:
+        if (u,v) in edges_in_shortest:
+            list_of_indexes_and_costs[u].remove((v,1))
+            _, weights = dijkstra(list_of_indexes_and_costs, start=0)
+            res.append(weights[-1])
+            list_of_indexes_and_costs[u].append((v,1))
+        else:
+            res.append(weights_without[-1])
+
+    res = [-1 if x == MAXINT else x for x in res]
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -71,26 +121,26 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # arr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr,n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
