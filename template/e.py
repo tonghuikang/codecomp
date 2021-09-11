@@ -45,17 +45,69 @@ def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.leader(a)]
 
 
-def solve_():
+def minimum_spanning_tree(edge_and_cost):
+    # leetcode.com/problems/min-cost-to-connect-all-points
+    ds = DisjointSet()
+    total_tree_cost = 0
+    edge_and_cost.sort(key = lambda x:x[2])
+    for u, v, cost in edge_and_cost:
+        if ds.find(u) != ds.find(v):
+            ds.union(u, v)
+            total_tree_cost += cost
+    return total_tree_cost
+
+
+def solve_(mrr, n):
     # your solution here
-    
-    return ""
+    mrr = [(u,v,c) for u,v,c in mrr]
+    allcost = sum(x[2] for x in mrr)
+
+    return allcost - minimum_spanning_tree(mrr)
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -65,18 +117,18 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n, k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
