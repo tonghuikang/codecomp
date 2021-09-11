@@ -46,7 +46,7 @@ def longest_increasing_subsequence(nums):
     # leetcode.com/problems/longest-increasing-subsequence/discuss/667975/
     dp = [MAXINT] * (len(nums) + 1)
     for elem in nums:
-        dp[bisect.bisect_left(dp, elem)] = elem  
+        dp[bisect.bisect_left(dp, elem)] = elem
     return dp.index(MAXINT)
 
 
@@ -69,7 +69,7 @@ def RabinKarp(arr, window_size, modulus):
     h, t, d = (1<<(17*window_size-17))%modulus, 0, 1<<17
     all_hashes = set()
 
-    for i in range(window_size): 
+    for i in range(window_size):
         t = (d * t + arr[i])%modulus
 
     all_hashes.add(t)
@@ -111,26 +111,26 @@ def sliding_window_median(nums, k):
         heapq.heappush(h2, (-x, i))
 
     def get_med(h1, h2, k):
-        return h2[0][0] * 1. if k & 1 else (h2[0][0]-h1[0][0]) / 2.        
+        return h2[0][0] * 1. if k & 1 else (h2[0][0]-h1[0][0]) / 2.
 
     small, large = [], []
-    for i, x in enumerate(nums[:k]): 
+    for i, x in enumerate(nums[:k]):
         heapq.heappush(small, (-x,i))
-    for _ in range(k-(k>>1)): 
+    for _ in range(k-(k>>1)):
         move(small, large)
     ans = [get_med(small, large, k)]
     for i, x in enumerate(nums[k:]):
         if x >= large[0][0]:
             heapq.heappush(large, (x, i+k))
-            if nums[i] <= large[0][0]: 
+            if nums[i] <= large[0][0]:
                 move(large, small)
         else:
             heapq.heappush(small, (-x, i+k))
-            if nums[i] >= large[0][0]: 
+            if nums[i] >= large[0][0]:
                 move(small, large)
-        while small and small[0][1] <= i: 
+        while small and small[0][1] <= i:
             heapq.heappop(small)
-        while large and large[0][1] <= i: 
+        while large and large[0][1] <= i:
             heapq.heappop(large)
         ans.append(get_med(small, large, k))
     return ans
@@ -187,4 +187,3 @@ def manachers(S):
         if i + Z[i] > right:
             center, right = i, i + Z[i]
     return Z[2:-2:2]
-

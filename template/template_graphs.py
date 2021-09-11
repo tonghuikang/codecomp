@@ -57,7 +57,7 @@ def count_connected_components_undirected(map_from_node_to_nodes, total_elements
         components += 1
     if not total_elements:  # if all elements are already specified in the map
         return components
-    
+
     return components + total_elements - len(map_from_node_to_nodes)
 
 
@@ -66,7 +66,7 @@ def find_strongly_connected_components(graph):
     # input - list of node to nodes?
     SCC, S, P = [], [], []
     depth = [0] * len(graph)
- 
+
     stack = list(range(len(graph)))
     while stack:
         node = stack.pop()
@@ -143,7 +143,7 @@ def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target
         d[target] = []
     if source not in d:
         return MAXINT
-    
+
     # assign indexes
     if idxs:
         idxs = {k:i for i,k in enumerate(idxs)}
@@ -378,7 +378,7 @@ def clique_cover(edges, N):
     edges = set(tuple(edge) for edge in edges)
     ccs = [[1]]
     ret = 100
-    
+
     def visit(pos):
         nonlocal ret
         # debug(pos, ccs, msg=":pos")

@@ -57,7 +57,7 @@ class Trie:
                 return False
             current_dict = current_dict[letter]
         return "_end_" in current_dict
-            
+
     def delete(self, word, prune=False):
         current_dict = self.root
         nodes = [current_dict]
@@ -66,17 +66,17 @@ class Trie:
             current_dict = current_dict[letter]
             nodes.append(current_dict)
             objects.append(current_dict)
-            
+
         del current_dict["_end_"]
 
-        if prune:    
+        if prune:
             # https://leetcode.com/problems/maximum-genetic-difference-query/discuss/1344900/
             for c,obj in zip(word[::-1], objects[:-1][::-1]):
                 if not obj[c]:
                     del obj[c]
                 else:
                     break
-        
+
         # assert word not in self  # confirm that the number has been removed
 
 
@@ -91,14 +91,14 @@ class FenwickTree:
     def __init__(self, bits=31):
         self.c = defaultdict(int)
         self.LARGE = 2**bits
-        
+
     def update(self, x, increment):
         x += 1  # to avoid infinite loop at x > 0
         while x <= self.LARGE:
             # increase by the greatest power of two that divides x
             self.c[x] += increment
             x += x & -x
-        
+
     def query(self, x):
         x += 1  # to avoid infinite loop at x > 0
         res = 0

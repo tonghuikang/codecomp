@@ -49,7 +49,7 @@ def minus_one_matrix(mrr):
 
 def solve_():
     # your solution here
-    
+
     return ""
 
 
@@ -65,7 +65,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as a string
     # lst = input().split()
-    
+
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))

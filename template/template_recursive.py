@@ -6,6 +6,16 @@
 # https://codeforces.com/blog/entry/80158?locale=en
 from types import GeneratorType
 def bootstrap(f, stack=[]):
+    # usage - please remember to YIELD to call and return
+    '''
+    @bootstrap
+    def recurse(n):
+        if n <= 0:
+            yield 0
+        yield (yield recurse(n-1)) + 2
+
+    res = recurse(10**5)
+    '''
     def wrappedfunc(*args, **kwargs):
         if stack:
             return f(*args, **kwargs)
