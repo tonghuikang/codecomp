@@ -53,17 +53,18 @@ def solve_(srr):
     # O
     # X
 
+    n = len(srr)
 
-    srr = [c for c in srr if c != "F"]
+    srr = [(i,c) for i,c in enumerate(srr) if c != "F"]
 
     if len(srr) == 0:
         return 0
 
     res = 0
-    for a,b in zip(srr, srr[1:]):
+    for (i,a),(j,b) in zip(srr, srr[1:]):
         if a != b:
-            res += 1
-    return res
+            res += (n-j)*(i+1)
+    return res%M9
 
 
 
