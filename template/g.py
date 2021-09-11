@@ -6,9 +6,9 @@ import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
-import sys, threading
-threading.stack_size(2**27)
-sys.setrecursionlimit(10**6 + 5)
+# import sys, threading
+# threading.stack_size(2**27)
+sys.setrecursionlimit(10**5 + 20)
 
 
 # available on Google, AtCoder Python3, not available on Codeforces
