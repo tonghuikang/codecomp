@@ -88,13 +88,13 @@ for mrr in cases:
     # - number of buds
     # + 1
 
-    global total_children_not_a_bud
-    global total_count_buds
-    total_children_not_a_bud = 0
-    total_count_buds = 0
+    # global total_children_not_a_bud
+    # global total_count_buds
+    total_children_not_a_bud = {0:0}
+    total_count_buds = {0:0}
 
-    buds = set()
-    children_who_are_not_buds = set()
+    # buds = set()
+    # children_who_are_not_buds = set()
     has_children = [False for _ in range(k+2)]
     has_children_who_are_not_buds = [False for _ in range(k+2)]
 
@@ -125,26 +125,32 @@ for mrr in cases:
 
 
     def return_operation(prev, cur):
+        # global total_children_not_a_bud
+        # global total_count_buds
+
         if has_children[cur] and has_children_who_are_not_buds[cur]:
-            buds.add(cur)
+            total_count_buds[0] += 1
+            # buds.add(cur)
+        else:
+            # children_who_are_not_buds.add(cur)
+            has_children_who_are_not_buds[prev] = True
+            if cur != 1:
+                total_children_not_a_bud[0] += 1
 
         has_children[prev] = True
-        if not cur in buds:
-            children_who_are_not_buds.add(cur)
-            has_children_who_are_not_buds[prev] = True
 
     # g[0].append(1)
     # log(num_children_not_a_bud)
     # log(buds)
     # log(non_buds)
     dfs_bare_bones(1, g, return_operation)
-    children_who_are_not_buds.discard(1)
+    # children_who_are_not_buds.discard(1)
 
     # print()
     # print(buds)
     # print(children_who_are_not_buds)
 
-    res = len(children_who_are_not_buds) - len(buds) + 1
+    res = total_children_not_a_bud[0] - total_count_buds[0] + 1
     all_res.append(res)
 
 all_res = "\n".join(str(x) for x in all_res)
