@@ -73,38 +73,40 @@ class FenwickTree:
         return res
 
 
-def solve_(mrr, n, m):
+def solve_(arr, n, m):
     # your solution here
-
+    mrr = [x for x in arr]
 
     mrr = [(q,-i) for i,q in enumerate(mrr)]
     mrr.sort()
 
     d = defaultdict(lambda: defaultdict(list))
-    for q,ni in mrr:
-        i = -ni
-        x,y = divmod(i, m)
-        log(x,y)
+    for j,(q,ni) in enumerate(mrr):
+        x,y = divmod(j, m)
         d[q][x].append(y)
 
-    log(d)
+    # for q in d:
+    #     for x in d[q]:
+    #         d[q][x] = d[q][x][::-1]
+    # log(d)
 
     res = 0
 
-    occupied = [FenwickTree(bits=10) for _ in range(n)]
-    for q,i in mrr:
-        minval = m-1
+    occupied = [FenwickTree(bits=20) for _ in range(n)]
+    for _,q in enumerate(arr):
+        minval = 400, 400
         minidx = -1,-1
         for x in d[q]:
             y = d[q][x][-1]
-            log(x,y)
-            val = occupied[x].query(y)
+            # log(x,y)
+            val = m-y-1 - occupied[x].query(m-y), x
             if val <= minval:
                 minval = val
                 minidx = x,y
-        occupied[x].update(y,1)
-        res += minval
+        res += minval[0]
         x,y = minidx
+        occupied[x].update(m-y,1)
+        # log(q,x,y,minval)
         d[q][x].pop()
         if not d[q][x]:
             del d[q][x]
