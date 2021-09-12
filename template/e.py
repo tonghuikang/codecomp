@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-from collections import defaultdict
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -107,7 +106,7 @@ for mrr in cases:
     # log(k)
     # log(mrr)
 
-    g = defaultdict(list)
+    g = [[] for i in range(len(mrr)+2)]
     for a,b in mrr:
         g[a].append(b)
         g[b].append(a)
@@ -120,11 +119,15 @@ for mrr in cases:
     # - number of buds
     # + 1
 
+    global total_children_not_a_bud
+    global total_count_buds
+    total_children_not_a_bud = 0
+    total_count_buds = 0
 
     @bootstrap
     def is_bud(cur):
-        total_count_buds = 0
-        total_children_not_a_bud = 0
+        global total_children_not_a_bud
+        global total_count_buds
 
         num_children = 0
         num_children_not_bud = 0
@@ -134,24 +137,24 @@ for mrr in cases:
             if nex in visited:
                 continue
             visited.add(nex)
-            child_is_bud, count_buds, children_not_a_bud = yield is_bud(nex)
+            child_is_bud = yield is_bud(nex)
 
             num_children += 1
-            total_count_buds += count_buds
-            total_children_not_a_bud += children_not_a_bud
 
             if not child_is_bud:
+                total_children_not_a_bud += 1
                 num_children_not_bud += 1
 
         # this is not a bud
         if num_children == 0 or num_children_not_bud == 0:
-            yield False, total_count_buds, total_children_not_a_bud + num_children_not_bud
+            yield False
 
         # this is a bud
-        yield True, total_count_buds + 1, total_children_not_a_bud + num_children_not_bud
+        total_count_buds += 1
+        yield True
 
     visited.add(1)
-    _, total_count_buds, total_children_not_a_bud = is_bud(1)
+    is_bud(1)
 
     # log(num_children_not_a_bud)
     # log(buds)
