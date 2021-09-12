@@ -67,13 +67,8 @@ cases = []
 for case_num in range(int(input())):
     # your solution here
     k = int(input())
-    cases.append(read_matrix(k-1))  # and return as a list of list of int
-
-
-for mrr in cases:
-    # log(k)
-    # log(mrr)
-    k = len(mrr)
+    mrr = read_matrix(k-1)
+    # cases.append()  # and return as a list of list of int
 
     g = [[] for i in range(k+2)]
     for a,b in mrr:
@@ -100,39 +95,38 @@ for mrr in cases:
 
 
     start = 1
-    if True:
-        # hacked this out due to strict time limit because recursive dfs resulted in TLE
-        # https://codeforces.com/contest/1528/problem/A
-        # instead of returning a value, read and update an external data structure instead
-        entered = set([start])
-        exiting = set()
-        stack = [start]
-        prevs = {start: 0}
+    # hacked this out due to strict time limit because recursive dfs resulted in TLE
+    # https://codeforces.com/contest/1528/problem/A
+    # instead of returning a value, read and update an external data structure instead
+    entered = set([start])
+    exiting = set()
+    stack = [start]
+    prevs = {start: 0}
 
-        while stack:
-            cur = stack[-1]
-            if cur in exiting:
-                stack.pop()
-                if cur in prevs:
-                    prev = prevs[cur]
-                    if has_children[cur] and has_children_who_are_not_buds[cur]:
-                        total_count_buds += 1
-                        # buds.add(cur)
-                    else:
-                        # children_who_are_not_buds.add(cur)
-                        has_children_who_are_not_buds[prev] = True
-                        if cur != 1:
-                            total_children_not_a_bud += 1
+    while stack:
+        cur = stack[-1]
+        if cur in exiting:
+            stack.pop()
+            if cur in prevs:
+                prev = prevs[cur]
+                if has_children[cur] and has_children_who_are_not_buds[cur]:
+                    total_count_buds += 1
+                    # buds.add(cur)
+                else:
+                    # children_who_are_not_buds.add(cur)
+                    has_children_who_are_not_buds[prev] = True
+                    if cur != 1:
+                        total_children_not_a_bud += 1
 
-                    has_children[prev] = True
+                has_children[prev] = True
+            continue
+        for nex in g[cur]:
+            if nex in entered:
                 continue
-            for nex in g[cur]:
-                if nex in entered:
-                    continue
-                entered.add(nex)
-                stack.append(nex)
-                prevs[nex] = cur
-            exiting.add(cur)
+            entered.add(nex)
+            stack.append(nex)
+            prevs[nex] = cur
+        exiting.add(cur)
 
 
     # def return_operation(prev, cur):
