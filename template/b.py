@@ -52,15 +52,16 @@ def solve_(srr):
 
     if "0" not in srr:
         return 0
+
     if "1" not in srr:
         return 1
 
     # if 11000 or 00111
-
     if ("01" in srr) + ("10" in srr) == 1:
         return 1
 
-    if ("01" in srr) and ("10" in srr) and srr.index("10") < srr.index("01"):
+    # if 11100001111
+    if (srr.count("10") == 1) and (srr.count("01") == 1) and srr.index("10") < srr.index("01"):
         return 1
 
     return 2
