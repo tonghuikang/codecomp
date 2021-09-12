@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 import sys
 
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-
 BUFSIZE = 8192
 
 import os
@@ -56,6 +52,10 @@ class IOWrapper(IOBase):
 sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
 input = lambda: sys.stdin.readline().rstrip("\r\n")
 
+def read_matrix(rows):
+    return [list(map(int,input().split())) for _ in range(rows)]
+
+
 
 # ---------------------------- template ends here ----------------------------
 
@@ -75,7 +75,7 @@ for case_num in range(int(input())):
         g[a].append(b)
         g[b].append(a)
 
-    del mrr
+    # del mrr
 
     visited = set()
 
