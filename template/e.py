@@ -147,9 +147,6 @@ def solve_():
 
     del mrr
 
-    buds = set()
-    non_buds = set()
-    num_children_not_a_bud = []
     visited = set()
 
     # + number of children that is not a bud
@@ -159,31 +156,41 @@ def solve_():
 
     @bootstrap
     def is_bud(cur):
-        visited.add(cur)
-        # log(cur)
-        children_is_bud = []
+        total_count_buds = 0
+        total_children_not_a_bud = 0
+
+        num_children = 0
+        num_children_is_bud = 0
+
+        # children_is_bud = []
         for nex in g[cur]:
             if nex in visited:
                 continue
             visited.add(nex)
-            child_is_bud = yield is_bud(nex)
-            children_is_bud.append(child_is_bud)
+            child_is_bud, count_buds, children_not_a_bud = yield is_bud(nex)
 
-        if not children_is_bud or all(child_is_bud for child_is_bud in children_is_bud):
-            non_buds.add(cur)
-            yield False
+            num_children += 1
+            total_count_buds += count_buds
+            total_children_not_a_bud += children_not_a_bud
 
-        num_children_not_a_bud.append(len(children_is_bud) - sum(children_is_bud))
-        buds.add(cur)
-        yield True
+            if child_is_bud:
+                num_children_is_bud += 1
 
-    is_bud(1)
+        # this is not a bud
+        if num_children == 0 or num_children == num_children_is_bud:
+            yield False, total_count_buds, total_children_not_a_bud + (num_children - num_children_is_bud)
+
+        # this is a bud
+        yield True, total_count_buds + 1, total_children_not_a_bud + (num_children - num_children_is_bud)
+
+    visited.add(1)
+    _, total_count_buds, total_children_not_a_bud = is_bud(1)
 
     # log(num_children_not_a_bud)
     # log(buds)
     # log(non_buds)
 
-    return sum(num_children_not_a_bud) - len(buds) + 1
+    return total_children_not_a_bud - total_count_buds + 1
 
 
 # for case_num in [0]:  # no loop over test case
