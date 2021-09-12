@@ -59,38 +59,6 @@ input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 # ---------------------------- template ends here ----------------------------
 
-# https://codeforces.com/blog/entry/80158?locale=en
-from types import GeneratorType
-def bootstrap(f, stack=[]):
-    # usage - please remember to YIELD to call and return
-    '''
-    @bootstrap
-    def recurse(n):
-        if n <= 0:
-            yield 0
-        yield (yield recurse(n-1)) + 2
-
-    res = recurse(10**5)
-    '''
-    def wrappedfunc(args):
-        if stack:
-            return f(args)
-        else:
-            to = f(args)
-            while True:
-                if type(to) is GeneratorType:
-                    stack.append(to)
-                    to = next(to)
-                else:
-                    if stack:
-                        stack.pop()
-                    if not stack:
-                        break
-                    to = stack[-1].send(to)
-            return to
-    return wrappedfunc
-
-
 
 all_res = []
 cases = []
@@ -105,8 +73,9 @@ for case_num in range(int(input())):
 for mrr in cases:
     # log(k)
     # log(mrr)
+    k = len(mrr)
 
-    g = [[] for i in range(len(mrr)+2)]
+    g = [[] for i in range(k+2)]
     for a,b in mrr:
         g[a].append(b)
         g[b].append(a)
@@ -124,43 +93,58 @@ for mrr in cases:
     total_children_not_a_bud = 0
     total_count_buds = 0
 
-    @bootstrap
-    def is_bud(cur):
-        global total_children_not_a_bud
-        global total_count_buds
+    buds = set()
+    children_who_are_not_buds = set()
+    has_children = [False for _ in range(k+2)]
+    has_children_who_are_not_buds = [False for _ in range(k+2)]
 
-        num_children = 0
-        num_children_not_bud = 0
 
-        # children_is_bud = []
-        for nex in g[cur]:
-            if nex in visited:
+    def dfs_bare_bones(start, g, return_operation):
+        # hacked this out due to strict time limit because recursive dfs resulted in TLE
+        # https://codeforces.com/contest/1528/problem/A
+        # instead of returning a value, read and update an external data structure instead
+        entered = set([start])
+        exiting = set()
+        stack = [start]
+        prev = {start: 0}
+
+        while stack:
+            cur = stack[-1]
+            if cur in exiting:
+                stack.pop()
+                if cur in prev:
+                    return_operation(prev[cur], cur)
                 continue
-            visited.add(nex)
-            child_is_bud = yield is_bud(nex)
+            for nex in g[cur]:
+                if nex in entered:
+                    continue
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+            exiting.add(cur)
 
-            num_children += 1
 
-            if not child_is_bud:
-                total_children_not_a_bud += 1
-                num_children_not_bud += 1
+    def return_operation(prev, cur):
+        if has_children[cur] and has_children_who_are_not_buds[cur]:
+            buds.add(cur)
 
-        # this is not a bud
-        if num_children == 0 or num_children_not_bud == 0:
-            yield False
+        has_children[prev] = True
+        if not cur in buds:
+            children_who_are_not_buds.add(cur)
+            has_children_who_are_not_buds[prev] = True
 
-        # this is a bud
-        total_count_buds += 1
-        yield True
-
-    visited.add(1)
-    is_bud(1)
-
+    # g[0].append(1)
     # log(num_children_not_a_bud)
     # log(buds)
     # log(non_buds)
+    dfs_bare_bones(1, g, return_operation)
+    children_who_are_not_buds.discard(1)
 
-    res = total_children_not_a_bud - total_count_buds + 1
+    # print()
+    # print(buds)
+    # print(children_who_are_not_buds)
+
+    res = len(children_who_are_not_buds) - len(buds) + 1
     all_res.append(res)
 
 all_res = "\n".join(str(x) for x in all_res)
