@@ -47,7 +47,6 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-
 class FenwickTree:
     # also known as Binary Indexed Tree
     # binarysearch.com/problems/Virtual-Array
@@ -76,29 +75,39 @@ class FenwickTree:
 
 def solve_(mrr, n, m):
     # your solution here
+
+
+    mrr = [(q,-i) for i,q in enumerate(mrr)]
+    mrr.sort()
+
+    d = defaultdict(lambda: defaultdict(list))
+    for q,ni in mrr:
+        i = -ni
+        x,y = divmod(i, m)
+        log(x,y)
+        d[q][x].append(y)
+
+    log(d)
+
     res = 0
-    # lst = []
-    # i = 0
-    # for x,row in enumerate(mrr):
-    #     for y,cell in enumerate(row):
-    #         lst.append(cell, -i)
-    #         i += 1
 
-    # # lst = [(x,-i) for i,x in enumerate(lst)]
-    # lst.sort()
-    # log(lst)
-
-    # lst = [(-i,j,x) for j,(x,i) in enumerate(lst)]
-    # lst.sort()
-    # log(lst)
-
-    # fs = [FenwickTree(bits=10) for _ in range(n)]
-
-    # res = 0
-    # for i,j,x in lst:
-    #     val = f.query(j)
-    #     res += val
-    #     f.update(j, 1)
+    occupied = [FenwickTree(bits=10) for _ in range(n)]
+    for q,i in mrr:
+        minval = m-1
+        minidx = -1,-1
+        for x in d[q]:
+            y = d[q][x][-1]
+            log(x,y)
+            val = occupied[x].query(y)
+            if val <= minval:
+                minval = val
+                minidx = x,y
+        occupied[x].update(y,1)
+        res += minval
+        x,y = minidx
+        d[q][x].pop()
+        if not d[q][x]:
+            del d[q][x]
 
     return res
 
