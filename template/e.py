@@ -90,8 +90,8 @@ for mrr in cases:
 
     # global total_children_not_a_bud
     # global total_count_buds
-    total_children_not_a_bud = {0:0}
-    total_count_buds = {0:0}
+    total_children_not_a_bud = 0
+    total_count_buds = 0
 
     # buds = set()
     # children_who_are_not_buds = set()
@@ -99,58 +99,59 @@ for mrr in cases:
     has_children_who_are_not_buds = [False for _ in range(k+2)]
 
 
-    def dfs_bare_bones(start, g, return_operation):
+    start = 1
+    if True:
         # hacked this out due to strict time limit because recursive dfs resulted in TLE
         # https://codeforces.com/contest/1528/problem/A
         # instead of returning a value, read and update an external data structure instead
         entered = set([start])
         exiting = set()
         stack = [start]
-        prev = {start: 0}
+        prevs = {start: 0}
 
         while stack:
             cur = stack[-1]
             if cur in exiting:
                 stack.pop()
-                if cur in prev:
-                    return_operation(prev[cur], cur)
+                if cur in prevs:
+                    prev = prevs[cur]
+                    if has_children[cur] and has_children_who_are_not_buds[cur]:
+                        total_count_buds += 1
+                        # buds.add(cur)
+                    else:
+                        # children_who_are_not_buds.add(cur)
+                        has_children_who_are_not_buds[prev] = True
+                        if cur != 1:
+                            total_children_not_a_bud += 1
+
+                    has_children[prev] = True
                 continue
             for nex in g[cur]:
                 if nex in entered:
                     continue
                 entered.add(nex)
                 stack.append(nex)
-                prev[nex] = cur
+                prevs[nex] = cur
             exiting.add(cur)
 
 
-    def return_operation(prev, cur):
+    # def return_operation(prev, cur):
         # global total_children_not_a_bud
         # global total_count_buds
 
-        if has_children[cur] and has_children_who_are_not_buds[cur]:
-            total_count_buds[0] += 1
-            # buds.add(cur)
-        else:
-            # children_who_are_not_buds.add(cur)
-            has_children_who_are_not_buds[prev] = True
-            if cur != 1:
-                total_children_not_a_bud[0] += 1
-
-        has_children[prev] = True
 
     # g[0].append(1)
     # log(num_children_not_a_bud)
     # log(buds)
     # log(non_buds)
-    dfs_bare_bones(1, g, return_operation)
+    # dfs_bare_bones(1, g, return_operation)
     # children_who_are_not_buds.discard(1)
 
     # print()
     # print(buds)
     # print(children_who_are_not_buds)
 
-    res = total_children_not_a_bud[0] - total_count_buds[0] + 1
+    res = total_children_not_a_bud - total_count_buds + 1
     all_res.append(res)
 
 all_res = "\n".join(str(x) for x in all_res)
