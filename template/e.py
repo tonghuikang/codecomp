@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -18,31 +15,15 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
 
 
 BUFSIZE = 8192
@@ -112,11 +93,11 @@ def bootstrap(f, stack=[]):
 
     res = recurse(10**5)
     '''
-    def wrappedfunc(*args, **kwargs):
+    def wrappedfunc(args):
         if stack:
-            return f(*args, **kwargs)
+            return f(args)
         else:
-            to = f(*args, **kwargs)
+            to = f(args)
             while True:
                 if type(to) is GeneratorType:
                     stack.append(to)
@@ -132,7 +113,10 @@ def bootstrap(f, stack=[]):
 
 
 
-def solve_():
+all_res = []
+# for case_num in [0]:  # no loop over test case
+# for case_num in range(100):  # if the number of test cases is specified
+for case_num in range(int(input())):
     # your solution here
     k = int(input())
     mrr = read_matrix(k-1)  # and return as a list of list of int
@@ -190,41 +174,8 @@ def solve_():
     # log(buds)
     # log(non_buds)
 
-    return total_children_not_a_bud - total_count_buds + 1
+    res = total_children_not_a_bud - total_count_buds + 1
+    all_res.append(res)
 
-
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
-
-    # read line as an integer
-
-    # read line as a string
-    # srr = input().strip()
-
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
-    # lst = minus_one(lst)
-
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = minus_one_matrix(mrr)
-
-    res = solve()  # include input here
-
-    # print length if applicable
-    # print(len(res))
-
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
-
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
-    print(res)
+all_res = "\n".join(str(x) for x in all_res)
+print(all_res)
