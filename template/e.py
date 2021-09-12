@@ -1,26 +1,6 @@
 #!/usr/bin/env python3
 import sys
 from collections import defaultdict
-input = sys.stdin.readline  # to read input quickly
-
-# available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
-# import scipy
-
-M9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
-# d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
-# d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
-
-# if testing locally, print to terminal with a different color
-# OFFLINE_TEST = getpass.getuser() == "hkmac"
-OFFLINE_TEST = False  # codechef does not allow getpass
-def log(*args):
-    if OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
-
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -114,20 +94,23 @@ def bootstrap(f, stack=[]):
 
 
 all_res = []
+cases = []
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # your solution here
     k = int(input())
-    mrr = read_matrix(k-1)  # and return as a list of list of int
+    cases.append(read_matrix(k-1))  # and return as a list of list of int
 
+
+for mrr in cases:
     # log(k)
     # log(mrr)
 
-    g = defaultdict(set)
+    g = defaultdict(list)
     for a,b in mrr:
-        g[a].add(b)
-        g[b].add(a)
+        g[a].append(b)
+        g[b].append(a)
 
     del mrr
 
@@ -144,7 +127,7 @@ for case_num in range(int(input())):
         total_children_not_a_bud = 0
 
         num_children = 0
-        num_children_is_bud = 0
+        num_children_not_bud = 0
 
         # children_is_bud = []
         for nex in g[cur]:
@@ -157,15 +140,15 @@ for case_num in range(int(input())):
             total_count_buds += count_buds
             total_children_not_a_bud += children_not_a_bud
 
-            if child_is_bud:
-                num_children_is_bud += 1
+            if not child_is_bud:
+                num_children_not_bud += 1
 
         # this is not a bud
-        if num_children == 0 or num_children == num_children_is_bud:
-            yield False, total_count_buds, total_children_not_a_bud + (num_children - num_children_is_bud)
+        if num_children == 0 or num_children_not_bud == 0:
+            yield False, total_count_buds, total_children_not_a_bud + num_children_not_bud
 
         # this is a bud
-        yield True, total_count_buds + 1, total_children_not_a_bud + (num_children - num_children_is_bud)
+        yield True, total_count_buds + 1, total_children_not_a_bud + num_children_not_bud
 
     visited.add(1)
     _, total_count_buds, total_children_not_a_bud = is_bud(1)
