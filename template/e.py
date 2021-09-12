@@ -107,17 +107,17 @@ def solve_(mrr):
             if nex in visited:
                 continue
             visited.add(nex)
-            child_is_bud = is_bud(nex)
+            child_is_bud = yield is_bud(nex)
             children_is_bud.append(child_is_bud)
 
         if not children_is_bud or all(child_is_bud for child_is_bud in children_is_bud):
             non_buds.add(cur)
-            return False
+            yield False
 
         nonlocal num_children_not_a_bud
         num_children_not_a_bud += len(children_is_bud) - sum(children_is_bud)
         buds.add(cur)
-        return True
+        yield True
 
     is_bud(1)
 
