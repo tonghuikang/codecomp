@@ -74,24 +74,31 @@ class FenwickTree:
         return res
 
 
-def solve_(lst):
+def solve_(mrr, n, m):
     # your solution here
-
-    lst = [(x,-i) for i,x in enumerate(lst)]
-    lst.sort()
-    log(lst)
-
-    lst = [(-i,j,x) for j,(x,i) in enumerate(lst)]
-    lst.sort()
-    log(lst)
-
-    f = FenwickTree(bits=10)
-
     res = 0
-    for i,j,x in lst:
-        val = f.query(j)
-        res += val
-        f.update(j, 1)
+    # lst = []
+    # i = 0
+    # for x,row in enumerate(mrr):
+    #     for y,cell in enumerate(row):
+    #         lst.append(cell, -i)
+    #         i += 1
+
+    # # lst = [(x,-i) for i,x in enumerate(lst)]
+    # lst.sort()
+    # log(lst)
+
+    # lst = [(-i,j,x) for j,(x,i) in enumerate(lst)]
+    # lst.sort()
+    # log(lst)
+
+    # fs = [FenwickTree(bits=10) for _ in range(n)]
+
+    # res = 0
+    # for i,j,x in lst:
+    #     val = f.query(j)
+    #     res += val
+    #     f.update(j, 1)
 
     return res
 
@@ -116,10 +123,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    # mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(lst)  # include input here
+    res = solve(lst, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
