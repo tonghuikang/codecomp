@@ -50,9 +50,9 @@ def minus_one_matrix(mrr):
 def solve_(mrr,p,q):
     # your solution here
 
-    # mrr.sort(key=lambda x: x[0] + x[1])
-    mrr.sort(key=lambda x: -x[1])
-    # mrr.reverse()
+    mrr.sort(key=lambda x: x[0] + x[1])
+    # mrr.sort(key=lambda x: -x[1])
+    mrr.reverse()
 
     mincounts = defaultdict(lambda: 1000)
     mincounts[0,0] = 0
