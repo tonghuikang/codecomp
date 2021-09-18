@@ -164,7 +164,7 @@ def solve_(mrr,x0,y0):
                         p = p1+p2
 
                         expected_y = m*x3 + c
-                        if expected_y > y:
+                        if expected_y > y3:
                             minleft = min(minleft, p)
                         else:
                             minright = min(minright, p)
@@ -201,9 +201,9 @@ for case_num in range(int(input())):
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
-    x,y = list(map(int,input().split()))
+    xx,yy = list(map(int,input().split()))
 
-    res = solve(mrr,x,y)  # include input here
+    res = solve(mrr,xx,yy)  # include input here
 
     # print length if applicable
     # print(len(res))
