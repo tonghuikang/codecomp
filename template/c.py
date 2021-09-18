@@ -48,9 +48,11 @@ def minus_one_matrix(mrr):
 
 
 # https://stackoverflow.com/questions/59597399/area-of-triangle-using-3-sets-of-coordinates
-def get_area(x,y):
+def get_area(x,y,take_abs=True):
     area=( (x[0]*(y[1]-y[2])) + (x[1]*(y[2]-y[0])) + (x[2]*(y[0]-y[1])) )
     assert area%2 == 0
+    if take_abs:
+        area = abs(area)
     return abs(area//2)
 
 
@@ -98,17 +100,16 @@ def solve_(mrr,x0,y0):
                 log("areas", default_area, a1+a2+a3)
 
                 # check if outside
-                if a1 + a2 + a3 > default_area:
-                    continue
+                if a1 + a2 + a3 == default_area:
 
-                # parameter = euclidean_dist(x1,y1,x2,y2,x3,y3)
-                p1 = euclidean_dist(x1,y1,x2,y2      )
-                p2 = euclidean_dist(x1,y1,      x3,y3)
-                p3 = euclidean_dist(      x2,y2,x3,y3)
-                p = p1 + p2 + p3
+                    # parameter = euclidean_dist(x1,y1,x2,y2,x3,y3)
+                    p1 = euclidean_dist(x1,y1,x2,y2      )
+                    p2 = euclidean_dist(x1,y1,      x3,y3)
+                    p3 = euclidean_dist(      x2,y2,x3,y3)
+                    p = p1 + p2 + p3
 
-                log("trig", p, p1, p2, p3)
-                minres = min(minres, p)
+                    log("trig", p, p1, p2, p3)
+                    minres = min(minres, p)
 
 
     # case that you need quad
@@ -118,6 +119,9 @@ def solve_(mrr,x0,y0):
 
                 assert x1 <= x2
                 if not x1 <= x0 <= x2:
+                    continue
+
+                if not y1 <= y0 <= y2 or y1 >= y0 >= y2:
                     continue
 
                 minleft = 10**18
@@ -147,7 +151,7 @@ def solve_(mrr,x0,y0):
                     for k,(x3,y3) in enumerate(mrr):
                         if k == i or k == j:
                             continue
-                        a = get_area([x1,x2,x3], [y1,y2,y3])
+                        a = get_area([x1,x2,x3], [y1,y2,y3], take_abs=False)
                         if a == 0:
                             continue
 
@@ -168,7 +172,8 @@ def solve_(mrr,x0,y0):
     if minres >= 10**18:
         return "IMPOSSIBLE"
 
-    return minres/2
+    return round(minres/2, 6)
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -195,8 +200,9 @@ for case_num in range(int(input())):
     mrr = minus_one_matrix(mrr)
     xx,yy = list(map(int,input().split()))
 
+    xx = xx*2
+    yy = yy*2
     res = solve(mrr,xx,yy)  # include input here
-
     # print length if applicable
     # print(len(res))
 
