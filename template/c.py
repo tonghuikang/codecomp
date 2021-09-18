@@ -127,6 +127,7 @@ def solve_(mrr,x0,y0):
                 p3 = euclidean_dist(      x2,y2,x3,y3)
                 p = p1 + p2 + p3
 
+                log("trig", p, p1, p2, p3)
                 minres = min(minres, p)
 
 

@@ -47,10 +47,56 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(nrr, mrr, k, n):
     # your solution here
+    lower = [x[0] for x in nrr]
+    upper = [x[1] for x in nrr]
+    points = [x[2] for x in nrr]
 
-    return ""
+    graph = defaultdict(set)
+    for a,b in mrr:
+        graph[a].add(b)
+        graph[b].add(a)
+
+    # nrr l,r,a
+
+
+    res = 0
+    for start in range(n):
+
+        @functools.lru_cache(maxsize=None)
+        def dp(remaining):
+            cur_points = sum((1-r)*p for r,p in zip(remaining, points))
+            if cur_points == k:
+                return 1
+            if cur_points > k:
+                return 0
+
+            cnt = 0
+            remaining = list(remaining)
+            reachable = set()
+            for cur in range(n):
+                if remaining[cur] == 0:
+                    reachable |= graph[cur]
+
+            for nex in reachable:
+                if remaining[nex] == 1:
+                    if lower[nex] <= cur_points <= upper[nex]:
+                        remaining[nex] = 0
+                        cnt += dp(tuple(remaining))
+                        remaining[nex] = 1
+
+            # log(remaining, cur_points, cnt)
+            return cnt
+
+        remaining = [1 for _ in range(n)]
+        remaining[start] = 0
+        val = dp(tuple(remaining))
+        # log(start, val)
+        res += val
+
+    return res
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,16 +113,17 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    nrr = read_matrix(n)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(nrr, mrr, k, n)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +134,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
