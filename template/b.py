@@ -47,10 +47,89 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    if sum(arr) == 0:
+        return []
+
+    if arr.count(0) == 0:
+        return -1
+
+    if sum(arr)%2 == 1:
+        return -1
+
+    left_ones = 0
+    res = []
+
+    for i in range(len(arr)):
+        x = arr[i]
+        log(i, x, left_ones)
+        log(arr)
+        if x == 0:
+            if left_ones == 0:
+                continue
+
+            if left_ones%2 == 0:
+                j = i-2
+                while j >= 0 and arr[j] == 1:
+                    assert arr[j] == 1
+                    assert arr[j+1] == 1
+                    assert arr[j+2] == 0
+                    arr[j], arr[j+1], arr[j+2] = 0,0,0
+                    res.append(j)
+                    j -= 2
+
+            else:
+                # delete 101
+
+                # cannot pair
+                if i + 1 == len(arr):
+                    return -1
+                if arr[i+1] != 1:
+                    return -1
+
+                assert arr[i-1] == 1
+                assert arr[i] == 0
+                assert arr[i+1] == 1
+                arr[i-1], arr[i], arr[i+1] = 0,0,0
+                res.append(i-1)
+
+                j = i-3
+                while j >= 0 and arr[j] == 1:
+                    assert arr[j] == 1
+                    assert arr[j+1] == 1
+                    assert arr[j+2] == 0
+                    arr[j], arr[j+1], arr[j+2] = 0,0,0
+                    res.append(j)
+                    j -= 2
+
+            left_ones = 0
+
+        else:
+            left_ones += 1
+
+    log(arr)
+    sumarr = sum(arr)
+
+    if sumarr == 0:
+        return res
+
+    if sumarr%2 == 1:
+        return -1
+
+    assert arr[0] == 0
+    for i in range(len(arr)):
+        if arr[i] == 1:
+            assert arr[i-1] == 0
+            assert arr[i] == 1
+            assert arr[i+1] == 1
+            arr[i-1], arr[i], arr[i+1] = 0,0,0
+            res.append(i-1)
+
+    assert sum(arr) == 0
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +137,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +147,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,13 +155,19 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
+    if res == -1:
+        print("NO")
+        continue
+
+    print("YES")
+    print(len(res))
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x + 1) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

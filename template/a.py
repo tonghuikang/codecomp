@@ -50,8 +50,8 @@ def minus_one_matrix(mrr):
 def solve_(mrr):
     # simulations
 
-    g = {i:set() for i in range(len(mrr))}
-    h = {i:set() for i in range(len(mrr))}
+    g = {i:set() for i in range(len(mrr))}  # map required to cur
+    h = {i:set() for i in range(len(mrr))}  # map cur to required
 
     stack = []
     for i,prev in enumerate(mrr):
@@ -71,6 +71,7 @@ def solve_(mrr):
     cnt = 0
     visited = set(stack)
     while stack:
+        heapq.heapify(stack)
         # log(stack)
         cnt += 1
         new_stack = []
