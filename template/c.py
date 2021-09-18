@@ -121,7 +121,7 @@ def solve_(mrr,x0,y0):
                 if not x1 <= x0 <= x2:
                     continue
 
-                if not y1 <= y0 <= y2 or y1 >= y0 >= y2:
+                if not (y1 <= y0 <= y2 or y1 >= y0 >= y2):
                     continue
 
                 minleft = 10**18
@@ -148,18 +148,21 @@ def solve_(mrr,x0,y0):
                             minright = min(minright, p)
 
                 else:
+                    m = (y2 - y1)/(x2 - x1)
+                    c = y1 - x1*m
                     for k,(x3,y3) in enumerate(mrr):
                         if k == i or k == j:
                             continue
-                        a = get_area([x1,x2,x3], [y1,y2,y3], take_abs=False)
-                        if a == 0:
+                        if checkStraightLine([[x3,y3], [x1,y1], [x2,y2]]):
                             continue
+
+                        expected_y = m*x3 + c
 
                         p1 = euclidean_dist(x3,y3,x1,y1)
                         p2 = euclidean_dist(x3,y3,x2,y2)
                         p = p1+p2
 
-                        if a > 0:
+                        if y3 > expected_y:
                             minleft = min(minleft, p)
                         else:
                             minright = min(minright, p)
