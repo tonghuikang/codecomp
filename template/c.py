@@ -80,6 +80,9 @@ def euclidean_dist(x1,y1,x2,y2):
 
 
 def solve_(mrr,x0,y0):
+    if len(mrr) <= 2:
+        return "IMPOSSIBLE"
+
     # all triangles
 
     # all quads that are colinear
@@ -109,9 +112,8 @@ def solve_(mrr,x0,y0):
                 log(default_area, a1+a2+a3)
 
                 # check if outside
-                if a1 + a2 + a3 - 10**-8 > default_area:
+                if a1 + a2 + a3 > default_area:
                     continue
-                log("check",a1,a2,a3,a1+a2+a3,default_area)
 
                 # parameter = euclidean_dist(x1,y1,x2,y2,x3,y3)
                 p1 = euclidean_dist(x1,y1,x2,y2      )
