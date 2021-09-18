@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+# import math, random
+# import functools, itertools, collections, heapq, bisect
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,18 +47,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr,p,q):
     # your solution here
 
-    return ""
+    mincounts = defaultdict(lambda: 1000)
+    mincounts[0,0] = 0
+
+    for a,b in mrr:
+        new_count = defaultdict(lambda: 1000)
+        for (c,d),prev_count in mincounts.items():
+            x,y = a+c,b+d
+            if x > 600 or y > 600:
+                continue
+            new_count[x,y] = min(new_count[x,y], prev_count+1)
+
+        for (x,y),count in new_count.items():
+            mincounts[x,y] = min(mincounts[x,y], count)
+
+        # log(mincounts)
+
+    res = 1000
+    for (x,y),count in mincounts.items():
+        if x >= p and y >= q:
+            res = min(res, count)
+
+    if res == 1000:
+        return -1
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -67,16 +91,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    p,q = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr,p,q)  # include input here
 
     # print length if applicable
     # print(len(res))
