@@ -54,6 +54,7 @@ def get_area(x,y):
 
 
 def checkStraightLine(coordinates) -> bool:
+    coordinates.sort()
     a,b = coordinates[0]
     c,d = coordinates[1]
 
@@ -63,14 +64,18 @@ def checkStraightLine(coordinates) -> bool:
                 return False
         return True
 
-    gradient = (d-b)/(c-a)
+    gcd = math.gcd((d-b),(c-a))
+    gradient = ((d-b)//gcd, (c-a)//gcd)
     for x,y in coordinates[2:]:
         if x == a:
             if y == b:
                 continue
             else:
                 return False
-        elif (y-b)/(x-a) != gradient:
+        c,d = x,y
+        gcd = math.gcd((d-b),(c-a))
+        test_gradient = ((d-b)//gcd, (c-a)//gcd)
+        if test_gradient != gradient:
             return False
     return True
 
@@ -93,7 +98,7 @@ def solve_(mrr,x0,y0):
     for i,(x1,y1) in enumerate(mrr):
         for j,(x2,y2) in enumerate(mrr[i+1:], start=i+1):
             for x3,y3 in mrr[j+1:]:
-                log([x1,y1], [x2,y2], [x3,y3])
+                log("trig coords", [x1,y1], [x2,y2], [x3,y3])
                 # check if colinear
 
                 if checkStraightLine([[x0,y0], [x1,y1], [x2,y2], [x3,y3]]):
@@ -110,7 +115,7 @@ def solve_(mrr,x0,y0):
                 a2 = get_area([x1,x0,x3], [y1,y0,y3])
                 a3 = get_area([x0,x2,x3], [y0,y2,y3])
 
-                log(default_area, a1+a2+a3)
+                log("areas", default_area, a1+a2+a3)
 
                 # check if outside
                 if a1 + a2 + a3 > default_area:
@@ -130,6 +135,7 @@ def solve_(mrr,x0,y0):
         for j,(x2,y2) in enumerate(mrr[i+1:], start=i+1):
             if checkStraightLine([[x0,y0], [x1,y1], [x2,y2]]):
 
+                assert x1 <= x2
                 if not x1 <= x0 <= x2:
                     continue
 
@@ -177,7 +183,7 @@ def solve_(mrr,x0,y0):
                             minright = min(minright, p)
 
                 total_p = minleft + minright
-                log(minleft, minright)
+                log("total_p", minleft, minright)
                 minres = min(minres, total_p)
 
 
