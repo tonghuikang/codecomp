@@ -50,7 +50,7 @@ def minus_one_matrix(mrr):
 # https://stackoverflow.com/questions/59597399/area-of-triangle-using-3-sets-of-coordinates
 def get_area(x,y):
     area=0.5*( (x[0]*(y[1]-y[2])) + (x[1]*(y[2]-y[0])) + (x[2]*(y[0]-y[1])) )
-    return area
+    return abs(area)
 
 
 def checkStraightLine(coordinates) -> bool:
@@ -111,6 +111,7 @@ def solve_(mrr,x0,y0):
                 # check if outside
                 if a1 + a2 + a3 - 10**-8 > default_area:
                     continue
+                log("check",a1,a2,a3,a1+a2+a3,default_area)
 
                 # parameter = euclidean_dist(x1,y1,x2,y2,x3,y3)
                 p1 = euclidean_dist(x1,y1,x2,y2      )
@@ -170,6 +171,7 @@ def solve_(mrr,x0,y0):
                             minright = min(minright, p)
 
                 total_p = minleft + minright
+                log(minleft, minright)
                 minres = min(minres, total_p)
 
 
