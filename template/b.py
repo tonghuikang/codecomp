@@ -65,7 +65,6 @@ def solve_(arr):
     for i in range(len(arr)):
         x = arr[i]
         log(i, x, left_ones)
-        log(arr)
         if x == 0:
             if left_ones == 0:
                 continue
@@ -78,6 +77,7 @@ def solve_(arr):
                     assert arr[j+2] == 0
                     arr[j], arr[j+1], arr[j+2] = 0,0,0
                     res.append(j)
+                    log(arr)
                     j -= 2
 
             else:
@@ -86,13 +86,24 @@ def solve_(arr):
                 # cannot pair
                 if i + 1 == len(arr):
                     return -1
+
                 if arr[i+1] != 1:
-                    return -1
+                    if i > 0 and arr[i-1] == 1:
+                        # make extension
+                        assert arr[i-1] == 1
+                        assert arr[i] == 0
+                        assert arr[i+1] == 0
+                        arr[i-1], arr[i], arr[i+1] = 1,1,1
+                        log(arr)
+                        res.append(i-1)
+                        left_ones += 1
+                        continue
 
                 assert arr[i-1] == 1
                 assert arr[i] == 0
                 assert arr[i+1] == 1
                 arr[i-1], arr[i], arr[i+1] = 0,0,0
+                log(arr)
                 res.append(i-1)
 
                 j = i-3
@@ -102,6 +113,7 @@ def solve_(arr):
                     assert arr[j+2] == 0
                     arr[j], arr[j+1], arr[j+2] = 0,0,0
                     res.append(j)
+                    log(arr)
                     j -= 2
 
             left_ones = 0
@@ -115,6 +127,9 @@ def solve_(arr):
     if sumarr == 0:
         return res
 
+    if arr.count(0) == 0:
+        return -1
+
     if sumarr%2 == 1:
         return -1
 
@@ -125,6 +140,7 @@ def solve_(arr):
             assert arr[i] == 1
             assert arr[i+1] == 1
             arr[i-1], arr[i], arr[i+1] = 0,0,0
+            log(arr)
             res.append(i-1)
 
     assert sum(arr) == 0
@@ -155,7 +171,9 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(lst)  # include input here
+    res = solve([x for x in lst])  # include input here
+
+    assert (res == -1) == (solve(lst[::-1]) == -1)
 
     if res == -1:
         print("NO")
