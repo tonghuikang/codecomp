@@ -47,10 +47,52 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(mrr):
+    # simulations
 
-    return ""
+    g = {i:set() for i in range(len(mrr))}
+    h = {i:set() for i in range(len(mrr))}
+
+    stack = []
+    for i,prev in enumerate(mrr):
+        for p in prev:
+            g[p].add(i)
+            h[i].add(p)
+        if not prev:
+            stack.append(i)
+
+    # log(g)
+    # log(h)
+    # log(h[1])
+
+    if not stack:
+        return -1
+
+    cnt = 0
+    visited = set(stack)
+    while stack:
+        # log(stack)
+        cnt += 1
+        new_stack = []
+        while stack:
+            cur = heapq.heappop(stack)
+            visited.add(cur)
+            # log("reading", cur)
+            for nex in g[cur]:
+                # log(cur, nex, g[cur], h[nex])
+                h[nex].remove(cur)
+                if len(h[nex]) == 0:
+                    if nex > cur:
+                        heapq.heappush(stack, nex)
+                    else:
+                        new_stack.append(nex)
+        stack = new_stack
+
+    if len(visited) != len(mrr):
+        return -1
+
+    return cnt
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +100,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,10 +115,11 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    mrr = [row[1:] for row in mrr]
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
