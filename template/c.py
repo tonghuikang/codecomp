@@ -42,42 +42,22 @@ def minus_one(arr):
     return [x-1 for x in arr]
 
 def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
+    return [[x*2 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
 
 
 # https://stackoverflow.com/questions/59597399/area-of-triangle-using-3-sets-of-coordinates
 def get_area(x,y):
-    area=0.5*( (x[0]*(y[1]-y[2])) + (x[1]*(y[2]-y[0])) + (x[2]*(y[0]-y[1])) )
-    return abs(area)
+    area=( (x[0]*(y[1]-y[2])) + (x[1]*(y[2]-y[0])) + (x[2]*(y[0]-y[1])) )
+    assert area%2 == 0
+    return abs(area//2)
 
 
+# https://leetcode.com/problems/check-if-it-is-a-straight-line/discuss/408984/JavaPython-3-check-slopes-short-code-w-explanation-and-analysis.
 def checkStraightLine(coordinates) -> bool:
-    coordinates.sort()
-    a,b = coordinates[0]
-    c,d = coordinates[1]
-
-    if a == c:
-        for x,y in coordinates[2:]:
-            if x != a:
-                return False
-        return True
-
-    gcd = math.gcd((d-b),(c-a))
-    gradient = ((d-b)//gcd, (c-a)//gcd)
-    for x,y in coordinates[2:]:
-        if x == a:
-            if y == b:
-                continue
-            else:
-                return False
-        c,d = x,y
-        gcd = math.gcd((d-b),(c-a))
-        test_gradient = ((d-b)//gcd, (c-a)//gcd)
-        if test_gradient != gradient:
-            return False
-    return True
+        (x0, y0), (x1, y1) = coordinates[: 2]
+        return all((x1 - x0) * (y - y1) == (x - x1) * (y1 - y0) for x, y in coordinates)
 
 
 def euclidean_dist(x1,y1,x2,y2):
@@ -191,7 +171,7 @@ def solve_(mrr,x0,y0):
     if minres >= 10**18:
         return "IMPOSSIBLE"
 
-    return minres
+    return minres/2
 
 
 # for case_num in [0]:  # no loop over test case
@@ -215,7 +195,7 @@ for case_num in range(int(input())):
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(n)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = minus_one_matrix(mrr)
     xx,yy = list(map(int,input().split()))
 
     res = solve(mrr,xx,yy)  # include input here
