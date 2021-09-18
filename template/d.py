@@ -51,7 +51,6 @@ def solve_(mrr,p,q):
     # your solution here
 
     mrr.sort()
-    mrr.reverse()
 
     mincounts = defaultdict(lambda: 1000)
     mincounts[0,0] = 0
@@ -60,8 +59,8 @@ def solve_(mrr,p,q):
         new_count = defaultdict(lambda: 1000)
         for (c,d),prev_count in mincounts.items():
             x,y = a+c,b+d
-            if x > 600 or y > 600:
-                continue
+            x = min(p,x)
+            y = min(q,y)
             new_count[x,y] = min(new_count[x,y], prev_count+1)
 
         for (x,y),count in new_count.items():
@@ -69,11 +68,7 @@ def solve_(mrr,p,q):
 
         # log(mincounts)
 
-    res = 1000
-    for (x,y),count in mincounts.items():
-        if x >= p and y >= q:
-            res = min(res, count)
-
+    res = mincounts[p,q]
     if res == 1000:
         return -1
 
