@@ -83,6 +83,7 @@ def solve_(mrr,x0,y0):
     if len(mrr) <= 2:
         return "IMPOSSIBLE"
 
+    mrr.sort()
     # all triangles
 
     # all quads that are colinear
@@ -128,6 +129,9 @@ def solve_(mrr,x0,y0):
     for i,(x1,y1) in enumerate(mrr):
         for j,(x2,y2) in enumerate(mrr[i+1:], start=i+1):
             if checkStraightLine([[x0,y0], [x1,y1], [x2,y2]]):
+
+                if not x1 <= x0 <= x2:
+                    continue
 
                 minleft = 10**18
                 minright = 10**18
