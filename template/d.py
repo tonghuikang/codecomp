@@ -46,11 +46,12 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-
+# import random
 def solve_(mrr,p,q):
     # your solution here
 
-    mrr.sort()
+    mrr.sort(key=lambda x: x[0] + x[1])
+    mrr.reverse()
 
     mincounts = defaultdict(lambda: 1000)
     mincounts[0,0] = 0
@@ -66,7 +67,15 @@ def solve_(mrr,p,q):
         for (x,y),count in new_count.items():
             mincounts[x,y] = min(mincounts[x,y], count)
 
-        # log(mincounts)
+        keys = list(mincounts.keys())
+        keys.sort(key=lambda x:(-x[1]))
+
+        minseen = [301 for _ in range(q+1)]
+        for x,y in keys:
+            count = mincounts[x,y]
+            if minseen[y] <= count:
+                del mincounts[x,y]
+            minseen[y] = count
 
     res = mincounts[p,q]
     if res == 1000:
