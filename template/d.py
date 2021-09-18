@@ -80,7 +80,18 @@ def solve_(mrr,p,q):
                 del mincounts[x,y]
             minseen[x] = count
 
-        # log(minseen)
+        keys = list(mincounts.keys())
+        keys.sort(key=lambda x:-x[0])
+
+        minseen = [301 for _ in range(q+1)]
+        for x,y in keys:
+            count = mincounts[x,y]
+            if minseen[y] <= count:
+                del mincounts[x,y]
+            minseen[y] = count
+
+
+        # log(len(mincounts))
 
     # log(len(mincounts))
 
