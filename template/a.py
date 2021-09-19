@@ -47,10 +47,62 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a0,b0,c0):
     # your solution here
 
-    return ""
+    # 3 + 3 + 4
+    # 4 + 4 + 2
+    # 4 + 2 + 2 + 2
+    # 2 + 2 + 2 + 2 + 2
+
+    a,b,c = a0,b0,c0
+
+    def op334():
+        nonlocal a,b,c
+        set334 = min(b//2, c)
+        c -= set334
+        b -= set334*2
+        return set334
+
+    def op442():
+        nonlocal a,b,c
+        set442 = min(c//2, a)
+        c -= set442*2
+        a -= set442
+        return set442
+
+    def op4222():
+        nonlocal a,b,c
+        set4222 = min(c, a//3)
+        c -= set4222
+        a -= set4222*3
+        return set4222
+
+    def op22222():
+        nonlocal a,b,c
+        set22222 = a//5
+        a -= set22222*5
+        return set22222
+
+    def op3322():
+        nonlocal a,b,c
+        set2233 = min(b//2, a//2)
+        a -= set2233*2
+        b -= set2233*2
+        return set2233
+
+    maxcnt = 0
+
+    for perm in itertools.permutations([op334, op442, op4222, op22222, op3322]):
+        a,b,c = a0,b0,c0
+
+        cnt = 0
+        for op in perm:
+            cnt += op()
+            # log(op.__name__, cnt)
+        maxcnt = max(maxcnt, cnt)
+
+    return maxcnt
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +119,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +128,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,c)  # include input here
 
     # print length if applicable
     # print(len(res))
