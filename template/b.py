@@ -59,8 +59,11 @@ def longest_increasing_subsequence(nums):
 
 def solve_(mrr):
 
-    mrr.sort(key=lambda x:x[1])
-    mrr = [(a-i*10**-9,b-i*10**-9) for i,(a,b) in enumerate(mrr)]
+    mrr.sort(key=lambda x:(x[1], -x[0]))
+
+    log(mrr)
+
+    mrr = [(10**9*a-i,b) for i,(a,b) in enumerate(mrr)]
     # your solution here
 
     return longest_increasing_subsequence(mrr)
