@@ -33,7 +33,7 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+    return [tuple(map(int,input().split())) for _ in range(rows)]
 
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
@@ -47,15 +47,28 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def longest_increasing_subsequence(nums):
+    # leetcode.com/problems/longest-increasing-subsequence/discuss/667975/
+    dp = [(MAXINT,MAXINT)] * (len(nums) + 1)
+    for elem in nums:
+        dp[bisect.bisect_left(dp, elem)] = elem
+        log(dp)
+    return dp.index((MAXINT,MAXINT))
+
+
+
+def solve_(mrr):
+
+    mrr.sort(key=lambda x:x[1])
+    mrr = [(a-i*10**-9,b-i*10**-9) for i,(a,b) in enumerate(mrr)]
     # your solution here
 
-    return ""
+    return longest_increasing_subsequence(mrr)
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,16 +80,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
