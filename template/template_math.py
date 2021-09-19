@@ -6,6 +6,32 @@ from collections import Counter, defaultdict, deque
 
 MAXINT = sys.maxsize
 
+
+# ------------------------ geometry ------------------------
+
+
+def shoelace_formula(xs,ys):
+    # https://stackoverflow.com/a/30950874/5894029
+    return sum(xs[i]*ys[i-1] - xs[i-1]*ys[i] for i in range(len(xs)))
+
+def triangle_formula(xs,ys):
+    # shoelace formula is 10x slower for some reason
+    return (xs[0]*ys[1] + xs[1]*ys[2] + xs[2]*ys[0]) - (xs[0]*ys[2] + xs[1]*ys[0] + xs[2]*ys[1])
+
+def get_polygon_area(xs,ys,take_abs=True,take_double=False):
+    signed_area = shoelace_formula(xs,ys)  # switch to func=triangle_formula if needed for speed
+    if not take_double:  # may cause precision issues idk
+        signed_area = signed_area/2
+    if take_abs:
+        return abs(signed_area)
+    return signed_area
+
+def checkStraightLine(coordinates):
+    # https://leetcode.com/problems/check-if-it-is-a-straight-line/discuss/408984/
+    (x0, y0), (x1, y1) = coordinates[:2]
+    return all((x1 - x0) * (y - y1) == (x - x1) * (y1 - y0) for x, y in coordinates)
+
+
 # ------------------------ standard imports ends here ------------------------
 
 def ceiling_division(numer, denom):
