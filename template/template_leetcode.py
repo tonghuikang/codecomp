@@ -7,3 +7,5 @@ abc_map = {c:i for i,c in enumerate(abc)}
 d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 
 # REMEMBER TO TAKE MODULO
+# CHECK EDGE CASE, ESPECIALLY ZERO
+# Check constraints for large and small numbers
