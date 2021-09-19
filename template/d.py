@@ -47,15 +47,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, k):
     # your solution here
 
-    return ""
+    indexes = [[-1] for _ in range(k)]
+    for i,x in enumerate(arr):
+        indexes[x].append(i)
 
 
-# for case_num in [0]:  # no loop over test case
+    for start in range(len(arr) - k):
+        alts = []
+
+        for i in range(k):
+            idx = bisect.bisect_left(indexes[i], start)
+            if idx == len(indexes[i]):
+                idx -= 1
+            cur = indexes[i][idx]
+            prev = indexes[i][idx-1]
+            if prev == -1:
+                alts.append((cur, ))
+            else:
+                alts.append((cur, prev))
+
+        # log(alts)
+
+        for comb in itertools.product(*alts):
+            set_comb = set(comb)
+
+            # for start in
+            # log(comb)
+
+
+    # return k
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,8 +95,9 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
+    lst = [x-1 for x in lst]
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +105,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst,k)  # include input here
 
     # print length if applicable
     # print(len(res))

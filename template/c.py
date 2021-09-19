@@ -46,55 +46,6 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-def findGCD(x, y, z, res):
-
-    # Store the maximum GCD obtained
-    # by either incrementing, decrementing
-    # or not changing A[i]
-    ans = math.gcd(x, res)
-    ans = max(ans, math.gcd(y, res))
-    ans = max(ans, math.gcd(z, res))
-
-    # Return the maximum GCD
-    return ans
-
-
-def maximumGCD(A, K):
-    N = len(A)
-
-    # Initialize a dp table of size N*3
-    dp = [[0 for x in range(3)]
-             for y in range(N)]
-
-    # Base Cases:
-    # If only one element is present
-    dp[0][0] = A[0]
-    dp[0][1] = A[0] + K
-    dp[0][2] = A[0] - K
-
-    # Traverse the array A[] over
-    # indices [1, N - 1]
-    for i in range(1, N):
-
-        # Store the previous state results
-        x = dp[i - 1][0]
-        y = dp[i - 1][1]
-        z = dp[i - 1][2]
-
-        # Store maximum GCD result
-        # for each current state
-        dp[i][0] = findGCD(x, y, z, A[i])
-        dp[i][1] = findGCD(x, y, z, A[i] + K)
-        dp[i][2] = findGCD(x, y, z, A[i] - K)
-
-    # Store the required result
-    mx = max([3, dp[N - 1][0],
-                 dp[N - 1][1],
-                 dp[N - 1][2]])
-
-    # Return the result
-    return mx
-
 
 def binary_search(func_,       # condition function
                   first=True,  # else last
@@ -128,14 +79,32 @@ def binary_search(func_,       # condition function
 
 
 def solve_(arr, k):
-    res = 1
-    if k <= 10**12:
-        res = maximumGCD(arr, k)
+    res = math.gcd(arr[0], arr[1])
     # binary search
+    for x in arr[2:]:
+        res = math.gcd(res, x)
 
+
+
+    @functools.lru_cache(maxsize=None)
     def func(val):
         # return true if can increase the array to get gcd of k
         return sum((-x)%val for x in arr) <= k
+
+    for i in range(1, 20):
+        if func(i):
+            res = max(res, i)
+
+    for i,_ in Counter(arr).most_common(10):
+        if func(i):
+            res = max(res, i)
+        i += 1
+        if func(i):
+            res = max(res, i)
+        i += 1
+        if func(i):
+            res = max(res, i)
+
 
     res2 = binary_search(func, left=1, first=False, target=True)
 
