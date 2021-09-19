@@ -46,16 +46,88 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+#This function merges two sorted arrays and returns inversion count in the arrays.*/
+def merge(arr, temp, left, mid, right):
+    inv_count = 0
+
+    i = left #i is index for left subarray*/
+    j = mid #j is index for right subarray*/
+    k = left #k is index for resultant merged subarray*/
+    while ((i <= mid - 1) and (j <= right)):
+        if (arr[i] <= arr[j]):
+            temp[k] = arr[i]
+            k += 1
+            i += 1
+        else:
+            temp[k] = arr[j]
+            k += 1
+            j += 1
+
+            #this is tricky -- see above explanation/
+            # diagram for merge()*/
+            inv_count = inv_count + (mid - i)
+
+    #Copy the remaining elements of left subarray
+    # (if there are any) to temp*/
+    while (i <= mid - 1):
+        temp[k] = arr[i]
+        k += 1
+        i += 1
+
+    #Copy the remaining elements of right subarray
+    # (if there are any) to temp*/
+    while (j <= right):
+        temp[k] = arr[j]
+        k += 1
+        j += 1
+
+    # Copy back the merged elements to original array*/
+    for i in range(left,right+1,1):
+        arr[i] = temp[i]
+
+    return inv_count
+
+#An auxiliary recursive function that sorts the input
+# array and returns the number of inversions in the
+# array. */
+def _mergeSort(arr, temp, left, right):
+    inv_count = 0
+    if (right > left):
+        # Divide the array into two parts and call
+        #_mergeSortAndCountInv()
+        # for each of the parts */
+        mid = int((right + left)/2)
+
+        #Inversion count will be sum of inversions in
+        # left-part, right-part and number of inversions
+        # in merging */
+        inv_count = _mergeSort(arr, temp, left, mid)
+        inv_count += _mergeSort(arr, temp, mid+1, right)
+
+        # Merge the two parts*/
+        inv_count += merge(arr, temp, left, mid+1, right)
+
+    return inv_count
+
+#This function sorts the input array and returns the
+#number of inversions in the array */
+def countSwaps(arr):
+    n = len(arr)
+    temp = [0 for i in range(n)]
+    return _mergeSort(arr, temp, 0, n - 1)
+
 
 def solve_(arr, k):
     # your solution here
 
-    indexes = [[-1] for _ in range(k)]
+    indexes = [[] for _ in range(k)]
     for i,x in enumerate(arr):
         indexes[x].append(i)
 
 
-    for start in range(len(arr) - k):
+    mincost = 10**10
+
+    for start in range(len(arr) - k + 1):
         draws = []
 
         for i in range(k):
@@ -63,15 +135,34 @@ def solve_(arr, k):
             if idx == len(indexes[i]):
                 idx -= 1
             cur = indexes[i][idx]
-            assert cur != -1
             draws.append(cur)
 
+        draws_set = set(draws)
 
-            # for start in
-            # log(comb)
+        target = []
+        for j,x in enumerate(arr):
+            if j in draws_set:
+                continue
+            target.append(x)
 
+        target = target[:start] + list(range(k)) + target[start:]
 
-    # return k
+        indexes_target = [[] for _ in range(k)]
+        for i,x in enumerate(target):
+            indexes_target[x].append(i)
+
+        array_to_sort = [-1 for _ in arr]
+        for m in range(k):
+            v1 = indexes_target[m]
+            v2 = indexes[m]
+            for a,b in zip(v1,v2):
+                array_to_sort[a] = b
+
+        cost = countSwaps(array_to_sort)
+
+        mincost = min(mincost, cost)
+
+    return mincost
 
 
 for case_num in [0]:  # no loop over test case
