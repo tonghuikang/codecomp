@@ -56,23 +56,16 @@ def solve_(arr, k):
 
 
     for start in range(len(arr) - k):
-        alts = []
+        draws = []
 
         for i in range(k):
-            idx = bisect.bisect_left(indexes[i], start)
+            idx = bisect.bisect_left(indexes[i], start+i)
             if idx == len(indexes[i]):
                 idx -= 1
             cur = indexes[i][idx]
-            prev = indexes[i][idx-1]
-            if prev == -1:
-                alts.append((cur, ))
-            else:
-                alts.append((cur, prev))
+            assert cur != -1
+            draws.append(cur)
 
-        # log(alts)
-
-        for comb in itertools.product(*alts):
-            set_comb = set(comb)
 
             # for start in
             # log(comb)
