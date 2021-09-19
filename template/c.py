@@ -46,16 +46,50 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def binary_search(func_,       # condition function
+                  first=True,  # else last
+                  target=True, # else False
+                  left=0, right=2**63-1) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
 
-def solve_():
-    # your solution here
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
 
-    return ""
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first^target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:      # find last False
+        return left-1
 
 
-# for case_num in [0]:  # no loop over test case
+def solve_(arr, k):
+    # binary search
+
+    def func(val):
+        # return true if can increase the array to get gcd of k
+        return sum((-x)%val for x in arr) <= k
+
+    return binary_search(func, left=1, first=False, target=True)
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,8 +101,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +110,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
