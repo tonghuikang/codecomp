@@ -117,8 +117,13 @@ def solve_(mrr,x0,y0):
             if not (x1 + x2 == x0*2 and y1 + y2 == y0*2):
                 continue
 
+
             for k,(x3,y3) in enumerate(mrr):
                 if k == i or k == j:
+                    continue
+
+                a1 = get_polygon_area([x1,x2,x3], [y1,y2,y3], take_abs=True, take_double=True)
+                if a1 == 0:
                     continue
 
                 dx1,dy1 = x3-x1, y3-y1
@@ -132,6 +137,7 @@ def solve_(mrr,x0,y0):
                     p4 = euclidean_dist(x4,y4,x2,y2)
                     p = p1+p2+p3+p4
 
+                    # log("quad", x1,y1,x2,y2,x3,y3,x4,y4)
                     minres = min(minres, p)
 
     if minres >= 10**18:
