@@ -9,7 +9,6 @@ import bisect
 import os
 import sys
 from io import BytesIO, IOBase
-sys.setrecursionlimit(300000)
 
 BUFSIZE = 8192
 
@@ -103,16 +102,21 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, mrr):
+def solve_():
     # your solution here
 
     # either you boost the most underqualified or your select the least overqualified
     # arr.sort()
+
+    arr = list(map(int,input().split()))
+    arr.sort()
+    # lst = minus_one(lst)
     sumarr = sum(arr)
 
+    k = int(input())
 
-    allres = []
-    for required_attack, required_defence in mrr:
+    for _ in range(k):
+        required_attack, required_defence = list(map(int,input().split()))
         # log(required_attack, required_defence)
         minres = 10**19
         idx = bisect.bisect_left(arr, required_attack)
@@ -134,9 +138,10 @@ def solve_(arr, mrr):
 
             minres = min(minres, res)
 
-        allres.append(minres)
+        # allres.append(minres)
+        print(minres)
 
-    return allres
+    # return allres
 
 
 for case_num in [0]:  # no loop over test case
@@ -154,29 +159,24 @@ for case_num in [0]:  # no loop over test case
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    arr = list(map(int,input().split()))
-    arr.sort()
-    # lst = minus_one(lst)
-
-    k = int(input())
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    mrr = read_matrix(k)  # and return as a list of list of int
+    # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-
-    res = solve(arr, mrr)  # include input here
+    res = solve()
+    # res = solve(arr, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    res = "\n".join(str(x) for x in res)
+    # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
