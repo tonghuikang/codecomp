@@ -78,9 +78,9 @@ if True:
     arr = []
     brr = []
     for _ in range(k):
-        a, *b = map(int,input().split())
-        arr.append(a)
-        brr.append(b)
+        crr = map(int,input().split())
+        arr.append(next(crr))
+        brr.append(list(crr))
     arr = tuple(x-1 for x in arr)
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
@@ -89,10 +89,14 @@ if True:
     banned = set(tuple(x-1 for x in map(int,input().split())) for _ in range(k))
 
     n = len(arr)
-    queue = [[sum(row[-1] for row in brr), tuple(arr)]]
+    queue = [[-sum(row[-1] for row in brr), -1, tuple(arr)]]
+    visited = set()
 
+    idx = 0
     while queue:
-        score, comb = heapq.heappop(queue)
+        idx += 1
+        score, _, comb = heapq.heappop(queue)
+        # print(score, comb)
         # log(score, comb)
         if comb not in banned:
             comb = [x+1 for x in comb]
@@ -107,6 +111,10 @@ if True:
             diff = brr[i][combi - 1] - brr[i][combi]
             comb[i] -= 1
             score -= diff
-            heapq.heappush(queue, (score, tuple(comb)))
+            tuple_comb = tuple(comb)
+            if tuple_comb in visited:
+                continue
+            heapq.heappush(queue, (score, idx, tuple(comb)))
+            visited.add(tuple_comb)
             comb[i] += 1
             score += diff
