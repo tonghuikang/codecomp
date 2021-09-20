@@ -89,14 +89,13 @@ if True:
     banned = set(tuple(x-1 for x in map(int,input().split())) for _ in range(k))
 
     n = len(arr)
-    queue = [[-sum(row[-1] for row in brr), -1, tuple(arr)]]
+    queue = [[-sum(row[-1] for row in brr), 0, tuple(arr)]]
     visited = set()
 
     idx = 0
     while queue:
-        idx += 1
         score, _, comb = heapq.heappop(queue)
-        # print(score, comb)
+        # print(score, _, comb)
         # log(score, comb)
         if comb not in banned:
             comb = [x+1 for x in comb]
@@ -113,8 +112,11 @@ if True:
             score -= diff
             tuple_comb = tuple(comb)
             if tuple_comb in visited:
+                comb[i] += 1
+                score += diff
                 continue
-            heapq.heappush(queue, (score, idx, tuple(comb)))
+            idx += 1
+            heapq.heappush(queue, (score, idx, tuple_comb))
             visited.add(tuple_comb)
             comb[i] += 1
             score += diff
