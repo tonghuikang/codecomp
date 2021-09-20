@@ -85,15 +85,6 @@ def solve(*args):
         log("----- ------- ------")
     return solve_(*args)
 
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
 def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
@@ -104,7 +95,7 @@ def solve_(arr, brr, banned):
     # your solution here
 
     n = len(arr)
-    queue = [[sum(row[-1] for row in brr), tuple(x-1 for x in arr)]]
+    queue = [[sum(row[-1] for row in brr), tuple(arr)]]
 
     while queue:
         score, comb = heapq.heappop(queue)
@@ -113,9 +104,10 @@ def solve_(arr, brr, banned):
             return comb
         comb = list(comb)
         for i in range(n):
-            if comb[i] == 0:
+            combi = comb[i]
+            if combi == 0:
                 continue
-            diff = brr[i][comb[i] - 1] - brr[i][comb[i]]
+            diff = brr[i][combi - 1] - brr[i][combi]
             comb[i] -= 1
             score -= diff
             heapq.heappush(queue, (score, tuple(comb)))
@@ -151,15 +143,12 @@ for case_num in [0]:  # no loop over test case
         a, *b = map(int,input().split())
         arr.append(a)
         brr.append(b)
+    arr = tuple(x-1 for x in arr)
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
     k = int(input())
-    banned = set()
-    for _ in range(k):
-        to_ban = tuple(map(int,input().split()))
-        to_ban = tuple(x-1 for x in to_ban)
-        banned.add(to_ban)
+    banned = set(tuple(x-1 for x in map(int,input().split())) for _ in range(k))
 
     res = solve(arr, brr, banned)  # include input here
 
