@@ -50,12 +50,24 @@ def minus_one_matrix(mrr):
 def solve_(a,b,c,m):
     # your solution here
 
-    upper = a//2 + b//2 + c//2
+    a,b,c = sorted([a,b,c])
 
-    if upper >= m:
-        return yes
+    upper = max(0,a-1) + max(0,b-1) + max(0,c-1)
 
-    return no
+    log(upper)
+
+    if m > upper:
+        return no
+
+    lower = (c - a - b - 1)
+    lower = max(lower, 0)
+
+    log(lower)
+
+    if m < lower:
+        return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
