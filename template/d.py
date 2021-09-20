@@ -89,8 +89,11 @@ if True:
     banned = set(tuple(x-1 for x in map(int,input().split())) for _ in range(k))
 
     n = len(arr)
-    queue = [[-sum(row[-1] for row in brr), 0, tuple(arr)]]
-    visited = set()
+    init_score = -sum(row[-1] for row in brr)
+    queue = [[init_score, 0, tuple(arr)]]
+    visited = set([tuple(arr)])
+
+    curmin = 0
 
     idx = 0
     while queue:
@@ -115,6 +118,13 @@ if True:
                 comb[i] += 1
                 score += diff
                 continue
+            if tuple_comb not in banned:
+                if score > curmin:
+                    comb[i] += 1
+                    score += diff
+                    continue
+                curmin = min(curmin, score)
+
             idx += 1
             heapq.heappush(queue, (score, idx, tuple_comb))
             visited.add(tuple_comb)
