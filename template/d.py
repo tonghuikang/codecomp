@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 import heapq
 input = sys.stdin.readline  # to read input quickly
 
@@ -14,14 +14,6 @@ input = sys.stdin.readline  # to read input quickly
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 # MAXINT = sys.maxsize
-
-# if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
-def log(*args):
-    if OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
-
 
 import os
 import sys
@@ -77,65 +69,11 @@ sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
 input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
-
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, brr, banned):
+if True:
     # your solution here
-
-    n = len(arr)
-    queue = [[sum(row[-1] for row in brr), tuple(arr)]]
-
-    while queue:
-        score, comb = heapq.heappop(queue)
-        # log(score, comb)
-        if comb not in banned:
-            return comb
-        comb = list(comb)
-        for i in range(n):
-            combi = comb[i]
-            if combi == 0:
-                continue
-            diff = brr[i][combi - 1] - brr[i][combi]
-            comb[i] -= 1
-            score -= diff
-            heapq.heappush(queue, (score, tuple(comb)))
-            comb[i] += 1
-            score += diff
-
-    return arr
-
-
-for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-# for case_num in range(int(input())):
-
-    # read line as an integer
-
-    # read line as a string
-    # srr = input().strip()
-
-    # read one line and parse each word as a string
-    # lst = input().split()
-
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = minus_one(lst)
-
-
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
     k = int(input())
     arr = []
     brr = []
@@ -150,17 +88,25 @@ for case_num in [0]:  # no loop over test case
     k = int(input())
     banned = set(tuple(x-1 for x in map(int,input().split())) for _ in range(k))
 
-    res = solve(arr, brr, banned)  # include input here
+    n = len(arr)
+    queue = [[sum(row[-1] for row in brr), tuple(arr)]]
 
-    # print length if applicable
-    # print(len(res))
-    res = [x+1 for x in res]
-    # parse result
-    res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
-
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
-    print(res)
+    while queue:
+        score, comb = heapq.heappop(queue)
+        # log(score, comb)
+        if comb not in banned:
+            comb = [x+1 for x in comb]
+            res = " ".join(str(x) for x in comb)
+            print(res)
+            sys.exit()
+        comb = list(comb)
+        for i in range(n):
+            combi = comb[i]
+            if combi == 0:
+                continue
+            diff = brr[i][combi - 1] - brr[i][combi]
+            comb[i] -= 1
+            score -= diff
+            heapq.heappush(queue, (score, tuple(comb)))
+            comb[i] += 1
+            score += diff
