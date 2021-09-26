@@ -47,18 +47,47 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+pdt = {}
+add = {}
+
+for i in range(10):
+    for j in range(10):
+
+        k = (i+j)%10
+        add[i,j] = k
+
+        k = (i*j)%10
+        pdt[i,j] = k
+
+
+# log(add)
+# log(pdt)
+
+m9 = 998244353
+
+
+def solve_(arr):
     # your solution here
 
-    return ""
+    dp = [0 for _ in range(10)]
+    dp[arr[0]] = 1
+
+    for x in arr[1:]:
+        new_dp = [0 for _ in range(10)]
+        for i in range(10):
+            new_dp[pdt[i,x]] += dp[i]
+            new_dp[add[i,x]] += dp[i]
+        dp = [x%m9 for x in new_dp]
+
+    return dp
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +97,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,14 +105,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
