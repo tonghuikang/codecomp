@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+M9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -46,16 +46,35 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# print(3567170121152297677747162706050162%M9)
 
-def solve_():
-    # your solution here
+def solve_(n, d):
+    # consider a node at each level, count how many path can it apex
 
-    return ""
+    res = 0
+    for h in range(n):  # base is height zero
+        log("\n", h)
+        cnt = 0
+        if h >= d:
+            cnt += pow(2, d+1, M9)
+        for j in range(1,d):
+            left_depth, right_depth = j, d-j
+            if right_depth > h or left_depth > h:
+                continue
+            val = pow(2, left_depth-1, M9) * pow(2, right_depth-1, M9)
+            # log("lr", val, left_depth, right_depth)
+            cnt += val*2
+        num_nodes = pow(2, n-h-1, M9)
+        # log("level", h, cnt, num_nodes, pow(2, d, M9))
+        cnt = cnt*num_nodes
+        res += cnt
+        res = res%M9
+    return res%M9
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,7 +86,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,d = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +95,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,d)  # include input here
 
     # print length if applicable
     # print(len(res))
