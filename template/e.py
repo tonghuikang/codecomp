@@ -55,24 +55,14 @@ def solve_(n, d):
     res = 0
     for h in range(n):  # base is height zero
         # log("\n", h)
-        cnt = 0
+
+        c_ref = max(0,min(d-1, 2*h + 1 - d))
+        num_nodes = pow(2, n-h-1, M9)
+
+        cnt = d2*c_ref
         if h >= d:
             cnt += d1
-
-        c = 0
-        for j in range(1,d):
-            left_depth, right_depth = j, d-j
-            if right_depth > h or left_depth > h:
-                continue
-            c += 1
-            cnt += d2
-        c_ref = max(0,min(d-1, 2*h + 1 - d))
-        # log(c, c_ref)
-        assert c == c_ref
-        num_nodes = pow(2, n-h-1, M9)
-        # log("level", h, cnt, num_nodes, pow(2, d, M9))
-        cnt = cnt*num_nodes
-        res += cnt
+        res += cnt*num_nodes
         res = res%M9
     return res%M9
 
