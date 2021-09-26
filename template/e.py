@@ -46,24 +46,29 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-# print(3567170121152297677747162706050162%M9)
 
 def solve_(n, d):
     # consider a node at each level, count how many path can it apex
+    d1 = pow(2, d+1, M9)
+    d2 = pow(2, d-1, M9)
 
     res = 0
     for h in range(n):  # base is height zero
-        log("\n", h)
+        # log("\n", h)
         cnt = 0
         if h >= d:
-            cnt += pow(2, d+1, M9)
+            cnt += d1
+
+        c = 0
         for j in range(1,d):
             left_depth, right_depth = j, d-j
             if right_depth > h or left_depth > h:
                 continue
-            val = pow(2, left_depth-1, M9) * pow(2, right_depth-1, M9)
-            # log("lr", val, left_depth, right_depth)
-            cnt += val*2
+            c += 1
+            cnt += d2
+        c_ref = max(0,min(d-1, 2*h + 1 - d))
+        # log(c, c_ref)
+        assert c == c_ref
         num_nodes = pow(2, n-h-1, M9)
         # log("level", h, cnt, num_nodes, pow(2, d, M9))
         cnt = cnt*num_nodes
