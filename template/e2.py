@@ -179,21 +179,24 @@ class FenwickTree:
 def solve_(arr):
     # your solution here
 
-    arr = [M9 + x for x in arr]
+    arr = [100 + x for x in arr]
+    # arr = [M9 + x for x in arr]
 
     res = deque([arr[0]])
 
+    c = Counter()
     f = FenwickTree()
     f.update(arr[0], 1)
 
     for i,x in enumerate(arr[1:], start=1):
-        val = f.query(x)
-        # log(val)
-        if val*2 > i:
+        val = f.query(x-1)
+        log(x, val, res)
+        if val > (i-c[x])/2:
             res.append(x)
         else:
             res.appendleft(x)
         f.update(x,1)
+        c[x] += 1
 
     # log(res)
     return count_inversions(res)
