@@ -148,19 +148,54 @@ def count_inversions(arr):
     return result
 
 
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+    def __init__(self, bits=31):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+
+    def update(self, x, increment):
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
+
+
 def solve_(arr):
     # your solution here
 
+    arr = [M9 + x for x in arr]
+
     res = deque([arr[0]])
 
-    for x in arr[1:]:
-        if x < res[-1]:
-            res.appendleft(x)
-        else:
+    f = FenwickTree()
+    f.update(arr[0], 1)
+
+    for i,x in enumerate(arr[1:], start=1):
+        val = f.query(x)
+        # log(val)
+        if val*2 > i:
             res.append(x)
+        else:
+            res.appendleft(x)
+        f.update(x,1)
 
-
-    log(res)
+    # log(res)
     return count_inversions(res)
 
 
