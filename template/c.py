@@ -47,18 +47,64 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr):
+def solve_(mrr, d):
     # your solution here
+    h,w = len(mrr), len(mrr[0])
+    mrr = [[int(cell == "*") for cell in row] for row in mrr]
 
-    res = deque([arr[0]])
 
-    for x in arr[1:]:
-        if x < res[0]:
-            res.appendleft(x)
-        else:
-            res.append(x)
+    for i in range(h):
+        for j in range(w):
+            # check for candidature
+            if mrr[i][j] > 0:
 
-    return res
+                x,y = i-1,j-1
+                c = 0
+                while x >= 0 and y >= 0:
+                    if mrr[x][y] == 0:
+                        break
+                    c += 1
+                    x -= 1
+                    y -= 1
+                if c < d:
+                    continue
+
+                x,y = i-1,j+1
+                c = 0
+                while x >= 0 and y < w:
+                    if mrr[x][y] == 0:
+                        break
+                    c += 1
+                    x -= 1
+                    y += 1
+                if c < d:
+                    continue
+
+                mrr[i][j] = 2
+
+                x,y = i-1,j-1
+                while x >= 0 and y >= 0:
+                    if mrr[x][y] == 0:
+                        break
+                    mrr[x][y] = 2
+                    x -= 1
+                    y -= 1
+
+                x,y = i-1,j+1
+                while x >= 0 and y < w:
+                    if mrr[x][y] == 0:
+                        break
+                    mrr[x][y] = 2
+                    x -= 1
+                    y += 1
+
+    # for row in mrr:
+    #     log(row)
+
+    if sum(row.count(1) for row in mrr) == 0:
+        return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -75,16 +121,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_strings(a)  # and return as a list of str
+    # mrr = read_matrix(a)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, c)  # include input here
 
     # print length if applicable
     # print(len(res))
