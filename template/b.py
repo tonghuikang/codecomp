@@ -56,13 +56,17 @@ def solve_(arr):
     # log(target)
 
     for i in range(len(arr)):
-        x = arr[i]
-        idx = target.index(x)
+        x = target[i]
+        idx = arr.index(x)
+        log(arr)
         if i == idx:
             continue
-        arr[i:idx] = [arr[idx]] + arr[i:idx]
-        log(arr)
-        res.append([i+1, idx+1, 1])
+        arr[i:idx+1] = [arr[idx]] + arr[i:idx]
+        res.append([i+1, idx+1, idx-i])
+
+        x = target[i]
+        idx = arr.index(x)
+        assert idx == i
 
     return res
 

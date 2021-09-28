@@ -47,10 +47,18 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    res = deque([arr[0]])
+
+    for x in arr[1:]:
+        if x < res[0]:
+            res.appendleft(x)
+        else:
+            res.append(x)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
