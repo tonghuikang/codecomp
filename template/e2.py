@@ -1,10 +1,61 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
-input = sys.stdin.readline  # to read input quickly
+import os
+import sys
+from io import BytesIO, IOBase
+sys.setrecursionlimit(300000)
+
+BUFSIZE = 8192
+
+
+class FastIO(IOBase):
+    newlines = 0
+
+    def __init__(self, file):
+        self._fd = file.fileno()
+        self.buffer = BytesIO()
+        self.writable = "x" in file.mode or "r" not in file.mode
+        self.write = self.buffer.write if self.writable else None
+
+    def read(self):
+        while True:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            if not b:
+                break
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines = 0
+        return self.buffer.read()
+
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines -= 1
+        return self.buffer.readline()
+
+    def flush(self):
+        if self.writable:
+            os.write(self._fd, self.buffer.getvalue())
+            self.buffer.truncate(0), self.buffer.seek(0)
+
+
+class IOWrapper(IOBase):
+    def __init__(self, file):
+        self.buffer = FastIO(file)
+        self.flush = self.buffer.flush
+        self.writable = self.buffer.writable
+        self.write = lambda s: self.buffer.write(s.encode("ascii"))
+        self.read = lambda: self.buffer.read().decode("ascii")
+        self.readline = lambda: self.buffer.readline().decode("ascii")
+
+
+sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -141,12 +192,6 @@ def merge(arr, temp_arr, left, mid, right):
     return inv_count
 
 
-# This code is contributed by ankush_953
-
-def count_inversions(arr):
-    result = mergeSort(arr, len(arr))
-    return result
-
 
 class FenwickTree:
     # also known as Binary Indexed Tree
@@ -174,13 +219,24 @@ class FenwickTree:
         return res
 
 
+def count_inversions(perm):
+    # number of adjacent inversions needed to return to identity permutation
+    # for each index, count how many numbers on its left that are larger
+    # this is also a sample on how to use the class
+    res = 0
+    t = FenwickTree(bits = 1+len(bin(max(perm))))
+    for i,x in enumerate(perm):
+        cnt = t.query(x)
+        res += i-cnt
+        t.update(x, 1)
+    return res
 
 
 def solve_(arr):
     # your solution here
 
-    arr = [100 + x for x in arr]
-    # arr = [M9 + x for x in arr]
+    # arr = [100 + x for x in arr]
+    arr = [M9 + x for x in arr]
 
     res = deque([arr[0]])
 
@@ -190,8 +246,8 @@ def solve_(arr):
 
     for i,x in enumerate(arr[1:], start=1):
         val = f.query(x-1)
-        log(x, val, res)
-        if val > (i-c[x])/2:
+        # log(x, val, i-c[x], i, c[x], res)
+        if val >= i-c[x]-val:
             res.append(x)
         else:
             res.appendleft(x)
