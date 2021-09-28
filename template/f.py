@@ -49,8 +49,12 @@ def minus_one_matrix(mrr):
 
 def solve_(arr, d):
     n = len(arr)
-    if sum(arr) == 0:
+    sumarr = sum(arr)
+    if sumarr == 0:
         return 0
+    if sumarr == n:
+        return -1
+
     # your solution here
     maxres = 0
 
@@ -69,15 +73,15 @@ def solve_(arr, d):
             visited.add(cur)
             nex = (cur+d)%n
 
-        # log(brr)
+        log(brr)
 
         brr = brr+brr
         curcnt = 0
         for x in brr:
             if x == 0:
+                flag = False
                 curcnt = 0
             else:
-                flag = False
                 curcnt += 1
                 maxres = max(maxres, curcnt)
         if flag:
