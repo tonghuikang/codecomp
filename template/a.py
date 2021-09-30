@@ -47,8 +47,16 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, n, m):
     # your solution here
+
+    # 400 * 400 * 20?
+
+    # for i in range(n-5):
+    #     for j in range(m-4):
+    #         for x in [i+1, i+2, i+3]:
+    #             for j in range()
+
 
     return ""
 
@@ -67,16 +75,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(n)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))

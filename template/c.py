@@ -47,15 +47,73 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    timings = {}
+    for i,(a,b) in enumerate(arr, start=1):
+        timings[i] = (a,b,a+b)
+    del arr
+
+    threshold = 5
+
+    # big cycle tracker
+    diff_arr = [0 for _ in range(m+1)]
+
+    # small cycle tracker
+    clock = [[], [0]]
+    for i in range(2, threshold):
+        clock.append([0]*i)
+    pointer = [0]*threshold
+
+    res = []
+    cur_num = 0
+
+    for start, (op, train) in enumerate(brr):
+
+        for i in range(2, threshold):
+            pointer[i] = (pointer[i] + 1)%i
+
+        if op == 1:
+            make_diff = 1
+        else:
+            make_diff = -1
+
+        running, maintaining, cycle_size = timings[train]
+
+        if cycle_size >= threshold:
+            # big cycle case
+            cur = start
+            while cur < m+1:
+                diff_arr[cur] += make_diff
+                cur += running
+                if not cur < m+1:
+                    break
+                diff_arr[cur] -= make_diff
+                cur += maintaining
+
+        else:
+            # small cycle case
+            clock[cycle_size][pointer[cycle_size]] += make_diff
+            clock[cycle_size][(pointer[cycle_size] + running)%cycle_size] -= make_diff
+
+        cur_num += diff_arr[start]
+
+        for i in range(2,threshold):
+            cur_num += clock[i][pointer[i]]
+
+        log(start, (op, train), running, maintaining, cycle_size)
+        log(clock)
+        log(pointer)
+
+        res.append(cur_num)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,23 +125,24 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    arr = read_matrix(n)  # and return as a list of list of int
+    brr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
