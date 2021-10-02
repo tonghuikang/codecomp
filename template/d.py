@@ -47,18 +47,33 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    mods = Counter()
+    for a,b in mrr:
+        mods[a] += 1
+        mods[a+b] -= 1
+
+    events = [(k,v) for k,v in mods.items() if v]
+    events.sort()
+
+    res = [0 for _ in range(len(mrr) + 1)]
+
+    cnt = 0
+    for (a,x),(b,y) in zip(events, events[1:]):
+        cnt += x
+        res[cnt] += b-a
+
+    return res[1:]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,16 +88,16 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
