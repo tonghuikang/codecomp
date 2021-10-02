@@ -78,12 +78,20 @@ def solve_(arr):
 
     f = FenwickTree()
 
+    # number of numbers smaller than itself
+
     res = 0
+    f.update(0, 1)
     for prev_cnt,x in enumerate(arr):
-        val = f.query(x + 1)
+        f.update(x, 1)
+        val = f.query(x)
+        log(f.query(x), val)
+        res += pow(2, val-2, 998244353)
 
+    # res -= len(arr)
+    # res -= 1
 
-    return ""
+    return res
 
 
 for case_num in [0]:  # no loop over test case
