@@ -47,21 +47,44 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+    arr = [int(x) for x in srr]
+
+    arr.sort()
+    arr.reverse()
+
+    maxres = 0
+
+    for mask in itertools.product([0,1], repeat=len(srr)):
+        left = [x for b,x in zip(mask, arr) if b]
+        right = [x for b,x in zip(mask, arr) if not b]
+        if not left:
+            continue
+        if not right:
+            continue
+        if left[0] == 0:
+            continue
+        if right[0] == 0:
+            continue
+        left_num = int("".join(str(x) for x in left))
+        right_num = int("".join(str(x) for x in right))
+        res = left_num*right_num
+        maxres = max(maxres, res)
+
+    return maxres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +99,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
