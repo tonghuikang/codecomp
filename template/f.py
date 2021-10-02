@@ -57,7 +57,7 @@ def solve_(mrr):
         g[b].append(a)
 
 
-    queue = deque([1])
+    queue = deque([0])
     visited = set(queue)
     while queue:
         cur = queue.popleft()
@@ -87,8 +87,6 @@ def solve_(mrr):
                 continue
             d1[nex] = d1[cur] + 1
             queue.append(nex)
-
-    dist = d1[cur]
 
     e2 = cur
     queue = deque([e2])
@@ -149,14 +147,19 @@ def solve_(mrr):
             group_counts.append(group_count)
         log(group_counts)
 
-        # all possible masks
-        res = pow(2, len(endpoints), 998244353)
-
-        # minus all selected come from only one
+        # select one or zero from each group
+        res = 1
         for x in group_counts:
-            res -= pow(2, x, 998244353) - 1
+            res = res * (x+1)
+            res = res%998244353
 
-        # minus none selected
+        log(res)
+
+        # select only one group
+        for x in group_counts:
+            res -= x
+
+        # select none of the groups
         res -= 1
 
         return res
@@ -171,7 +174,7 @@ def solve_(mrr):
             g2_size += 1
         assert not a == b == maxd
 
-    # log(g1_size, g2_size)
+    log(g1_size, g2_size)
 
     return (g1_size * g2_size) % 998244353
 
