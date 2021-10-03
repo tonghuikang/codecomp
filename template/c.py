@@ -107,27 +107,39 @@ def solve_(mrr, arr, k, n):
     @bootstrap
     def dfs(cur):
         curxor = arr[cur]
+        found_xor = False
+        found_zero = False
+        count_xor = 0
         for nex in g[cur]:
             if nex in visited:
                 continue
             visited.add(nex)
-            nexxor = yield dfs(nex)
+            nexxor, f1, f2 = yield dfs(nex)
             curxor = curxor^nexxor
+            found_xor = found_xor | f1
+            found_zero = found_zero | f2
+            if f1:
+                count_xor += 1
         if cur != 0:
             c[curxor] += 1
-        yield curxor
+        if found_xor and curxor == 0:
+            found_zero = True
+        if count_xor >= 2:
+            found_zero = True
+        if curxor == allxor:
+            found_xor = True
+        yield curxor, found_xor, found_zero
 
-    dfs(0)
+    curxor, found_xor, found_zero = dfs(0)
+
+    if found_zero:
+        return yes
 
     log(allxor)
     log(c)
 
-
-    if c[allxor] >= 2:
-        return yes
-
-    if c[allxor] == 1 and c[0] >= 1:
-        return yes
+    # if c[allxor] >= 2:
+    #     return yes
 
     return no
 
