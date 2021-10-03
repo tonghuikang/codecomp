@@ -24,7 +24,7 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def query(arr):
-    print("? {}".format(" ".join(str(pos+1) for pos in arr)), flush=True)
+    print("? {} {}".format(len(arr), " ".join(str(pos+1) for pos in arr)), flush=True)
     response = int(input())
     return response
 
