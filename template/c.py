@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter, defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -46,11 +44,89 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    # usage - please remember to YIELD to call and return
+    '''
+    @bootstrap
+    def recurse(n):
+        if n <= 0:
+            yield 0
+        yield (yield recurse(n-1)) + 2
+
+    res = recurse(10**5)
+    '''
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    if stack:
+                        stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
+
 
 def solve_(mrr, arr, k, n):
     # your solution here
 
-    return ""
+    # hypothesis either one or two
+
+    allxor = 0
+    for x in arr:
+        allxor = allxor^x
+
+    if allxor != 0 and k == 2:
+        return no
+
+    # calculate edge xor diff
+
+    g = defaultdict(list)
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    c = Counter()
+
+    visited = set([0])
+
+    @bootstrap
+    def dfs(cur):
+        curxor = arr[cur]
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            nexxor = yield dfs(nex)
+            curxor = curxor^nexxor
+        c[curxor] += 1
+        yield curxor
+
+    dfs(0)
+
+    log(allxor)
+    log(c)
+
+
+    if 0 in c:
+        return yes
+
+    if k == 2:
+        return no
+
+    if c[allxor] >= 2:
+        return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -74,7 +150,7 @@ for case_num in range(int(input())):
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(n-1)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = minus_one_matrix(mrr)
 
     res = solve(mrr, arr, k, n)  # include input here
 
