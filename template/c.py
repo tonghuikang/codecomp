@@ -2,7 +2,7 @@
 import sys
 import getpass  # not available on codechef
 from collections import Counter, defaultdict
-input = sys.stdin.readline  # to read input quickly
+input = sys.stdin.buffer.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -57,11 +57,11 @@ def bootstrap(f, stack=[]):
 
     res = recurse(10**5)
     '''
-    def wrappedfunc(*args, **kwargs):
+    def wrappedfunc(args):
         if stack:
-            return f(*args, **kwargs)
+            return f(args)
         else:
-            to = f(*args, **kwargs)
+            to = f(args)
             while True:
                 if type(to) is GeneratorType:
                     stack.append(to)
@@ -85,7 +85,12 @@ def solve_(mrr, arr, k, n):
     for x in arr:
         allxor = allxor^x
 
-    if allxor != 0 and k == 2:
+    if allxor == 0:
+        # any leaf is ok
+        return yes
+
+    if k == 2:
+        # not even, not possible
         return no
 
     # calculate edge xor diff
@@ -108,7 +113,8 @@ def solve_(mrr, arr, k, n):
             visited.add(nex)
             nexxor = yield dfs(nex)
             curxor = curxor^nexxor
-        c[curxor] += 1
+        if cur != 0:
+            c[curxor] += 1
         yield curxor
 
     dfs(0)
@@ -117,13 +123,10 @@ def solve_(mrr, arr, k, n):
     log(c)
 
 
-    if 0 in c:
+    if c[allxor] >= 2:
         return yes
 
-    if k == 2:
-        return no
-
-    if c[allxor] >= 2:
+    if c[allxor] == 1 and c[0] >= 1:
         return yes
 
     return no
