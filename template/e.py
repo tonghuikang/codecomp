@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,12 +45,17 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def modinv_p(base, p):
+    # modular if the modulo is a prime
+    return pow(base, p-2, p)
+
+
 class FenwickTree:
     # also known as Binary Indexed Tree
     # binarysearch.com/problems/Virtual-Array
     # https://leetcode.com/problems/create-sorted-array-through-instructions
     # may need to be implemented again to reduce constant factor
-    def __init__(self, bits=31):
+    def __init__(self, bits=20):
         self.c = defaultdict(int)
         self.LARGE = 2**bits
 
@@ -76,22 +79,28 @@ class FenwickTree:
 def solve_(arr):
     # your solution here
 
+    comp = {x:i for i,x in enumerate(sorted(arr))}
+    arr = [comp[x] for x in arr]
+
     f = FenwickTree()
 
     # number of numbers smaller than itself
 
     res = 0
-    f.update(0, 1)
-    for prev_cnt,x in enumerate(arr):
-        f.update(x, 1)
-        val = f.query(x)
-        log(f.query(x), val)
-        res += pow(2, val-2, 998244353)
+    for i,x in enumerate(arr):
+        ip2i = f.query(x)
+        p2j = pow(2, i, 998244353)
+        val = p2j * ip2i
+        res += val
+        # log(val)
+
+        ip2i = modinv_p(p2j * 2, 998244353)
+        f.update(x, ip2i)
 
     # res -= len(arr)
     # res -= 1
 
-    return res
+    return res%998244353
 
 
 for case_num in [0]:  # no loop over test case
