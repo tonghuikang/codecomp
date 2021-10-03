@@ -47,10 +47,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, diff):
     # your solution here
+    sorted_arr = sorted(arr)
+    if arr == sorted_arr:
+        return yes
 
-    return ""
+    if diff == len(arr):
+        return no
+
+    if diff <= len(arr) / 2:
+        return yes
+
+    left_extent = len(arr) - diff
+    right_extent = diff
+
+    frozen = arr[left_extent:right_extent]
+
+    unfrozen = arr[:left_extent] + arr[right_extent:]
+
+    unfrozen = sorted(unfrozen)
+
+
+    arr[:left_extent] = unfrozen[:left_extent]
+    arr[right_extent:] = unfrozen[left_extent:]
+
+    if arr == sorted_arr:
+        return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,8 +92,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    _,x = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +101,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, x)  # include input here
 
     # print length if applicable
     # print(len(res))
