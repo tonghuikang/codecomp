@@ -64,6 +64,8 @@ def solve_(arr, diff):
 
     frozen = arr[left_extent:right_extent]
 
+    log(frozen)
+
     unfrozen = arr[:left_extent] + arr[right_extent:]
 
     unfrozen = sorted(unfrozen)
