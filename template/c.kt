@@ -15,17 +15,56 @@ fun main() {
     val case_num = readInt()
 
     for (i in 1..case_num) {
-        var n = readInt()
-        var aa = readInts()
-        var bb = readInts()
-        var c = readInt()
+        var q = readInt()
 
-        var a = aa[0]
-        var b = bb[0]
-        var va = aa[1]
-        var vb = bb[1]
+        var mins = 0
+        var maxs = 100
 
-        println(listOf(vb,va+c-a).minOrNull());
+        for (j in 1..q) {
+            var inp = readStrings()
+            println(inp)
+            var arr = inp[0]
+            var brr = inp[1]
+            var c = inp[2]
+
+            if (c[0] == '0' && mins == 0){
+                mins == 1
+            }
+
+            var a1 = arr.length - 1
+            var b1 = brr.length - 1
+            var cntr = 0
+
+            while (a1 >= 0 && b1 >= 0) {
+                if (arr[a1] != brr[b1]) {
+                    break
+                }
+                a1 -= 1
+                b1 -= 1
+                cntr += 1
+
+            }
+
+            println(cntr)
+            if (c[0] == '1' && maxs > cntr){
+                maxs = cntr
+            }
+
+            // if (c[0] == '0'){
+            // }
+
+        }
+
+        println()
+        println(mins)
+        println(maxs)
+        // println(maxallow - minallow + 1)
+        // for (x in minallow..maxallow) {
+        //     print(x)
+        //     print(" ")
+        // }
+        println()
+        println()
 
     }
 }
