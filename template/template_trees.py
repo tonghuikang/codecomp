@@ -88,11 +88,14 @@ class FenwickTree:
     # binarysearch.com/problems/Virtual-Array
     # https://leetcode.com/problems/create-sorted-array-through-instructions
     # may need to be implemented again to reduce constant factor
+
+    # ALL ELEMENTS ARE TO BE POSITIVE
     def __init__(self, bits=31):
         self.c = defaultdict(int)
         self.LARGE = 2**bits
 
     def update(self, x, increment):
+        # future query(y) to increase for all y >= x
         x += 1  # to avoid infinite loop at x > 0
         while x <= self.LARGE:
             # increase by the greatest power of two that divides x
