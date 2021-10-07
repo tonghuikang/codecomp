@@ -15,28 +15,31 @@ fun main() {
     val case_num = readInt()
 
     for (i in 1..case_num) {
-        var inp = readInts()
-        var n = inp[0]
-        var k = inp[1]
         var srr = readLn()
-        var stack = 0
-        var blocks = 0
+        var a = 0
+        var b = 0
         for (c in srr) {
             // print(c)
-            if (c == '('){
-                stack ++
-            } else {
-                stack --
+            if (c == '<'){
+                a ++
             }
-            if (stack == 0){
-                blocks ++
+            if (c == '>'){
+                b ++
             }
         }
-        var depth = n/2 - blocks
-        if (k > depth){
-            println(blocks + depth)
-        } else {
-            println(blocks + k)
+        if (a > 0 && b > 0){
+            println('?');
+            continue;
         }
+        if (a > 0) {
+            println('<');
+            continue;
+        }
+        if (b > 0) {
+            println('>');
+            continue;
+        }
+        println('=');
+        continue;
     }
 }
