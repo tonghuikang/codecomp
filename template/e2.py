@@ -78,21 +78,26 @@ def solve_(arr, k):
                 return 0
         mapp[node] = color
 
-    log(arr)
+    # log(arr)
 
+    # to 3 colors
     count = {}
     visited = set()
-    # to 3 colors
+    # visited = set([-x[0] for x in arr])
 
 
     # for node, color, level in arr:
     while arr:
+        # log(sorted(arr))
         node, color, level = heapq.heappop(arr)
 
         node = -node
         if node in visited:
             continue
         visited.add(node)
+
+        # log("node")
+        # log(node)
 
         left_child = node*2
         right_child = node*2+1
@@ -126,14 +131,20 @@ def solve_(arr, k):
         #     res[1] *= 2
         #     res[2] *= 2
 
+        res = [res[0]%M9, res[1]%M9, res[2]%M9]
+
         count[node] = res
 
-        # log(node, color, res)
+        log(node, color, res)
 
-        heapq.heappush(arr, (-(node//2), 0, level-1))
+        parent = node//2
+        # if parent in visited:
+        #     continue
 
+        heapq.heappush(arr, (-(parent), 0, level-1))
 
-
+        if parent == 0:
+            break
 
 
     return sum(count[1])%M9
