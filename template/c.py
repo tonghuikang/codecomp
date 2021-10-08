@@ -89,7 +89,8 @@ def solve_(srr, c):
     # log(jumpable)
 
     for i in jumpable[::-1]:
-        for j in range(i,len(srr),i):
+        for j in range(i,len(srr)+1,i):
+            # log(i,j)
             if j not in jumpable_set:
                 break
         else:
