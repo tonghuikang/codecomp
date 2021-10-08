@@ -138,8 +138,8 @@ def solve_(arr, k):
         log(node, color, res)
 
         parent = node//2
-        # if parent in visited:
-        #     continue
+        if parent in visited:
+            continue
 
         heapq.heappush(arr, (-(parent), 0, level-1))
 
