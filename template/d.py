@@ -36,7 +36,7 @@ def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
 
 def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
+    return [list(input().split()) for _ in range(rows)]
 
 def minus_one(arr):
     return [x-1 for x in arr]
@@ -47,7 +47,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr,n):
     # your solution here
 
     return ""
@@ -67,16 +67,18 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(m)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    arr = [(int(x[0]), int(x[1]), int("imposter" == x[2])) for x in arr]
+
+    res = solve(arr,n)  # include input here
 
     # print length if applicable
     # print(len(res))
