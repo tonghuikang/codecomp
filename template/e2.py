@@ -36,7 +36,7 @@ def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
 
 def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
+    return [list(input().split()) for _ in range(rows)]
 
 def minus_one(arr):
     return [x-1 for x in arr]
@@ -47,10 +47,12 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(k):
+def solve_(arr, k):
     # your solution here
 
     # return pow(2,4*k,M9)*6
+
+    unconstrainted = [1,1]
 
     res = 1
     for _ in range(k-1):
@@ -61,9 +63,80 @@ def solve_(k):
 
         res = new%M9
 
-        log(res*6)
+        unconstrainted.append(res)
 
-    return (res*6)%M9
+    unconstrainted = unconstrainted[::-1]
+
+    log(unconstrainted)
+
+    mapp = {}
+    for node, color, level in arr[::-1]:
+        node = -node
+        log(node, node//2)
+        if node//2 in mapp:
+            if mapp[node//2] == color or mapp[node//2] == -color:
+                return 0
+        mapp[node] = color
+
+    log(arr)
+
+    count = {}
+    visited = set()
+    # to 3 colors
+
+
+    # for node, color, level in arr:
+    while arr:
+        node, color, level = heapq.heappop(arr)
+
+        node = -node
+        if node in visited:
+            continue
+        visited.add(node)
+
+        left_child = node*2
+        right_child = node*2+1
+
+        res = [1,1,1]
+
+        if left_child in count:
+            a0,a1,a2 = count[left_child]
+        else:
+            a0,a1,a2 = [2*unconstrainted[level], 2*unconstrainted[level], 2*unconstrainted[level]]
+
+        if right_child in count:
+            b0,b1,b2 = count[right_child]
+        else:
+            b0,b1,b2 = [2*unconstrainted[level], 2*unconstrainted[level], 2*unconstrainted[level]]
+
+        res[0] = a1*b2 + a2*b1 + a1*b1 + a2*b2
+        res[1] = a2*b0 + a0*b2 + a2*b2 + a0*b0
+        res[2] = a0*b1 + a1*b0 + a0*b0 + a1*b1
+
+        if level == k:
+            res = [1,1,1]
+
+        if color != 0:
+            col = abs(color)-1
+            r2 = res[col]
+            res = [0,0,0]
+            res[col] = r2
+        # else:
+        #     res[0] *= 2
+        #     res[1] *= 2
+        #     res[2] *= 2
+
+        count[node] = res
+
+        # log(node, color, res)
+
+        heapq.heappush(arr, (-(node//2), 0, level-1))
+
+
+
+
+
+    return sum(count[1])%M9
 
 
 for case_num in [0]:  # no loop over test case
@@ -84,12 +157,19 @@ for case_num in [0]:  # no loop over test case
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
+    mapp = {"white": 1, "yellow": -1, "green": 2, "blue": -2, "red": 2, "orange": -2}
+
+    r = int(input())
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(r)  # and return as a list of str
+
+    arr = [(-int(x[0]), mapp[x[1]], -2 + len(bin(int(x[0])))) for x in arr]
+    arr.sort()
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(k)  # include input here
+    res = solve(arr, k)  # include input here
+
 
     # print length if applicable
     # print(len(res))
