@@ -114,22 +114,30 @@ def solve_(arr, k):
         else:
             b0,b1,b2 = [2*unconstrainted[level], 2*unconstrainted[level], 2*unconstrainted[level]]
 
+        # log()
+        # log([a0,a1,a2])
+        # log([b0,b1,b2])
+
         res[0] = a1*b2 + a2*b1 + a1*b1 + a2*b2
         res[1] = a2*b0 + a0*b2 + a2*b2 + a0*b0
         res[2] = a0*b1 + a1*b0 + a0*b0 + a1*b1
 
         if level == k:
-            res = [1,1,1]
+            if color == 0:
+                res = [2,2,2]
+            else:
+                res = [0,0,0]
+                res[abs(color)-1] = 1
 
-        if color != 0:
+        elif color != 0:
             col = abs(color)-1
             r2 = res[col]
             res = [0,0,0]
             res[col] = r2
-        # else:
-        #     res[0] *= 2
-        #     res[1] *= 2
-        #     res[2] *= 2
+        else:
+            res[0] *= 2
+            res[1] *= 2
+            res[2] *= 2
 
         res = [res[0]%M9, res[1]%M9, res[2]%M9]
 
@@ -138,8 +146,8 @@ def solve_(arr, k):
         log(node, color, res)
 
         parent = node//2
-        if parent in visited:
-            continue
+        # if parent in visited:
+        #     continue
 
         heapq.heappush(arr, (-(parent), 0, level-1))
 
@@ -168,13 +176,13 @@ for case_num in [0]:  # no loop over test case
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
-    mapp = {"white": 1, "yellow": -1, "green": 2, "blue": -2, "red": 2, "orange": -2}
+    mapp = {"white": 1, "yellow": -1, "green": 2, "blue": -2, "red": 3, "orange": -3}
 
     r = int(input())
     # read multiple rows
     arr = read_strings(r)  # and return as a list of str
 
-    arr = [(-int(x[0]), mapp[x[1]], -2 + len(bin(int(x[0])))) for x in arr]
+    arr = [(-int(x[0]), -abs(mapp[x[1]]), -2 + len(bin(int(x[0])))) for x in arr]
     arr.sort()
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
