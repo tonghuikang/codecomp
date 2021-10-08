@@ -47,10 +47,24 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k):
     # your solution here
 
-    return ""
+    # k in base n
+    # k -= 1
+    binarr = bin(k)[2:]
+
+    # log(binarr)
+
+    res = 0
+    for c in binarr:
+        res *= n
+        if c == "1":
+            res += 1
+        res = res%M9
+        # log(res)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +81,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +90,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
