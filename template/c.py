@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,15 +44,59 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    players = {i:0 for i in range(1, 1+len(arr))}
+
+    for i,plays in enumerate(zip(*arr)):
+        log(plays)
+        p0 = plays[0::2]
+        p1 = plays[1::2]
+
+        rankings = [(x,i) for i,x in players.items()]
+        rankings.sort()
+        # rankings.reverse()
+        log(rankings)
+
+        x0 = rankings[0::2]
+        x1 = rankings[1::2]
+
+        # x0 = range(1,1+len(arr),2)
+        # x1 = range(2,1+len(arr),2)
+
+        for (_,y0),(_,y1) in zip(x0, x1):
+            a = arr[y0-1][i]
+            b = arr[y1-1][i]
+            # log(a,b,y0,y1)
+            if a == b:
+                continue
+            if a == "G" and b == "C":
+                players[y0] -= 1
+            if a == "C" and b == "P":
+                players[y0] -= 1
+            if a == "P" and b == "G":
+                players[y0] -= 1
+
+            if b == "G" and a == "C":
+                players[y1] -= 1
+            if b == "C" and a == "P":
+                players[y1] -= 1
+            if b == "P" and a == "G":
+                players[y1] -= 1
 
 
-# for case_num in [0]:  # no loop over test case
+    rankings = [(x,i) for i,x in players.items()]
+    rankings.sort()
+    # rankings.reverse()
+    log(rankings)
+
+    return [x[1] for x in rankings]
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,23 +108,23 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    k,_ = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(2*k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
