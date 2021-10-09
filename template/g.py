@@ -47,10 +47,40 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+# https://math.stackexchange.com/questions/2442809/how-can-i-get-the-length-of-repeating-decimal
+def solve_(k):
     # your solution here
 
-    return ""
+    if k%2 == 0:
+        k = k//2
+
+    if k%2 == 0 or k%5 == 0:
+        return -1
+
+    factors = get_prime_factors(k)
+
+    tot = 1
+    for x in factors:
+        tot *= x-1
+
+    return tot
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +88,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +106,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
