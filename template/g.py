@@ -76,9 +76,37 @@ def solve_(k):
 
     factors = get_prime_factors(k)
 
+    log(factors)
+
     tot = 1
     for x in factors:
         tot *= x-1
+
+    if k%3 == 0 and tot%3 != 0:
+        tot *= 3
+        tot = tot//2
+
+    if k%9 == 0 and tot%9 != 0:
+        tot *= 3
+        tot = tot//2
+
+    if k%11 == 0 and tot%10 == 0:
+        # tot *= 3
+        tot = tot//5
+
+    if tot < 140 and tot%4 == 0:
+        val = tot//5
+        num = int("2"*val)
+        if num%k == 0:
+            log("cut")
+            return val
+
+    if tot < 140 and tot%2 == 0:
+        val = tot//2
+        num = int("2"*val)
+        if num%k == 0:
+            log("cut")
+            return val
 
     return tot
 
