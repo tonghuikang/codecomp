@@ -64,6 +64,21 @@ def get_prime_factors(nr):
     return factors
 
 
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
 # https://math.stackexchange.com/questions/2442809/how-can-i-get-the-length-of-repeating-decimal
 def solve_(k):
     # your solution here
@@ -74,41 +89,29 @@ def solve_(k):
     if k%2 == 0 or k%5 == 0:
         return -1
 
-    factors = get_prime_factors(k)
+    k = k*9
 
-    log(factors)
+    tot = k
+    for x in set(get_prime_factors(k*9)):
+        tot -= tot//x
 
-    tot = 1
-    for x in factors:
-        tot *= x-1
+    factors = get_all_divisors_given_prime_factorization(get_prime_factors(tot))
+    # factors.append(k//9)
+    factors.sort()
 
-    if k%3 == 0 and tot%3 != 0:
-        tot *= 3
-        tot = tot//2
+    # log(k//9)
+    # log(factors)
 
-    if k%9 == 0 and tot%9 != 0:
-        tot *= 3
-        tot = tot//2
+    for f in factors:
+        # if f < k//9:
+        #     continue
+    # for f in range(1,100):
+        x = pow(10,f,k)
+        if x == 1:
+            # assert f in factors
+            return f
 
-    if k%11 == 0 and tot%10 == 0:
-        # tot *= 3
-        tot = tot//5
-
-    if tot < 140 and tot%4 == 0:
-        val = tot//5
-        num = int("2"*val)
-        if num%k == 0:
-            log("cut")
-            return val
-
-    if tot < 140 and tot%2 == 0:
-        val = tot//2
-        num = int("2"*val)
-        if num%k == 0:
-            log("cut")
-            return val
-
-    return tot
+    return -1
 
 
 # for case_num in [0]:  # no loop over test case
