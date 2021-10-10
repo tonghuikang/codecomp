@@ -33,7 +33,7 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+    return [tuple(map(int,input().split())) for _ in range(rows)]
 
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
@@ -49,8 +49,30 @@ def minus_one_matrix(mrr):
 
 def solve_(mrr):
     # your solution here
+    z = len(mrr)
 
-    return ""
+    # left different + right different - both different
+
+    def calc_different(arr):
+        # all possible
+        # all three the same
+        # two same one different
+        c = Counter(arr)
+        res = len(arr) * (len(arr)-1) * (len(arr)-2) // 6
+        for k,v in c.items():
+            res -= v*(v-1)*(v-2) // 6
+            res -= v*(v-1)*(z-v) // 2
+        arr.sort()
+        log(arr)
+        log(res)
+        log()
+        return res
+
+    xrr = [x[0] for x in mrr]
+    yrr = [x[1] for x in mrr]
+
+
+    return calc_different(xrr) + calc_different(yrr) - calc_different(mrr)
 
 
 # for case_num in [0]:  # no loop over test case
