@@ -47,10 +47,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
+    if len(mrr)%2:
+        return no
 
-    return ""
+    for i in range(5):
+        for j in range(5):
+            if i == j:
+                continue
+            both = 0
+            a = 0
+            b = 0
+            for row in mrr:
+                if row[i] == 1 and row[j] == 1:
+                    both += 1
+                elif row[i] == 1:
+                    a += 1
+                elif row[j] == 1:
+                    b += 1
+                else:
+                    break
+            else:
+                if abs(a-b) <= both:
+                    return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +80,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,10 +95,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
