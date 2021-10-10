@@ -48,57 +48,17 @@ def minus_one_matrix(mrr):
 def solve_(mrr):
     # your solution here
     z = len(mrr)
+    c1 = Counter(x[0] for x in mrr)
+    c2 = Counter(x[1] for x in mrr)
 
-    # left different + right different - both different
-
-    xrr = [x[0] for x in mrr]
-    yrr = [x[1] for x in mrr]
-
-    c1 = Counter(xrr)
-    c2 = Counter(yrr)
-
-    res = 0
+    res = z*(z-1)*(z-2)//6
 
     for a,b in mrr:
         x = c1[a] - 1
         y = c2[b] - 1
-        q = z-x-y-1
-        val = 0
+        res -= x*y
 
-        # choose totally different
-        val += (q)*(q-1)
-
-        # choose one same one different (which the other two might have the same row/col)
-        val += (x)*(q)*2
-        val += (y)*(q)*2
-
-        res += val
-        log()
-        log(x,y,q,val)
-
-    log(res)
-
-    for a,b in mrr:
-        x = c1[a] - 1
-        y = c2[b] - 1
-
-        val = 0
-        val -= (x)*(y)*2*2
-        res += val
-        # log()
-        log(x,y,val)
-
-    log(res)
-
-    assert res%6 == 0
-
-    for k,v in c1.items():
-        res += v*(v-1)*(v-2)
-
-    for k,v in c2.items():
-        res += v*(v-1)*(v-2)
-
-    return res//6
+    return res
 
 
 
