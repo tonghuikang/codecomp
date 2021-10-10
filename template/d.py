@@ -59,22 +59,40 @@ def solve_(mrr):
     c1 = Counter(xrr)
     c2 = Counter(yrr)
 
-    res = z*(z-1)*(z-2)//6
+    res = 0
+
     for a,b in mrr:
         x = c1[a] - 1
         y = c2[b] - 1
+        q = z-x-y-1
         val = 0
-        val += x*y
-        # log(val, a, b, x, y)
-        res -= val
 
-    for k,v in c1.items():
-        res -= v*(v-1)*(v-2)//6
+        # choose totally different
+        val += (q)*(q-1)
 
-    for k,v in c2.items():
-        res -= v*(v-1)*(v-2)//6
+        # choose one same one different (which the other two might have the same row/col)
+        val += (x)*(q)*2
+        val += (y)*(q)*2
 
-    return res
+        res += val
+        # log()
+        # log(x,y,q,val)
+
+    # log(res)
+
+    for a,b in mrr:
+        x = c1[a] - 1
+        y = c2[b] - 1
+
+        val = 0
+        val -= (x)*(y)*4
+        res += val
+        # log()
+        # log(x,y,val)
+
+    # log(res)
+
+    return res//6
 
 
 # for case_num in [0]:  # no loop over test case
