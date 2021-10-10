@@ -53,26 +53,28 @@ def solve_(mrr):
 
     # left different + right different - both different
 
-    def calc_different(arr):
-        # all possible
-        # all three the same
-        # two same one different
-        c = Counter(arr)
-        res = len(arr) * (len(arr)-1) * (len(arr)-2) // 6
-        for k,v in c.items():
-            res -= v*(v-1)*(v-2) // 6
-            res -= v*(v-1)*(z-v) // 2
-        arr.sort()
-        log(arr)
-        log(res)
-        log()
-        return res
-
     xrr = [x[0] for x in mrr]
     yrr = [x[1] for x in mrr]
 
+    c1 = Counter(xrr)
+    c2 = Counter(yrr)
 
-    return calc_different(xrr) + calc_different(yrr) - calc_different(mrr)
+    res = z*(z-1)*(z-2)//6
+    for a,b in mrr:
+        x = c1[a] - 1
+        y = c2[b] - 1
+        val = 0
+        val += x*y
+        # log(val, a, b, x, y)
+        res -= val
+
+    for k,v in c1.items():
+        res -= v*(v-1)*(v-2)//6
+
+    for k,v in c2.items():
+        res -= v*(v-1)*(v-2)//6
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
