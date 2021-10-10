@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -75,24 +73,33 @@ def solve_(mrr):
         val += (y)*(q)*2
 
         res += val
-        # log()
-        # log(x,y,q,val)
+        log()
+        log(x,y,q,val)
 
-    # log(res)
+    log(res)
 
     for a,b in mrr:
         x = c1[a] - 1
         y = c2[b] - 1
 
         val = 0
-        val -= (x)*(y)*4
+        val -= (x)*(y)*2*2
         res += val
         # log()
-        # log(x,y,val)
+        log(x,y,val)
 
-    # log(res)
+    log(res)
+
+    assert res%6 == 0
+
+    for k,v in c1.items():
+        res += v*(v-1)*(v-2)
+
+    for k,v in c2.items():
+        res += v*(v-1)*(v-2)
 
     return res//6
+
 
 
 # for case_num in [0]:  # no loop over test case
