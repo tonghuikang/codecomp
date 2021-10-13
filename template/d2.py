@@ -2,6 +2,7 @@
 import sys
 import getpass  # not available on codechef
 import math
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -45,20 +46,89 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+largest_prime_factors = get_largest_prime_factors(2*10**6+10)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+
+
+def get_prime_factors_with_precomp_largest_factors(num, largest_prime_factors=largest_prime_factors):
+    # factorise into prime factors given precomputed largest_prime_factors
+    factors = []
+    lf = largest_prime_factors[num]
+    while lf != num:
+        factors.append(lf)
+        num //= lf
+        lf = largest_prime_factors[num]
+    if num > 1:
+        factors.append(num)
+    return factors
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
+
+
+
 def solve_(arr):
     # your solution here
+    reqiured = len(arr)/2
 
     if len(set(arr)) == 1:
         return -1
 
-    diff = [abs(a-b) for a,b in zip(arr, arr[1:])]
+    c = Counter(arr)
+    for v in c.values():
+        if v >= len(arr)/2:
+            return -1
 
-    gcd = diff[0]
-    for x in diff:
-        gcd = math.gcd(x, gcd)
+    diffs = set()
 
+    for i,a in enumerate(arr):
+        for j,b in enumerate(arr[i+1:]):
+            diffs.add(abs(a-b))
 
-    return gcd
+    diffs.discard(0)
+
+    factors = set()
+    for diff in diffs:
+        factors.update(get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp_largest_factors(diff)))
+
+    log(factors)
+
+    maxres = 0
+    for factor in factors:
+        c = Counter()
+        for x in arr:
+            r = x%factor
+            c[r] += 1
+            if c[r] >= reqiured:
+                maxres = max(maxres, factor)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
