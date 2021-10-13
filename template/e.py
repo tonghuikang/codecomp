@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
+from abc import get_cache_token
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -47,36 +46,57 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, ops):
     # your solution here
 
-    return ""
+    g = defaultdict(set)
+
+    for a,b in mrr:
+        g[a].add(b)
+        g[b].add(a)
+
+    leaves = set()
+    for k,vs in g.items():
+        if len(vs) == 1:
+            leaves.add(k)
+
+    for _ in range(ops):
+        new_leaves = set()
+        for x in leaves:
+            for v in g[x]:
+                g[v].discard(x)
+                if len(g[v]) == 1:
+                    new_leaves.add(v)
+            del g[x]
+        leaves = new_leaves
+
+    return len(g)
+
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
+    input()
     # read line as an integer
-    # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n-1)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
