@@ -71,7 +71,7 @@ def solve_(arr, target):
         minres = min(j-i for i,j in segments[target])
 
     for x in segments:
-        if time.time() - start_time > 1:
+        if time.time() - start_time > 1.5:
             break
 
         # log(x, target-x)
