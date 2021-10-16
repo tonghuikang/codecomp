@@ -69,9 +69,7 @@ def solve_(arr, target):
     if target in segments:
         minres = min(j-i for i,j in segments[target])
 
-    vals = list(segments.keys())
-    random.shuffle(vals)
-    for x in vals:
+    for x in segments:
         # log(x, target-x)
         if x not in segments or target-x not in segments:
             continue
