@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import heapq
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +46,54 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, target):
     # your solution here
 
-    return ""
+    psum = [0]
+    for x in arr:
+        psum.append(x + psum[-1])
+
+    segments = defaultdict(list)
+
+    for i in range(len(arr)):
+        for j in range(i+1,len(arr)+1):
+            segment_sum = psum[j] - psum[i]
+            if segment_sum > target:
+                continue
+            segments[segment_sum].append((i,j))
+
+    for k in segments:
+        segments[k].sort()
+
+    minres = 10**18
+    if target in segments:
+        minres = min(j-i for i,j in segments[target])
+
+    for x in range(1,target):
+        # log(x, target-x)
+        if x not in segments or target-x not in segments:
+            continue
+        # log(segments[x])
+        # log(segments[target-x])
+        # log()
+
+        right = [(j-i,i,j) for i,j in segments[target-x]]
+        right.sort()
+
+        for i,j in segments[x]:
+            while right and right[0][1] < j:
+                heapq.heappop(right)
+            if not right:
+                break
+            if right[0][0] > minres:
+                break
+            res = j-i + right[0][0]
+            minres = min(minres, res)
+
+    if minres == 10**18:
+        return -1
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,8 +110,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +119,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +130,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
