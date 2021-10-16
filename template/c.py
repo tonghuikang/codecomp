@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import heapq, random
+import heapq, time
 from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
@@ -47,6 +47,7 @@ def minus_one_matrix(mrr):
 
 
 def solve_(arr, target):
+    start_time = time.time()
     # your solution here
 
     psum = [0]
@@ -70,8 +71,11 @@ def solve_(arr, target):
         minres = min(j-i for i,j in segments[target])
 
     for x in segments:
+        if time.time() - start_time > 1:
+            break
+
         # log(x, target-x)
-        if x not in segments or target-x not in segments:
+        if target-x not in segments:
             continue
         # log(segments[x])
         # log(segments[target-x])
@@ -89,6 +93,7 @@ def solve_(arr, target):
                 break
             res = j-i + right[0][0]
             minres = min(minres, res)
+
 
     if minres == 10**18:
         return -1
