@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import heapq
+import heapq, random
 from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,13 +63,15 @@ def solve_(arr, target):
             segments[segment_sum].append((i,j))
 
     for k in segments:
-        segments[k].sort()
+        segments[k].sort(key=lambda x: x[1])
 
     minres = 10**18
     if target in segments:
         minres = min(j-i for i,j in segments[target])
 
-    for x in range(1,target):
+    vals = list(segments.keys())
+    random.shuffle(vals)
+    for x in vals:
         # log(x, target-x)
         if x not in segments or target-x not in segments:
             continue
@@ -85,7 +87,7 @@ def solve_(arr, target):
                 heapq.heappop(right)
             if not right:
                 break
-            if right[0][0] > minres:
+            if right[0][0] >= minres:
                 break
             res = j-i + right[0][0]
             minres = min(minres, res)
