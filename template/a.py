@@ -47,10 +47,24 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, d, c, m):
     # your solution here
 
-    return ""
+    all_dogs = srr.count("D")
+
+    for x in srr:
+        if all_dogs == 0:
+            return yes
+        if x == "D":
+            c += m
+            d -= 1
+            all_dogs -= 1
+        if x == "C":
+            c -= 1
+        if d < 0 or c < 0:
+            return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
@@ -61,13 +75,13 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    n,d,c,m = list(map(int,input().split()))
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +90,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, d, c, m)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +101,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
