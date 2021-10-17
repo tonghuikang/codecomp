@@ -66,7 +66,7 @@ primes = set(primes)
 
 def solve_(arr):
     # your solution here
-    arr.sort()
+    # arr.sort()
     sumarr = sum(arr)
 
     if sumarr not in primes:
