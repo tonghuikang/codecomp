@@ -47,10 +47,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, n):
     # your solution here
 
-    return ""
+    parent_candidate = set(range(1, n+1))
+    for a,b,c in mrr:
+        parent_candidate.discard(b)
+
+    parent = list(parent_candidate)[0]
+
+    res = []
+    for i in range(1,n+1):
+        if i == parent:
+            continue
+        res.append((parent, i))
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,16 +79,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -84,7 +96,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
