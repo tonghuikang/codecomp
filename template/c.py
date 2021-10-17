@@ -53,8 +53,8 @@ def solve_(xrr, mrr, h, w):
     for a,b in mrr:
         query_reqirement[b].append(a)
 
-    flag = [0 for _ in range(w)]
-    psum = [0 for _ in range(w+2)]
+    flag = []
+    psum = [0]
 
     for i,(arr,brr) in enumerate(zip(xrr, xrr[1:]), start=1):
         # arr | brr
@@ -63,20 +63,24 @@ def solve_(xrr, mrr, h, w):
         # block if
         # x ?
         # . x
+        val = 0
         for a,b,c,d in zip(arr, arr[1:], brr, brr[1:]):
             if a == d == 1 and b == 0:
-                flag[i-1] += 1
+                val = 1
 
-        psum[i] = psum[i-1] + flag[i-1]
-        psum[i+1] = psum[i]
-        psum[i+2] = psum[i+1]
+        flag.append(val)
+        psum[-1] += val
+        psum.append(psum[-1])
+
         # log(query_reqirement[i])
         for a in query_reqirement[i]:
+            # log(a,i)
             assert (a,i) in query_map
-            if psum[i] - psum[a] > 0:
+            if psum[-1] - psum[a-1] > 0:
                 # log(a,i,"NO")
                 query_idx = query_map[a,i]
                 res[query_idx] = 1
+        # log(psum)
         # log()
         # log(arr)
         # log(brr)
