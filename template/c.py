@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -33,7 +31,7 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+    return [tuple(map(int,input().split())) for _ in range(rows)]
 
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
@@ -47,15 +45,48 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(xrr, mrr, h, w):
     # your solution here
+    query_map = {x:i for i,x in enumerate(mrr)}
+    res = [0 for _ in mrr]
+    query_reqirement = defaultdict(list)
+    for a,b in mrr:
+        query_reqirement[b].append(a)
 
-    return ""
+    flag = [0 for _ in range(w)]
+    psum = [0 for _ in range(w+1)]
+
+    for i,(arr,brr) in enumerate(zip(xrr, xrr[1:]), start=1):
+        # log()
+        # log(arr)
+        # log(brr)
+        # arr | brr
+        # a c
+        # b d
+        # block if
+        # x ?
+        # . x
+        for a,b,c,d in zip(arr, arr[1:], brr, brr[1:]):
+            if a == d == 1 and b == 0:
+                flag[i-1] += 1
+
+        psum[i] = psum[i-1] + flag[i-1]
+        # log(query_reqirement[i])
+        for a in query_reqirement[i]:
+            assert (a,i) in query_map
+            if psum[i] - psum[a] > 0:
+                query_idx = query_map[a,i]
+                res[query_idx] = 1
+
+    #     log(flag[:i+1])
+    # log(psum)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,22 +98,33 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    h,w = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
-
+    w += 1
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    brr = [[0 for _ in range(h)] for _ in range(w)]
+    brr[0] = [1 for _ in range(h)]
+    for i in range(h):
+        row = input().strip()
+        for j,cell in enumerate(row, start=1):
+            if cell == "X":
+                brr[w-j][i] = 1
+            else:
+                brr[w-j][i] = 0
+
+    k = int(input())
+    mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = [(w-y,w-x) for x,y in mrr]
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(brr, mrr, h, w)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = "\n".join("NO" if x else "YES" for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
