@@ -80,6 +80,8 @@ def solve_(xrr, mrr, h, w):
                 # log(a,i,"NO")
                 query_idx = query_map[a,i]
                 res[query_idx] = 1
+        # log()
+        # log(flag)
         # log(psum)
         # log()
         # log(arr)
