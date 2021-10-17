@@ -57,9 +57,6 @@ def solve_(xrr, mrr, h, w):
     psum = [0 for _ in range(w+1)]
 
     for i,(arr,brr) in enumerate(zip(xrr, xrr[1:]), start=1):
-        # log()
-        # log(arr)
-        # log(brr)
         # arr | brr
         # a c
         # b d
@@ -77,8 +74,10 @@ def solve_(xrr, mrr, h, w):
             if psum[i] - psum[a] > 0:
                 query_idx = query_map[a,i]
                 res[query_idx] = 1
-
-    #     log(flag[:i+1])
+        log()
+        log(arr)
+        log(brr)
+        log(flag[:i+1])
     # log(psum)
 
     return res
