@@ -112,22 +112,22 @@ for case_num in [0]:  # no loop over test case
     # lst = minus_one(lst)
     w += 1
     # read multiple rows
-    brr = [[0 for _ in range(h)] for _ in range(w)]
-    brr[0] = [1 for _ in range(h)]
+    xrr = [[0 for _ in range(h)] for _ in range(w)]
+    xrr[0] = [1 for _ in range(h)]
     for i in range(h):
         row = input().strip()
         for j,cell in enumerate(row, start=1):
             if cell == "X":
-                brr[w-j][i] = 1
+                xrr[w-j][i] = 1
             else:
-                brr[w-j][i] = 0
+                xrr[w-j][i] = 0
 
     k = int(input())
     mrr = read_matrix(k)  # and return as a list of list of int
     mrr = [(w-y,w-x) for x,y in mrr]
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(brr, mrr, h, w)  # include input here
+    res = solve(xrr, mrr, h, w)  # include input here
 
     # print length if applicable
     # print(len(res))

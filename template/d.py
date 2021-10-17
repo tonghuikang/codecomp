@@ -24,20 +24,49 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
-def query(pos):
-    print("{}".format(pos+1), flush=True)
-    response = int(input())
+def query_method(arr):
+    print("? {}".format(" ".join(str(pos+1) for pos in arr)), flush=True)
+    response = int(input())-1
     return response
 
-def alert(pos):
-    print("! {}".format(pos), flush=True)
+def alert_method(arr):
+    print("? {}".format(" ".join(str(pos+1) for pos in arr)), flush=True)
     sys.exit()
 
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-# k = int(input())
+size = int(input())
 
+# find the one
+# find the rest
+
+count = 0
+for i in range(size):
+    # test value of final position
+    query = [i for _ in range(size)]
+    query[-1] = 0
+    k = query_method(query)
+    if k != -1:
+        count += 1
+
+last_number = count
+
+log(last_number)
+
+res = [0 for _ in range(size)]
+res[-1] = last_number
+
+for i in range(size):
+    if i == last_number:
+        continue
+    # test value of final position
+    query = [last_number for _ in range(size)]
+    query[-1] = i
+    k = query_method(query)
+    res[k] = i
+
+alert_method(res)
 # read line as a string
 # srr = input().strip()
 
