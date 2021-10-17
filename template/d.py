@@ -24,16 +24,20 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
+query_cache = []
+
 def query_method(arr):
     print("? {}".format(" ".join(str(pos+1) for pos in arr)), flush=True)
     response = int(input())-1
+    query_cache.append([arr.copy(), response])
     return response
 
 def alert_method(arr):
-    print("? {}".format(" ".join(str(pos+1) for pos in arr)), flush=True)
+    print("! {}".format(" ".join(str(pos+1) for pos in arr)), flush=True)
     sys.exit()
 
 # -----------------------------------------------------------------------------
+
 
 # read line as an integer
 size = int(input())
@@ -65,6 +69,19 @@ for i in range(size):
     query[-1] = i
     k = query_method(query)
     res[k] = i
+
+assert sorted(set(res)) == list(range(size))
+
+# for query, result in query_cache:
+#     sumarr = [a+b for a,b in zip(query, res)]
+#     seen = {}
+#     for i,x in enumerate(sumarr):
+#         if x in seen:
+#             assert seen[x] == result
+#             break
+#         seen[x] = i
+#     else:
+#         assert result == -1
 
 alert_method(res)
 # read line as a string

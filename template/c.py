@@ -47,48 +47,29 @@ def minus_one_matrix(mrr):
 
 def solve_(xrr, mrr, h, w):
     # your solution here
-    query_map = {x:i for i,x in enumerate(mrr)}
-    res = [0 for _ in mrr]
-    query_reqirement = defaultdict(list)
-    for a,b in mrr:
-        query_reqirement[b].append(a)
 
-    flag = []
+    flags = [0 for _ in range(w)]
+
+    for row1,row2 in zip(xrr, xrr[1:]):
+        for i,(a,b,c,d) in enumerate(zip(row1, row2, row1[1:], row2[1:]), start=1):
+            if b == c == 1:
+                flags[i] = 1
+
     psum = [0]
+    for x in flags:
+        psum.append(psum[-1] + x)
 
-    for i,(arr,brr) in enumerate(zip(xrr, xrr[1:]), start=1):
-        # arr | brr
-        # a c
-        # b d
-        # block if
-        # x ?
-        # . x
-        val = 0
-        for a,b,c,d in zip(arr, arr[1:], brr, brr[1:]):
-            if a == d == 1 and b == 0:
-                val = 1
+    log(flags)
+    log(psum)
 
-        flag.append(val)
-        psum[-1] += val
-        psum.append(psum[-1])
-
-        # log(query_reqirement[i])
-        for a in query_reqirement[i]:
-            # log(a,i)
-            assert (a,i) in query_map
-            if psum[-1] - psum[a-1] > 0:
-                # log(a,i,"NO")
-                query_idx = query_map[a,i]
-                res[query_idx] = 1
-        # log()
-        # log(flag)
-        # log(psum)
-        # log()
-        # log(arr)
-        # log(brr)
-        # log(flag[:i+1])
-        # log(psum)
-    # log(psum)
+    res = []
+    for a,b in mrr:
+        val = psum[b] - psum[a]
+        log(a,b,val)
+        if val != 0:
+            res.append("NO")
+        else:
+            res.append("YES")
 
     return res
 
@@ -110,21 +91,11 @@ for case_num in [0]:  # no loop over test case
     h,w = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
-    w += 1
-    # read multiple rows
-    xrr = [[0 for _ in range(h)] for _ in range(w)]
-    xrr[0] = [1 for _ in range(h)]
-    for i in range(h):
-        row = input().strip()
-        for j,cell in enumerate(row, start=1):
-            if cell == "X":
-                xrr[w-j][i] = 1
-            else:
-                xrr[w-j][i] = 0
-
+    xrr = read_strings(h)
+    xrr = [[1 if cell == "X" else 0 for cell in row] for row in xrr]
     k = int(input())
     mrr = read_matrix(k)  # and return as a list of list of int
-    mrr = [(w-y,w-x) for x,y in mrr]
+    # mrr = [(x-1,y-1) for x,y in mrr]
     # mrr = minus_one_matrix(mrr)
 
     res = solve(xrr, mrr, h, w)  # include input here
@@ -133,8 +104,8 @@ for case_num in [0]:  # no loop over test case
     # print(len(res))
 
     # parse result
-    res = "\n".join("NO" if x else "YES" for x in res)
-    # res = "\n".join(str(x) for x in res)
+    # res = "\n".join("NO" if x else "YES" for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
