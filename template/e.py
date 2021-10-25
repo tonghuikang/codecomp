@@ -183,7 +183,7 @@ def solve_(arr, brr):
     @bootstrap
     def binary_insert(sa,ea,sb,eb):
         if sa >= ea:
-            return
+            yield
         ma = (sa + ea)//2
         # log(arr[ma],sa,ea,sb,eb)
 
