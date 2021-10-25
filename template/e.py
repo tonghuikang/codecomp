@@ -199,12 +199,13 @@ def solve_(arr, brr):
     # your solution here
     # https://cs.stackexchange.com/questions/140295/
 
-    if sorted(brr) == brr:
-        return 0
+    # if sorted(brr) == brr:
+    #     return 0
 
-    irr = [0 for _ in arr]
+    irr = [-1 for _ in arr]
 
     def binary_insert(sa,ea,sb,eb):
+        log(sa,ea,sb,eb)
         if sa >= ea:
             return
         ma = (sa + ea)//2
@@ -222,36 +223,43 @@ def solve_(arr, brr):
                 cur += 1
             if brr[mb] < arr[ma]:
                 cur -= 1
-            if cur <= best:
+            if cur < best:
                 best = cur
                 best_pos = mb+1
 
-        irr[ma] = best_pos
+        log(ma, arr[ma], sb, best_pos, eb)
 
-        best_pos = max(sb+1, best_pos)
-        best_pos = min(eb-1, best_pos)
+        irr[ma] = best_pos
 
         binary_insert(sa,ma,sb,best_pos)
         binary_insert(ma+1,ea,best_pos,eb)
 
     binary_insert(0,len(arr),0,len(brr))
 
-    irr = deque([(pb,i) for i,pb in enumerate(irr)])
+    assert -1 not in irr
 
-    # log(irr)
+    log(irr)
 
     res = []
-    for i,x in enumerate(brr):
-        while irr and irr[0][0] <= i:
-            pb,i = irr.popleft()
-            res.append(arr[i])
+    j = 0
+    for i,x in enumerate(arr):
+        while j < irr[i]:
+            res.append(brr[j])
+            j += 1
         res.append(x)
 
-    while irr:
-        pb,i = irr.popleft()
-        res.append(arr[i])
+    while j < len(brr):
+        res.append(brr[j])
+        j += 1
+
+    assert len(res) == len(arr) + len(brr)
+    assert sorted(res) == sorted(arr + brr)
 
     log(res)
+
+    if res == sorted(res):
+        return 0
+
     res = mergeSort(res)
 
     return res
