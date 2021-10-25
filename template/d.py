@@ -47,18 +47,45 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
+    log(arr)
+    log(brr)
 
-    return ""
+    g = defaultdict(set)
+
+    for i,a in enumerate(arr):
+        # jump up
+        g[(i-a,0)].add((i,1))
+
+    for i,b in enumerate(brr):
+        # slip down
+        g[(i+b,1)].add((i,0))
+
+    source = (0,1) # location, is post slip
+    visited = {source: 0}
+    queue = deque([source])
+    while queue:
+        a,b = queue.popleft()
+        for c,d in g[a,b]:
+            if (c,d) in visited:
+                continue
+            visited[c,d] = visited[a,b] + 1
+            queue.append((c,d))
+
+    log(visited)
+    dest = (len(arr)-1,1)
+    if dest in visited:
+        return visited[dest]
+    return -1
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,15 +95,19 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # lst = minus_one(lst)
+
+    arr.reverse()
+    brr.reverse()
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))

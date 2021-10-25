@@ -86,7 +86,7 @@ def solve_(lst):
 
     c = Counter()
     for x in lst:
-        val = bin(x)[2:].zfill(31)
+        val = bin(x)[2:].zfill(32)
         # log(val)
         for i,x in enumerate(val):
             if x == "1":
@@ -107,8 +107,9 @@ def solve_(lst):
     for x in vals:
         gcd = math.gcd(gcd, x)
 
-    return get_all_divisors_given_prime_factorization(get_prime_factors(gcd))
-
+    res = get_all_divisors_given_prime_factorization(get_prime_factors(gcd))
+    res.sort()
+    return res
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -147,3 +148,16 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
     print(res)
+
+
+# if OFFLINE_TEST:
+#     res = solve([
+#         int('0101',2),
+#         int('0101',2),
+#         int('0101',2),
+#         int('0000',2),
+#         int('0101',2),
+#         int('0101',2),
+#         int('0101',2),
+#     ])
+#     print(res)
