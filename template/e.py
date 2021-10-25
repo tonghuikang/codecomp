@@ -141,6 +141,37 @@ def merge(arr, temp_arr, left, mid, right):
     # https://www.geeksforgeeks.org/counting-inversions/
     return inv_count
 
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    # usage - please remember to YIELD to call and return
+    '''
+    @bootstrap
+    def recurse(n):
+        if n <= 0:
+            yield 0
+        yield (yield recurse(n-1)) + 2
+
+    res = recurse(10**5)
+    '''
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    if stack:
+                        stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
+
 
 
 def solve_(arr, brr):
@@ -149,6 +180,7 @@ def solve_(arr, brr):
 
     irr = [0 for _ in arr]
 
+    @bootstrap
     def binary_insert(sa,ea,sb,eb):
         if sa >= ea:
             return
@@ -172,8 +204,9 @@ def solve_(arr, brr):
                 best_pos = mb+1
 
         irr[ma] = best_pos
-        binary_insert(sa,ma,sb,mb)
-        binary_insert(ma+1,ea,mb,eb)
+        yield binary_insert(sa,ma,sb,mb)
+        yield binary_insert(ma+1,ea,mb,eb)
+        yield
 
     binary_insert(0,len(arr),0,len(brr))
 
