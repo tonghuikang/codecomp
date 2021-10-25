@@ -110,6 +110,7 @@ def get_all_divisors_given_prime_factorization(factors):
             for j in range(l):
                 divs.append(divs[j]*prime_pow)
 
+    # NOT IN SORTED ORDER
     return divs
 
 
