@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import math
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +46,68 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    return divs
+
+
+
+def solve_(lst):
     # your solution here
 
-    return ""
+    c = Counter()
+    for x in lst:
+        val = bin(x)[2:].zfill(31)
+        # log(val)
+        for i,x in enumerate(val):
+            if x == "1":
+                c[i] += 1
+
+    if not c:
+        log("empty")
+        return list(range(1,1+len(lst)))
+
+    vals = []
+    for k,v in c.items():
+        if v:
+            vals.append(v)
+
+    # log("vals", vals)
+
+    gcd = vals[0]
+    for x in vals:
+        gcd = math.gcd(gcd, x)
+
+    return get_all_divisors_given_prime_factorization(get_prime_factors(gcd))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +115,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +125,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,13 +133,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
