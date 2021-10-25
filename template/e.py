@@ -1,8 +1,61 @@
 #!/usr/bin/env python3
+import os
 import sys
 import getpass  # not available on codechef
 from collections import deque
-input = sys.stdin.readline  # to read input quickly
+from io import BytesIO, IOBase
+
+BUFSIZE = 8192
+
+
+class FastIO(IOBase):
+    newlines = 0
+
+    def __init__(self, file):
+        self._fd = file.fileno()
+        self.buffer = BytesIO()
+        self.writable = "x" in file.mode or "r" not in file.mode
+        self.write = self.buffer.write if self.writable else None
+
+    def read(self):
+        while True:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            if not b:
+                break
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines = 0
+        return self.buffer.read()
+
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines -= 1
+        return self.buffer.readline()
+
+    def flush(self):
+        if self.writable:
+            os.write(self._fd, self.buffer.getvalue())
+            self.buffer.truncate(0), self.buffer.seek(0)
+
+
+class IOWrapper(IOBase):
+    def __init__(self, file):
+        self.buffer = FastIO(file)
+        self.flush = self.buffer.flush
+        self.writable = self.buffer.writable
+        self.write = lambda s: self.buffer.write(s.encode("ascii"))
+        self.read = lambda: self.buffer.read().decode("ascii")
+        self.readline = lambda: self.buffer.readline().decode("ascii")
+
+
+sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
+
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -141,49 +194,19 @@ def merge(arr, temp_arr, left, mid, right):
     # https://www.geeksforgeeks.org/counting-inversions/
     return inv_count
 
-# https://codeforces.com/blog/entry/80158?locale=en
-from types import GeneratorType
-def bootstrap(f, stack=[]):
-    # usage - please remember to YIELD to call and return
-    '''
-    @bootstrap
-    def recurse(n):
-        if n <= 0:
-            yield 0
-        yield (yield recurse(n-1)) + 2
-
-    res = recurse(10**5)
-    '''
-    def wrappedfunc(*args, **kwargs):
-        if stack:
-            return f(*args, **kwargs)
-        else:
-            to = f(*args, **kwargs)
-            while True:
-                if type(to) is GeneratorType:
-                    stack.append(to)
-                    to = next(to)
-                else:
-                    if stack:
-                        stack.pop()
-                    if not stack:
-                        break
-                    to = stack[-1].send(to)
-            return to
-    return wrappedfunc
-
-
 
 def solve_(arr, brr):
     # your solution here
     # https://cs.stackexchange.com/questions/140295/
 
+    if sorted(brr) == brr:
+        return 0
+
     irr = [0 for _ in arr]
 
-    @bootstrap
     def binary_insert(sa,ea,sb,eb):
         if sa >= ea:
-            yield
+            return
         ma = (sa + ea)//2
         # log(arr[ma],sa,ea,sb,eb)
 
@@ -199,14 +222,17 @@ def solve_(arr, brr):
                 cur += 1
             if brr[mb] < arr[ma]:
                 cur -= 1
-            if cur < best:
+            if cur <= best:
                 best = cur
                 best_pos = mb+1
 
         irr[ma] = best_pos
-        yield binary_insert(sa,ma,sb,mb)
-        yield binary_insert(ma+1,ea,mb,eb)
-        yield
+
+        best_pos = max(sb+1, best_pos)
+        best_pos = min(eb-1, best_pos)
+
+        binary_insert(sa,ma,sb,best_pos)
+        binary_insert(ma+1,ea,best_pos,eb)
 
     binary_insert(0,len(arr),0,len(brr))
 
@@ -225,9 +251,10 @@ def solve_(arr, brr):
         pb,i = irr.popleft()
         res.append(arr[i])
 
-    # log(res)
+    log(res)
+    res = mergeSort(res)
 
-    return mergeSort(res)
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -250,7 +277,6 @@ for case_num in range(int(input())):
     # lst = minus_one(lst)
 
     arr.sort()
-
 
 
     # read multiple rows
