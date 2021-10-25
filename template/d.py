@@ -54,29 +54,6 @@ def solve_(arr, brr):
 
     g = defaultdict(set)
 
-    for i,a in enumerate(arr):
-        # jump up
-        g[(i-a,0)].add((i,1))
-
-    for i,b in enumerate(brr):
-        # slip down
-        g[(i+b,1)].add((i,0))
-
-    source = (0,1) # location, is post slip
-    visited = {source: 0}
-    queue = deque([source])
-    while queue:
-        a,b = queue.popleft()
-        for c,d in g[a,b]:
-            if (c,d) in visited:
-                continue
-            visited[c,d] = visited[a,b] + 1
-            queue.append((c,d))
-
-    log(visited)
-    dest = (len(arr)-1,1)
-    if dest in visited:
-        return visited[dest]
     return -1
 
 
