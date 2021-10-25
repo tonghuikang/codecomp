@@ -268,6 +268,7 @@ def min_cost_flow(map_from_node_to_nodes_and_capcities, demands):
 
 class DisjointSet:
     # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+    # MIGHT WORK ONLY WITH POSITIVE INTEGERS - use a map
 
     def __init__(self, n: int = 0) -> None:
         if n > 0:  # constant size DSU
