@@ -64,21 +64,37 @@ def solve_(arr):
     length_sampled = (len(arr) - 2 + 1)//2
     log(length_sampled)
     maxres = 0
+    cnt = 0
 
-    for i in range(42):
+    while cnt < 60:
         random.shuffle(arr)
         gcd_half = get_gcd(arr[:length_sampled])
         fail = []
+
+        cnt += 1
+
         for x in arr[length_sampled:]:
             if x%gcd_half != 0:
                 fail.append(x)
+                if len(fail) >= 3:
+                    break
+
         if len(fail) > 2:
             continue
+
+        cnt += 1
+
         if len(fail) <= 1:
-            maxres = max(maxres, gcd_half)
+            if gcd_half > maxres:
+                cnt = 0
+                maxres = gcd_half
             continue
+
         gcd_res = math.gcd(gcd_half, fail[0]*fail[1])
-        maxres = max(maxres, gcd_res)
+        if gcd_res > maxres:
+            cnt = 0
+            maxres = gcd_res
+
 
     return maxres
 
