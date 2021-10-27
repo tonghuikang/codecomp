@@ -58,7 +58,8 @@ def solve_(arr, limit, k):
     # print(arr)
 
     discard_rows = (k-1)//2
-    arr = arr[:-discard_rows*k]
+    if discard_rows:
+        arr = arr[:-discard_rows*k]
     colsize = k-discard_rows
 
     # print(discard_rows)
