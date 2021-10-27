@@ -55,6 +55,7 @@ def solve_(n,v):
 
     maxx = sumrange(n)
 
+    v = min(n, v)
     pillar = max(v-1, 0)
 
     log(pillar)
