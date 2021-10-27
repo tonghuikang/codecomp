@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
 import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -18,8 +15,9 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# import getpass  # not available on codechef
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -47,10 +45,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
+    arr.sort()
     # your solution here
 
-    return ""
+    if len(arr) == 2:
+        return arr[0]*arr[1]
+
+    def get_gcd(xrr):
+        gcd = xrr[0]
+        for x in xrr:
+            gcd = math.gcd(gcd, x)
+        return gcd
+
+    # gcd_base = get_gcd(arr)
+    # arr = [x//gcd_base for x in arr]
+
+    length_sampled = (len(arr) - 2 + 1)//2
+    log(length_sampled)
+    maxres = 0
+
+    for i in range(42):
+        random.shuffle(arr)
+        gcd_half = get_gcd(arr[:length_sampled])
+        fail = []
+        for x in arr[length_sampled:]:
+            if x%gcd_half != 0:
+                fail.append(x)
+        if len(fail) > 2:
+            continue
+        if len(fail) <= 1:
+            maxres = max(maxres, gcd_half)
+            continue
+        gcd_res = math.gcd(gcd_half, fail[0]*fail[1])
+        maxres = max(maxres, gcd_res)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +88,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +98,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +106,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
     # print(len(res))

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import math
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -133,17 +134,24 @@ def solve_(mrr,q,k):
                 if depth[nex] == depth[cur] + 1:
                     diff += 1
             log(cur, diff)
-            diffs.append(diff)
+            if diff:
+                diffs.append(diff)
 
     diffs = [abs(x) for x in diffs]
 
-
-    log(diffs)
+    if not diffs:
+        return 0
 
     if q == 1:
         return sum(diffs)
 
-    return findMin(diffs)
+    gcd = diffs[0]
+    for x in diffs:
+        gcd = math.gcd(gcd, x)
+
+    diffs = [x//gcd for x in diffs]
+
+    return findMin(diffs)*gcd
 
 
 # for case_num in [0]:  # no loop over test case
