@@ -50,9 +50,19 @@ def minus_one_matrix(mrr):
 def solve_(arr, limit, k):
     # your solution here
 
+    if len(arr) == 1:
+        if arr[0] > limit:
+            return -1
+        return arr[0]
+
+    # print(arr)
+
     discard_rows = (k-1)//2
     arr = arr[:-discard_rows*k]
     colsize = k-discard_rows
+
+    # print(discard_rows)
+    # print(arr)
 
     heap = []
     pool = []
@@ -63,8 +73,8 @@ def solve_(arr, limit, k):
         else:
             pool.append(x)
 
-    log(heap)
-    log(pool)
+    # print(heap)
+    # print(pool)
 
     sumheap = sum(heap)
     if sumheap > limit:
