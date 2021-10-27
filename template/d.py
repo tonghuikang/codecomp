@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -18,8 +18,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -47,11 +47,41 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(mrr,q):
+def solve_(mrr,q,k):
     # your solution here
 
+    depth = {}
+    g = defaultdict(set)
 
-    return ""
+    for a,b in mrr:
+        g[a].add(b)
+        g[b].add(a)
+
+    queue = deque([0])
+    depth[0] = 0
+
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in depth:
+                continue
+            depth[nex] = depth[cur] + 1
+            queue.append(nex)
+
+
+    log(depth)
+
+    c = Counter(depth.values())
+    diffs = []
+
+    for i in range(0,k+2,2):
+        diff = abs(c[i+1] - c[i])
+        if diff:
+            diffs.append(diff)
+
+    log(diffs)
+
+    return sum(diffs)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -77,7 +107,7 @@ for case_num in range(int(input())):
     mrr = read_matrix(k-1)  # and return as a list of list of int
     mrr = minus_one_matrix(mrr)
 
-    res = solve(mrr,q)  # include input here
+    res = solve(mrr,q,k)  # include input here
 
     # print length if applicable
     # print(len(res))
