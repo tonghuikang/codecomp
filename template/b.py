@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -18,8 +18,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -47,10 +47,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,v):
     # your solution here
 
-    return ""
+    def sumrange(r):
+        return r*(r-1)//2
+
+    maxx = sumrange(n)
+
+    pillar = max(v-1, 0)
+
+    log(pillar)
+
+    minn = pillar + sumrange(n-pillar)
+
+
+    return [maxx, minn]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +79,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,v = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,13 +88,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,v)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
