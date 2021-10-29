@@ -47,10 +47,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
+def solve_(arr, k):
     # your solution here
 
-    return ""
+    denominations = [10**x for x in arr]
+
+    k += 1
+
+    cntr = Counter()
+    cntr[1] = k
+    cursum = k
+
+    for a,b in zip(denominations, denominations[1:]):
+        required_remainder = b//a - 1
+        up = max(0, cntr[a] - required_remainder)
+        cursum += up * b - up * a
+        cntr[b] += up
+        cntr[a] -= up
+
+        # log(required_remainder, up, cntr)
+
+    return cursum
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,8 +89,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +98,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
