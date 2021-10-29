@@ -114,13 +114,13 @@ def solve_():
         log(row)
         pmin = [row[0]]
         pmax = [row[0]]
-        for x in row:
+        for x in row[1:]:
             pmin.append(min(pmin[-1], x))
             pmax.append(max(pmax[-1], x))
 
         smin = [row[-1]]
         smax = [row[-1]]
-        for x in row[::-1]:
+        for x in (row[:-1])[::-1]:
             smin.append(min(smin[-1], x))
             smax.append(max(smax[-1], x))
         smin.reverse()
@@ -128,10 +128,10 @@ def solve_():
 
         allow_red = set()
         allow_blue = set()
-        for i,(a,b) in enumerate(zip(pmin, smax)):
+        for i,(a,b) in enumerate(zip(pmin, smax[1:])):
             if a > b:
                 allow_red.add(i)
-        for i,(a,b) in enumerate(zip(pmax, smin)):
+        for i,(a,b) in enumerate(zip(pmax, smin[1:])):
             if a < b:
                 allow_blue.add(i)
 
@@ -160,7 +160,7 @@ def solve_():
         return "NO"
 
     log(allow_all)
-    res_col = list(allow_all)[0]
+    res_col = list(allow_all)[0] + 1
 
     return res_color, res_col
 
