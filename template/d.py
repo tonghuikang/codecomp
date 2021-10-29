@@ -111,6 +111,7 @@ def solve_():
 
     for i in range(n):
         row = list(map(int,input().split()))
+        log(row)
         pmin = [row[0]]
         pmax = [row[0]]
         for x in row:
@@ -127,16 +128,16 @@ def solve_():
 
         allow_red = set()
         allow_blue = set()
-        for i,(a,b) in enumerate(zip(pmin, smax[1:])):
+        for i,(a,b) in enumerate(zip(pmin, smax)):
             if a > b:
                 allow_red.add(i)
-        for i,(a,b) in enumerate(zip(pmax, smin[1:])):
+        for i,(a,b) in enumerate(zip(pmax, smin)):
             if a < b:
                 allow_blue.add(i)
 
-        # log(allow_red)
-        # log(allow_blue)
-        # log()
+        log(allow_red)
+        log(allow_blue)
+        log()
 
         assert not ((len(allow_red) > 0) and (len(allow_blue) > 0))
 
@@ -158,8 +159,8 @@ def solve_():
     if blue_flag or red_flag:
         return "NO"
 
-    # log(allow_all)
-    res_col = list(allow_all)[0] + 1
+    log(allow_all)
+    res_col = list(allow_all)[0]
 
     return res_color, res_col
 
