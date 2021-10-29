@@ -97,9 +97,8 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, m, n):
     # your solution here
-    n,m = list(map(int,input().split()))
 
     allow_red_all = set(range(m-1))
     allow_blue_all = set(range(m-1))
@@ -110,7 +109,7 @@ def solve_():
     res_color = ""
 
     for i in range(n):
-        row = list(map(int,input().split()))
+        row = mrr[i]
         log(row)
         pmin = [row[0]]
         pmax = [row[0]]
@@ -180,6 +179,7 @@ for case_num in range(int(input())):
     # read line as a string
     # srr = input().strip()
 
+    n,m = list(map(int,input().split()))
     # read one line and parse each word as a string
     # lst = input().split()
 
@@ -189,10 +189,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(n)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, m, n)  # include input here
 
     if res == "NO":
         print(res)
