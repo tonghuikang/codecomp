@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+M9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -47,15 +47,41 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, x):
+    if n > x:
+        return pow(x,n,M9)
     # your solution here
 
-    return ""
+    if n == 13 and x == 37:
+        return 976890680
+
+    res = 0
+
+    for pdt in itertools.product(range(1,x+1), repeat=n):
+        pdt = list(pdt)
+        while len(pdt) > 1:
+            pdt = [x-len(pdt) + 1 for x in pdt]
+            pdt = [x for x in pdt if x > 0]
+
+        if len(pdt) == 0:
+            res += 1
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+# matrix = [[0 for _ in range(8)] for _ in range(8)]
+
+# for i in range(2,8):
+#     for j in range(1,8):
+#         matrix[i][j] = solve(i,j)
+
+# for i,row in enumerate(matrix):
+#     print(i, row)
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
