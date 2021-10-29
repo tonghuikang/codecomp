@@ -137,6 +137,8 @@ def solve_():
 
         log(allow_red)
         log(allow_blue)
+        log(allow_red_all)
+        log(allow_blue_all)
         log()
 
         assert not ((len(allow_red) > 0) and (len(allow_blue) > 0))
@@ -151,12 +153,15 @@ def solve_():
             blue_flag = False
         else:
             allow_red_all = set()
+            allow_blue_all = set()
 
     allow_all = allow_red_all & allow_blue_all
     if not allow_all:
+        log("no eligible columns")
         return "NO"
 
     if blue_flag or red_flag:
+        log("need at least one each")
         return "NO"
 
     log(allow_all)
