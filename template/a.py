@@ -47,11 +47,56 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+    crr = srr
 
+
+    ab = srr.count("ab")
+    ba = srr.count("ba")
+    if ab == ba:
+        return srr
+
+    log(ab,ba)
+
+    srr = list(crr)
+    srr[0] = "a"
+    srr = "".join(srr)
+
+    ab = srr.count("ab")
+    ba = srr.count("ba")
+    if ab == ba:
+        return srr
+
+    srr = list(crr)
+    srr[0] = "b"
+    srr = "".join(srr)
+
+    ab = srr.count("ab")
+    ba = srr.count("ba")
+    if ab == ba:
+        return srr
+
+    srr = list(crr)
+    srr[-1] = "a"
+    srr = "".join(srr)
+
+    ab = srr.count("ab")
+    ba = srr.count("ba")
+    if ab == ba:
+        return srr
+
+    srr = list(crr)
+    srr[-1] = "b"
+    srr = "".join(srr)
+
+    ab = srr.count("ab")
+    ba = srr.count("ba")
+    if ab == ba:
+        return srr
+
+    return srr
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -61,7 +106,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +121,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
