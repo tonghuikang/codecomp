@@ -47,15 +47,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    # check col has same modulo
+    for col in zip(*mrr):
+        mod = col[0]%7
+        for x in col:
+            if x%7 != mod:
+                log("col mod not equal")
+                return "No"
+        for a,b in zip(col, col[1:]):
+            if b-a != 7:
+                log("diff not seven")
+                return "No"
+
+    row = [(x-1)%7 for x in mrr[0]]
+    for a,b in zip(row, row[1:]):
+        if b-a != 1:
+            log("remainder not consec")
+            return "No"
 
 
-# for case_num in [0]:  # no loop over test case
+
+    return "Yes"
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,16 +87,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
