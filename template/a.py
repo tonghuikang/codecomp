@@ -49,18 +49,17 @@ def minus_one_matrix(mrr):
 
 def solve_(srr):
     # your solution here
+    z = "Z"
 
     srr = [(i,x) for i,x in enumerate(srr)]
+    res = [-1 for _ in srr]
 
-    # ABC
-    # ACB
-    # BAC
-    # BCA
-    # CAB
-    # CBA
+    def extract(srr, pattern, idx=1):
+        if not srr:
+            return []
 
-    def extract(srr, pattern):
         a,b,c = pattern
+        log(a,b,c)
         psum = {0:0}
         ssum = {0:srr[-1][0]}
         bsum = [0]
@@ -75,6 +74,7 @@ def solve_(srr):
             bsum.append(mid)
 
         for i,x in srr:
+            i += 1
             if x == a:
                 left += 1
                 psum[left] = i
@@ -84,14 +84,72 @@ def solve_(srr):
                 right += 1
                 ssum[right] = i
 
-        log(psum)
-        log(ssum)
-        log(bsum)
+        allowed = 0
+        for k,v1 in sorted(psum.items()):
+            if k in ssum:
+                v2 = ssum[k]
+                # log(k, v1, v2)
+                if bsum[v2] - bsum[v1] >= k:
+                    allowed = k
+                else:
+                    break
 
-    extract(srr, "ABC")
+        allow_a = allowed
+        allow_b = allowed
+        allow_c = allowed
+
+        new_srr = []
+        for i,x in srr:
+
+            # log(i,x,a,b,c)
+
+            if x == a and allow_a > 0:
+                res[i] = idx
+                allow_a -= 1
+                new_srr.append((i,z))
+
+            elif x == b and allow_b > 0:
+                res[i] = idx
+                allow_b -= 1
+                new_srr.append((i,z))
+
+            elif x == c and allow_c > 0:
+                res[i] = idx
+                allow_c -= 1
+                new_srr.append((i,z))
+
+            else:
+                new_srr.append((i,x))
+
+        # log(allow_a, allow_b, allow_c)
+
+        assert allow_a + allow_b + allow_c == 0
+
+        # log(psum)
+        # log(ssum)
+        # log(bsum)
+        # log(res)
+        log("".join(x for i,x in new_srr if x != z))
+        log()
+
+        return new_srr
+
+    srr = extract(srr, "ABC", idx=1)
+    srr = extract(srr, "ACB", idx=2)
+    srr = extract(srr, "BAC", idx=3)
+    srr = extract(srr, "BCA", idx=4)
+    srr = extract(srr, "CAB", idx=5)
+    srr = extract(srr, "CBA", idx=6)
+
+    # ABC
+    # ACB
+    # BAC
+    # BCA
+    # CAB
+    # CBA
 
 
-    return ""
+    return "".join(str(x) for x in res)
 
 
 for case_num in [0]:  # no loop over test case
