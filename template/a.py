@@ -61,25 +61,32 @@ def solve_(srr):
 
     def extract(srr, pattern):
         a,b,c = pattern
-        psum = [0]
-        ssum = [0]
+        psum = {0:0}
+        ssum = {0:srr[-1][0]}
+        bsum = [0]
 
         left = 0
         right = 0
+        mid = 0
 
-        for x in srr:
+        for i,x in srr:
+            if x == b:
+                mid += 1
+            bsum.append(mid)
+
+        for i,x in srr:
             if x == a:
                 left += 1
-            psum.append(left)
+                psum[left] = i
 
-        for x in srr:
-            if x == a:
+        for i,x in reversed(srr):
+            if x == c:
                 right += 1
-            ssum.append(right)
-        ssum = ssum[::-1]
+                ssum[right] = i
 
         log(psum)
         log(ssum)
+        log(bsum)
 
     extract(srr, "ABC")
 
