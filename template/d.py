@@ -47,10 +47,38 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, srr):
     # your solution here
+    n = len(arr)
+    downable = [0 for _ in range(n+2)]
+    uppable = [0 for _ in range(n+2)]
 
-    return ""
+    for a,s in zip(arr, srr):
+        a = min(max(0, a), n+1)
+        if s == "B":  # downable
+            if a == 0:
+                log("B out")
+                return no
+            downable[a] += 1
+        else:
+            if a == n+1:
+                log("A out")
+                return no
+            uppable[a] += 1
+
+    cursum = 0
+    for i,x in enumerate(downable):
+        cursum += x
+        if cursum > i:
+            return no
+
+    cursum = 0
+    for i,x in enumerate(uppable[::-1]):
+        cursum += x
+        if cursum > i:
+            return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,25 +86,26 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
+    srr = input().strip()
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, srr)  # include input here
+
 
     # print length if applicable
     # print(len(res))
