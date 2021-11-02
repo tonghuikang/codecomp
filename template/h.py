@@ -86,6 +86,7 @@ def solve_(mrr):
                     cnt += 1
                 for j in curpool:
                     res[j] = curlimit
+                curpool = []
                 curlimit = right
             curlimit = min(curlimit, right)
             curpool.append(i)
