@@ -95,13 +95,23 @@ def solve_(mrr):
             res[j] = curlimit
 
     log(res)
+    allset = set()
     allres = []
 
     for (a,b,c), diff in zip(mrr, res):
         total = a+b-c
+        assert (total-diff)%2 == 0
         target_a = (total-diff)//2
         target_b = (total+diff)//2
+
+        assert 0 <= target_a <= a
+        assert 0 <= target_b <= b
+        assert target_a + target_b + c == a + b
+
+        allset.add((target_a, target_b))
         allres.append((a-target_a, b-target_b))
+
+    assert len(allset) == cnt
 
     return cnt, allres
 
