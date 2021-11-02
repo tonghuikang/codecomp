@@ -47,10 +47,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(x,n):
     # your solution here
 
-    return ""
+    skip = max(0, n//4 - 2)
+
+    cur = x
+    for i in range(4*skip+1,n+1):
+        log(cur)
+        if cur%2:
+            cur += i
+        else:
+            cur -= i
+
+    log(cur)
+
+    return cur
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +79,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    x,n = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +88,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(x,n)  # include input here
 
     # print length if applicable
     # print(len(res))
