@@ -47,13 +47,46 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(mrr, m):
+def solve_(mrr):
     # your solution here
 
     n = len(mrr)
     target = 0
 
-    # for a,b in mrr:
+    for i in range(n):
+        a,b,m,_,_ = mrr[i]
+
+        # cacluate inevitable advantage
+
+
+
+        # xxxx
+        # xxxx
+        # ooooo
+        # + ?
+
+        # x
+        # yyyy
+        # ooooo
+        # + yyy
+
+        # xx
+        # yyyy
+        # ooooo
+        # + y
+
+        # x
+        # yyyyyyy
+        # ooooo
+        # + yyy
+
+        # xxxxxx
+        # yyyyyyy
+        # ooooo
+        # + (none)
+
+
+
 
 
 
@@ -82,6 +115,7 @@ for case_num in range(int(input())):
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(n)  # and return as a list of list of int
+    mrr = [[a,b,m,0,0] for a,b in mrr]
     # mrr = minus_one_matrix(mrr)
 
     res = solve(mrr, m)  # include input here

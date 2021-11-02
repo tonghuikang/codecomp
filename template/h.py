@@ -16,6 +16,7 @@ yes, no = "YES", "NO"
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
+LARGE = 10**13
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "hkmac"
@@ -47,10 +48,63 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(list)
+    res = [LARGE for _ in range(k)]
+
+    for i,(a,b,c) in enumerate(mrr):
+        total = a+b-c
+
+        # for min a
+        xa = min(a,c)
+        xb = c - xa
+        maxdiff = (b-xb) - (a-xa)
+
+        # for min b
+        xb = min(b,c)
+        xa = c - xb
+        mindiff = (b-xb) - (a-xa)
+
+        g[total].append((mindiff, maxdiff, i))
+
+    for total in g.keys():
+        g[total].sort()
+
+    log(g)
+
+    cnt = 0
+    for total in g.keys():
+
+        curlimit = -LARGE
+        curpool = []
+
+        for left,right,i in g[total]:
+            if left > curlimit:
+                if curpool:
+                    cnt += 1
+                for j in curpool:
+                    res[j] = curlimit
+                curlimit = right
+            curlimit = min(curlimit, right)
+            curpool.append(i)
+
+        cnt += 1
+        for j in curpool:
+            res[j] = curlimit
+
+    log(res)
+    allres = []
+
+    for (a,b,c), diff in zip(mrr, res):
+        total = a+b-c
+        target_a = (total-diff)//2
+        target_b = (total+diff)//2
+        allres.append((a-target_a, b-target_b))
+
+    return cnt, allres
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,10 +112,10 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    _ = input().strip()
+    k = int(input())
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -73,18 +127,18 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
-
+    cnt, res = solve(mrr)  # include input here
+    print(cnt)
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
