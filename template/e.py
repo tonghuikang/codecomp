@@ -47,10 +47,56 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, n, m):
     # your solution here
 
-    return ""
+    x_min = 0
+    x_max = 0
+    y_min = 0
+    y_max = 0
+
+    d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+
+    # R -> (0,1)
+    # D -> (1,0)
+
+    cx = 0
+    cy = 0
+
+    resx = 0
+    resy = 0
+
+    for c in srr:
+        if c == "R":
+            cy += 1
+        if c == "L":
+            cy -= 1
+        if c == "D":
+            cx += 1
+        if c == "U":
+            cx -= 1
+
+        x_min_test = min(cx, x_min)
+        x_max_test = max(cx, x_max)
+        y_min_test = min(cy, y_min)
+        y_max_test = max(cy, y_max)
+
+        if x_max_test - x_min_test >= n:
+            break
+        if y_max_test - y_min_test >= m:
+            break
+
+        x_min = min(cx, x_min)
+        x_max = max(cx, x_max)
+        y_min = min(cy, y_min)
+        y_max = max(cy, y_max)
+
+
+        resx = -x_min
+        resy = -y_min
+
+
+    return [resx + 1, resy + 1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -61,7 +107,8 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    n,m = list(map(int,input().split()))
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,13 +123,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
