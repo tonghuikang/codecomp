@@ -45,10 +45,18 @@ def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
-
+class LLNode:
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+        self.prev = None
 
 def solve_(srr):
     # your solution here
+
+
+    # for s in s
+
 
     prevlen = len(srr) + 1
     while prevlen != len(srr):

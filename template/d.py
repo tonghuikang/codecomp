@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -48,16 +46,9 @@ def minus_one_matrix(mrr):
 
 m1 = 10**6
 
-@functools.lru_cache(maxsize=10**6+10)
 def inv(base, p=M9):
     # modular if the modulo is a prime
     return pow(base, p-2, p)
-
-
-def depth(exponent, b=m1, p=M9):
-    # modular if the modulo is a prime
-    return 1
-    # return pow(inv(b), exponent, p)
 
 
 def solve_(n,k,mrr,qrr):
@@ -81,12 +72,12 @@ def solve_(n,k,mrr,qrr):
     # p_depth = [-1 for _ in range(n)]
     p_happen = [-1 for _ in range(n)]
     p_no_happen = [-1 for _ in range(n)]
-    p_happen_float = [-1 for _ in range(n)]
+    # p_happen_float = [-1 for _ in range(n)]
 
     # p_depth[0] = 1
     p_happen[0] = k * invm
     p_no_happen[0] = (m1-k) * invm
-    p_happen_float[0] = k/m1
+    # p_happen_float[0] = k/m1
 
     for p in range(n):
 
@@ -95,17 +86,17 @@ def solve_(n,k,mrr,qrr):
             no_happen = (m1-a)*p_happen[p] + (m1-b)*p_no_happen[p]
             # happen = happen%M9
             # no_happen = no_happen%M9
-            happen_float = a/m1 * p_happen_float[p] + b/m1 * (1-p_happen_float[p])
+            # happen_float = a/m1 * p_happen_float[p] + b/m1 * (1-p_happen_float[p])
 
             # p_depth[i] = p_depth[p] + 1
-            p_happen[i] = happen * invm
-            p_no_happen[i] = no_happen * invm
-            p_happen_float[i] = happen_float
+            p_happen[i] = (happen * invm) % M9
+            p_no_happen[i] = (no_happen * invm) % M9
+            # p_happen_float[i] = happen_float
 
     # log(p_depth)
     # log([x/m1**y for x,y in zip(p_no_happen, p_depth)])
     # log([x/m1**y for x,y in zip(p_happen, p_depth)])
-    log(p_happen_float)
+    # log(p_happen_float)
 
     def build_from_node(start, flag):
         p_happen = [-1 for _ in range(n)]
@@ -131,20 +122,22 @@ def solve_(n,k,mrr,qrr):
                 no_happen = (m1-a)*p_happen[p] + (m1-b)*p_no_happen[p]
                 # happen = happen%M9
                 # no_happen = no_happen%M9
-                happen_float = a/m1 * p_happen_float[p] + b/m1 * (1-p_happen_float[p])
+                # happen_float = a/m1 * p_happen_float[p] + b/m1 * (1-p_happen_float[p])
 
                 # p_depth[i] = p_depth[p] + 1
-                p_happen[i] = happen * invm
-                p_no_happen[i] = no_happen * invm
-                p_happen_float[i] = happen_float
+                p_happen[i] = (happen * invm) % M9
+                p_no_happen[i] = (no_happen * invm) % M9
+                # p_happen_float[i] = happen_float
 
         # log(p_depth)
         # log([x/m1**y for x,y in zip(p_no_happen, p_depth)])
         # log([x/m1**y for x,y in zip(p_happen, p_depth)])
         # log(p_happen_float)
 
+        log(p_happen, p_no_happen)
         return p_happen, p_no_happen
 
+    log(p_happen, p_no_happen)
 
     parent_to_children = defaultdict(list)
     child_to_parent = {}
