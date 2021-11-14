@@ -61,7 +61,7 @@ def solve_(w,h):
         if h%3 == 1:
             return h//3 + 1
         if h%3 == 2:
-            return h//3 + 2
+            return h//3 + 1
         assert False
 
     if w == 2:
