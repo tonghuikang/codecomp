@@ -47,10 +47,39 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(w,h):
     # your solution here
 
-    return ""
+    w,h = sorted([w,h])
+
+    # if one side divisible by 3, maximise
+
+    if w%3 == 0 or h%3 == 0:
+        return w*h//3
+
+    if w == 1:
+        if h%3 == 1:
+            return h//3 + 1
+        if h%3 == 2:
+            return h//3 + 2
+        assert False
+
+    if w == 2:
+        if h%3 == 1:
+            return h//3 * 2 + 1
+        if h%3 == 2:
+            return h//3 * 2 + 2
+        assert False
+
+    minres = w*h // 2 + 10
+
+    res = solve_(w - w%3, h) + solve_(w%3, h)
+    minres = min(minres, res)
+
+    res = solve_(w, h - h%3) + solve_(w, h%3)
+    minres = min(minres, res)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +96,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    w,h = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,7 +105,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(w,h)  # include input here
 
     # print length if applicable
     # print(len(res))
