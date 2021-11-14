@@ -46,11 +46,29 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+abc = "abcdefghijklmnopqrstuvwxyz"
+abc_map = {c:i for i,c in enumerate(abc)}
 
-def solve_():
+
+def solve_(srr, trr):
     # your solution here
 
-    return ""
+    srr = [abc_map[x] for x in srr]
+    trr = [abc_map[x] for x in trr]
+
+    c1 = Counter(srr)
+    s1 = set(trr)
+
+    res = 0
+
+    for k,v in c1.items():
+        mindiff = 26
+        for x in s1:
+            diff = min(abs(k-x), abs(k+26-x), abs(k-26-x))
+            mindiff = min(mindiff, diff)
+        res += mindiff*v
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -61,7 +79,8 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    trr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +95,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, trr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +106,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

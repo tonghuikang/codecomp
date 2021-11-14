@@ -47,10 +47,57 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+
+    brr = [0 for _ in (srr)]
+    rrr = [0 for _ in (srr)]
+    yrr = [0 for _ in (srr)]
+
+    for i,x in enumerate(srr):
+        if x == "R":
+            rrr[i] += 1
+        if x == "Y":
+            yrr[i] += 1
+        if x == "B":
+            brr[i] += 1
+
+        # Red + Yellow = Orange
+        if x == "O":
+            rrr[i] += 1
+            yrr[i] += 1
+
+        # Red + Blue = Purple
+        if x == "P":
+            rrr[i] += 1
+            brr[i] += 1
+
+        # Yellow + Blue = Green
+        if x == "G":
+            yrr[i] += 1
+            brr[i] += 1
+
+        # Red + Yellow + Blue = Gray
+        if x == "A":
+            rrr[i] += 1
+            yrr[i] += 1
+            brr[i] += 1
+
+    rrr = [0] + rrr + [0]
+    yrr = [0] + yrr + [0]
+    brr = [0] + brr + [0]
+
+    res = 0
+
+    def count(arr):
+        res = 0
+        for a,b in zip(arr, arr[1:]):
+            if a == 1 and b == 0:
+                res += 1
+        return res
+
+    return count(rrr) + count(yrr) + count(brr)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,10 +105,10 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +123,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -87,6 +134,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
