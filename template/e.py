@@ -46,6 +46,21 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# https://github.com/cheran-senthil/PyRival/blob/3795f54e42d77f67bf065fd5ca3841da6ab3e4b7/pyrival/graphs/lca.py
+class RangeQuery:
+    def __init__(self, data, func=min):
+        self.func = func
+        self._data = _data = [list(data)]
+        i, n = 1, len(_data[0])
+        while 2 * i <= n:
+            prev = _data[-1]
+            _data.append([func(prev[j], prev[j + i]) for j in range(n - 2 * i + 1)])
+            i <<= 1
+
+    def query(self, begin, end):
+        depth = (end - begin).bit_length() - 1
+        return self.func(self._data[depth][begin], self._data[depth][end - (1 << depth)])
+
 
 def solve_(arr):
     # your solution here
@@ -53,14 +68,22 @@ def solve_(arr):
     arr = [-x if i%2 else x for i,x in enumerate(arr)]
     log(arr)
 
+    minval = 10**18
+    cur = 0
+    for x in arr:
+        x += cur
+
+
     count = defaultdict(list)
-    count[0] = 1
+    count[0].append(0)
     cur = 0
     res = 0
     for i,v in enumerate(arr, start=1):
         cur += v
         res += len(count[cur])
         count[cur].append(i)
+
+    # log(count)
 
     return res
 
