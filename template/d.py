@@ -56,7 +56,8 @@ def inv(base, p=M9):
 
 def depth(exponent, b=m1, p=M9):
     # modular if the modulo is a prime
-    return pow(inv(b), exponent, p)
+    return 1
+    # return pow(inv(b), exponent, p)
 
 
 def solve_(n,k,mrr,qrr):
@@ -68,9 +69,6 @@ def solve_(n,k,mrr,qrr):
     # log((30*inv(1000))%M9)
     # your solution here
 
-
-    # independent if not parent and child
-
     # otherwise recalculate
 
     g = defaultdict(list)
@@ -78,18 +76,20 @@ def solve_(n,k,mrr,qrr):
         g[p].append((i,a,b))
 
     # log(g)
+    invm = inv(m1)
 
-    p_depth = [-1 for _ in range(n)]
+    # p_depth = [-1 for _ in range(n)]
     p_happen = [-1 for _ in range(n)]
     p_no_happen = [-1 for _ in range(n)]
     p_happen_float = [-1 for _ in range(n)]
 
-    p_depth[0] = 1
-    p_happen[0] = k
-    p_no_happen[0] = m1-k
+    # p_depth[0] = 1
+    p_happen[0] = k * invm
+    p_no_happen[0] = (m1-k) * invm
     p_happen_float[0] = k/m1
 
     for p in range(n):
+
         for i,a,b in g[p]:
             happen    = a*p_happen[p]      + b*p_no_happen[p]
             no_happen = (m1-a)*p_happen[p] + (m1-b)*p_no_happen[p]
@@ -97,9 +97,9 @@ def solve_(n,k,mrr,qrr):
             # no_happen = no_happen%M9
             happen_float = a/m1 * p_happen_float[p] + b/m1 * (1-p_happen_float[p])
 
-            p_depth[i] = p_depth[p] + 1
-            p_happen[i] = happen
-            p_no_happen[i] = no_happen
+            # p_depth[i] = p_depth[p] + 1
+            p_happen[i] = happen * invm
+            p_no_happen[i] = no_happen * invm
             p_happen_float[i] = happen_float
 
     # log(p_depth)
@@ -107,13 +107,90 @@ def solve_(n,k,mrr,qrr):
     # log([x/m1**y for x,y in zip(p_happen, p_depth)])
     log(p_happen_float)
 
+    def build_from_node(start, flag):
+        p_happen = [-1 for _ in range(n)]
+        p_no_happen = [-1 for _ in range(n)]
+        p_happen_float = [-1 for _ in range(n)]
+
+        # p_depth[0] = 1
+        p_happen[0] = k * invm
+        p_no_happen[0] = (m1-k) * invm
+        p_happen_float[0] = k/m1
+
+        for p in range(n):
+            if p == start:
+                if flag:
+                    p_happen[p] = 1
+                    p_no_happen[p] = 0
+                else:
+                    p_happen[p] = 0
+                    p_no_happen[p] = 1
+
+            for i,a,b in g[p]:
+                happen    = a*p_happen[p]      + b*p_no_happen[p]
+                no_happen = (m1-a)*p_happen[p] + (m1-b)*p_no_happen[p]
+                # happen = happen%M9
+                # no_happen = no_happen%M9
+                happen_float = a/m1 * p_happen_float[p] + b/m1 * (1-p_happen_float[p])
+
+                # p_depth[i] = p_depth[p] + 1
+                p_happen[i] = happen * invm
+                p_no_happen[i] = no_happen * invm
+                p_happen_float[i] = happen_float
+
+        # log(p_depth)
+        # log([x/m1**y for x,y in zip(p_no_happen, p_depth)])
+        # log([x/m1**y for x,y in zip(p_happen, p_depth)])
+        # log(p_happen_float)
+
+        return p_happen, p_no_happen
+
+
+    parent_to_children = defaultdict(list)
+    child_to_parent = {}
+    for i,(p,a,b) in enumerate(mrr, start=1):
+        parent_to_children[p].append(i)
+        child_to_parent[i] = p
+
     res = []
     for a,b in qrr:
-        pa = (p_happen[a]*depth(p_depth[a]))%M9
-        pb = (p_happen[b]*depth(p_depth[b]))%M9
-        val = pa*pb
+        ancestors_of_a = set([a])
+        cur = a
+        while cur in child_to_parent:
+            cur = child_to_parent[cur]
+            ancestors_of_a.add(cur)
+
+        assert 0 in ancestors_of_a
+
+        cur = b
+        while cur not in ancestors_of_a:
+            cur = child_to_parent[cur]
+
+        anc = cur
+        log("common ancestor", cur)
+
+        anc_happen = (p_happen[anc])%M9
+        anc_no_happen = (p_no_happen[anc])%M9
+
+        p_happen_cond, p_no_happen_cond = build_from_node(anc, flag=True)
+        pa1 = (p_happen_cond[a])%M9
+        pb1 = (p_happen_cond[b])%M9
+
+        p_happen_cond, p_no_happen_cond = build_from_node(anc, flag=False)
+        pa2 = (p_happen_cond[a])%M9
+        pb2 = (p_happen_cond[b])%M9
+
+        log(anc_happen, pa1, pb1, anc_no_happen, pa2, pb2)
+
+        val = anc_happen*pa1*pb1 + anc_no_happen*pa2*pb2
+        # A -> B -> C
+        # A -> X -> Y
+        # P(C=1, Y=1 | A) =   P(C=1 | B) * P(B | A=1)
+        #                   * P(Y=1 | X) * P(X | A=1) * P(A=1)
+        #                     P(C=1 | B) * P(B | A=0)
+        #                   * P(Y=1 | X) * P(X | A=0) * P(A=0)
+
         # log(pa,pb,p_happen[a],p_happen[b])
-        log(p_happen_float[a]*p_happen_float[b])
         res.append(val%M9)
 
     return res
