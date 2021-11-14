@@ -79,6 +79,9 @@ def solve_(n,k,mrr,qrr):
     p_no_happen[0] = (m1-k) * invm
     # p_happen_float[0] = k/m1
 
+    p_happen[0] = p_happen[0]%M9
+    p_no_happen[0] = p_no_happen[0]%M9
+
     for p in range(n):
 
         for i,a,b in g[p]:
@@ -101,14 +104,17 @@ def solve_(n,k,mrr,qrr):
     def build_from_node(start, flag):
         p_happen = [-1 for _ in range(n)]
         p_no_happen = [-1 for _ in range(n)]
-        p_happen_float = [-1 for _ in range(n)]
+        # p_happen_float = [-1 for _ in range(n)]
 
         # p_depth[0] = 1
-        p_happen[0] = k * invm
-        p_no_happen[0] = (m1-k) * invm
-        p_happen_float[0] = k/m1
+        p_happen[0] = 0
+        p_no_happen[0] = 0
+        # p_happen_float[0] = k/m1
 
         for p in range(n):
+            if p < start:
+                continue
+
             if p == start:
                 if flag:
                     p_happen[p] = 1
@@ -134,7 +140,7 @@ def solve_(n,k,mrr,qrr):
         # log([x/m1**y for x,y in zip(p_happen, p_depth)])
         # log(p_happen_float)
 
-        log(p_happen, p_no_happen)
+        log("def", p_happen, p_no_happen)
         return p_happen, p_no_happen
 
     log(p_happen, p_no_happen)

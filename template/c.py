@@ -51,28 +51,94 @@ class LLNode:
         self.next = None
         self.prev = None
 
+
 def solve_(srr):
     # your solution here
 
+    left = LLNode(-1)
+    prev = left
 
-    # for s in s
+    iteration = []
+    iteration_map = {}
+    a,b,c = 0,1,2
+    for _ in range(10):
+        a,b,c = a+1,b+1,c+1
+        a,b,c = a%10,b%10,c%10
+        iteration.append((a,b,c))
+        iteration_map[a,b] = c
+
+    iteration_pool = defaultdict(list)
+    for c in srr:
+        cur = LLNode(int(c))
+        cur.prev = prev
+        prev.next = cur
+
+        if (prev.val, cur.val) in iteration_map:
+            iteration_pool[prev.val, cur.val].append((prev, cur))
+
+        prev = cur
+
+    cur = LLNode(-2)
+    prev.next = cur
+    cur.prev = prev
 
 
-    prevlen = len(srr) + 1
-    while prevlen != len(srr):
-        prevlen = len(srr)
-        srr = srr.replace("01", "2")
-        srr = srr.replace("12", "3")
-        srr = srr.replace("23", "4")
-        srr = srr.replace("34", "5")
-        srr = srr.replace("45", "6")
-        srr = srr.replace("56", "7")
-        srr = srr.replace("67", "8")
-        srr = srr.replace("78", "9")
-        srr = srr.replace("89", "0")
-        srr = srr.replace("90", "1")
+    cur = left
+    res = []
+    while cur:
+        res.append(cur.val)
+        cur = cur.next
 
-    return srr
+    # log(res)
+
+
+    flag = True
+    while flag:
+        flag = False
+
+        for a,b,c in iteration:
+            for prev, cur in iteration_pool[a,b]:
+                # log(prev, cur, type(prev))
+                new = LLNode(c)
+                prev.prev.next = new
+                cur.next.pev = new
+                new.prev = prev.prev
+                new.next = cur.next
+                flag = True
+
+                if (new.prev.val, new.val) in iteration_map:
+                    iteration_pool[new.prev.val, new.val].append((new.prev, new))
+
+                if (new.val, new.next.val) in iteration_map:
+                    iteration_pool[new.val, new.next.val].append((new, new.next))
+
+                cur = left
+                res = []
+                while cur:
+                    res.append(cur.val)
+                    cur = cur.next
+
+                # log(res)
+
+            iteration_pool[a,b] = []
+
+    res = [x for x in res if x >= 0]
+
+    # prevlen = len(srr) + 1
+    # while prevlen != len(srr):
+    #     prevlen = len(srr)
+    #     srr = srr.replace("01", "2")
+    #     srr = srr.replace("12", "3")
+    #     srr = srr.replace("23", "4")
+    #     srr = srr.replace("34", "5")
+    #     srr = srr.replace("45", "6")
+    #     srr = srr.replace("56", "7")
+    #     srr = srr.replace("67", "8")
+    #     srr = srr.replace("78", "9")
+    #     srr = srr.replace("89", "0")
+    #     srr = srr.replace("90", "1")
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -104,7 +170,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = "".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
