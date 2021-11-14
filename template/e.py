@@ -47,25 +47,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def subarraySum(nums, k=0):
-    count = defaultdict(int)
-    count[0] = 1
-    cur = 0
-    res = 0
-    for i,v in enumerate(nums):
-        cur += v
-        res += count[cur - k]
-        count[cur] += 1
-        # log(cur-k, count)
-    return res
-
-
 def solve_(arr):
     # your solution here
 
     arr = [-x if i%2 else x for i,x in enumerate(arr)]
     log(arr)
-    return subarraySum(arr)
+
+    count = defaultdict(list)
+    count[0] = 1
+    cur = 0
+    res = 0
+    for i,v in enumerate(arr, start=1):
+        cur += v
+        res += len(count[cur])
+        count[cur].append(i)
+
+    return res
 
 
 
