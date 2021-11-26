@@ -47,10 +47,61 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+# Python3 approach to finding the XOR_SUM
+
+# Returns sum of XORs of all subsets
+def xorSum(arr):
+    n = len(arr)
+
+    bits = 0
+
+    # Finding bitwise OR of all elements
+    for i in range(n):
+        bits |= arr[i]
+
+    ans = bits * pow(2, n-1, M9)
+
+    return ans
+
+def solve_(n,mrr):
     # your solution here
 
-    return ""
+    restriction = [[0 for _ in range(31)] for _ in range(n+1)]
+
+    for l,r,k in mrr:
+        l -= 1
+        r -= 1
+        srr = bin(k)[2:].zfill(31)[::-1]
+        log(k, srr)
+        for i,x in enumerate(srr):
+            if x == "0":
+                restriction[l][i] += 1
+                restriction[r+1][i] -= 1
+
+    log("restriction")
+    log(restriction)
+
+    rrr = [[1 for _ in range(31)] for _ in range(n)]
+
+    for j in range(31):
+        csum = 0
+        for i in range(n):
+            csum += restriction[i][j]
+            if csum == 0:
+                rrr[i][j] = 0
+
+    log("rrr")
+    log(rrr)
+
+    res = [0 for _ in range(n)]
+    for i,row in enumerate(rrr):
+        val = sum(2**i * x for i,x in enumerate(row[:30]))
+        res[i] = val
+
+    log(res)
+
+    return xorSum(res)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,16 +118,16 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
