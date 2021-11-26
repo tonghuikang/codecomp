@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import functools
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,18 +46,102 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# ---------------------- multiple prime factorisation ----------------------
+
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+LARGE = 5*10**6 + 10
+
+largest_prime_factors = get_largest_prime_factors(LARGE)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+
+
+@functools.lru_cache(maxsize=None)
+def get_prime_factors_with_precomp_largest_factors(num):
+    # factorise into prime factors given precomputed largest_prime_factors
+    factors = []
+    lf = largest_prime_factors[num]
+    while lf != num:
+        factors.append(lf)
+        num //= lf
+        lf = largest_prime_factors[num]
+    if num > 1:
+        factors.append(num)
+    return factors
+
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    # NOT IN SORTED ORDER
+    return divs
+
+
+@functools.lru_cache(maxsize=None)
+def get_divisors(x):
+    return get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp_largest_factors(x))
+
+
+def solve_(lst):
     # your solution here
 
-    return ""
+    # factorise all numbers
+    # populate factor count
+
+    fcount = [0 for _ in range(LARGE)]
+
+    # take path
+    for x in lst:
+        factors = get_divisors(x)
+        # log(factors)
+        for factor in factors:
+            fcount[factor] += 1
+
+    res = [i*x for i,x in enumerate(fcount)]
+
+    for i in range(LARGE):
+        x = fcount[i]
+        if x == 0:
+            continue
+        for j in range(2*i, LARGE, i):
+            decrease = i*fcount[j]
+            increase = j*fcount[j]
+            # log(diff, increase, decrease)
+            res[j] = max(res[j], res[i] + increase - decrease)
+
+        # log(res[:10])
+
+    return max(res)
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +151,8 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
+    lst.sort()
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +160,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
 
     # print length if applicable
     # print(len(res))
