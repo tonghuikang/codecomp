@@ -67,12 +67,12 @@ def xorSum(arr):
 def solve_(n,mrr):
     # your solution here
 
-    restriction = [[0 for _ in range(31)] for _ in range(n+1)]
+    restriction = [[0 for _ in range(32)] for _ in range(n+1)]
 
     for l,r,k in mrr:
         l -= 1
         r -= 1
-        srr = bin(k)[2:].zfill(31)[::-1]
+        srr = bin(k)[2:].zfill(32)[::-1]
         log(k, srr)
         for i,x in enumerate(srr):
             if x == "0":
@@ -80,23 +80,26 @@ def solve_(n,mrr):
                 restriction[r+1][i] -= 1
 
     log("restriction")
-    log(restriction)
+    for row in restriction:
+        log(row)
 
-    rrr = [[1 for _ in range(31)] for _ in range(n)]
+    rrr = [[1 for _ in range(32)] for _ in range(n)]
 
-    for j in range(31):
+    for j in range(32):
         csum = 0
         for i in range(n):
             csum += restriction[i][j]
-            if csum == 0:
+            if csum > 0:
                 rrr[i][j] = 0
 
     log("rrr")
-    log(rrr)
+    for row in rrr:
+        log(row)
+
 
     res = [0 for _ in range(n)]
     for i,row in enumerate(rrr):
-        val = sum(2**i * x for i,x in enumerate(row[:30]))
+        val = sum(2**i * x for i,x in enumerate(row))
         res[i] = val
 
     log(res)
