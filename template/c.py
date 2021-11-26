@@ -156,7 +156,7 @@ def solve_(n,mrr):
 
     res = [0 for _ in range(n)]
     for i,row in enumerate(rrr):
-        val = sum(2**i * x for i,x in enumerate(row))
+        val = sum(x << i for i,x in enumerate(row))
         res[i] = val
 
     # log(res)
