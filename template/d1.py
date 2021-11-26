@@ -35,8 +35,8 @@ input = sys.stdin.readline  # to read input quickly
 # import time
 # start_time = time.time()
 
-# LARGE = 5*10**6 + 10
-LARGE = 2*10**7 + 10
+LARGE = 5*10**6 + 10
+# LARGE = 2*10**7 + 10
 
 def solve_(lst):
     # your solution here

@@ -1,10 +1,62 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
-input = sys.stdin.readline  # to read input quickly
+# region fastio
+
+BUFSIZE = 8192
+
+import os
+import sys
+from io import BytesIO, IOBase
+
+
+class FastIO(IOBase):
+    newlines = 0
+
+    def __init__(self, file):
+        self._fd = file.fileno()
+        self.buffer = BytesIO()
+        self.writable = "x" in file.mode or "r" not in file.mode
+        self.write = self.buffer.write if self.writable else None
+
+    def read(self):
+        while True:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            if not b:
+                break
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines = 0
+        return self.buffer.read()
+
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines -= 1
+        return self.buffer.readline()
+
+    def flush(self):
+        if self.writable:
+            os.write(self._fd, self.buffer.getvalue())
+            self.buffer.truncate(0), self.buffer.seek(0)
+
+
+class IOWrapper(IOBase):
+    def __init__(self, file):
+        self.buffer = FastIO(file)
+        self.flush = self.buffer.flush
+        self.writable = self.buffer.writable
+        self.write = lambda s: self.buffer.write(s.encode("ascii"))
+        self.read = lambda: self.buffer.read().decode("ascii")
+        self.readline = lambda: self.buffer.readline().decode("ascii")
+
+
+sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -62,7 +114,8 @@ def xorSum(arr):
 
     ans = bits * pow(2, n-1, M9)
 
-    return ans
+    return ans%M9
+
 
 def solve_(n,mrr):
     # your solution here
@@ -72,16 +125,20 @@ def solve_(n,mrr):
     for l,r,k in mrr:
         l -= 1
         r -= 1
-        srr = bin(k)[2:].zfill(32)[::-1]
-        log(k, srr)
-        for i,x in enumerate(srr):
-            if x == "0":
-                restriction[l][i] += 1
-                restriction[r+1][i] -= 1
+        xrr = restriction[l]
+        yrr = restriction[r+1]
+        # srr = bin(k)[2:].zfill(32)[::-1]
+        # log(k, srr)
+        for i in range(32):
+            if k&1 == 0:
+                xrr[i] += 1
+                yrr[i] -= 1
+                # log("x")
+            k = k >> 1
 
-    log("restriction")
-    for row in restriction:
-        log(row)
+    # log("restriction")
+    # for row in restriction:
+    #     log(row)
 
     rrr = [[1 for _ in range(32)] for _ in range(n)]
 
@@ -92,9 +149,9 @@ def solve_(n,mrr):
             if csum > 0:
                 rrr[i][j] = 0
 
-    log("rrr")
-    for row in rrr:
-        log(row)
+    # log("rrr")
+    # for row in rrr:
+    #     log(row)
 
 
     res = [0 for _ in range(n)]
@@ -102,7 +159,7 @@ def solve_(n,mrr):
         val = sum(2**i * x for i,x in enumerate(row))
         res[i] = val
 
-    log(res)
+    # log(res)
 
     return xorSum(res)
 
