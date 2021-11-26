@@ -1,107 +1,42 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
-import functools
-from collections import Counter
+# import getpass  # not available on codechef
+from collections import Counter, defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+# M9 = 10**9 + 7  # 998244353
+# yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
+# MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
 # OFFLINE_TEST = False  # codechef does not allow getpass
-def log(*args):
-    if OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
+# def log(*args):
+#     if OFFLINE_TEST:
+#         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
+# def solve(*args):
+#     # screen input
+#     if OFFLINE_TEST:
+#         log("----- solving ------")
+#         log(*args)
+#         log("----- ------- ------")
+#     return solve_(*args)
 
 # ---------------------------- template ends here ----------------------------
 
+# import time
+# start_time = time.time()
 
-# ---------------------- multiple prime factorisation ----------------------
-
-
-def get_largest_prime_factors(num):
-    # get largest prime factor for each number
-    # you can use this to obtain primes
-    largest_prime_factors = [1] * num
-    for i in range(2, num):
-        if largest_prime_factors[i] > 1:  # not prime
-            continue
-        for j in range(i, num, i):
-            largest_prime_factors[j] = i
-    return largest_prime_factors
-
-
-LARGE = 5*10**6 + 10
-
-largest_prime_factors = get_largest_prime_factors(LARGE)   # take care that it begins with [1,1,2,...]
-primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
-
-
-@functools.lru_cache(maxsize=None)
-def get_prime_factors_with_precomp_largest_factors(num):
-    # factorise into prime factors given precomputed largest_prime_factors
-    factors = []
-    lf = largest_prime_factors[num]
-    while lf != num:
-        factors.append(lf)
-        num //= lf
-        lf = largest_prime_factors[num]
-    if num > 1:
-        factors.append(num)
-    return factors
-
-
-def get_all_divisors_given_prime_factorization(factors):
-    c = Counter(factors)
-
-    divs = [1]
-    for prime, count in c.most_common()[::-1]:
-        l = len(divs)
-        prime_pow = 1
-
-        for _ in range(count):
-            prime_pow *= prime
-            for j in range(l):
-                divs.append(divs[j]*prime_pow)
-
-    # NOT IN SORTED ORDER
-    return divs
-
-
-@functools.lru_cache(maxsize=None)
-def get_divisors(x):
-    return get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp_largest_factors(x))
-
+# LARGE = 5*10**6 + 10
+LARGE = 2*10**7 + 10
 
 def solve_(lst):
     # your solution here
@@ -109,30 +44,39 @@ def solve_(lst):
     # factorise all numbers
     # populate factor count
 
-    fcount = [0 for _ in range(LARGE)]
+    c = Counter(lst)
+    fcount = Counter()
 
-    # take path
-    for x in lst:
-        factors = get_divisors(x)
-        # log(factors)
-        for factor in factors:
-            fcount[factor] += 1
+    for i in range(1, LARGE):
+        for j in range(i, LARGE, i):
+            if j in c:
+                fcount[i] += c[j]
+                # log("x")
 
-    res = [i*x for i,x in enumerate(fcount)]
+    # print(time.time() - start_time)
+    # print(fcount)
+    # del c
+    res = {i:i*x for i,x in fcount.items()}
+
+    # log(res)
 
     for i in range(LARGE):
-        x = fcount[i]
-        if x == 0:
+        if i not in fcount:
             continue
         for j in range(2*i, LARGE, i):
-            decrease = i*fcount[j]
-            increase = j*fcount[j]
+            if j not in fcount:
+                continue
+            y = fcount[j]
+            # decrease = i*y
+            # increase = j*y
             # log(diff, increase, decrease)
-            res[j] = max(res[j], res[i] + increase - decrease)
+            res[j] = max(res[j], res[i] + (j-i) * y)
+            # log("y")
 
-        # log(res[:10])
+        # log(res)
+    # print(time.time() - start_time)
 
-    return max(res)
+    return max(res.values())
 
 
 
@@ -152,7 +96,6 @@ for case_num in [0]:  # no loop over test case
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     lst = list(map(int,input().split()))
-    lst.sort()
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -160,7 +103,7 @@ for case_num in [0]:  # no loop over test case
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(lst)  # include input here
+    res = solve_(lst)  # include input here
 
     # print length if applicable
     # print(len(res))
