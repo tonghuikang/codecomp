@@ -47,10 +47,38 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(lst):
     # your solution here
+    original = [x for x in lst]
 
-    return ""
+    lst = [(x,i) for i,x in enumerate(lst, start=1)]
+    lst.sort(reverse=True)
+
+    left = True
+    dq = deque([0])
+    for x,i in lst:
+        left = not left
+        if left:
+            dq.append(i)
+        else:
+            dq.appendleft(i)
+
+    log(dq)
+
+    res = [-1 for _ in range(len(dq))]
+
+    for x,i in enumerate(dq):
+        res[i] = x
+
+    log(res)
+
+    val = 0
+
+    for i,x in zip(res[1:], original):
+        # log(abs(i-res[0]), x)
+        val += 2 * x * abs(i-res[0])
+
+    return val, res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +86,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +96,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,13 +104,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    val, res = solve(lst)  # include input here
+    print(val)
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
