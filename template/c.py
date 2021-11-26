@@ -140,28 +140,25 @@ def solve_(n,mrr):
     # for row in restriction:
     #     log(row)
 
-    rrr = [[1 for _ in range(32)] for _ in range(n)]
+    rrr = [2**30 - 1 for _ in range(n)]
 
-    for j in range(32):
+    for j in range(30):
+        mask = 2**30 - 1 - 2**j
         csum = 0
         for i in range(n):
             csum += restriction[i][j]
             if csum > 0:
-                rrr[i][j] = 0
+                rrr[i] = rrr[i]&mask
 
     # log("rrr")
     # for row in rrr:
     #     log(row)
 
 
-    res = [0 for _ in range(n)]
-    for i,row in enumerate(rrr):
-        val = sum(x << i for i,x in enumerate(row))
-        res[i] = val
 
     # log(res)
 
-    return xorSum(res)
+    return xorSum(rrr)
 
 
 # for case_num in [0]:  # no loop over test case
