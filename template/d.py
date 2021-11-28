@@ -372,7 +372,7 @@ def solve_(n, mrr):
         else:
             size_a = ds.size(a)
             size_b = ds.size(b)
-            log(size_a, size_b, threshold)
+            # log(size_a, size_b, threshold)
 
             if size_a < threshold and size_b < threshold:
                 log("case A")
@@ -381,7 +381,7 @@ def solve_(n, mrr):
             elif size_a >= threshold and size_b >= threshold:
                 log("case B")
                 # add sl[wildcard]
-                cursum += -sl[wildcard-1]
+                cursum += -sl[wildcard]
             else:
                 log("case C")
                 x,y = size_a, size_b
@@ -399,16 +399,31 @@ def solve_(n, mrr):
 
         # log(ds.parent_or_size, wildcard)
 
-        arr = sorted([-x for x in ds.parent_or_size if x < 0])[::-1]
-        arrsum = sum(arr[:wildcard])-1
-        val = -sum(sl[x] for x in range(wildcard)) - 1
-        log(val, cursum, arrsum)
-        assert val == cursum == arrsum
+        # arr = sorted([-x for x in ds.parent_or_size if x < 0])[::-1]
+        # log(arr)
+        # log(sl)
+        # arrsum = sum(arr[:wildcard])-1
+        # val = -sum(sl[x] for x in range(wildcard)) - 1
+        # log(cursum, val, arrsum)
+        # # assert val == arrsum
+        # assert cursum == val == arrsum
 
         res.append(cursum)
         # log()
 
     return res
+
+# import random
+# while True:
+#     n = random.randint(2,5)
+#     d = random.randint(1,n-1)
+#     mrr = [[random.randint(1,n), random.randint(1,n)] for _ in range(d)]
+#     mrr = [[a,b] for a,b in mrr if a != b]
+#     if not mrr:
+#         continue
+#     mrr = minus_one_matrix(mrr)
+#     solve(n, mrr)
+
 
 
 for case_num in [0]:  # no loop over test case
