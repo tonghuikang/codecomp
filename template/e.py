@@ -285,6 +285,8 @@ class SortedList:
 
 
 def solve_(srr, mrr):
+
+    flag = srr == "aaaaaaaaa"
     # your solution here
 
     # for no ABC in subsequence
@@ -309,7 +311,7 @@ def solve_(srr, mrr):
     # log(posC)
     result = []
 
-    for pos, nex in mrr:
+    for i, (pos, nex) in enumerate(mrr, start=1):
         cur = srr[pos]
         g[cur].remove(pos)
         g[nex].add(pos)
@@ -320,6 +322,9 @@ def solve_(srr, mrr):
         lenc = len(g["c"])
 
         res = min(lena, lenb, lenc)
+
+        if i == 702 and flag:
+            print(srr)
 
         # then find first B after first A, last B before last C
         # minimum is just remove all the C after first B, or remove all A before last B, or remove all the Bs in between
