@@ -319,20 +319,40 @@ def solve_(srr, mrr):
         lenb = len(g["b"])
         lenc = len(g["c"])
 
-        # log()
-        # log(srr)
         res = min(lena, lenb, lenc)
         if res > 0:
             idx = g["a"].bisect_left(g["b"][-1])
-            # log(idx)
+            idx_a = g["a"].bisect_left(g["b"][0])
+            idx_a = min(lena-1, idx_a)
+            log(idx)
             res = min(res, idx)
 
             idx = g["c"].bisect_left(g["b"][0])
+            idx_c = g["c"].bisect_left(g["b"][-1])
+            idx_c = min(lenc-1, idx_c)
             idx = lenc - idx
-            # log(idx)
+            log(idx)
             res = min(res, idx)
 
-        # log(res)
+            if res > 0:
+                log("prev", res)
+
+                idx = g["b"].bisect_left(g["c"][idx_c])
+                log(idx)
+                res = min(res, idx)
+
+                idx = g["b"].bisect_left(g["a"][idx_a])
+                idx = lenb - idx
+                log(idx)
+                res = min(res, idx)
+
+        log(g["a"])
+        log(g["b"])
+        log(g["c"])
+        log(srr)
+        log(lena, lenb, lenc, res)
+        log()
+
         result.append(res)
 
     return result
