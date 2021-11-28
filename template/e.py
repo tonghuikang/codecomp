@@ -325,6 +325,7 @@ def solve_(srr, mrr):
 
         if i == 702 and flag:
             print(srr)
+            break
 
         # then find first B after first A, last B before last C
         # minimum is just remove all the C after first B, or remove all A before last B, or remove all the Bs in between
@@ -381,6 +382,7 @@ def solve_(srr, mrr):
     return result
 
 while True and OFFLINE_TEST:
+    break
     n = 100
     srr = [random.choice(["a", "b", "c"]) for _ in range(n)]
     mrr = [(random.randint(0,n-1), random.choice(["a", "b", "c"])) for _ in range(n)]
