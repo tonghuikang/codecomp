@@ -45,13 +45,6 @@ def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
-
-
-def solve_():
-    # your solution here
-
-    return ""
-
 # Python3 program to find the number of
 # subarrays with sum exactly equal to k.
 from collections import defaultdict
@@ -59,7 +52,7 @@ from collections import defaultdict
 # Function to find number of subarrays
 # with sum exactly equal to k.
 def findSubarraySum(arr, Sum):
-    n = len(arr)
+	n = len(arr)
 
 	# Dictionary to store number of subarrays
 	# starting from index zero having
@@ -97,7 +90,55 @@ def findSubarraySum(arr, Sum):
 
 	return res
 
-# This code is contributed by Rituraj Jain
+
+
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+largest_prime_factors = get_largest_prime_factors(10**6 + 10)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+primes = set(primes)
+
+primes.discard(1)
+
+# log(sorted(primes)[:10])
+
+
+def solve_(arr, e):
+    # your solution here
+
+    brr = []
+    for x in arr:
+        if x == 1:
+            brr.append(0)
+        elif x in primes:
+            brr.append(1)
+        else:
+            brr.append(2)
+
+
+    c = defaultdict(list)
+
+    for i,x in enumerate(brr):
+        mod_pos = i%e
+        c[mod_pos].append(x)
+
+    res = 0
+    for lst in c.values():
+        # log(lst)
+        res += findSubarraySum(lst, 1)
+
+    return res - brr.count(1)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -114,8 +155,8 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,e = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -123,7 +164,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, e)  # include input here
 
     # print length if applicable
     # print(len(res))

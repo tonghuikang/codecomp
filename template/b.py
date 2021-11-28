@@ -46,25 +46,6 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-def get_largest_prime_factors(num):
-    # get largest prime factor for each number
-    # you can use this to obtain primes
-    largest_prime_factors = [1] * num
-    for i in range(2, num):
-        if largest_prime_factors[i] > 1:  # not prime
-            continue
-        for j in range(i, num, i):
-            largest_prime_factors[j] = i
-    return largest_prime_factors
-
-
-largest_prime_factors = get_largest_prime_factors(10**6 + 10)   # take care that it begins with [1,1,2,...]
-primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
-primes = set(primes)
-
-primes.discard(1)
-
-log(sorted(primes))
 
 def solve_(srr, mrr):
     # your solution here
