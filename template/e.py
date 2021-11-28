@@ -332,7 +332,10 @@ def solve_(srr, mrr):
             if g["b"][0] > g["c"][-1]:
                 res = 0
 
-        if res > 1:
+        log()
+        log(srr)
+
+        if res > 0:
             # while True:
                 first_b_after_first_a_idx = g["b"].bisect_left(g["a"][0])
                 assert first_b_after_first_a_idx < lenb
@@ -349,9 +352,15 @@ def solve_(srr, mrr):
 
                 count_c_after_first_b = lenc - g["c"].bisect_left(first_b_after_first_a)
                 count_a_before_last_b = g["a"].bisect_left(last_b_before_last_c)
-                count_b_in_between = max(0, last_b_before_last_c_idx - first_b_after_first_a_idx + 1)
+                count_b_in_between = max(0,
+                                         last_b_before_last_c_idx - first_b_after_first_a_idx + 1,
+                                         first_b_after_first_a_idx - last_b_before_last_c_idx + 1)
 
                 log(count_c_after_first_b, count_a_before_last_b, count_b_in_between)
+
+                assert srr[first_b_after_first_a:].count("c") == count_c_after_first_b
+                assert srr[:last_b_before_last_c].count("a") == count_a_before_last_b
+
                 res = min(res, count_c_after_first_b, count_a_before_last_b, count_b_in_between)
                 # break
 
@@ -365,6 +374,13 @@ def solve_(srr, mrr):
         result.append(res)
 
     return result
+
+while True and OFFLINE_TEST:
+    n = 100
+    srr = [random.choice(["a", "b", "c"]) for _ in range(n)]
+    mrr = [(random.randint(0,n-1), random.choice(["a", "b", "c"])) for _ in range(n)]
+    solve(srr, mrr)
+
 
 
 for case_num in [0]:  # no loop over test case
