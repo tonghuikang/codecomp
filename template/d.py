@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -359,34 +356,57 @@ def solve_(n, mrr):
     ds = DisjointSet(n)
 
     res = []
-    cursum = 1
+    cursum = 0
     wildcard = 1
-    sl = SortedList()
+    sl = SortedList([-1 for _ in range(n)])
 
-    for i,(a,b) in enumerate(mrr, start=1):
+    for a,b in mrr:
+
+        threshold = -sl[wildcard-1]
+
         if ds.leader(a) == ds.leader(b):
             wildcard += 1
+            cursum += -sl[wildcard-1]
+            log("case X")
 
         else:
             size_a = ds.size(a)
             size_b = ds.size(b)
-            size_ab = size_a + size_b
-            sl.remove(a)
-            sl.remove(b)
-            sl.add(size_ab)
-            # cursum += -sl[wildcard]
+            log(size_a, size_b, threshold)
 
+            if size_a < threshold and size_b < threshold:
+                log("case A")
+                # no change in cursum
+                pass
+            elif size_a >= threshold and size_b >= threshold:
+                log("case B")
+                # add sl[wildcard]
+                cursum += -sl[wildcard-1]
+            else:
+                log("case C")
+                x,y = size_a, size_b
+                if x < y:
+                    x,y = y,x
+                cursum += y
+
+            # log(size_a, size_b)
+            size_ab = size_a + size_b
+            sl.remove(-size_a)
+            sl.remove(-size_b)
+            sl.add(-size_ab)
 
         ds.merge(a,b)
 
         # log(ds.parent_or_size, wildcard)
 
-        # arr = sorted([-x for x in ds.parent_or_size if x < 0])[::-1]
-        # log(arr)
+        arr = sorted([-x for x in ds.parent_or_size if x < 0])[::-1]
+        arrsum = sum(arr[:wildcard])-1
+        val = -sum(sl[x] for x in range(wildcard)) - 1
+        log(val, cursum, arrsum)
+        assert val == cursum == arrsum
 
-        val = -sum(sl[:wildcard]) - 1
-        # val = max(val, i)
-        res.append(val)
+        res.append(cursum)
+        # log()
 
     return res
 
