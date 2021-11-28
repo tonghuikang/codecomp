@@ -22,6 +22,7 @@ These are the command-line shortcuts that I use
 alias ss="source /usr/local/anaconda3/etc/profile.d/conda.sh"
 alias sa="conda activate"
 alias jn="jupyter notebook"
+alias code="open -a /Applications/Visual\ Studio\ Code.app"
 
 alias t="touch"
 alias cx="./run_cpp.sh"
@@ -38,6 +39,8 @@ Copy the test case to `a0`. If there is an expected output for the test case, co
 If there are additional test cases copy them as `a1`, `a2` etc.
 
 `sample_gen.py` and the Competitive Companion extension will crawl and write the test cases.
+
+In the code template, there are examples on how to IO. Uncomment and use them.
 
 
 
