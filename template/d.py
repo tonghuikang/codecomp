@@ -361,6 +361,7 @@ def solve_(n, mrr):
     sl = SortedList([-1 for _ in range(n)])
 
     for a,b in mrr:
+        log()
 
         threshold = -sl[wildcard-1]
 
@@ -372,12 +373,17 @@ def solve_(n, mrr):
         else:
             size_a = ds.size(a)
             size_b = ds.size(b)
+            size_ab = size_a + size_b
             # log(size_a, size_b, threshold)
 
             if size_a < threshold and size_b < threshold:
                 log("case A")
-                # no change in cursum
-                pass
+                if size_ab >= threshold:
+                    cursum -= -sl[wildcard-1]
+                    cursum += size_ab
+                else:
+                    # no change in cursum
+                    pass
             elif size_a >= threshold and size_b >= threshold:
                 log("case B")
                 # add sl[wildcard]
@@ -390,7 +396,6 @@ def solve_(n, mrr):
                 cursum += y
 
             # log(size_a, size_b)
-            size_ab = size_a + size_b
             sl.remove(-size_a)
             sl.remove(-size_b)
             sl.add(-size_ab)
@@ -399,30 +404,32 @@ def solve_(n, mrr):
 
         # log(ds.parent_or_size, wildcard)
 
-        # arr = sorted([-x for x in ds.parent_or_size if x < 0])[::-1]
-        # log(arr)
-        # log(sl)
-        # arrsum = sum(arr[:wildcard])-1
-        # val = -sum(sl[x] for x in range(wildcard)) - 1
-        # log(cursum, val, arrsum)
-        # # assert val == arrsum
-        # assert cursum == val == arrsum
+        if OFFLINE_TEST:
+            arr = sorted([-x for x in ds.parent_or_size if x < 0])[::-1]
+            log(threshold)
+            log(arr)
+            log(sl)
+            arrsum = sum(arr[:wildcard])-1
+            val = -sum(sl[x] for x in range(wildcard)) - 1
+            log(cursum, val, arrsum)
+            # assert val == arrsum
+            assert cursum == val == arrsum
 
         res.append(cursum)
         # log()
 
     return res
 
-# import random
-# while True:
-#     n = random.randint(2,5)
-#     d = random.randint(1,n-1)
-#     mrr = [[random.randint(1,n), random.randint(1,n)] for _ in range(d)]
-#     mrr = [[a,b] for a,b in mrr if a != b]
-#     if not mrr:
-#         continue
-#     mrr = minus_one_matrix(mrr)
-#     solve(n, mrr)
+import random
+while True and OFFLINE_TEST:
+    n = random.randint(2,100)
+    d = random.randint(1,n-1)
+    mrr = [[random.randint(1,n), random.randint(1,n)] for _ in range(d)]
+    mrr = [[a,b] for a,b in mrr if a != b]
+    if not mrr:
+        continue
+    mrr = minus_one_matrix(mrr)
+    solve(n, mrr)
 
 
 
