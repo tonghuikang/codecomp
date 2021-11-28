@@ -37,6 +37,8 @@ Copy the test case to `a0`. If there is an expected output for the test case, co
 
 If there are additional test cases copy them as `a1`, `a2` etc.
 
+`sample_gen.py` and the Competitive Companion extension will crawl and write the test cases.
+
 
 
 
@@ -90,7 +92,7 @@ python interactive_runner.py python3 sample_local_testing_tool.py $TEST_CASE -- 
 I made the above command an alias, so in contests I run
 
 ```bash
-pxi 1
+pi 1
 ```
 
 
