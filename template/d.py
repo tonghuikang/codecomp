@@ -359,20 +359,32 @@ def solve_(n, mrr):
     ds = DisjointSet(n)
 
     res = []
+    cursum = 1
     wildcard = 1
     sl = SortedList()
 
     for i,(a,b) in enumerate(mrr, start=1):
         if ds.leader(a) == ds.leader(b):
             wildcard += 1
+
+        else:
+            size_a = ds.size(a)
+            size_b = ds.size(b)
+            size_ab = size_a + size_b
+            sl.remove(a)
+            sl.remove(b)
+            sl.add(size_ab)
+            # cursum += -sl[wildcard]
+
+
         ds.merge(a,b)
 
-        log(ds.parent_or_size, wildcard)
+        # log(ds.parent_or_size, wildcard)
 
-        arr = sorted([-x for x in ds.parent_or_size if x < 0])[::-1]
-        log(arr)
+        # arr = sorted([-x for x in ds.parent_or_size if x < 0])[::-1]
+        # log(arr)
 
-        val = sum(arr[:wildcard]) - 1
+        val = -sum(sl[:wildcard]) - 1
         # val = max(val, i)
         res.append(val)
 
