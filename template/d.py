@@ -47,18 +47,27 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+import typing
+
+
 class DisjointSet:
-    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+    '''
+    Implement (union by size) + (path halving)
+    Reference:
+    Zvi Galil and Giuseppe F. Italiano,
+    Data structures and algorithms for disjoint set union problems
+    '''
 
     def __init__(self, n: int = 0) -> None:
-        if n > 0:  # constant size DSU
-            self.parent_or_size = [-1]*n
-        else:
-            self.parent_or_size = defaultdict(lambda: -1)
+        self._n = n
+        self.parent_or_size = [-1] * n
 
-    def union(self, a: int, b: int) -> int:
-        x = self.find(a)
-        y = self.find(b)
+    def merge(self, a: int, b: int) -> int:
+        assert 0 <= a < self._n
+        assert 0 <= b < self._n
+
+        x = self.leader(a)
+        y = self.leader(b)
 
         if x == y:
             return x
@@ -71,7 +80,15 @@ class DisjointSet:
 
         return x
 
-    def find(self, a: int) -> int:
+    def same(self, a: int, b: int) -> bool:
+        assert 0 <= a < self._n
+        assert 0 <= b < self._n
+
+        return self.leader(a) == self.leader(b)
+
+    def leader(self, a: int) -> int:
+        assert 0 <= a < self._n
+
         parent = self.parent_or_size[a]
         while parent >= 0:
             if self.parent_or_size[parent] < 0:
@@ -81,11 +98,22 @@ class DisjointSet:
                 self.parent_or_size[parent],
                 self.parent_or_size[self.parent_or_size[parent]]
             )
+
         return a
 
     def size(self, a: int) -> int:
+        assert 0 <= a < self._n
+
         return -self.parent_or_size[self.leader(a)]
 
+    def groups(self) -> typing.List[typing.List[int]]:
+        leader_buf = [self.leader(i) for i in range(self._n)]
+
+        result: typing.List[typing.List[int]] = [[] for _ in range(self._n)]
+        for i in range(self._n):
+            result[leader_buf[i]].append(i)
+
+        return list(filter(lambda r: r, result))
 
 
 def solve_(n, mrr):
@@ -96,9 +124,9 @@ def solve_(n, mrr):
     res = []
     wildcard = 1
     for i,(a,b) in enumerate(mrr, start=1):
-        if ds.find(a) == ds.find(b):
+        if ds.leader(a) == ds.leader(b):
             wildcard += 1
-        ds.union(a,b)
+        ds.merge(a,b)
 
         log(ds.parent_or_size, wildcard)
 
