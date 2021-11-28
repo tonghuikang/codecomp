@@ -46,44 +46,104 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
 
-def solve_():
+
+largest_prime_factors = get_largest_prime_factors(10**6 + 10)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+primes = set(primes)
+
+primes.discard(1)
+
+log(sorted(primes))
+
+def solve_(srr, mrr):
     # your solution here
 
-    return ""
+    if len(srr) < 3:
+        return [0 for _ in mrr]
 
 
-# for case_num in [0]:  # no loop over test case
+    srr = list(srr)
+    cnt = 0
+
+    for a,b,c in zip(srr, srr[1:], srr[2:]):
+        if a == "a" and b == "b" and c == "c":
+            cnt += 1
+
+    res = []
+
+    for pos, x in mrr:
+        # log()
+
+        # log(pos,x)
+
+        left = max(0, pos-2)
+        right = pos+3
+        for a,b,c in zip(srr[left:right], srr[left+1:right+1], srr[left+2:right+2]):
+            # log(a,b,c)
+            if a == "a" and b == "b" and c == "c":
+                cnt -= 1
+
+        srr[pos] = x
+
+        left = max(0, pos-2)
+        right = pos+3
+        for a,b,c in zip(srr[left:right], srr[left+1:right+1], srr[left+2:right+2]):
+            if a == "a" and b == "b" and c == "c":
+                cnt += 1
+
+        # log(srr)
+        res.append(cnt)
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
 
+    n,q = list(map(int,input().split()))
+
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    arr = read_strings(q)  # and return as a list of str
+    # mrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+    mrr = []
+    for ar in arr:
+        a,b = ar.split()
+        mrr.append((int(a)-1, b))
 
-    res = solve()  # include input here
+    res = solve(srr, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
