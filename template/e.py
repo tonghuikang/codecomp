@@ -320,38 +320,47 @@ def solve_(srr, mrr):
         lenc = len(g["c"])
 
         res = min(lena, lenb, lenc)
+
+        # then find first B after first A, last B before last C
+        # minimum is just remove all the C after first B, or remove all A before last B, or remove all the Bs in between
+
         if res > 0:
-            idx = g["a"].bisect_left(g["b"][-1])
-            idx_a = g["a"].bisect_left(g["b"][0])
-            idx_a = min(lena-1, idx_a)
-            log(idx)
-            res = min(res, idx)
+            if g["b"][-1] < g["a"][0]:
+                res = 0
 
-            idx = g["c"].bisect_left(g["b"][0])
-            idx_c = g["c"].bisect_left(g["b"][-1])
-            idx_c = min(lenc-1, idx_c)
-            idx = lenc - idx
-            log(idx)
-            res = min(res, idx)
+        if res > 0:
+            if g["b"][0] > g["c"][-1]:
+                res = 0
 
-            if res > 0:
-                log("prev", res)
+        if res > 1:
+            # while True:
+                first_b_after_first_a_idx = g["b"].bisect_left(g["a"][0])
+                assert first_b_after_first_a_idx < lenb
 
-                idx = g["b"].bisect_left(g["c"][idx_c])
-                log(idx)
-                res = min(res, idx)
+                last_b_before_last_c_idx = g["b"].bisect_left(g["c"][-1]) - 1
+                assert last_b_before_last_c_idx >= 0
 
-                idx = g["b"].bisect_left(g["a"][idx_a])
-                idx = lenb - idx
-                log(idx)
-                res = min(res, idx)
+                log(first_b_after_first_a_idx, last_b_before_last_c_idx)
 
-        log(g["a"])
-        log(g["b"])
-        log(g["c"])
-        log(srr)
-        log(lena, lenb, lenc, res)
-        log()
+                first_b_after_first_a = g["b"][first_b_after_first_a_idx]
+                last_b_before_last_c = g["b"][last_b_before_last_c_idx]
+
+                log(first_b_after_first_a, last_b_before_last_c)
+
+                count_c_after_first_b = lenc - g["c"].bisect_left(first_b_after_first_a)
+                count_a_before_last_b = g["a"].bisect_left(last_b_before_last_c)
+                count_b_in_between = max(0, last_b_before_last_c_idx - first_b_after_first_a_idx + 1)
+
+                log(count_c_after_first_b, count_a_before_last_b, count_b_in_between)
+                res = min(res, count_c_after_first_b, count_a_before_last_b, count_b_in_between)
+                # break
+
+        # log(g["a"])
+        # log(g["b"])
+        # log(g["c"])
+        # log(srr)
+        # log(lena, lenb, lenc, res)
+        # log()
 
         result.append(res)
 
