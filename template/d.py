@@ -18,8 +18,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -88,7 +88,7 @@ def solve_(arr):
         dp_unfilled[x] = dp_unfilled[x]*2 + dp_filled[x-2]
         dp_filled[x] = dp_filled[x]*2 + dp_filled[x-1]
 
-        # dp_filled[x+1] += dp_unfilled[x+1]
+        dp_unfilled[x+2] += dp_unfilled[x+2]
 
         # if x >= 2:
         #     dp_unfilled[x], dp_filled[x] = \
@@ -99,10 +99,11 @@ def solve_(arr):
         #         dp_unfilled[x]*2 + dp_filled[x-2], \
         #         dp_filled[x]*2 + dp_filled[x-1] + dp_unfilled[x+1]
 
-        log(inc)
-        log({k:v for k,v in dp_unfilled.items() if v > 0})
-        log({k:v for k,v in dp_filled.items() if v > 0})
-        log()
+        if OFFLINE_TEST:
+            log(inc)
+            log({k:v for k,v in dp_unfilled.items() if v > 0})
+            log({k:v for k,v in dp_filled.items() if v > 0})
+            log()
 
     log(res)
     if OFFLINE_TEST:
@@ -112,10 +113,10 @@ def solve_(arr):
 
 
 if OFFLINE_TEST:
-    if False:
+    # if False:
         import random
         for _ in range(10000):
-            solve([random.randint(0,5) for _ in range(random.randint(1,4))])
+            solve([random.randint(0,5) for _ in range(random.randint(1,5))])
 
 
 # for case_num in [0]:  # no loop over test case
