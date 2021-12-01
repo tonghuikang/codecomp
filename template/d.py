@@ -2,7 +2,7 @@
 import sys
 import getpass  # not available on codechef
 # import math, random
-# import functools, itertools, collections, heapq, bisect
+import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -46,10 +46,30 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def check_mex_good(arr):
+    if not arr:
+        return False
+    seen = set()
+    for x in arr:
+        seen.add(x)
+        for i in range(10):
+            if i not in seen:
+                mex = i
+                if abs(x-mex) > 1:
+                    return False
+                break
+    return True
 
 def solve_(arr):
-    # all possible subs - subs with zero and one
     # your solution here
+
+    if OFFLINE_TEST:
+        ref = 0
+        for comb in itertools.product([0,1], repeat=len(arr)):
+            brr = [x for c,x in zip(comb,arr) if c]
+            if check_mex_good(brr):
+                ref += 1
+        log(ref)
 
     dp_filled = defaultdict(int)
     dp_filled[-1] = 1
@@ -59,16 +79,43 @@ def solve_(arr):
     res = 0
 
     for x in arr:
-        if x != 0:
-            dp_unfilled[x] = dp_unfilled[x]*2 + dp_filled[x-2]
+        inc = 0
+        inc += dp_unfilled[x] + dp_filled[x-2]
+        inc += dp_filled[x] + dp_filled[x-1]
+        inc += dp_unfilled[x+2]
+        res += inc
+
+        dp_unfilled[x] = dp_unfilled[x]*2 + dp_filled[x-2]
         dp_filled[x] = dp_filled[x]*2 + dp_filled[x-1]
 
-        # log(dp_unfilled)
-        # log(dp_filled)
-        # log()
+        # dp_filled[x+1] += dp_unfilled[x+1]
+
+        # if x >= 2:
+        #     dp_unfilled[x], dp_filled[x] = \
+        #         dp_unfilled[x]*2 + dp_filled[x-2], \
+        #         dp_filled[x]*2 + dp_filled[x-1]
+        # else:
+        #     dp_unfilled[x], dp_filled[x] = \
+        #         dp_unfilled[x]*2 + dp_filled[x-2], \
+        #         dp_filled[x]*2 + dp_filled[x-1] + dp_unfilled[x+1]
+
+        log(inc)
+        log({k:v for k,v in dp_unfilled.items() if v > 0})
+        log({k:v for k,v in dp_filled.items() if v > 0})
+        log()
+
+    log(res)
+    if OFFLINE_TEST:
+        assert res == ref
+
+    return res
 
 
-    return sum(dp_unfilled.values()) + sum(dp_filled.values()) - 1
+if OFFLINE_TEST:
+    if False:
+        import random
+        for _ in range(10000):
+            solve([random.randint(0,5) for _ in range(random.randint(1,4))])
 
 
 # for case_num in [0]:  # no loop over test case
