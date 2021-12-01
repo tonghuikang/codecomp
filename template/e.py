@@ -1,10 +1,58 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
-input = sys.stdin.readline  # to read input quickly
+import os
+import sys
+from io import BytesIO, IOBase
+BUFSIZE = 1024
+
+
+class FastIO(IOBase):
+    newlines = 0
+
+    def __init__(self, file):
+        self._fd = file.fileno()
+        self.buffer = BytesIO()
+        self.writable = "x" in file.mode or "r" not in file.mode
+        self.write = self.buffer.write if self.writable else None
+
+    def read(self):
+        while True:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            if not b:
+                break
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines = 0
+        return self.buffer.read()
+
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines -= 1
+        return self.buffer.readline()
+
+    def flush(self):
+        if self.writable:
+            os.write(self._fd, self.buffer.getvalue())
+            self.buffer.truncate(0), self.buffer.seek(0)
+
+
+class IOWrapper(IOBase):
+    def __init__(self, file):
+        self.buffer = FastIO(file)
+        self.flush = self.buffer.flush
+        self.writable = self.buffer.writable
+        self.write = lambda s: self.buffer.write(s.encode("ascii"))
+        self.read = lambda: self.buffer.read().decode("ascii")
+        self.readline = lambda: self.buffer.readline().decode("ascii")
+
+
+sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -47,7 +95,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, n, m, i, j, ress):
+def solve_(n, m, i, j, ress):
     # your solution here
 
     stack = [(i,j)]
@@ -60,7 +108,7 @@ def solve_(arr, n, m, i, j, ress):
             log(xx,yy)
             if not (0 <= xx < n and 0 <= yy < m):
                 continue
-            if arr[xx][yy] != 0:
+            if ress[xx][yy] != ".":
                 continue
             if (xx,yy) in visited:
                 continue
@@ -69,13 +117,14 @@ def solve_(arr, n, m, i, j, ress):
                 xxx, yyy = xx+dx, yy+dy
                 if not (0 <= xxx < n and 0 <= yyy < m):
                     continue
-                if arr[xxx][yyy] == 0:
+                if ress[xxx][yyy] == ".":
                     cnt += 1
             log(xx,yy,cnt)
-            if cnt <= 2:
+            if cnt <= 1:
                 stack.append((xx,yy))
                 visited.add((xx,yy))
                 ress[xx][yy] = "+"
+                # arr[xx][yy] = 2
 
     return ress
 
@@ -98,7 +147,7 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
-    mapp = {".":0, "#":1, "L":2}
+    # mapp = {".":0, "#":1, "L":2}
     ress = []
 
     p,q = -1,-1
@@ -106,20 +155,20 @@ for case_num in range(int(input())):
     for i in range(n):
         row = input().strip()
         ress.append(list(row))
-        row = [mapp[c] for c in row]
+        # row = [mapp[c] for c in row]
         for j,x in enumerate(row):
-            if x == 2:
+            if x == "L":
                 p,q = i,j
-                log(row)
-                row[j] = 0
-        mrr.append(row)
+                # log(row)
+                # row[j] = 0
+        # mrr.append(row)
 
     # read multiple rows
     # arr = read_strings(n)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(mrr, n, m, p, q, ress)  # include input here
+    res = solve(n, m, p, q, ress)  # include input here
 
     # print length if applicable
     # print(len(res))
