@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+M9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -18,8 +18,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-# OFFLINE_TEST = getpass.getuser() == "hkmac"
-OFFLINE_TEST = False  # codechef does not allow getpass
+OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -90,6 +90,10 @@ def solve_(arr):
 
         dp_unfilled[x+2] += dp_unfilled[x+2]
 
+        dp_unfilled[x+2] = dp_unfilled[x+2]%M9
+        dp_filled[x] = dp_filled[x]%M9
+        dp_unfilled[x] = dp_unfilled[x]%M9
+
         # if x >= 2:
         #     dp_unfilled[x], dp_filled[x] = \
         #         dp_unfilled[x]*2 + dp_filled[x-2], \
@@ -109,14 +113,16 @@ def solve_(arr):
     if OFFLINE_TEST:
         assert res == ref
 
-    return res
+    return res%M9
 
 
 if OFFLINE_TEST:
     # if False:
         import random
-        for _ in range(10000):
-            solve([random.randint(0,5) for _ in range(random.randint(1,5))])
+        for _ in range(100000):
+            arr = [random.randint(0,4) for _ in range(random.randint(2,6))]
+            random.shuffle(arr)
+            solve(arr)
 
 
 # for case_num in [0]:  # no loop over test case
