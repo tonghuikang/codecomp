@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import random
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +47,52 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+# largest_prime_factors = get_largest_prime_factors(10**6 + 10)   # take care that it begins with [1,1,2,...]
+# primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+# log(primes[:10])
+# primes = set(primes)
+
+
+def solve_(lst):
     # your solution here
 
-    return ""
+    random.shuffle(lst)
+    setlst = set(lst)
+    required = len(lst) // 2
+    # log(required)
+
+    res = []
+    if 1 in setlst:
+        for a in lst:
+            if a != 1:
+                res.append((a,1))
+        return res
+
+    for i,a in enumerate(lst):
+        for b in lst[i+1:]:
+            if b%a not in setlst:
+                res.append((b,a))
+            if a%b not in setlst:
+                res.append((a,b))
+
+            if len(res) >= required:
+                break
+        if len(res) >= required:
+            break
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +100,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +110,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +118,8 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(lst)  # include input here
+    res = res[:len(lst)//2]
 
     # print length if applicable
     # print(len(res))
@@ -84,7 +127,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
