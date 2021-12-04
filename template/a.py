@@ -46,19 +46,117 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+mrr5 = [
+[1, 1, 1, 0, 0],
+[1, 1, 0, 1, 0],
+[1, 0, 1, 0, 1],
+[0, 1, 0, 1, 1],
+[0, 0, 1, 1, 1]
+]
 
-def solve_():
+mrr6 = [
+[1, 1, 1, 0, 0, 0],
+[1, 1, 1, 0, 0, 0],
+[0, 1, 0, 1, 0, 1],
+[1, 0, 1, 0, 1, 0],
+[0, 0, 0, 1, 1, 1],
+[0, 0, 0, 1, 1, 1]
+]
+
+mrr7 = [
+[1, 1, 1, 0, 0, 0, 0],
+[1, 1, 1, 0, 0, 0, 0],
+[1, 1, 0, 0, 0, 1, 0],
+[0, 0, 0, 1, 1, 0, 1],
+[0, 0, 0, 1, 1, 1, 0],
+[0, 0, 1, 0, 1, 0, 1],
+[0, 0, 0, 1, 0, 1, 1]
+]
+
+mrr8_sub = [
+[1, 0, 1, 1, 0],
+[0, 1, 1, 0, 1],
+[1, 1, 0, 1, 0],
+[1, 0, 1, 0, 1],
+[0, 1, 0, 1, 1]
+]
+
+mrr8 = [[0 for _ in range(8)] for _ in range(8)]
+
+for i in range(3):
+    for j in range(3):
+        mrr8[~i][~j] = 1
+
+for i,row in enumerate(mrr8_sub):
+    for j,cell in enumerate(row):
+        mrr8[i][j] = cell
+
+mrr9_sub = [
+[1, 0, 1, 1, 0, 0],
+[1, 0, 1, 1, 0, 0],
+[0, 1, 0, 1, 0, 1],
+[1, 0, 1, 0, 1, 0],
+[0, 1, 0, 0, 1, 1],
+[0, 1, 0, 0, 1, 1]
+]
+
+mrr9 = [[0 for _ in range(9)] for _ in range(9)]
+
+for i in range(3):
+    for j in range(3):
+        mrr9[~i][~j] = 1
+
+for i,row in enumerate(mrr9_sub):
+    for j,cell in enumerate(row):
+        mrr9[i][j] = cell
+
+# print(mrr8)
+# print(mrr9)
+
+
+def solve_(n):
     # your solution here
 
-    return ""
+    q,r = divmod(n,5)
+
+    q -= 1
+    log(q,r)
+
+    res = [[0 for _ in range(n)] for _ in range(n)]
+
+    for a in range(q):
+        for i in range(5):
+            for j in range(5):
+                x = a*5 + i
+                y = a*5 + j
+                res[x][y] = mrr5[i][j]
+
+    mrrx = {
+        0: mrr5,
+        1: mrr6,
+        2: mrr7,
+        3: mrr8,
+        4: mrr9
+    }
+    mrr = mrrx[r]
+
+    log(mrr)
+
+    for i in range(r+5):
+        for j in range(r+5):
+            res[~i][~j] = mrr[i][j]
+
+    res = [["#" if cell else "." for cell in row] for row in res]
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +174,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -84,7 +182,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join("".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
