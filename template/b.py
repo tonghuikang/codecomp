@@ -12,7 +12,7 @@ input = sys.stdin.readline  # to read input quickly
 
 M9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -47,10 +47,25 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr):
+def solve_(arr, h, w):
     # your solution here
 
-    return ""
+    arr = [list(row) for row in arr]
+
+
+
+    for i in range(h):
+        for j in range(w):
+            if arr[i][j] == ".":
+                ok = set(["1", "2", "3", "4", "5"])
+                for dx,dy in d4:
+                    xx,yy = i+dx,j+dy
+                    if 0 <= xx < h and 0 <= yy < w:
+                        ok.discard(arr[xx][yy])
+                cur = list(ok)[0]
+                arr[i][j] = cur
+    return arr
+
 
 
 for case_num in [0]:  # no loop over test case
@@ -76,7 +91,7 @@ for case_num in [0]:  # no loop over test case
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(arr)  # include input here
+    res = solve(arr, h, w)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -84,7 +99,7 @@ for case_num in [0]:  # no loop over test case
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join("".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
