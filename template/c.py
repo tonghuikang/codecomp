@@ -50,12 +50,26 @@ def minus_one_matrix(mrr):
 def solve_(lst):
     # your solution here
 
+    c = Counter()
     xor = 0
     for x in lst:
+        # binarr = bin(x)[2:][::-1].zfill(32)
+        # for i,b in enumerate(binarr):
+        #     if b == "1":
+        #         c[i] += 1
         xor = xor^x
 
-    if xor in lst:
+    setlst = set(lst)
+
+    if xor in setlst:
         return "Win"
+
+    if len(lst)%2:
+        return "Win"
+
+    # for k,v in c.items():
+    #     if v%2 == 1:
+    #         return "Lose"
 
     return "Lose"
 
