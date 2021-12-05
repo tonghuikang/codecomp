@@ -47,18 +47,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b):
     # your solution here
 
-    return ""
+    val = int(10**10 // 2 * b + a)
+    log(2*val)
+    log(val)
+    assert val < 10**18
+    return val
 
-
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    a = int(input())
+    b = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +80,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
 
     # print length if applicable
     # print(len(res))
