@@ -146,14 +146,6 @@ def solve_(arr, brr, crr):
             return False
         x_point = arr[k-1][0] + 1
 
-        x_point_right = crr[-k][0] - 1
-        cnt = 0
-        for x,y in brr:
-            if x_point <= x <= x_point_right:
-                cnt += 1
-            if cnt == k:
-                return True
-
         cnt = 0
         for x,y in brr:
             if x < x_point:
@@ -184,8 +176,34 @@ def solve_(arr, brr, crr):
 
     res = binary_search(func, left=0, right=len(arr)+1, first=False)
 
-    # log(res)
+    log(res)
     return res
+
+
+def bars(arr,brr,crr):
+
+    def func(k):
+        if k == 0:
+            return True
+        if k > len(arr):
+            return False
+        x_left = arr[k-1] + 1
+
+        x_right = crr[-k] + 1
+
+        if x_left > x_right:
+            return False
+
+        cnt = 0
+        for x in brr:
+            if x_left <= x <= x_right:
+                cnt += 1
+
+        return cnt >= k
+
+    res = binary_search(func, left=0, right=len(arr)+1, first=False)
+    return res
+
 
 
 for case_num in [0]:  # no loop over test case
@@ -247,6 +265,43 @@ for case_num in [0]:  # no loop over test case
     log(r1,r2,r3)
 
     res = max([res, r1, r2, r3])
+
+    def flip_axes(xrr):
+        return [(y,x) for x,y in xrr]
+
+    prr = sorted(x for x,y in arr)
+    qrr = sorted(x for x,y in brr)
+    rrr = sorted(x for x,y in crr)
+
+    r1 = bars(prr, qrr, rrr)
+    r2 = bars(prr, rrr, qrr)
+
+    r3 = bars(qrr, prr, rrr)
+    r4 = bars(qrr, rrr, prr)
+
+    r5 = bars(rrr, prr, qrr)
+    r6 = bars(rrr, qrr, prr)
+
+    res = max([res, r1, r2, r3, r4, r5, r6])
+
+    log(r1, r2, r3, r4, r5, r6)
+
+    prr = sorted(y for x,y in arr)
+    qrr = sorted(y for x,y in brr)
+    rrr = sorted(y for x,y in crr)
+
+    r1 = bars(prr, qrr, rrr)
+    r2 = bars(prr, rrr, qrr)
+
+    r3 = bars(qrr, prr, rrr)
+    r4 = bars(qrr, rrr, prr)
+
+    r5 = bars(rrr, prr, qrr)
+    r6 = bars(rrr, qrr, prr)
+
+    log(r1, r2, r3, r4, r5, r6)
+
+    res = max([res, r1, r2, r3, r4, r5, r6])
 
     # print length if applicable
     # print(len(res))
