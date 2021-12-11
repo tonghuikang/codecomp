@@ -137,7 +137,7 @@ def solve_(arr, brr, crr):
     # binary search and sweep
     arr.sort()
     brr.sort(lambda x:x[1])
-    # crr.sort()
+    crr.sort()
 
     def func(k):
         if k == 0:
@@ -145,6 +145,14 @@ def solve_(arr, brr, crr):
         if k > len(arr):
             return False
         x_point = arr[k-1][0] + 1
+
+        x_point_right = crr[-k][0] - 1
+        cnt = 0
+        for x,y in brr:
+            if x_point <= x <= x_point_right:
+                cnt += 1
+            if cnt == k:
+                return True
 
         cnt = 0
         for x,y in brr:
