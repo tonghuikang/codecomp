@@ -131,7 +131,7 @@ def binary_search(func_,       # condition function
 
 
 
-def solve_(arr, brr, crr):
+def solve_(arr, brr, crr, k=0):
     # your solution here
 
     # binary search and sweep
@@ -145,6 +145,8 @@ def solve_(arr, brr, crr):
             return False
         x_point = arr[k-1][0] + 1
 
+        x_point_right = arr[-k][0] - 1
+
         cnt = 0
         for x,y in brr:
             if x < x_point:
@@ -152,29 +154,47 @@ def solve_(arr, brr, crr):
             cnt += 1
             if cnt == k:
                 break
-        else:
-            # log("check")
-            return False
 
-        y_point = y + 1
+        if cnt == k:
+            y_point = y + 1
+
+            cnt = 0
+            for x,y in crr:
+                if x < x_point or y < y_point:
+                    continue
+                cnt += 1
+
+                if cnt == k:
+                    return True
 
         cnt = 0
-        for x,y in crr:
-            if x < x_point or y < y_point:
+        for x,y in brr:
+            if x > x_point_right:
                 continue
             cnt += 1
+            if cnt == k:
+                break
 
-        if cnt < k:
-            return False
+        if cnt == k:
+            y_point = y + 1
 
-        return True
+            cnt = 0
+            for x,y in crr:
+                if x < x_point or y < y_point:
+                    continue
+                cnt += 1
+
+                if cnt == k:
+                    return True
+
+        return False
 
     # log(func(0))
     # log(func(1))
     # log(func(2))
     # log(func(3))
 
-    res = binary_search(func, left=0, right=len(arr)+1, first=False)
+    res = binary_search(func, left=k, right=len(arr)+1, first=False)
 
     log(res)
     return res
@@ -241,30 +261,59 @@ for case_num in [0]:  # no loop over test case
         if i == 3:
             crr.append((x,y))
 
-    res = 1
-
-    r1 = solve(arr, brr, crr)  # include input here
-    r2 = solve(brr, arr, crr)  # include input here
-    r3 = solve(crr, arr, brr)  # include input here
-
-    log(r1,r2,r3)
-
-    res = max([res, r1, r2, r3])
+    def rotate(xrr):
+        return [(y,-x) for x,y in xrr]
 
     def reverse_and_negate(xrr):
-        return [(-x,-y) for x,y in xrr]
+        return [(y,-x) for x,y in xrr]
 
-    arr = reverse_and_negate(arr)
-    brr = reverse_and_negate(brr)
-    crr = reverse_and_negate(crr)
+    res = 1
 
-    r1 = solve(arr, brr, crr)  # include input here
-    r2 = solve(brr, arr, crr)  # include input here
-    r3 = solve(crr, arr, brr)  # include input here
+    r1 = solve(arr, crr, brr, res)  # include input here
+    r2 = solve(brr, crr, arr, res)  # include input here
+    r3 = solve(crr, arr, brr, res)  # include input here
 
     log(r1,r2,r3)
 
     res = max([res, r1, r2, r3])
+
+    # arr = reverse_and_negate(arr)
+    # brr = reverse_and_negate(brr)
+    # crr = reverse_and_negate(crr)
+
+    # r1 = solve(arr, brr, crr, res)  # include input here
+    # r2 = solve(brr, arr, crr, res)  # include input here
+    # r3 = solve(crr, arr, brr, res)  # include input here
+
+    # log(r1,r2,r3)
+
+    res = max([res, r1, r2, r3])
+
+    for _ in range(3):
+        arr = rotate(arr)
+        brr = rotate(brr)
+        crr = rotate(crr)
+
+        r1 = solve(arr, crr, brr, res)  # include input here
+        r2 = solve(brr, crr, arr, res)  # include input here
+        r3 = solve(crr, arr, brr, res)  # include input here
+
+        log(r1,r2,r3)
+
+        res = max([res, r1, r2, r3])
+
+        # arr = reverse_and_negate(arr)
+        # brr = reverse_and_negate(brr)
+        # crr = reverse_and_negate(crr)
+
+        # r1 = solve(arr, brr, crr, res)  # include input here
+        # r2 = solve(brr, arr, crr, res)  # include input here
+        # r3 = solve(crr, arr, brr, res)  # include input here
+
+        # log(r1,r2,r3)
+
+        # res = max([res, r1, r2, r3])
+
 
     def flip_axes(xrr):
         return [(y,x) for x,y in xrr]
