@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
+
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -49,6 +48,27 @@ def minus_one_matrix(mrr):
 
 def solve_(srr):
     # your solution here
+
+    b = "B"
+    w = "W"
+    q = "?"
+
+    arr = [x[0] for x in srr]
+    brr = [x[1] for x in srr[1:]] + [srr[0][1]]
+
+    res = []
+    for a,b in zip(arr, brr):
+        if a == b != q:
+            return 0
+        if a == b == q:
+            res.append(2)
+            continue
+        res.append(1)
+    #     if
+    #     if
+
+    # LP:
+
 
     return ""
 
