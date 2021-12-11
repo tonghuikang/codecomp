@@ -135,9 +135,8 @@ def solve_(arr, brr, crr):
     # your solution here
 
     # binary search and sweep
-    arr.sort()
+    arr.sort(lambda x:x[0])
     brr.sort(lambda x:x[1])
-    crr.sort()
 
     def func(k):
         if k == 0:
@@ -154,6 +153,7 @@ def solve_(arr, brr, crr):
             if cnt == k:
                 break
         else:
+            # log("check")
             return False
 
         y_point = y + 1
@@ -189,7 +189,7 @@ def bars(arr,brr,crr):
             return False
         x_left = arr[k-1] + 1
 
-        x_right = crr[-k] + 1
+        x_right = crr[-k] - 1
 
         if x_left > x_right:
             return False
@@ -252,7 +252,7 @@ for case_num in [0]:  # no loop over test case
     res = max([res, r1, r2, r3])
 
     def reverse_and_negate(xrr):
-        return [(-x,y) for x,y in xrr]
+        return [(-x,-y) for x,y in xrr]
 
     arr = reverse_and_negate(arr)
     brr = reverse_and_negate(brr)
@@ -314,4 +314,6 @@ for case_num in [0]:  # no loop over test case
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
+    assert res != 0
+    assert res <= len(arr)
     print(res*3)
