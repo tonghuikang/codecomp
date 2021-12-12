@@ -152,11 +152,13 @@ def merge_operate(x,y):
 
 operate_unit = 1<<32
 
-N,Q = map(int,input().split())
-a = list(map(int,input().split()))
-a = [(a[i]<<32)+1 for i in range(N)]
+# N,Q = map(int,input().split())
+# a = list(map(int,input().split()))
+# a = [(a[i]<<32)+1 for i in range(N)]
 
-LST = LazySegmentTree(N,a,merge,merge_unit,operate,merge_operate,operate_unit)
+def solve_(arr):
+    N = 10**9 + 7
+    LST = LazySegmentTree(N,a,merge,merge_unit,operate,merge_operate,operate_unit)
 
 for _ in range(Q):
     query = list(map(int,input().split()))
