@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+# import math, random
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -50,7 +50,48 @@ def minus_one_matrix(mrr):
 def solve_(lst, k):
     # your solution here
 
-    return ""
+    lst.sort()
+
+    arr = []
+    brr = []
+
+    for x in lst:
+        if x < 0:
+            arr.append(-x)
+        if x > 0:
+            brr.append(x)
+
+    if len(arr)%k != 0:
+        arr += [0]*(k-len(arr)%k)
+
+    extension_b = 0
+    if len(brr)%k != 0:
+        extension_b = (k-len(brr)%k)
+        brr += [brr[-1]]*extension_b
+
+    # log(arr)
+    # log(brr, extension_b)
+
+    res = 0
+    for x in arr[0::k]:
+        res += 2*x
+    # log(res, "arr")
+
+    if not brr:
+        return res
+
+    minval = 10**18
+    brr = brr[::-1]
+    for start in range(extension_b+1):
+        val = sum(x for x in brr[start::k])
+        # log(start, val)
+        minval = min(minval, val)
+
+    res += minval*2
+    res -= brr[0]
+
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -76,7 +117,9 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(lst, k)  # include input here
+    r1 = solve(lst, k)  # include input here
+    r2 = 10**18
+    r2 = solve([-x for x in lst], k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -89,4 +132,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    print(min(r1,r2))
