@@ -46,52 +46,127 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# https://atcoder.jp/contests/practice2/submissions/16616933
+class LazySegmentTree():
+    __slots__ = ["merge","merge_unit","operate","merge_operate","operate_unit","n","data","lazy"]
+    def __init__(self,n,init,merge,merge_unit,operate,merge_operate,operate_unit):
+        self.merge=merge
+        self.merge_unit=merge_unit
+        self.operate=operate
+        self.merge_operate=merge_operate
+        self.operate_unit=operate_unit
 
-def solve_(arr):
-    # your solution here
+        self.n=(n-1).bit_length()
+        self.data=[merge_unit for i in range(1<<(self.n+1))]
+        self.lazy=[operate_unit for i in range(1<<(self.n+1))]
+        if init:
+            for i in range(n):
+                self.data[2**self.n+i]=init[i]
+            for i in range(2**self.n-1,0,-1):
+                self.data[i]=self.merge(self.data[2*i],self.data[2*i+1])
 
-    # def dp(val):
-    #     return arr[0]
+    def propagate(self,v):
+        ope = self.lazy[v]
+        if ope == self.operate_unit:
+            return
+        self.lazy[v]=self.operate_unit
+        self.data[(v<<1)]=self.operate(self.data[(v<<1)],ope)
+        self.data[(v<<1)+1]=self.operate(self.data[(v<<1)+1],ope)
+        self.lazy[v<<1]=self.merge_operate(self.lazy[(v<<1)],ope)
+        self.lazy[(v<<1)+1]=self.merge_operate(self.lazy[(v<<1)+1],ope)
 
-    dp = [
-        arr[0], # number of small
-        1, # value of small
-        0, # number of large
-        0, # value of large
-    ]
+    def propagate_above(self,i):
+        m=i.bit_length()-1
+        for bit in range(m,0,-1):
+            v=i>>bit
+            self.propagate(v)
 
-    # assume no ones first
-    for x,y in zip(arr, arr[1:]):
-        if x == y == 1:
-            return 0
+    def remerge_above(self,i):
+        while i:
+            c = self.merge(self.data[i],self.data[i^1])
+            i>>=1
+            self.data[i]=self.operate(c,self.lazy[i])
 
-        prev_small_num, prev_small_count, prev_large_num, prev_large_count = dp
+    def update(self,l,r,x):
+        l+=1<<self.n
+        r+=1<<self.n
+        l0=l//(l&-l)
+        r0=r//(r&-r)-1
+        self.propagate_above(l0)
+        self.propagate_above(r0)
+        while l<r:
+            if l&1:
+                self.data[l]=self.operate(self.data[l],x)
+                self.lazy[l]=self.merge_operate(self.lazy[l],x)
+                l+=1
+            if r&1:
+                self.data[r-1]=self.operate(self.data[r-1],x)
+                self.lazy[r-1]=self.merge_operate(self.lazy[r-1],x)
+            l>>=1
+            r>>=1
+        self.remerge_above(l0)
+        self.remerge_above(r0)
 
-        prev_sum = prev_small_num*prev_small_count + prev_large_num*prev_large_count
+    def query(self,l,r):
+        l+=1<<self.n
+        r+=1<<self.n
+        l0=l//(l&-l)
+        r0=r//(r&-r)-1
+        self.propagate_above(l0)
+        self.propagate_above(r0)
+        res=self.merge_unit
+        while l<r:
+            if l&1:
+                res=self.merge(res,self.data[l])
+                l+=1
+            if r&1:
+                res=self.merge(res,self.data[r-1])
+            l>>=1
+            r>>=1
+        return res>>32
 
+import sys
 
+input = sys.stdin.buffer.readline
 
-        if y > x:
-            large_num = y-x
-            large_count = prev_sum
-        else:
-            large_num = 0
-            large_count = 0
+mod = 998244353
+mask = 2**32 - 1
 
+def merge(x,y):
+    s = ((x>>32) + (y>>32)) % mod
+    num = (x&mask) + (y&mask)
+    return (s<<32) + num
 
-        # dp = [small_num, small_count, large_num, large_count]
+merge_unit = 0
 
+def operate(x,ope):
+    s,num = x>>32,x&mask
+    b,c = ope>>32,ope&mask
+    s = (b*s + c*num) % mod
+    return (s<<32)+num
 
-        # bottom_value = prev_sum - prev_bottom_value
+def merge_operate(x,y):
+    b1,c1 = x>>32,x&mask
+    b2,c2 = y>>32,y&mask
+    return (((b1*b2)%mod)<<32)+((b2*c1+c2)%mod)
 
+operate_unit = 1<<32
 
+N,Q = map(int,input().split())
+a = list(map(int,input().split()))
+a = [(a[i]<<32)+1 for i in range(N)]
 
+LST = LazySegmentTree(N,a,merge,merge_unit,operate,merge_operate,operate_unit)
 
-    #     def dp_new(val):
+for _ in range(Q):
+    query = list(map(int,input().split()))
+    if query[0] == 0:
+        gomi,l,r,b,c = query
+        LST.update(l,r,(b<<32)+c)
+    else:
+        gomi,l,r = query
+        print(LST.query(l,r))
 
-
-
-    return ""
 
 
 for case_num in [0]:  # no loop over test case
