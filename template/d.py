@@ -34,16 +34,19 @@ for case_num in range(int(input())):
 
     # read line as an integer
     if OFFLINE_TEST:
-        n = 999
+        n = random.randint(2,4) * 3
+        log("n", n)
     else:
         n = int(input())
 
     if OFFLINE_TEST:
         impostors_simulated = set(random.sample(range(n), random.randint(n//3+1, 2*n//3-1)))
+        query_count = []
         log(impostors_simulated)
 
     @functools.lru_cache(maxsize=3000)
     def query_(a,b,c):
+        query_count.append(0)
         if OFFLINE_TEST:
             if (a in impostors_simulated) + (b in impostors_simulated) + (c in impostors_simulated) > 1:
                 return 0
@@ -65,6 +68,8 @@ for case_num in range(int(input())):
 
     for a,b,c in zip(range(0,n,3), range(1,n,3), range(2,n,3)):
         q = query(a,b,c)
+        if len(query_store_inv) == 2:
+            break
 
     assert len(query_store_inv) == 2
 
@@ -103,6 +108,8 @@ for case_num in range(int(input())):
 
     boo, possible = check(a,b,c,x,y,z)
 
+    log("query_count", len(query_count))
+
     assert boo
 
     res = {}
@@ -110,27 +117,105 @@ for case_num in range(int(input())):
     for abc, pos in zip([a,b,c,x,y,z], possible):
         res[abc] = pos
         res_inv[pos] = abc
+        # if len(res_inv) == 2:
+        #     break
 
     assert len(res_inv) == 2
 
-    for abc in range(n):
-        if abc not in res:
-            q = query(res_inv[0], res_inv[1], abc)
-            res[abc] = q
-
-    log("res", res)
-
-    impostors = []
+    impostors = set()
+    crew = set()
     for k,v in res.items():
         if v == 0:
-            impostors.append(k)
+            impostors.add(k)
+        if v == 1:
+            crew.add(k)
 
-    impostors.sort()
+    # for abc in range(n):
+    #     if abc not in res:
+    #         q = query(res_inv[0], res_inv[1], abc)
+    #         res[abc] = q
+
+    # log("res", res)
+    # del res
+
+
+    def fill_up(crew, impostors):
+        # return False, crew, impostors
+        if len(crew) == 2*n//3 - 1:
+            log("fill impostors")
+            impostors = set(x for x in range(n) if x not in crew)
+            return True, crew, impostors
+        if len(impostors) == 2*n//3 - 1:
+            log("fill crew")
+            crew = set(x for x in range(n) if x not in impostors)
+            return True, crew, impostors
+        return False, crew, impostors
+
+
+    for a,b,c in zip(range(0,n,3), range(1,n,3), range(2,n,3)):
+        if a in res:
+            continue
+
+        q = query(a,b,c)
+
+        qa = query(res_inv[0], res_inv[1], a)
+        res[a] = qa
+        if qa == 0:
+            impostors.add(a)
+        if qa == 1:
+            crew.add(a)
+        # del qa
+
+        boo, crew, impostors = fill_up(crew, impostors)
+        if boo:
+            break
+
+        qb = query(res_inv[0], res_inv[1], b)
+        res[b] = qb
+        if qb == 0:
+            impostors.add(b)
+        if qb == 1:
+            crew.add(b)
+        # del qb
+
+        boo, crew, impostors = fill_up(crew, impostors)
+        if boo:
+            break
+
+        if qa != qb:  # c is the tiebreaker
+            qc = q
+        else:
+            qc = query(res_inv[0], res_inv[1], c)
+        res[c] = qc
+        if qc == 0:
+            impostors.add(c)
+        if qc == 1:
+            crew.add(c)
+        # del qc
+
+        boo, crew, impostors = fill_up(crew, impostors)
+        if boo:
+            break
+
+    # impostors = set()
+    # crew = set()
+    # for k,v in res.items():
+    #     if v == 0:
+    #         impostors.add(k)
+    #     if v == 1:
+    #         crew.add(k)
+
+
+    # log("res", res)
+    # impostors = list(impostors)
+    # impostors.sort()
 
     log(impostors)
+    log("query_count", len(query_count))
 
     if OFFLINE_TEST:
         assert sorted(impostors) == sorted(impostors_simulated)
+        assert len(query_count) <= n + 6
     alert(impostors)
 
 
