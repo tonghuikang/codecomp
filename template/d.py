@@ -16,8 +16,8 @@ M9 = 10**9 + 7  # 998244353
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -34,14 +34,14 @@ for case_num in range(int(input())):
 
     # read line as an integer
     if OFFLINE_TEST:
-        n = random.randint(2,4) * 3
+        n = random.randint(2,5) * 3
         log("n", n)
     else:
         n = int(input())
 
+    query_count = []
     if OFFLINE_TEST:
         impostors_simulated = set(random.sample(range(n), random.randint(n//3+1, 2*n//3-1)))
-        query_count = []
         log(impostors_simulated)
 
     @functools.lru_cache(maxsize=3000)
@@ -94,19 +94,52 @@ for case_num in range(int(input())):
                 possible = [p1,p2,p3,p4,p5,p6]
         return True, possible
 
-    query(a,b,z)
-    query(a,y,c)
-    query(x,b,c)
+    for _ in range(1):
+        query(a,b,z)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
 
-    query(x,y,c)
-    query(x,b,z)
-    query(a,y,z)
+        query(a,y,c)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
 
-    query(a,b,y)
-    query(a,x,c)
-    query(z,b,c)
+        query(x,b,c)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
 
-    boo, possible = check(a,b,c,x,y,z)
+        query(x,y,c)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
+
+        query(x,b,z)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
+
+        query(a,y,z)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
+
+        query(a,b,y)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
+
+        query(a,x,c)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
+
+        query(z,b,c)
+        boo, possible = check(a,b,c,x,y,z)
+        if boo:
+            break
+
 
     log("query_count", len(query_count))
 
@@ -211,9 +244,9 @@ for case_num in range(int(input())):
     # impostors.sort()
 
     log(impostors)
-    log("query_count", len(query_count))
 
     if OFFLINE_TEST:
+        log("query_count", len(query_count))
         assert sorted(impostors) == sorted(impostors_simulated)
         assert len(query_count) <= n + 6
     alert(impostors)
