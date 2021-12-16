@@ -53,13 +53,46 @@ def minus_one_matrix(mrr):
 # gcd(a/c,b/c) = 1
 # a/c + b/c + 1 = n/c
 
+# 2,3,1
+
 def solve_(n):
+    if n == 10:
+        return [4,5,1]
+    if n == 14:
+        return [7,6,1]
+
     # your solution here
+    n_all = n
+
+    times_two = False
+    if n%2 == 0:
+        times_two = True
+        n = n // 2
+
+    c = 1
+    a,b = 0,0
+
+    for a in range(n//2, 0, -1):
+        b = n-a-1
+        if math.gcd(a, b) == 1:
+            break
+
+    if times_two:
+        a,b,c = a*2, b*2, c*2
+
+    # log(n_all,a,b,c)
+
+    assert a + b + c == n_all
+    assert math.gcd(a,b) == c
+    assert a != b
+    assert b != c
+    assert a != c
+
+    return [a,b,c]
 
 
-
-    return ""
-
+# for _ in range(10,100):
+#     solve_(_)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -90,7 +123,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
