@@ -47,8 +47,16 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# a + b + c = n
+# gcd(a,b) = c
+
+# gcd(a/c,b/c) = 1
+# a/c + b/c + 1 = n/c
+
+def solve_(n):
     # your solution here
+
+
 
     return ""
 
@@ -58,7 +66,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +84,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
