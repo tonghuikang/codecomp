@@ -105,11 +105,12 @@ def solve_(mrr):
     res = []
     for ptr in arr:
         val = ptr_to_val[ptr]
+        stack = [ptr]
         while val < 0:
-            if val == ptr_to_val[val] and val < 0:
-                assert False
             val = ptr_to_val[val]
-        ptr_to_val[ptr] = val
+            stack.append(val)
+        for ptr in stack:
+            ptr_to_val[ptr] = val
         res.append(val)
 
     return res
