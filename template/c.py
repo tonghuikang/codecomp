@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +44,30 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,k,x,srr):
+def solve_(k,x,srr):
     # your solution here
 
-    return ""
+    srr = "a" + srr + "a"
+    segments = srr.split("a")
+    segments = [1+len(x)*k for x in segments]
+
+    # log(segments)
+
+    vals = []
+    for mod in segments[::-1]:
+        val = x%mod
+        x = x // mod
+        vals.append(val)
+
+    vals.reverse()
+    # log(vals)
+
+    srr = ""
+    for x in vals:
+        srr += "a"
+        srr += "b"*x
+
+    return srr[2:-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -75,8 +92,8 @@ for case_num in range(int(input())):
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
-
-    res = solve(n,k,x,srr)  # include input here
+    x -= 1
+    res = solve(k,x,srr)  # include input here
 
     # print length if applicable
     # print(len(res))
