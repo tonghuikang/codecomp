@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -87,18 +84,14 @@ def solve_(mrr):
                 continue
 
             if y not in val_to_ptr:
-                # relink
-                ptr = val_to_ptr[x]
-                ptr_to_val[ptr] = y
-                val_to_ptr[y] = ptr
-                del val_to_ptr[x]
+                ptr_to_val[curptr] = y
+                val_to_ptr[y] = curptr
 
-            elif y in val_to_ptr:
-                # point to another pointer
-                xptr = val_to_ptr[x]
-                yptr = val_to_ptr[y]
-                ptr_to_val[xptr] = yptr
-                del val_to_ptr[x]
+            # point to another pointer
+            xptr = val_to_ptr[x]
+            yptr = val_to_ptr[y]
+            ptr_to_val[xptr] = yptr
+            del val_to_ptr[x]
 
         else:
             assert False
@@ -113,6 +106,8 @@ def solve_(mrr):
     for ptr in arr:
         val = ptr_to_val[ptr]
         while val < 0:
+            if val == ptr_to_val[val] and val < 0:
+                assert False
             val = ptr_to_val[val]
         ptr_to_val[ptr] = val
         res.append(val)
