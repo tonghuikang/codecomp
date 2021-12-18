@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +44,36 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    minres = max(arr)
+
+    for ones in range(4):
+        for twos in range(4):
+            for threes in range(2):
+                maxfillers = 0
+                for x in arr:
+                    minfillers = x
+                    makeable = False
+                    for one in range(ones+1):
+                        for two in range(twos+1):
+                            for three in range(threes+1):
+                                to_fill = x - one*1 - two*2 - three*3
+                                div,mod = divmod(to_fill, 3)
+                                if to_fill >= 0 and mod == 0:
+                                    minfillers = min(minfillers, div)
+                                    makeable = True
+                    maxfillers = max(maxfillers, minfillers)
+                    if not makeable:
+                        # log(ones, twos, threes, x)
+                        break
+                else:
+                    res = ones + twos + threes + maxfillers
+                    # log(ones, twos, threes, maxfillers, res)
+                    minres = min(minres, res)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +81,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +91,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +99,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
