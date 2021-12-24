@@ -50,6 +50,59 @@ def minus_one_matrix(mrr):
 def solve_(mrr, n, k):
     # your solution here
 
+    # keep on finding the deepest node in the forest
+
+    edges = defaultdict(list)
+    for a,b in mrr:
+        edges[a].append(b)
+        edges[b].append(a)
+
+    children = defaultdict(list)
+    parent = {}
+
+    stack = [0]
+    visited = set(stack)
+
+    while stack:
+        cur = stack.pop()
+        for nex in edges[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            stack.append(nex)
+            children[cur].append(nex)
+            parent[nex] = cur
+
+    log("children", children)
+    log("parent", parent)
+
+    stack = []
+    subtree_size = {i:1 for i in range(n)}
+    children_size = {i:len(children[i]) for i in range(n)}
+    for i in range(n):
+        if len(children[i]) == 0:
+            stack.append(i)
+
+    visited = set(stack)
+    while stack:
+        cur = stack.pop()
+        if cur == 0:
+            continue
+        log(cur)
+        nex = parent[cur]
+        subtree_size[nex] += subtree_size[cur]
+        children_size[nex] -= 1
+        if children_size[nex] == 0:
+            stack.append(nex)
+
+    log(children_size)
+    log(subtree_size)
+
+
+
+
+
+
     return ""
 
 
