@@ -347,9 +347,6 @@ def solve_(mrr, n, k):
     removed = set()
 
     for kk in range(1,k+1):
-        if not sl:
-            break
-
         _,cur = sl[-1]
         while True:
             # log("depths", depths)
@@ -366,6 +363,9 @@ def solve_(mrr, n, k):
 
             cur = parents[cur]
 
+        if not sl:
+            break
+
     maxb = len(sl)
 
     # log(maxb)
@@ -374,7 +374,7 @@ def solve_(mrr, n, k):
     # managed to have zero b
     if maxb == 0:
         maxres = kk * (n-kk)
-        for ii in range(kk, n):
+        for ii in range(kk, k+1):
             res = ii * (n-ii)
             maxres = max(maxres, res)
         return maxres
