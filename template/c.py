@@ -70,48 +70,37 @@ def solve_(srr, trr):
         if a == "0" and b == "1":
             x += 1
 
-    ww,xx,yy,zz = w,x,y,z
+    target = (w+y,0,0,x+z)
 
-    minres = 10**18
+    queue = deque([(w,x,y,z)])
+    visited = {}
+    visited[w,x,y,z] = 0
 
-    cnt = 0
-    while True:
-        if y <= w and y > 0:
-            w,y = y-1,w+1
-            x,z = z,x
-            cnt += 1
-        elif z <= x and z > 0:
-            x,y = z-1,1+x
-            w,y = y,w
-            cnt += 1
-        else:
-            break
+    while queue:
+        # log(queue)
+        cur = queue.popleft()
+        w,x,y,z = cur
+        if y > 0:
+            ww,yy = y-1,w+1
+            xx,zz = z,x
+            nex = (ww,xx,yy,zz)
+            if nex not in visited:
+                visited[nex] = visited[cur] + 1
+                queue.append(nex)
 
-    if x == y == 0:
-        minres = min(minres, cnt)
+        if z > 0:
+            xx,zz = z-1,x+1
+            ww,yy = y,w
+            nex = (ww,xx,yy,zz)
+            if nex not in visited:
+                visited[nex] = visited[cur] + 1
+                queue.append(nex)
 
-    w,x,y,z = ww,xx,yy,zz
+    # log(visited)
 
-    cnt = 0
-    while True:
-        if z <= x and z > 0:
-            x,y = z-1,1+x
-            w,y = y,w
-            cnt += 1
-        elif y <= w and y > 0:
-            w,y = y-1,w+1
-            x,z = z,x
-            cnt += 1
-        else:
-            break
-
-    if x == y == 0:
-        minres = min(minres, cnt)
-
-    if minres == 10**18:
+    if target not in visited:
         return -1
-
-    return minres
+    return visited[target]
 
 
 # for case_num in [0]:  # no loop over test case
