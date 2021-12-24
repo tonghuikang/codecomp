@@ -297,11 +297,13 @@ def solve_(mrr, n, k):
         edges[b].append(a)
 
     children = defaultdict(list)
-    parent = {}
+    parents = {}
+    roots = {}
 
     stack = [0]
     visited = set(stack)
 
+    # extract parent and children
     while stack:
         cur = stack.pop()
         for nex in edges[cur]:
@@ -310,34 +312,64 @@ def solve_(mrr, n, k):
             visited.add(nex)
             stack.append(nex)
             children[cur].append(nex)
-            parent[nex] = cur
+            parents[nex] = cur
 
     log("children", children)
-    log("parent", parent)
+    log("parent", parents)
 
-    stack = []
-    subtree_size = {i:1 for i in range(n)}
-    children_size = {i:len(children[i]) for i in range(n)}
-    for i in range(n):
-        if len(children[i]) == 0:
-            stack.append(i)
+    # compute depth and root
+    depths = {}
+    sl = SortedList()
 
-    visited = set(stack)
-    while stack:
-        cur = stack.pop()
-        if cur == 0:
-            continue
-        log(cur)
-        nex = parent[cur]
-        subtree_size[nex] += subtree_size[cur]
-        children_size[nex] -= 1
-        if children_size[nex] == 0:
-            stack.append(nex)
+    def recompute_depth(root, init=False):
+        stack = [root]
+        roots[root] = root
 
-    log(children_size)
-    log(subtree_size)
+        if not init: sl.remove((depths[root], root))
+        depths[root] = 1
+        sl.add((depths[root], root))
+
+        while stack:
+            cur = stack.pop()
+            for nex in children[cur]:
+                stack.append(nex)
+
+                if not init: sl.remove((depths[nex], nex))
+                depths[nex] = depths[cur] + 1
+                sl.add((depths[nex], nex))
+                roots[nex] = root
+
+    recompute_depth(0, init=True)
 
 
+    log("roots", roots)
+    log("depths", depths)
+    log("sl", sl)
+
+    removed = set()
+
+    for _ in range(k):
+        if not sl:
+            break
+
+        _,cur = sl[-1]
+        while True:
+            log("depths", depths)
+            log("sl", sl)
+            sl.remove((depths[cur], cur))
+            removed.add(cur)
+
+            for new_root in children[cur]:
+                if new_root not in removed:
+                    recompute_depth(new_root)
+
+            if cur == roots[cur]:
+                break
+
+            cur = parents[cur]
+
+    maxb = len(sl)
+    log(maxb)
 
 
 
