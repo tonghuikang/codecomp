@@ -240,9 +240,7 @@ class SortedList:
 
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -314,8 +312,8 @@ def solve_(mrr, n, k):
             children[cur].append(nex)
             parents[nex] = cur
 
-    log("children", children)
-    log("parent", parents)
+    # log("children", children)
+    # log("parent", parents)
 
     # compute depth and root
     depths = {}
@@ -342,20 +340,20 @@ def solve_(mrr, n, k):
     recompute_depth(0, init=True)
 
 
-    log("roots", roots)
-    log("depths", depths)
-    log("sl", sl)
+    # log("roots", roots)
+    # log("depths", depths)
+    # log("sl", sl)
 
     removed = set()
 
-    for _ in range(k):
+    for kk in range(1,k+1):
         if not sl:
             break
 
         _,cur = sl[-1]
         while True:
-            log("depths", depths)
-            log("sl", sl)
+            # log("depths", depths)
+            # log("sl", sl)
             sl.remove((depths[cur], cur))
             removed.add(cur)
 
@@ -369,12 +367,25 @@ def solve_(mrr, n, k):
             cur = parents[cur]
 
     maxb = len(sl)
-    log(maxb)
 
+    # log(maxb)
+    # log(kk)
 
+    # managed to have zero b
+    if maxb == 0:
+        maxres = kk * (n-kk)
+        for ii in range(kk, n):
+            res = ii * (n-ii)
+            maxres = max(maxres, res)
+        return maxres
 
+    # b is nonzero
+    minres = (k - maxb) * (n - k - maxb)
+    for bb in range(maxb):
+        res = (k - bb) * (n - k - bb)
+        minres = min(minres, res)
 
-    return ""
+    return minres
 
 
 for case_num in [0]:  # no loop over test case
