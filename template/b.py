@@ -46,11 +46,30 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+psum = [[0]*20]
 
-def solve_():
+for i in range(2*10**5 + 5):
+    prev = [x for x in psum[-1]]
+    for j,b in enumerate(bin(i)[2:][::-1]):
+        if b == "1":
+            prev[j] += 1
+    psum.append(prev)
+
+
+# log(psum[:3])
+
+def solve_(l,r):
     # your solution here
 
-    return ""
+    total = r-l+1
+
+    maxres = 0
+    for j in range(20):
+        res = psum[r+1][j] - psum[l][j]
+        maxres = max(maxres, res)
+
+    log(total, maxres)
+    return total - maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,7 +87,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    l,r = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +95,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(l,r)  # include input here
 
     # print length if applicable
     # print(len(res))

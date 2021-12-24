@@ -47,10 +47,71 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(srr, trr):
 
-    return ""
+    if srr == trr:
+        return 0
+
+    if srr.count("1") == 0:
+        return -1
+
+    w = 0
+    x = 0
+    y = 0
+    z = 0
+
+    for a,b in zip(srr, trr):
+        if a == b == "1":
+            z += 1
+        if a == b == "0":
+            w += 1
+        if a == "1" and b == "0":
+            y += 1
+        if a == "0" and b == "1":
+            x += 1
+
+    ww,xx,yy,zz = w,x,y,z
+
+    minres = 10**18
+
+    cnt = 0
+    while True:
+        if y <= w and y > 0:
+            w,y = y-1,w+1
+            x,z = z,x
+            cnt += 1
+        elif z <= x and z > 0:
+            x,y = z-1,1+x
+            w,y = y,w
+            cnt += 1
+        else:
+            break
+
+    if x == y == 0:
+        minres = min(minres, cnt)
+
+    w,x,y,z = ww,xx,yy,zz
+
+    cnt = 0
+    while True:
+        if z <= x and z > 0:
+            x,y = z-1,1+x
+            w,y = y,w
+            cnt += 1
+        elif y <= w and y > 0:
+            w,y = y-1,w+1
+            x,z = z,x
+            cnt += 1
+        else:
+            break
+
+    if x == y == 0:
+        minres = min(minres, cnt)
+
+    if minres == 10**18:
+        return -1
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,10 +119,11 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    trr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -76,7 +138,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, trr)  # include input here
 
     # print length if applicable
     # print(len(res))
