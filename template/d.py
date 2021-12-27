@@ -60,8 +60,14 @@ def ncr_mod_p(n, r, p=p):
 
 
 
-def solve_two(srr, n, k):
+def solve_(srr, n, k):
     # your solution here
+
+    if k == 0:
+        return 1
+
+    if srr.count("1") < k:
+        return 1
 
     if k < 0:
         return 0
@@ -89,23 +95,23 @@ def solve_two(srr, n, k):
 
     log(k, intervals, res)
 
-    return res
+#     return res
 
-def solve_(srr, n, k):
+# def solve_(srr, n, k):
 
-    if k == 0:
-        return 1
+#     if k == 0:
+#         return 1
 
-    if srr.count("1") < k:
-        return 1
+#     if srr.count("1") < k:
+#         return 1
 
-    flag = 1
-    res = 0
-    for k2 in range(k,-1,-1):
-        res += flag * solve_two(srr, n, k2)
-        flag = -flag
+#     flag = 1
+#     res = 0
+#     for k2 in range(k,-1,-1):
+#         res += flag * solve_two(srr, n, k2)
+#         flag = -flag
 
-    return res
+    # return res
 
 
 
@@ -131,6 +137,11 @@ def solve_(srr, n, k):
 
     # second_intervals = []
 
+    def flag(x):
+        if (k-x)%2:
+            return -1
+        return 1
+
     for i,(a,b) in enumerate(intervals):
         for c,d in intervals[i+1:]:
             # if c >= b:
@@ -140,7 +151,7 @@ def solve_(srr, n, k):
             val = ncr_mod_p(overlap_length, overlap_count)
             # second_intervals.append([c,b])
             log(a,b,c,d, "|", overlap_length, overlap_count, val)
-            res -= val
+            res += flag(overlap_count) * val
 
 
     log(k, res)
