@@ -71,6 +71,7 @@ def solve_(arr, k):
         cursum -= (x - arr[0])
         if cursum <= k:
             minres = min(minres, cnt)
+            break
 
     required_reduction = sumarr - k
     log(required_reduction)
@@ -81,6 +82,12 @@ def solve_(arr, k):
         rightsum += x
         rightcount = i + 1
         target = (-required_reduction + rightsum) // rightcount
+
+        if target > arr[0]:
+            continue
+        # if OFFLINE_TEST:
+        #     assert target <= arr[0]
+
         valdrcrease = arr[0] - target
         res = valdrcrease + rightcount - 1
         minres = min(minres, res)
