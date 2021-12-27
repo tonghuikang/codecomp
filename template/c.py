@@ -47,10 +47,68 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, k):
     # your solution here
+    n = len(arr)
 
-    return ""
+    sumarr = sum(arr)
+
+    if sumarr <= k:
+        return 0
+
+    if len(arr) == 1:
+        return arr[0] - k
+
+    # arr.reverse()
+    minres = sumarr - k
+    # arr = arr
+
+    # no reduction
+    cursum = sumarr
+    cnt = 0
+    for x in arr[::-1]:
+        cnt += 1
+        cursum -= (x - arr[0])
+        if cursum <= k:
+            minres = min(minres, cnt)
+
+    required_reduction = sumarr - k
+    log(required_reduction)
+
+    cursum = sumarr
+    rightsum = arr[0]
+    for i,x in enumerate(arr[1:][::-1], start=1):
+        rightsum += x
+        rightcount = i + 1
+        target = (-required_reduction + rightsum) // rightcount
+        valdrcrease = arr[0] - target
+        res = valdrcrease + rightcount - 1
+        minres = min(minres, res)
+
+        log(rightsum, rightcount, target, valdrcrease, res)
+
+    return minres
+
+
+
+    # left_sum = 0
+    # for i,x in enumerate(arr[1:]):
+    #     right_count = n - i - 1
+    #     right_allowance = k - left_sum
+    #     right_target = right_allowance // right_count
+    #     reduction = arr[0] - right_target
+
+    #     res = reduction + right_count
+
+    #     log(left_sum, right_count, right_allowance, right_target, reduction, res)
+
+    #     # if not x <= right_target <= y:
+    #     #     continue
+
+    #     minres = min(minres, res)
+    #     left_sum += x
+
+    # return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,8 +125,9 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    _,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    arr.sort()
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +135,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
