@@ -47,9 +47,8 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, srr, k):
     # your solution here
-
     return ""
 
 
@@ -58,17 +57,17 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    srr = input().strip()
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +75,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, srr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
