@@ -60,14 +60,11 @@ def ncr_mod_p(n, r, p=p):
 
 
 
-def solve_(srr, n, k):
+def solve_two(srr, n, k):
     # your solution here
 
-    if k == 0:
-        return 1
-
-    if srr.count("1") < k:
-        return 1
+    if k < 0:
+        return 0
 
     res = 0
 
@@ -86,11 +83,42 @@ def solve_(srr, n, k):
     intervals = []
     for a,b in zip(start, ends[k:]):
         val = ncr_mod_p(b-a, k)
-        log(a,b,val)
+        # log(a,b,val)
         res += val
         intervals.append([a,b])
 
+    log(k, intervals, res)
 
+    return res
+
+def solve_(srr, n, k):
+
+    if k == 0:
+        return 1
+
+    if srr.count("1") < k:
+        return 1
+
+    flag = 1
+    res = 0
+    for k2 in range(k,-1,-1):
+        res += flag * solve_two(srr, n, k2)
+        flag = -flag
+
+    return res
+
+
+
+    # for i,(a,b) in enumerate(second_intervals):
+    #     for c,d in second_intervals[i+1:]:
+    #         # if c >= b:
+    #         #     break
+    #         overlap_length = b - c
+    #         overlap_count = psum[b] - psum[c]
+    #         val = ncr_mod_p(overlap_length, overlap_count)
+    #         # second_intervals.append([c,b])
+    #         log(a,b,c,d, "|", overlap_length, overlap_count, val)
+    #         res += val
     psum = [0]
     for x in srr:
         if x == "1":
@@ -98,8 +126,8 @@ def solve_(srr, n, k):
         else:
             psum.append(psum[-1])
 
-    log(psum)
-    log(intervals)
+    # log(psum)
+    # log(intervals)
 
     # second_intervals = []
 
@@ -114,18 +142,9 @@ def solve_(srr, n, k):
             log(a,b,c,d, "|", overlap_length, overlap_count, val)
             res -= val
 
-    # for i,(a,b) in enumerate(second_intervals):
-    #     for c,d in second_intervals[i+1:]:
-    #         # if c >= b:
-    #         #     break
-    #         overlap_length = b - c
-    #         overlap_count = psum[b] - psum[c]
-    #         val = ncr_mod_p(overlap_length, overlap_count)
-    #         # second_intervals.append([c,b])
-    #         log(a,b,c,d, "|", overlap_length, overlap_count, val)
-    #         res += val
 
-    return res%M9
+    log(k, res)
+    # return res%M9
 
 
 for case_num in [0]:  # no loop over test case
