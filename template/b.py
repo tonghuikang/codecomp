@@ -49,7 +49,38 @@ def minus_one_matrix(mrr):
 
 def solve_(arr, srr, k):
     # your solution here
-    return ""
+
+    if srr.count("1") == 0 or srr.count("0") == 0:
+        return arr
+
+    baseline = srr.count("0")
+
+    res = [-1 for _ in range(k)]
+
+    idx_low_to_high = []
+    high_nums = []
+    idx_high_to_low = []
+    low_nums = []
+
+    for i,(a,s) in enumerate(zip(arr, srr)):
+        if s == "0" and a > baseline:
+            high_nums.append(a)
+            idx_low_to_high.append(i)
+
+        if s == "1" and a <= baseline:
+            low_nums.append(a)
+            idx_high_to_low.append(i)
+
+        else:
+            res[i] = a
+
+    for i,x in zip(idx_low_to_high, low_nums):
+        arr[i] = x
+
+    for i,x in zip(idx_high_to_low, high_nums):
+        arr[i] = x
+
+    return arr
 
 
 # for case_num in [0]:  # no loop over test case
@@ -81,7 +112,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
