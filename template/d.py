@@ -149,13 +149,16 @@ def solve_(srr, n, k):
             overlap_length = b - c
             overlap_count = psum[b] - psum[c]
             val = ncr_mod_p(overlap_length, overlap_count)
+
+            if overlap_count == 0:
+                continue
             # second_intervals.append([c,b])
             log(a,b,c,d, "|", overlap_length, overlap_count, val)
             res += flag(overlap_count) * val
 
 
     log(k, res)
-    # return res%M9
+    return res%M9
 
 
 for case_num in [0]:  # no loop over test case
