@@ -47,14 +47,41 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def solve_brute(arr):
+    minres = "|"
+    for i in range(1,len(arr)+1):
+        res = arr[:i] + arr[:i][::-1]
+        minres = min(minres, res)
+    return minres
+
+
 def solve_(arr):
     # your solution here
 
-    # minres = arr[0] + arr[0]
+
+    minres = arr + arr[::-1]
+
+    if len(arr) == 0:
+        return arr[0] + arr[0]
+
+    if len(arr) > 1 and arr[0] == arr[1]:
+        return arr[:2]
 
     for i,(a,b) in enumerate(zip(arr, arr[1:]), start=1):
-        if a >= b:
-            return arr[:i] + arr[:i][::-1]
+        if a != b:
+            res = arr[:i] + arr[:i][::-1]
+            minres = min(minres, res)
+            break
+
+    # end of the first local minimum
+    for i,(a,b) in enumerate(zip(arr, arr[1:]), start=1):
+        if a < b:
+            res = arr[:i] + arr[:i][::-1]
+            minres = min(minres, res)
+            break
+
+    # minres = min(minres, res)
+
         #     minres = min(minres, res)
         #     log(res, minres)
         #     break
@@ -64,10 +91,22 @@ def solve_(arr):
         #     log(res, minres)
         #     break
 
-    return arr + arr[::-1] #
+    return minres
     # minres = min(minres, res)
 
     # return minres
+
+import random
+
+while True and OFFLINE_TEST:
+    srr = ''
+    for _ in range(random.randint(1,5)):
+        srr += random.choice(list("abcdefghijklmnopqrstuvwxyz"))
+
+    aval = solve(srr)
+    bval = solve_brute(srr)
+    log(aval, bval)
+    assert aval == bval
 
 
 # for case_num in [0]:  # no loop over test case
