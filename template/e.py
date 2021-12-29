@@ -1,10 +1,60 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
-input = sys.stdin.readline  # to read input quickly
+from collections import deque
+# import os
+# from io import BytesIO, IOBase
+
+# BUFSIZE = 8192
+
+
+# class FastIO(IOBase):
+#     newlines = 0
+
+#     def __init__(self, file):
+#         self._fd = file.fileno()
+#         self.buffer = BytesIO()
+#         self.writable = "x" in file.mode or "r" not in file.mode
+#         self.write = self.buffer.write if self.writable else None
+
+#     def read(self):
+#         while True:
+#             b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+#             if not b:
+#                 break
+#             ptr = self.buffer.tell()
+#             self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+#         self.newlines = 0
+#         return self.buffer.read()
+
+#     def readline(self):
+#         while self.newlines == 0:
+#             b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+#             self.newlines = b.count(b"\n") + (not b)
+#             ptr = self.buffer.tell()
+#             self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+#         self.newlines -= 1
+#         return self.buffer.readline()
+
+#     def flush(self):
+#         if self.writable:
+#             os.write(self._fd, self.buffer.getvalue())
+#             self.buffer.truncate(0), self.buffer.seek(0)
+
+
+# class IOWrapper(IOBase):
+#     def __init__(self, file):
+#         self.buffer = FastIO(file)
+#         self.flush = self.buffer.flush
+#         self.writable = self.buffer.writable
+#         self.write = lambda s: self.buffer.write(s.encode("ascii"))
+#         self.read = lambda: self.buffer.read().decode("ascii")
+#         self.readline = lambda: self.buffer.readline().decode("ascii")
+
+
+# sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -290,8 +340,13 @@ abcd = "abcdefghijklmnopqrstuvwxyz"
 abcd_map = {c:i for i,c in enumerate(abcd)}
 
 
+class ShortList(list):
+    def bisect_left(self, val):
+        return self.index(val)
 
-def solve_(srr, trr, k):
+
+for case_num in range(int(input())):
+    _ = input()
     # your solution here
 
     # if min(list(srr)) >= max(list(trr)):
@@ -301,6 +356,8 @@ def solve_(srr, trr, k):
     # if srr < trr:
     #     return 0
 
+    srr = input().strip()
+    trr = input().strip()
     srr = [abcd_map[c] for c in srr]
     trr = [abcd_map[c] for c in trr]
 
@@ -309,11 +366,14 @@ def solve_(srr, trr, k):
 
 
     for i,x in enumerate(srr):
-        psrr[x].append(i)
+        psrr[x].append(i*1000)
 
     # log(psrr)
 
-    sl = SortedList([(x + 1000*i) for (i,x) in enumerate(srr)])
+    if len(srr) > 20:
+        sl = SortedList([(x + 1000*i) for (i,x) in enumerate(srr)])
+    else:
+        sl = ShortList([(x + 1000*i) for (i,x) in enumerate(srr)])
 
     minres = MAXINT
 
@@ -327,13 +387,13 @@ def solve_(srr, trr, k):
                 break
             while psrr[abc]:
                 original_idx = psrr[abc][0]
-                if (abc + 1000*original_idx) not in sl:
+                if (abc + original_idx) not in sl:
                     psrr[abc].popleft()
                 else:
                     break
             if psrr[abc]:
                 original_idx = psrr[abc][0]
-                new_idx = sl.bisect_left((abc + 1000*original_idx))
+                new_idx = sl.bisect_left((abc + original_idx))
                 minleft = min(minleft, new_idx)
         minres = min(minres, cur+minleft)
 
@@ -342,16 +402,16 @@ def solve_(srr, trr, k):
         abc = ref
         while psrr[abc]:
             original_idx = psrr[abc][0]
-            if (abc + 1000*original_idx) not in sl:
+            if (abc + original_idx) not in sl:
                 psrr[abc].popleft()
             else:
                 break
 
         if psrr[abc]:
             original_idx = psrr[abc][0]
-            new_idx = sl.bisect_left((abc + 1000*original_idx))
+            new_idx = sl.bisect_left((abc + original_idx))
             cur += new_idx
-            sl.remove((abc + 1000*original_idx))
+            sl.remove((abc + original_idx))
         else:
             break
 
@@ -361,35 +421,19 @@ def solve_(srr, trr, k):
         # log("\n\n")
 
     if minres == MAXINT:
-        return -1
-
-    return minres
-
-
-
-
-    # if sorted(srr) >= sorted(trr):
-    #     return -1
-
-    # remove common prefix
-
-
-
-
-
-    return ""
+        print(-1)
+    else:
+        print(minres)
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    k = int(input())
+    # k = int(input())
 
     # read line as a string
-    srr = input().strip()
-    trr = input().strip()
 
     # read one line and parse each word as a string
     # lst = input().split()
@@ -404,7 +448,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(srr, trr, k)  # include input here
+    # res = solve()  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -417,4 +461,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
