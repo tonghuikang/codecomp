@@ -50,24 +50,24 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
-    minres = arr[0] + arr[0]
+    # minres = arr[0] + arr[0]
 
     for i,(a,b) in enumerate(zip(arr, arr[1:]), start=1):
-        if a == b:
-            res = arr[:i] + arr[:i][::-1]
-            minres = min(minres, res)
-            log(res, minres)
-            break
-        if a == "a":
-            res = arr[:i] + arr[:i][::-1]
-            minres = min(minres, res)
-            log(res, minres)
-            break
+        if a <= b:
+            return arr[:i] + arr[:i][::-1]
+        #     minres = min(minres, res)
+        #     log(res, minres)
+        #     break
+        # if a == "a":
+        #     res = arr[:i] + arr[:i][::-1]
+        #     minres = min(minres, res)
+        #     log(res, minres)
+        #     break
 
-    res = arr + arr[:i][::-1]
-    minres = min(minres, res)
+    return arr + arr[::-1] #
+    # minres = min(minres, res)
 
-    return minres
+    # return minres
 
 
 # for case_num in [0]:  # no loop over test case
