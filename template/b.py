@@ -53,7 +53,7 @@ def solve_(arr):
     # minres = arr[0] + arr[0]
 
     for i,(a,b) in enumerate(zip(arr, arr[1:]), start=1):
-        if a <= b:
+        if a >= b:
             return arr[:i] + arr[:i][::-1]
         #     minres = min(minres, res)
         #     log(res, minres)
