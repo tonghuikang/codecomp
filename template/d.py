@@ -87,15 +87,20 @@ def solve_(srr, n, k):
     res = 0
 
     intervals = []
-    for a,b in zip(start, ends[k:]):
-        val = ncr_mod_p(b-a, k)
-        # log(a,b,val)
+    starting = True
+    for a,b,c in zip(start, ends[k:], ends[k-1:]):
+        val = ncr_mod_p(b-a, k) - ncr_mod_p(c-a, k-1)
+        if starting:
+            val += ncr_mod_p(c-a, k-1)
+            starting = False
+
+        log(a,b,val)
         res += val
         intervals.append([a,b])
 
     log(k, intervals, res)
 
-#     return res
+    return res%998244353
 
 # def solve_(srr, n, k):
 
@@ -144,16 +149,19 @@ def solve_(srr, n, k):
 
     for i,(a,b) in enumerate(intervals):
         for c,d in intervals[i+1:]:
+            if a == c:
+                continue
             # if c >= b:
             #     break
             overlap_length = b - c
             overlap_count = psum[b] - psum[c]
             val = ncr_mod_p(overlap_length, overlap_count)
+            # second_intervals.append([c,b])
+            log(a,b,c,d, "|", overlap_length, overlap_count, val)
 
             if overlap_count == 0:
                 continue
-            # second_intervals.append([c,b])
-            log(a,b,c,d, "|", overlap_length, overlap_count, val)
+
             res += flag(overlap_count) * val
 
 
