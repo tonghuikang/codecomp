@@ -46,11 +46,65 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def longest_increasing_subsequence(nums):
+    # leetcode.com/problems/longest-increasing-subsequence/discuss/667975/
+    dp = [MAXINT] * (len(nums) + 1)
+    for elem in nums:
+        dp[bisect.bisect_left(dp, elem)] = elem
+    return dp.index(MAXINT)
+
 
 def solve_(arr, n, k):
     # your solution here
 
-    return ""
+    # the average of contiguous selected elements must be larger than x times its length
+
+    brr = [x/k - 1 for x in arr]
+
+    for x in brr:
+        log(round(x, 5))
+    log()
+
+    # the sum or average of contiguous selected elements must be larger than zero
+    # (of size larger than one)
+
+    # minimum number of changes so that each the sum or average of contiguous elements must be larger than zero
+
+
+    log()
+    psum = [0]
+    for x in brr:
+        psum.append(psum[-1] + x)
+    for x in psum:
+        log(round(x, 5))
+    log()
+
+    # log(longest_increasing_subsequence(psum))
+
+
+    dp_prev_selected = -10**18
+    dp_prev_not_selected = 0
+    sum_prev_selected = -10**18
+
+    # every time we see a negative number, unless it is the start
+    for x in brr:
+        dp_prev_not_selected = max(dp_prev_not_selected, dp_prev_selected)
+
+        # adding the current number will not reduce the average to below zero
+        if sum_prev_selected+x >= 0:
+            dp_prev_selected = max(1+dp_prev_not_selected, 1+dp_prev_selected)
+            sum_prev_selected = max(x, sum_prev_selected+x)
+
+        else:
+            dp_prev_selected = max(1+dp_prev_not_selected, 1+dp_prev_selected)
+            sum_prev_selected = max(x, sum_prev_selected+x)
+
+        log(dp_prev_not_selected, dp_prev_selected, sum_prev_selected)
+
+        # dp_prev_selected = 1
+        # dp_prev_not_selected = 1
+
+    return max(dp_prev_selected, dp_prev_not_selected)
 
 
 # for case_num in [0]:  # no loop over test case

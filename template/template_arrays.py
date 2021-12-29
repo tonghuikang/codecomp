@@ -43,11 +43,14 @@ def longest_common_subarray(arr, brr):
 
 
 def longest_increasing_subsequence(nums):
+    nums = [(x,i) for i,x in enumerate(nums)]
+
+    print(nums)
     # leetcode.com/problems/longest-increasing-subsequence/discuss/667975/
-    dp = [MAXINT] * (len(nums) + 1)
+    dp = [(MAXINT, MAXINT)] * (len(nums) + 1)
     for elem in nums:
         dp[bisect.bisect_left(dp, elem)] = elem
-    return dp.index(MAXINT)
+    return dp.index((MAXINT, MAXINT))
 
 
 def max_dot_product_of_two_subsequence(A, B):
