@@ -47,8 +47,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,a,b,c,srr):
     # your solution here
+
+    maxres = 0
+    curres = 0
+
+    srr = srr.replace("01", "0011")
+    srr = srr.replace("10", "1100")
+
+    arr = srr.split("01")
+    brr = []
+    for a in arr:
+        crr = a.split("10")
+        for x in crr:
+            if x:
+                brr.append(x)
+
+    # log(brr)
+
+    ones = []
+    zero = []
+
+    for x in brr:
+        if x[0] == "1":
+            ones.append(len(x))
+        if x[0] == "0":
+            zero.append(len(x))
+
+    log(ones)
+    log(zero)
+
+    a_opt = sum(x-1 for x in zero)
+    b_opt = sum(x-1 for x in ones)
+    c_opt = len(zero)
+
+    log(a_opt, b_opt, c_opt)
 
     return ""
 
@@ -67,16 +101,17 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,a,b,c = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
+    srr = input().strip()
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,a,b,c,srr)  # include input here
 
     # print length if applicable
     # print(len(res))
