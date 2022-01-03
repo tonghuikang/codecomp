@@ -59,28 +59,24 @@ def solve_(mrr):
 
     for i,(a,b,c) in enumerate(mrr[1:], start=1):
 
-        if a <= left and b >= right:
-            if c < left_right_cost:
-                left_right_cost = c
-
-        elif a < left or b > right:
+        if a < left:
+            left_cost = MAXINT
             left_right_cost = MAXINT
+            left = a
+
+        if b > right:
+            right_cost = MAXINT
+            left_right_cost = MAXINT
+            right = b
+
+        if a == left and b == right:
+            left_right_cost = min(left_right_cost, c)
 
         if a == left:
-            left = a
             left_cost = min(left_cost, c)
 
-        elif a < left:
-            left = a
-            left_cost = c
-
         if b == right:
-            right = b
             right_cost = min(right_cost, c)
-
-        elif b > right:
-            right = b
-            right_cost = c
 
         res.append(min(left_right_cost, left_cost + right_cost))
 
