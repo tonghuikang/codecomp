@@ -46,9 +46,113 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
-def solve_(nrr, grr):
+
+def solve_(n,m,nrr,ginit):
     # your solution here
+
+    teachers = sorted(nrr)[-m:]
+
+    gsum = [sum(x) for x in ginit]
+    glen = [len(x) for x in ginit]
+    gavg = [ceiling_division(gs,gl) for gs,gl in (zip(gsum,glen))]
+
+    grr = [(ga,gs,gl,i) for i,(gs,gl,ga) in enumerate(zip(gsum, glen, gavg))]
+    grr.sort()
+
+    groups = [x[0] for x in grr]
+    groups.append(10**18)
+
+
+    teachable = True
+    oldest_offending_idx = -1
+    youngest_offending_idx = 10**18
+
+    for i,(a,b) in enumerate(zip(teachers, grr)):
+        if a >= b[0]:
+            continue
+        else:
+            teachable = False
+            oldest_offending_idx = i
+            youngest_offending_idx = min(youngest_offending_idx, i)
+
+    if teachable:
+        # check how much we can raise the average of each group
+        allowed = [-1 for _ in range(m)]
+
+        right = 0
+        for left in range(m):
+            while groups[right+1] <= teachers[right]:
+                right += 1
+            allowed[left] = teachers[right]
+
+        # log(allowed)
+
+        gall = [-1 for _ in ginit]
+        for (ga,gs,gl,i),allow in zip(grr, allowed):
+            gall[i] = allow
+
+        log(gall)
+
+        res = ""
+        for gr,ga,gl,gs in zip(ginit, gall, glen, gsum):
+            for cell in gr:
+                if ceiling_division(gs-cell, gl-1) <= ga:
+                    res += "1"
+                else:
+                    res += "0"
+
+        return res
+
+
+    # else can only attempt to reduce the oldest offending group
+
+
+    assert oldest_offending_idx >= 0
+
+    left = oldest_offending_idx
+    groups = [0] + groups
+
+    arr = teachers[:oldest_offending_idx+1]
+    brr = groups[:oldest_offending_idx+1]
+
+    log(arr)
+    log(brr)
+
+    for a,b in zip(arr, brr):
+        if a < b:
+            return "0"*sum(gsum)
+
+    target = teachers[youngest_offending_idx]
+    original_idx = grr[oldest_offending_idx][-1]
+    log(target)
+
+    res = ""
+    for i,(gr,gl,gs) in enumerate(zip(ginit, glen, gsum)):
+        for cell in gr:
+            if i != original_idx:
+                res += "0"
+                continue
+
+            if ceiling_division(gs-cell, gl-1) <= target:
+                res += "1"
+            else:
+                res += "0"
+
+    return res
+
+
+    # while
+
+    # log(teachable)
+
+    # groups = [sum(x), ceiling_division(sum(x), len(x)) for x in grr]
+    # groups.sort()
+
+    # log(teachers)
+    # log(groups)
 
     return ""
 
