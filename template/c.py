@@ -26,7 +26,7 @@ def log(*args):
 
 def query(pos):
     print("{}".format(pos+1), flush=True)
-    response = int(input())
+    response = int(input()) - 1
     return response
 
 def alert(arr):
@@ -39,6 +39,44 @@ for case_num in range(int(input())):
 
     # read line as an integer
     n = int(input())
+
+    results = []
+    visited = set()
+
+    cur = 0
+    idx = 0
+    while cur < n:
+        if cur in visited:
+            cur += 1
+            continue
+
+        start = query(cur)
+        start_idx = idx
+        visited.add(start)
+        idx += 1
+
+        cycle = [start]
+        while True:
+            q = query(cur)
+            idx += 1
+            cycle.append(q)
+            visited.add(q)
+
+            # print(cycle)
+
+            if q == start:
+                break
+
+        results.append((start_idx, cycle))
+        cur += 1
+
+    res = [-1] * n
+
+    for _, cycle in results:
+        for prev, nex in zip(cycle, cycle[1:]):
+            res[prev] = nex
+
+    alert(res)
 
     # read line as a string
     # srr = input().strip()
@@ -53,3 +91,4 @@ for case_num in range(int(input())):
     # -----------------------------------------------------------------------------
 
     # your code here
+sys.exit()
