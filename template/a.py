@@ -47,10 +47,34 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k):
     # your solution here
 
-    return ""
+    if 2*k-1 > n:
+        return []
+
+    res = []
+    for i in range((n+1)//2):
+        i = i*2
+        if k > 0:
+            arr = ["."] * n
+            arr[i] = "R"
+            arr = "".join(arr)
+            res.append(arr)
+        else:
+            arr = ["."] * n
+            arr = "".join(arr)
+            res.append(arr)
+
+        arr = ["."] * n
+        arr = "".join(arr)
+        res.append(arr)
+        k -= 1
+
+    res = res[:n]
+
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +91,7 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # lst = list(map(int,input().split()))
     # lst = minus_one(lst)
 
@@ -76,14 +100,16 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
-
+    if not res:
+        print(-1)
+        continue
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
