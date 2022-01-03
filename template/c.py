@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -31,7 +28,6 @@ def query(pos):
 
 def alert(arr):
     print("! {}".format(" ".join(str(x+1) for x in arr)), flush=True)
-    sys.exit()
 
 # -----------------------------------------------------------------------------
 
@@ -89,6 +85,7 @@ for case_num in range(int(input())):
     # lst = list(map(int,input().split()))
 
     # -----------------------------------------------------------------------------
+    # assert int(input())
 
     # your code here
 sys.exit()
