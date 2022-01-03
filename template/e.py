@@ -50,10 +50,10 @@ def ceiling_division(numer, denom):
     return -((-numer)//denom)
 
 
-def solve_(n,m,nrr,ginit):
+def solve_(nrr,ginit):
     # your solution here
 
-    teachers = sorted(nrr)[-m:]
+    teachers = sorted(nrr)[-len(ginit):]
 
     gsum = [sum(x) for x in ginit]
     glen = [len(x) for x in ginit]
@@ -79,6 +79,7 @@ def solve_(n,m,nrr,ginit):
             youngest_offending_idx = min(youngest_offending_idx, i)
 
     if teachable:
+        log("teachable")
         # check how much we can raise the average of each group
         allowed = [-1 for _ in range(m)]
 
@@ -94,11 +95,14 @@ def solve_(n,m,nrr,ginit):
         for (ga,gs,gl,i),allow in zip(grr, allowed):
             gall[i] = allow
 
+        gall = [max(a,b) for a,b in zip(gall, teachers)]
         log(gall)
+        log(groups)
 
         res = ""
         for gr,ga,gl,gs in zip(ginit, gall, glen, gsum):
             for cell in gr:
+                # log(ceiling_division(gs-cell, gl-1))
                 if ceiling_division(gs-cell, gl-1) <= ga:
                     res += "1"
                 else:
@@ -109,6 +113,7 @@ def solve_(n,m,nrr,ginit):
 
     # else can only attempt to reduce the oldest offending group
 
+    log("unteachable")
 
     assert oldest_offending_idx >= 0
 
@@ -185,7 +190,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,m,nrr,grr)  # include input here
+    res = solve(nrr,grr)  # include input here
 
     # print length if applicable
     # print(len(res))
