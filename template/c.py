@@ -29,25 +29,27 @@ def query(pos):
     response = int(input())
     return response
 
-def alert(pos):
-    print("! {}".format(pos), flush=True)
+def alert(arr):
+    print("! {}".format(" ".join(str(x+1) for x in arr)), flush=True)
     sys.exit()
 
 # -----------------------------------------------------------------------------
 
-# read line as an integer
-# k = int(input())
+for case_num in range(int(input())):
 
-# read line as a string
-# srr = input().strip()
+    # read line as an integer
+    n = int(input())
 
-# read one line and parse each word as a string
-# lst = input().split()
+    # read line as a string
+    # srr = input().strip()
 
-# read one line and parse each word as an integer
-# a,b,c = list(map(int,input().split()))
-# lst = list(map(int,input().split()))
+    # read one line and parse each word as a string
+    # lst = input().split()
 
-# -----------------------------------------------------------------------------
+    # read one line and parse each word as an integer
+    # a,b,c = list(map(int,input().split()))
+    # lst = list(map(int,input().split()))
 
-# your code here
+    # -----------------------------------------------------------------------------
+
+    # your code here
