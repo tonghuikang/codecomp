@@ -46,6 +46,7 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# https://people.scs.carleton.ca/~michiel/k-closestnote.pdf
 
 def solve_():
     # your solution here

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-# import getpass  # not available on codechef
+import getpass  # not available on codechef
 from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
@@ -15,8 +15,8 @@ yes, no = "YES", "NO"
 # MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-# OFFLINE_TEST = getpass.getuser() == "hkmac"
-OFFLINE_TEST = False  # codechef does not allow getpass
+OFFLINE_TEST = getpass.getuser() == "hkmac"
+# OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -56,15 +56,17 @@ def solve_(srr):
     for x in range(arr[0] + 1):
         dp[x] += 1
 
+    cur = arr[0]
     for insertable in arr[1:]:  # 26
         new_dp = [0]*5001
         for prev, count in enumerate(dp):
             count = count%998244353
-            if count == 0:
-                continue
+            if prev > cur:
+                break
             for inserting in range(insertable + 1):
-                new_dp[prev + inserting] += ncr_mod_p(prev+1, inserting) * count
+                new_dp[prev + inserting] = (new_dp[prev + inserting] + ncr_mod_p(prev+1, inserting) * count)%998244353
         dp = new_dp
+        cur += insertable
         # log("\n")
         # log(dp)
 
