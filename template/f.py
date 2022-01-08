@@ -8,7 +8,6 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -30,18 +29,6 @@ def solve(*args):
         log("----- ------- ------")
     return solve_(*args)
 
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
-
 # ---------------------------- template ends here ----------------------------
 
 
@@ -51,7 +38,9 @@ factorial_mod_p = [1 for _ in range(LARGE)]
 for i in range(1,LARGE):
     factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
 
+import functools
 
+@functools.lru_cache(maxsize=None)
 def ncr_mod_p(n, r, p=p):
     num = factorial_mod_p[n]
     dem = factorial_mod_p[r]*factorial_mod_p[n-r]
@@ -63,21 +52,25 @@ def solve_(srr):
 
     arr = list(Counter(list(srr)).values())
 
-    dp = Counter()
+    dp = [0]*5001
     for x in range(arr[0] + 1):
         dp[x] += 1
 
     for insertable in arr[1:]:  # 26
-        new_dp = Counter()
-        for prev, count in dp.items():
+        new_dp = [0]*5001
+        for prev, count in enumerate(dp):
             count = count%998244353
+            if count == 0:
+                continue
             for inserting in range(insertable + 1):
                 new_dp[prev + inserting] += ncr_mod_p(prev+1, inserting) * count
         dp = new_dp
+        # log("\n")
         # log(dp)
 
+    return (sum(dp) - 1)%998244353
 
-    return (sum(dp.values()) - 1)%998244353
+# print(solve("abcdefghijklmnopqrstuvwxy"*200))
 
 
 for case_num in [0]:  # no loop over test case
