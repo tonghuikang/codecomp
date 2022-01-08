@@ -64,11 +64,11 @@ def solve_(srr):
             if prev > cur:
                 break
             for inserting in range(insertable + 1):
-                new_dp[prev + inserting] = (new_dp[prev + inserting] + ncr_mod_p(prev+1, inserting) * count)%998244353
+                new_dp[prev + inserting] = (new_dp[prev + inserting] + ncr_mod_p(prev+inserting, inserting) * count)%998244353
         dp = new_dp
         cur += insertable
-        # log("\n")
-        # log(dp)
+        log("\n")
+        log(dp[:cur])
 
     return (sum(dp) - 1)%998244353
 
