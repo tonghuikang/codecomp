@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import math
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -46,19 +46,71 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# def get_largest_prime_factors(num):
+#     # get largest prime factor for each number
+#     # you can use this to obtain primes
+#     largest_prime_factors = [1] * num
+#     for i in range(2, num):
+#         if largest_prime_factors[i] > 1:  # not prime
+#             continue
+#         for j in range(i, num, i):
+#             largest_prime_factors[j] = i
+#     return largest_prime_factors
 
-def solve_():
+
+# largest_prime_factors = get_largest_prime_factors(10**6)   # take care that it begins with [1,1,2,...]
+# primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+
+def solve_(arr):
     # your solution here
 
-    return ""
+    # for i,x in enumerate(arr):
+    #     pass
+
+    gcd = arr[0]
+    for x in arr[1:]:
+        gcd = math.gcd(x, gcd)
+
+    arr = [x//gcd for x in arr]
+    pool = set(arr)
+    pool.add(1)
+
+    # log(pool)
+
+    LARGE = max(pool) + 1
+
+    for i in range(LARGE,1,-1):
+        if i in pool:
+            continue
+
+        idxs = []
+        for f in range(2,LARGE):
+            j = f*i
+            if j > LARGE:
+                break
+            if j in pool:
+                idxs.append(f)
+
+        if len(idxs) <= 1:
+            continue
+
+        gcd = idxs[0]
+        for x in idxs[1:]:
+            gcd = math.gcd(x,gcd)
+            if gcd == 1:
+                pool.add(i)
+                break
 
 
-# for case_num in [0]:  # no loop over test case
+    return len(pool) - len(arr)
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +120,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
@@ -76,7 +128,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
