@@ -64,12 +64,12 @@ for case_num in range(int(input())):
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    # lst = input().split()
+    # arr = input().split()
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
-    # lst = minus_one(lst)
+    # arr = list(map(int,input().split()))
+    # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str

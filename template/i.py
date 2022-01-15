@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 ## For the attempt to be the first to solve the easiest AtCoder questions
 
-import heapq as hq
 import math, random
-import functools, itertools, collections
+import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 
 # read line as an integer
