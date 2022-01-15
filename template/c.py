@@ -76,15 +76,15 @@ def solve_(mrr):
     while stack:
         cur = stack.pop()
         for nex in g[cur]:
+            if nex in visited:
+                continue
             idx = edge_to_idx[cur,nex]
             res[idx] = flag
             flag = not flag
-            if nex in visited:
-                continue
             visited.add(nex)
             stack.append(nex)
 
-    res = [3 if x else 2 for x in res]
+    res = [11 if x else 2 for x in res]
     return res
 
 
