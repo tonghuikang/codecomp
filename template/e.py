@@ -46,11 +46,87 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+LARGE = 10**18 + 10
 
-def solve_():
-    # your solution here
+def solve_(mrr,xrr,n,m,k):
+    # your solution
 
-    return ""
+    entry_points_all_floors = [[] for _ in range(n+1)]
+    entry_points_all_floors[0].append([0,0])  # loc, cost
+
+    exit_points_all_floors = defaultdict(list)
+    for a,b,c,d,e in mrr:
+        exit_points_all_floors[a].append((a,b,c,d,e))
+
+    exit_points_all_floors[n-1].append((n-1,m-1,n,0,0))
+
+    # for i in exit_points_all_floors:
+    #     exit_points_all_floors[i].sort()
+
+    for i in range(n):
+        xcost = xrr[i]
+        # if i not in exit_points_all_floors:
+        #     continue
+
+        entry_points = entry_points_all_floors[i]
+        exit_points = exit_points_all_floors[i]
+
+        # log("floor")
+        # log(i)
+        # log(entry_points)
+        # log(exit_points)
+        # log()
+
+        loc_and_cost = []
+        for loc,cost in entry_points:
+            loc_and_cost.append([loc, cost])
+
+        for a,b,c,d,e in exit_points:
+            loc_and_cost.append([b, LARGE])
+
+        loc_and_cost.sort()
+        min_costs = [LARGE]*len(loc_and_cost)
+
+        loc_to_idx = {}
+        for i,(loc,cost) in enumerate(loc_and_cost):
+            loc_to_idx[loc] = i
+
+        # propagate left right
+        min_intercept = LARGE
+        for i,(loc,cost) in enumerate(loc_and_cost):
+            if cost == LARGE:
+                if min_intercept == LARGE:
+                    continue
+                val = min_intercept + loc*xcost
+                min_costs[i] = min(min_costs[i], val)
+            else:
+                intercept = cost - loc*xcost
+                min_intercept = min(min_intercept, intercept)
+
+        min_intercept = LARGE
+        for i,(loc,cost) in enumerate(loc_and_cost[::-1]):
+            if cost == LARGE:
+                if min_intercept == LARGE:
+                    continue
+                val = min_intercept - loc*xcost
+                min_costs[~i] = min(min_costs[~i], val)
+            else:
+                intercept = cost + loc*xcost
+                min_intercept = min(min_intercept, intercept)
+
+        for a,b,c,d,e in exit_points:
+            idx = loc_to_idx[b]
+            entry_points_all_floors[c].append([d,-e+min_costs[idx]])
+
+        # log(min_costs)
+        # log(loc_and_cost)
+        # log()
+
+
+    if entry_points_all_floors[-1][-1][-1] > 10**17:
+        return "NO ESCAPE"
+
+    return entry_points_all_floors[-1][-1][-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,16 +143,17 @@ for case_num in range(int(input())):
     # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # lst = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
+    xrr = list(map(int,input().split()))
     # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+    mrr = [(a-1,b-1,c-1,d-1,e) for a,b,c,d,e in mrr]
 
-    res = solve()  # include input here
+    res = solve(mrr,xrr,n,m,k)  # include input here
 
     # print length if applicable
     # print(len(res))
