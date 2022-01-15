@@ -47,10 +47,44 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(list)
+    edge_to_idx = {}
+    aug = defaultdict(list)
+
+    for i,(a,b) in enumerate(mrr):
+        a -= 1
+        b -= 1
+        edge_to_idx[a,b] = i
+        edge_to_idx[b,a] = i
+
+    for v in g.values():
+        if len(v) > 2:
+            return [-1]
+
+    for k,v in g.items():
+        if len(v) == 1:
+            break
+
+    res = [0 for _ in mrr]
+    stack = [k]
+    visited = set(stack)
+    flag = False
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            idx = edge_to_idx[cur,nex]
+            res[idx] = flag
+            flag = not flag
+            if nex in visited:
+                continue
+            visited.add(nex)
+            stack.append(nex)
+
+    res = [2 if x else 3 for x in res]
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +92,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,16 +107,16 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k-1)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
