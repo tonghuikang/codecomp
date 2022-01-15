@@ -52,13 +52,14 @@ def solve_(mrr):
 
     g = defaultdict(list)
     edge_to_idx = {}
-    aug = defaultdict(list)
 
     for i,(a,b) in enumerate(mrr):
         a -= 1
         b -= 1
         edge_to_idx[a,b] = i
         edge_to_idx[b,a] = i
+        g[a].append(b)
+        g[b].append(a)
 
     for v in g.values():
         if len(v) > 2:
@@ -83,7 +84,7 @@ def solve_(mrr):
             visited.add(nex)
             stack.append(nex)
 
-    res = [2 if x else 3 for x in res]
+    res = [3 if x else 2 for x in res]
     return res
 
 
