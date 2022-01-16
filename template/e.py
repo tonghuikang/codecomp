@@ -50,16 +50,26 @@ def minus_one_matrix(mrr):
 def solve_(arr, mrr, k):
     # your solution here
 
-    num_black = sum(arr)
-
     g = defaultdict(list)
     g2 = defaultdict(list)
 
     idx = -1
 
+    adj_black = set()
     for a,b in mrr:
-        if arr[a] + arr[b] == 2:
-            return [1 for _ in arr]
+        if arr[a] == 1:
+            # adj_black.add(a)
+            adj_black.add(b)
+        if arr[b] == 1:
+            adj_black.add(a)
+            # adj_black.add(b)
+
+    arr = [1 if x in adj_black else 0 for x in range(k)]
+    num_black = sum(arr)
+
+    for a,b in mrr:
+        # if arr[a] + arr[b] == 2:
+        #     return [1 for _ in arr]
         g[a].append(b)
         g[b].append(a)
 
@@ -112,24 +122,16 @@ def solve_(arr, mrr, k):
             if len(g2[x]) == 1:
                 leaves.add(x)
 
-        # log(session, cnt_black)
-        adj_black = set()
         if cnt_black == num_black:
             for x in session:
                 if x < 0:
                     continue
                 for adj in g[x]:
                     if arr[adj] == 1:
-                        adj_black.add(x)
                         break
                 else:
                     res[x] = 0
 
-        for x in leaves:
-            for adj in g2[x]:
-                if adj in adj_black:
-                    res[x] = 1
-                    break
 
     return res
 
