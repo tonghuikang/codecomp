@@ -56,6 +56,10 @@ def solve_(arr):
         bucket.append(v)
     minres = 10**7
 
+    psum = [0]
+    for x in bucket:
+        psum.append(psum[-1] + x)
+
     twenty = 20
 
     for left_ in range(twenty):
@@ -63,6 +67,10 @@ def solve_(arr):
             left = 2**left_
             right = 2**right_
             # log(left, right, "hcekc")
+
+            left_idx = bisect.bisect_left(psum, left)
+            log(left_idx)
+
 
             arr = deque(bucket)
             remaining = allsum
