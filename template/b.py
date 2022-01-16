@@ -57,14 +57,16 @@ def solve_(srr):
         if a+b >= 10:
             last = i
 
+    log(last)
+
     if last == -1:
-        last = len(srr) - 2
-        srr[i+1] = (a+b)
-        del srr[i]
+        last = 0
+        srr[last+1] = srr[last] + srr[last+1]
+        del srr[last]
         return srr
 
-    srr[i] = 1
-    srr[i+1] = (a+b)%10
+    srr[last+1] = (srr[last] + srr[last+1])%10
+    srr[last] = 1
 
     return srr
 
