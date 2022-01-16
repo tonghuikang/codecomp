@@ -59,8 +59,14 @@ def solve_(arr):
     psum = [0]
     for x in bucket:
         psum.append(psum[-1] + x)
+    log(psum)
 
-    twenty = 20
+    ssum = [0]
+    for x in bucket[::-1]:
+        ssum.append(ssum[-1] + x)
+    log(ssum)
+
+    twenty = 3
 
     for left_ in range(twenty):
         for right_ in range(twenty):
@@ -68,50 +74,24 @@ def solve_(arr):
             right = 2**right_
             # log(left, right, "hcekc")
 
-            left_idx = bisect.bisect_left(psum, left)
-            log(left_idx)
+            left_idx = bisect.bisect_right(psum, left)
+            left_cost = left - psum[left_idx-1]
 
+            right_idx = bisect.bisect_right(ssum, right)
+            right_cost = right - ssum[right_idx-1]
 
-            arr = deque(bucket)
-            remaining = allsum
+            addn = max(0, psum[left_idx-1] + ssum[right_idx-1] - allsum)
 
-            while arr and left >= arr[0]:
-                remaining -= arr[0]
-                left -= arr.popleft()
-                # log(left, right, arr)
-
-            if left >= minres:
-                continue
-
-            while arr and right >= arr[-1]:
-                remaining -= arr[-1]
-                right -= arr.pop()
-                # log(left, right, arr)
+            remaining = max(0, allsum - psum[left_idx-1] - ssum[right_idx-1])
 
             for i in range(20):
                 if 2**i >= remaining:
-                    middle = 2**i - remaining
+                    middle_cost = 2**i - remaining
                     break
 
-            res = left + right + middle
-            # if res < minres:
-            if True:
-                minres = min(minres, res)
-                if minres == 0:
-                    return 0
-                # log(res, left_, right_, left, middle, right)
+            res = left_cost + middle_cost + right_cost + addn
+            minres = min(minres, res)
 
-
-
-    # psum = [0]
-    # for x in bucket:
-    #     psum.append(psum[-1] + x)
-
-    # ssum = [0]
-    # for x in bucket[::-1]:
-    #     ssum.append(ssum[-1] + x)
-
-    # log(bucket)
 
     return minres
 
