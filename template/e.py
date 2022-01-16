@@ -47,18 +47,99 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, mrr, k):
     # your solution here
 
-    return ""
+    num_black = sum(arr)
+
+    g = defaultdict(list)
+    g2 = defaultdict(list)
+
+    idx = -1
+
+    for a,b in mrr:
+        if arr[a] + arr[b] == 2:
+            return [1 for _ in arr]
+        g[a].append(b)
+        g[b].append(a)
+
+        if arr[a] == 1:
+            a = idx
+            idx -= 1
+
+        if arr[b] == 1:
+            b = idx
+            idx -= 1
+
+        g2[a].append(b)
+        g2[b].append(a)
+
+    # log(g)
+    # log(g2)
+    # log()
+    res = [1 for _ in arr]
+
+    visited = set()
+    for i in range(k):
+        if arr[i] == 1:
+            continue
+        if i in visited:
+            continue
+
+        cur = i
+        stack = [i]
+        visited.add(i)
+
+        session = set()
+        session.add(i)
+        cnt_black = 0
+
+        while stack:
+            cur = stack.pop()
+            for nex in g2[cur]:
+                if nex in visited:
+                    continue
+                visited.add(nex)
+                session.add(nex)
+                stack.append(nex)
+                if nex < 0:
+                    cnt_black += 1
+
+        leaves = set()
+        for x in session:
+            if x < 0:
+                continue
+            if len(g2[x]) == 1:
+                leaves.add(x)
+
+        # log(session, cnt_black)
+        adj_black = set()
+        if cnt_black == num_black:
+            for x in session:
+                if x < 0:
+                    continue
+                for adj in g[x]:
+                    if arr[adj] == 1:
+                        adj_black.add(x)
+                        break
+                else:
+                    res[x] = 0
+
+        for x in leaves:
+            for adj in g2[x]:
+                if adj in adj_black:
+                    res[x] = 1
+                    break
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,21 +149,21 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(k-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, mrr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

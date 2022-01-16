@@ -56,6 +56,8 @@ def solve_(arr):
         bucket.append(v)
     minres = 10**7
 
+    log(bucket)
+
     psum = [0]
     for x in bucket:
         psum.append(psum[-1] + x)
@@ -66,13 +68,13 @@ def solve_(arr):
         ssum.append(ssum[-1] + x)
     log(ssum)
 
-    twenty = 3
+    twenty = 20
 
     for left_ in range(twenty):
         for right_ in range(twenty):
             left = 2**left_
             right = 2**right_
-            # log(left, right, "hcekc")
+            # log(left, right, "check")
 
             left_idx = bisect.bisect_right(psum, left)
             left_cost = left - psum[left_idx-1]
@@ -90,6 +92,7 @@ def solve_(arr):
                     break
 
             res = left_cost + middle_cost + right_cost + addn
+            # log(left_, right_, psum[left_idx-1], ssum[right_idx-1], remaining, left_cost, middle_cost, right_cost, addn, res)
             minres = min(minres, res)
 
 
