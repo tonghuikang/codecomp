@@ -47,10 +47,65 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
+    allsum = len(arr)
+    c = Counter(arr)
+    bucket = []
+    for k,v in sorted(c.items()):
+        bucket.append(v)
+    minres = 10**7
 
-    return ""
+    twenty = 20
+
+    for left_ in range(twenty):
+        for right_ in range(twenty):
+            left = 2**left_
+            right = 2**right_
+            # log(left, right, "hcekc")
+
+            arr = deque(bucket)
+            remaining = allsum
+
+            while arr and left >= arr[0]:
+                remaining -= arr[0]
+                left -= arr.popleft()
+                # log(left, right, arr)
+
+            if left >= minres:
+                continue
+
+            while arr and right >= arr[-1]:
+                remaining -= arr[-1]
+                right -= arr.pop()
+                # log(left, right, arr)
+
+            for i in range(20):
+                if 2**i >= remaining:
+                    middle = 2**i - remaining
+                    break
+
+            res = left + right + middle
+            # if res < minres:
+            if True:
+                minres = min(minres, res)
+                if minres == 0:
+                    return 0
+                # log(res, left_, right_, left, middle, right)
+
+
+
+    # psum = [0]
+    # for x in bucket:
+    #     psum.append(psum[-1] + x)
+
+    # ssum = [0]
+    # for x in bucket[::-1]:
+    #     ssum.append(ssum[-1] + x)
+
+    # log(bucket)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +113,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +123,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -76,7 +131,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
