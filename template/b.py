@@ -4,6 +4,7 @@ import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
+from tkinter import OFF
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,21 +48,56 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def solve_brute(arr):
+    for comb in itertools.product([0,1], repeat=len(arr)):
+        comb = [x for x,y in zip(arr, comb) if y == 1]
+        srr = "".join(comb)
+        if srr == srr[::-1] and srr:
+            return True
+    return False
+
+
 def solve_(arr):
     # your solution here
 
     pool = set()
+    pool_2 = set()
     for a in arr:
         if a == a[::-1]:
-            return yes
-        if a in pool:
-            return yes
+            return True
+        if a in pool_2:
+            return True
         if a[1:] in pool:
-            return yes
+            return True
+        if a in pool:
+            return True
         pool.add(a[::-1])
-        pool.add(a[:-1][::-1])
+        pool_2.add(a[:-1][::-1])
+        log(pool)
 
-    return no
+    return False
+
+
+if OFFLINE_TEST:
+    allpool = set()
+    for a in "abcdefghijklmnopqrstuvwxyz":
+        for b in "abcdefghijklmnopqrstuvwxyz":
+            for c in "abcdefghijklmnopqrstuvwxyz":
+                allpool.add(a+b+c)
+    for a in "abcdefghijklmnopqrstuvwxyz":
+        for b in "abcdefghijklmnopqrstuvwxyz":
+            allpool.add(a+b)
+    for a in "abcdefghijklmnopqrstuvwxyz":
+        allpool.add(a)
+    allpool = list(allpool)
+
+    for _ in range(10**5):
+        # break
+        random.shuffle(allpool)
+        arr = allpool[:2]
+        assert solve(arr) == solve_brute(arr)
+
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -88,6 +124,10 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr)  # include input here
+    log(res)
+
+    if OFFLINE_TEST:
+        assert solve(arr) == solve_brute(arr)
 
     # print length if applicable
     # print(len(res))
@@ -99,5 +139,7 @@ for case_num in range(int(input())):
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
-    print(res)
+    if res:
+        print(yes)
+    else:
+        print(no)
