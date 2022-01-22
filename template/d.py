@@ -53,19 +53,19 @@ def modinv_p(base, p=M9):
 
 two_inv = modinv_p(2)
 
-LARGE = 2010
-dp = {}
-for n in range(LARGE):
-    for m in range(n+1):
-        assert m <= n
-        if m == 0:
-            dp[n,m] = 0
-            continue
-        if n == m:
-            dp[n,m] = n
-            continue
-        dp[n,m] = (dp[n-1,m-1] + dp[n-1,m])%M9
-        dp[n,m] = (dp[n,m] * two_inv)%M9
+# LARGE = 2010
+# dp = {}
+# for n in range(N):
+#     for m in range(n+1):
+#         assert m <= n
+#         if m == 0:
+#             dp[n,m] = 0
+#             continue
+#         if n == m:
+#             dp[n,m] = n
+#             continue
+#         dp[n,m] = (dp[n-1,m-1] + dp[n-1,m])%M9
+#         dp[n,m] = (dp[n,m] * two_inv)%M9
 
 # log(dp[2,1])
 # log(dp[3,2])
@@ -83,15 +83,30 @@ for n in range(LARGE):
 # log((pow(two_inv,100,M9)))
 # log((pow(two_inv,101,M9)))
 
-def solve_(n,m,k):
+def solve_(N,M,k):
     # your solution here
-    if n == m:
-        return (n*k)%M9
-    if k == 0:
-        return 0
-    res = dp[n,m]
+    dp = {0:0}
+    for n in range(1,N+1):
+        new_dp = {}
+        for m in range(n+1):
+            if m == 0:
+                new_dp[m] = 0
+                continue
+            if n == m:
+                new_dp[m] = n
+                continue
+            new_dp[m] = (dp[m-1] + dp[m])%M9
+            new_dp[m] = (new_dp[m] * two_inv)%M9
+        dp = new_dp
+
+    # if n == m:
+    #     return (n*k)%M9
+    # if k == 0:
+    #     return 0
+    # res = dp[n,m]
     # log(n,m,res)
-    res = k * dp[n,m]
+    res = k * dp[M]
+
 
     return res%M9
 
