@@ -47,36 +47,37 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 # average of all next outcomes
+def modinv_p(base, p=M9):
+    # modular if the modulo is a prime
+    return pow(base, p-2, p)
+
+two_inv = modinv_p(2)
 
 LARGE = 2010
 dp = {}
 for n in range(LARGE):
     for m in range(n+1):
         assert m <= n
-        if n == m:
-            dp[n,m] = m
-            continue
         if m == 0:
             dp[n,m] = 0
             continue
+        if n == m:
+            dp[n,m] = n
+            continue
         dp[n,m] = (dp[n-1,m-1] + dp[n-1,m])%M9
+        dp[n,m] = (dp[n,m] * two_inv)%M9
 
-log(dp[2,1])
-log(dp[3,2])
-log(dp[3,1])
-log(dp[6,3])
-log(dp[6,4])
-
-def modinv_p(base, p=M9):
-    # modular if the modulo is a prime
-    return pow(base, p-2, p)
+# log(dp[2,1])
+# log(dp[3,2])
+# log(dp[3,1])
+# log(dp[6,3])
+# log(dp[6,4])
 
 # log(modinv_p(pow(2,98,M9)))
 # log(modinv_p(pow(2,99,M9)))
 # log(modinv_p(pow(2,100,M9)))
 # log(modinv_p(pow(2,101,M9)))
 
-two_inv = modinv_p(2)
 # log((pow(two_inv,98,M9)))
 # log((pow(two_inv,99,M9)))
 # log((pow(two_inv,100,M9)))
@@ -88,7 +89,9 @@ def solve_(n,m,k):
         return (n*k)%M9
     if k == 0:
         return 0
-    res = k * pow(two_inv,n-1,M9) * dp[n,m]
+    res = dp[n,m]
+    # log(n,m,res)
+    res = k * dp[n,m]
 
     return res%M9
 
