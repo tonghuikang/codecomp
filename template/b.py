@@ -94,7 +94,7 @@ if OFFLINE_TEST:
     for _ in range(10**5):
         # break
         random.shuffle(allpool)
-        arr = allpool[:2]
+        arr = allpool[:3]
         assert solve(arr) == solve_brute(arr)
 
 
