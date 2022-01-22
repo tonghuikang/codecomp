@@ -59,7 +59,7 @@ def solve_(arr):
         if a[1:] in pool:
             return yes
         pool.add(a[::-1])
-        log(a)
+        pool.add(a[:-1][::-1])
 
     return no
 
