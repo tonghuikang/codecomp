@@ -61,11 +61,11 @@ for n in range(LARGE):
             continue
         dp[n,m] = (dp[n-1,m-1] + dp[n-1,m])%M9
 
-# log(dp[2,1])
-# log(dp[3,2])
-# log(dp[3,1])
-# log(dp[6,3])
-# log(dp[6,4])
+log(dp[2,1])
+log(dp[3,2])
+log(dp[3,1])
+log(dp[6,3])
+log(dp[6,4])
 
 def modinv_p(base, p=M9):
     # modular if the modulo is a prime
