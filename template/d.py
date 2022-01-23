@@ -46,15 +46,6 @@ def minus_one_matrix(mrr):
 
 # https://stackoverflow.com/questions/5360220/how-to-split-a-list-into-pairs-in-all-possible-ways
 def all_pairs(lst):
-    if len(lst) < 2:
-        yield []
-        return
-    if len(lst) % 2 == 1:
-        # Handle odd length list
-        for i in range(len(lst)):
-            for result in all_pairs(lst[:i] + lst[i+1:]):
-                yield result
-    else:
         a = lst[0]
         for i in range(1,len(lst)):
             pair = (a,lst[i])
