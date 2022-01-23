@@ -56,20 +56,30 @@ def all_pairs(lst):
             for rest in all_pairs(lst[1:i]+lst[i+1:]):
                 yield [pair] + rest
 
+from itertools import combinations
+
+def generate_groups(lst, n=2):
+    if not lst:
+        yield []
+    else:
+        for group in (((lst[0],) + xs) for xs in combinations(lst[1:], n-1)):
+            for groups in generate_groups([x for x in lst if x not in group], n):
+                yield [group] + groups
+
 
 def solve_(mrr, k):
     # your solution here
 
     maxres = 0
-    for pairs in all_pairs(list(range((k*2)))):
+    for pairs in generate_groups(list(range((k*2)))):
         # log(pairs)
         val = 0
         for a,b in pairs:
             # log(a,b)
             val = val^mrr[a][b-a-1]
         maxres = max(maxres, val)
-        if time.time() - start_time > 1.85:
-            break
+        # if time.time() - start_time > 1.92:
+        #     break
 
     return maxres
 
