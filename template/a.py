@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -18,7 +17,8 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
+import getpass  # not available on codechef
+OFFLINE_TEST = getpass.getuser() == "htong"
 # OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
@@ -46,11 +46,115 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def query(pos):
+    print("{}".format(pos+1), flush=True)
+    lst = input().split()
+    if lst[0] == "AC":
+        return lst[0]
+    elif lst[0] == "R":
+        return [(int(a),int(b)) for a,b in zip(lst[2::2], lst[3::2])]
+    elif lst[0] == "F":
+        return lst[0]
+    else:
+        assert False
 
-def solve_():
+def alert(pos):
+    print("{}".format(pos+1), flush=True)
+    sys.exit()
+
+
+def solve_(n, m, start, base_move_count, edges):
+
+    degrees = Counter()
+    for a,b in edges:
+        degrees[a] += 1
+        degrees[b] += 1
+    
+    one_flag = len(degrees.values()) > len(degrees) // 4
+
     # your solution here
+    cur_degree = -1
+    prev_degree = -1
+    first = True
+    while True:
+        if first:
+            lst = input().split()
+            q = [(int(a),int(b)) for a,b in zip(lst[2::2], lst[3::2])]
+            first = False
+        
+        else:
+            q = query(nex)
 
-    return ""
+        prev_degree, cur_degree = cur_degree, len(q)
+
+        log(q, prev_degree, cur_degree)
+        if q == "AC":
+            return
+        if q == "F":
+            return
+        
+        # no choice lmao
+        if len(q) == 1:
+            log("no choice")
+            nex = 0
+            continue
+    
+        # always optimal, if there is an unvisited node with degree one, visit
+        flag = False
+        for i,(d,f) in enumerate(q):
+            if f == 0 and d == 1:
+                log("degree one")
+                nex = i
+                flag = True
+                break
+        if flag:
+            continue
+        del flag
+        
+        unvisited = [(d,random.randint(0,100),i) for i,(d,f) in enumerate(q) if f == 0]
+
+        # all adjacent nodes are already visited
+        if not unvisited:
+            visited = [(d,random.randint(0,100),i) for i,(d,f) in enumerate(q)]
+            
+            # node with the largest degree
+            # visited.sort()
+            # visited.reverse()
+            # nex = visited[0][1]
+
+            # nex = random.randint(0, len(q)-1)
+
+            # if there are no unvisited neighbours, go one at random
+            nex = 0
+            # but avoid going back to a node with the same degree
+            if visited[0][0] == prev_degree:
+                nex = 1
+            continue
+
+        # only unvisited only
+        if len(unvisited) == 1:
+            nex = unvisited[0][2]
+            continue
+
+        unvisited.sort()
+
+        # if an unvisited node has degree two, must go
+        if unvisited[0][0] <= 2:
+            log("degree two")
+            nex = unvisited[0][2]
+            continue
+
+        # visit unvisited node with highest degree
+        unvisited = unvisited[::-1]
+
+        # visit random unvisited node
+        # random.shuffle(unvisited)
+
+        nex = unvisited[0][2]
+        continue
+
+
+    return
 
 
 # for case_num in [0]:  # no loop over test case
@@ -64,19 +168,19 @@ for case_num in range(int(input())):
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    # arr = input().split()
+    # lst = input().split()
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    n, m, start, base_move_count = list(map(int,input().split()))
+    # lst = minus_one(lst)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    edges = read_matrix(m)  # and return as a list of list of int
+    edges = minus_one_matrix(edges)
 
-    res = solve()  # include input here
+    res = solve(n, m, start, base_move_count, edges)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -89,4 +193,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
