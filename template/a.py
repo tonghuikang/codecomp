@@ -18,7 +18,7 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "hkmac"
+OFFLINE_TEST = getpass.getuser() == "htong"
 # OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:

@@ -306,6 +306,17 @@ def convolution(a,b):
     return a[:deg+1]
 
 
+def convolution(f,g):
+    # https://atcoder.jp/contests/abc196/submissions/26418619
+    size=len(f)+len(g)-1
+    size=1<<(size-1).bit_length()
+    f=np.fft.rfft(f,size)
+    g=np.fft.rfft(g,size)
+    f*=g
+    f=np.fft.irfft(f,size)
+    return np.rint(f).astype(np.int32)
+
+
 def walsh_hadamard(my_freqs):
     # https://en.wikipedia.org/wiki/Fast_Walsh%E2%80%93Hadamard_transform
     # https://leetcode.com/problems/count-pairs-with-xor-in-a-range/discuss/1119975/
