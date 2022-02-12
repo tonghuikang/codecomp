@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-# import math, random
+import random
 # import functools, itertools, collections, heapq, bisect
 # from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
@@ -51,11 +51,9 @@ def solve_(arr, brr):
     # your solution here
     res = 0
     
-    # arr, brr = zip(*sorted(zip(arr, brr)))
-    # arr = list(arr)
-    # brr = list(brr)
-
-    # log(arr, brr)
+    arr, brr = zip(*sorted(zip(arr, brr)))
+    arr = list(arr)
+    brr = list(brr)
 
     def calc():
         res = 0
@@ -72,13 +70,16 @@ def solve_(arr, brr):
 
     minres = calc()
 
-    for _ in range(1000):
+    for _ in range(100*100):
 
-        for i in range(len(arr)):
+        # for i in range(len(arr)):
+        if True:
+            i = random.randint(0,len(arr)-1)
+
             arr[i], brr[i] = brr[i], arr[i]
             res = calc()
             minres = min(minres, res)
-            if res >= minres:
+            if res > minres:
                 arr[i], brr[i] = brr[i], arr[i]
 
     return minres
