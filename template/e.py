@@ -61,12 +61,10 @@ def solve_(arr, mrr):
         populate[b].append(a)
 
     for b in populate:
-        populate[b].sort()
-        populate[b].reverse()
+        populate[b].sort(reverse=True)
 
-    def get_biggest_pair_not_banned(arr, brr):
+    def get_biggest_pair_not_banned(arr, brr, maxres=0):
         # log(arr, brr)
-        maxres = 0
         for a in arr:
             for b in brr:
                 res = max(maxres, a+b)
@@ -79,10 +77,10 @@ def solve_(arr, mrr):
         return maxres
 
     maxres = 0
-    b_vals = list(populate.keys())
+    b_vals = sorted(populate.keys(), reverse=True)
     for i,b1 in enumerate(b_vals):
         for b2 in b_vals[i:]:
-            maxpairsum = get_biggest_pair_not_banned(populate[b1], populate[b2])
+            maxpairsum = get_biggest_pair_not_banned(populate[b1], populate[b2], maxres//(b1+b2))
             res = (b1+b2) * maxpairsum
             maxres = max(maxres, res)
                     
