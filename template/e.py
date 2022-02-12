@@ -3,7 +3,7 @@ import sys
 import getpass  # not available on codechef
 # import math, random
 # import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter, defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -53,35 +53,30 @@ def minus_one_matrix(mrr):
 def solve_(arr, mrr):
     # your solution here
 
-    banned_pair = set((a,b) for a,b in mrr) | set((b,a) for a,b in mrr)
-    banned_pair |= set((a,a) for a in arr) 
+    banned_pair = set((a,b) for a,b in mrr) | set((b,a) for a,b in mrr) | set((a,a) for a in arr) 
 
     c = Counter(arr)
-
-    cntrs = sorted(c.items(), key=lambda x:x[1])[::-1]
-
     populate = defaultdict(list)
-    for a,b in cntrs:
+    for a,b in c.items():
         populate[b].append(a)
 
     for b in populate:
         populate[b].sort()
         populate[b].reverse()
 
-    # log(populate)
-    # log(banned_pair)
-
     def get_biggest_pair_not_banned(arr, brr):
         # log(arr, brr)
         maxres = 0
         for a in arr:
             for b in brr:
+                res = max(maxres, a+b)
+                if res <= maxres:
+                    break
                 if (a,b) not in banned_pair:
-                    maxres = max(maxres, a+b)
+                    maxres = res
                     break
 
         return maxres
-
 
     maxres = 0
     b_vals = list(populate.keys())

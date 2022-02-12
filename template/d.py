@@ -49,11 +49,12 @@ def minus_one_matrix(mrr):
 
 def solve_(arr, brr):
     # your solution here
-    res = 0
+    minres = 10**18
     
     arr, brr = zip(*sorted(zip(arr, brr)))
     arr = list(arr)
     brr = list(brr)
+
 
     def calc():
         res = 0
@@ -62,25 +63,69 @@ def solve_(arr, brr):
             for y in arr[i+1:]:
                 res += (x+y)*(x+y)
 
+        # log(res)
+
         for i,x in enumerate(brr):
             for y in brr[i+1:]:
                 res += (x+y)*(x+y)
 
         return res
 
-    minres = calc()
+    # log(arr, brr)
+    # minres = calc()
+    # log(minres)
 
-    for _ in range(100*100):
+    # for i in range(len(arr)):
+    #     if arr[i] < brr[i]:
+    #         arr[i], brr[i] = brr[i], arr[i]
 
-        # for i in range(len(arr)):
-        if True:
-            i = random.randint(0,len(arr)-1)
+    # log(arr, brr)
+    # res = calc()
+    # minres = min(minres, res)
+    # log(minres)
 
+    ranges = list(range(len(arr)))
+
+    prev = 10**18 + 10
+
+    while prev != minres:
+        prev = minres
+        random.shuffle(ranges)
+
+        for i in ranges:
             arr[i], brr[i] = brr[i], arr[i]
             res = calc()
             minres = min(minres, res)
             if res > minres:
                 arr[i], brr[i] = brr[i], arr[i]
+
+        for i in ranges:
+          for j in ranges:
+            arr[i], brr[i] = brr[i], arr[i]
+            arr[j], brr[j] = brr[j], arr[j]
+            res = calc()
+            minres = min(minres, res)
+            if res > minres:
+                arr[i], brr[i] = brr[i], arr[i]
+                arr[j], brr[j] = brr[j], arr[j]
+
+        cnt = 0
+
+        for i in ranges:
+          for j in ranges:
+           for k in ranges:
+            cnt += 1
+            arr[i], brr[i] = brr[i], arr[i]
+            arr[j], brr[j] = brr[j], arr[j]
+            arr[k], brr[k] = brr[k], arr[k]
+            res = calc()
+            minres = min(minres, res)
+            if res > minres:
+                arr[i], brr[i] = brr[i], arr[i]
+                arr[j], brr[j] = brr[j], arr[j]
+                arr[k], brr[k] = brr[k], arr[k]
+            if cnt > 10000:
+                break
 
     return minres
 
