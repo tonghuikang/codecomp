@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+# import math, random
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +47,41 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
+    res = 0
+    
+    # arr, brr = zip(*sorted(zip(arr, brr)))
+    # arr = list(arr)
+    # brr = list(brr)
 
-    return ""
+    # log(arr, brr)
+
+    def calc():
+        res = 0
+
+        for i,x in enumerate(arr):
+            for y in arr[i+1:]:
+                res += (x+y)*(x+y)
+
+        for i,x in enumerate(brr):
+            for y in brr[i+1:]:
+                res += (x+y)*(x+y)
+
+        return res
+
+    minres = calc()
+
+    for _ in range(1000):
+
+        for i in range(len(arr)):
+            arr[i], brr[i] = brr[i], arr[i]
+            res = calc()
+            minres = min(minres, res)
+            if res >= minres:
+                arr[i], brr[i] = brr[i], arr[i]
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +89,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +99,8 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -76,7 +108,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))

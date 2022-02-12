@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+# import getpass  # not available on codechef
+# import math, random
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+# M9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
+# MAXINT = sys.maxsize
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -47,10 +47,40 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    if arr == sorted(arr):
+        return no
+    return yes
+
+    # arr.append(0)
+    # arr.append(10**18)
+    # pmax = [0]
+    # smax = [0]
+    # smin = [10**18]
+
+    # for x in arr:
+    #     pmax.append(max(pmax[-1], x))
+
+    # for x in arr[::-1]:
+    #     smax.append(max(smax[-1], x))
+
+    # for x in arr[::-1]:
+    #     smin.append(min(smin[-1], x))
+
+    # pmax = pmax[1:]
+    # smax = smax[::-1][:-1]
+    # smin = smin[::-1][:-1]
+
+    # log(pmax)
+    # log(smin)
+
+    # for a,b in zip(pmax, smin):
+    #     if a < b:
+    #         return yes
+
+    # return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +88,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,7 +98,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -76,7 +106,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
