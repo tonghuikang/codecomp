@@ -1744,14 +1744,14 @@ def solve_(arr, mrr):
     outer = [cntrs[0]]
 
     vert_limit = Counter()
-    vert_limit[cntrs[0][0]] += 1
+    vert_limit[cntrs[0][1]] += 1
 
     for a,b in cntrs[1:]:
         if outer[-1][-1] > b:
             continue
-        if vert_limit[a] >= 2:
+        if vert_limit[b] >= 2:
             continue
-        vert_limit[a] += 1
+        vert_limit[b] += 1
         outer.append((a,b))
 
     # DEBUG
@@ -1820,7 +1820,7 @@ def solve_(arr, mrr):
     #         b = valmap[a]
     #         sl.add((a,b))
 
-    return maxres
+    # return maxres
 
 
 # for case_num in [0]:  # no loop over test case
