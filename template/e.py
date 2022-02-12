@@ -1714,45 +1714,85 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def find_peak(func_, minimize=False, left=0, right=2**31-1):
-    # https://leetcode.com/problems/peak-index-in-a-mountain-array/discuss/139848/
-    # find the peak value of a function, assumes that the ends are not peaks
-    # ASSUMES THAT THERE IS NO PLATEAUS
+# def find_peak(func_, minimize=False, left=0, right=2**31-1):
+#     # https://leetcode.com/problems/peak-index-in-a-mountain-array/discuss/139848/
+#     # find the peak value of a function, assumes that the ends are not peaks
+#     # ASSUMES THAT THERE IS NO PLATEAUS
 
-    def func(val):
-        # negative the value of func_ if we are minimizing
-        if minimize:
-            return -func_(val)
-        return func_(val)
+#     def func(val):
+#         # negative the value of func_ if we are minimizing
+#         if minimize:
+#             return -func_(val)
+#         return func_(val)
 
-    while left < right:
-        mid = (left + right) // 2
-        if func(mid) < func(mid + 1):
-            left = mid + 1
-        else:
-            right = mid
+#     while left < right:
+#         mid = (left + right) // 2
+#         if func(mid) < func(mid + 1):
+#             left = mid + 1
+#         else:
+#             right = mid
 
-    return left
+#     return left
 
 
 def solve_(arr, mrr):
     # your solution here
 
-    c = Counter(arr)    
+    banned_pair = set((a,b) for a,b in mrr) | set((b,a) for a,b in mrr)
+    banned_pair |= set((a,a) for a in arr) 
 
-    cntrs = sorted(c.items())[::-1]
-    outer = [cntrs[0]]
+    c = Counter(arr)
 
-    vert_limit = Counter()
-    vert_limit[cntrs[0][1]] += 1
+    cntrs = sorted(c.items(), key=lambda x:x[1])[::-1]
 
-    for a,b in cntrs[1:]:
-        if outer[-1][-1] > b:
-            continue
-        if vert_limit[b] >= 2:
-            continue
-        vert_limit[b] += 1
-        outer.append((a,b))
+    populate = defaultdict(list)
+    for a,b in cntrs:
+        populate[b].append(a)
+
+    for b in populate:
+        populate[b].sort()
+        populate[b].reverse()
+
+    log(populate)
+    log(banned_pair)
+
+    maxres = 0
+    for b1 in populate:
+        for b2 in populate:
+            # biggest pair that is not inside
+            for a1 in populate[b1]:
+                for a2 in populate[b2]:
+                    if (a1, a2) not in banned_pair:
+                        res = (a1 + a2) * (b1 + b2)
+                        # log(a1, a2, (a1 + a2), (b1 + b2))
+                        maxres = max(maxres, res)
+                    
+    return maxres
+
+    
+
+    # outer = []
+    # for b,lst in populate.items():
+    #     lst.sort()
+    #     lst.reverse()
+    #     for a in lst[:2]:
+    #         outer.append((a,b))
+
+
+    
+    
+    # outer = [cntrs[0]]
+
+    # vert_limit = Counter()
+    # vert_limit[cntrs[0][1]] += 1
+
+    # for a,b in cntrs[1:]:
+    #     # if b < outer[-1][-1]:
+    #     #     continue
+    #     if vert_limit[b] >= 2:
+    #         continue
+    #     vert_limit[b] += 1
+    #     outer.append((a,b))
 
     # DEBUG
     # outer = cntrs
@@ -1766,8 +1806,8 @@ def solve_(arr, mrr):
     #         banned[a].add(b)
     #         banned[b].add(a)
 
-    banned_pair = set((a,b) for a,b in mrr) | set((b,a) for a,b in mrr)
 
+    # log(cntrs)
     # log(outer)
     # log(banned_pair)
 
