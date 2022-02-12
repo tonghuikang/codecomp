@@ -1735,6 +1735,8 @@ def minus_one_matrix(mrr):
 #     return left
 
 
+# https://binarysearch.com/problems/K-Largest-Pairs/solutions/5990638
+
 def solve_(arr, mrr):
     # your solution here
 
@@ -1753,19 +1755,35 @@ def solve_(arr, mrr):
         populate[b].sort()
         populate[b].reverse()
 
-    log(populate)
-    log(banned_pair)
+    # log(populate)
+    # log(banned_pair)
+
+    def get_biggest_pair_not_banned(arr, brr):
+        # log(arr, brr)
+        maxres = 0
+        for a in arr:
+            for b in brr:
+                if (a,b) not in banned_pair:
+                    maxres = max(maxres, a+b)
+                    break
+
+        return maxres
+
 
     maxres = 0
-    for b1 in populate:
-        for b2 in populate:
-            # biggest pair that is not inside
-            for a1 in populate[b1]:
-                for a2 in populate[b2]:
-                    if (a1, a2) not in banned_pair:
-                        res = (a1 + a2) * (b1 + b2)
-                        # log(a1, a2, (a1 + a2), (b1 + b2))
-                        maxres = max(maxres, res)
+    b_vals = list(populate.keys())
+    for i,b1 in enumerate(b_vals):
+        for b2 in b_vals[i:]:
+            maxpairsum = get_biggest_pair_not_banned(populate[b1], populate[b2])
+            res = (b1+b2) * maxpairsum
+            maxres = max(maxres, res)
+            # biggest pair that is not banned
+            # for a1 in populate[b1]:
+            #     for a2 in populate[b2]:
+            #         if (a1, a2) not in banned_pair:
+            #             res = (a1 + a2) * (b1 + b2)
+            #             # log(a1, a2, (a1 + a2), (b1 + b2))
+            #             maxres = max(maxres, res)
                     
     return maxres
 
@@ -1811,13 +1829,13 @@ def solve_(arr, mrr):
     # log(outer)
     # log(banned_pair)
 
-    maxres = 0
-    for i,(a,b) in enumerate(outer):
-        for c,d in outer[i+1:]:
-            if (a,c) not in banned_pair:
-                res = (a+c)*(b+d)
-                maxres = max(maxres, res)
-    return maxres
+    # maxres = 0
+    # for i,(a,b) in enumerate(outer):
+    #     for c,d in outer[i+1:]:
+    #         if (a,c) not in banned_pair:
+    #             res = (a+c)*(b+d)
+    #             maxres = max(maxres, res)
+    # return maxres
 
 
     # log(outer)
