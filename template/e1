@@ -1,1 +1,9 @@
-# PLEASE REMEMBER TO COPY YOUR EXAMPLE
+5 8
+Color 2 4 2
+Add 2 2
+Query 3
+Color 4 5 3
+Color 2 2 3
+Add 3 3
+Query 2
+Query 5
