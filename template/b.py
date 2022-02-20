@@ -63,14 +63,26 @@ def solve_(arr):
         if a == c == True:
             res[i] = False
             res[i+2] = False
-            ret[i+1] = ret[i]
+            if ret[i] > ret[i+2]:
+                ret[i+1] = ret[i]
+            else:
+                ret[i+1] = ret[i+2]
             val += 1
 
     for i,(a,b,c) in enumerate(zip(res, res[1:], res[2:])):
         if b == True:
             res[i+1] = False
-            ret[i+1] = ret[i]
+            if ret[i] > ret[i+2]:
+                ret[i+1] = ret[i]
+            else:
+                ret[i+1] = ret[i+2]
             val += 1
+
+    # log(ret)
+
+    for i,(a,b,c) in enumerate(zip(ret, ret[1:], ret[2:])):
+        assert not (a < b and b > c)
+
 
     return val, ret
 
