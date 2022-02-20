@@ -78,8 +78,6 @@ def solve_(arr, n):
     g = defaultdict(list)
 
     for a,b,c in arr:
-    #     is_destined[b,c] = a == 1  # deducted one previously
-    #     is_destined[c,b] = a == 1
         g[b].append(c)
         g[c].append(b)
 
@@ -123,6 +121,9 @@ def solve_(arr, n):
                 dirs[b].append(c)
 
     arr = topological_sort(dirs, set(range(n)))
+
+    if arr == []:
+        return False, []
     posting = {x:i for i,x in enumerate(arr)}
 
     # log(arr)
