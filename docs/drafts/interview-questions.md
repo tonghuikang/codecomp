@@ -82,15 +82,15 @@ def longest_increasing_subsequence(nums):
 
 ### Heap
 
-\- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
-\- Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
-\- Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
+- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+- Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
+- Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
 
 
 
 ### Standard problems
 
-- Solve Sudoku - Iterate random numbers
+- Solve Sudoku - DFS the solutions
 
 
 

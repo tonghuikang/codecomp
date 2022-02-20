@@ -2,10 +2,6 @@
 
 This contains the code template I use for competitive programming.
 
-* auto-gen TOC:
-{:toc}
-
-
 
 ### Contest preparation script
 
@@ -14,7 +10,7 @@ cd template
 git checkout -b $CONTEST_NAME
 code .  # open VSCode
 python3 sample_gen.py  # and download test cases with jmerle/competitive-companion
-jn
+jupyter notebook  # for adhoc computations
 ```
 
 These are the command-line shortcuts that I use
@@ -31,6 +27,7 @@ alisa ggs="python3 sample_gen.py"
 
 alias t="touch"
 alias cx="./run_cpp.sh"
+alias kx="./run_kt.sh"
 alias px="./run_py.sh"
 alias pi="./run_pi.sh"
 ```
@@ -44,7 +41,7 @@ Copy the test case to `a0`. If there is an expected output for the test case, co
 If there are additional test cases copy them as `a1`, `a2` etc.
 
 I use the Competitive Companion extension to download test cases.
-Start the Python script with `python3 sample_gen.py` or `ggs` and click on the extension.
+I will start the Python script with `python3 sample_gen.py` or `ggs`, and then click on the extension.
 The Competitive Companion extension will parse and send the test cases to a port (which you have to specify) and the Python script process the test cases into respective files. 
 
 In the code template, there are examples on how to IO. Uncomment and use them.
@@ -79,13 +76,13 @@ px a
 I should write a script to clean up logging and unused imports.
 
 
-##### Recursion
+#### Recursion
 
 If you need to recursively call functions more than 1000 times, please use the function decorator in `template_recursion.py` (may not always work)
 
 
 
-##### Interactive questions
+#### Interactive questions
 
 - You can read input as usual.
 - When printing, please flush, i.e. `print(x, flush=True)`
@@ -108,7 +105,7 @@ pi 1
 ```
 
 
-##### Algorithm Templates
+#### Algorithm Templates
 
 These are the sources that I collected my templates for Python
 - [PyRival](https://github.com/cheran-senthil/PyRival), which is contributed by top Python competitive programmers
@@ -116,6 +113,23 @@ These are the sources that I collected my templates for Python
 - [Leetcode](https://leetcode.com) solutions
 - [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) and [intervaltree](https://github.com/chaimleib/intervaltree)
 
+
+
+### How to use (C++)
+
+Please refer to my [C++ conversion course](../docs/cpp_conversion_course.md)
+
+To compile the code and run for all test cases
+
+```
+./run_cpp.sh x
+```
+
+I made the above command an alias, so in contests I run
+
+```bash
+cx a
+```
 
 
 ### How to use (C++)
