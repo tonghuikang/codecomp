@@ -47,54 +47,54 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+k = 2*10**5 + 100
+
+dp_one = [0]*(k+15)
+dp_zero = [0]*(k+15)
+dp_one[0] = 1
+dp_zero[0] = 0
+
+for i in range(k+10):
+    dp_one[i+1] = (dp_zero[i] + dp_one[i]) % M9
+    dp_zero[i+2] = (dp_zero[i] + dp_one[i]) % M9
+
+cursum = [0]*(k+10)
+cursum[0] = 1
+for i in range(1, k+5):
+    cursum[i] = (dp_one[i] + dp_zero[i] + cursum[i-1]) % M9
+
+# log(dp_one[:10])
+# log(dp_zero[:10])
+# log(cursum[:10])
+# log(dp_one[-10])
+# log(dp_zero[-10])
+
+
 
 def solve_(arr, p):
     # your solution here
 
     curset = set(arr)
-
-    # limit = 2**30
-
     newset = []
 
     for x in arr:
         ox = x
         flag = True
-        while x > 1 and flag:
+        while x and flag:
             if x%2 == 1:
                 x = x // 2
                 if x in curset:
                     flag = False
-                continue
             elif x%4 == 0:
                 x = x // 4
                 if x in curset:
                     flag = False
-                continue
             else:
                 break
         if flag:
             newset.append(ox)
 
-    dp_one = [0]*(p+15)
-    dp_zero = [0]*(p+15)
-    dp_one[0] = 1
-    dp_zero[0] = 0
-
-    for i in range(p+10):
-        dp_one[i+1] = (dp_zero[i] + dp_one[i]) % M9
-        dp_zero[i+2] = (dp_zero[i] + dp_one[i]) % M9
-
-    cursum = [0]*(p+10)
-    cursum[0] = 1
-    for i in range(1, p+5):
-        cursum[i] = (dp_one[i] + dp_zero[i] + cursum[i-1]) % M9
-
-    # log(dp_one[:10])
-    # log(dp_zero[:10])
-    # log(cursum[:10])
-    # log(dp_one[-10])
-    # log(dp_zero[-10])
+    # log(newset)
 
     res = 0
 
@@ -106,7 +106,8 @@ def solve_(arr, p):
         # log(x, binlen, idx, cursum[idx])
         res += cursum[idx]
 
-    return res
+    return res%M9
+
     # number of ways to put one and double zeroes
 
     # log(newset)
@@ -132,8 +133,6 @@ def solve_(arr, p):
     #         if x < actual_limit:
     #             res += 1
     #     return res
-
-    return ""
 
 
 # log(solve_(list(range(1,2*10**5)), 30))
