@@ -47,15 +47,101 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def solve_(arr, p):
     # your solution here
+
+    curset = set(arr)
+
+    # limit = 2**30
+
+    newset = []
+
+    for x in arr:
+        ox = x
+        flag = True
+        while x > 1 and flag:
+            if x%2 == 1:
+                x = x // 2
+                if x in curset:
+                    flag = False
+                continue
+            elif x%4 == 0:
+                x = x // 4
+                if x in curset:
+                    flag = False
+                continue
+            else:
+                break
+        if flag:
+            newset.append(ox)
+
+    dp_one = [0]*(p+15)
+    dp_zero = [0]*(p+15)
+    dp_one[0] = 1
+    dp_zero[0] = 0
+
+    for i in range(p+10):
+        dp_one[i+1] = (dp_zero[i] + dp_one[i]) % M9
+        dp_zero[i+2] = (dp_zero[i] + dp_one[i]) % M9
+
+    cursum = [0]*(p+10)
+    cursum[0] = 1
+    for i in range(1, p+5):
+        cursum[i] = (dp_one[i] + dp_zero[i] + cursum[i-1]) % M9
+
+    # log(dp_one[:10])
+    # log(dp_zero[:10])
+    # log(cursum[:10])
+    # log(dp_one[-10])
+    # log(dp_zero[-10])
+
+    res = 0
+
+    for x in newset:
+        binlen = len(bin(x)) - 2
+        if binlen > p:
+            continue
+        idx = p - binlen
+        # log(x, binlen, idx, cursum[idx])
+        res += cursum[idx]
+
+    return res
+    # number of ways to put one and double zeroes
+
+    # log(newset)
+
+
+    # stack = arr
+    # while stack:
+    #     x = stack.pop()
+    #     a,b = 2*x + 1, 4*x
+
+    #     if a < limit and a not in curset:
+    #         curset.add(a)
+    #         stack.append(a)
+
+    #     if b < limit and b not in curset:
+    #         curset.add(b)
+    #         stack.append(b)
+
+    # if p <= 30:
+    #     res = 0
+    #     actual_limit = 2**p
+    #     for x in curset:
+    #         if x < actual_limit:
+    #             res += 1
+    #     return res
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+# log(solve_(list(range(1,2*10**5)), 30))
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -67,8 +153,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,p = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -76,7 +162,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, p)  # include input here
 
     # print length if applicable
     # print(len(res))
