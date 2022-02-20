@@ -6,6 +6,7 @@ This contains the code template I use for competitive programming.
 {:toc}
 
 
+
 ### Contest preparation script
 
 ```
@@ -24,6 +25,10 @@ alias sa="conda activate"
 alias jn="jupyter notebook"
 alias code="open -a /Applications/Visual\ Studio\ Code.app"
 
+alias gcm="git checkout master"
+alias ggc="git add . && git commit -m checkpoint"
+alisa ggs="python3 sample_gen.py"
+
 alias t="touch"
 alias cx="./run_cpp.sh"
 alias px="./run_py.sh"
@@ -38,14 +43,17 @@ Copy the test case to `a0`. If there is an expected output for the test case, co
 
 If there are additional test cases copy them as `a1`, `a2` etc.
 
-`sample_gen.py` and the Competitive Companion extension will crawl and write the test cases.
+I use the Competitive Companion extension to download test cases.
+Start the Python script with `python3 sample_gen.py` or `ggs` and click on the extension.
+The Competitive Companion extension will parse and send the test cases to a port (which you have to specify) and the Python script process the test cases into respective files. 
 
 In the code template, there are examples on how to IO. Uncomment and use them.
 
 
 
-
 ### How to use (Python)
+
+You will need to have pypy3 installed.
 
 To run the code
 
@@ -68,11 +76,12 @@ I made the above command an alias, so in contests I run
 px a
 ```
 
+I should write a script to clean up logging and unused imports.
 
 
 ##### Recursion
 
-If you need to recursively call functions more than 1000 times, please use the function decorator in `recursive_example_1.py` (may not always work)
+If you need to recursively call functions more than 1000 times, please use the function decorator in `template_recursion.py` (may not always work)
 
 
 
@@ -99,60 +108,13 @@ pi 1
 ```
 
 
+##### Algorithm Templates
 
-
-
-##### Python Algorithm Templates
-The following algorithmic templates should be available.
-
-- [AtCoder library](https://atcoder.github.io/ac-library/master/document_en/)
-  - (There is a [Python](https://github.com/not522/ac-library-python) [version](https://github.com/Mitarushi/ACL-Python) but probably I want to extract copiable snippets instead of running the script to transfer the functions.
-- Math
-  - Ceiling division (ok)
-  - Inverse modulo - Refer to PyRival
-  - Prime factorisation (ok)
-  - Chinese Remainder Theorem (please check)
-  - Floor Sum
-  - Convolution
-  - Binomial coefficient
-- Trees
-  - Trie (ok)
-  - Fenwick Tree (ok)
-  - Segment Tree (I still don't understand)
-  - Lazy Segment Tree
-  - [intervaltree](https://github.com/chaimleib/intervaltree) clone
-  - [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) - Refer to PyRival SortedList
-- Arrays
-  - Prefix Sum
-  - Longest Common Subsequence (ok)
-  - Longest Common Subarray (ok)
-  - Longest Increasing Subsequence (ok)
-  - Sliding Windows
-  - Suffix Array
-  - LCP array
-  - Z algorithm
-- Search
-  - Binary Search
-  - Ternary Search
-  - [scipy.optimize](https://docs.scipy.org/doc/scipy/reference/optimize.html)
-  - Gradient Descent
-- Graphs
-  - Dijkstra Algorithm (ok)
-  - Count Connected Components (ok)
-  - Disjoint Set Union (ok)
-  - Minimum Spanning Tree (ok)
-  - Topological Sort and Cycle Detection (ok)
-  - Clique Cover and Chromatic Number (ok)
-  - Floyd–Warshall algorithm (tbc, for graphs with negative edges)
-  - Dinic's algorithm for max-flow problem (tbc)
-  - Algorithm (?) for min-cost flow problem (tbc)
-  - 2-SAT (tbc)
-- Recursion template
-  - (Because the default recursion limit for Python is 1000)
-- Other Algorithms
-  - Convex Hull (tbc, Monotone Chain algorithm)
-  - Coordinate Compression (tbc)
-
+These are the sources that I collected my templates for Python
+- [PyRival](https://github.com/cheran-senthil/PyRival), which is contributed by top Python competitive programmers
+- [AtCoder library](https://github.com/not522/ac-library-python)
+- [Leetcode](https://leetcode.com) solutions
+- [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) and [intervaltree](https://github.com/chaimleib/intervaltree)
 
 
 
