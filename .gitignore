@@ -6,12 +6,3 @@ __pycache__/
 *.pyc
 
 ! .vscode/tasks.json
-
-
-# hashcode
-
-template/input_data/
-template/output/
-
-! template/input_data/.gitkeep
-! template/output/.gitkeep
