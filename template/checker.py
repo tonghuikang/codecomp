@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+
+# sample usage
+# python3 checker.py input_data/c_coarse.in.txt output/c_coarse.in.txt.0000000005
+
 import sys
 import shutil
 
@@ -18,12 +22,18 @@ def output_parser(filename):
     with open(filename) as f:
         srr = [row.strip() for row in f.readlines()]  
     crr = srr[0].split()[1:]
+
+    assert len(crr) == int(srr[0].split()[0])
+
     return crr
 
 
 def take_score(input_filename, output_filename):
     arr, brr = input_parser(input_filename)
     crr = output_parser(output_filename)
+
+    # probably some validator to check that output matches input
+    # for example all ingredient names are valid
 
     crr = set(crr)
     score = 0
