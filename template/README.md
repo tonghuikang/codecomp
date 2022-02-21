@@ -30,6 +30,7 @@ alias cx="./run_cpp.sh"
 alias kx="./run_kt.sh"
 alias px="./run_py.sh"
 alias pi="./run_pi.sh"
+pxa() { autoflake --in-place --remove-all-unused-imports "$1".py }
 ```
 
 
@@ -73,7 +74,7 @@ I made the above command an alias, so in contests I run
 px a
 ```
 
-I should write a script to clean up logging and unused imports.
+To clean up unused imports, run `autoflake --in-place --remove-all-unused-imports a.py` or `pxa a`.
 
 
 #### Recursion
