@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +44,33 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, n, k):
     # your solution here
 
-    return ""
+    psum = [0]
+
+    for x in arr:
+        psum.append(psum[-1] + x)
+        
+    res = []
+    for i in range(1,n+1):
+        maxsum = -10**12 - 12
+        for x in range(n-i+1):
+            maxsum = max(maxsum, psum[x+i] - psum[x])
+        res.append(maxsum)
+
+    # log(res)
+
+    allres = [max(0,max(res))]
+    for i in range(n):
+        for j in range(i,n):
+           res[j] += k
+        # log(res)
+        curres = max(0, max(res))
+        allres.append(curres)
+
+    return allres
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,8 +87,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -76,13 +96,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, n, k)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
