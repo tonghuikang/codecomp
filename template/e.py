@@ -1754,7 +1754,7 @@ def minus_one_matrix(mrr):
 def solve_(srr, n):
     # your solution here
 
-    if len(srr) == 1:
+    if len(Counter(list(srr))) == 1:
         return n
 
     # rectangle defined by x1,y1,x2,y2
@@ -1773,8 +1773,8 @@ def solve_(srr, n):
 
     # log(arr)
 
-    ex = 1+sum(arr[0::2])
-    ey = 1+sum(arr[1::2])
+    ey = 1+sum(arr[0::2])
+    ex = 1+sum(arr[1::2])
     # log(ex,ey)
 
     downright = len(arr)%2 == 1
