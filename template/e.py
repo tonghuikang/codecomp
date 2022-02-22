@@ -50,6 +50,64 @@ def minus_one_matrix(mrr):
 def solve_(srr, n):
     # your solution here
 
+    if len(srr) == 1:
+        return n
+
+    # rectangle defined by x1,y1,x2,y2
+
+    prev = srr[0]
+    cur = 1
+    arr = []
+    for c in srr[1:]:
+        if prev == c:
+            cur += 1
+        else:
+            arr.append(cur)
+            cur = 1
+    arr.append(cur)
+
+    log(arr)
+
+
+    # if srr.count("D") == 0 or srr.count("R") == 0:
+    #     return n
+
+    # dirs = {
+    #     "D":(1,0),
+    #     "R":(0,1),
+    # }
+
+    # ex,ey = 0,0
+    # for c in srr:
+    #     dx,dy = dirs[c]
+    #     ex += dx
+    #     ey += dy
+
+    # log(ex,ey)
+
+    # rx,ry = 1,1
+    # rx += dx
+    # ry += dy
+
+    # rects = []
+
+    # for c,d in zip(srr[::-1], srr[::-1][1:]):
+    #     log(c,d)
+    #     dx,dy = dirs[c]
+    #     rx += dx
+    #     ry += dy
+
+    #     if c == d:
+    #         continue
+
+    #     x -= dx
+    #     y -= dy
+
+    #     if dx == 0:
+    #         y2 = n
+    #     if dy == 0:
+    #         x2 = n
+
     return ""
 
 
