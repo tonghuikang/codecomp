@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,10 +44,21 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, n, m, k, q):
     # your solution here
 
-    return ""
+    rows = set()
+    cols = set()
+    cnt = 0
+    for a,b in mrr[::-1]:
+        if (a not in rows or b not in cols):
+            if len(rows) < n and len(cols) < m:
+                cnt += 1
+        rows.add(a)
+        cols.add(b)
+    # log(cnt)
+
+    return pow(k,cnt,998244353)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,16 +75,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,k,q = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, n, m, k, q)  # include input here
 
     # print length if applicable
     # print(len(res))
