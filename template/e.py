@@ -64,49 +64,47 @@ def solve_(srr, n):
         else:
             arr.append(cur)
             cur = 1
+            prev = c
     arr.append(cur)
 
     log(arr)
 
+    ex = 1+sum(arr[0::2])
+    ey = 1+sum(arr[1::2])
+    log(ex,ey)
 
-    # if srr.count("D") == 0 or srr.count("R") == 0:
-    #     return n
+    downright = len(arr)%2 == 1
+    rx, ry = 0,0
 
-    # dirs = {
-    #     "D":(1,0),
-    #     "R":(0,1),
-    # }
+    rects = []
 
-    # ex,ey = 0,0
-    # for c in srr:
-    #     dx,dy = dirs[c]
-    #     ex += dx
-    #     ey += dy
+    for a,b in zip(arr[::-1], arr[::-1][1:]):
+        log(ex,ey,rx,ry)
 
-    # log(ex,ey)
+        if downright:
 
-    # rx,ry = 1,1
-    # rx += dx
-    # ry += dy
+            ey -= a
 
-    # rects = []
+            x2, y2 = n-rx, n-ry
+            x1, y1 = ex, ey
+            rects.append((x1,y1,x2,y2))
 
-    # for c,d in zip(srr[::-1], srr[::-1][1:]):
-    #     log(c,d)
-    #     dx,dy = dirs[c]
-    #     rx += dx
-    #     ry += dy
+            ry += a
+        
+        else:  # rightdown
 
-    #     if c == d:
-    #         continue
+            ex -= a
 
-    #     x -= dx
-    #     y -= dy
+            x2, y2 = n-rx, n-ry
+            x1, y1 = ex, ey
+            rects.append((x1,y1,x2,y2))
 
-    #     if dx == 0:
-    #         y2 = n
-    #     if dy == 0:
-    #         x2 = n
+            rx += a
+
+        downright = not downright
+
+    log(rects)
+
 
     return ""
 
