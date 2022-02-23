@@ -160,8 +160,24 @@ def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target
     return costs[idxs[target]]
 
 
-def floyd_warshall(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
-    raise NotImplementedError
+def floyd_warshall(n, edges, LARGE=10**18):
+    # https://github.com/cheran-senthil/PyRival/blob/pyrival/graphs/floyd_warshall.py
+    # not sure what pred is for
+    dist = [[0 if i == j else LARGE for i in range(n)] for j in range(n)]
+    pred = [[None] * n for _ in range(n)]
+
+    for u, v, d in edges:
+        dist[u][v] = d
+        pred[u][v] = u
+
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][k] + dist[k][j] < dist[i][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+                    pred[i][j] = pred[k][j]
+
+    return dist, pred
 
 
 def maximum_bipartite_matching(map_from_node_to_nodes):
@@ -174,6 +190,9 @@ def maximum_bipartite_matching(map_from_node_to_nodes):
 class Dinic:
     # codeforces.com/contest/1473/submission/104332748
     # max flow algorithm
+
+    # codeforces.com/contest/1473/submission/111242916
+    # for slightly faster and smaller memory usage
     def __init__(self, N):
         self.N = N
         self.G = [[] for i in range(N)]
@@ -358,6 +377,7 @@ def find_bridges():
     # https://cp-algorithms.com/graph/bridge-searching.html
     # https://cp-algorithms.com/graph/bridge-searching-online.html
     return NotImplementedError
+
 
 def find_articulation_points():
     # https://cp-algorithms.com/graph/cutpoints.html
