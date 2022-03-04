@@ -79,8 +79,8 @@ def bootstrap(f, stack=[]):
     return wrappedfunc
 
 def solve_(mrr, total_vertices):
-    if total_vertices == 2:
-        return 2,2,[1,1]
+    # if total_vertices == 2:
+    #     return 2,2,[1,1]
     # your solution here
 
     # https://courses.grainger.illinois.edu/cs473/sp2011/lectures/09_lec.pdf
@@ -93,12 +93,12 @@ def solve_(mrr, total_vertices):
         g[b].add(a)
         # log(a, b)
 
-    leaves = set()
+    leaves = 0
     degree = defaultdict(int)
     for x in range(total_vertices):
         degree[x] = len(g[x])
         if len(g[x]) == 1:
-            leaves.add(x)
+            leaves = x
             res[x] = 1
 
     opt = [-1 for _ in range(total_vertices)]
@@ -111,7 +111,7 @@ def solve_(mrr, total_vertices):
     #         yield 0
     #     yield (yield recurse(n-1)) + 2
 
-    allstart = list(leaves)[0]
+    allstart = leaves
 
     res = [0 for _ in range(total_vertices)]
 
@@ -126,43 +126,41 @@ def solve_(mrr, total_vertices):
             grand_children.update(gc)
             children.add(nex)
 
-        opt1 = 1 + sum(opt[x] for x in grand_children)
-        opt2 = sum(opt[x] for x in children)
+        opt1 = 1_000_000_000 - degree[cur] + sum(opt[x] for x in grand_children)
+        opt2 = -1 + sum(opt[x] for x in children)
 
         opt1_store[cur] = opt1
         opt2_store[cur] = opt2
         opt[cur] = max(opt1, opt2)
-
-        # if opt[cur] == opt1:
-        #     res[cur] = 1
-        # else:
-        #     res[cur] = 0
 
         yield children
         
     recurse(allstart)
 
     @bootstrap
-    def recurse(cur, prev=-1, prev_color=False):
-        if opt[cur] == opt1_store[cur] and not prev_color:
-            res[cur] = 1
-            for nex in g[cur]:
-                if nex == prev:
-                    continue
-                yield recurse(nex, cur, True)
-
-        else:
+    def recurse2(cur, prev=-1, prev_color=False):
+        if prev_color or opt[cur] == opt2_store[cur]:
             res[cur] = 0
             for nex in g[cur]:
                 if nex == prev:
                     continue
-                yield recurse(nex, cur, False)
+                yield recurse2(nex, cur, False)
+        else:
+            res[cur] = 1
+            for nex in g[cur]:
+                if nex == prev:
+                    continue
+                yield recurse2(nex, cur, True)
 
         yield
 
-    recurse(allstart)
+    recurse2(allstart)
 
-    # log(opt)
+    # assert -1 not in res
+    # assert -1 not in opt
+    # assert -1 not in opt1_store
+    # assert -1 not in opt2_store
+    log(opt)
     # log(res)
 
     assignment = [degree[i] if x == 1 else 1 for i,x in enumerate(res)]
