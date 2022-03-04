@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
+# import math, random
+# import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -48,70 +48,95 @@ def minus_one_matrix(mrr):
 
 
 def solve_(mrr, total_vertices):
+    if total_vertices == 2:
+        return 2,2,[1,1]
     # your solution here
 
-    g = defaultdict(list)
+    # prune all leaves
+    # break graph by leaf adjcaent
+    # assign color by connected component
+
+    # will be counted
+    res = [-1 for _ in range(total_vertices)]
+
+    g = defaultdict(set)
     for a,b in mrr:
-        g[a].append(b)
-        g[b].append(a)
+        g[a].add(b)
+        g[b].add(a)
         # log(a, b)
 
-    # log()
-
-    stack = deque([])
+    leaves = set()
+    degree = defaultdict(int)
     for x in range(total_vertices):
+        degree[x] = len(g[x])
         if len(g[x]) == 1:
-            stack.append(x)
-    color = {x:1 for x in stack}
+            leaves.add(x)
+            res[x] = 1
 
-    while stack:
-        cur = stack.popleft()
+    breakers = set()
+    for cur in leaves:
         for nex in g[cur]:
-            # log(cur, nex)
-            if nex in color:
-                continue
-            color[nex] = 1-color[cur]
-            stack.append(nex)
+            breakers.add(nex)
+            res[nex] = 0
+            g[nex].remove(cur)
+            if not(g[nex]):
+                del g[nex]
+        del g[cur]
 
-    color_one = 0
-    color_zero = 0
+    # log(leaves)
+    # log(breakers)
 
-    degree_one = 0
-    degree_zero = 0
+    
+    for start in range(total_vertices):
+        if start in leaves or start in breakers:
+            continue
+        stack = [start]
+        color = {}
+        color[start] = 1
+        while stack:
+            cur = stack.pop()
+            for nex in g[cur]:
+                if nex in breakers:
+                    continue
+                # log(cur, nex)
+                if nex in color:
+                    continue
+                color[nex] = 1-color[cur]
+                stack.append(nex)
 
-    for k,v in color.items():
-        if v:
-            color_one += 1
-            degree_one += len(g[k])
+        color_one = 0
+        color_zero = 0
+
+        degree_one = 0
+        degree_zero = 0
+
+        for k,v in color.items():
+            if v:
+                color_one += 1
+                degree_one += degree[k]
+            else:
+                color_zero += 1
+                degree_zero += degree[k]
+
+        if color_one > color_zero or (color_one == color_zero and degree_one < degree_zero):
+            colored = 1
         else:
-            color_zero += 1
-            degree_zero += len(g[k])
+            colored = 0
 
-    # log(sorted(color.keys()))
-    # log(color_one)
-    # log(color_zero)
+        # log(color, colored)
 
-    colored = -1
+        for k,v in color.items():
+            if v == colored:
+                res[k] = 1
+            else:
+                res[k] = 0
 
-    a = 0
-    if color_one > color_zero or (color_one == color_zero and degree_one < degree_zero):
-        colored = 1
-        # a = color_one
-    else:
-        colored = 0
-        # a = color_zero
+    assert -1 not in res
+    assignement = [degree[i] if x == 1 else 1 for i,x in enumerate(res)]
+    a = sum(degree[i] == x for i,x in enumerate(assignement))
+    b = sum(assignement)
 
-    # a = 0
-    res = [1 for _ in range(total_vertices)]
-
-    for k,v in color.items():
-        if v == colored:
-            res[k] = len(g[k])
-            a += 1
-    b = sum(res)
-
-
-    return a,b,res
+    return a,b,assignement
 
 
 for case_num in [0]:  # no loop over test case
@@ -152,17 +177,3 @@ for case_num in [0]:  # no loop over test case
 
     print(res)
 
-
-#    g = defaultdict(set)
-#     for a,b in mrr:
-#         g[a].add(b)
-#         g[b].add(a)
-
-#     leaves = set()
-#     for i in range(total_vertices):
-#         if len(g[i]) == 1:
-#             leaves.add(i)
-
-#     while g:
-#         for cur in leaves:
-#             for nex in g[cur]
