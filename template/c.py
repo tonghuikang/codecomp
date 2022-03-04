@@ -46,11 +46,27 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+factorials = list(math.factorial(x) for x in range(15))
 
-def solve_():
+
+def solve_(k):
     # your solution here
 
-    return ""
+    minres = bin(k).count("1")
+
+    pool = set([(k,0)])
+    for i,x in enumerate(factorials, start=1):
+        new_pool = set((x,c) for x,c in pool)
+        for y,c in pool:
+            if y > x:
+                z = y-x
+                res = c + bin(z).count("1") + 1
+                minres = min(minres, res)
+                new_pool.add((z,c+1))
+        pool = new_pool
+        # log(pool)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -58,7 +74,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +92,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
