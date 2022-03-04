@@ -77,10 +77,8 @@ def solve_(mrr, total_vertices):
     for cur in leaves:
         for nex in g[cur]:
             breakers.add(nex)
+            assert res[nex] != 1
             res[nex] = 0
-            g[nex].remove(cur)
-            if not(g[nex]):
-                del g[nex]
         del g[cur]
 
     # log(leaves)
