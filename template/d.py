@@ -54,19 +54,24 @@ def solve_(mrr, total_vertices):
     for a,b in mrr:
         g[a].append(b)
         g[b].append(a)
+        # log(a, b)
 
-    color = {}
-    start = 0
-    color[start] = 1
-    stack = [start]
+    # log()
+
+    stack = deque([])
+    for x in range(total_vertices):
+        if len(g[x]) == 1:
+            stack.append(x)
+    color = {x:1 for x in stack}
 
     while stack:
-        cur = stack.pop()
+        cur = stack.popleft()
         for nex in g[cur]:
+            # log(cur, nex)
             if nex in color:
                 continue
             color[nex] = 1-color[cur]
-            stack.append(cur)
+            stack.append(nex)
 
     color_one = 0
     color_zero = 0
@@ -81,6 +86,10 @@ def solve_(mrr, total_vertices):
         else:
             color_zero += 1
             degree_zero += len(g[k])
+
+    # log(sorted(color.keys()))
+    # log(color_one)
+    # log(color_zero)
 
     colored = -1
 
@@ -142,3 +151,18 @@ for case_num in [0]:  # no loop over test case
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
     print(res)
+
+
+#    g = defaultdict(set)
+#     for a,b in mrr:
+#         g[a].add(b)
+#         g[b].add(a)
+
+#     leaves = set()
+#     for i in range(total_vertices):
+#         if len(g[i]) == 1:
+#             leaves.add(i)
+
+#     while g:
+#         for cur in leaves:
+#             for nex in g[cur]
