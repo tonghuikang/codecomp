@@ -47,16 +47,44 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+# https://codeforces.com/blog/entry/80158?locale=en
+from types import GeneratorType
+def bootstrap(f, stack=[]):
+    # usage - please remember to YIELD to call and return
+    '''
+    @bootstrap
+    def recurse(n):
+        if n <= 0:
+            yield 0
+        yield (yield recurse(n-1)) + 2
+
+    res = recurse(10**5)
+    '''
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    if stack:
+                        stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
+
 def solve_(mrr, total_vertices):
     if total_vertices == 2:
         return 2,2,[1,1]
     # your solution here
 
-    # prune all leaves
-    # break graph by leaf adjcaent
-    # assign color by connected component
-
-    # will be counted
+    # https://courses.grainger.illinois.edu/cs473/sp2011/lectures/09_lec.pdf
+    
     res = [-1 for _ in range(total_vertices)]
 
     g = defaultdict(set)
@@ -73,68 +101,75 @@ def solve_(mrr, total_vertices):
             leaves.add(x)
             res[x] = 1
 
-    breakers = set()
-    for cur in leaves:
+    opt = [-1 for _ in range(total_vertices)]
+    opt1_store = [-1 for _ in range(total_vertices)]
+    opt2_store = [-1 for _ in range(total_vertices)]
+
+    # @bootstrap
+    # def recurse(n):
+    #     if n <= 0:
+    #         yield 0
+    #     yield (yield recurse(n-1)) + 2
+
+    allstart = list(leaves)[0]
+
+    res = [0 for _ in range(total_vertices)]
+
+    @bootstrap
+    def recurse(cur, prev=-1):
+        children = set()
+        grand_children = set()
         for nex in g[cur]:
-            breakers.add(nex)
-            assert res[nex] != 1
-            res[nex] = 0
-        del g[cur]
+            if nex == prev:
+                continue
+            gc = yield recurse(nex, cur)
+            grand_children.update(gc)
+            children.add(nex)
 
-    # log(leaves)
-    # log(breakers)
+        opt1 = 1 + sum(opt[x] for x in grand_children)
+        opt2 = sum(opt[x] for x in children)
 
-    
-    for start in range(total_vertices):
-        if start in leaves or start in breakers:
-            continue
-        stack = [start]
-        color = {}
-        color[start] = 1
-        while stack:
-            cur = stack.pop()
+        opt1_store[cur] = opt1
+        opt2_store[cur] = opt2
+        opt[cur] = max(opt1, opt2)
+
+        # if opt[cur] == opt1:
+        #     res[cur] = 1
+        # else:
+        #     res[cur] = 0
+
+        yield children
+        
+    recurse(allstart)
+
+    @bootstrap
+    def recurse(cur, prev=-1, prev_color=False):
+        if opt[cur] == opt1_store[cur] and not prev_color:
+            res[cur] = 1
             for nex in g[cur]:
-                if nex in breakers:
+                if nex == prev:
                     continue
-                # log(cur, nex)
-                if nex in color:
-                    continue
-                color[nex] = 1-color[cur]
-                stack.append(nex)
+                yield recurse(nex, cur, True)
 
-        color_one = 0
-        color_zero = 0
-
-        degree_one = 0
-        degree_zero = 0
-
-        for k,v in color.items():
-            if v:
-                color_one += 1
-                degree_one += degree[k]
-            else:
-                color_zero += 1
-                degree_zero += degree[k]
-
-        if color_one > color_zero or (color_one == color_zero and degree_one < degree_zero):
-            colored = 1
         else:
-            colored = 0
+            res[cur] = 0
+            for nex in g[cur]:
+                if nex == prev:
+                    continue
+                yield recurse(nex, cur, False)
 
-        # log(color, colored)
+        yield
 
-        for k,v in color.items():
-            if v == colored:
-                res[k] = 1
-            else:
-                res[k] = 0
+    recurse(allstart)
 
-    assert -1 not in res
-    assignement = [degree[i] if x == 1 else 1 for i,x in enumerate(res)]
-    a = sum(degree[i] == x for i,x in enumerate(assignement))
-    b = sum(assignement)
+    # log(opt)
+    # log(res)
 
-    return a,b,assignement
+    assignment = [degree[i] if x == 1 else 1 for i,x in enumerate(res)]
+    a = sum(degree[i] == x for i,x in enumerate(assignment))
+    b = sum(assignment)
+
+    return a,b,assignment
 
 
 for case_num in [0]:  # no loop over test case
