@@ -47,18 +47,70 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, total_vertices):
     # your solution here
 
-    return ""
+    g = defaultdict(list)
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    color = {}
+    start = 0
+    color[start] = 1
+    stack = [start]
+
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex in color:
+                continue
+            color[nex] = 1-color[cur]
+            stack.append(cur)
+
+    color_one = 0
+    color_zero = 0
+
+    degree_one = 0
+    degree_zero = 0
+
+    for k,v in color.items():
+        if v:
+            color_one += 1
+            degree_one += len(g[k])
+        else:
+            color_zero += 1
+            degree_zero += len(g[k])
+
+    colored = -1
+
+    a = 0
+    if color_one > color_zero or (color_one == color_zero and degree_one < degree_zero):
+        colored = 1
+        # a = color_one
+    else:
+        colored = 0
+        # a = color_zero
+
+    # a = 0
+    res = [1 for _ in range(total_vertices)]
+
+    for k,v in color.items():
+        if v == colored:
+            res[k] = len(g[k])
+            a += 1
+    b = sum(res)
 
 
-# for case_num in [0]:  # no loop over test case
+    return a,b,res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,16 +125,16 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(k-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
-
+    a,b,res = solve(mrr, k)  # include input here
+    print(a,b)
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

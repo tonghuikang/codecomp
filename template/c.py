@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import math
+# import functools, itertools, collections, heapq, bisect
+# from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -46,7 +46,9 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-factorials = list(math.factorial(x) for x in range(15))
+factorials = list(math.factorial(x) for x in range(3,16))
+
+# log(factorials)
 
 
 def solve_(k):
@@ -55,10 +57,10 @@ def solve_(k):
     minres = bin(k).count("1")
 
     pool = set([(k,0)])
-    for i,x in enumerate(factorials, start=1):
+    for i,x in enumerate(factorials[::-1], start=1):
         new_pool = set((x,c) for x,c in pool)
         for y,c in pool:
-            if y > x:
+            if y >= x:
                 z = y-x
                 res = c + bin(z).count("1") + 1
                 minres = min(minres, res)
