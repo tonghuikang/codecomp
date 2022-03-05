@@ -7,6 +7,7 @@
 from types import GeneratorType
 def bootstrap(f, stack=[]):
     # usage - please remember to YIELD to call and return
+    # protip - do not store data structures in the function
     '''
     @bootstrap
     def recurse(n):
@@ -99,25 +100,40 @@ t.join()
 # -----------------------------------------------------------------------------
 
 
-def dfs_bare_bones(start, g, return_operation):
-    # hacked this out due to strict time limit because recursive dfs resulted in TLE
-    # https://codeforces.com/contest/1528/problem/A
-    # instead of returning a value, read and update an external data structure instead
-    entered = set([start])
-    exiting = set()
-    stack = [start]
-    prev = {}
+if True:
+    # https://codeforces.com/contest/1646/submission/148435078
 
-    while stack:
-        cur = stack[-1]
-        if cur in exiting:
-            stack.pop()
-            return_operation(prev[cur], cur)
-            continue
-        for nex in g[cur]:
-            if nex in entered:
-                continue
-            entered.add(nex)
-            stack.append(nex)
-            prev[nex] = cur
-        exiting.add(cur)
+    def dfs(start, g, entry_operation, exit_operation):
+        entered = set([start])
+        exiting = set()
+        stack = [start]
+        prev = {}
+
+        null_pointer = "NULL"
+        prev[start] = null_pointer
+
+        while stack:
+            cur = stack[-1]
+
+            if cur not in exiting:
+                for nex in g[cur]:
+                    if nex in entered:
+                        continue
+
+                    entry_operation(prev[cur], cur, nex)
+
+                    entered.add(nex)
+                    stack.append(nex)
+                    prev[nex] = cur
+                exiting.add(cur)
+
+            else:
+                stack.pop()
+                exit_operation(prev[cur], cur)
+
+    def entry_operation(prev, cur, nex):
+        pass
+
+    def exit_operation(prev, cur):
+        pass
+
