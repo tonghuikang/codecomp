@@ -63,9 +63,9 @@ def max_dot_product_of_two_subsequence(A, B):
     return dp[-1][-1]
 
 
-def RabinKarp(arr, window_size, modulus):
-    # for longest common subarray in O(N log N), use binary search
-    # run this multiple times to avoid collisions
+def rabin_karp(arr, window_size, modulus):
+    # return all hashes of each substring of a certain window_size
+    # run this multiple times to avoid hash collisions
     h, t, d = (1<<(17*window_size-17))%modulus, 0, 1<<17
     all_hashes = set()
 
@@ -79,6 +79,52 @@ def RabinKarp(arr, window_size, modulus):
         all_hashes.add(t)
 
     return all_hashes
+
+
+def next_permuation(nums):
+    # https://leetcode.com/problems/next-permutation/
+    # allow duplicates
+    # warning: this algorithm also modifies the input
+    k = -1
+    # Find the largest index k such that nums[k] < nums[k + 1]. 
+    for i in range(len(nums)-1):
+        if nums[i] < nums[i+1]:
+            k = i
+    
+    # If no such index exists, just reverse nums and done.
+    if k == -1:
+        nums.reverse()
+        return
+
+    l = k+1
+    # Find the largest index l > k such that nums[k] < nums[l].
+    for i in range(k, len(nums)):
+        if nums[k] < nums[i]:
+            l = i
+    
+    print(k,l)
+    
+    # Swap nums[k] and nums[l]
+    nums[k], nums[l] = nums[l], nums[k]
+        
+    # Reverse the sub-array nums[k + 1:]
+    nums[k+1:] = nums[k+1:][::-1]
+    return nums
+
+
+def get_permutation_given_lexicographic_order(perm):
+    # allow duplicates
+    # https://stackoverflow.com/questions/6884708/
+    raise NotImplementedError
+
+
+def get_lexicographic_order_of_permutation(perm):
+    # allow duplicates
+    # https://www.geeksforgeeks.org/lexicographic-rank-of-a-string/
+    # https://www.geeksforgeeks.org/lexicographic-rank-string-duplicate-characters/
+    # https://stackoverflow.com/questions/12146910
+    # https://stackoverflow.com/questions/6884708/
+    raise NotImplementedError
 
 
 # --------------------------- sliding windows ---------------------------
@@ -176,6 +222,7 @@ def z_function(S):
 def manachers(S):
     # https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1389421/
     # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/suffix_array.py
+    # https://cp-algorithms.com/string/suffix-array.html
     A = '@#' + '#'.join(S) + '#$'
     Z = [0] * len(A)
     center = right = 0
