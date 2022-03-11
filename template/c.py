@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -50,22 +47,24 @@ def minus_one_matrix(mrr):
 def solve_(mrr, n, m):
     # your solution here
 
-    if mrr[0][0] == 0:
+    if mrr[0][0] == 1:
         return False, []
 
-    if sum(sum(row) for row in mrr) == n*m:
-        return True, []
-
-    res = [(1,1,n,m)]
-
+    res1 = []
     for x in range(n):
-        for y in range(m):
+        for y in range(1,m):
             if mrr[x][y] == 1:
-                res.append((x+1,y+1,x+1,y+1))
+                res1.append((x,y-1,x,y))
+    res1.reverse()
 
-    assert len(res) <= n*m
+    res2 = []
+    for x in range(1,n):
+        if mrr[x][0] == 1:
+            res2.append((x-1,0,x,0))
+    res2.reverse()
 
-    return True, res
+    return True, res1 + res2
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -90,7 +89,7 @@ for case_num in range(int(input())):
     arr = read_strings(n)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
-    mrr = [[1 - int(x) for x in row] for row in arr]
+    mrr = [[int(x) for x in row] for row in arr]
     boo, res = solve(mrr, n, m)  # include input here
 
     if not boo:
@@ -108,7 +107,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x+1) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
