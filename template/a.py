@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -47,18 +44,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(k):
+    k_init = k
     # your solution here
 
-    return ""
+    arr = [2,1]*1505
 
+    res = []
+    for i in arr:
+        if k > 0:
+            x = arr.pop()
+            res.append(x)
+            k -= x
+            continue
+        else:
+            break
+        
+    if k < 0:
+        res = res[1:]
+
+    if res[0] == 1:
+        res.reverse()
+
+    assert sum(res) == k_init
+
+    return "".join(str(x) for x in res)
+
+
+# for x in range(1,1001):
+#     solve(x)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -76,7 +97,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
