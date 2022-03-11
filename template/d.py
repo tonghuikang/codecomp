@@ -98,7 +98,7 @@ def solve_(x,d):
     # your solution here
 
     factors_x = get_prime_factors_with_precomp_largest_factors(x)
-    counter_x = Counter(factors_x)
+    # counter_x = Counter(factors_x)
 
     factors_d = get_prime_factors_with_precomp_largest_factors(d)
     d_is_prime = len(factors_d) == 1
@@ -119,17 +119,25 @@ def solve_(x,d):
 
     if count_d == 1:
         # only one representation
+        log("count_d == 1")
         return no
+
+    if not r_is_prime:
+        return yes
 
     if r_is_prime and count_d == 2:
         # only one representation
+        log("r_is_prime and count_d == 2")
         return no
 
     if r_is_prime and d_is_prime:
+        log("r_is_prime and d_is_prime")
         return no
 
-    if r_is_prime and remainder * remainder == d:  # [2,1] = [1,2]
+    if r_is_prime and remainder * remainder == d and count_d == 3:  # [1,2,2,2]
         return no
+
+    # [1+2,2,2,2] = [3,3,3] is ok
     
     return yes
 
