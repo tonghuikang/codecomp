@@ -47,7 +47,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(mrr):
+def solve_(mrr, n, m):
     # your solution here
 
     for x in range(n-1):
@@ -78,7 +78,7 @@ for case_num in range(int(input())):
     # arr = minus_one(arr)
 
     # read multiple rows
-    arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(n)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
     mrr = [[int(x) for x in row] for row in arr]
