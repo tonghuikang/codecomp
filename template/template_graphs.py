@@ -122,6 +122,8 @@ def dijkstra(list_of_indexes_and_costs, start):
     heapq.heappush(queue, (0, start))
     while queue:
         g, u = heapq.heappop(queue)
+        if visited[u]:
+            continue
         visited[u] = True
         for v, w in list_of_indexes_and_costs[u]:
             if not visited[v]:

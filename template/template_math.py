@@ -129,12 +129,15 @@ def get_largest_prime_factors(num):
     return largest_prime_factors
 
 
-largest_prime_factors = get_largest_prime_factors(10**6)   # take care that it begins with [1,1,2,...]
+SIZE_OF_PRIME_ARRAY = 10**6 + 10
+largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
 primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
 
 
-def get_prime_factors_with_precomp_largest_factors(num, largest_prime_factors=largest_prime_factors):
-    # factorise into prime factors given precomputed largest_prime_factors
+def get_prime_factors_with_precomp(num):
+    # requires precomputed `largest_prime_factors``
+    # for numbers below SIZE_OF_PRIME_ARRAY
+    # O(log n)
     factors = []
     lf = largest_prime_factors[num]
     while lf != num:
@@ -146,15 +149,25 @@ def get_prime_factors_with_precomp_largest_factors(num, largest_prime_factors=la
     return factors
 
 
-def get_prime_factor_count(num):
-    # count how many prime factor
-    prime_factor_count = [0] * num
-    for i in range(2, num):
-        if prime_factor_count[i]:  # not prime
-            continue
-        for j in range(i, num, i):
-            prime_factor_count[j] += 1
-    return prime_factor_count
+def get_prime_factors_with_precomp_sqrt(num):
+    # requires precomputed `primes``
+    # for numbers below SIZE_OF_PRIME_ARRAY**2
+    # O(sqrt(n) / log(n))
+
+    if num == 1:
+        # may need to edit depending on use case
+        return []
+ 
+    factors = [] 
+    for p in primes:
+        while num%p == 0 and num <= p:
+            factors.append(p)
+            num = num // p
+    if num > 1:
+        # remaining number is a prime
+        factors.append(num)
+ 
+    return factors
 
 
 # ----------------------------- modular inverse -----------------------------

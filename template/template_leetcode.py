@@ -1,6 +1,7 @@
 import sys
 
-m9 = 10**9+7
+m9 = 10**9+7  # 998244353
+e18 = 10**18 + 10
 MAXINT = sys.maxsize
 abc = "abcdefghijklmnopqrstuvwxyz"
 abc_map = {c:i for i,c in enumerate(abc)}

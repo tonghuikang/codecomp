@@ -9,11 +9,12 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-M9 = 10**9 + 7  # 998244353
+m9 = 10**9 + 7  # 998244353
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
+e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "htong"
