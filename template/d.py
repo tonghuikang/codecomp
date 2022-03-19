@@ -1,9 +1,5 @@
-#!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -18,9 +14,13 @@ yes, no = "yes", "no"
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
+import networkx as nx
+nx.check_planarity
+
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "htong"
+# import getpass  # not available on codechef
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -51,7 +51,25 @@ def minus_one_matrix(mrr):
 def solve_(arr, k):
     # your solution here
 
-    return ""
+    val_to_idxs = defaultdict(list)
+
+    edges = [(i,i+1) for i in range(2*k)]
+    edges.append((0, 2*k-1))
+
+    for i,x in enumerate(arr):
+        val_to_idxs[x].append(i)
+
+    for a,b in val_to_idxs.values():
+        edges.append((a,b))
+
+    G = nx.Graph()
+    for a,b in edges:
+        G.add_edge(a,b)
+
+
+    if nx.check_planarity(G, False)[0]:
+        return yes
+    return no
 
 
 # for case_num in [0]:  # no loop over test case

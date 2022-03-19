@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import networkx as nx
 from collections import deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -16,9 +17,9 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-# import getpass  # not available on codechef
-# OFFLINE_TEST = getpass.getuser() == "htong"
-OFFLINE_TEST = False  # codechef does not allow getpass
+import getpass  # not available on codechef
+OFFLINE_TEST = getpass.getuser() == "htong"
+# OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -42,13 +43,15 @@ def sliding_window_maximum(nums, k):
     # leetcode.com/problems/sliding-window-maximum/discuss/65901
     # log("sliding_window_maximum", nums, k)
     deq, n, ans = deque([0]), len(nums), []
-    for i in range (n):
+    for i in range(n):
         while deq and deq[0] <= i - k:
             deq.popleft()
         while deq and nums[i] >= nums[deq[-1]] :
             deq.pop()
         deq.append(i)
         ans.append(nums[deq[0]])
+
+    log(ans)
     # return ans[k-1:]
     return [ans[k-1]]*(k//2) + ans[k-1:] + [ans[-1]]*(k//2)
 
@@ -80,7 +83,7 @@ def solve_(mrr,n,m,d):
         window_size = min(2*n-1, window_size)
         dp = sliding_window_maximum(dp, window_size)
 
-        # log(len(dp), dp, window_size)
+        log(len(dp), dp, window_size)
 
         new_dp = gen_arr(a)
 
