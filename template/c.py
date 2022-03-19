@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -19,8 +16,9 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# import getpass  # not available on codechef
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -36,27 +34,67 @@ def solve(*args):
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
 
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def sliding_window_maximum(nums, k):
+    # leetcode.com/problems/sliding-window-maximum/discuss/65901
+    # log("sliding_window_maximum", nums, k)
+    deq, n, ans = deque([0]), len(nums), []
+    for i in range (n):
+        while deq and deq[0] <= i - k:
+            deq.popleft()
+        while deq and nums[i] >= nums[deq[-1]] :
+            deq.pop()
+        deq.append(i)
+        ans.append(nums[deq[0]])
+    res = ans[k-1:]
+    return [res[0]]*(k//2) + res + [res[-1]]*(k//2)
+
+
+LARGE = 10**16
+
+def solve_(mrr,n,m,d):
     # your solution here
 
-    return ""
+    def gen_arr(a):
+        a -= 1
+        return [-LARGE]*n + [-abs(a-i) for i in range(n)] + [-LARGE]*n
+        
+    res = 0
+    a0, b0, t0 = mrr[0]
+    dp = gen_arr(a0)
+    res = b0
+    prev_t = t0
+
+    for a,b,t in mrr[1:]:
+        log(a,b,t)
+        res += b
+        t_diff = t - prev_t
+        dist = t_diff * d
+        window_size = 2*dist + 1
+
+        log(len(dp), dp)
+
+        dist = min(2*n-1, window_size)
+        dp = sliding_window_maximum(dp, window_size)
+
+        log(len(dp), dp)
+
+        new_dp = gen_arr(a)
+
+        assert len(dp) == len(new_dp)
+
+        dp = [a+b for a,b in zip(dp, new_dp)]
+        prev_t = t
+
+    return res + max(dp)
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -68,16 +106,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,d = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr,n,m,d)  # include input here
 
     # print length if applicable
     # print(len(res))
