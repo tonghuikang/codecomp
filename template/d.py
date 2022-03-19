@@ -231,8 +231,8 @@ class LRPlanarity:
     def __init__(self, G):
         # copy G without adding self-loops
         self.G = nx.Graph()
-        self.G.add_nodes_from(G.nodes)
-        for e in G.edges:
+        self.G.add_nodes_from(G.nodes())
+        for e in G.edges():
             if e[0] != e[1]:
                 self.G.add_edge(e[0], e[1])
 
@@ -250,7 +250,7 @@ class LRPlanarity:
 
         # oriented DFS graph
         self.DG = nx.DiGraph()
-        self.DG.add_nodes_from(G.nodes)
+        self.DG.add_nodes_from(G.nodes())
 
         self.adjs = {}
         self.ordered_adjs = {}
@@ -313,10 +313,10 @@ class LRPlanarity:
         self.stack_bottom = None
         self.lowpt_edge = None
 
-        for e in self.DG.edges:
+        for e in self.DG.edges():
             self.nesting_depth[e] = self.sign(e) * self.nesting_depth[e]
 
-        self.embedding.add_nodes_from(self.DG.nodes)
+        self.embedding.add_nodes_from(self.DG.nodes())
         for v in self.DG:
             # sort the adjacency lists again
             self.ordered_adjs[v] = sorted(
@@ -373,10 +373,10 @@ class LRPlanarity:
             if not self.dfs_testing_recursive(v):
                 return None
 
-        for e in self.DG.edges:
+        for e in self.DG.edges():
             self.nesting_depth[e] = self.sign_recursive(e) * self.nesting_depth[e]
 
-        self.embedding.add_nodes_from(self.DG.nodes)
+        self.embedding.add_nodes_from(self.DG.nodes())
         for v in self.DG:
             # sort the adjacency lists again
             self.ordered_adjs[v] = sorted(
@@ -411,7 +411,7 @@ class LRPlanarity:
                 vw = (v, w)
 
                 if not skip_init[vw]:
-                    if (v, w) in self.DG.edges or (w, v) in self.DG.edges:
+                    if (v, w) in self.DG.edges() or (w, v) in self.DG.edges():
                         ind[v] += 1
                         continue  # the edge was already oriented
 
@@ -451,7 +451,7 @@ class LRPlanarity:
         """Recursive version of :meth:`dfs_orientation`."""
         e = self.parent_edge[v]
         for w in self.G[v]:
-            if (v, w) in self.DG.edges or (w, v) in self.DG.edges:
+            if (v, w) in self.DG.edges() or (w, v) in self.DG.edges():
                 continue  # the edge was already oriented
             vw = (v, w)
             self.DG.add_edge(v, w)  # orient the edge
@@ -850,7 +850,7 @@ class PlanarEmbedding(nx.DiGraph):
         if len(self[v]) == 0:
             # v has no neighbors
             return
-        start_node = self.nodes[v]["first_nbr"]
+        start_node = self.nodes()[v]["first_nbr"]
         yield start_node
         current_node = self[v][start_node]["cw"]
         while start_node != current_node:
@@ -1043,8 +1043,8 @@ class PlanarEmbedding(nx.DiGraph):
         add_half_edge_cw
         connect_components
         """
-        if start_node in self and "first_nbr" in self.nodes[start_node]:
-            reference = self.nodes[start_node]["first_nbr"]
+        if start_node in self and "first_nbr" in self.nodes()[start_node]:
+            reference = self.nodes()[start_node]["first_nbr"]
         else:
             reference = None
         self.add_half_edge_ccw(start_node, end_node, reference)
@@ -1188,7 +1188,7 @@ def solve_(arr, k):
 for case_num in range(int(input())):
 
     # read line as an integer
-    k = int(input())
+    kkkkk = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -1206,7 +1206,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(arr, k)  # include input here
+    res = solve(arr, kkkkk)  # include input here
 
     # print length if applicable
     # print(len(res))

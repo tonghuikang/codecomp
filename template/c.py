@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import networkx as nx
+# import networkx as nx
 from collections import deque
 input = sys.stdin.readline  # to read input quickly
 
