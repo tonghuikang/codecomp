@@ -49,8 +49,8 @@ def sliding_window_maximum(nums, k):
             deq.pop()
         deq.append(i)
         ans.append(nums[deq[0]])
-    res = ans[k-1:]
-    return [res[0]]*(k//2) + res + [res[-1]]*(k//2)
+    # return ans[k-1:]
+    return [ans[k-1]]*(k//2) + ans[k-1:] + [ans[-1]]*(k//2)
 
 
 LARGE = 10**16
@@ -75,12 +75,12 @@ def solve_(mrr,n,m,d):
         dist = t_diff * d
         window_size = 2*dist + 1
 
-        log(len(dp), dp)
+        # log(len(dp), dp, window_size)
 
-        dist = min(2*n-1, window_size)
+        window_size = min(2*n-1, window_size)
         dp = sliding_window_maximum(dp, window_size)
 
-        log(len(dp), dp)
+        # log(len(dp), dp, window_size)
 
         new_dp = gen_arr(a)
 
