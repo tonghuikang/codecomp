@@ -48,10 +48,58 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def is_prime(n):
+    # primality test (not tested)
+    # https://github.com/not522/ac-library-python/blob/master/atcoder/_math.py
+    # http://ceur-ws.org/Vol-1326/020-Forisek.pdf
+    # untested
+    if n <= 1:
+        return False
+    if n > 2**32:
+        primitives = set([2, 325, 9375, 28178, 450775, 9780504, 1795265022])
+        if n == 2:
+            return True
+    else:
+        primitives = set([2, 7, 61])
+        if n in primitives:
+            return True
+
+    if n % 2 == 0:
+        return False
+
+    d = n - 1
+    while d % 2 == 0:
+        d //= 2
+
+    for a in primitives:
+        t = d
+        y = pow(a, t, n)
+        while t != n - 1 and y != 1 and y != n - 1:
+            y = y * y % n
+            t <<= 1
+        if y != n - 1 and t % 2 == 0:
+            return False
+    return True
+
+
+
+def solve_(k):
     # your solution here
 
-    return ""
+    for i in range(2,100):
+        cap = i*(i+1)//2
+        if k < cap:
+            continue
+        if (k - cap) % i == 0:
+            return i
+
+    if k < 50:
+        return -1
+
+    if is_prime(x//2):
+        return -1
+
+    return k
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,7 +107,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -77,7 +125,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
