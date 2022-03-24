@@ -66,87 +66,36 @@ def solve_(arr):
     for a,b in zip(arr, arr[1:]):
         mindiff = min(mindiff, b-a)
 
-    if a > 1:
-        val = a
+    def attempt(val):
         brr = [x%val for x in arr]
         set_brr = set(brr)
         # log(brr)
         if len(set_brr) == 1:
-            return yes
+            return True
         if 1 not in set_brr and 0 in set_brr and len(set_brr) == 2:
+            return True
+        return False
+
+    if a > 1:
+        if attempt(a):
             return yes
 
     if b > 1:
-        val = b
-        brr = [x%val for x in arr]
-        set_brr = set(brr)
-        # log(brr)
-        if len(set_brr) == 1:
-            log(val)
-            return yes
-        if 1 not in set_brr and len(set_brr) == 2:
-            log(val)
+        if attempt(b):
             return yes
 
     if c > 1:
-        val = c
-        brr = [x%val for x in arr]
-        set_brr = set(brr)
-        # log(brr)
-        if len(set_brr) == 1:
-            log(val)
-            return yes
-        if 1 not in set_brr and len(set_brr) == 2:
-            log(val)
+        if attempt(c):
             return yes
 
     if mindiff > 1:
-        val = mindiff
-        brr = [x%val for x in arr]
-        set_brr = set(brr)
-        # log(brr)
-        if len(set_brr) == 1:
-            log(val)
-            return yes
-        if 1 not in set_brr and len(set_brr) == 2:
-            log(val)
+        if attempt(mindiff):
             return yes
 
-    if True:
-        val = 3
-        brr = [x%val for x in arr]
-        set_brr = set(brr)
-        # log(brr)
-        if len(set_brr) == 1:
-            log(val)
-            return yes
-        if 1 not in set_brr and len(set_brr) == 2:
-            log(val)
+    for i in range(2,7):
+        if attempt(i):
             return yes
 
-    if True:
-        val = 4
-        brr = [x%val for x in arr]
-        set_brr = set(brr)
-        # log(brr)
-        if len(set_brr) == 1:
-            log(val)
-            return yes
-        if 1 not in set_brr and len(set_brr) == 2:
-            log(val)
-            return yes
-
-    if True:
-        val = 5
-        brr = [x%val for x in arr]
-        set_brr = set(brr)
-        # log(brr)
-        if len(set_brr) == 1:
-            log(val)
-            return yes
-        if 1 not in set_brr and len(set_brr) == 2:
-            log(val)
-            return yes
 
     # if mindiff > 1 and 1 not in arr:
     #     return yes
