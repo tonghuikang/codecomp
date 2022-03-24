@@ -48,10 +48,51 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(arr):
+    # check if all odd
 
-    return ""
+    arr = sorted(set(arr))
+
+    if len(arr) == 1:
+        return yes
+
+    # mod value after k is all not 1
+
+    a = arr[0]
+    b = arr[1]
+    c = b-a
+
+    if a > 1:
+        val = a
+        brr = [x%val for x in arr]
+        set_brr = set(brr)
+        # log(brr)
+        if len(set_brr) == 1:
+            return yes
+        if 1 not in set_brr and 0 in set_brr and len(set_brr) == 2:
+            return yes
+
+    if b > 1:
+        val = b
+        brr = [x%val for x in arr]
+        set_brr = set(brr)
+        # log(brr)
+        if len(set_brr) == 1:
+            return yes
+        if 1 not in set_brr and 0 in set_brr and len(set_brr) == 2:
+            return yes
+
+    if c > 1:
+        val = c
+        brr = [x%val for x in arr]
+        set_brr = set(brr)
+        # log(brr)
+        if len(set_brr) == 1:
+            return yes
+        if 1 not in set_brr and 0 in set_brr and len(set_brr) == 2:
+            return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,7 +100,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -69,7 +110,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +118,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
