@@ -51,7 +51,25 @@ def minus_one_matrix(mrr):
 def solve_(arr, a, b):
     # your solution here
 
-    return max(arr)
+    bins = [0 for _ in range(18)]
+
+    for i,x in enumerate(arr):
+        for z in range(17):
+            if x&1:
+                bins[z] += 1
+            x = x // 2
+
+    for i in range(a,b+1):
+        for z in range(17):
+            if i&1:
+                bins[z] -= 1
+            i = i // 2
+
+    log(bins)
+
+    q = "".join(str(int(x != 0)) for x in bins[::-1])
+
+    return int(q, 2)
 
 
 # for case_num in [0]:  # no loop over test case
