@@ -1,19 +1,6 @@
-# obtained from https://codeforces.com/profile/anishde85, original sources to be determined
-# ---------------------------iye ha aam zindegi---------------------------------------------
-import math
-import random
-import heapq, bisect
-import sys
-from collections import deque, defaultdict
-from fractions import Fraction
-import sys
-import threading
-from collections import defaultdict
-threading.stack_size(1<<27)
-mod = 10**9 + 7
-mod1 = 998244353
+# https://codeforces.com/blog/entry/82989
+# Some code to make your Python code run faster
 
-# ------------------------------warmup----------------------------
 import os
 import sys
 from io import BytesIO, IOBase
@@ -71,70 +58,7 @@ input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 
 
-
-# --------------------------------------------------binary----------------------------------------
-def binarySearchCount(arr, n, key):
-    left = 0
-    right = n - 1
-
-    count = 0
-
-    while (left <= right):
-        mid = int((right + left) / 2)
-
-        # Check if middle element is
-        # less than or equal to key
-        if (arr[mid] < key):
-            count = mid + 1
-            left = mid + 1
-
-        # If key is smaller, ignore right half
-        else:
-            right = mid - 1
-
-    return count
-
-
-# --------------------------------------------------binary----------------------------------------
-def countdig(n):
-    c = 0
-    while (n > 0):
-        n //= 10
-        c += 1
-    return c
-
-def binary(x, length):
-    y = bin(x)[2:]
-    return y if len(y) >= length else "0" * (length - len(y)) + y
-
-def countGreater(arr, n, k):
-    l = 0
-    r = n - 1
-
-    # Stores the index of the left most element
-    # from the array which is greater than k
-    leftGreater = n
-
-    # Finds number of elements greater than k
-    while (l <= r):
-        m = int(l + (r - l) / 2)
-        if (arr[m] >= k):
-            leftGreater = m
-            r = m - 1
-
-        # If mid element is less than
-        # or equal to k update l
-        else:
-            l = m + 1
-
-    # Return the count of elements
-    # greater than k
-    return (n - leftGreater)
-
-
-# --------------------------------------------------binary------------------------------------
-
-
+# the following may no longer be applicable as pypy3 is available as 64-bit
 import __pypy__
 
 int_add = __pypy__.intop.int_add

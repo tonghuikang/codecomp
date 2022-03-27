@@ -469,8 +469,8 @@ class LazySegTree:
 
 # ----------------------- Self-balancing Trees -----------------------
 
+# see template_sortedlist_grantjenks.py for Self-balancing Trees template
 
 # todo
-#   - AVL Tree https://github.com/tonghuikang/binary-tree
-#   - [intervaltree](https://github.com/chaimleib/intervaltree) clone
-#   - [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) clone
+# - 2D Segment tree for https://codeforces.com/contest/1658/problem/E
+#   - probably https://codeforces.com/contest/1658/submission/151178090
