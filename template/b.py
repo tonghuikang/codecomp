@@ -47,11 +47,29 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def ncr(n, r):
+    # if python version == 3.8+, use comb()
+    if r == 0:
+        return 1
+    return n * ncr(n-1, r-1) // r
 
-def solve_():
+
+LARGE = 10**5 + 10
+p = 998244353
+factorial_mod_p = [1 for _ in range(LARGE)]
+for i in range(1,LARGE):
+    factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
+
+
+def solve_(n):
     # your solution here
 
-    return ""
+    if n%2 == 1:
+        return 0
+
+    x = factorial_mod_p[n//2]
+
+    return (x**2) % p
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,7 +77,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -77,7 +95,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
