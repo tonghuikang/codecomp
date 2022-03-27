@@ -13,24 +13,8 @@ MAXINT = sys.maxsize
 # ------------------------ basic graph operations ------------------------
 
 
-def build_graph(edges, bidirectional=False, costs=None):
-    # recommend to build it yourself
-    g = defaultdict(list)
-    if costs:
-        for (a,b),cost in zip(edges, costs):
-            g[a].append((b,cost))
-            if bidirectional:
-                g[b].append((a,cost))
-    else:
-        for a,b in edges:
-            g[a].append(b)
-            if bidirectional:
-                g[b].append(a)
-    return g
-
-
 def visit_accessible(map_from_node_to_nodes, start, visited=set()):
-    # https://binarysearch.com/problems/Connected-Cities
+    # binarysearch.com/problems/Connected-Cities
     if not visited:
         visited = set()
     stack = [start]
@@ -62,7 +46,7 @@ def count_connected_components_undirected(map_from_node_to_nodes, total_elements
 
 
 def find_strongly_connected_components(graph):
-    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/graphs/scc.py
+    # github.com/cheran-senthil/PyRival/blob/master/pyrival/graphs/scc.py
     # input - list of node to nodes?
     SCC, S, P = [], [], []
     depth = [0] * len(graph)
@@ -87,6 +71,27 @@ def find_strongly_connected_components(graph):
             stack.append(~node)
             stack += graph[node]
     return SCC[::-1]
+
+
+def is_bipartite(map_from_node_to_nodes):
+    # leetcode.com/problems/is-graph-bipartite/discuss/119514/
+    map_from_node_to_nodes = graph
+    n, colored = len(map_from_node_to_nodes), {}
+    for i in range(n):
+        if i not in colored and graph[i]:
+            colored[i] = 1
+            queue = collections.deque([i])
+            while queue:
+                cur = queue.popleft()
+                for nex in graph[cur]:
+                    if nex not in colored:
+                        colored[nex] = -colored[cur]
+                        queue.append(nex)
+                    elif colored[nex] == colored[cur]:
+                        return False
+    # you can obtain 2-coloring from the `colored` as well
+    return True
+
 
 # ------------------------ shortest path ------------------------
 
@@ -182,12 +187,13 @@ def floyd_warshall(n, edges, LARGE=10**18):
     return dist, pred
 
 
+# ------------------------ flow algorithms ------------------------
+
+
 def maximum_bipartite_matching(map_from_node_to_nodes):
     # maximum independent set = total vertexes — edges in maximum matching
     raise NotImplementedError
 
-
-# ------------------------ flow algorithms ------------------------
 
 class Dinic:
     # codeforces.com/contest/1473/submission/104332748
@@ -429,3 +435,13 @@ def clique_cover(edges, N):
 
     visit(2)
     return ret
+
+
+def is_planar(graph):
+    # a graph is planar iff there is no K5 or K3,3 subgraph
+    # github.com/networkx/networkx/blob/main/networkx/algorithms/planarity.py
+    # github.com/networkx/networkx/pull/3040
+    # https://en.wikipedia.org/wiki/Planarity_testing
+    # https://en.wikipedia.org/wiki/Left-right_planarity_test
+    return NotImplementedError
+

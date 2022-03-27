@@ -8,6 +8,97 @@ MAXINT = sys.maxsize
 
 # ------------------------ standard imports ends here ------------------------
 
+
+# ------------------------- helper functions ----------------------------
+
+
+def remove_consecutive_duplicates(lst):
+    res = []
+    for x in lst:
+        if res and x == res[-1]:
+            continue
+        res.append(x)
+    return res
+
+
+def count_peaks_and_valleys(lst):
+    # leetcode.com/problems/count-hills-and-valleys-in-an-array/
+    if len(lst) <= 2:
+        return 0, 0
+    peaks = 0
+    valleys = 0
+    for a,b,c in zip(lst, lst[1:], lst[2:]):
+        if a < b and b > c:
+            peaks += 1
+        if a > b and b < c:
+            valleys += 1
+    return peaks, valleys
+
+
+def is_subsequence(self, s, t) -> bool:
+    # https://leetcode.com/problems/is-subsequence/
+    if len(s) == 0:
+        return True
+
+    l = 0
+    for r in range(len(t)):
+        if t[r] == s[l]:
+            l += 1
+        if l == len(s):
+            return True
+
+    return False
+
+
+def split_when_different(lst):
+    res = []
+    cur = []
+
+    for x in lst:
+        if cur and x == cur[-1]:
+            cur.append(x)
+        else:
+            if cur:
+                res.append(cur)
+            cur = [x]
+    if cur:
+        res.append(cur)
+    return res
+
+
+def gathering_cost(xpos):
+    # the cost to gather every item to each location
+    xpos = sorted(xpos)
+    n = len(xpos)
+    left_cost = 0
+    right_cost = sum([x-xpos[0] for x in xpos])
+    cost_arr = [right_cost]
+
+    for i,(prev,nex) in enumerate(zip(xpos,xpos[1:])):
+        left_cost += (i+1)*(nex - prev)
+        right_cost -= (n-i-1)*(nex - prev)
+        cost_arr.append(left_cost + right_cost)
+    return cost_arr
+
+
+def rabin_karp(arr, window_size, modulus):
+    # return all hashes of each substring of a certain window_size
+    # run this multiple times to avoid hash collisions
+    h, t, d = (1<<(17*window_size-17))%modulus, 0, 1<<17
+    all_hashes = set()
+
+    for i in range(window_size):
+        t = (d * t + arr[i])%modulus
+
+    all_hashes.add(t)
+
+    for i in range(len(arr) - window_size):
+        t = (d*(t-arr[i]*h) + arr[i + window_size])%modulus
+        all_hashes.add(t)
+
+    return all_hashes
+
+
 # ---------------------- longest subsequence or subarray ----------------------
 
 
@@ -63,22 +154,7 @@ def max_dot_product_of_two_subsequence(A, B):
     return dp[-1][-1]
 
 
-def rabin_karp(arr, window_size, modulus):
-    # return all hashes of each substring of a certain window_size
-    # run this multiple times to avoid hash collisions
-    h, t, d = (1<<(17*window_size-17))%modulus, 0, 1<<17
-    all_hashes = set()
-
-    for i in range(window_size):
-        t = (d * t + arr[i])%modulus
-
-    all_hashes.add(t)
-
-    for i in range(len(arr) - window_size):
-        t = (d*(t-arr[i]*h) + arr[i + window_size])%modulus
-        all_hashes.add(t)
-
-    return all_hashes
+# ------------------------- lexicographic operations --------------------------
 
 
 def next_permuation(nums):
@@ -101,8 +177,6 @@ def next_permuation(nums):
     for i in range(k, len(nums)):
         if nums[k] < nums[i]:
             l = i
-    
-    print(k,l)
     
     # Swap nums[k] and nums[l]
     nums[k], nums[l] = nums[l], nums[k]
@@ -182,19 +256,7 @@ def sliding_window_median(nums, k):
     return ans
 
 
-def gathering_cost(xpos):
-    # the cost to gather every item to each location
-    xpos = sorted(xpos)
-    n = len(xpos)
-    left_cost = 0
-    right_cost = sum([x-xpos[0] for x in xpos])
-    cost_arr = [right_cost]
-
-    for i,(prev,nex) in enumerate(zip(xpos,xpos[1:])):
-        left_cost += (i+1)*(nex - prev)
-        right_cost -= (n-i-1)*(nex - prev)
-        cost_arr.append(left_cost + right_cost)
-    return cost_arr
+# ------------------------- standard algorithms -------------------------
 
 
 def z_function(S):

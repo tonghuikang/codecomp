@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# usually, there is a great deal of overhead involved in recursion
+# this usually results in exceeding time limit and memory limit
+# these are some remedies
+
 # recursion template
 # I wonder if this could be optimised further
 
@@ -99,41 +103,41 @@ t.join()
 
 # -----------------------------------------------------------------------------
 
+# recusion template that does not use recursion
 
-if True:
+def dfs(start, g, entry_operation, exit_operation):
     # https://codeforces.com/contest/1646/submission/148435078
+    # https://codeforces.com/contest/1656/submission/150799881
+    entered = set([start])
+    exiting = set()
+    stack = [start]
+    prev = {}
 
-    def dfs(start, g, entry_operation, exit_operation):
-        entered = set([start])
-        exiting = set()
-        stack = [start]
-        prev = {}
+    null_pointer = "NULL"
+    prev[start] = null_pointer
 
-        null_pointer = "NULL"
-        prev[start] = null_pointer
+    while stack:
+        cur = stack[-1]
 
-        while stack:
-            cur = stack[-1]
+        if cur not in exiting:
+            for nex in g[cur]:
+                if nex in entered:
+                    continue
 
-            if cur not in exiting:
-                for nex in g[cur]:
-                    if nex in entered:
-                        continue
+                entry_operation(prev[cur], cur, nex)
 
-                    entry_operation(prev[cur], cur, nex)
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+            exiting.add(cur)
 
-                    entered.add(nex)
-                    stack.append(nex)
-                    prev[nex] = cur
-                exiting.add(cur)
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
 
-            else:
-                stack.pop()
-                exit_operation(prev[cur], cur)
+def entry_operation(prev, cur, nex):
+    # note that prev is `null_pointer` at the root node
+    pass
 
-    def entry_operation(prev, cur, nex):
-        pass
-
-    def exit_operation(prev, cur):
-        pass
-
+def exit_operation(prev, cur):
+    pass
