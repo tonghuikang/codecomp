@@ -48,10 +48,17 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr, crr):
     # your solution here
 
-    return ""
+    drr = [10**6, 10**6, 10**6, 10**6]
+
+    remainder = 10**6
+    for i,(x,y,z) in enumerate(zip(arr, brr, crr)):
+        drr[i] = min(x,y,z,remainder)
+        remainder -= drr[i]
+
+    return drr
 
 
 # for case_num in [0]:  # no loop over test case
@@ -69,7 +76,9 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
+    crr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,17 +86,22 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr,brr,crr)  # include input here
+
+    if sum(res) < 10**6:
+        res = "IMPOSSIBLE"
+        print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+        continue
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
