@@ -69,6 +69,12 @@ for case_num in range(int(input())):
     res = []
 
     for x in lst:
+
+        # if k == 0:
+        #     break
+        # k -= 1
+        # _, count = walk()
+
         # if k == 0:
         #     break
         # k -= 1
