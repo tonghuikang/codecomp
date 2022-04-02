@@ -115,7 +115,7 @@ def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
 
 
 def dijkstra(list_of_indexes_and_costs, start):
-    # short path with nonnegative edge costs
+    # shortest path with nonnegative edge costs
     # leetcode.com/problems/path-with-maximum-probability/
     # leetcode.com/problems/network-delay-time/
     length = len(list_of_indexes_and_costs)
