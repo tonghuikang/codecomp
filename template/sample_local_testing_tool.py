@@ -1,213 +1,181 @@
-# Usage: `python local_testing_tool.py test_number`, where the argument
-# test_number is either 0 (Test Set 1), 1 (Test Set 2) or 2 (Test Set 3).
+# "Twisty Little Passages" local testing tool.
+#
+# Usage: `python3 local_testing_tool.py`
 
-
-from __future__ import print_function
-
-import itertools
-import random
 import sys
+import random
 
-# Use raw_input in Python2.
-try:
-  input = raw_input
-except NameError:
+NUM_CASES = 100
+N = 100000
+K = 8000
+NEED_CORRECT = 90
+
+class Error(Exception):
   pass
 
-MAX_QUERIES = 150
-NUM_CASES = 100
+class WrongAnswer(Exception):
+  pass
 
-_ERROR_MSG_EXTRA_NEW_LINES = 'Input has extra newline characters.'
-_ERROR_MSG_INVALID_CHARACTER = 'Input contains character other than 0 and 1.'
-_ERROR_MSG_INVALID_INPUT = 'Input is neither a number or a string with correct length.'
-_ERROR_MSG_INPUT_OUT_OF_RANGE = 'Input position is out of range.'
-_ERROR_MSG_READ_FAILURE = 'Read for input fails.'
-_ERROR_MSG_WRONG_ANSWER_FORMAT_STR = 'Wrong answer: contestant input {}, but answer is {}.'
-_ERROR_MSG_MAX_QUERIES_EXCEED = 'Contestant tries to query too many times.'
-
-_CORRECT_MSG = 'Y'
-_WRONG_ANSWER_MSG = 'N'
+WRONG_NUM_TOKENS_ERROR = ("Wrong number of tokens: expected {}, found {}.".format)
+NOT_INTEGER_ERROR = "Not an integer: {}.".format
+INVALID_LINE_ERROR = "Couldn't read a valid line."
+ADDITIONAL_INPUT_ERROR = "Additional input after all cases finish: {}.".format
+OUT_OF_BOUNDS_ERROR = "Request out of bounds: {}.".format
+TOO_FEW_CORRECT_ERROR = "Too few correct answers: {}.".format
+INVALID_COMMAND_ERROR = "couldn't understand player command: {}.".format
+DID_NOT_GIVE_AN_ESTIMATE_ERROR = "Player did not give an estimate after K rounds."
 
 
-class IO(object):
+def ReadValues(line):
+  t = line.split()
+  return t
 
-  def ReadInput(self):
+def ConvertToInt(token, min, max):
+    try:
+      v = int(token)
+    except:
+      raise Error(NOT_INTEGER_ERROR(token[:100]))
+    if v < min or v > max:
+      raise Error(OUT_OF_BOUNDS_ERROR(v))
+    return v
+
+def ConvertToAnyInt(token):
+    try:
+      v = int(token)
+    except:
+      raise Error(NOT_INTEGER_ERROR(token[:100]))
+    return v
+
+def Input():
+  try:
     return input()
+  except EOFError:
+    raise
+  except:
+    raise Error(INVALID_LINE_ERROR)
 
-  def PrintOutput(self, output):
-    print(output)
+def Output(line):
+  try:
+    print(line)
     sys.stdout.flush()
+  except:
+    try:
+      sys.stdout.close()
+    except:
+      pass
 
-  def SetCurrentCase(self, case):
+def RunCases():
+  Output("{}".format(NUM_CASES))
+  correct = 0
+  for case_number in range(NUM_CASES):
+    Output("{} {}".format(N, K))
+
+    # Construct a graph in adj.
+    adj = [[] for _ in range(N)]
+    correct_total_edges = 0
+    order = [i for i in range(N)]
+    random.shuffle(order)
+    for i in range(0, N, 2):
+      v1 = order[i]
+      v2 = order[i+1]
+      adj[v1].append(v2)
+      adj[v2].append(v1)
+      correct_total_edges += 1
+    add = random.randint(0, 4*N)
+    add = random.randint(0, add)
+    for j in range(add):
+      v1 = random.randint(0,N-1)
+      v2 = random.randint(0,N-1)
+      if v1 != v2 and v2 not in adj[v1] and len(adj[v1])<N-2 and len(adj[v2])<N-2:
+        adj[v1].append(v2)
+        adj[v2].append(v1)
+        correct_total_edges += 1
+    complement = random.choice([False, True])
+    if complement:
+      correct_total_edges = (N*(N-1))//2 - correct_total_edges
+
+    # Play the game.
+    where = random.randint(0,N-1)
+    for move_number in range(K+1):
+      # Output current room number (1-based) and number of adjacent passages.
+      if complement:
+        Output("{} {}".format(where+1, N-1-len(adj[where])))
+      else:
+        Output("{} {}".format(where+1, len(adj[where])))
+
+      # Get the user's move.
+      try:
+        move = ReadValues(Input())
+      except EOFError:
+        raise Error(INVALID_LINE_ERROR)
+      except Error as error:
+          raise error
+      if len(move) == 0:
+        raise Error(INVALID_LINE_ERROR)
+
+      if move[0] == "E":
+        # The user provided an estimate.
+        if len(move) != 2:
+          raise Error(WRONG_NUM_TOKENS_ERROR(2,len(move)))
+        estimate = ConvertToAnyInt(move[1])
+        lo = (correct_total_edges * 2 + 2) // 3
+        hi = (correct_total_edges * 4) // 3
+        if lo <= estimate and estimate <= hi:
+          print(f"Case #{case_number}: Correct -- got {estimate}; exact answer is {correct_total_edges}.", file=sys.stderr)
+          correct += 1
+        else:
+          print(f"Case #{case_number}: Wrong -- got {estimate}; exact answer is {correct_total_edges}; acceptable range is [{lo}, {hi}].", file=sys.stderr)
+        # Go to the next test case.
+        break
+      elif move_number == K:
+        # The cave is now closed!
+        raise Error(DID_NOT_GIVE_AN_ESTIMATE_ERROR)
+      elif move[0] == "W":
+        # The user took a random exit.
+        if len(move) != 1:
+          raise Error(WRONG_NUM_TOKENS_ERROR(1,len(move)))
+        if complement:
+          while True:
+            next = random.randint(0,N-1)
+            if next not in adj[where]:
+              where = next
+              break
+        else:
+          l = adj[where]
+          where = l[random.randint(0,len(l)-1)]
+      elif move[0] == "T":
+        # The user teleported to a room.
+        if len(move) != 2:
+          raise Error(WRONG_NUM_TOKENS_ERROR(1,len(move)))
+        where = ConvertToInt(move[1], 1, N)
+        where -= 1
+      else:
+        raise Error(INVALID_COMMAND_ERROR(move[0][:1000]))
+
+  # Check there is no extraneous input from the user.
+  try:
+    extra_input = Input()
+    raise Error(ADDITIONAL_INPUT_ERROR(extra_input[:100]))
+  except EOFError:
     pass
 
-
-def Reverse(s):
-  return s[::-1]
-
-
-def BitFlip(s):
-  return ''.join(str(1 - int(c)) for c in s)
-
-
-class JudgeSingleCase(object):
-
-  def __init__(self, io, initial_arr):
-    self.io = io
-    self.io.SetCurrentCase(self)
-
-    self.arr = initial_arr
-    self.len = len(self.arr)
-
-  def _ParseContestantInput(self, response):
-    """Parses contestant's input.
-
-    Parses contestant's input, which should be a number between 1 and self.len,
-    or a string of length exactly self.len which contains only 0 and 1.
-
-    Args:
-      response: (str) one-line input given by the contestant.
-
-    Returns:
-      A int or str of the contestant's input.
-      Also, an error string if input is invalid, otherwise None.
-    """
-    if ('\n' in response) or ('\r' in response):
-      return None, _ERROR_MSG_EXTRA_NEW_LINES
-
-    if len(response) == self.len:
-      if any(c not in '01' for c in response):
-        return None, _ERROR_MSG_INVALID_CHARACTER
-      return response, None
-
-    try:
-      num = int(response)
-      if not 1 <= num <= self.len:
-        return None, _ERROR_MSG_INPUT_OUT_OF_RANGE
-      return num, None
-    except ValueError:
-      return None, _ERROR_MSG_INVALID_INPUT
-
-  def _ReadContestantInput(self):
-    """Reads contestant's input.
-
-    Reads contestant's input,  which should be a number between 1 and self.len,
-    or a string of length exactly self.len which contains only 0 and 1.
-
-    Returns:
-      A int or str of the contestant's input.
-      Also, an error string if input is invalid, otherwise None.
-    """
-    try:
-      contestant_input = self.io.ReadInput()
-    except Exception:
-      return None, _ERROR_MSG_READ_FAILURE
-
-    return self._ParseContestantInput(contestant_input)
-
-  def Judge(self):
-    """Judges one single case; should only be called once per test case.
-
-    Returns:
-      An error string if an I/O rule was violated or the answer was incorrect,
-      otherwise None.
-    """
-    for i in range(MAX_QUERIES + 1):
-      contestant_input, err = self._ReadContestantInput()
-      if err is not None:
-        return err
-
-      if isinstance(contestant_input, str):
-        if self.arr != contestant_input:
-          return _ERROR_MSG_WRONG_ANSWER_FORMAT_STR.format(
-              contestant_input[:2 * self.len], self.arr)
-        self.io.PrintOutput(_CORRECT_MSG)
-        return None
-
-      if i == MAX_QUERIES:
-        return _ERROR_MSG_MAX_QUERIES_EXCEED
-
-      if i % 10 == 0:
-        # Number of queries we've received ends with 1
-        if random.randint(0, 1):
-          self.arr = Reverse(self.arr)
-        if random.randint(0, 1):
-          self.arr = BitFlip(self.arr)
-      self.io.PrintOutput(self.arr[contestant_input - 1])
-
-
-def RandomBitString(b):
-  return ''.join(str(random.randint(0, 1)) for _ in range(b))
-
-
-def GenerateInputs(b):
-  assert b in (10, 20, 100)
-
-  cases = set()
-
-  # Add your own cases here.
-  # The one included here is just an example and is not necessarily part of
-  # any real test set.
-  cases.add('1' * b)
-
-  while len(cases) < NUM_CASES:
-    cases.add(RandomBitString(b))
-
-  cases = list(cases)
-  random.shuffle(cases)
-  assert len(cases) == NUM_CASES
-  assert all(len(case) == b for case in cases)
-  assert all(all(c in '01' for c in case) for case in cases)
-  return cases
-
-
-def JudgeAllCases(test_number, io):
-  """Sends input to contestant and judges contestant output.
-
-  Returns:
-    An error string, or None if the attempt was correct.
-  """
-  b = (10, 20, 100)[test_number]
-  inputs = GenerateInputs(b)
-
-  io.PrintOutput('{} {}'.format(NUM_CASES, b))
-  for case_number in range(NUM_CASES):
-    single_case = JudgeSingleCase(io, inputs[case_number])
-    err = single_case.Judge()
-    if err is not None:
-      return 'Case #{} fails:\n{}'.format(case_number + 1, err)
-
-  # Make sure nothing other than EOF is printed after all cases finish.
-  try:
-    response = io.ReadInput()
-  except EOFError:
-    return None
-  except Exception:  # pylint: disable=broad-except
-    return 'Exception raised while reading input after all cases finish.'
-  return 'Additional input after all cases finish: {}'.format(response[:1000])
-
+  # Finished.
+  print(f"User got {correct} cases correct.", file=sys.stderr)
+  if correct < NEED_CORRECT:
+    raise WrongAnswer(TOO_FEW_CORRECT_ERROR(correct))
 
 def main():
+  if len(sys.argv) == 2 and int(sys.argv[1]) < 0:
+    sys.exit(0)
+  random.seed(12345)
   try:
-    test_number = int(sys.argv[1])
-    assert test_number in (0, 1, 2)
-    # Remember that the local testing tool is not guaranteed to implement
-    # randomness in the same way as the actual judge.
-    random.seed(123456 + test_number)
-    io = IO()
-    result = JudgeAllCases(test_number, io)
-    if result is not None:
-      print(result, file=sys.stderr)
-      io.PrintOutput(_WRONG_ANSWER_MSG)
-      sys.exit(1)
-  except Exception as exception:
-    # Hopefully this will never happen, but try to finish gracefully
-    # and report a judge error in case of unexpected exception.
-    io.PrintOutput(_WRONG_ANSWER_MSG)
-    print('JUDGE_ERROR! Internal judge exception:', file=sys.stderr)
-    print(str(exception)[:1000], file=sys.stderr)
+    RunCases()
+  except Error as error:
+    print(error, file=sys.stderr)
+    sys.exit(1)
+  except WrongAnswer as error:
+    print(error, file=sys.stderr)
     sys.exit(1)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
   main()

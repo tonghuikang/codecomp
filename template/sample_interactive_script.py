@@ -1,82 +1,91 @@
-from itertools import combinations
-import numpy as np
-import sys
+#!/usr/bin/env python3
+import sys, getpass
+import math, random
+import functools, itertools, collections, heapq, bisect
+from collections import Counter, defaultdict, deque
+input = sys.stdin.readline  # to read input quickly
 
-def complement(bits): return [
-    '_' if b=='_' else
-    '1' if b=='0' else '0'
-    for b in bits
-]
+# available on Google, AtCoder Python3, not available on Codeforces
+# import numpy as np
+# import scipy
 
-class QuantumArray():
-    def __init__(self, B):
-        self.bits = ['_'] * B
-        self.unkowns = list(range(B))
-        self.read(10)
-        self.run()
+m9 = 10**9 + 7  # 998244353
+# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+# d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
+# d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
+MAXINT = sys.maxsize
+e18 = 10**18 + 10
 
-    def read(self, n):
-        for _ in range(n):
-            i = self.unkowns.pop()
-            self.bits[i] = self.read_bit(i+1)
-            self.unkowns = self.unkowns[::-1]
-        self.update_states()
+# if testing locally, print to terminal with a different color
+OFFLINE_TEST = getpass.getuser() == "htong"
+# OFFLINE_TEST = False  # codechef does not allow getpass
+def log(*args):
+    if OFFLINE_TEST:
+        print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-    def read_bit(self, i):
-        interactive_print(i)
-        return interactive_read()
+# ---------------------------- template ends here ----------------------------
 
-    def update_states(self):
-        self.bits_c  = complement(self.bits)
-        self.bits_cr = self.bits_c[::-1]
-        self.bits_r  = complement(self.bits_cr)
-        self.states = [self.bits, self.bits_c, self.bits_cr, self.bits_r]
+def walk():
+    print("W", flush=True)
+    response = list(map(int,input().split()))
+    return response
 
-    def get_test_idx(self):
-        candidates = list(set(range(B)) - set(self.unkowns))
-        max_states = len(set(map(tuple, self.states)))
-        for idx in combinations(candidates, 2):
-            num_states = len(set(
-                tuple(np.take(state, idx))
-                for state in self.states
-            ))
-            if num_states == max_states: return idx
+def teleport(pos):
+    print("T {}".format(pos+1), flush=True)
+    response = list(map(int,input().split()))
+    return response
 
-    def collapse(self):
-        test_idx = self.get_test_idx()
-        test = [self.read_bit(i+1) for i in test_idx]
+def alert(pos):
+    print("E {}".format(pos), flush=True)
 
-        self.bits = next(state
-            for state in self.states
-            if test == list(np.take(state, test_idx))
-        )
+# -----------------------------------------------------------------------------
 
-    def run(self):
-        while True:
-            self.collapse()
-            try: self.read(8)
-            except IndexError: break
+# read line as an integer
+# k = int(input())
 
+# read line as a string
+# srr = input().strip()
 
-def console(*args):  # the judge will not read these standard error output
-    print('\033[36m', *args, '\033[0m', file=sys.stderr)
-    return
+# read one line and parse each word as a string
+# lst = input().split()
 
-def interactive_print(output):
-    # print output with flush (and also print output to standard error)
-    print(output, flush=True)
-    print('\033[35m', output, '\033[0m', file=sys.stderr)
+# read one line and parse each word as an integer
+# a,b,c = v
+# lst = list(map(int,input().split()))
 
+# -----------------------------------------------------------------------------
 
-def interactive_read():
-    # read (and also print input to standard error)
-    input_string = input()
-    print('\033[34m', input_string, '\033[0m', file=sys.stderr)
-    return input_string
+# your code here
 
+for case_num in range(int(input())):
+    n,k = list(map(int,input().split()))
+    k0 = k
+    log(n,k)
+    lst = list(range(n))
+    random.shuffle(lst)
 
-T, B = map(int, input().split())
-for _ in range(T):
-    array = QuantumArray(B)
-    interactive_print(''.join(array.bits))
-    if interactive_read() == 'N': sys.exit()
+    _,_ = list(map(int,input().split()))
+
+    res = []
+
+    for x in lst:
+        # if k == 0:
+        #     break
+        # k -= 1
+        # _, count = walk()
+
+        # res.append(count)
+
+        if k == 0:
+            break
+        k -= 1
+
+        _, count = teleport(x)
+
+        res.append(count)
+        # log(count)
+    
+    estimate = round(sum(res) / len(res) * n / 2)
+    alert(estimate)
+
+sys.exit()
