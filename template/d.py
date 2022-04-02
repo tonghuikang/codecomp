@@ -68,6 +68,8 @@ def solve_(values, parents, k):
             visited.add(nex)
             queue.append(nex)
 
+    log(init_set)
+
     g = defaultdict(list)
     for i,x in enumerate(parents):
         g[x].append(i)
