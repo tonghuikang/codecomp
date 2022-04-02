@@ -51,34 +51,38 @@ def minus_one_matrix(mrr):
 def solve_(values, parents, k):
     # your solution here
 
-    for a,b in zip(values, parents):
-        log(a,b+1)
+    subtreemax = [x for x in values]
 
     parent_set = set(parents)
     init_set = set(range(k)) - parent_set
     visited = set([-1])
 
-    init_and_value = [(values[x],x) for x in init_set]
-    init_and_value.sort()
+    queue = collections.deque(init_set)
+    while queue:
+        cur = queue.popleft()
+        nex = parents[cur]
+        if nex == -1:
+            continue
+        subtreemax[nex] = max(subtreemax[nex], subtreemax[cur])
+        if parents[nex] not in visited:
+            visited.add(nex)
+            queue.append(nex)
 
-    log(init_and_value)
+    g = defaultdict(list)
+    for i,x in enumerate(parents):
+        g[x].append(i)
 
-    res = 0
+    allres = 0
+    for x in range(k):
+        res = 0
+        for nex in g[x]:
+            res = max(res, values[x] - subtreemax[nex])
+        allres += res
 
-    for x,y in init_and_value:
-        assert y not in visited
-        cur = y
-        value = x
+    for x in init_set:
+        allres += values[x]
 
-        visited.add(cur)
-        while parents[cur] not in visited:
-            cur = parents[cur]
-            value = max(value, values[cur])
-            visited.add(cur)
-        log(y, value)
-        res += value
-
-    return res
+    return allres
 
 
 # for case_num in [0]:  # no loop over test case
