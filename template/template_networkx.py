@@ -11,11 +11,11 @@ For directed graphs see DiGraph and MultiDiGraph.
 """
 from copy import deepcopy
 
-import networkx as nx
-from networkx.classes.coreviews import AdjacencyView
-from networkx.classes.reportviews import NodeView, EdgeView, DegreeView
-from networkx.exception import NetworkXError
-import networkx.convert as convert
+# import networkx as nx
+# from networkx.classes.coreviews import AdjacencyView
+# from networkx.classes.reportviews import NodeView, EdgeView, DegreeView
+# from networkx.exception import NetworkXError
+# import networkx.convert as convert
 
 __all__ = ["Graph"]
 
@@ -3164,7 +3164,7 @@ class DiGraph(Graph):
 
 class networkx:
     Graph = Graph
-    Digraph = Graph
+    DiGraph = DiGraph
 
 nx = networkx
 
@@ -4284,3 +4284,26 @@ class PlanarEmbedding(nx.DiGraph):
         contained.
         """
         return False
+    
+# check_planarity tests
+
+g = Graph()
+for i in range(5):
+    for j in range(i+1, 4):
+        g.add_edge(i,j)
+
+print(check_planarity(g))
+
+g = Graph()
+for i in range(5):
+    for j in range(i+1, 5):
+        g.add_edge(i,j)
+
+print(check_planarity(g))
+
+g = Graph()
+for i in range(0,3):
+    for j in range(3,6):
+        g.add_edge(i,j)
+
+print(check_planarity(g))
