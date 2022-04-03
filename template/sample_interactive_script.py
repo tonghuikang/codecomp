@@ -67,31 +67,30 @@ for case_num in range(int(input())):
     _,_ = list(map(int,input().split()))
 
     res = []
+    weights = []
 
     for x in lst:
-
-        # if k == 0:
-        #     break
-        # k -= 1
-        # _, count = walk()
-
-        # if k == 0:
-        #     break
-        # k -= 1
-        # _, count = walk()
-
-        # res.append(count)
 
         if k == 0:
             break
         k -= 1
-
         _, count = teleport(x)
 
         res.append(count)
-        # log(count)
-    
-    estimate = round(sum(res) / len(res) * n / 2)
+        weights.append(1)    
+
+        if k == 0:
+            break
+        k -= 1
+        _, count = walk()
+
+        res.append(count)
+        weights.append(1/count)
+
+    # log(res)
+    # log(weights)
+
+    estimate = int(sum(c*w for c,w in zip(res,weights)) / sum(weights) * n * 0.5)
     alert(estimate)
 
 sys.exit()
