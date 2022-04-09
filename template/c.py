@@ -3,7 +3,6 @@ import sys
 import getpass  # not available on codechef
 import heapq
 import itertools
-from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -73,33 +72,6 @@ def dijkstra(list_of_indexes_and_costs, start):
     return path, weights
 
 
-def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
-    # this operation is costly, recommend to parse to list_of_indexes_and_costs directly
-    # leetcode.com/problems/path-with-maximum-probability/
-    # leetcode.com/problems/network-delay-time/
-    d = map_from_node_to_nodes_and_costs
-
-    if target not in d:  # destination may not have outgoing paths
-        d[target] = []
-    if source not in d:
-        return MAXINT
-
-    # assign indexes
-    if idxs:
-        idxs = {k:i for i,k in enumerate(idxs)}
-    else:
-        idxs = {k:i for i,k in enumerate(d.keys())}
-
-    # populate list of indexes and costs
-    list_of_indexes_and_costs = [[] for _ in range(len(idxs))]
-    for e,vrr in d.items():
-        for v,cost in vrr:
-            list_of_indexes_and_costs[idxs[e]].append((idxs[v],cost))
-
-    _, costs = dijkstra(list_of_indexes_and_costs, idxs[source])
-    return costs[idxs[target]]
-
-
 def solve_(mrr, e, w):
     # your solution here
 
@@ -124,13 +96,26 @@ def solve_(mrr, e, w):
             combs.add(comb)
         states[i] = combs
 
-    g = defaultdict(list)
+    g = [[] for _ in range(1680 * 11)]
+
+    node_to_idx = {}
+    idx = 0
 
     for i,(prev_combs, next_combs) in enumerate(zip(states, states[1:]), start=1):
         for prev_comb in prev_combs:
             for next_comb in next_combs:
                 cur = (i,) + prev_comb
                 nex = (i+1,) + next_comb
+
+                if cur not in node_to_idx:
+                    idx += 1
+                    node_to_idx[cur] = idx
+                if nex not in node_to_idx:
+                    idx += 1
+                    node_to_idx[nex] = idx
+                cur = node_to_idx[cur]
+                nex = node_to_idx[nex]
+
                 cost = diff(prev_comb, next_comb)
                 g[cur].append((nex, cost))
     
@@ -138,15 +123,37 @@ def solve_(mrr, e, w):
         cur = (0,)
         nex = (1,) + comb
         cost = len(comb)
+
+        if cur not in node_to_idx:
+            idx += 1
+            node_to_idx[cur] = idx
+        if nex not in node_to_idx:
+            idx += 1
+            node_to_idx[nex] = idx
+        cur = node_to_idx[cur]
+        nex = node_to_idx[nex]
+
         g[cur].append((nex, cost))
 
     for comb in states[-1]:
         cur = (e,) + comb
         nex = (e+1,)
         cost = len(comb)
+
+        if cur not in node_to_idx:
+            idx += 1
+            node_to_idx[cur] = idx
+        if nex not in node_to_idx:
+            idx += 1
+            node_to_idx[nex] = idx
+        cur = node_to_idx[cur]
+        nex = node_to_idx[nex]
+
         g[cur].append((nex, cost))
 
-    return dijkstra_with_preprocessing(g, (0,), (e+1,))
+    start = node_to_idx[(0,)]
+    end = node_to_idx[(e+1,)]    
+    return dijkstra(g, start)[-1][end]
 
 
 # for case_num in [0]:  # no loop over test case
