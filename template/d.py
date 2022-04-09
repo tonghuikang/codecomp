@@ -48,15 +48,74 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+
+    # ALL ELEMENTS ARE TO BE POSITIVE
+    def __init__(self, bits=17):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+
+    def update(self, x, increment):
+        # future query(y) to increase for all y >= x
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
+def solve_(arr,k):
     # your solution here
 
-    return ""
+    # log(arr)
+    # log(x)
+
+    # number of times increased
+    f = FenwickTree()
+    res = 0
+    prev_decr = 0
+
+    for pos, x in reversed(list(enumerate(arr, start=1))):
+        # log("-")
+        # log(prev_decr, f.query(pos))
+        cur_decr = prev_decr - f.query(pos)
+        x -= cur_decr
+
+        ops = 0
+        if x > 0:
+            limit = min(pos, k)
+            ops = ceiling_division(x, limit)
+            res += ops
+            f.update(pos - limit, ops)
+            cur_decr += ops*limit
+
+        prev_decr = cur_decr
+        # log(prev_decr, ops)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -68,8 +127,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    _,x = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +136,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr,x)  # include input here
 
     # print length if applicable
     # print(len(res))

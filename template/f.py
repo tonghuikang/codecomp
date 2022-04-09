@@ -48,18 +48,62 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, m):
     # your solution here
+    arr = [0] + arr
+    negative_diffs = [a-b for a,b in zip(arr, arr[1:])]
+    heapq.heapify(negative_diffs)
+
+    allcost = 0
+    c = Counter()
+    for diff in negative_diffs:
+        allcost += diff**2
+        c[diff] += 1
+
+    if allcost <= m:
+        return 0
+
+    added = set(negative_diffs)
+
+    curinstall = 0
+    for _ in range(10):
+        log(negative_diffs, c, curinstall, allcost)
+        a = -heapq.heappop(negative_diffs)
+        if a == 1:
+            break
+
+        x = a // 2
+        y = a - x
+        
+        old_cost = a**2
+        new_cost = x**2 + y**2
+        diff = old_cost - new_cost
+        allcost -= diff * c[a]
+        curinstall += c[a]
+
+        if allcost <= m:
+            return curinstall
+
+        c[-x] += c[a]
+        c[-y] += c[a]
+        if -x not in added:
+            heapq.heappush(negative_diffs, -x)
+            added.add(-x)
+        if -y not in added:
+            heapq.heappush(negative_diffs, -y)
+            added.add(-y)
+
+
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    _ = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -69,15 +113,17 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
+
+    k = int(input())
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k)  # include input here
 
     # print length if applicable
     # print(len(res))

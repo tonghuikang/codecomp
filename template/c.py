@@ -52,46 +52,19 @@ def solve_(arr):
     # your solution here
 
     # target height = maxheight or maxheight+1
-    maxheight = max(arr)
+    maxarr = max(arr)
 
-    # target maxheight
-    diffs = [maxheight-x for x in arr]
-    maxtwos = sum([x // 2 for x in diffs])
-    minones = sum([x % 2 for x in diffs])
+    minres = maxarr * len(arr)
 
-    # log(diffs)
-    # log(maxtwos, minones)
-    # res =
+    for maxheight in [maxarr, maxarr+1]:
 
-    minres = max(maxtwos, minones) * 2
+        # target maxheight
+        diffs = [maxheight-x for x in arr]
+        minones = sum([x % 2 for x in diffs])
+        maxtwos = sum([x // 2 for x in diffs])
 
-    if minones > maxtwos:
-        minres = min(minres, minones * 2 - 1)
-    elif minones == maxtwos:
-        minres = min(minres, minones + maxtwos)
-    else:
-        minres = min(minres, maxtwos * 2)
-
-    d2 = max(0, (maxtwos - minones - 2) // 2)
-    minones += d2*2
-    maxtwos -= d2
-
-    # log(minones, maxtwos)
-
-    if minones > maxtwos:
-        minres = min(minres, minones * 2 - 1)
-    elif minones == maxtwos:
-        minres = min(minres, minones + maxtwos)
-    else:
-        minres = min(minres, maxtwos * 2)
-    
-    for _ in range(3):
-
-        d2 = 1
-        minones += d2*2
-        maxtwos -= d2
-
-        # log(minones, maxtwos)
+        # log(diffs)
+        log(minones, maxtwos)
 
         if minones > maxtwos:
             minres = min(minres, minones * 2 - 1)
@@ -99,6 +72,34 @@ def solve_(arr):
             minres = min(minres, minones + maxtwos)
         else:
             minres = min(minres, maxtwos * 2)
+
+        d2 = max(0, (maxtwos - minones - 4) // 3)
+        minones += d2*2
+        maxtwos -= d2
+
+        log(minones, maxtwos)
+
+        if minones > maxtwos:
+            minres = min(minres, minones * 2 - 1)
+        elif minones == maxtwos:
+            minres = min(minres, minones + maxtwos)
+        else:
+            minres = min(minres, maxtwos * 2)
+        
+        for _ in range(5):
+
+            d2 = 1
+            minones += d2*2
+            maxtwos -= d2
+
+            log(minones, maxtwos)
+
+            if minones > maxtwos:
+                minres = min(minres, minones * 2 - 1)
+            elif minones == maxtwos:
+                minres = min(minres, minones + maxtwos)
+            else:
+                minres = min(minres, maxtwos * 2)
 
     return minres
 
