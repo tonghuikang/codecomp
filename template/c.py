@@ -102,6 +102,13 @@ def solve_(mrr, e, w):
     idx = 0
 
     for i,(prev_combs, next_combs) in enumerate(zip(states, states[1:]), start=1):
+
+        a,b = mrr[i-1], mrr[i]
+        base = sum(a) + sum(b)
+        for x,y in zip(a,b):
+            base -= min(x,y)
+        # log(base, a, b)
+
         for prev_comb in prev_combs:
             for next_comb in next_combs:
                 cur = (i,) + prev_comb
@@ -117,6 +124,10 @@ def solve_(mrr, e, w):
                 nex = node_to_idx[nex]
 
                 cost = diff(prev_comb, next_comb)
+
+                if cost > base:
+                    continue
+
                 g[cur].append((nex, cost))
     
     for comb in states[0]:
