@@ -42,10 +42,9 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
-def walk():
-    print("W", flush=True)
-    response = list(map(int,input().split()))
-    return response
+def print_array(lst):
+    print(*lst, flush=True)
+    return None
 
 def teleport(pos):
     print("T {}".format(pos+1), flush=True)
@@ -75,39 +74,109 @@ def alert(pos):
 # your code here
 
 for case_num in range(int(input())):
-    n,k = list(map(int,input().split()))
-    k0 = k
-    log(n,k)
-    lst = list(range(n))
-    random.shuffle(lst)
+    n = int(input())
 
-    _,_ = list(map(int,input().split()))
+    diff = [2**x // 2 for x in range(1,29)]
+    pos = [diff*4+1+diff for diff in diff]
+    neg = [diff*4+1 for diff in diff]
 
-    res = []
-    weights = []
+    # pos.append(1+2**28)
+    # neg.append(1)
+    # pos.append(2+2**29)
+    # neg.append(2)
 
-    for x in lst:
+    # log(pos)
+    # log(neg)
+    # log(diff)
+    # break
 
-        if k == 0:
+    for a,b,c in zip(pos, neg, diff):
+        assert a == b+c
+        # no diff   - a   | b,c
+        # make diff - a,c | b
+
+    drr = diff + pos + neg
+    # log(sum(drr))
+    assert len(drr) == len(set(drr))
+    
+    arrlen = 100 - len(drr)
+    # log(arrlen)
+    arr = []
+    for x in range(29,-1,-1):
+        if len(arr) == arrlen:
             break
-        k -= 1
-        _, count = teleport(x)
+        if x not in drr:
+            arr.append(2**x + 10)
+    else:
+        assert False
 
-        res.append(count)
-        weights.append(1)    
+    orr = drr+arr
+    # log(orr)
+    # orr = orr[:100]
+    # log(orr)
+    print_array(orr)
+    
+    brr = list(map(int,input().split()))
 
-        if k == 0:
-            break
-        k -= 1
-        _, count = walk()
+    bin1 = []
+    bin2 = []
+    sum1 = 0
+    sum2 = 0
 
-        res.append(count)
-        weights.append(1/count)
+    all_nums = orr+brr
+    # log(sum(all_nums))
+    target_sum = sum(all_nums) // 2
 
-    # log(res)
-    # log(weights)
+    xrr = brr+arr
+    xrr.sort()
+    xrr.reverse()
 
-    estimate = int(sum(c*w for c,w in zip(res,weights)) / sum(weights) * n * 0.5)
-    alert(estimate)
+    # log(xrr)
+
+    for x in xrr:
+        if sum1 < sum2:
+            bin1.append(x)
+            sum1 += x
+        else:
+            bin2.append(x)
+            sum2 += x
+
+    if sum1 > sum2:
+        sum1, sum2 = sum2, sum1
+        bin1, bin2 = bin2, bin1
+    target_diff = sum2 - sum1
+
+    # log(target_diff)
+    # assert target_diff%2 == 0
+
+    binrr = (bin(target_diff)[2:]).zfill(30)[::-1]
+    # log(binrr)
+
+    for a,b,c,x in zip(pos, neg, diff, binrr[1:]):
+        assert a == b+c
+        if x == "1":
+            # make diff
+            bin1.append(a)
+            bin1.append(c)
+
+            bin2.append(b)
+        else:
+            bin1.append(a)
+
+            bin2.append(c)
+            bin2.append(b)
+        
+        # log(sum(bin2) - sum(bin1))
+
+    # log(target_sum, sum(bin1))
+    # assert target_sum == sum(bin1)
+    # for x in bin1:
+    #     assert x in all_nums, x
+
+    assert sum(bin2) - sum(bin1) == 0
+
+    # log(sum(bin2) - sum(bin1))
+    print_array(bin1)
+    
 
 sys.exit()
