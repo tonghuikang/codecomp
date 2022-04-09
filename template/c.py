@@ -48,18 +48,66 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    # target height = maxheight or maxheight+1
+    maxheight = max(arr)
 
+    # target maxheight
+    diffs = [maxheight-x for x in arr]
+    maxtwos = sum([x // 2 for x in diffs])
+    minones = sum([x % 2 for x in diffs])
+
+    # log(diffs)
+    # log(maxtwos, minones)
+    # res =
+
+    minres = max(maxtwos, minones) * 2
+
+    if minones > maxtwos:
+        minres = min(minres, minones * 2 - 1)
+    elif minones == maxtwos:
+        minres = min(minres, minones + maxtwos)
+    else:
+        minres = min(minres, maxtwos * 2)
+
+    d2 = max(0, (maxtwos - minones - 2) // 2)
+    minones += d2*2
+    maxtwos -= d2
+
+    # log(minones, maxtwos)
+
+    if minones > maxtwos:
+        minres = min(minres, minones * 2 - 1)
+    elif minones == maxtwos:
+        minres = min(minres, minones + maxtwos)
+    else:
+        minres = min(minres, maxtwos * 2)
+    
+    for _ in range(3):
+
+        d2 = 1
+        minones += d2*2
+        maxtwos -= d2
+
+        # log(minones, maxtwos)
+
+        if minones > maxtwos:
+            minres = min(minres, minones * 2 - 1)
+        elif minones == maxtwos:
+            minres = min(minres, minones + maxtwos)
+        else:
+            minres = min(minres, maxtwos * 2)
+
+    return minres
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -69,7 +117,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +125,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
