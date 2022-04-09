@@ -106,8 +106,8 @@ def solve_(mrr, e, w):
         a,b = mrr[i-1], mrr[i]
         base = sum(a) + sum(b)
         for x,y in zip(a,b):
-            base -= min(x,y)
-        # log(base, a, b)
+            base -= min(x,y)/2
+        log(base, a, b)
 
         for prev_comb in prev_combs:
             for next_comb in next_combs:
