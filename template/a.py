@@ -18,6 +18,10 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
+abc = "abcdefghijklmnopqrstuvwxyz".upper()
+abc_map = {c:i for i,c in enumerate(abc)}
+
+
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "htong"
 # OFFLINE_TEST = False  # codechef does not allow getpass
@@ -48,10 +52,41 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+    lst = [abc_map[x] for x in srr]
+
+    arr = []
+    brr = []
+    prev = -1
+    for x in lst:
+        if x == prev:
+            brr[-1] += 1
+        else:
+            arr.append(x)
+            brr.append(1)
+        prev = x
+
+    # log(arr)
+    # log(brr)
+
+    res = ""
+    for a,b,c,d in zip(arr,brr,arr[1:],brr[1:]):
+        if a < c:
+            # expand
+            res += abc[a]*(b*2)
+        else:
+            res += abc[a]*(b)
+
+    c = arr[-1]
+    d = brr[-1]
+    res += abc[c]*(d)
+
+    # if increase, expand
+    # if decrease or trailing, no expand
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -62,7 +97,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -77,7 +112,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -88,6 +123,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

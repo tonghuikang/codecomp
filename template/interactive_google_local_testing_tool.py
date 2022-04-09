@@ -1,184 +1,320 @@
-# "Twisty Little Passages" local testing tool.
-#
-# Usage: `python3 local_testing_tool.py`
+# Usage: `local_testing_tool.py`.
 
-import sys
+from collections import Counter
+
+import math
 import random
+import sys
 
-NUM_CASES = 100
-N = 100000
-K = 8000
-NEED_CORRECT = 90
+RANDOM_SEED = 123456789
+TEST_CASES = 100
+MIN_AB = 1
+MAX_AB = 10**9
+MIN_N = MAX_N = 100
+MAX_LINE_LENGTH = 100000
+TEST_TYPES = 7
+test_types_seen = set()
+
+
+def ConfigureIO():
+  """Configures IO backed by stdin/stdout and encapsulating common processing.
+
+  Common processing includes things like raising exceptions on invalid input and
+  flushing stdout after each output.
+
+  Returns:
+    (Input, Output) tuple where both members are functions, reading and output a
+    line to standard IO streams respectively
+  """
+
+  def Input():
+    try:
+      return input()
+    except Error as e:
+      raise Error(INVALID_LINE_ERROR + str(e))
+
+  Output = ActuallyOutput
+  return Input, Output
+
+
+def RunCase(test_case):
+  Input, Output = ConfigureIO()
+
+  random.seed(RANDOM_SEED + test_case)
+
+  n = random.randint(MIN_N, MAX_N)
+
+  Output(n)
+
+  # Read the set of N numbers provided by the solution.
+  a = ReadInts(
+      Input(),
+      inclusive_min_n=n,
+      inclusive_max_n=n,
+      inclusive_min_value=MIN_AB,
+      inclusive_max_value=MAX_AB)
+  a_as_set = set(a)
+
+  if len(a) != len(a_as_set):
+    raise Error(NUMBERS_ARE_NOT_UNIQUE)
+
+  sum_a = sum(a)
+
+  # Print a set of N numbers which are:
+  # 1. Different from whatever the solution provided
+  # 2. Add up to an even number with the numbers provided by the solution.
+
+  test_type = test_case % TEST_TYPES
+  test_types_seen.add(test_type)
+
+  # N random numbers.
+  b = PickFromPool(n, random.choices(range(MIN_AB, MAX_AB + 1), k=2 * n),
+                   a_as_set)
+  EnsureParity(a_as_set, b)
+  ValidateB(a_as_set, b, n)
+
+  # Normalize B to ensure that shuffling produces consistent results.
+  b = list(sorted(b))
+  random.shuffle(b)
+
+  Output(" ".join(map(str, b)))
+
+  # Read the set of numbers the solution chosen for us.
+  c = ReadInts(
+      Input(),
+      inclusive_min_n=1,
+      inclusive_max_n=2 * n - 1,
+      inclusive_min_value=MIN_AB,
+      inclusive_max_value=MAX_AB)
+
+  # Numbers should be unique.
+  if len(c) != len(set(c)):
+    raise Error(NUMBERS_ARE_NOT_UNIQUE)
+
+  # Numbers should only come from the sets of the numbers above.
+  diff = Counter(a + b)
+  diff.subtract(Counter(c))
+  if min(diff.values()) < 0:
+    raise Error(NUMBER_NOT_FROM_THE_SET)
+
+  # The sum of the chosen numbers should be equal to the half of the total sum.
+  return sum(a) + sum(b) == 2 * sum(c)
+
+
+def PickFromPool(n, pool, a_as_set):
+  """Returns n items from the pool which do not appear in a_as_set.
+
+  Args:
+    n: number of items to return.
+    pool: an sequence of elements to choose from.
+    a_as_set: a set of elements which should not appear in the result.
+
+  Returns:
+    List of n items from the pool which do not appear in a_as_set.
+  """
+  assert isinstance(a_as_set, set)
+
+  # Remove the ones that are in A.
+  filtered_pool = list(filter(lambda x: x not in a_as_set, pool))
+  # Pick N random numbers out of the pool.
+  return random.sample(filtered_pool, k=n)
+
+
+def EnsureParity(a_as_set, b):
+  """Modifies b in place to ensure that the sum of a_as_set and b is even.
+
+  While modifying b it ensures that modified elements do not also appear in
+  a_as_set.
+
+  Args:
+    a_as_set: a set of elements which should not appear in b.
+    b: the list to modify.
+  """
+
+  assert isinstance(a_as_set, set)
+
+  sum_a = sum(a_as_set)
+  if (sum_a + sum(b)) % 2 == 0:
+    return
+
+  min_b = min(b)
+  n = len(b)
+  b.remove(min_b)
+  b_as_set = set(b)
+  min_b += 1
+  while min_b in b_as_set or min_b in a_as_set and min_b <= MAX_AB:
+    min_b += 2
+  if min_b > MAX_AB:
+    min_b -= 2 * (n + 1)
+  b.append(min_b)
+
+
+def ValidateB(a_as_set, b, n):
+  """Validate b to ensure that it complies with the problem statement.
+
+  Args:
+    a_as_set: a set of elements which should not appear in b.
+    b: the list to validagte.
+    n: the number of elements b should contain.
+  """
+
+  assert isinstance(a_as_set, set)
+
+  assert len(b) == n, "Incorrect length"
+  assert min(b) >= MIN_AB and max(b) <= MAX_AB, "Values out of range"
+  b_as_set = set(b)
+  assert len(b) == len(b_as_set), "Non-unique elements"
+  assert len(b_as_set) == len(b_as_set - a_as_set), "Elements from A appear in B"
+  assert (sum(a_as_set) + sum(b)) % 2 == 0, "Odd sum"
+
+
+def AssertEqual(expected, actual):
+  assert expected == actual, ("Expected [{}], got [{}]".format(
+      expected, actual))
+
 
 class Error(Exception):
   pass
 
-class WrongAnswer(Exception):
+
+class JudgeError(Exception):
   pass
 
-WRONG_NUM_TOKENS_ERROR = ("Wrong number of tokens: expected {}, found {}.".format)
-NOT_INTEGER_ERROR = "Not an integer: {}.".format
-INVALID_LINE_ERROR = "Couldn't read a valid line."
-ADDITIONAL_INPUT_ERROR = "Additional input after all cases finish: {}.".format
-OUT_OF_BOUNDS_ERROR = "Request out of bounds: {}.".format
-TOO_FEW_CORRECT_ERROR = "Too few correct answers: {}.".format
-INVALID_COMMAND_ERROR = "couldn't understand player command: {}.".format
-DID_NOT_GIVE_AN_ESTIMATE_ERROR = "Player did not give an estimate after K rounds."
+
+def AssertReturns(expected, fn, *args, **kwargs):
+  result = fn(*args, **kwargs)
+  AssertEqual(expected, result)
 
 
-def ReadValues(line):
-  t = line.split()
-  return t
-
-def ConvertToInt(token, min, max):
-    try:
-      v = int(token)
-    except:
-      raise Error(NOT_INTEGER_ERROR(token[:100]))
-    if v < min or v > max:
-      raise Error(OUT_OF_BOUNDS_ERROR(v))
-    return v
-
-def ConvertToAnyInt(token):
-    try:
-      v = int(token)
-    except:
-      raise Error(NOT_INTEGER_ERROR(token[:100]))
-    return v
-
-def Input():
+def AssertRaisesError(expected_message, fn, *args, **kwargs):
   try:
-    return input()
-  except EOFError:
-    raise
-  except:
-    raise Error(INVALID_LINE_ERROR)
+    fn(*args, **kwargs)
+    assert False, (
+        "Expected error [{}], but there was none".format(expected_message))
+  except Error as error:
+    message = str(error)
+    assert expected_message == message, ("Expected error [{}], got [{}]".format(
+        expected_message, message))
 
-def Output(line):
+
+def AssertReturnsIO(ret, expected_output, fn, *args):
+  test_output_storage = []
+  AssertReturns(ret, fn, *(args + (test_output_storage,)))
+  AssertEqual(expected_output, test_output_storage)
+
+
+def AssertRaisesErrorIO(expected_message, expected_output, fn, *args):
+  test_output_storage = []
+  AssertRaisesError(expected_message, fn, *(args + (test_output_storage,)))
+  AssertEqual(expected_output, test_output_storage)
+
+
+INVALID_LINE_ERROR = "Couldn't read a valid line"
+TOO_LONG_LINE_ERROR = "Line too long: {} characters".format
+WRONG_NUM_TOKENS_ERROR = ("Wrong number of tokens, expected between {} and {}, "
+                          "but got {}").format
+NOT_INTEGER_ERROR = "Not an integer: {}".format
+OUT_OF_BOUNDS_ERROR = "{} is out of bounds".format
+REPEATED_INTEGERS_ERROR = "Received repeated integers: {}".format
+TOO_MANY_QUERIES_ERROR = "Queried too many times"
+WRONG_ORDER_ERROR = "Guessed wrong order"
+CASE_ERROR = "Case #{} failed: {}".format
+EXCEPTION_AFTER_END_ERROR = (
+    "Exception raised while reading input after all cases finish.")
+ADDITIONAL_INPUT_ERROR = "Additional input after all cases finish: {}".format
+QUERIES_USED = "Total Queries Used: {}/{}".format
+NUMBERS_ARE_NOT_UNIQUE = "Some provided numbers are not unique"
+NUMBER_NOT_FROM_THE_SET = ("Some provided numbers are missing in the original "
+                           "set")
+WRONG_ANSWER = "Wrong answer"
+INVALID_OUTPUT = -1
+
+
+def ParseInteger(line):
+  try:
+    return int(line)
+  except:
+    raise Error(NOT_INTEGER_ERROR(line))
+
+
+def ReadInts(line, inclusive_min_n, inclusive_max_n, inclusive_min_value,
+             inclusive_max_value):
+  if len(line) > max(
+      MAX_LINE_LENGTH,
+      inclusive_max_n *
+      (max(len(str(inclusive_min_value)), len(str(inclusive_max_value))) + 5)):
+    raise Error(TOO_LONG_LINE_ERROR(len(line)))
+
+  tokens = line.split()
+  if not (inclusive_min_n <= len(tokens) <= inclusive_max_n):
+    raise Error(
+        WRONG_NUM_TOKENS_ERROR(inclusive_min_n, inclusive_max_n, len(tokens)))
+
+  ints = list(map(ParseInteger, tokens))
+
+  out_of_bounds = list(
+      filter(lambda x: not (inclusive_min_value <= x <= inclusive_max_value),
+             ints))
+  if out_of_bounds:
+    raise Error(OUT_OF_BOUNDS_ERROR(out_of_bounds))
+
+  return ints
+
+
+def ActuallyOutput(line):
   try:
     print(line)
     sys.stdout.flush()
   except:
+    # If we let stdout be closed by the end of the program, then an unraisable
+    # broken pipe exception will happen, and we won't be able to finish
+    # normally.
     try:
       sys.stdout.close()
     except:
       pass
 
+
 def RunCases():
-  Output("{}".format(NUM_CASES))
-  correct = 0
-  for case_number in range(NUM_CASES):
-    Output("{} {}".format(N, K))
+  Input, Output = ConfigureIO()
 
-    # Construct a graph in adj.
-    adj = [[] for _ in range(N)]
-    correct_total_edges = 0
-    order = [i for i in range(N)]
-    random.shuffle(order)
-    for i in range(0, N, 2):
-      v1 = order[i]
-      v2 = order[i+1]
-      adj[v1].append(v2)
-      adj[v2].append(v1)
-      correct_total_edges += 1
-    add = random.randint(0, 4*N)
-    add = random.randint(0, add)
-    for j in range(add):
-      v1 = random.randint(0,N-1)
-      v2 = random.randint(0,N-1)
-      if v1 != v2 and v2 not in adj[v1] and len(adj[v1])<N-2 and len(adj[v2])<N-2:
-        adj[v1].append(v2)
-        adj[v2].append(v1)
-        correct_total_edges += 1
-    complement = random.choice([False, True])
-    if complement:
-      correct_total_edges = (N*(N-1))//2 - correct_total_edges
+  ok = True
 
-    # Play the game.
-    where = random.randint(0,N-1)
-    for move_number in range(K+1):
-      # Output current room number (1-based) and number of adjacent passages.
-      if complement:
-        Output("{} {}".format(where+1, N-1-len(adj[where])))
-      else:
-        Output("{} {}".format(where+1, len(adj[where])))
+  Output(TEST_CASES)
+  for test_case in range(TEST_CASES):
+    try:
+      test_case_ok = RunCase(test_case)
+      ok = ok and test_case_ok
+    except Error as err:
+      Output(INVALID_OUTPUT)
+      raise Error(CASE_ERROR(test_case, err))
 
-      # Get the user's move.
-      try:
-        move = ReadValues(Input())
-      except EOFError:
-        raise Error(INVALID_LINE_ERROR)
-      except Error as error:
-          raise error
-      if len(move) == 0:
-        raise Error(INVALID_LINE_ERROR)
+  assert len(test_types_seen) == TEST_TYPES, "Not all test types tried"
 
-      if move[0] == "E":
-        # The user provided an estimate.
-        if len(move) != 2:
-          raise Error(WRONG_NUM_TOKENS_ERROR(2,len(move)))
-        estimate = ConvertToAnyInt(move[1])
-        lo = (correct_total_edges * 2 + 2) // 3
-        hi = (correct_total_edges * 4) // 3
-        if lo <= estimate and estimate <= hi:
-          print(f"Case #{case_number + 1}: Correct -- got {estimate}; exact answer is {correct_total_edges}.", file=sys.stderr)
-          correct += 1
-        else:
-          print(f"Case #{case_number + 1}: Wrong -- got {estimate}; exact answer is {correct_total_edges}; acceptable range is [{lo}, {hi}].", file=sys.stderr)
-        # Go to the next test case.
-        break
-      elif move_number == K:
-        # The cave is now closed!
-        raise Error(DID_NOT_GIVE_AN_ESTIMATE_ERROR)
-      elif move[0] == "W":
-        # The user took a random exit.
-        if len(move) != 1:
-          raise Error(WRONG_NUM_TOKENS_ERROR(1,len(move)))
-        if complement:
-          while True:
-            next = random.randint(0,N-1)
-            # NOTE: The check for (next != where) was not present at the
-            # beginning of contest. This would, in rare occasions, introduce
-            # self-loops. This bug was never present in the real judge.
-            if next != where and next not in adj[where]:
-              where = next
-              break
-        else:
-          l = adj[where]
-          where = l[random.randint(0,len(l)-1)]
-      elif move[0] == "T":
-        # The user teleported to a room.
-        if len(move) != 2:
-          raise Error(WRONG_NUM_TOKENS_ERROR(1,len(move)))
-        where = ConvertToInt(move[1], 1, N)
-        where -= 1
-      else:
-        raise Error(INVALID_COMMAND_ERROR(move[0][:1000]))
-
-  # Check there is no extraneous input from the user.
   try:
     extra_input = Input()
-    raise Error(ADDITIONAL_INPUT_ERROR(extra_input[:100]))
   except EOFError:
-    pass
+    if not ok:
+      raise Error(WRONG_ANSWER)
+    return
+  except Exception as e:
+    raise Error(EXCEPTION_AFTER_END_ERROR + str(e))
+  raise Error(ADDITIONAL_INPUT_ERROR(extra_input[:100]))
 
-  # Finished.
-  print(f"User got {correct} cases correct.", file=sys.stderr)
-  if correct < NEED_CORRECT:
-    raise WrongAnswer(TOO_FEW_CORRECT_ERROR(correct))
 
 def main():
-  if len(sys.argv) == 2 and int(sys.argv[1]) < 0:
-    sys.exit(0)
-  random.seed(12345)
   try:
     RunCases()
-  except Error as error:
-    print(error, file=sys.stderr)
+  except Error as err:
+    print(str(err)[:1000], file=sys.stderr)
     sys.exit(1)
-  except WrongAnswer as error:
-    print(error, file=sys.stderr)
+  except Exception as exception:
+    ActuallyOutput(INVALID_OUTPUT)
+    print(
+        ("JUDGE_ERROR! Internal judge exception: {}".format(exception))[:1000],
+        file=sys.stderr)
     sys.exit(1)
+
 
 if __name__ == "__main__":
   main()
