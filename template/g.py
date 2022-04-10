@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
-# import scipy
+import numpy as np
+import scipy.optimize
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
@@ -48,18 +45,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    LARGE = 10**15
+
+    matrix = np.array([[LARGE for _ in range(300)] for _ in range(150)])
+    matrix[:,150:] = -LARGE
+
+    for x,y,c in mrr:
+        x -= 1
+        y -= 1
+        matrix[x,y] = min(matrix[x,y], -c)
+
+    # print(matrix)
+    # print(matrix.shape)
+    allres = []
+
+    for i in range(150):
+        matrix[:,i+150] = LARGE
+        row_ind, col_ind = scipy.optimize.linear_sum_assignment(matrix)
+        res = matrix[row_ind, col_ind].sum()
+
+        res += LARGE*(150-i-1)
+        res = -res
+        if res < 0:
+            break
+        allres.append(res)
+
+    return allres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -74,17 +96,18 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
+    print(len(res))
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
