@@ -47,6 +47,39 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def binary_search(func_,       # condition function
+                  first=True,  # else last
+                  target=True, # else False
+                  left=0, right=2**31-1) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
+
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first^target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:      # find last False
+        return left-1
+
+
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
 def solve_(arr, m):
     # your solution here
@@ -93,7 +126,39 @@ def solve_(arr, m):
             heapq.heappush(negative_diffs, -y)
             added.add(-y)
 
+    for curinstall in range(1,100_000):
+        a = heapq.heappop(negative_diffs)
+        x = a // 2
+        y = a - x
+        
+        curinstall += 1
+        old_cost = a**2
+        new_cost = x**2 + y**2
+        diff = old_cost - new_cost
+        allcost -= diff
 
+        if allcost <= m:
+            return curinstall
+
+        heapq.heappush(negative_diffs, x)
+        heapq.heappush(negative_diffs, y)
+
+    diffs = [b-a for a,b in zip(arr, arr[1:])]
+
+    def func(x):
+        res = 0
+        for diff in diffs:
+            components = ceiling_division(diff, x)
+            maxsize = ceiling_division(diff, components)
+
+            smalls = maxsize * components
+            larges = components - smalls
+            res = smalls * maxsize**2 + larges * (maxsize-1)**2
+        log(res, x)
+        return res <= m
+
+
+    return binary_search(func, left=True, target=True)
 
     return ""
 
