@@ -48,15 +48,82 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, maxi, mini):
     # your solution here
 
-    return ""
+
+    if maxi == mini:
+        arr.append(-1)
+        # count differently
+        cur = 0
+        res = 0
+        for x in arr:
+            if x == maxi:
+                cur += 1
+            else:
+                res += (cur)*(cur+1) // 2
+                cur = 0
+        return res
+
+    res = [[]]
+    for i,x in enumerate(arr):
+        if x == maxi:
+            res[-1].append(1)
+        elif x == mini:
+            res[-1].append(2)
+        elif x < mini or x > maxi:
+            res.append([])
+        else:
+            res[-1].append(0)
+
+    log(res)
+
+    allval = 0
+
+    for segment in res:
+        if not segment:
+            continue
+
+        val = 0
+        seglen = len(segment)
+        val += (seglen)*(seglen+1) // 2
+
+        pos1 = [-1]
+        pos2 = [-1]
+        pos12 = [-1]
+
+        for i,x in enumerate(segment):
+            if x == 1:
+                pos1.append(i)
+            if x == 2:
+                pos2.append(i)
+            if x == 1 or x == 2:
+                pos12.append(i)
+
+        pos1.append(seglen)
+        pos2.append(seglen)
+        pos12.append(seglen)
+
+        for a,b in zip(pos1, pos1[1:]):
+            diff = b-a
+            val -= (diff)*(diff-1) // 2
+
+        for a,b in zip(pos2, pos2[1:]):
+            diff = b-a
+            val -= (diff)*(diff-1) // 2
+
+        for a,b in zip(pos12, pos12[1:]):
+            diff = b-a
+            val += (diff)*(diff-1) // 2
+
+        allval += val
+
+    return allval
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -68,8 +135,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    _,  maxi, mini = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +144,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, maxi, mini)  # include input here
 
     # print length if applicable
     # print(len(res))

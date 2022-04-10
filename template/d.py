@@ -48,18 +48,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
+
+    queue = deque([])
+
+    for ops in mrr:
+        if ops[0] == 1: # put
+            x,c = ops[1], ops[2]
+            queue.append((x,c))
+        else:
+            required = ops[1]
+
+            cursum = 0
+            curcnt = 0
+
+            while curcnt < required:
+                x1,c1 = queue.popleft()
+                cursum += x1*c1
+                curcnt += c1
+            
+            extra = curcnt - required
+            cursum -= extra*x1
+            queue.appendleft((x1,extra))
+
+            print(cursum)
+
+
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -74,10 +99,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -90,4 +115,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
