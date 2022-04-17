@@ -21,6 +21,16 @@ def remove_consecutive_duplicates(lst):
     return res
 
 
+def split_by_same_elements(lst):
+    res = []
+    for x in lst:
+        if res and x == res[-1][0]:
+            res[-1][-1] += 1
+            continue
+        res.append([x,1])
+    return res
+
+
 def count_peaks_and_valleys(lst):
     # leetcode.com/problems/count-hills-and-valleys-in-an-array/
     if len(lst) <= 2:
