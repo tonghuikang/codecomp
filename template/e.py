@@ -88,7 +88,7 @@ class DisjointSet:
     def size(self, a: int) -> int:
         return -self.parent_or_size[self.leader(a)]
 
-
+# https://codeforces.com/contest/1659/submission/153940120
 
 def solve_(mrr, qrr, n):
     # your solution here
@@ -97,35 +97,32 @@ def solve_(mrr, qrr, n):
     # if within 0-edge component: 1
     # else: 2
 
-    ds0 = DisjointSet(n=n+2)
-    ds1 = DisjointSet(n=n+2)
-    b0 = set()
-    b1 = set()
-    edges = set()
+    ds0 = [DisjointSet(n) for _ in range(30)]
+    ds1 = [DisjointSet(n+1) for _ in range(30)]
 
     for a,b,c in mrr:
-        if c%2 == 0:
-            ds0.union(a,b)
-            b0.add(a)
-            b0.add(b)
-        else:
-            ds1.union(a,b)
-            b1.add(a)
-            b1.add(b)
-        edges.add((a,b))
-        edges.add((b,a))
-
+        for i in range(30):
+            if c&(1<<i):
+                ds0[i].union(a,b)
+                ds1[i].union(a,b)
+            if c&1 == 0:
+                ds1[i].union(a,n)
+                ds1[i].union(b,n)
 
 
     res = []
     for x,y in qrr:
-        if ds1.find(x) == ds1.find(y) or (x,y) in edges:
-            res.append(0) # agree
-            continue
-        if ds0.find(x) == ds0.find(y) or x in b0:
-            res.append(1)
-            continue
-        res.append(2)
+        for z in range(30):
+            if ds0[z].find(x) == ds0[z].find(y):
+                res.append(0)
+                break
+        else:
+            for z in range(1,30):
+                if ds1[z].find(x) == ds1[z].find(n):
+                    res.append(1)
+                    break
+            else:
+                res.append(2)
 
     return res
 
