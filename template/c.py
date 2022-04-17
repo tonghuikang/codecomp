@@ -48,10 +48,29 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr,n,a,b):
+def solve_(arr,n,q,p):
     # your solution here
 
-    return ""
+    acnt = arr[-1]
+    bcnt = arr[-1]
+    minres = acnt*p + bcnt*q
+
+    diff = [arr[0]]
+    for a,b in zip(arr, arr[1:]):
+        diff.append(b-a)
+    
+    for i,x in enumerate(diff[::-1], start=1):
+        acnt -= x
+        bcnt -= x
+
+        acnt += x*i
+
+        # log(acnt, bcnt, x, y)
+        res = acnt*p + bcnt*q
+        minres = min(minres, res)
+
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
