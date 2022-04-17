@@ -48,10 +48,63 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+
+    # ALL ELEMENTS ARE TO BE POSITIVE
+    def __init__(self, bits=31):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+
+    def update(self, x, increment):
+        # future query(y) to increase for all y >= x
+        x += 2  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+
+    def query(self, x):
+        x += 2  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
+def solve_(arr):
     # your solution here
 
-    return ""
+    # return [int(x >= i) for i,x in enumerate(arr, start=1)]
+
+    numones = sum(arr) // len(arr)
+    numones_left = numones
+
+    f = FenwickTree()
+
+    res = [0 for _ in arr]
+
+    prev = 0
+    for i,x in list(enumerate(arr))[::-1]:
+        f.update(i-numones_left+1, 1)
+        f.update(i+1, -1)
+        val = f.query(i)  # if it is zero
+        log(numones_left, val)
+        if val == x and i+1 != numones_left:
+            res[i] = 0
+        else:
+            res[i] = 1
+            numones_left -= 1
+            # f.update(i-numones_left, -1)
+            # f.update(i-numones_left+1, 1)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,7 +112,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -69,7 +122,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,13 +130,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

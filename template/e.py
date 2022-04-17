@@ -48,18 +48,93 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.leader(a)]
+
+
+
+def solve_(mrr, qrr, n):
     # your solution here
 
-    return ""
+    # if within 1-edge component: 0
+    # if within 0-edge component: 1
+    # else: 2
+
+    ds0 = DisjointSet(n=n+2)
+    ds1 = DisjointSet(n=n+2)
+    b0 = set()
+    b1 = set()
+    edges = set()
+
+    for a,b,c in mrr:
+        if c%2 == 0:
+            ds0.union(a,b)
+            b0.add(a)
+            b0.add(b)
+        else:
+            ds1.union(a,b)
+            b1.add(a)
+            b1.add(b)
+        edges.add((a,b))
+        edges.add((b,a))
 
 
-# for case_num in [0]:  # no loop over test case
+
+    res = []
+    for x,y in qrr:
+        if ds1.find(x) == ds1.find(y) or (x,y) in edges:
+            res.append(0) # agree
+            continue
+        if ds0.find(x) == ds0.find(y) or x in b0:
+            res.append(1)
+            continue
+        res.append(2)
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -68,23 +143,27 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    # k = int(input())
+    mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = [(x-1, y-1, z) for x,y,z in mrr]
+    q = int(input())
+    qrr = read_matrix(q)  # and return as a list of list of int
+    qrr = minus_one_matrix(qrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, qrr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
