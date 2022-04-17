@@ -56,6 +56,12 @@ def solve_(srr,b,c):
     if c%2 == 1:
         srr = [1-x for x in srr]
 
+    if srr.count(0) == 0:
+        srr[-1] = 1
+        res = [0 for _ in srr]
+        res[-1] = c
+        return srr, res
+
     log(srr)
 
     allowance = c
@@ -83,6 +89,7 @@ def solve_(srr,b,c):
 
     for a,b in zip(zeropos, onepos[::-1]):
         if allowance >= 2 and b > a:
+            log(a,b)
             allowance -= 2
             srr[a] += 1
             srr[b] -= 1
