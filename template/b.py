@@ -48,10 +48,53 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr,b,c):
     # your solution here
 
-    return ""
+    srr = [int(x) for x in srr]
+
+    if c%2 == 1:
+        srr = [1-x for x in srr]
+
+    log(srr)
+
+    allowance = c
+    res = [0 for _ in srr]
+    pairing = srr.count(0)
+    for i in range(len(srr)):
+        x = srr[i]
+        if x==0 and allowance and not (pairing == 1 and allowance%2 == 0):
+            res[i] += 1
+            srr[i] += 1
+            allowance -= 1
+            pairing -= 1
+
+    log(allowance, srr)
+
+    assert allowance%2 == 0
+    
+    zeropos = []
+    onepos = []
+    for i,x in enumerate(srr):
+        if x == 0:
+            zeropos.append(i)
+        if x == 1:
+            onepos.append(i)
+
+    for a,b in zip(zeropos, onepos[::-1]):
+        if allowance >= 2 and b > a:
+            allowance -= 2
+            srr[a] += 1
+            srr[b] -= 1
+            res[a] += 1
+            res[b] += 1
+
+    log(srr)
+
+    res[0] += allowance
+    assert sum(res) == c
+
+    return srr, res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -62,13 +105,13 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    b,c = list(map(int,input().split()))
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -77,17 +120,18 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    srr, res = solve(srr,b,c)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    srr = "".join(str(x) for x in srr)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
+    print(srr)
     print(res)
