@@ -77,13 +77,13 @@ def solve_(srr, k):
             s3 = val + s2 + s1
 
         if s1 == s2:
-            c3 = (c1 * c2) % 10**9
+            c3 = (c1 * c2) % m9
         else:
-            c3 = (c1 * c2 * 2) % 10**9
+            c3 = (c1 * c2 * 2) % m9
 
         return [s3, c3]
 
-    return dfs(1)[-1] % 10**9
+    return dfs(1)[-1] % m9
 
 
 for case_num in [0]:  # no loop over test case
