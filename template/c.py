@@ -48,8 +48,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, k, limit):
     # your solution here
+
+    arr.sort()
+    log(arr)
+
+    psum = [0]
+    for x in arr:
+        psum.append(psum[-1] + x)
+
+    log(psum)
+
+    maxdays = [0 for _ in psum]
+    for i,x in list(enumerate(psum))[::-1]:
+        if i == 0:
+            continue
+        if x > limit:
+            continue
+        y = limit - x
+        maxdays[i] = y // i + 1
+        
+    log(maxdays)
+
+    prev = 0
+    res = 0
+    for i,x in list(enumerate(maxdays))[::-1]:
+        res += (x-prev)*i
+        prev = x
+    return res
 
     return ""
 
@@ -68,8 +95,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    k,x = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +104,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k, x)  # include input here
 
     # print length if applicable
     # print(len(res))
