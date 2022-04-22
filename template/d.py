@@ -48,10 +48,29 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, n, x):
     # your solution here
 
-    return ""
+    res = 0
+    for a,b in zip(arr, arr[1:]):
+        res += abs(b-a)
+
+    minarr = min(arr)
+    maxarr = max(arr)
+
+    cnt1 = 2*max(0, minarr - 1)
+    cnt2 = max(0, arr[0] - 1)
+    cnt3 = max(0, arr[-1] - 1)
+    cntmin = min(cnt1, cnt2, cnt3)
+
+    cnt1 = 2*max(0, x - maxarr)
+    cnt2 = max(0, x - arr[0])
+    cnt3 = max(0, x - arr[-1])
+    cntmax = min(cnt1, cnt2, cnt3)
+
+    log(cntmin, cntmax)
+
+    return res + cntmin + cntmax
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,8 +87,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,x = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +96,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, n, x)  # include input here
 
     # print length if applicable
     # print(len(res))
