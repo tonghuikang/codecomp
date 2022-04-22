@@ -51,7 +51,38 @@ def minus_one_matrix(mrr):
 def solve_(srr, k):
     # your solution here
 
-    return ""
+    # c = Counter()
+    # g = defaultdict(list)
+    # for i in range(1,2**(k-1)):
+    #     g[i].append(2*i)
+    #     g[i].append(2*i+1)
+
+    k2 = 2**(k-1)
+
+    def dfs(node):
+        val = srr[node-1]
+        if node >= k2:
+            if val == "A":
+                return ["A", 1]
+            if val == "B":
+                return ["B", 1]
+
+        s1, c1 = dfs(node*2)
+        s2, c2 = dfs(node*2+1)
+
+        if s1 > s2:
+            s3 = val + s1 + s2
+        else:
+            s3 = val + s1 + s2
+
+        if s1 == s2:
+            c3 = c1 * c2
+        else:
+            c3 = c1 * c2 * 2
+
+        return [s3, c3]
+
+    return dfs(1)[-1]
 
 
 for case_num in [0]:  # no loop over test case
