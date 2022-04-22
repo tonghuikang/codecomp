@@ -47,7 +47,7 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-
+m9 = 998244353
 def solve_(srr, k):
     # your solution here
 
@@ -62,6 +62,7 @@ def solve_(srr, k):
     def dfs(node):
         val = srr[node-1]
         if node >= k2:
+            # log(node)
             if val == "A":
                 return ["A", 1]
             if val == "B":
@@ -73,16 +74,16 @@ def solve_(srr, k):
         if s1 > s2:
             s3 = val + s1 + s2
         else:
-            s3 = val + s1 + s2
+            s3 = val + s2 + s1
 
         if s1 == s2:
-            c3 = c1 * c2
+            c3 = (c1 * c2) % 10**9
         else:
-            c3 = c1 * c2 * 2
+            c3 = (c1 * c2 * 2) % 10**9
 
         return [s3, c3]
 
-    return dfs(1)[-1]
+    return dfs(1)[-1] % 10**9
 
 
 for case_num in [0]:  # no loop over test case
