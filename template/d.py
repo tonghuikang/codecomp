@@ -5,7 +5,7 @@
 
 class Solution:
     def composeCube(self, shapes: List[List[str]]) -> bool:
-        # 30 * 8**6 / 2 * n
+        # 30 * 8**6 / 2
         
         shapes = [[[int(x) for x in row] for row in shape] for shape in shapes]
         
@@ -106,9 +106,7 @@ class Solution:
         seen = set()
         
         def process(perm):
-            for rotations in itertools.product(list(range(8)), repeat=6):                    
-                if rotations[0] >= 4:
-                    continue
+            for rotations in itertools.product(list(range(8)), repeat=6):
                     
                 flag = True
                                         
