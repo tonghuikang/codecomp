@@ -142,8 +142,8 @@ class Solution:
                     
                 if not (
                     get_corner(perm[0], rotations[perm[0]], 0, 1) +
-                    get_corner(perm[1], rotations[perm[1]], 3, 0) +
-                    get_corner(perm[5], rotations[perm[5]], 2, 1) == 1
+                    get_corner(perm[1], rotations[perm[1]], 0, 3) +
+                    get_corner(perm[5], rotations[perm[5]], 1, 2) == 1
                     and
                     get_corner(perm[0], rotations[perm[0]], 1, 2) +
                     get_corner(perm[1], rotations[perm[1]], 2, 3) +
@@ -164,10 +164,10 @@ class Solution:
                     get_corner(perm[5], rotations[perm[5]], 0, 1) == 1
                     and
                     get_corner(perm[4], rotations[perm[4]], 1, 2) +
-                    get_corner(perm[1], rotations[perm[1]], 2, 1) +
+                    get_corner(perm[1], rotations[perm[1]], 1, 2) +
                     get_corner(perm[2], rotations[perm[2]], 2, 3) == 1
                     and
-                    get_corner(perm[2], rotations[perm[2]], 2, 1) +
+                    get_corner(perm[2], rotations[perm[2]], 1, 2) +
                     get_corner(perm[4], rotations[perm[4]], 2, 3) +
                     get_corner(perm[3], rotations[perm[3]], 2, 3) == 1
                     and
