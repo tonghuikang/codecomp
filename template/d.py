@@ -24,8 +24,16 @@ class Solution:
         def flip(matrix):
             return matrix[::-1]
         
+        cntr1_idx = Counter()
+        cntr1_rotation = Counter()
+        cntr1_edge_idx = Counter()
+        
         @lru_cache(maxsize = 6*8*4)
         def get_length(idx, rotation, edge_idx):
+            cntr1_idx[idx] += 1
+            cntr1_rotation[rotation] += 1
+            cntr1_edge_idx[edge_idx] += 1
+            
             shape = [[x for x in row] for row in shapes[idx]]
             
             if rotation >= 4:
@@ -52,17 +60,21 @@ class Solution:
                 return [row[0] for row in shape[1:-1]]
             assert False
 
+        cntr = Counter()
+            
         @lru_cache(maxsize = 6*8*4*4)
         def get_corner(idx, rotation, a, b):
-            a,b = sorted([a,b])
+            assert a < b
+            cntr[a,b] += 1
             
-            shape = [[x for x in row] for row in shapes[idx]]
+            shape = shapes[idx]
             
             if rotation >= 4:
                 shape = flip(shape)
+            
             rotation = rotation%4
             if rotation == 0:
-                shape = shape
+                shape = [[x for x in row] for row in shape]
             elif rotation == 1:
                 shape = rot1(shape)
             elif rotation == 2:
@@ -179,7 +191,7 @@ class Solution:
                     and
                     get_corner(perm[0], rotations[perm[0]], 0, 3) +
                     get_corner(perm[5], rotations[perm[5]], 2, 3) +
-                    get_corner(perm[3], rotations[perm[3]], 1, 0) == 1
+                    get_corner(perm[3], rotations[perm[3]], 0, 1) == 1
                     and
                     get_corner(perm[0], rotations[perm[0]], 2, 3) +
                     get_corner(perm[3], rotations[perm[3]], 1, 2) +
@@ -222,12 +234,19 @@ class Solution:
         ]:
             for suffix_perm in itertools.permutations(suffix):
                 perm = prefix + list(suffix_perm)
+                
+                assert len(set(perm)) == 6
             
                 if process(perm):
                     return True
                 cnt += 1
         
         print(cnt)  # only getting 15, should get 30
+        print(cntr)
+        print(cntr1_idx)
+        print(cntr1_rotation)
+        print(cntr1_edge_idx)
+        print()
         return False
         
         
