@@ -106,37 +106,37 @@ class Solution:
                     continue
 
                         
-                if not form(get_length(perm[5], rotations[perm[x]], 2), 
-                            get_length(perm[0], rotations[perm[y]], 0)):
+                if not form(get_length(perm[5], rotations[perm[5]], 2), 
+                            get_length(perm[0], rotations[perm[0]], 0)):
                     continue
                     
-                if not form(get_length(perm[5], rotations[perm[x]], 1)[::-1], 
-                            get_length(perm[1], rotations[perm[y]], 0)):
+                if not form(get_length(perm[5], rotations[perm[5]], 1)[::-1], 
+                            get_length(perm[1], rotations[perm[1]], 0)):
                     continue
 
-                if not form(get_length(perm[5], rotations[perm[x]], 2)[::-1], 
-                            get_length(perm[2], rotations[perm[y]], 0)):
+                if not form(get_length(perm[5], rotations[perm[5]], 2)[::-1], 
+                            get_length(perm[2], rotations[perm[2]], 0)):
                     continue
                     
-                if not form(get_length(perm[5], rotations[perm[x]], 3), 
-                            get_length(perm[3], rotations[perm[y]], 0)):
+                if not form(get_length(perm[5], rotations[perm[5]], 3), 
+                            get_length(perm[3], rotations[perm[3]], 0)):
                     continue
                     
                     
-                if not form(get_length(perm[4], rotations[perm[x]], 0), 
-                            get_length(perm[0], rotations[perm[y]], 2)):
+                if not form(get_length(perm[4], rotations[perm[4]], 0), 
+                            get_length(perm[0], rotations[perm[0]], 2)):
                     continue
                     
-                if not form(get_length(perm[4], rotations[perm[x]], 1), 
-                            get_length(perm[1], rotations[perm[y]], 2)):
+                if not form(get_length(perm[4], rotations[perm[4]], 1), 
+                            get_length(perm[1], rotations[perm[1]], 2)):
                     continue
 
-                if not form(get_length(perm[4], rotations[perm[x]], 2)[::-1], 
-                            get_length(perm[2], rotations[perm[y]], 2)):
+                if not form(get_length(perm[4], rotations[perm[4]], 2)[::-1], 
+                            get_length(perm[2], rotations[perm[2]], 2)):
                     continue
                     
-                if not form(get_length(perm[4], rotations[perm[x]], 3)[::-1], 
-                            get_length(perm[3], rotations[perm[y]], 2)):
+                if not form(get_length(perm[4], rotations[perm[4]], 3)[::-1], 
+                            get_length(perm[3], rotations[perm[3]], 2)):
                     continue
                     
                     
