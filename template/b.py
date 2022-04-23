@@ -86,25 +86,37 @@ largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take 
 primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
 
 
-def get_prime_factors_with_precomp(num):
-    # requires precomputed `largest_prime_factors``
-    # for numbers below SIZE_OF_PRIME_ARRAY
-    # O(log n)
-    factors = []
-    lf = largest_prime_factors[num]
-    while lf != num:
-        factors.append(lf)
-        num //= lf
-        lf = largest_prime_factors[num]
+log(primes[:10])
+
+def get_prime_factors_with_precomp_sqrt(num):
+    # requires precomputed `primes``
+    # for numbers below SIZE_OF_PRIME_ARRAY**2
+    # O(sqrt(n) / log(n))
+
+    if num == 1:
+        # may need to edit depending on use case
+        return []
+ 
+    factors = [] 
+    for p in primes:
+        while num%p == 0:
+            factors.append(p)
+            num = num // p
+        if num < p:
+            break
     if num > 1:
+        # remaining number is a prime
         factors.append(num)
+ 
     return factors
 
 
 def solve_(x):
     # your solution here
 
-    factors = get_prime_factors_with_precomp(x)
+    factors = get_prime_factors_with_precomp_sqrt(x)
+
+    log(factors)
 
     divisors = get_all_divisors_given_prime_factorization(factors)
 
