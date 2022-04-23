@@ -61,11 +61,14 @@ class Solution:
             assert False
 
         cntr = Counter()
-            
+        cntr_set = defaultdict(set)
+             
         @lru_cache(maxsize = 6*8*4*4)
         def get_corner(idx, rotation, a, b):
             assert a < b
             cntr[a,b] += 1
+            cntr_set[a,b].add((idx, rotation))
+            
             
             shape = shapes[idx]
             
@@ -119,7 +122,9 @@ class Solution:
         
         def process(perm):
             for rotations in itertools.product(list(range(8)), repeat=6):
-                    
+                if rotations[0] < 4:
+                    continue
+                
                 flag = True
                                         
                 for x,y in zip([0,1,2,3], [1,2,3,0]):
@@ -241,11 +246,12 @@ class Solution:
                     return True
                 cnt += 1
         
-        print(cnt)  # only getting 15, should get 30
+        print(cnt)  # should be 30
         print(cntr)
         print(cntr1_idx)
         print(cntr1_rotation)
         print(cntr1_edge_idx)
+        # print(cntr_set[0,1] - cntr_set[0,3])
         print()
         return False
         
