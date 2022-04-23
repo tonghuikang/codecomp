@@ -23,17 +23,9 @@ class Solution:
             
         def flip(matrix):
             return matrix[::-1]
-        
-        cntr1_idx = Counter()
-        cntr1_rotation = Counter()
-        cntr1_edge_idx = Counter()
-        
-        @lru_cache(maxsize = 6*8*4)
-        def get_length(idx, rotation, edge_idx):
-            cntr1_idx[idx] += 1
-            cntr1_rotation[rotation] += 1
-            cntr1_edge_idx[edge_idx] += 1
-            
+                
+        @lru_cache(maxsize = 6*8)
+        def get_rot(idx, rotation):
             shape = [[x for x in row] for row in shapes[idx]]
             
             if rotation >= 4:
@@ -49,6 +41,13 @@ class Solution:
                 shape = rot3(shape)
             else:
                 assert False
+                
+            return shape
+        
+        @lru_cache(maxsize = 6*8*4)
+        def get_length(idx, rotation, edge_idx):
+            
+            shape = get_rot(idx, rotation)
 
             if edge_idx == 0:
                 return shape[0][1:-1]
@@ -63,29 +62,13 @@ class Solution:
         cntr = Counter()
         cntr_set = defaultdict(set)
              
-        @lru_cache(maxsize = 6*8*4*4)
+        @lru_cache(maxsize = 6*8*4)
         def get_corner(idx, rotation, a, b):
             assert a < b
             cntr[a,b] += 1
             cntr_set[a,b].add((idx, rotation))
             
-            
-            shape = shapes[idx]
-            
-            if rotation >= 4:
-                shape = flip(shape)
-            
-            rotation = rotation%4
-            if rotation == 0:
-                shape = [[x for x in row] for row in shape]
-            elif rotation == 1:
-                shape = rot1(shape)
-            elif rotation == 2:
-                shape = rot2(shape)
-            elif rotation == 3:
-                shape = rot3(shape)
-            else:
-                assert False
+            shape = get_rot(idx, rotation)
                 
             if a == 0 and b == 1:
                 return shape[0][-1]
@@ -98,6 +81,7 @@ class Solution:
             assert False
             
         def form(arr, brr):
+            assert len(arr) == len(brr)
             for x,y in zip(arr, brr):
                 if x + y != 1:
                     return False
@@ -117,14 +101,50 @@ class Solution:
                 )
                 
             
-        
-        seen = set()
+        true_cnt = [0]
         
         def process(perm):
             for rotations in itertools.product(list(range(8)), repeat=6):
-                if rotations[0] < 4:
+                if rotations[0] < 2:
                     continue
-                
+
+                if not (
+                    get_corner(perm[0], rotations[perm[0]], 0, 1) +
+                    get_corner(perm[1], rotations[perm[1]], 0, 3) +
+                    get_corner(perm[5], rotations[perm[5]], 1, 2) == 1
+                    and
+                    get_corner(perm[0], rotations[perm[0]], 1, 2) +
+                    get_corner(perm[1], rotations[perm[1]], 2, 3) +
+                    get_corner(perm[4], rotations[perm[4]], 0, 1) == 1
+                    and
+                    get_corner(perm[0], rotations[perm[0]], 0, 3) +
+                    get_corner(perm[5], rotations[perm[5]], 2, 3) +
+                    get_corner(perm[3], rotations[perm[3]], 0, 1) == 1
+                    and
+                    get_corner(perm[0], rotations[perm[0]], 2, 3) +
+                    get_corner(perm[3], rotations[perm[3]], 1, 2) +
+                    get_corner(perm[4], rotations[perm[4]], 0, 3) == 1
+
+                    and
+                    
+                    get_corner(perm[1], rotations[perm[1]], 0, 1) +
+                    get_corner(perm[2], rotations[perm[2]], 0, 3) +
+                    get_corner(perm[5], rotations[perm[5]], 0, 1) == 1
+                    and
+                    get_corner(perm[4], rotations[perm[4]], 1, 2) +
+                    get_corner(perm[1], rotations[perm[1]], 1, 2) +
+                    get_corner(perm[2], rotations[perm[2]], 2, 3) == 1
+                    and
+                    get_corner(perm[2], rotations[perm[2]], 1, 2) +
+                    get_corner(perm[4], rotations[perm[4]], 2, 3) +
+                    get_corner(perm[3], rotations[perm[3]], 2, 3) == 1
+                    and
+                    get_corner(perm[2], rotations[perm[2]], 0, 1) +
+                    get_corner(perm[3], rotations[perm[3]], 0, 3) +
+                    get_corner(perm[5], rotations[perm[5]], 0, 3) == 1
+                ):
+                    continue                    
+                    
                 flag = True
                                         
                 for x,y in zip([0,1,2,3], [1,2,3,0]):
@@ -183,46 +203,10 @@ class Solution:
                 if not form_wrapper(perm[4], rotations[perm[4]], 3, 
                                     perm[3], rotations[perm[3]], 2, rev=True):
                     continue
-                    
-                    
-                if not (
-                    get_corner(perm[0], rotations[perm[0]], 0, 1) +
-                    get_corner(perm[1], rotations[perm[1]], 0, 3) +
-                    get_corner(perm[5], rotations[perm[5]], 1, 2) == 1
-                    and
-                    get_corner(perm[0], rotations[perm[0]], 1, 2) +
-                    get_corner(perm[1], rotations[perm[1]], 2, 3) +
-                    get_corner(perm[4], rotations[perm[4]], 0, 1) == 1
-                    and
-                    get_corner(perm[0], rotations[perm[0]], 0, 3) +
-                    get_corner(perm[5], rotations[perm[5]], 2, 3) +
-                    get_corner(perm[3], rotations[perm[3]], 0, 1) == 1
-                    and
-                    get_corner(perm[0], rotations[perm[0]], 2, 3) +
-                    get_corner(perm[3], rotations[perm[3]], 1, 2) +
-                    get_corner(perm[4], rotations[perm[4]], 0, 3) == 1
-
-                    and
-                    
-                    get_corner(perm[1], rotations[perm[1]], 0, 1) +
-                    get_corner(perm[2], rotations[perm[2]], 0, 3) +
-                    get_corner(perm[5], rotations[perm[5]], 0, 1) == 1
-                    and
-                    get_corner(perm[4], rotations[perm[4]], 1, 2) +
-                    get_corner(perm[1], rotations[perm[1]], 1, 2) +
-                    get_corner(perm[2], rotations[perm[2]], 2, 3) == 1
-                    and
-                    get_corner(perm[2], rotations[perm[2]], 1, 2) +
-                    get_corner(perm[4], rotations[perm[4]], 2, 3) +
-                    get_corner(perm[3], rotations[perm[3]], 2, 3) == 1
-                    and
-                    get_corner(perm[2], rotations[perm[2]], 0, 1) +
-                    get_corner(perm[3], rotations[perm[3]], 0, 3) +
-                    get_corner(perm[5], rotations[perm[5]], 0, 3) == 1
-                ):
-                    continue
                 
+                true_cnt[0] += 1
                 return True
+                
             
             
         cnt = 0
@@ -248,11 +232,11 @@ class Solution:
         
         print(cnt)  # should be 30
         print(cntr)
-        print(cntr1_idx)
-        print(cntr1_rotation)
-        print(cntr1_edge_idx)
         # print(cntr_set[0,1] - cntr_set[0,3])
         print()
+        print(true_cnt[0])
+        if true_cnt[0]:
+            return True
         return False
         
         
