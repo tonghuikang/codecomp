@@ -5,7 +5,7 @@
 
 class Solution:
     def composeCube(self, shapes: List[List[str]]) -> bool:
-        # 30 * 8**5 * n
+        # 30 * 8**6 / 2 * n
         
         shapes = [[[int(x) for x in row] for row in shape] for shape in shapes]
         
@@ -91,9 +91,9 @@ class Solution:
         seen = set()
         
         def process(perm):
-            for rotations in itertools.product(list(range(8)), repeat=6):
-                if rotations[0] != 0:
-                    break
+            for rotations in itertools.product(list(range(8)), repeat=6):                    
+                if rotations[0] >= 4:
+                    continue
                     
                 flag = True
                                         
@@ -102,45 +102,43 @@ class Solution:
                                 get_length(perm[y], rotations[perm[y]], 3)):
                         flag = False
                         break
+                if not flag:
+                    continue
 
                         
                 if not form(get_length(perm[5], rotations[perm[x]], 2), 
                             get_length(perm[0], rotations[perm[y]], 0)):
-                    flag = False
+                    continue
                     
                 if not form(get_length(perm[5], rotations[perm[x]], 1)[::-1], 
                             get_length(perm[1], rotations[perm[y]], 0)):
-                    flag = False
+                    continue
 
                 if not form(get_length(perm[5], rotations[perm[x]], 2)[::-1], 
                             get_length(perm[2], rotations[perm[y]], 0)):
-                    flag = False
+                    continue
                     
                 if not form(get_length(perm[5], rotations[perm[x]], 3), 
                             get_length(perm[3], rotations[perm[y]], 0)):
-                    flag = False
-                    
+                    continue
                     
                     
                 if not form(get_length(perm[4], rotations[perm[x]], 0), 
                             get_length(perm[0], rotations[perm[y]], 2)):
-                    flag = False
+                    continue
                     
                 if not form(get_length(perm[4], rotations[perm[x]], 1), 
                             get_length(perm[1], rotations[perm[y]], 2)):
-                    flag = False
+                    continue
 
                 if not form(get_length(perm[4], rotations[perm[x]], 2)[::-1], 
                             get_length(perm[2], rotations[perm[y]], 2)):
-                    flag = False
+                    continue
                     
                 if not form(get_length(perm[4], rotations[perm[x]], 3)[::-1], 
                             get_length(perm[3], rotations[perm[y]], 2)):
-                    flag = False
-                    
-                
-                if not flag:
                     continue
+                    
                     
                 if not (
                     get_corner(perm[0], rotations[perm[0]], 0, 1) +
