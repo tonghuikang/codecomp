@@ -5,7 +5,7 @@
 
 class Solution:
     def composeCube(self, shapes: List[List[str]]) -> bool:
-        # 8**5 * 5!
+        # 30 * 8**5 * n
         
         shapes = [[[int(x) for x in row] for row in shape] for shape in shapes]
         
@@ -183,34 +183,26 @@ class Solution:
             
             
         cnt = 0
-        for perm in itertools.permutations(list(range(6))):
+        for prefix, suffix in [
+            [[0,1,2], [3,4,5]],
+
+            [[0,2,3], [4,5,1]],
             
-            opposites = tuple(sorted([tuple(sorted([perm[0], perm[2]])), 
-                                      tuple(sorted([perm[1], perm[3]])),
-                                      tuple(sorted([perm[4], perm[5]]))]))
-            if opposites in seen:
-                continue
-            seen.add(opposites)
+            [[0,3,4], [5,1,2]],
             
-            if process(perm):
-                return True
-            cnt += 1
+            [[0,4,5], [1,2,3]],
+            
+            [[0,5,1], [2,3,4]],
+        ]:
+            for suffix_perm in itertools.permutations(suffix):
+                perm = prefix + list(suffix_perm)
+            
+                if process(perm):
+                    return True
+                cnt += 1
         
         print(cnt)  # only getting 15, should get 30
         return False
-        
-
-                
-                    
-                    
-                
-                        
-                        
-                        
-                        
-
-                
-                
         
         
         
