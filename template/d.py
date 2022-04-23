@@ -88,6 +88,21 @@ class Solution:
                     return False
             return True
         
+        @lru_cache(maxsize = 6*6*8*8*4*4*2)
+        def form_wrapper(a,b,c,d,e,f,rev=False):
+            if rev:
+                return form(
+                    get_length(a, b, c)[::-1],
+                    get_length(d, e, f),
+                )
+            else:
+                return form(
+                    get_length(a, b, c),
+                    get_length(d, e, f),
+                )
+                
+            
+        
         seen = set()
         
         def process(perm):
@@ -98,45 +113,60 @@ class Solution:
                 flag = True
                                         
                 for x,y in zip([0,1,2,3], [1,2,3,0]):
-                    if not form(get_length(perm[x], rotations[perm[x]], 1), 
-                                get_length(perm[y], rotations[perm[y]], 3)):
+                    if not form_wrapper(perm[x], rotations[perm[x]], 1, 
+                                        perm[y], rotations[perm[y]], 3):
                         flag = False
                         break
                 if not flag:
                     continue
 
-                        
-                if not form(get_length(perm[5], rotations[perm[5]], 2), 
-                            get_length(perm[0], rotations[perm[0]], 0)):
+                # if not form(get_length(perm[5], rotations[perm[5]], 2), 
+                #             get_length(perm[0], rotations[perm[0]], 0)):                        
+                if not form_wrapper(perm[5], rotations[perm[5]], 2, 
+                                    perm[0], rotations[perm[0]], 0):
                     continue
                     
-                if not form(get_length(perm[5], rotations[perm[5]], 1)[::-1], 
-                            get_length(perm[1], rotations[perm[1]], 0)):
+                # if not form(get_length(perm[5], rotations[perm[5]], 1)[::-1], 
+                #             get_length(perm[1], rotations[perm[1]], 0)):
+                if not form_wrapper(perm[5], rotations[perm[5]], 1, 
+                                    perm[1], rotations[perm[1]], 0, rev=True):
                     continue
 
-                if not form(get_length(perm[5], rotations[perm[5]], 2)[::-1], 
-                            get_length(perm[2], rotations[perm[2]], 0)):
+                # if not form(get_length(perm[5], rotations[perm[5]], 2)[::-1], 
+                #             get_length(perm[2], rotations[perm[2]], 0)):
+                if not form_wrapper(perm[5], rotations[perm[5]], 2, 
+                                    perm[2], rotations[perm[2]], 0, rev=True):
                     continue
                     
-                if not form(get_length(perm[5], rotations[perm[5]], 3), 
-                            get_length(perm[3], rotations[perm[3]], 0)):
+                # if not form(get_length(perm[5], rotations[perm[5]], 3), 
+                #             get_length(perm[3], rotations[perm[3]], 0)):
+                if not form_wrapper(perm[5], rotations[perm[5]], 3, 
+                                    perm[3], rotations[perm[3]], 0):
                     continue
                     
                     
-                if not form(get_length(perm[4], rotations[perm[4]], 0), 
-                            get_length(perm[0], rotations[perm[0]], 2)):
+                # if not form(get_length(perm[4], rotations[perm[4]], 0), 
+                #             get_length(perm[0], rotations[perm[0]], 2)):
+                if not form_wrapper(perm[4], rotations[perm[4]], 0, 
+                                    perm[0], rotations[perm[0]], 2):
                     continue
                     
-                if not form(get_length(perm[4], rotations[perm[4]], 1), 
-                            get_length(perm[1], rotations[perm[1]], 2)):
+                # if not form(get_length(perm[4], rotations[perm[4]], 1), 
+                #             get_length(perm[1], rotations[perm[1]], 2)):
+                if not form_wrapper(perm[4], rotations[perm[4]], 1, 
+                                    perm[1], rotations[perm[1]], 2):
                     continue
 
-                if not form(get_length(perm[4], rotations[perm[4]], 2)[::-1], 
-                            get_length(perm[2], rotations[perm[2]], 2)):
+                # if not form(get_length(perm[4], rotations[perm[4]], 2)[::-1], 
+                #             get_length(perm[2], rotations[perm[2]], 2)):
+                if not form_wrapper(perm[4], rotations[perm[4]], 2, 
+                                    perm[2], rotations[perm[2]], 2, rev=True):
                     continue
                     
-                if not form(get_length(perm[4], rotations[perm[4]], 3)[::-1], 
-                            get_length(perm[3], rotations[perm[3]], 2)):
+                # if not form(get_length(perm[4], rotations[perm[4]], 3)[::-1], 
+                #             get_length(perm[3], rotations[perm[3]], 2)):
+                if not form_wrapper(perm[4], rotations[perm[4]], 3, 
+                                    perm[3], rotations[perm[3]], 2, rev=True):
                     continue
                     
                     
