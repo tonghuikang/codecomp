@@ -5,7 +5,7 @@ from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
+import numpy as np
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
@@ -100,7 +100,7 @@ for case_num in range(int(input())):
     # your solution here
     # if connected you can travel
     # just detour
-    mrr = read_strings(r)  # and return as a list of str
+    mrr = np.array(read_strings(r))  # and return as a list of str
 
     check = (r*c - sum(sum(row) for row in mrr))*4
     log(check)
@@ -109,13 +109,13 @@ for case_num in range(int(input())):
 
     for x in range(r):
         for y in range(c-1):
-            if mrr[x][y] == mrr[x][y+1] == 0:
+            if mrr[x,y] == mrr[x,y+1] == 0:
                 g[x,y].append((x,y+1))
                 g[x,y+1].append((x,y))
 
     for x in range(r-1):
         for y in range(c):
-            if mrr[x][y] == mrr[x+1][y] == 0:
+            if mrr[x,y] == mrr[x+1,y] == 0:
                 g[x,y].append((x+1,y))
                 g[x+1,y].append((x,y))
 
@@ -140,7 +140,13 @@ for case_num in range(int(input())):
         (1,0): "E",
         (1,1): "N",
     }
-    res = [[initdir[i&1, j&1] if mrr[i >> 1][j >> 1] == 0 else "." for j in range(c*2)] for i in range(r*2)]
+    res = np.empty((r*2,c*2), dtype=str)
+    for i in range(r*2):
+        for j in range(c*2):
+            if mrr[i >> 1,j >> 1] == 0:
+                res[i,j] = initdir[i&1, j&1]
+            else:
+                res[i,j] = "."
 
     for (ax,ay),(bx,by) in block_direction:
 
@@ -159,7 +165,7 @@ for case_num in range(int(input())):
 
         qx,qy,qd = cake[di]
 
-        res[2*ax+qx][2*ay+qy] = qd
+        res[2*ax+qx,2*ay+qy] = qd
 
     for row in res:
         log(row)
@@ -170,9 +176,9 @@ for case_num in range(int(input())):
     cx,cy = 0,0
     ret = ""
     while True:
-        cdir = res[cx][cy]
+        cdir = res[cx,cy]
         ret += cdir
-        dx,dy = dir_to_dxdy[res[cx][cy]]
+        dx,dy = dir_to_dxdy[res[cx,cy]]
         cx,cy = cx+dx, cy+dy
         
         if (cx,cy) in visited:
