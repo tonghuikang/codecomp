@@ -56,7 +56,8 @@ def solve_(arr, d):
         # https://math.stackexchange.com/questions/1951658/calculate-distance-between-two-values-in-a-cycle
         return min(abs(a-b), d-abs(a-b))
 
-    arr = [0] + arr + [0]
+    arr = [0] + arr
+    # arr = arr[::-1]
 
     def remove_consecutive_duplicates(lst):
         res = []
@@ -73,32 +74,32 @@ def solve_(arr, d):
 
     log(arr)
 
-    all_nums = set(arr)
-
     n = len(arr)
-    dp = {}  # (l,r,target): cost  - r exclusive
+    dp = defaultdict(lambda: LARGE)  # (l,r,target): cost  - r exclusive
     for i in range(n):
         dp[i,i+1,arr[i]] = 0
 
-    # 400
 
     for size in range(2,n+1):
         # log(dp)
         for left in range(n-size+1):
             right = left+size
-            dp[left,right,arr[left]] = LARGE
-            dp[left,right,arr[right-1]] = LARGE
+
+            left_target = arr[left]
+            right_target = arr[right-1]
+
+            dp[left,right,left_target] = LARGE
+            dp[left,right,right_target] = LARGE
 
             mincost = LARGE
-            left_target = arr[left]
             # log(left, right, left_target)
 
-            for divider in range(left+1,right):
+            for divider in [left+1,right-1]:
                 moving_target = arr[divider]
                 cost = dp[left, divider, left_target] + dp[divider, right, moving_target] + dist(left_target, moving_target)
                 mincost = min(mincost, cost)
 
-            for divider in range(left+1,right):
+            for divider in [left+1,right-1]:
                 moving_target = arr[right-1]
                 cost = dp[left, divider, left_target] + dp[divider, right, moving_target] + dist(left_target, moving_target)
                 mincost = min(mincost, cost)
@@ -106,21 +107,20 @@ def solve_(arr, d):
             dp[left,right,left_target] = min(dp[left,right,left_target], mincost)
 
             mincost = LARGE
-            right_target = arr[right-1]
             # log(left, right, right_target)
 
-            for divider in range(left+1,right):
+            for divider in [left+1,right-1]:
                 moving_target = arr[left]
                 cost = dp[left, divider, moving_target] + dp[divider, right, right_target] + dist(right_target, moving_target)
                 mincost = min(mincost, cost)
 
-            for divider in range(left+1,right):
+            for divider in [left+1,right]:
                 moving_target = arr[divider-1]
                 cost = dp[left, divider, moving_target] + dp[divider, right, right_target] + dist(right_target, moving_target)
                 mincost = min(mincost, cost)
                 
             dp[left,right,right_target] = min(dp[left,right,right_target], mincost)
-            # log(left,right, dp[left,right,right_target], dp[left,right,left_target])
+            log(left,right, dp[left,right,left_target], dp[left,right,right_target])
 
     return dp[0,n,0]
     # def dp(l,r,target):
