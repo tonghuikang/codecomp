@@ -94,12 +94,12 @@ def solve_(arr, d):
             mincost = LARGE
             # log(left, right, left_target)
 
-            for divider in [left+1,right-1]:
+            for divider in [left+1]:
                 moving_target = arr[divider]
                 cost = dp[left, divider, left_target] + dp[divider, right, moving_target] + dist(left_target, moving_target)
                 mincost = min(mincost, cost)
 
-            for divider in [left+1,right-1]:
+            for divider in [left+1]:
                 moving_target = arr[right-1]
                 cost = dp[left, divider, left_target] + dp[divider, right, moving_target] + dist(left_target, moving_target)
                 mincost = min(mincost, cost)
@@ -109,12 +109,12 @@ def solve_(arr, d):
             mincost = LARGE
             # log(left, right, right_target)
 
-            for divider in [left+1,right-1]:
+            for divider in [right-1]:
                 moving_target = arr[left]
                 cost = dp[left, divider, moving_target] + dp[divider, right, right_target] + dist(right_target, moving_target)
                 mincost = min(mincost, cost)
 
-            for divider in [left+1,right]:
+            for divider in [right-1]:
                 moving_target = arr[divider-1]
                 cost = dp[left, divider, moving_target] + dp[divider, right, right_target] + dist(right_target, moving_target)
                 mincost = min(mincost, cost)
