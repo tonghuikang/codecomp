@@ -53,8 +53,8 @@ def solve_(arr, d):
     # your solution here
 
     def dist(a,b):
-        return min(abs(a-b), abs(a-b-d), abs(a-b+d))
-
+        # https://math.stackexchange.com/questions/1951658/calculate-distance-between-two-values-in-a-cycle
+        return min(abs(a-b), d-abs(a-b))
 
     arr = [0] + arr + [0]
 
@@ -68,7 +68,8 @@ def solve_(arr, d):
 
     arr = remove_consecutive_duplicates(arr)
     if len(arr) == 1:
-        return dist(arr[0], 0)
+        # because got zero
+        return 0
 
     log(arr)
 
