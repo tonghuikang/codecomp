@@ -47,9 +47,16 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+LARGE = 10**18
 
 def solve_(arr, d):
     # your solution here
+
+    def dist(a,b):
+        return min(abs(a-b), abs(a-b-d), abs(a-b+d))
+
+
+    arr = [0] + arr + [0]
 
     def remove_consecutive_duplicates(lst):
         res = []
@@ -60,6 +67,66 @@ def solve_(arr, d):
         return res
 
     arr = remove_consecutive_duplicates(arr)
+    if len(arr) == 1:
+        return dist(arr[0], 0)
+
+    log(arr)
+
+    all_nums = set(arr)
+
+    n = len(arr)
+    dp = {}  # (l,r,target): cost  - r exclusive
+    for i in range(n):
+        dp[i,i+1,arr[i]] = 0
+
+    # 400
+
+    for size in range(2,n+1):
+        # log(dp)
+        for left in range(n-size+1):
+            right = left+size
+            dp[left,right,arr[left]] = LARGE
+            dp[left,right,arr[right-1]] = LARGE
+
+            mincost = LARGE
+            left_target = arr[left]
+            # log(left, right, left_target)
+
+            for divider in range(left+1,right):
+                moving_target = arr[divider]
+                cost = dp[left, divider, left_target] + dp[divider, right, moving_target] + dist(left_target, moving_target)
+                mincost = min(mincost, cost)
+
+            for divider in range(left+1,right):
+                moving_target = arr[right-1]
+                cost = dp[left, divider, left_target] + dp[divider, right, moving_target] + dist(left_target, moving_target)
+                mincost = min(mincost, cost)
+
+            dp[left,right,left_target] = min(dp[left,right,left_target], mincost)
+
+            mincost = LARGE
+            right_target = arr[right-1]
+            # log(left, right, right_target)
+
+            for divider in range(left+1,right):
+                moving_target = arr[left]
+                cost = dp[left, divider, moving_target] + dp[divider, right, right_target] + dist(right_target, moving_target)
+                mincost = min(mincost, cost)
+
+            for divider in range(left+1,right):
+                moving_target = arr[divider-1]
+                cost = dp[left, divider, moving_target] + dp[divider, right, right_target] + dist(right_target, moving_target)
+                mincost = min(mincost, cost)
+                
+            dp[left,right,right_target] = min(dp[left,right,right_target], mincost)
+            # log(left,right, dp[left,right,right_target], dp[left,right,left_target])
+
+    return dp[0,n,0]
+    # def dp(l,r,target):
+    #     for i in range(l,r):
+
+
+    # return dp(0,d,0)
 
     # def dp()
 
