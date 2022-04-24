@@ -61,6 +61,8 @@ def solve_(arr, d):
 
     arr = remove_consecutive_duplicates(arr)
 
+    # def dp()
+
     return arr.count(1)
 
 

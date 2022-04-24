@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
+# import random
 from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
@@ -130,6 +131,8 @@ for case_num in range(int(input())):
         block_direction.append((cur, nex))
         block_direction.append((nex, cur))
 
+    # random.shuffle(block_direction)
+
     def exit_operation(prev, cur):
         pass
     #     if prev != "NULL":
@@ -192,7 +195,7 @@ for case_num in range(int(input())):
     log(check, len(visited), len(ret))
 
     if check > len(ret):
-        print("IMPOSSIBLE")
+        print("Case #{}: {}".format(case_num+1, "IMPOSSIBLE"))   # Google and Facebook - case number required
         continue
 
     assert len(ret) == check
