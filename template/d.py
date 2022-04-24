@@ -81,8 +81,10 @@ def dfs(start, g, entry_operation, exit_operation):
 
 d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 d4_to_idx = {x:i for i,x in enumerate(d4)}
-dir_to_dxdy = {"S": (1,0), "E": (0,1), "N": (-1,0), "W": (0,-1)}
+dir_to_dxdy = {0: (1,0), 2: (0,1), 3: (-1,0), 1: (0,-1)}
+# dir_to_dxdy = {"S": (1,0), "E": (0,1), "N": (-1,0), "W": (0,-1)}
 
+# dcode_to_str = ["S", "W", "E", "N", "."]
 
 for case_num in range(int(input())):
 
@@ -134,19 +136,21 @@ for case_num in range(int(input())):
 
     # log(block_direction)
 
+    dcode_to_str = ["S", "W", "E", "N", "."]
+
     initdir = {
-        (0,0): "S",
-        (0,1): "W",
-        (1,0): "E",
-        (1,1): "N",
+        (0,0): 0, # "S",
+        (0,1): 1, # "W",
+        (1,0): 2, # "E",
+        (1,1): 3, # "N",
     }
-    res = np.empty((r*2,c*2), dtype=str)
+    res = np.empty((r*2,c*2), dtype=int)
     for i in range(r*2):
         for j in range(c*2):
             if mrr[i >> 1,j >> 1] == 0:
                 res[i,j] = initdir[i&1, j&1]
             else:
-                res[i,j] = "."
+                res[i,j] = 4
 
     for (ax,ay),(bx,by) in block_direction:
 
@@ -157,10 +161,10 @@ for case_num in range(int(input())):
         # d4_to_idx = {x:i for i,x in enumerate(d4)}
 
         cake = [
-            (1,0,"S"),
-            (1,1,"E"),
-            (0,1,"N"),
-            (0,0,"W"),
+            (1,0,0),  # "S"
+            (1,1,2),  # "E"
+            (0,1,3),  # "N"
+            (0,0,1),  # "W"
         ]
 
         qx,qy,qd = cake[di]
@@ -174,10 +178,10 @@ for case_num in range(int(input())):
     visited = set()
 
     cx,cy = 0,0
-    ret = ""
+    ret = []
     while True:
         cdir = res[cx,cy]
-        ret += cdir
+        ret.append(cdir)
         dx,dy = dir_to_dxdy[res[cx,cy]]
         cx,cy = cx+dx, cy+dy
         
@@ -233,6 +237,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    print("Case #{}: {}".format(case_num+1, ret))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, "".join(dcode_to_str[x] for x in ret)))   # Google and Facebook - case number required
 
     # print(res)
