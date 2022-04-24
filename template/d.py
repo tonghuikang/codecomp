@@ -12,7 +12,7 @@ input = sys.stdin.readline  # to read input quickly
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -37,21 +37,154 @@ def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
 
 def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
+    return [[int(x == "#") for x in input().strip()] for _ in range(rows)]
 
 # ---------------------------- template ends here ----------------------------
 
+# recusion template that does not use recursion
 
-def solve_():
+def dfs(start, g, entry_operation, exit_operation):
+    # https://codeforces.com/contest/1646/submission/148435078
+    # https://codeforces.com/contest/1656/submission/150799881
+    entered = set([start])
+    exiting = set()
+    stack = [start]
+    prev = {}
+
+    null_pointer = "NULL"
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            for nex in g[cur]:
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+            exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
+# def entry_operation(prev, cur, nex):
+#     # note that prev is `null_pointer` at the root node
+#     pass
+
+# def exit_operation(prev, cur):
+#     pass
+
+
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4_to_idx = {x:i for i,x in enumerate(d4)}
+# dxdy_to_dir = {(1,0): "E", (0,1): "N", (-1,0): "W", (0,-1): "S"}
+dir_to_dxdy = {"S": (1,0), "E": (0,1), "N": (-1,0), "W": (0,-1)}
+
+b4 = [(1,1), (0,1), (0,0), (1,0)]
+e4 = ["E", "N", "W", "S"]
+
+
+def solve_(mrr, r, c):
     # your solution here
+    # if connected you can travel
+    # just detour
 
-    return ""
+    check = (r*c - sum(sum(row) for row in mrr))*4
+    log(check)
+
+    g = defaultdict(list)
+
+    for x in range(r):
+        for y in range(c-1):
+            if mrr[x][y] == mrr[x][y+1] == 0:
+                g[x,y].append((x,y+1))
+                g[x,y+1].append((x,y))
+
+    for x in range(r-1):
+        for y in range(c):
+            if mrr[x][y] == mrr[x+1][y] == 0:
+                g[x,y].append((x+1,y))
+                g[x+1,y].append((x,y))
+
+    block_direction = []
+
+    def entry_operation(prev, cur, nex):
+        block_direction.append((cur, nex))
+        block_direction.append((nex, cur))
+
+    def exit_operation(prev, cur):
+        pass
+    #     if prev != "NULL":
+    #         block_direction.append((cur, prev))
+
+    dfs((0,0), g, entry_operation, exit_operation)
+
+    log(block_direction)
+
+    initdir = {
+        (0,0): "S",
+        (0,1): "W",
+        (1,0): "E",
+        (1,1): "N",
+    }
+    res = [[initdir[i&1, j&1] for j in range(c*2)] for i in range(r*2)]
+
+    visited = set((0,0))
+
+    for (ax,ay),(bx,by) in block_direction:
+
+        dx,dy = bx-ax, by-ay
+        di = d4_to_idx[dx,dy]
+
+        # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+        # d4_to_idx = {x:i for i,x in enumerate(d4)}
+
+        cake = [
+            (1,0,"S"),
+            (1,1,"E"),
+            (0,1,"N"),
+            (0,0,"W"),
+        ]
+
+        qx,qy,qd = cake[di]
+
+        res[2*ax+qx][2*ay+qy] = qd
+
+    # for row in res:
+    #     log(row)
+    # log()
+
+    c = set()
+
+    cx,cy = 0,0
+    ret = ""
+    while True:
+        cdir = res[cx][cy]
+        ret += cdir
+        dx,dy = dir_to_dxdy[res[cx][cy]]
+        cx,cy = cx+dx, cy+dy
+        
+        if (cx,cy) in visited:
+            assert False
+        visited.add((cx,cy))
+        if (cx == 0 and cy == 0):
+            break
+        # log(cx,cy)
+
+    # log(visited)
+
+    if check > len(ret):
+        return "IMPOSSIBLE"
+
+    assert len(ret) == check
+
+    return ret
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,16 +201,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    r,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_strings(r)  # and return as a list of str
+    # mrr = read_matrix(r)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, r, c)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -88,6 +221,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
