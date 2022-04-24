@@ -81,17 +81,26 @@ def dfs(start, g, entry_operation, exit_operation):
 
 d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 d4_to_idx = {x:i for i,x in enumerate(d4)}
-# dxdy_to_dir = {(1,0): "E", (0,1): "N", (-1,0): "W", (0,-1): "S"}
 dir_to_dxdy = {"S": (1,0), "E": (0,1), "N": (-1,0), "W": (0,-1)}
 
-b4 = [(1,1), (0,1), (0,0), (1,0)]
-e4 = ["E", "N", "W", "S"]
 
+for case_num in range(int(input())):
 
-def solve_(mrr, r, c):
+    # read line as an integer
+    # k = int(input())
+
+    # read line as a string
+    # srr = input().strip()
+
+    # read one line and parse each word as a string
+    # arr = input().split()
+
+    # read one line and parse each word as an integer
+    r,c = list(map(int,input().split()))
     # your solution here
     # if connected you can travel
     # just detour
+    mrr = read_strings(r)  # and return as a list of str
 
     check = (r*c - sum(sum(row) for row in mrr))*4
     log(check)
@@ -131,8 +140,7 @@ def solve_(mrr, r, c):
         (1,0): "E",
         (1,1): "N",
     }
-    res = [[initdir[i&1, j&1] for j in range(c*2)] for i in range(r*2)]
-
+    res = [[initdir[i&1, j&1] if mrr[i >> 1][j >> 1] == 0 else "." for j in range(c*2)] for i in range(r*2)]
 
     for (ax,ay),(bx,by) in block_direction:
 
@@ -153,9 +161,9 @@ def solve_(mrr, r, c):
 
         res[2*ax+qx][2*ay+qy] = qd
 
-    # for row in res:
-    #     log(row)
-    # log()
+    for row in res:
+        log(row)
+    log()
 
     visited = set()
 
@@ -174,19 +182,20 @@ def solve_(mrr, r, c):
             break
         # log(cx,cy)
 
-    log(check, len(visited), visited)
+    log(check, len(visited), len(ret))
 
     if check > len(ret):
-        return "IMPOSSIBLE"
+        print("IMPOSSIBLE")
+        continue
 
     assert len(ret) == check
 
-    return ret
+    # return ret
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -198,16 +207,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    r,c = list(map(int,input().split()))
+    # r,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    mrr = read_strings(r)  # and return as a list of str
+    # mrr = read_strings(r)  # and return as a list of str
     # mrr = read_matrix(r)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(mrr, r, c)  # include input here
+    # res = solve(mrr, r, c)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -218,6 +227,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, ret))   # Google and Facebook - case number required
 
     # print(res)
