@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import getpass  # not available on codechef
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -125,7 +123,7 @@ def solve_(mrr, r, c):
 
     dfs((0,0), g, entry_operation, exit_operation)
 
-    log(block_direction)
+    # log(block_direction)
 
     initdir = {
         (0,0): "S",
@@ -135,7 +133,6 @@ def solve_(mrr, r, c):
     }
     res = [[initdir[i&1, j&1] for j in range(c*2)] for i in range(r*2)]
 
-    visited = set((0,0))
 
     for (ax,ay),(bx,by) in block_direction:
 
@@ -160,7 +157,7 @@ def solve_(mrr, r, c):
     #     log(row)
     # log()
 
-    c = set()
+    visited = set()
 
     cx,cy = 0,0
     ret = ""
@@ -177,7 +174,7 @@ def solve_(mrr, r, c):
             break
         # log(cx,cy)
 
-    # log(visited)
+    log(check, len(visited), visited)
 
     if check > len(ret):
         return "IMPOSSIBLE"
