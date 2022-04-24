@@ -31,6 +31,21 @@ def split_by_same_elements(lst):
     return res
 
 
+def split_into_number_and_char(srr):
+    import re
+    # https://stackoverflow.com/q/430079/5894029
+    # numbers are grouped together
+    arr = []
+    for word in re.split('(\d+)', srr):
+        try:
+            num = int(word)
+            arr.append(num)
+        except ValueError:
+            for c in word:
+                arr.append(c)
+    return arr
+
+
 def count_peaks_and_valleys(lst):
     # leetcode.com/problems/count-hills-and-valleys-in-an-array/
     if len(lst) <= 2:
