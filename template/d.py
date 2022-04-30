@@ -47,11 +47,117 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
 
-def solve_(a,b,c,x,y,z):
+
+SIZE_OF_PRIME_ARRAY = 10**5 + 10
+largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+
+
+
+def get_prime_factors_with_precomp_sqrt(num):
+    # requires precomputed `primes``
+    # for numbers below SIZE_OF_PRIME_ARRAY**2
+    # O(sqrt(n) / log(n))
+
+    if num == 1:
+        # may need to edit depending on use case
+        return []
+ 
+    factors = [] 
+    for p in primes:
+        while num%p == 0:
+            factors.append(p)
+            num = num // p
+    if num > 1:
+        # remaining number is a prime
+        factors.append(num)
+ 
+    return factors
+
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    # NOT IN SORTED ORDER
+    return divs
+
+
+def solve_(b,q,r,y,z):
     # your solution here
 
-    return ""
+    # if C is not a subset of B, 0
+    # if C and B has the same difference, infinite
+
+    b_left = b
+    b_right = b + q*(y-1)
+
+    c_left = 0
+    c_right = r*(z-1)
+
+    if b_left > c_left:
+        log("left")
+        return 0
+
+    if b_right < c_right:
+        log("right")
+        return 0
+
+    # log(b_left, b_right)
+
+    if b%q != 0:
+        log("bq")
+        return 0
+    if r%q != 0:
+        log("rq")
+        return 0
+
+    if c_left - b_left < r:
+        log("left -1")
+        return -1
+
+    if b_right - c_right < r:
+        log("right -1")
+        return -1
+
+    # if y < 1000 and z < 1000:
+    #     for i in range(y):
+    #         print(b + q*i, end=" ")
+    #     print()
+    #     for i in range(z):
+    #         print(r*i, end=" ")
+    #     print()
+
+    fq = set(get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp_sqrt(q)))
+    fr = set(get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp_sqrt(r)))
+
+    adiff = set(fr - fq)
+
+    res = 0
+    for x in adiff:
+        res += (r // x)**2
+
+    return res%m9
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,8 +174,9 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    a,b,c = list(map(int,input().split()))
-    x,y,z = list(map(int,input().split()))
+    b,q,y = list(map(int,input().split()))
+    c,r,z = list(map(int,input().split()))
+    b -= c
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -78,7 +185,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(a,b,c,x,y,z)  # include input here
+    res = solve(b,q,r,y,z)  # include input here
 
     # print length if applicable
     # print(len(res))

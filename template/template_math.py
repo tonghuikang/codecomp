@@ -160,7 +160,7 @@ def get_prime_factors_with_precomp_sqrt(num):
  
     factors = [] 
     for p in primes:
-        while num%p == 0 and num <= p:
+        while num%p == 0 and num <= p:   # what
             factors.append(p)
             num = num // p
     if num > 1:
