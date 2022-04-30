@@ -103,6 +103,17 @@ def get_all_divisors_given_prime_factorization(factors):
     return divs
 
 
+def fac(x):
+    xr=math.ceil(math.sqrt(x))
+ 
+    LIST=[]
+    for i in range(1,xr+2):
+        if x%i==0:
+            LIST.append(i)
+            LIST.append(x//i)
+    return set(LIST)
+
+
 def solve_(b,q,r,y,z):
     # your solution here
 
@@ -157,10 +168,11 @@ def solve_(b,q,r,y,z):
         adiff = set(fq)
 
     res = 0
-    for x in adiff:
-        val = (r // x)**2
-        log(x, val)
-        res += val
+    for x in fr:
+        if x * q // math.gcd(x,q) == r:
+            val = (r // x)**2
+            log(x, val)
+            res += val%m9
 
     return res%m9
 
@@ -182,6 +194,7 @@ for case_num in range(int(input())):
     b,q,y = list(map(int,input().split()))
     c,r,z = list(map(int,input().split()))
     b -= c
+    del c
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
