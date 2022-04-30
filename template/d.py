@@ -59,7 +59,7 @@ def get_largest_prime_factors(num):
     return largest_prime_factors
 
 
-SIZE_OF_PRIME_ARRAY = 10**5 + 10
+SIZE_OF_PRIME_ARRAY = 10**6 + 10
 largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
 primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
 
@@ -151,11 +151,16 @@ def solve_(b,q,r,y,z):
     fq = set(get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp_sqrt(q)))
     fr = set(get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp_sqrt(r)))
 
-    adiff = set(fr - fq)
+    adiff = set(fr) - set(fq)
+
+    if q == r:
+        adiff = set(fq)
 
     res = 0
     for x in adiff:
-        res += (r // x)**2
+        val = (r // x)**2
+        log(x, val)
+        res += val
 
     return res%m9
 
