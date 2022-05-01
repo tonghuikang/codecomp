@@ -51,6 +51,21 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
+    if len(arr) <= 5:
+        minres = 0
+        minret = arr
+
+        for comb in itertools.permutations(arr):
+            res = min(abs(b-a) for a,b in zip(comb, comb[1:]))
+            res = min(res, abs(comb[0] - comb[-1]))
+
+            if res > minres:
+                minres = res
+                minret = list(comb)
+
+        return minret
+            
+
     arr.sort()
 
     idx = (len(arr) + 1) // 2
