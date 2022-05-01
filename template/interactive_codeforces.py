@@ -29,12 +29,51 @@ n,m,a,b = list(map(int,input().split()))
 
 # play first see who win
 
-nm_flip = False
-if n > m:
-    n,m = m,n
-    nm_flip = True
+nice_spots = []
+dx,dy = a // 2, (a+1) // 2
 
-def response(x,y,x_flipped,y_flipped,nm_flip,exiting=False):
+for xx in [-dx, n-1-dx]:
+    for yy in [-dy, n-1-dy]:
+        nice_spots.append()
+
+
+def catcher(x1,y1,x2,y2):
+    if abs(x1 - x2) + abs(y1 - y2) <= a:
+        x1 = x2
+        y1 = y2
+        return x1,y1,x2,y2
+
+
+
+
+def runner(x1,y1,x2,y2):
+    for dx in [-x2, n-1-x2]:
+        ydiff = b-abs(dx)
+
+        for dy in [-ydiff, ydiff]:
+            xx = x2+dx
+            yy = min(m-1, max(0,y2+dy))
+
+            if 0 <= xx < n and 0 <= yy < m and abs(xx-x1) + abs(yy-y1) > a:
+                return x1,y1,xx,yy
+
+    for dy in [-y2, m-1-y2]:
+        xdiff = b-abs(dy)
+
+        for dx in [-xdiff, xdiff]:
+            yy = y2+dy
+            xx = min(n-1, max(0,x2+dx))
+
+            if 0 <= xx < n and 0 <= yy < m and abs(xx-x1) + abs(yy-y1) > a:
+                return x1,y1,xx,yy
+
+    # gg.com
+    return x1,y1,x2,y2
+
+
+
+
+def response(x,y,x_flipped=False,y_flipped=False,nm_flip=False,exiting=False):
 
     if x_flipped:
         x = n-1-x
@@ -71,28 +110,18 @@ def response(x,y,x_flipped,y_flipped,nm_flip,exiting=False):
     return x1, y1
 
 
-def catcher(x1,y1,x2,y2,x_flipped,y_flipped):
-    if abs(x1 - x2) + abs(y1 - y2) <= a:
-        x1 = x2
-        y1 = y2
-        return x1,y1,x2,y2,x_flipped,y_flipped
 
-    # stay and center-side and move forward
+if a%2 == 1:
+    required = a
+else:
+    required = a+1
 
+play_as_catcher = False
 
-def runner(x1,y1,x2,y2,x_flipped,y_flipped):
-    # move only if in danger
-    if abs(x1 - x2) + abs(y1 - y2) > a:
-        return x1,y1,x2,y2,x_flipped,y_flipped
-
-    # if not at corner, go corner
-    dx, dy = 
-    x2 -= x    
-
-    
-
-
-play_as_catcher = True
+if min(n,m) < required:
+    play_as_catcher = True
+if b < required:
+    play_as_catcher = True
 
 # simulate and play
 
