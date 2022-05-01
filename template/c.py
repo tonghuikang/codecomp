@@ -18,9 +18,9 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-# import getpass  # not available on codechef
-# OFFLINE_TEST = getpass.getuser() == "htong"
-OFFLINE_TEST = False  # codechef does not allow getpass
+import getpass  # not available on codechef
+OFFLINE_TEST = getpass.getuser() == "htong"
+# OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -57,7 +57,6 @@ def calc_min_diff(comb):
 def solve_(arr):
     # your solution here
 
-    arr.sort()
 
     idx = (len(arr) + 1) // 2
 
@@ -67,8 +66,8 @@ def solve_(arr):
     left = left[::-1]
     right = right[::-1]
 
-    log(left)
-    log(right)
+    # log(left)
+    # log(right)
 
     res = []
     while left or right:
@@ -80,83 +79,71 @@ def solve_(arr):
     maxval = calc_min_diff(res)
     maxret = res
 
-    if True:
-        for i,(a,b) in enumerate(zip(res, res[1:])):
-            if maxval == abs(b-a):
+    maxret_prev = maxret
+    maxval_prev = maxval
+
+
+    if len(arr)%2 == 0:
+        mindiff = min(b-a for a,b in zip(arr, arr[:idx-1]))
+        for i,(a,b) in enumerate(zip(arr, arr[:idx])):
+            if mindiff == b-a:
                 break
-    
-        xrr = [x for x in arr]
-        q = xrr[i]
-        del xrr[i]
-        xrr.append(q)
+        xrr = arr[i+1:] + arr[:i+1]
+        log(xrr)
+        left = xrr[:idx]
+        right = xrr[idx:]
 
-        val = calc_min_diff(xrr)
-        if val > maxval:
-            log(val, maxval)
-            maxval = val
-            maxret = xrr
+        log(left)
+        log(right)
 
-        xrr = [x for x in arr]
-        q = xrr[i]
-        del xrr[i]
-        xrr = [q] + xrr
-
-        val = calc_min_diff(xrr)
-        if val > maxval:
-            log(val, maxval)
-            maxval = val
-            maxret = xrr
-
-        xrr = [x for x in arr]
-        q = xrr[i+1]
-        del xrr[i+1]
-        xrr.append(q)
-
-        val = calc_min_diff(xrr)
-        if val > maxval:
-            log(val, maxval)
-            maxval = val
-            maxret = xrr
-
-        xrr = [x for x in arr]
-        q = xrr[i+1]
-        del xrr[i+1]
-        xrr = [q] + xrr
-
-        val = calc_min_diff(xrr)
-        if val > maxval:
-            log(val, maxval)
-            maxval = val
-            maxret = xrr
-
-    if True:
-        left = arr[0::2]
-        right = arr[1::2]
-        res = left + right[::-1]
+        left = left
+        right = right
+            
+        res = []
+        while left or right:
+            if left:
+                res.append(left.pop())
+            if right:
+                res.append(right.pop())
 
         val = calc_min_diff(res)
+        log(res)
+        log()
         if val > maxval:
-            log(val, maxval)
             maxval = val
             maxret = res
 
+
+    flag = False
     if len(arr) <= 6:
         for comb in itertools.permutations(arr):
             res = list(comb)
 
             val = calc_min_diff(res)
             if val > maxval:
-                assert False
-                log(val, maxval)
+                flag = True
                 maxval = val
                 maxret = res
 
-        return maxret
+        # return maxret
+
+    if flag:
+        log(maxret_prev)
+        log(maxret)
+        log(maxval_prev, maxval)
+        assert False
+
     
     assert len(maxret) == len(arr)
 
     return maxret
 
+
+while True:
+    length = 6
+    arr = [random.randint(0,10) for _ in range(length)]
+    arr.sort()
+    solve(arr)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -180,6 +167,7 @@ for case_num in range(int(input())):
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+    arr.sort()
 
     res = solve(arr)  # include input here
 
