@@ -25,14 +25,102 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
-def query(pos):
-    print("{}".format(pos+1), flush=True)
-    response = int(input())
-    return response
+n,m,a,b = list(map(int,input().split()))
 
-def alert(pos):
-    print("! {}".format(pos), flush=True)
-    sys.exit()
+# play first see who win
+
+nm_flip = False
+if n > m:
+    n,m = m,n
+    nm_flip = True
+
+def response(x,y,x_flipped,y_flipped,nm_flip,exiting=False):
+
+    if x_flipped:
+        x = n-1-x
+
+    if y_flipped:
+        y = m-1-y
+
+    x += 1
+    y += 1
+
+    if nm_flip:
+        x,y = y,x
+
+    print("{} {}".format(x,y), flush=True)
+    x1, y1 = list(map(int,input().split()))
+    if x1 == x and y1 == y:
+        sys.exit()
+
+    if exiting:
+        sys.exit()
+
+    if nm_flip:
+        x1,y1 = y1,x1
+
+    x1 -= 1
+    y1 -= 1
+
+    if x_flipped:
+        x1 = n-1-x1
+
+    if y_flipped:
+        y1 = m-1-y1
+
+    return x1, y1
+
+
+def catcher(x1,y1,x2,y2,x_flipped,y_flipped):
+    if abs(x1 - x2) + abs(y1 - y2) <= a:
+        x1 = x2
+        y1 = y2
+        return x1,y1,x2,y2,x_flipped,y_flipped
+
+    # stay and center-side and move forward
+
+
+def runner(x1,y1,x2,y2,x_flipped,y_flipped):
+    # move only if in danger
+    if abs(x1 - x2) + abs(y1 - y2) > a:
+        return x1,y1,x2,y2,x_flipped,y_flipped
+
+    # if not at corner, go corner
+    dx, dy = 
+    x2 -= x    
+
+    
+
+
+play_as_catcher = True
+
+# simulate and play
+
+
+x_flipped = False
+y_flipped = False
+
+x1, y1 = 0, 0
+x2, y2 = n-1, m-1
+
+if play_as_catcher:
+    print("1", flush=True)
+else:
+    print("2", flush=True)
+    x1,y1 = list(map(int,input().split()))
+
+for i in range(100_000):
+    if play_as_catcher:
+        x1,y1,x2,y2,x_flipped,y_flipped = catcher(x1,y1,x2,y2,x_flipped,y_flipped)
+        exiting = (x1 == x2 and y1 == y2)
+        x2,y2 = response(x1,y1,x_flipped,y_flipped,nm_flip,exiting=exiting)
+    else:
+        x2,y2,x2,y2,x_flipped,y_flipped = runner(x1,y1,x2,y2,x_flipped,y_flipped)
+        x1,y1 = response(x2,y2,x_flipped,y_flipped,nm_flip)
+    
+sys.exit()
+
+
 
 # -----------------------------------------------------------------------------
 
@@ -46,7 +134,6 @@ def alert(pos):
 # lst = input().split()
 
 # read one line and parse each word as an integer
-# a,b,c = list(map(int,input().split()))
 # lst = list(map(int,input().split()))
 
 # -----------------------------------------------------------------------------
