@@ -18,9 +18,9 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-import getpass  # not available on codechef
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# import getpass  # not available on codechef
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -79,40 +79,37 @@ def solve_(arr):
     maxval = calc_min_diff(res)
     maxret = res
 
+    if len(arr)%2 == 1:
+        return maxret
+
+    k = len(arr) // 2
+
+    mindiff = 10**18
+    for a,b in zip(arr, arr[k-1:]):
+        mindiff = min(mindiff, b-a)
+
+    for i,(a,b) in enumerate(zip(arr, arr[k-1:])):
+        if b-a == mindiff:
+            break
+
+    odds = arr[k:i+k] + arr[i:k][::-1]
+    evens = [arr[2*k-1]] + arr[1:i] + [arr[0]] + arr[i+k:2*k-1][::-1]
+
+    log(odds)
+    log(evens)
+
+    res = []
+    for a,b in zip(odds, evens):
+        res.append(b)
+        res.append(a)
+
+    val = calc_min_diff(res)
+    if val > maxval:
+        maxval = val
+        maxret = res
+        
     maxret_prev = maxret
     maxval_prev = maxval
-
-
-    if len(arr)%2 == 0:
-        mindiff = min(b-a for a,b in zip(arr, arr[:idx-1]))
-        for i,(a,b) in enumerate(zip(arr, arr[:idx])):
-            if mindiff == b-a:
-                break
-        xrr = arr[i+1:] + arr[:i+1]
-        log(xrr)
-        left = xrr[:idx]
-        right = xrr[idx:]
-
-        log(left)
-        log(right)
-
-        left = left
-        right = right
-            
-        res = []
-        while left or right:
-            if left:
-                res.append(left.pop())
-            if right:
-                res.append(right.pop())
-
-        val = calc_min_diff(res)
-        log(res)
-        log()
-        if val > maxval:
-            maxval = val
-            maxret = res
-
 
     flag = False
     if len(arr) <= 6:
@@ -139,8 +136,8 @@ def solve_(arr):
     return maxret
 
 
-while True:
-    length = 6
+if OFFLINE_TEST and False:
+    length = random.randint(3,6)
     arr = [random.randint(0,10) for _ in range(length)]
     arr.sort()
     solve(arr)
