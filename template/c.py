@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -19,6 +18,7 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
+# import getpass  # not available on codechef
 # OFFLINE_TEST = getpass.getuser() == "htong"
 OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
@@ -48,23 +48,14 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def calc_min_diff(comb):
+    res = min(abs(b-a) for a,b in zip(comb, comb[1:]))
+    res = min(res, abs(comb[0] - comb[-1]))
+    return res
+
+
 def solve_(arr):
     # your solution here
-
-    if len(arr) <= 5:
-        minres = 0
-        minret = arr
-
-        for comb in itertools.permutations(arr):
-            res = min(abs(b-a) for a,b in zip(comb, comb[1:]))
-            res = min(res, abs(comb[0] - comb[-1]))
-
-            if res > minres:
-                minres = res
-                minret = list(comb)
-
-        return minret
-            
 
     arr.sort()
 
@@ -86,7 +77,85 @@ def solve_(arr):
         if right:
             res.append(right.pop())
 
-    return res
+    maxval = calc_min_diff(res)
+    maxret = res
+
+    if True:
+        for i,(a,b) in enumerate(zip(res, res[1:])):
+            if maxval == abs(b-a):
+                break
+    
+        xrr = [x for x in arr]
+        q = xrr[i]
+        del xrr[i]
+        xrr.append(q)
+
+        val = calc_min_diff(xrr)
+        if val > maxval:
+            log(val, maxval)
+            maxval = val
+            maxret = xrr
+
+        xrr = [x for x in arr]
+        q = xrr[i]
+        del xrr[i]
+        xrr = [q] + xrr
+
+        val = calc_min_diff(xrr)
+        if val > maxval:
+            log(val, maxval)
+            maxval = val
+            maxret = xrr
+
+        xrr = [x for x in arr]
+        q = xrr[i+1]
+        del xrr[i+1]
+        xrr.append(q)
+
+        val = calc_min_diff(xrr)
+        if val > maxval:
+            log(val, maxval)
+            maxval = val
+            maxret = xrr
+
+        xrr = [x for x in arr]
+        q = xrr[i+1]
+        del xrr[i+1]
+        xrr = [q] + xrr
+
+        val = calc_min_diff(xrr)
+        if val > maxval:
+            log(val, maxval)
+            maxval = val
+            maxret = xrr
+
+    if True:
+        left = arr[0::2]
+        right = arr[1::2]
+        res = left + right[::-1]
+
+        val = calc_min_diff(res)
+        if val > maxval:
+            log(val, maxval)
+            maxval = val
+            maxret = res
+
+    if len(arr) <= 6:
+        for comb in itertools.permutations(arr):
+            res = list(comb)
+
+            val = calc_min_diff(res)
+            if val > maxval:
+                assert False
+                log(val, maxval)
+                maxval = val
+                maxret = res
+
+        return maxret
+    
+    assert len(maxret) == len(arr)
+
+    return maxret
 
 
 # for case_num in [0]:  # no loop over test case
