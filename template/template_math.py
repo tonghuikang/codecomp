@@ -160,9 +160,11 @@ def get_prime_factors_with_precomp_sqrt(num):
  
     factors = [] 
     for p in primes:
-        while num%p == 0 and num <= p:
+        while num%p == 0:
             factors.append(p)
             num = num // p
+        # if num < p:  # remaining factor is a prime?
+        #     break
     if num > 1:
         # remaining number is a prime
         factors.append(num)
