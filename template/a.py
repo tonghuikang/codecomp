@@ -48,19 +48,52 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+
+    # ALL ELEMENTS ARE TO BE POSITIVE
+    def __init__(self, bits=31):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+
+    def update(self, x, increment):
+        # future query(y) to increase for all y >= x
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
+
 def solve_(arr):
     # your solution here
 
-    incr = []
-    decr = []
+    xrr = []
 
     for i,a in enumerate(arr):
-        for j,b in enumerate(arr):
+        for j,b in enumerate(arr[i+1:], start=i+1):
             if a > b:
-                incr.append((i,a))
-            else:
-                decr.append((a,b))
+                xrr.append((0,i,j))
 
+    f = FenwickTree()
+
+    # res = 0
+    # for z,i,j in xrr:
+    #     if z == 0:
 
     return ""
 
