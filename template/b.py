@@ -48,11 +48,54 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
+def solve_(srr, n, m):
     # your solution here
 
-    return ""
+    srr = [int(x) for x in srr]
 
+    colsum = [0 for _ in range(m)]
+    colres = [0 for _ in srr]
+
+    colcur = 0
+    for i,x in enumerate(srr):
+        if x:
+            if colsum[i%m] == 0:
+                colcur += 1
+                colsum[i%m] += 1
+        colres[i] = colcur
+
+    # log(colres)
+
+    rowres = [0 for _ in range(n*m)]
+
+    psum = [0]
+    for x in srr:
+        psum.append(psum[-1] + x)
+
+
+    rowpen = [0 for _ in range(m)]
+    rowres = []
+
+    for i,(a,b) in enumerate(zip([0]*(m-1) + psum, psum[1:]), start=1):
+        if a == b:
+            rowpen[i%m] += 1
+
+        val = -rowpen[(i)%m] + ceiling_division((i), m)
+        rowres.append(val)
+
+    # log(rowpen)
+    # log(rowres)
+
+    return [a+b for a,b in zip(colres, rowres)]
+
+
+# solve_("1"*10**6, 1, 1000000)
+# solve_("1"*10**6, 1000, 1000)
+# solve_("1"*10**6, 1000000, 1)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -62,13 +105,13 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    srr = input().strip()
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -77,13 +120,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

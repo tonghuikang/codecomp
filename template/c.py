@@ -39,8 +39,8 @@ def read_matrix(rows):
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
 
-def minus_one(arr):
-    return [x-1 for x in arr]
+def minus_one(xrr):
+    return [x-1 for x in xrr]
 
 def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
@@ -48,10 +48,70 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr, n):
     # your solution here
 
-    return ""
+    seen = set()
+
+    g = defaultdict(list)
+
+    val_to_arr = {x:i for i,x in enumerate(arr)}
+    val_to_brr = {x:i for i,x in enumerate(brr)}
+
+    # log(val_to_brr)
+
+    for i,x in enumerate(arr):
+        x = val_to_brr[x]
+        g[2,x].append((1,i))
+        g[1,i].append((2,x))
+
+    for i,x in enumerate(brr):
+        x = val_to_arr[x]
+        g[1,x].append((2,i))
+        g[2,i].append((1,x))
+
+    for i in range(n):
+        g[1,i].append((2,i))
+        g[2,i].append((1,i))
+
+
+    # log(g)
+
+    visited = set()
+    res = 0
+    for x in range(n):
+        cur = (1,x)
+        if cur in visited:
+            continue
+        # log()
+        
+        size = 1
+        stack = [cur]
+        visited.add(cur)
+        while stack:
+            cur = stack.pop()
+            # log(cur)
+            for nex in g[cur]:
+                if nex in visited:
+                    continue
+                size += 1
+                stack.append(nex)
+                visited.add(nex)
+
+        # log(x, size)
+        res += size // 4
+
+    # log("--")
+    # log(res)
+
+    ret = 0
+    val = n-1
+    for i in range(res):
+        ret += val*2
+        # log(val)
+        val -= 2
+
+    return ret
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,25 +119,25 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    # arr = input().split()
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
+    arr = minus_one(arr)
+    brr = minus_one(brr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
