@@ -71,7 +71,6 @@ def solve_(nrr, mrr, n):
             children_remaining, sweets_remaining = state
 
             children_position_considered = set()
-            children_remaining = list(children_remaining)
 
             for child, is_child_remaining in enumerate(children_remaining):
                 if not is_child_remaining:
@@ -113,11 +112,13 @@ def solve_(nrr, mrr, n):
 
                 # log(state, child, removable_sweets)
 
-                sweets_remaining = list(sweets_remaining)
+                children_remaining_mutable = list(children_remaining)
+                sweets_remaining_mutable = list(sweets_remaining)
                 for sweet in removable_sweets:
-                    children_remaining[child] -= 1
-                    sweets_remaining[sweet] -= 1
-                    new_state = (tuple(children_remaining), tuple(sweets_remaining), )
+                    children_remaining_mutable[child] -= 1
+                    sweets_remaining_mutable[sweet] -= 1
+
+                    new_state = (tuple(children_remaining_mutable), tuple(sweets_remaining_mutable), )
                     if new_state in new_states:
                         continue
                     
@@ -125,8 +126,8 @@ def solve_(nrr, mrr, n):
                     actions[new_state] = (child, sweet)
                     new_states.add(new_state)
 
-                    children_remaining[child] += 1
-                    sweets_remaining[sweet] += 1
+                    children_remaining_mutable[child] += 1
+                    sweets_remaining_mutable[sweet] += 1
 
         states = new_states
 
@@ -145,6 +146,12 @@ def solve_(nrr, mrr, n):
     return res[::-1]
 
 
+# while True:
+#     n = random.randint(1,10)
+#     nrr = [[random.randint(-2,2), random.randint(-2,2)] for _ in range(n)]
+#     mrr = [[random.randint(-2,2), random.randint(-2,2)] for _ in range(n+1)]
+#     solve(nrr,mrr, n)
+
                 
 
 
@@ -153,7 +160,7 @@ def solve_(nrr, mrr, n):
 for case_num in range(int(input())):
 
     # read line as an integer
-    k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -168,11 +175,11 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    nrr = read_matrix(k)  # and return as a list of list of int
-    mrr = read_matrix(k+1)  # and return as a list of list of int
+    nrr = read_matrix(n)  # and return as a list of list of int
+    mrr = read_matrix(n+1)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(nrr, mrr, k)  # include input here
+    res = solve(nrr, mrr, n)  # include input here
 
     if not res:
         print("Case #{}: {}".format(case_num+1, "IMPOSSIBLE"))   # Google and Facebook - case number required
