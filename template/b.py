@@ -48,10 +48,57 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(R):
     # your solution here
 
-    return ""
+    # draw_circle_perimeter(R):
+    # for x between -R and R, inclusive {
+    #     y = round(sqrt(R * R - x * x))   # round to nearest integer, breaking ties towards zero
+    #     set_pixel_to_black(x, y)
+    #     set_pixel_to_black(x, -y)
+    #     set_pixel_to_black(y, x)
+    #     set_pixel_to_black(-y, x)
+    # }
+
+    correct_set = set()
+    wrong_set = set()
+
+    def draw_circle_perimeter(R):
+        for x in range(-R-2,R+2):
+            if abs(R) >= abs(x):
+                y = round(math.sqrt(R*R - x*x))
+                wrong_set.add((x,y))
+                wrong_set.add((x,-y))
+                wrong_set.add((y,x))
+                wrong_set.add((-y,x))
+
+    # draw_circle_filled(R):
+    # for x between -R and R, inclusive {
+    #     for y between -R and R, inclusive {
+    #     if round(sqrt(x * x + y * y)) <= R:
+    #         set_pixel_to_black(x, y)
+    #     }
+    # }
+
+    def draw_circle_filled(R):
+        for x in range(-R-2, R+2):
+            for y in range(-R-2, R+2):
+                if round(math.sqrt(x*x + y*y)) <= R:
+                    correct_set.add((x,y))
+
+    # draw_circle_filled_wrong(R):
+    #   for r between 0 and R, inclusive {
+    #     draw_circle_perimeter(r)
+    #   }
+    def draw_circle_filled_wrong(R):
+        for r in range(0, R+1):
+            draw_circle_perimeter(r)
+
+    draw_circle_filled(R)
+    draw_circle_filled_wrong(R)
+
+
+    return len(correct_set) - len(wrong_set)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,7 +106,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -77,7 +124,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
