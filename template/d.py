@@ -48,10 +48,68 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, c):
+    # am I understanding this wrongly?
+
     # your solution here
 
-    return ""
+    def solve_segment(pos0, pos1):
+        pos0.sort()
+        pos1.sort()
+        # log(pos0)
+        # log(pos1)
+        if not mrr:
+            return 0
+
+        a = len(pos0)
+        b = len(pos1)
+
+        LARGE = 10**18
+        dp = [[LARGE for _ in range(b+5)] for _ in range(a+5)]
+        dp[0][0] = 0
+
+        for i in range(5):
+            pos0.append(10**16)
+            pos1.append(10**16)
+
+        # log(dp)
+
+        for i in range(a+1):
+            for j in range(b+1):
+                # log(i,j,a,b,dp[i+1])
+                dp[i+1][j] = min(dp[i+1][j], dp[i][j] + 2*(pos0[i+1-1]))
+                dp[i+2][j] = min(dp[i+2][j], dp[i][j] + 2*(pos0[i+2-1]) + c)
+
+                dp[i][j+1] = min(dp[i][j+1], dp[i][j] + 2*(pos1[j+1-1]))
+                dp[i][j+2] = min(dp[i][j+2], dp[i][j] + 2*(pos1[j+2-1]) + c)
+
+                dp[i+1][j+1] = min(dp[i+1][j+1], dp[i][j] + 2*max(pos0[i+1-1], pos1[j+1-1]))
+
+        # log(dp[a][b])
+        return dp[a][b]
+
+    pos0_pos = []
+    pos1_pos = []
+
+    pos0_neg = []
+    pos1_neg = []
+
+    for a,b in mrr:
+
+        if a > 0:
+            if b == 0:
+                pos0_pos.append(a)
+            else:
+                pos1_pos.append(a)
+
+        if a < 0:
+            if b == 0:
+                pos0_neg.append(-a)
+            else:
+                pos1_neg.append(-a)
+        
+
+    return solve_segment(pos0_pos, pos1_pos) + solve_segment(pos0_neg, pos1_neg)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,16 +126,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr,c)  # include input here
 
     # print length if applicable
     # print(len(res))
