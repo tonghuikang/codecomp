@@ -47,16 +47,89 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# recusion template that does not use recursion
 
-def solve_():
+# def dfs(start, g, entry_operation, exit_operation):
+#     # https://codeforces.com/contest/1646/submission/148435078
+#     # https://codeforces.com/contest/1656/submission/150799881
+#     entered = set([start])
+#     exiting = set()
+#     stack = [start]
+#     prev = {}
+
+#     null_pointer = "NULL"
+#     prev[start] = null_pointer
+
+#     while stack:
+#         cur = stack[-1]
+
+#         if cur not in exiting:
+#             for nex in g[cur]:
+#                 if nex in entered:
+#                     continue
+
+#                 entry_operation(prev[cur], cur, nex)
+
+#                 entered.add(nex)
+#                 stack.append(nex)
+#                 prev[nex] = cur
+#             exiting.add(cur)
+
+#         else:
+#             stack.pop()
+#             exit_operation(prev[cur], cur)
+
+
+def solve_(mrr, n, k):
+    del k
     # your solution here
 
-    return ""
+    g = defaultdict(list)
+    for a,b in mrr:
+        g[a-1].append(b-1)
+        g[b-1].append(a-1)
+
+    
+    pos = [0 for _ in range(n)]
+    res1 = []
+    stack = deque([0])
+    visited = set(stack)
+    while stack:
+        # log(stack)
+        cur = stack[-1]
+        if pos[cur] == len(g[cur]):
+            stack.pop()
+            continue
+        nex = g[cur][pos[cur]]
+        pos[cur] += 1
+        if nex in visited:
+            continue
+        visited.add(nex)
+        res1.append([cur,nex])
+        stack.append(nex)
 
 
-# for case_num in [0]:  # no loop over test case
+    res2 = []
+    stack = deque([0])
+    visited = set(stack)
+    while stack:
+        cur = stack.popleft()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            stack.append(nex)
+            res2.append([cur, nex])
+
+    # log(len(res1))
+    # log(len(res2))
+
+    return res1, res2
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -68,16 +141,19 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res1, res2 = solve(mrr, n, k)  # include input here
+
+    log(res1)
+    log(res2)
 
     # print length if applicable
     # print(len(res))
@@ -85,9 +161,12 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res1 = "\n".join("{} {}".format(row[0]+1, row[1]+1) for row in res1)
+    res2 = "\n".join("{} {}".format(row[0]+1, row[1]+1) for row in res2)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    print(res1)
+    # log()
+    print(res2)

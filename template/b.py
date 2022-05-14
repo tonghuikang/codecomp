@@ -48,15 +48,24 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(w,arr):
     # your solution here
 
-    return ""
+    res = set()
+
+    for i,x in enumerate(arr):
+        res.add(x)
+        for j,y in enumerate(arr[i+1:], start=i+1):
+            res.add(x+y)
+            for k,z in enumerate(arr[j+1:], start=j+1):
+                res.add(x+y+z)
+
+    return len([x for x in res if x <= w])
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -68,8 +77,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,w = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +86,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(w,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
