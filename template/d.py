@@ -88,6 +88,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
