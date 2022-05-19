@@ -48,10 +48,38 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    sorted_mrr = [sorted(row) for row in mrr]
+    all_diffs = []
+
+    for row, sorted_row in zip(mrr, sorted_mrr):
+        diffs = []
+        for i,(a,b) in enumerate(zip(row, sorted_row)):
+            if a != b:
+                diffs.append(i)
+        if diffs:
+            all_diffs.append(tuple(diffs))
+
+    if not all_diffs:
+        return [1,1]
+
+    # log(diffs)
+    
+    if len(set(all_diffs)) > 1:
+        return [-1]
+
+    a,b = all_diffs[0]
+
+    for row, sorted_row in zip(mrr, sorted_mrr):
+        if row[a] == row[b]:  # okay swapping
+            continue
+        if row[a] == sorted_row[b] and row[b] == sorted_row[a]:  # intended swap
+            continue
+        return [-1]
+
+    return [a+1, b+1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,22 +96,22 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
