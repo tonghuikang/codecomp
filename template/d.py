@@ -60,18 +60,22 @@ def solve_(arr, k):
     # whether is it worth it to skip an earlier trap with high base damage
     for trap in arr[:-k][::-1]:
         later = skipped[0]
-        log(trap, later + bonus)
+        # log(trap, later + bonus)
         if trap > later + bonus:
             heapq.heappop(skipped)
-            heapq.heappush(skipped, trap)
+            heapq.heappush(skipped, trap-bonus)
             damage += later + bonus
         else:
             damage += trap
         bonus += 1
 
-        log(damage, skipped)
+        # log(damage, skipped)
 
     return damage
+
+# arr = [99_999_999] + [1]*1200 + [9_999] + [1]*1000
+# log(solve(arr, 1))
+# log(sum(arr[1:]) + len(arr[1:]))
 
 
 # for case_num in [0]:  # no loop over test case
