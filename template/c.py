@@ -70,6 +70,9 @@ def solve_(mrr):
     if len(set(all_diffs)) > 1:
         return [-1]
 
+    if len(all_diffs[0]) != 2:
+        return [-1]
+
     a,b = all_diffs[0]
 
     for row, sorted_row in zip(mrr, sorted_mrr):
