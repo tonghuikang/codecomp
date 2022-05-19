@@ -474,3 +474,100 @@ class LazySegTree:
 # todo
 # - 2D Segment tree for https://codeforces.com/contest/1658/problem/E
 #   - probably https://codeforces.com/contest/1658/submission/151178090
+
+
+
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+
+    # ALL ELEMENTS ARE TO BE POSITIVE
+    def __init__(self, bits=31):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+
+    def update(self, x, increment):
+        # future query(y) to increase for all y >= x
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+class CountIntervals:
+
+    def __init__(self):
+        self.f = FenwickTree()
+        self.total = 0
+        
+
+    def add(self, left: int, right: int) -> None:
+        cur = self.f.query(right+1) - self.f.query(left)
+        self.total += right + 1 - left - cur
+        self.f.update(left,1)
+        self.f.update(right+1,-1)
+        
+        print()
+        for i in range(10):
+            print(i, self.f.query(i))
+
+    def count(self) -> int:
+        return self.total
+
+
+# Your CountIntervals object will be instantiated and called as such:
+# obj = CountIntervals()
+# obj.add(left,right)
+# param_2 = obj.count()
+
+
+
+# https://leetcode.cn/contest/weekly-contest-285/submissions/detail/286224808/
+from sortedcontainers import SortedList
+
+
+    
+class CountIntervals:
+
+    def __init__(self):
+        self.segment = SortedList()
+        self.total = 0
+            
+    def add(self, left: int, right: int) -> None:
+        if not self.segment:
+            segment.add((left, right+1))
+            
+        LARGE = 10**12
+        
+        idx = self.segment.bisect_left((left, LARGE))
+        if self.segment[idx][1] >= right:
+            left = min(left, self.segment[idx][0])
+            del self.segment[idx]
+        
+        while True:
+            idx = self.segment.bisect_left((right, LARGE))
+            
+        
+            
+
+        
+
+    def count(self) -> int:
+        return self.total
+
+
+# Your CountIntervals object will be instantiated and called as such:
+# obj = CountIntervals()
+# obj.add(left,right)
+# param_2 = obj.count()
