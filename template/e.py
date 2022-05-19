@@ -50,8 +50,10 @@ def minus_one_matrix(mrr):
 
 def solve_(arr, n, k):
     # your solution here
+    n = len(arr)
 
     def score(arr):
+        log(sorted(arr))
         aset = set(arr)
         for i in range(n+1):
             if i not in aset:
@@ -77,7 +79,7 @@ def solve_(arr, n, k):
     
     targeted_mex = i # will be achieved
 
-    # log(missing_nums)  # will definitely be filled
+    log(targeted_mex, missing_nums)  # will definitely be filled
 
     # get smallest count number larger than max of missing_nums
 
