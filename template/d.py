@@ -48,10 +48,30 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, k):
     # your solution here
 
-    return ""
+    skipped = [i+x for i,x in enumerate(arr[-k:], start=1)]
+    heapq.heapify(skipped)
+
+    damage = 0
+    bonus = 0
+
+    # whether is it worth it to skip an earlier trap with high base damage
+    for trap in arr[:-k][::-1]:
+        later = skipped[0]
+        log(trap, later + bonus)
+        if trap > later + bonus:
+            heapq.heappop(skipped)
+            heapq.heappush(skipped, trap)
+            damage += later + bonus
+        else:
+            damage += trap
+        bonus += 1
+
+        log(damage, skipped)
+
+    return damage
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,8 +88,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +97,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
