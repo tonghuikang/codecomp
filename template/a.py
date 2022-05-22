@@ -48,10 +48,12 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,p,x,y):
     # your solution here
 
-    return ""
+    meowth_pages = p // (n+1)
+
+    return meowth_pages*y + n*x
 
 
 # for case_num in [0]:  # no loop over test case
@@ -77,7 +79,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,p,x,y)  # include input here
 
     # print length if applicable
     # print(len(res))
