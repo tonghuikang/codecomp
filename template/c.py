@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -19,8 +19,8 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -48,15 +48,31 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(l,n,p):
     # your solution here
 
-    return ""
+    dp = [[0 for _ in range(l+1)] for _ in range(n+1)]
+    dp[0][l] = 1
+
+    for i in range(n):
+        for j in range(l,0,-1):
+            p2 = p**j
+            if j == 1:
+                p2 = 0
+            dp[i+1][j] += dp[i][j]*(1-p2)*0.5
+            dp[i+1][j-1] += dp[i][j]*(1-p2)*0.5
+            dp[i][j-1] += dp[i][j]*p2
+
+    # for row in dp:
+    #     log(row)
+    # log()
+
+    return sum(dp[n][j] for j in range(1,l+1))
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -69,7 +85,11 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    # n,l,p = list(map(int,input().split()))
+    n,l,p = list(input().strip().split())
+    n = int(n)
+    l = int(l)
+    p = float(p)
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +97,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,l,p)  # include input here
 
     # print length if applicable
     # print(len(res))

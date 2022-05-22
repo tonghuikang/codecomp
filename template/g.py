@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -19,8 +19,8 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -48,15 +48,90 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, n):
     # your solution here
 
-    return ""
+    # arr = [0] + arr + [n+1]
+    a = arr[0] - 1
+    b = n - arr[-1]
+    log(a,b)
+
+    diffs = [b-a-1 for a,b in zip(arr, arr[1:])]
+    # diffs[0][0] = diffs[0][2]
+    # diffs[-1][0] = diffs[-1][2]
+    # diffs[0][1] = 1
+    # diffs[-1][1] = 1
+
+    diffs.sort(reverse=True)
+
+    
+    ret = []
+    log(diffs)
+    cur = 0
+    for c in diffs:
+        c -= cur*2
+        if c <= 0:
+            continue
+        cur += 2
+        ret.append(max(1, c-1))
+
+    maxres = sum(ret)
+
+    cur = 1
+    res = a
+    for c in diffs:
+        c -= cur*2
+        if c <= 0:
+            continue
+        cur += 2
+        res += max(1, c-1)
+    # log(res)
+    maxres = max(maxres, res)
+
+    cur = 2
+    res = a + b - 1
+    for c in diffs:
+        c -= cur*2
+        if c <= 0:
+            continue
+        cur += 2
+        res += max(1, c-1)
+    # log(res)
+    maxres = max(maxres, res)
+ 
+    # heap = []
+    # heap.append((-diffs[0], 1, -diffs[0]))
+    # heap.append((-diffs[0], 1, -diffs[-1]))
+
+    # for x in diffs[1:-1]:
+    #     heap.append((2, -x))
+    
+    # heapq.heapify(heap)
+
+    # cur = 0
+    # res = 0
+    # while heap:
+    #     log(res, heap)
+    #     c, nx = heapq.heappop(heap)
+    #     x = -nx
+    #     x -= cur*c
+    #     if x <= 0:
+    #         continue
+    #     if c == 1:
+    #         res += x
+    #         cur += 1
+    #         continue
+    #     res += 1
+    #     x -= 1
+    #     heapq.heappush(heap, (1, -x))
+    #     cur += 1
+
+    return maxres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -68,8 +143,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -77,7 +152,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
