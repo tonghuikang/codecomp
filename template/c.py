@@ -51,7 +51,24 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
-    return ""
+    c = Counter(arr)
+
+    maxarr = max(arr)
+    minarr = min(arr)
+
+    res = 0
+    endpoint_unique = False
+
+    for k,v in c.items():
+        res += min(2,v)
+        if v == 1:
+            endpoint_unique = True
+
+    if endpoint_unique:
+        res += 1
+    # log(res)
+    
+    return res // 2
 
 
 # for case_num in [0]:  # no loop over test case
