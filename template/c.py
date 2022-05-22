@@ -68,7 +68,7 @@ def solve_(mrr,n,k):
     for (_,i,_),(loc,j,_) in zip(reversed(mrr), reversed(rights)):
         dist[i] = (k-loc)
 
-    log(dist)
+    # log(dist)
 
     dropoff = [(x,i) for (i,x) in enumerate(dist)]
     dropoff.sort()
