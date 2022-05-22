@@ -51,46 +51,58 @@ def minus_one_matrix(mrr):
 def solve_(arr,mrr,n,k):
     # your solution here
 
-    log(arr)
+    # prune the tree from the leaves
+    # only prune if
+        # the node is a leaf
+        # the parent of the leaf has the correct value
 
-    swap_tree = defaultdict(dict)
+    swap_tree_all = defaultdict(set)
     swap_to_idx = {}
 
     for i,(a,b) in enumerate(mrr):
-        # swap_tree[loc_cur][target] = [loc_of_target]
-        swap_tree[a][arr[b]] = b
-        swap_tree[b][arr[a]] = a
+        swap_tree_all[a].add(b)
+        swap_tree_all[b].add(a)
 
         swap_to_idx[a,b] = i
         swap_to_idx[b,a] = i
 
-    log(swap_tree)
-
     stack = []
-    for k,v in swap_tree.items():
-        if k in v:
+    for k,v in swap_tree_all.items():
+        if len(v) > 1:
+            continue
+        k2 = list(v)[0]
+        if arr[k2] == k:
             stack.append(k)
 
     res = []
     while stack:
-        loc_cur = stack.pop()
-        if arr[loc_cur] == loc_cur:
-            # already fixed
+        # log(stack)
+
+        loc_leaf = stack.pop()
+        if arr[loc_leaf] == loc_leaf:
+            # already swapped
             continue
-        loc_of_target = swap_tree[loc_cur][loc_cur]
-        swap_idx = swap_to_idx[loc_of_target, loc_cur]
-        res.append(swap_idx)
+        
+        # swap leaf with parent
+        loc_pare = list(swap_tree_all[loc_leaf])[0]
+        arr[loc_pare], arr[loc_leaf] = arr[loc_leaf], arr[loc_pare]
+        res.append(swap_to_idx[loc_pare, loc_leaf])
 
-        del swap_tree[loc_cur][loc_cur]
-        del swap_tree[loc_of_target][arr[loc_cur]]
-        arr[loc_cur], arr[loc_of_target] = arr[loc_of_target], arr[loc_cur]
-        swap_tree[loc_of_target][arr[loc_cur]] = loc_cur
-        swap_tree[loc_cur][arr[loc_of_target]] = loc_of_target
+        swap_tree_all[loc_pare].remove(loc_leaf)
+        swap_tree_all[loc_leaf].remove(loc_pare)
 
-        if arr[loc_of_target] in swap_tree[loc_of_target]:
-            stack.append(loc_of_target)
+        if len(swap_tree_all[loc_pare]) == 1:
+            loc_anot = list(swap_tree_all[loc_pare])[0]
+            if arr[loc_anot] == loc_pare:
+                stack.append(loc_pare)
+        
+        if arr[loc_pare] in swap_tree_all[loc_pare]:
+            loc_pare = arr[loc_pare]
+            if len(swap_tree_all[loc_pare]) == 1:
+                loc_anot = list(swap_tree_all[loc_pare])[0]
+                if arr[loc_anot] == loc_pare:
+                    stack.append(loc_pare)
 
-        log(arr, stack)
 
     return res
 
