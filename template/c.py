@@ -55,10 +55,10 @@ def solve_(mrr,n,k):
     mrr = [(loc,i,dirx) for i,(loc, dirx) in enumerate(mrr)]
     mrr.sort()
 
+
+    assign = [-1 for i in range(n)]
+
     arr = collections.deque([])
-
-    assign = [i for i in range(n)]
-
     for loc,i,dirx in mrr:
         if dirx == 1:
             arr.append(i)
@@ -66,8 +66,36 @@ def solve_(mrr,n,k):
             if not arr:
                 continue
             j = arr.popleft()
-            assign[i] = j
             assign[j] = i
+
+    arr = collections.deque([])
+    for loc,i,dirx in reversed(mrr):
+        if dirx == 0:
+            arr.append(i)
+        else:
+            if not arr:
+                continue
+            j = arr.popleft()
+            assign[j] = i
+
+    unassigned = set(range(n)) - set(assign)
+
+    unassigned_order = collections.deque([])
+    for loc,i,dirx in mrr:
+        if i in unassigned:
+            unassigned_order.append(i)
+
+    # log(unassigned_order)
+    # log(assign)
+
+    for loc,i,dirx in mrr:
+        if assign[i] == -1:
+            if dirx == 0:
+                j = unassigned_order.popleft()
+                assign[i] = j
+            else:
+                j = unassigned_order.popleft()
+                assign[i] = j
 
     # log(assign)
 
