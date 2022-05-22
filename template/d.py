@@ -48,10 +48,66 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, n):
     # your solution here
 
-    return ""
+    arr = [int(x) for x in srr]
+    degrees = sum(arr)
+
+    if degrees%2 == 1:
+        # pairity not possible
+        return []
+
+    if arr.count(1) < 2:
+        # a tree has at least two leaves
+        return []
+
+    # for i,x in enumerate(arr):
+
+    # there is always an even number of odds
+    # if all are odd, just connect all to one
+    if degrees == k:
+        res = []
+        for i in range(1,k):
+            res.append((0,i))
+        return res
+
+    iteration = list(range(k)) + list(range(k)) + list(range(k))
+
+    for i,j in zip(iteration, iteration[1:]):
+        i = i%n
+        j = j%n
+        if arr[i] == 0 and arr[j] == 1:
+            break
+
+    even_idx = i
+
+    assignment = [-1 for _ in range(k)]
+    assignment[even_idx] = -2
+
+    for i,x in enumerate(arr):
+        if x == 1:
+            assignment[i] = even_idx
+
+    for i in iteration[even_idx+1:]:
+        if assignment[i] != -1:
+            continue
+        if assignment[i] == -2:
+            break
+        assert assignment[i-1] == even_idx
+        assignment[i-1] = i
+        assignment[i] = even_idx
+
+    assert -1 not in assignment
+    assert assignment.count(-2) == 1
+
+    res = []
+    for i,x in enumerate(assignment):
+        if x == -2:
+            continue
+        res.append((i,x))
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,10 +115,10 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -77,15 +133,22 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, k)  # include input here
 
+    if res == []:
+        print(no)
+        continue
+
+    print(yes)
     # print length if applicable
     # print(len(res))
+
+    res = [(x+1, y+1) for x,y in res]
 
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required

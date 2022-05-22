@@ -48,15 +48,56 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr,mrr,n,k):
     # your solution here
 
-    return ""
+    log(arr)
+
+    swap_tree = defaultdict(dict)
+    swap_to_idx = {}
+
+    for i,(a,b) in enumerate(mrr):
+        # swap_tree[loc_cur][target] = [loc_of_target]
+        swap_tree[a][arr[b]] = b
+        swap_tree[b][arr[a]] = a
+
+        swap_to_idx[a,b] = i
+        swap_to_idx[b,a] = i
+
+    log(swap_tree)
+
+    stack = []
+    for k,v in swap_tree.items():
+        if k in v:
+            stack.append(k)
+
+    res = []
+    while stack:
+        loc_cur = stack.pop()
+        if arr[loc_cur] == loc_cur:
+            # already fixed
+            continue
+        loc_of_target = swap_tree[loc_cur][loc_cur]
+        swap_idx = swap_to_idx[loc_of_target, loc_cur]
+        res.append(swap_idx)
+
+        del swap_tree[loc_cur][loc_cur]
+        del swap_tree[loc_of_target][arr[loc_cur]]
+        arr[loc_cur], arr[loc_of_target] = arr[loc_of_target], arr[loc_cur]
+        swap_tree[loc_of_target][arr[loc_cur]] = loc_cur
+        swap_tree[loc_cur][arr[loc_of_target]] = loc_of_target
+
+        if arr[loc_of_target] in swap_tree[loc_of_target]:
+            stack.append(loc_of_target)
+
+        log(arr, stack)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -68,22 +109,22 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr,mrr,n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
-
+    res = [(x+1) for x in res]
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
