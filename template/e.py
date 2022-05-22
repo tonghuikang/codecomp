@@ -49,6 +49,8 @@ def minus_one_matrix(mrr):
 
 
 def solve_(arr,mrr,n,k):
+    del k
+    del n
     # your solution here
 
     # prune the tree from the leaves
@@ -73,6 +75,23 @@ def solve_(arr,mrr,n,k):
         k2 = list(v)[0]
         if arr[k2] == k:
             stack.append(k)
+
+    swap_tree_init = defaultdict(dict)
+    for i,(a,b) in enumerate(mrr):
+        swap_tree_init[a][arr[b]] = (b)
+        swap_tree_init[b][arr[a]] = (a)
+
+    stack_reserve = []
+    for loc,v in swap_tree_all.items():
+        if len(v) > 1:
+            continue
+        loc_pare = list(v)[0]
+        if loc in swap_tree_init[loc_pare]:
+            stack_reserve.append(tuple(sorted((loc_pare, swap_tree_init[loc_pare][loc]))))
+
+    stack_reserve = set(stack_reserve)
+    log(stack_reserve)
+
 
     res = []
     while stack:
@@ -103,6 +122,9 @@ def solve_(arr,mrr,n,k):
                 if arr[loc_anot] == loc_pare:
                     stack.append(loc_pare)
 
+    # assert len(set(res)) == len(res)
+    # assert len(res) == len(mrr)
+    # assert arr == sorted(arr)
 
     return res
 
