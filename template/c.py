@@ -47,6 +47,7 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# https://www.quora.com/What-are-some-competitive-programming-problems-with-really-elegant-solutions/answer/Michal-Fori%C5%A1ek?comment_id=13021060&comment_type=2
 
 def solve_(mrr,n,k):
     # your solution here
@@ -55,60 +56,21 @@ def solve_(mrr,n,k):
     mrr = [(loc,i,dirx) for i,(loc, dirx) in enumerate(mrr)]
     mrr.sort()
 
+    dist = [-1 for i in range(n)]
 
-    assign = [-1 for i in range(n)]
+    dir_arr = [dirx for loc,i,dirx in mrr]
+    lefts = [(loc,i,dirx) for loc,i,dirx in mrr if dirx == 0]
+    rights = [(loc,i,dirx) for loc,i,dirx in mrr if dirx == 1]
 
-    arr = collections.deque([])
-    for loc,i,dirx in mrr:
-        if dirx == 1:
-            arr.append(i)
-        else:
-            if not arr:
-                continue
-            j = arr.popleft()
-            assign[j] = i
+    for (_,i,_),(loc,j,_) in zip(mrr, lefts):
+        dist[i] = loc
 
-    arr = collections.deque([])
-    for loc,i,dirx in reversed(mrr):
-        if dirx == 0:
-            arr.append(i)
-        else:
-            if not arr:
-                continue
-            j = arr.popleft()
-            assign[j] = i
+    for (_,i,_),(loc,j,_) in zip(reversed(mrr), reversed(rights)):
+        dist[i] = (k-loc)
 
-    unassigned = set(range(n)) - set(assign)
+    log(dist)
 
-    unassigned_order = collections.deque([])
-    for loc,i,dirx in mrr:
-        if i in unassigned:
-            unassigned_order.append(i)
-
-    # log(unassigned_order)
-    # log(assign)
-
-    for loc,i,dirx in mrr:
-        if assign[i] == -1:
-            if dirx == 0:
-                j = unassigned_order.popleft()
-                assign[i] = j
-            else:
-                j = unassigned_order.popleft()
-                assign[i] = j
-
-    # log(assign)
-
-    dropoff = []  # idx, dist
-
-    for i,j in enumerate(assign):
-        loc, dirx = initial_mrr[j]
-        if dirx == 0:
-            dist = loc
-        else:
-            dist = k-loc
-        dropoff.append((dist, i))
-
+    dropoff = [(x,i) for (i,x) in enumerate(dist)]
     dropoff.sort()
 
     return [i+1 for dist,i in dropoff]
