@@ -48,10 +48,39 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+# At least 7 characters.
+# At least one uppercase English alphabet letter.
+# At least one lowercase English alphabet letter.
+# At least one digit.
+# At least one special character. There are four special characters: #, @, *, and &.
+
+def solve_(srr):
     # your solution here
 
-    return ""
+    digits = set(list("0123456789"))
+    lowers = set(list("abcdefghijklmnopqrstuvwxyz"))
+    uppers = set(list("abcdefghijklmnopqrstuvwxyz".upper()))
+    specials = set(list("#@*&"))
+
+    brr = list(srr)
+    arr = set(list(srr))
+
+    if not arr & digits:
+        brr.append("0")
+
+    if not arr & lowers:
+        brr.append("a")
+
+    if not arr & uppers:
+        brr.append("A")
+
+    if not arr & specials:
+        brr.append("#")
+
+    while len(brr) < 7:
+        brr.append("#")
+
+    return "".join(brr)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -59,10 +88,10 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -77,7 +106,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -88,6 +117,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

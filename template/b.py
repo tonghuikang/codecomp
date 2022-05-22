@@ -48,10 +48,26 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,x,y):
     # your solution here
 
-    return ""
+    total = n*(n+1)//2
+
+    if total%(x+y) != 0:
+        return []
+
+    required = (total // (x+y)) * x
+    log(required)
+    res = []
+
+    for i in range(n, 0, -1):
+        if i <= required:
+            required -= i
+            res.append(i)
+
+    res.sort()
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,7 +84,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,x,y = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -77,13 +93,19 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,x,y)  # include input here
+
+    if res == []:
+        print("Case #{}: {}".format(case_num+1, "IMPOSSIBLE"))   # Google and Facebook - case number required
+        continue
+
+    print("Case #{}: {}".format(case_num+1, "POSSIBLE"))   # Google and Facebook - case number required
 
     # print length if applicable
-    # print(len(res))
+    print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
