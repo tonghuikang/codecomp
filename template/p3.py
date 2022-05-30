@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import sys
 # import getpass  # not available on codechef
+import math, random
+import functools, itertools, collections, heapq, bisect
+from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -58,8 +61,6 @@ def solve_(n,m,mrr):
     constrained = False
     increasing = True
 
-    exiting = False
-
     for i in range(n):
         # log(right, constrained, increasing)
 
@@ -68,13 +69,9 @@ def solve_(n,m,mrr):
             while mrr and mrr[-1][1] < i:
                 t,a,b = mrr.pop()
                 if t == 0 and not increasing:
-                    print(-1)
-                    exiting = True
-                    break
+                    return [-1]
                 if t == 1 and increasing:
-                    print(-1)
-                    exiting = True
-                    break
+                    return [-1]
                 right = max(right, b)
 
         if right <= i:
