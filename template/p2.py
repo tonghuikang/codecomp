@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -19,8 +19,8 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -84,15 +84,15 @@ def solve_(mrr, k):
 
     g = collections.defaultdict(set)
     subtree_sizes = [1]*k
-    parent = [-1]*k
+    parents = [-1]*k
 
     def entry_operation(prev, cur, nex):
         # note that prev is `null_pointer` at the root node
-        parent[nex] = cur
+        parents[nex] = cur
 
     def exit_operation(prev, cur):
-        subtree_sizes[prev] += subtree_sizes[cur]
-
+        if cur != 0:
+            subtree_sizes[prev] += subtree_sizes[cur]
 
     for a,b in mrr:
         g[a].add(b)
@@ -100,12 +100,55 @@ def solve_(mrr, k):
 
     dfs(0,g,entry_operation,exit_operation)
     
-    log(parent)
-
+    log(parents)
     log(subtree_sizes)
 
+    def count(sides):
+        res = 0
 
-    return ""
+        # zero in node, all anywhere except node
+        res += (k-1) ** 3
+
+        for x in sides:
+            # all three is same branch
+            res -= x ** 3
+
+            # two in same branch, one outside
+            res -= x ** 2 * (k-1-x) * 3
+
+            log(res)
+
+        # one in node, two anywhere except node
+        res += (k-1) ** 2 * 3
+
+        for x in sides:
+            # two outside node is in same branch
+            res -= x ** 2 * 3
+
+        # two in node, one anywhere except node
+        res += (k-1) * 3
+
+        # three in node
+        res += 1
+
+        return res
+
+    res = []
+    for cur,(subtree_size, parent) in enumerate(zip(subtree_sizes, parents)):
+        sides = []
+        for nex in g[cur]:
+            if nex != parents[cur]:
+                sides.append(subtree_sizes[nex])
+
+        parent_size = k - sum(sides) - 1
+        if parent_size != 0:
+            sides.append(parent_size)
+
+        # log(cur, sides)
+
+        res.append(count(sides))
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
@@ -137,7 +180,7 @@ for case_num in [0]:  # no loop over test case
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
