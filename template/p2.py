@@ -48,18 +48,72 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def dfs(start, g, entry_operation, exit_operation):
+    # https://codeforces.com/contest/1646/submission/148435078
+    # https://codeforces.com/contest/1656/submission/150799881
+    entered = set([start])
+    exiting = set()
+    stack = [start]
+    prev = {}
+
+    null_pointer = "NULL"
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            for nex in g[cur]:
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+            exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
+
+def solve_(mrr, k):
     # your solution here
+
+    g = collections.defaultdict(set)
+    subtree_sizes = [1]*k
+    parent = [-1]*k
+
+    def entry_operation(prev, cur, nex):
+        # note that prev is `null_pointer` at the root node
+        parent[nex] = cur
+
+    def exit_operation(prev, cur):
+        subtree_sizes[prev] += subtree_sizes[cur]
+
+
+    for a,b in mrr:
+        g[a].add(b)
+        g[b].add(a)
+
+    dfs(0,g,entry_operation,exit_operation)
+    
+    log(parent)
+
+    log(subtree_sizes)
+
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -74,10 +128,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(k-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
