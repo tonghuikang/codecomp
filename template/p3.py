@@ -56,21 +56,23 @@ def solve_(n,m,mrr):
     mrr.sort(key=lambda x:(x[1], -x[2]), reverse=True)
 
     cur = 10**6 + 100
-    res = [cur]
+    res = [cur] * (n+1)
     right = 0
     constrained = False
     increasing = True
 
-    for i in range(1,n+1):
+    for i in range(n):
         # log(right, constrained, increasing)
 
         if constrained:
             # check feasibility, extend right
-            while mrr and mrr[-1][1] < i:
+            while mrr and mrr[-1][1] - 1 < i:
                 t,a,b = mrr.pop()
-                if t == 0 and not increasing:
+                a -= 1
+                b -= 1
+                if t == 1 and not increasing:
                     return [-1]
-                if t == 1 and increasing:
+                if t == 2 and increasing:
                     return [-1]
                 right = max(right, b)
 
@@ -78,14 +80,16 @@ def solve_(n,m,mrr):
             constrained = False
 
         if increasing:
-            res.append(res[i-1] + 1)
+            res[i+1] = (res[i] + 1)
         else:
-            res.append(res[i-1] - 1)
+            res[i+1] = (res[i] - 1)
 
-        if mrr and mrr[-1][1] == i:
+        if mrr and mrr[-1][1] - 1 == i:
             t,a,b = mrr.pop()
+            a -= 1
+            b -= 1
             constrained = True
-            increasing = t == 0
+            increasing = t == 1
             right = b
 
     minres = min(res[1:]) - 1
@@ -114,7 +118,7 @@ for case_num in [0]:  # no loop over test case
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(m)  # and return as a list of list of int
-    mrr = minus_one_matrix(mrr)
+    # mrr = minus_one_matrix(mrr)
 
     res = solve(n,m,mrr)  # include input here
 
