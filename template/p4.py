@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -19,6 +18,7 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
+# import getpass  # not available on codechef
 # OFFLINE_TEST = getpass.getuser() == "htong"
 OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
@@ -79,57 +79,57 @@ def dfs(start, g, entry_operation, exit_operation):
             exit_operation(prev[cur], cur)
 
 
-def get_centroid(mrr):
+
+def get_centroid(mrr, n):
     # your solution here
 
+    assert mrr and len(mrr) >= 1
+
     g = collections.defaultdict(set)
-    subtree_sizes = {}
-    parents = {}
-
-    for a,b in mrr:
-        subtree_sizes[a] = 1
-        subtree_sizes[b] = 1
-
-    k = len(subtree_sizes)
+    subtree_sizes = [1]*n
+    parents = [-1]*n
+    start = mrr[0][0]
 
     def entry_operation(prev, cur, nex):
-        nonlocal parents
         # note that prev is `null_pointer` at the root node
         parents[nex] = cur
 
     def exit_operation(prev, cur):
-        nonlocal subtree_sizes
-        if cur != start:
-            subtree_sizes[prev] += subtree_sizes[cur]
+        if prev == "NULL":
+            return
+        subtree_sizes[prev] += subtree_sizes[cur]
 
     for a,b in mrr:
         g[a].add(b)
         g[b].add(a)
 
-    start = a
-    centroid = a
-    parents[start] = -1
+    k = len(g)
 
     dfs(start,g,entry_operation,exit_operation)
+    
+    log(parents)
+    log(subtree_sizes)
 
-    for cur in subtree_sizes:
-        subtree_size = subtree_sizes[cur]
-        parent = parents[cur]
+    res = []
+    for cur,(subtree_size, parent) in enumerate(zip(subtree_sizes, parents)):
+        if cur not in g:
+            continue
         sides = []
         for nex in g[cur]:
-            if nex != parents[cur]:
+            if nex != parents[cur] and cur != start:
                 sides.append(subtree_sizes[nex])
 
         parent_size = k - sum(sides) - 1
         if parent_size != 0:
             sides.append(parent_size)
 
-        if max(sides) <= k//2:
-            centroid = cur
+        # log(cur, sides)
+        if max(sides) <= k//2 and cur != start:
+            return cur
 
-    return centroid
+        # res.append(count(sides))
 
-        
+    return start
 
 
 def query(pos):
@@ -141,8 +141,20 @@ def query(pos):
 n = int(input())
 mrr = read_matrix(n-1)  # and return as a list of list of int
 
+if n == 1:
+    query(1)
+    sys.exit()
+
+# if n <= 16:
+#     for i in range(n):
+#         i += 1
+#         res = query(i)
+#         if res == 0:
+#             sys.exit()
+
+
 while True:
-    centroid = get_centroid(mrr)
+    centroid = get_centroid(mrr, n+100)
     target = query(centroid)
     if target == 0:
         sys.exit()
@@ -156,7 +168,6 @@ while True:
         g[b].add(a)
 
     def entry_operation(prev, cur, nex):
-        nonlocal passing
         # note that prev is `null_pointer` at the root node
         if cur == centroid:
             passing[nex] = False
@@ -168,13 +179,21 @@ while True:
 
     dfs(target, g, entry_operation, exit_operation)
 
+    passing[centroid] = False
     new_mrr = []
     for a,b in mrr:
-        if not passing[a] or not passing[b]:
+        if (not passing[a]) or (not passing[b]):
             continue
         new_mrr.append((a,b))
     mrr = new_mrr
-
     # prune your tree here
+
+    # print(mrr)
+
+    if not mrr:
+        query(target)
+        sys.exit()
+
+
 sys.exit()
 
