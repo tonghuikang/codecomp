@@ -93,10 +93,12 @@ def get_centroid(mrr):
     k = len(subtree_sizes)
 
     def entry_operation(prev, cur, nex):
+        nonlocal parents
         # note that prev is `null_pointer` at the root node
         parents[nex] = cur
 
     def exit_operation(prev, cur):
+        nonlocal subtree_sizes
         if cur != start:
             subtree_sizes[prev] += subtree_sizes[cur]
 
@@ -135,10 +137,6 @@ def query(pos):
     response = int(input())
     return response
 
-def alert(pos):
-    print("! {}".format(pos), flush=True)
-    sys.exit()
-
 
 n = int(input())
 mrr = read_matrix(n-1)  # and return as a list of list of int
@@ -147,7 +145,7 @@ while True:
     centroid = get_centroid(mrr)
     target = query(centroid)
     if target == 0:
-        exit()
+        sys.exit()
 
     passing = {}
     g = defaultdict(set)
@@ -158,6 +156,7 @@ while True:
         g[b].add(a)
 
     def entry_operation(prev, cur, nex):
+        nonlocal passing
         # note that prev is `null_pointer` at the root node
         if cur == centroid:
             passing[nex] = False
@@ -177,4 +176,5 @@ while True:
     mrr = new_mrr
 
     # prune your tree here
+sys.exit()
 
