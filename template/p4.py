@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -19,8 +19,8 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -48,46 +48,133 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def dfs(start, g, entry_operation, exit_operation):
+    # https://codeforces.com/contest/1646/submission/148435078
+    # https://codeforces.com/contest/1656/submission/150799881
+    entered = set([start])
+    exiting = set()
+    stack = [start]
+    prev = {}
+
+    null_pointer = "NULL"
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            for nex in g[cur]:
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+            exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
+
+def get_centroid(mrr):
     # your solution here
 
-    return ""
+    g = collections.defaultdict(set)
+    subtree_sizes = {}
+    parents = {}
+
+    for a,b in mrr:
+        subtree_sizes[a] = 1
+        subtree_sizes[b] = 1
+
+    k = len(subtree_sizes)
+
+    def entry_operation(prev, cur, nex):
+        # note that prev is `null_pointer` at the root node
+        parents[nex] = cur
+
+    def exit_operation(prev, cur):
+        if cur != start:
+            subtree_sizes[prev] += subtree_sizes[cur]
+
+    for a,b in mrr:
+        g[a].add(b)
+        g[b].add(a)
+
+    start = a
+    centroid = a
+    parents[start] = -1
+
+    dfs(start,g,entry_operation,exit_operation)
+
+    for cur in subtree_sizes:
+        subtree_size = subtree_sizes[cur]
+        parent = parents[cur]
+        sides = []
+        for nex in g[cur]:
+            if nex != parents[cur]:
+                sides.append(subtree_sizes[nex])
+
+        parent_size = k - sum(sides) - 1
+        if parent_size != 0:
+            sides.append(parent_size)
+
+        if max(sides) <= k//2:
+            centroid = cur
+
+    return centroid
+
+        
 
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+def query(pos):
+    print("{}".format(pos), flush=True)
+    response = int(input())
+    return response
 
-    # read line as an integer
-    # k = int(input())
+def alert(pos):
+    print("! {}".format(pos), flush=True)
+    sys.exit()
 
-    # read line as a string
-    # srr = input().strip()
 
-    # read one line and parse each word as a string
-    # arr = input().split()
+n = int(input())
+mrr = read_matrix(n-1)  # and return as a list of list of int
 
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+while True:
+    centroid = get_centroid(mrr)
+    target = query(centroid)
+    if target == 0:
+        exit()
 
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    passing = {}
+    g = defaultdict(set)
+    for a,b in mrr:
+        passing[a] = True
+        passing[b] = True
+        g[a].add(b)
+        g[b].add(a)
 
-    res = solve()  # include input here
+    def entry_operation(prev, cur, nex):
+        # note that prev is `null_pointer` at the root node
+        if cur == centroid:
+            passing[nex] = False
+        else:
+            passing[nex] = passing[cur]
 
-    # print length if applicable
-    # print(len(res))
+    def exit_operation(prev, cur):
+        pass
 
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    dfs(target, g, entry_operation, exit_operation)
 
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    new_mrr = []
+    for a,b in mrr:
+        if not passing[a] or not passing[b]:
+            continue
+        new_mrr.append((a,b))
+    mrr = new_mrr
 
-    print(res)
+    # prune your tree here
+
