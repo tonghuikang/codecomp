@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
+# import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -19,8 +19,8 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -45,18 +45,59 @@ def minus_one(arr):
 def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
+def plus_one_matrix(mrr):
+    return [[x+1 for x in row] for row in mrr]
+
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,a,b,mrr):
     # your solution here
 
-    return ""
+    cur = a
+    res1 = []
+    for i,row in enumerate(mrr):
+        if row == [-2]:
+            break
+        x,y = row
+        if cur == x:
+            cur = y
+        elif cur == y:
+            cur = x
+        res1.append(row)
+
+    mrr = mrr[i:]
+    a = cur
+
+    mrr = mrr[::-1]
+    a,b = b,a
+
+    res = []
+    cur = a
+    for row in mrr[:-1]:
+        if row == [-2]:
+            row = (0,1)
+        x,y = row
+        res.append(row)
+        if cur == x:
+            cur = y
+        elif cur == y:
+            cur = x
+
+    if cur == b:
+        row = (b-1)%n, (b+1)%n
+        res.append(row)
+    else:
+        res.append((cur,b))
+
+    log(res1, res)
+
+    return res1 + res[::-1]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -68,16 +109,20 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,a,b = list(map(int,input().split()))
+    a -= 1
+    b -= 1
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,a,b,mrr)  # include input here
+
+    res = plus_one_matrix(res)
 
     # print length if applicable
     # print(len(res))
@@ -85,7 +130,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
