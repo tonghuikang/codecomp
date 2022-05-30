@@ -61,7 +61,7 @@ def solve_(n,m,mrr):
     constrained = False
     increasing = True
 
-    for i in range(n):
+    for i in range(1,n+1):
         # log(right, constrained, increasing)
 
         if constrained:
@@ -78,9 +78,9 @@ def solve_(n,m,mrr):
             constrained = False
 
         if increasing:
-            res.append(res[-1] + 1)
+            res.append(res[i-1] + 1)
         else:
-            res.append(res[-1] - 1)
+            res.append(res[i-1] - 1)
 
         if mrr and mrr[-1][1] == i:
             t,a,b = mrr.pop()
