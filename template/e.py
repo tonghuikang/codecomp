@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import getpass  # not available on codechef
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -19,10 +18,14 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+CHECK_OFFLINE_TEST = True
+# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+if CHECK_OFFLINE_TEST:
+    import getpass
+    OFFLINE_TEST = getpass.getuser() == "htong"
+
 def log(*args):
-    if OFFLINE_TEST:
+    if CHECK_OFFLINE_TEST and OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 def solve(*args):

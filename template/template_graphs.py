@@ -384,6 +384,74 @@ def longest_path(map_from_node_to_nodes_and_costs):
     return NotImplementedError
 
 
+def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
+    # assumes that input is a tree
+    # For each node, get the sizes of the forests if the tree is split on the node
+    # uses the dfs template - see template_recursive.py
+
+    subtree_sizes = {x:1 for x in map_from_node_to_nodes}
+    parents = {}
+
+    def entry_operation(prev, cur, nex):
+        # note that prev is `null_pointer` at the root node
+        parents[nex] = cur
+
+    def exit_operation(prev, cur):
+        subtree_sizes[prev] += subtree_sizes[cur]
+
+    start = next(iter(my_dict))
+    parents[start] = "NULL"
+    dfs(start, map_from_node_to_nodes, entry_operation, exit_operation)
+
+    node_to_forest_sizes = {}
+    for cur in map_from_node_to_nodes:
+        parent = parents[cur]
+
+        forest_sizes = []
+        for nex in g[cur]:
+            if nex != parents[cur]:
+                forest_sizes.append(subtree_sizes[nex])
+
+        parent_size = k - sum(forest_sizes) - 1
+        if parent_size != 0:
+            forest_sizes.append(parent_size)
+
+        node_to_forest_sizes[cur] = forest_sizes
+
+    return node_to_subtree_sizes
+
+
+def find_centroids(map_from_node_to_nodes):  # UNTESTED
+    # Centroid of a tree is a node which if removed from the tree would split it into a 'forest', 
+    # such that any tree in the forest would have at most half the number of vertices in the original tree
+    # the centroids is one or two points that 
+    
+    # assumes that input is a tree
+    node_to_forest_sizes = get_forest_sizes(map_from_node_to_nodes)
+
+    n = len(map_from_node_to_nodes)
+
+    centroid_candidates = []
+    min_max_forest_size = n
+
+    for cur, forest_sizes in node_to_forest_sizes.items():
+        max_forest_size = max(forest_sizes)
+        if max_forest_size == min_max_forest_size:
+            centroid_candidates.append(cur)
+        elif max_forest_size < min_max_forest_size:
+            centroid_candidates = [cur]
+            min_max_forest_size = max_forest_size
+
+    return centroid_candidates
+
+
+def extract_subgraph(map_from_node_to_nodes, source_point, break_point):
+    # dfs starting from the source_point
+    # break at the break point
+    # return pruned graph
+    pass
+
+
 def find_bridges():
     # https://leetcode.com/problems/critical-connections-in-a-network/discuss/410345/
     # https://cp-algorithms.com/graph/bridge-searching.html
