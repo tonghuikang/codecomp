@@ -90,6 +90,8 @@ def solve_(arr, brr, mrr, n, m):
     for i,a in enumerate(arr):
         f.update(i, a)
 
+    def get_interval()
+
     rsum = [0]
     for a in arr:
         psum.append(rsum[-1] + a)
