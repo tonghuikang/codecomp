@@ -26,7 +26,7 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def query(arr):
-    print("{}".format("".join(str(x) for x in arr)), flush=True)
+    print("? {}".format("".join(str(x) for x in arr)), flush=True)
     response = int(input())
     return response
 
