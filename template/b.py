@@ -37,8 +37,33 @@ def alert(pos):
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-k = int(input())
+n, m = list(map(int,input().split()))
 
+costs = [-1]*m
+
+for i in range(m):
+    arr = [0]*m
+    arr[i] = 1
+    cost = query(arr)
+    costs[i] = (cost, i)
+
+log(costs)
+
+state = [1]*m
+value = query(state)
+costs = sorted(costs, reverse=True)
+
+state = [1]*m
+for cost, i in costs:
+    state[i] = 0
+    a = query(state)
+    if a == value - cost:  # important, put back
+        state[i] = 1
+    else:  # not important
+        value = a
+
+alert(value)
+sys.exit()
 
 # query only for each railway
 
