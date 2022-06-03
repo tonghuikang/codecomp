@@ -17,8 +17,8 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = getpass.getuser() == "htong"
-# OFFLINE_TEST = False  # codechef does not allow getpass
+# OFFLINE_TEST = getpass.getuser() == "htong"
+OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
@@ -32,12 +32,11 @@ def query(arr):
 
 def alert(pos):
     print("! {}".format(pos), flush=True)
-    sys.exit()
 
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-n, m = list(map(int,input().split()))
+_, m = list(map(int,input().split()))
 
 costs = [-1]*m
 
@@ -47,14 +46,12 @@ for i in range(m):
     cost = query(arr)
     costs[i] = (cost, i)
 
-log(costs)
-
 state = [1]*m
 value = query(state)
 costs = sorted(costs, reverse=True)
 
 state = [1]*m
-for cost, i in costs:
+for cost, i in costs[:-1]:
     state[i] = 0
     a = query(state)
     if a == value - cost:  # important, put back
