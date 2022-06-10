@@ -1,0 +1,3 @@
+aabaabaa
+aaabbcc
+dihktlwlxnyoz
