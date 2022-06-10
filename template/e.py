@@ -51,10 +51,82 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.leader(a)]
+
+
+
+def solve_(arr):
     # your solution here
 
-    return ""
+    LARGE = 3000
+
+    cnt = arr.count(0)
+    arr = [1 if x == 0 else x for x in arr]
+
+    ds = DisjointSet(3040)
+
+    for i,x in enumerate(arr):
+        srr = bin(x)[2:].zfill(31)[::-1]
+        for j,b in enumerate(srr):
+            if b == "1":
+                ds.union(3000+j, i)
+
+    val_to_leader = {}
+    leader_to_val = defaultdict(list)
+
+    for i,x in enumerate(arr):
+        val_to_leader[i] = ds.find(i)
+        leader_to_val[ds.find(i)].append(i)
+
+    if len(leader_to_val) == 1:
+        return cnt, arr
+
+    for leader, idxs in leader_to_val.items():
+        for idx in idxs:
+            if arr[idx]%2 == 1:
+                break
+        else:
+            arr[idx] += 1
+            cnt += 1
+
+    return cnt, arr
 
 
 # for case_num in [0]:  # no loop over test case
@@ -62,7 +134,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -72,7 +144,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -80,13 +152,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    cnt, arr = solve(arr)  # include input here
+    print(cnt)
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in arr)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
