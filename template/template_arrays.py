@@ -12,6 +12,28 @@ MAXINT = sys.maxsize
 # ------------------------- helper functions ----------------------------
 
 
+def prefix_sum(arr):
+    psum = [0]
+    for x in arr:
+        psum.append(psum[-1] + x)
+    return psum
+
+def prefix_sum2(arr):
+    psum = [0]
+    psum2 = [0]
+    for x in arr:
+        psum.append(psum[-1] + x)
+        psum2.append(psum2[-1] + psum[-1])
+    return psum2
+
+def query_subarray_sum(psum2, r, l):
+    # https://leetcode.com/problems/sum-of-total-strength-of-wizards/discuss/2061985/
+    # UNTESTED
+    ln, rn = i - l, r - i
+    lacc = psum2[i] - psum2[max(l, 0)]
+    racc = psum2[r] - psum2[i]
+    return (racc * ln - lacc * rn)
+
 def remove_consecutive_duplicates(lst):
     res = []
     for x in lst:
