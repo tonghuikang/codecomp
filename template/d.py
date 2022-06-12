@@ -57,7 +57,14 @@ def binary_search(func_,       # condition function
 
 # ---------------------------- template ends here ----------------------------
 
+query_range_count = 0
+query_alpha_count = 0
+
 def query_range(l, r):
+    global query_range_count
+    query_range_count += 1
+    if query_range_count > 6000:
+        assert False
     assert l >= 0
     assert r >= 0
     print("? 2 {} {}".format(l+1, r+1), flush=True)
@@ -65,11 +72,24 @@ def query_range(l, r):
     return response
 
 def query_alpha(x):
+    global query_alpha_count
+    query_alpha_count += 1
+    if query_alpha_count > 26:
+        assert False
     assert x >= 0
     print("? 1 {}".format(x+1), flush=True)
     response = input().strip()
     return response
 
+
+# ref = "asfiahbuisbdaijsbdajnksldaknsodna"
+# log(len(ref))
+
+# def query_range(l, r):
+#     return len(set(list(ref[l:r+1])))
+
+# def query_alpha(x):
+#     return ref[x]
 
 # -----------------------------------------------------------------------------
 
@@ -88,14 +108,19 @@ for i in range(n):
         continue
     
     stack = sorted([(idx, alpha) for alpha,idx in alpha_to_latest_idx.items()])
+    log(stack)
+    log(res)
+
     def func(x):
         idx, alpha = stack[x]
-        expected_if_distinct = len(stack) - idx + 1
+        expected_if_distinct = len(stack) - x + 1
         distinct_count = query_range(idx, i)
-        return expected_if_distinct == distinct_count
+        log(x, idx, alpha, expected_if_distinct, distinct_count)
+        return expected_if_distinct <= distinct_count
     
     x = binary_search(func, first=False, target=False, right=len(alpha_to_latest_idx))
     idx_old,alpha = stack[x]
+    log(idx_old,alpha,x)
     alpha_to_latest_idx[alpha] = i
     res += alpha
 
