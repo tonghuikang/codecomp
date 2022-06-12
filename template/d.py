@@ -23,21 +23,85 @@ def log(*args):
     if OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
+
+
+def binary_search(func_,       # condition function
+                  first=True,  # else last
+                  target=True, # else False
+                  left=0, right=2**31-1) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
+
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first^target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:      # find last False
+        return left-1
+
 # ---------------------------- template ends here ----------------------------
 
-def query(pos):
-    print("{}".format(pos+1), flush=True)
+def query_range(l, r):
+    assert l >= 0
+    assert r >= 0
+    print("? 2 {} {}".format(l+1, r+1), flush=True)
     response = int(input())
     return response
 
-def alert(pos):
-    print("! {}".format(pos), flush=True)
-    sys.exit()
+def query_alpha(x):
+    assert x >= 0
+    print("? 1 {}".format(x+1), flush=True)
+    response = input().strip()
+    return response
+
 
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-# k = int(input())
+n = int(input())
+
+alpha_to_latest_idx = {}
+res = ""
+
+for i in range(n):
+    distinct_count = query_range(0,i)
+    if distinct_count > len(alpha_to_latest_idx):
+        alpha = query_alpha(i)
+        alpha_to_latest_idx[alpha] = i
+        res += alpha
+        continue
+    
+    stack = sorted([(idx, alpha) for alpha,idx in alpha_to_latest_idx.items()])
+    def func(x):
+        idx, alpha = stack[x]
+        expected_if_distinct = len(stack) - idx + 1
+        distinct_count = query_range(idx, i)
+        return expected_if_distinct == distinct_count
+    
+    x = binary_search(func, first=False, target=False, right=len(alpha_to_latest_idx))
+    idx_old,alpha = stack[x]
+    alpha_to_latest_idx[alpha] = i
+    res += alpha
+
+print("! {}".format(res), flush=True)
+response = input()
+
 
 # read line as a string
 # srr = input().strip()
@@ -52,3 +116,4 @@ def alert(pos):
 # -----------------------------------------------------------------------------
 
 # your code here
+sys.exit()
