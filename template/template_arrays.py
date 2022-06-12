@@ -26,13 +26,16 @@ def prefix_sum2(arr):
         psum2.append(psum2[-1] + psum[-1])
     return psum2
 
-def query_subarray_sum(psum2, r, l):
-    # https://leetcode.com/problems/sum-of-total-strength-of-wizards/discuss/2061985/
-    # UNTESTED
-    ln, rn = i - l, r - i
-    lacc = psum2[i] - psum2[max(l, 0)]
-    racc = psum2[r] - psum2[i]
-    return (racc * ln - lacc * rn)
+def powerset(iterable):
+    # https://stackoverflow.com/a/18035641/5894029
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s)+1))
+
+def colorings(iterable):
+    # https://stackoverflow.com/questions/20549341/ not very related
+    raise NotImplementedError
+
 
 def remove_consecutive_duplicates(lst):
     res = []
