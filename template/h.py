@@ -58,7 +58,7 @@ def solve_(arr):
     for i,x in enumerate(arr):
         g[x].append(i)
     
-    maxres = 1
+    maxres = 0
     ares = arr[0]
     lres = 0
     rres = 0
