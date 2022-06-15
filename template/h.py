@@ -53,10 +53,10 @@ def minus_one_matrix(mrr):
 
 def solve_(arr):
     # your solution here
-
+    
     g = defaultdict(list)
     for i,x in enumerate(arr):
-        g[x].append(i)
+        g[str(x)].append(i)
     
     maxres = 0
     ares = arr[0]
@@ -65,14 +65,15 @@ def solve_(arr):
 
     # log(g)
 
-    for element,brr in g.items():
-        brr = [(2*i-x,x) for i,x in enumerate(brr)]
+    for element in g:
+        # brr = [ for i,x in enumerate(brr)]
 
-        log(element, brr)
+        # log(element, brr)
 
         minprev = 10**10
         left = 0
-        for val,right in brr:
+        for i,x in enumerate(g[element]):
+            val,right = (2*i-x,x)
             if val - minprev > maxres:
                 maxres = val - minprev
                 ares = element
