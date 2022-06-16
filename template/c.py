@@ -106,20 +106,31 @@ def solve_(mrr, n):
         x, u = heapq.heappop(queue)
         if visited[u]:
             continue
-        visited[u] = True
-        pool.add(u)
-        cost = 1
-        for outpt in g[u]:
-            if outpt not in pool:
-                cost += 1
+        urr = [u]
+        while queue and queue[0][0] == x:
+            x, u = heapq.heappop(queue)
+            if visited[u]:
+                continue
+            urr.append(u)
 
-        log(cost, u)
-        for v in h[u]:
-            if not visited[v]:
-                f = x + cost
-                if f < weights[v]:
-                    weights[v] = f
-                    heapq.heappush(queue, (f, v))
+        for u in urr:
+            visited[u] = True
+            cost = 1
+            for outpt in g[u]:
+                if outpt not in pool:
+                    cost += 1
+
+            log(cost, u)
+            for v in h[u]:
+                if not visited[v]:
+                    f = x + cost
+                    if f < weights[v]:
+                        weights[v] = f
+                        heapq.heappush(queue, (f, v))
+
+        for u in urr:
+            pool.add(u)
+
 
     log(weights)
 
