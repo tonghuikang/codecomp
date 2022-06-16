@@ -93,7 +93,7 @@ def solve_(arr):
     left = []
     right = []
 
-    # log(arr)
+    log(arr)
 
     f = FenwickTree()
 
@@ -105,7 +105,7 @@ def solve_(arr):
         cost = f.query(x)
         left.append(cost)
 
-    # log(left)
+    log(left)
 
 
     f = FenwickTree()
@@ -119,7 +119,7 @@ def solve_(arr):
         right.append(cost)
 
     right = right[::-1]
-    # log(right)
+    log(right)
 
     return sum(min(a,b) for a,b in zip(left, right))
 
