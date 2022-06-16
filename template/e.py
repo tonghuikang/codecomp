@@ -93,6 +93,10 @@ def solve_(arr):
     left = []
     right = []
 
+    # log(arr)
+
+    f = FenwickTree()
+
     seen = set()
     for x in arr:
         if x not in seen:
@@ -101,8 +105,10 @@ def solve_(arr):
         cost = f.query(x)
         left.append(cost)
 
-    log(left)
+    # log(left)
 
+
+    f = FenwickTree()
 
     seen = set()
     for x in arr[::-1]:
@@ -110,15 +116,12 @@ def solve_(arr):
             seen.add(x)
             f.update(x, 1)
         cost = f.query(x)
-        left.append(cost)
+        right.append(cost)
 
     right = right[::-1]
-    log(right)
+    # log(right)
 
-
-    
-
-    return ""
+    return sum(min(a,b) for a,b in zip(left, right))
 
 
 for case_num in [0]:  # no loop over test case
