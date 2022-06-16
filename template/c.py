@@ -51,15 +51,84 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def dijkstra(list_of_indexes_and_costs, start):
+    # shortest path with nonnegative edge costs
+    # leetcode.com/problems/path-with-maximum-probability/
+    # leetcode.com/problems/network-delay-time/
+    length = len(list_of_indexes_and_costs)
+    visited = [False]*length
+    weights = [MAXINT]*length
+    path = [None]*length
+    queue = []
+    weights[start] = 0
+    heapq.heappush(queue, (0, start))
+    while queue:
+        g, u = heapq.heappop(queue)
+        if visited[u]:
+            continue
+        visited[u] = True
+        for v, w in list_of_indexes_and_costs[u]:
+            if not visited[v]:
+                f = g + w
+                if f < weights[v]:
+                    weights[v] = f
+                    path[v] = u
+                    heapq.heappush(queue, (f, v))
+    return path, weights
+
+
+MAXINT = 10**18
+
+def solve_(mrr, n):
     # your solution here
 
-    return ""
+    # the cost is the outdegree except those heading to the pool
+
+    pool = set([n])
+    visited = [False]*(n+1)
+    weights = [MAXINT]*(n+1)
+
+    g = defaultdict(set)
+    h = defaultdict(set)
+    for a,b in mrr:
+        g[a].add(b)
+        h[b].add(a)
+
+    g[0].add(1)
+    h[1].add(0)
+    
+    g[n] = set()
+    weights[n] = 0
+
+    queue = [(0, n)]
+    while queue:
+        # log(queue)
+        x, u = heapq.heappop(queue)
+        if visited[u]:
+            continue
+        visited[u] = True
+        pool.add(u)
+        cost = 1
+        for outpt in g[u]:
+            if outpt not in pool:
+                cost += 1
+
+        log(cost, u)
+        for v in h[u]:
+            if not visited[v]:
+                f = x + cost
+                if f < weights[v]:
+                    weights[v] = f
+                    heapq.heappush(queue, (f, v))
+
+    log(weights)
+
+    return weights[0] - 1
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -71,16 +140,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
