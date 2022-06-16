@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import heapq
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -120,7 +119,7 @@ def solve_(mrr, n):
                 if outpt not in pool:
                     cost += 1
 
-            log(cost, u)
+            # log(cost, u)
             for v in h[u]:
                 if not visited[v]:
                     f = x + cost
@@ -132,7 +131,7 @@ def solve_(mrr, n):
             pool.add(u)
 
 
-    log(weights)
+    # log(weights)
 
     return weights[0] - 1
 
