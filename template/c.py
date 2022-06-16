@@ -86,50 +86,39 @@ def solve_(mrr, n):
     pool = set([n])
     visited = [False]*(n+1)
     weights = [MAXINT]*(n+1)
+    outdegree = [0]*(n+1)
 
     g = defaultdict(set)
-    h = defaultdict(set)
+    h = defaultdict(list)
     for a,b in mrr:
+        if a == n:
+            continue
         g[a].add(b)
-        h[b].add(a)
+        h[b].append(a)
+        outdegree[a] += 1
 
-    g[0].add(1)
-    h[1].add(0)
+    for a,b in [[0,1]]:
+        g[a].add(b)
+        h[b].append(a)
+        outdegree[a] += 1
     
-    g[n] = set()
     weights[n] = 0
 
+    # log(outdegree)
     queue = [(0, n)]
+    
     while queue:
-        # log(queue)
         x, u = heapq.heappop(queue)
         if visited[u]:
             continue
-        urr = [u]
-        while queue and queue[0][0] == x:
-            x, u = heapq.heappop(queue)
-            if visited[u]:
-                continue
-            urr.append(u)
 
-        for u in urr:
-            visited[u] = True
-            cost = 1
-            for outpt in g[u]:
-                if outpt not in pool:
-                    cost += 1
-
-            # log(cost, u)
-            for v in h[u]:
-                if not visited[v]:
-                    f = x + cost
-                    if f < weights[v]:
-                        weights[v] = f
-                        heapq.heappush(queue, (f, v))
-
-        for u in urr:
-            pool.add(u)
-
+        for v in h[u]:
+            outdegree[v] -= 1
+            if not visited[v]:
+                f = x + outdegree[v] + 1
+                if f < weights[v]:
+                    weights[v] = f
+                    heapq.heappush(queue, (f, v))
 
     # log(weights)
 
