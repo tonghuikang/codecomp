@@ -82,18 +82,48 @@ def dfs(start, g, entry_operation, exit_operation):
             stack.pop()
             exit_operation(prev[cur], cur)
 
-def entry_operation(prev, cur, nex):
-    # note that prev is `null_pointer` at the root node
-    pass
-
-def exit_operation(prev, cur):
-    pass
-
 
 def solve_(arr, mrr, k):
     # your solution here
 
-    return ""
+    g = [[] for _ in range(k)]
+    for i,x in enumerate(arr, start=1):
+        x -= 1
+        g[x].append(i)
+
+    left = [x[0] for x in mrr]
+    right = [x[1] for x in mrr]
+
+    subtree_sum = [0]*k
+    assigned = [0]*k
+    result = [0]
+    
+    # log(g)
+    # log(left)
+    # log(right)
+
+    def entry_operation(prev, cur, nex):
+        pass
+    
+    def exit_operation(prev, cur):
+        if subtree_sum[cur] >= right[cur]:
+            assigned[cur] = right[cur]
+        elif subtree_sum[cur] < left[cur]:
+            # special ops needed
+            result[0] += 1
+            assigned[cur] = right[cur]
+        else:
+            assigned[cur] = subtree_sum[cur]
+        
+        if prev != "NULL":
+            subtree_sum[prev] += assigned[cur]
+
+    dfs(0, g, entry_operation, exit_operation)
+
+    # log(assigned)
+    # log(subtree_sum)
+
+    return result[0]
 
 
 # for case_num in [0]:  # no loop over test case
