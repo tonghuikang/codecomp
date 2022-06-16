@@ -78,7 +78,9 @@ def dijkstra(list_of_indexes_and_costs, start):
 
 MAXINT = 10**18
 
-def solve_(mrr, n):
+if True:
+    n,k = list(map(int,input().split()))
+    mrr = read_matrix(k)
     # your solution here
 
     # the cost is the outdegree except those heading to the pool
@@ -88,17 +90,17 @@ def solve_(mrr, n):
     weights = [MAXINT]*(n+1)
     outdegree = [0]*(n+1)
 
-    g = defaultdict(set)
+    # g = defaultdict(set)
     h = defaultdict(list)
     for a,b in mrr:
         if a == n:
             continue
-        g[a].add(b)
+        # g[a].add(b)
         h[b].append(a)
         outdegree[a] += 1
 
     for a,b in [[0,1]]:
-        g[a].add(b)
+        # g[a].add(b)
         h[b].append(a)
         outdegree[a] += 1
     
@@ -111,6 +113,7 @@ def solve_(mrr, n):
         x, u = heapq.heappop(queue)
         if visited[u]:
             continue
+        visited[u] = True
 
         for v in h[u]:
             outdegree[v] -= 1
@@ -122,43 +125,4 @@ def solve_(mrr, n):
 
     # log(weights)
 
-    return weights[0] - 1
-
-
-for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-# for case_num in range(int(input())):
-
-    # read line as an integer
-    # k = int(input())
-
-    # read line as a string
-    # srr = input().strip()
-
-    # read one line and parse each word as a string
-    # arr = input().split()
-
-    # read one line and parse each word as an integer
-    n,k = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
-
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
-
-    res = solve(mrr, n)  # include input here
-
-    # print length if applicable
-    # print(len(res))
-
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
-
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
-    print(res)
+    print(weights[0] - 1)
