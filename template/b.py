@@ -51,7 +51,46 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def dfs(start, g, entry_operation, exit_operation):
+    # https://codeforces.com/contest/1646/submission/148435078
+    # https://codeforces.com/contest/1656/submission/150799881
+    entered = set([start])
+    exiting = set()
+    stack = [start]
+    prev = {}
+
+    null_pointer = "NULL"
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            for nex in g[cur]:
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+            exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
+def entry_operation(prev, cur, nex):
+    # note that prev is `null_pointer` at the root node
+    pass
+
+def exit_operation(prev, cur):
+    pass
+
+
+def solve_(arr, mrr, k):
     # your solution here
 
     return ""
@@ -62,7 +101,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -72,15 +111,15 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, mrr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
