@@ -54,11 +54,14 @@ def solve_(arr, brr, n):
 
     in_count = Counter(arr)
 
-    for i in range(n):
-        cur = i
-        while in_count[cur] == 0:
+    pruned = set()
+    for cur in range(n):
+        while in_count[cur] == 0 and cur not in pruned:
+            pruned.add(cur)
             in_count[arr[cur]] -= 1
             cur = arr[cur]
+
+    log(in_count)
 
     allset = set()        
     for k,v in in_count.items():
@@ -71,14 +74,13 @@ def solve_(arr, brr, n):
 
     visited = set()
     res = 0
-    for i in range(n):
+    for cur in range(n):
         # log(visited)
-        if i not in allset:
+        if cur not in allset:
             continue
-        if i in visited:
+        if cur in visited:
             continue
         
-        cur = i
         curmin = brr[cur]
         while cur not in visited:
             visited.add(cur)
@@ -90,6 +92,18 @@ def solve_(arr, brr, n):
         res += curmin
 
     return res
+
+
+# import random
+# while OFFLINE_TEST:
+#     n = random.randint(4,10)
+#     arr = [random.randint(0,n-1) for x in range(n)]
+#     brr = [10]*n
+#     for i,x in enumerate(arr):
+#         if i == x:
+#             break
+#     else:
+#         solve(arr, brr, n)
 
 
 for case_num in [0]:  # no loop over test case
