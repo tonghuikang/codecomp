@@ -51,10 +51,17 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, n, m):
     # your solution here
 
-    return ""
+    maxx = max(max(row) for row in mrr)
+
+    for i,row in enumerate(mrr):
+        for j,y in enumerate(row):
+            if y == maxx:
+                h = min(i, n-1-i)
+                w = min(j, m-1-j)
+                return (n-h)*(m-w) 
 
 
 # for case_num in [0]:  # no loop over test case
@@ -71,16 +78,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
