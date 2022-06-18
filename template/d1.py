@@ -96,11 +96,11 @@ def solve_(mrr, n):
         return n-1
 
     for i in range(n):
-        if len(g[i]) == 1:
+        if len(g[i]) > 1:
             break
 
     start = i
-    res = [1]
+    res = [0]
     subtree_uncounted = [True for _ in range(n)]
 
     def entry_operation(prev, cur, nex):
