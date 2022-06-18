@@ -51,6 +51,38 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def dfs(start, g, entry_operation, exit_operation):
+    # https://codeforces.com/contest/1646/submission/148435078
+    # https://codeforces.com/contest/1656/submission/150799881
+    entered = set([start])
+    exiting = set()
+    stack = [start]
+    prev = {}
+
+    null_pointer = "NULL"
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            for nex in g[cur]:
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+            exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
+
+
 def solve_(mrr, n):
     # sum of minus one
     # your solution here
@@ -63,11 +95,33 @@ def solve_(mrr, n):
     if n <= 2:
         return n-1
 
-    res = 0
     for i in range(n):
-        res += max(0, len(g[i]) - 2)
+        if len(g[i]) == 1:
+            break
 
-    return max(1,res)
+    start = i
+    res = [1]
+    subtree_counted = [False for _ in range(n)]
+
+    def entry_operation(prev, cur, nex):
+        # note that prev is `null_pointer` at the root node
+        pass
+
+    def exit_operation(prev, cur):
+        subtree_count = 0
+        for nex in g[cur]:
+            if nex != prev:
+                if not subtree_counted[nex]:
+                    subtree_count += 1
+
+        # log(cur, subtree_count)
+        if subtree_count > 1:
+            res[0] += 1
+            subtree_counted[cur] = True
+
+    dfs(start, g, entry_operation, exit_operation)
+
+    return res[0]
 
 
 # for case_num in [0]:  # no loop over test case
