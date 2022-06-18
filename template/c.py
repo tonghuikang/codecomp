@@ -53,27 +53,27 @@ def solve_(a,b,c,x,y,z):
 
     res = 0
 
-    for x11 in range(1,28):
-        for x12 in range(1,28):
-            for x13 in range(1,28):
+    for x11 in range(1,31):
+        for x12 in range(1,31):
+            for x13 in range(1,31):
                 if x11 + x12 + x13 != a:
                     continue
 
-                for x21 in range(1,28):
-                    for x22 in range(1,28):
-                        for x23 in range(1,28):
+                for x21 in range(1,31):
+                    for x22 in range(1,31):
+                        for x23 in range(1,31):
                             if x21 + x22 + x23 != b:
                                 continue
 
-                            for x31 in range(1,28):
+                            for x31 in range(1,31):
                                 if x11 + x21 + x31 != x:
                                     continue
 
-                                for x32 in range(1,28):
+                                for x32 in range(1,31):
                                     if x12 + x22 + x32 != y:
                                         continue
 
-                                    for x33 in range(1,28):
+                                    for x33 in range(1,31):
                                         if x13 + x23 + x33 != z:
                                             continue
 
