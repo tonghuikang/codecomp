@@ -61,11 +61,11 @@ def solve_(mrr,n,m):
     minn = [[LARGE for _ in range(m)] for _ in range(n)]
     maxx = [[LARGE for _ in range(m)] for _ in range(n)]
 
-    minn[0][0] = mrr[0]
-    maxx[0][0] = mrr[0]
+    minn[0][0] = mrr[0][0]
+    maxx[0][0] = mrr[0][0]
 
     i = 0
-    for j in range(1,n):
+    for j in range(1,m):
         minn[i][j] = minn[i][j-1] + mrr[i][j]
         maxx[i][j] = maxx[i][j-1] + mrr[i][j]
         
@@ -76,10 +76,10 @@ def solve_(mrr,n,m):
     
     for i in range(1,n):
         for j in range(1,m):
-            minn[i][j] = mrr[i][j] + min(minn[i-1][j] + minn[i][j-1]) 
-            maxx[i][j] = mrr[i][j] + max(maxx[i-1][j] + maxx[i][j-1]) 
+            minn[i][j] = mrr[i][j] + min(minn[i-1][j], minn[i][j-1]) 
+            maxx[i][j] = mrr[i][j] + max(maxx[i-1][j], maxx[i][j-1]) 
 
-    if minn[-1][-1] <= 0 maxx[-1][-1]:
+    if minn[-1][-1] <= 0 <= maxx[-1][-1]:
         return yes
     return no
 
