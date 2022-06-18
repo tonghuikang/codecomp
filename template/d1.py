@@ -121,7 +121,10 @@ def solve_(mrr, n):
         if subtree_count == 0 and num_children >= 1:
             subtree_uncounted[cur] = False
 
-        if subtree_count >= 1:
+        if subtree_count == 1 and num_children > 1:
+            subtree_uncounted[cur] = False
+
+        if subtree_count > 1:
             res[0] += subtree_count-1
             subtree_uncounted[cur] = False
             # log(cur, subtree_count)
