@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,7 +51,37 @@ def minus_one_matrix(mrr):
 def solve_(a,b,c,x,y,z):
     # your solution here
 
-    return ""
+    res = 0
+
+    for x11 in range(1,28):
+        for x12 in range(1,28):
+            for x13 in range(1,28):
+                if x11 + x12 + x13 != a:
+                    continue
+
+                for x21 in range(1,28):
+                    for x22 in range(1,28):
+                        for x23 in range(1,28):
+                            if x21 + x22 + x23 != b:
+                                continue
+
+                            for x31 in range(1,28):
+                                if x11 + x21 + x31 != x:
+                                    continue
+
+                                for x32 in range(1,28):
+                                    if x12 + x22 + x32 != y:
+                                        continue
+
+                                    for x33 in range(1,28):
+                                        if x13 + x23 + x33 != z:
+                                            continue
+
+                                        if x31 + x32 + x33 != c:
+                                            continue
+                                        res += 1
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
