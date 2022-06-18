@@ -101,7 +101,7 @@ def solve_(mrr, n):
 
     start = i
     res = [1]
-    subtree_counted = [False for _ in range(n)]
+    subtree_uncounted = [True for _ in range(n)]
 
     def entry_operation(prev, cur, nex):
         # note that prev is `null_pointer` at the root node
@@ -109,15 +109,22 @@ def solve_(mrr, n):
 
     def exit_operation(prev, cur):
         subtree_count = 0
+        num_children = 0
         for nex in g[cur]:
             if nex != prev:
-                if not subtree_counted[nex]:
+                num_children += 1
+                if subtree_uncounted[nex]:
                     subtree_count += 1
 
         # log(cur, subtree_count)
+
+        if subtree_count == 0 and num_children >= 1:
+            subtree_uncounted[cur] = False
+
         if subtree_count > 1:
-            res[0] += 1
-            subtree_counted[cur] = True
+            res[0] += subtree_count-1
+            subtree_uncounted[cur] = False
+            # log(cur, subtree_count)
 
     dfs(start, g, entry_operation, exit_operation)
 
