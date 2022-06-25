@@ -51,7 +51,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-LARGE = 10**5 + 10
+LARGE = 4*10**5 + 10
 p = 10**9 + 7
 factorial_mod_p = [1 for _ in range(LARGE)]
 for i in range(1,LARGE):
@@ -78,7 +78,7 @@ def solve_(arr):
         # log(val)
         res += val
 
-    return res
+    return res%p
 
 
 for case_num in [0]:  # no loop over test case

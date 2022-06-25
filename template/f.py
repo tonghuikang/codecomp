@@ -51,7 +51,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(triplets):
     # your solution here
 
     return ""
@@ -62,13 +62,20 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
 
+    triplets = set()
+
     # read one line and parse each word as a string
-    # arr = input().split()
+    for i in range(n-1):
+        arr = input().split()
+        for j,block in enumerate(arr, start=i+1):
+            for k,cell in enumerate(block):
+                if cell == "1":
+                    triplets.add((i,j,k))
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
@@ -80,7 +87,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(triplets)  # include input here
 
     # print length if applicable
     # print(len(res))
