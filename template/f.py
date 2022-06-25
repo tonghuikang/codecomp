@@ -75,7 +75,7 @@ for case_num in range(int(input())):
         for j,block in enumerate(arr, start=i+1):
             for k,cell in enumerate(block):
                 if cell == "1":
-                    triplets.add((i,j,k))
+                    triplets.add((i+1,j+1,k+1))
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
