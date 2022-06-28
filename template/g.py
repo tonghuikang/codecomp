@@ -72,15 +72,20 @@ def solve_(srr):
 
     cnt = 1
 
-    while seed != 1:
+    @cache
+    def dp(seed):
         # log(seed)
         if seed == 0:
             return -1
+        if seed == 1:
+            return 0
+        res = 0        
         if seed & modifying == 0:
             seed = seed << 1
-            continue
-        cnt += 1
+            return dp(seed)
+        res += 1
         seed = seed ^ (val)
+        return dp(seed)
 
     return zero_prefix + 1, zero_prefix + cnt + n
 
