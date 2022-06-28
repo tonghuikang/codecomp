@@ -51,21 +51,49 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+    if srr.count("1") == 0:
+        return [-1]
+
+    for i,x in enumerate(srr):
+        if x == "1":
+            break
+    
+
+    zero_prefix = i
+    srr = srr[i:]
+    n = len(srr)
+    val = int(srr, 2)
+    seed = val ^ (val*2) ^ (2**n)
+    modifying = 2**(n-1)
+    log(zero_prefix, srr, val, n, seed)
+
+    cnt = 1
+
+    while seed != 1:
+        # log(seed)
+        if seed == 0:
+            return -1
+        if seed & modifying == 0:
+            seed = seed << 1
+            continue
+        cnt += 1
+        seed = seed ^ (val)
+
+    return zero_prefix + 1, zero_prefix + cnt + n
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -80,13 +108,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
