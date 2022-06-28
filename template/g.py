@@ -70,20 +70,20 @@ def solve_(srr):
     modifying = 2**(n-1)
     log(zero_prefix, srr, val, n, seed)
 
-    @functools.lru_cache(maxsize=None)
-    def dp(seed):
+    cnt = 1
+
+    while True:
         # log(seed)
         if seed == 0:
-            return -1
+            return [-1]
         if seed == 1:
-            return 1
+            break
         if seed & modifying == 0:
             seed = seed << 1
-            return dp(seed)
+            continue
         seed = seed ^ (val)
-        return dp(seed) + 1
-
-    cnt = dp(seed)
+        cnt += 1
+        continue
 
     return zero_prefix + 1, zero_prefix + cnt + n
 
