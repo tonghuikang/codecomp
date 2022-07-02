@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import heapq
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -104,7 +102,6 @@ def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target
     return costs[idxs[target]]
 
 
-
 def solve_(b, k, sx, sy, ex, ey):
     # your solution here
 
@@ -118,7 +115,7 @@ def solve_(b, k, sx, sy, ex, ey):
     ex1 = ex0 + b
     ey1 = ey0 + b
 
-    points = {
+    points = [
         (sx, sy),
 
         (sx, sy0),
@@ -144,12 +141,12 @@ def solve_(b, k, sx, sy, ex, ey):
         (ex0, ey1),
         (ex1, ey0),
         (ex1, ey1),
-    }
+    ]
 
-    g = defaultdict(list)
+    g = [[] for _ in range(18)]
 
     def diff(sx, sy, ex, ey):
-        dist = (abs(sx-ex) + abs(ex-ey))
+        dist = (abs(sx-ex) + abs(sy-ey))
         if (sx%b == 0 and sy%b == 0 and ex%b == 0 and ey%b == 0):
             return dist
         if (sx == ex and sx%b == 0):
@@ -158,13 +155,18 @@ def solve_(b, k, sx, sy, ex, ey):
             return dist
         return dist*k
 
-    for (ax,ay) in points:
-        for (bx, by) in points:
-            g[ax,ay].append(((bx, by), diff(ax,ay,bx,by)))
+    for i,(ax,ay) in enumerate(points):
+        if i == 9:
+            continue
+        for j,(bx, by) in enumerate(points):
+            if j == 0:
+                continue
+            if i >= 9 and j < 9:
+                continue
+            dist = diff(ax, ay, bx, by)
+            g[i].append((j,dist))
 
-    log(sx, sy, ex, ey)
-
-    return dijkstra_with_preprocessing(g, (sx,sy), (ex,ey), points)
+    return dijkstra(g, 0)[1][9]
 
 
 # for case_num in [0]:  # no loop over test case
