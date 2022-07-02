@@ -16,8 +16,8 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+# CHECK_OFFLINE_TEST = True
+CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -75,34 +75,8 @@ def dijkstra(list_of_indexes_and_costs, start):
     return path, weights
 
 
-def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target, idxs=set()):
-    # this operation is costly, recommend to parse to list_of_indexes_and_costs directly
-    # leetcode.com/problems/path-with-maximum-probability/
-    # leetcode.com/problems/network-delay-time/
-    d = map_from_node_to_nodes_and_costs
-
-    if target not in d:  # destination may not have outgoing paths
-        d[target] = []
-    if source not in d:
-        return MAXINT
-
-    # assign indexes
-    if idxs:
-        idxs = {k:i for i,k in enumerate(idxs)}
-    else:
-        idxs = {k:i for i,k in enumerate(d.keys())}
-
-    # populate list of indexes and costs
-    list_of_indexes_and_costs = [[] for _ in range(len(idxs))]
-    for e,vrr in d.items():
-        for v,cost in vrr:
-            list_of_indexes_and_costs[idxs[e]].append((idxs[v],cost))
-
-    _, costs = dijkstra(list_of_indexes_and_costs, idxs[source])
-    return costs[idxs[target]]
-
-
-def solve_(b, k, sx, sy, ex, ey):
+for case_num in range(int(input())):
+    b, k, sx, sy, ex, ey = list(map(int,input().split()))
     # your solution here
 
     sx0 = (sx // b) * b
@@ -116,32 +90,42 @@ def solve_(b, k, sx, sy, ex, ey):
     ey1 = ey0 + b
 
     points = [
-        (sx, sy),
+        (sx, sy, 1),
 
-        (sx, sy0),
-        (sx, sy1),
+        (sx, sy0, 2),
+        (sx, sy1, 2),
 
-        (sx0, sy),
-        (sx1, sy),
+        (sx0, sy, 2),
+        (sx1, sy, 2),
 
-        (sx0, sy0),
-        (sx0, sy1),
-        (sx1, sy0),
-        (sx1, sy1),
+        (sx0, sy0, 3),
+        (sx0, sy1, 3),
+        (sx1, sy0, 3),
+        (sx1, sy1, 3),
 
-        (ex, ey),
+        (ex, ey, 4),
 
-        (ex, ey0),
-        (ex, ey1),
+        (ex, ey0, 5),
+        (ex, ey1, 5),
 
-        (ex0, ey),
-        (ex1, ey),
+        (ex0, ey, 5),
+        (ex1, ey, 5),
 
-        (ex0, ey0),
-        (ex0, ey1),
-        (ex1, ey0),
-        (ex1, ey1),
+        (ex0, ey0, 6),
+        (ex0, ey1, 6),
+        (ex1, ey0, 6),
+        (ex1, ey1, 6),
     ]
+
+    allowed = set([
+        (1,2),
+        (2,3),
+        (3,6),
+        (6,5),
+        (5,4),
+        (2,5),
+        (1,4),
+    ])
 
     g = [[] for _ in range(18)]
 
@@ -155,54 +139,18 @@ def solve_(b, k, sx, sy, ex, ey):
             return dist
         return dist*k
 
-    for i,(ax,ay) in enumerate(points):
+    # count = 0
+    for i,(ax,ay,p) in enumerate(points):
         if i == 9:
             continue
-        for j,(bx, by) in enumerate(points):
-            if j == 0:
-                continue
-            if i >= 9 and j < 9:
+        for j,(bx,by,q) in enumerate(points):
+            if (p,q) not in allowed:
                 continue
             dist = diff(ax, ay, bx, by)
             g[i].append((j,dist))
+            # count += 1
+    # print(count)
 
-    return dijkstra(g, 0)[1][9]
-
-
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
-
-    # read line as an integer
-    # k = int(input())
-
-    # read line as a string
-    # srr = input().strip()
-
-    # read one line and parse each word as a string
-    # arr = input().split()
-
-    # read one line and parse each word as an integer
-    b, k, sx, sy, ex, ey = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
-
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
-
-    res = solve(b, k, sx, sy, ex, ey)  # include input here
-
-    # print length if applicable
-    # print(len(res))
-
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
-
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    res = dijkstra(g, 0)[1][9]
 
     print(res)
