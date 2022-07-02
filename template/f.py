@@ -49,7 +49,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def dijkstra(list_of_indexes_and_costs, start):
+def dijkstra(list_of_indexes_and_costs, start, end):
     # shortest path with nonnegative edge costs
     # leetcode.com/problems/path-with-maximum-probability/
     # leetcode.com/problems/network-delay-time/
@@ -65,6 +65,8 @@ def dijkstra(list_of_indexes_and_costs, start):
         if visited[u]:
             continue
         visited[u] = True
+        if u == end:
+            return weights[end]
         for v, w in list_of_indexes_and_costs[u]:
             if not visited[v]:
                 f = g + w
@@ -72,7 +74,7 @@ def dijkstra(list_of_indexes_and_costs, start):
                     weights[v] = f
                     path[v] = u
                     heapq.heappush(queue, (f, v))
-    return path, weights
+    return weights[end]
 
 
 for case_num in range(int(input())):
@@ -151,6 +153,6 @@ for case_num in range(int(input())):
             # count += 1
     # print(count)
 
-    res = dijkstra(g, 0)[1][9]
+    res = dijkstra(g, 0, 9)
 
     print(res)
