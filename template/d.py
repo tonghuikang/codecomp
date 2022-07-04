@@ -52,43 +52,43 @@ def minus_one_matrix(mrr):
 
 
 def solve_(arr):
-    # your solution here
-    if len(arr) == 1:
-        return len(arr)
-    if len(arr) == 2:
-        if arr[0] == arr[1]:
-            return 2
-        return 0
 
     c = sorted(Counter(arr).items(), reverse=True, key=lambda x:x[1])
-    maxres = len(arr)%2
 
-    for k,v in c:
-        if maxres >= v:
-            continue
-        
-        stack = arr[:2]
-        for x in arr[2:]:
-            if len(stack) >= 2 and x != k and stack[-1] == x and stack[-2] != x and stack[-2] != k:
-                stack.pop()
-                stack.pop()
-                stack.append(x)
-                continue
-            stack.append(x)
+    for k,v in c[:3]:
 
-        brr = stack
-        stack = []
-        for x in brr:
-            if stack and x != k and stack[-1] != k and stack[-1] != x:
-                stack.pop()
-                continue
-            stack.append(x)
+        # your solution here
+        maxres = len(arr)%2
+        n = len(arr)
 
-        # log(stack, k, v)
-        res = v - (len(stack) - v)
-        maxres = max(maxres, res)
+        dp = [[0 for _ in range(n+1)] for _ in range(n+1)]
 
-    return maxres
+        for i in range(n):
+            for j in range(1,n+1):
+                if i >= j:
+                    continue
+                if i+1 == j:
+                    dp[i][j] = 1
+                    continue
+                if i+2 == j:
+                    if arr[i] == arr[i+1] == k:
+                        dp[i][j] = 2
+                    else:
+                        dp[i][j] = 0
+                    continue
+
+                # log(i,j)
+                # log(int(arr[i] != arr[i+1]))
+                # log(int(arr[j-1] != arr[j-2]))
+
+                dp[i][j] = max(
+                    dp[i][j],
+                    dp[i+2][j] - int(arr[i] == arr[i+1] != k) * 2 + int(arr[i] == arr[i+1] == k) * 2,
+                    dp[i][j-2] - int(arr[j-1] == arr[j-2] != k) * 2 + int(arr[j-1] == arr[j-2] == k) * 2,
+                )
+
+
+    return dp[0][-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -114,7 +114,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = max(solve(arr), solve(arr[::-1]))  # include input here
+    res = solve(arr)
 
     # print length if applicable
     # print(len(res))
