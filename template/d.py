@@ -51,10 +51,44 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
+    if len(arr) == 1:
+        return len(arr)
+    if len(arr) == 2:
+        if arr[0] == arr[1]:
+            return 2
+        return 0
 
-    return ""
+    c = sorted(Counter(arr).items(), reverse=True, key=lambda x:x[1])
+    maxres = len(arr)%2
+
+    for k,v in c:
+        if maxres >= v:
+            continue
+        
+        stack = arr[:2]
+        for x in arr[2:]:
+            if len(stack) >= 2 and x != k and stack[-1] == x and stack[-2] != x and stack[-2] != k:
+                stack.pop()
+                stack.pop()
+                stack.append(x)
+                continue
+            stack.append(x)
+
+        brr = stack
+        stack = []
+        for x in brr:
+            if stack and x != k and stack[-1] != k and stack[-1] != x:
+                stack.pop()
+                continue
+            stack.append(x)
+
+        # log(stack, k, v)
+        res = v - (len(stack) - v)
+        maxres = max(maxres, res)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -62,7 +96,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -72,7 +106,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -80,7 +114,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = max(solve(arr), solve(arr[::-1]))  # include input here
 
     # print length if applicable
     # print(len(res))
