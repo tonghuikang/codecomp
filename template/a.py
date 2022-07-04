@@ -51,18 +51,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n):
     # your solution here
 
-    return ""
+    if n%2 == 0:
 
+        return [n//2,0,0]
+    return [-1]
+
+#     if n < 10:
+#         for i in range(100):
+#             for j in range(100):
+#                 for k in range(100):
+#                     if (i^j) + (j^k) + (k^i) == n:
+#                         return [i,j,k]
+#         return [-1]
+
+#     if n%2 == 0:
+#         return [0, n//2, n//2]
+
+#     n -= 3
+#     return [3, n//2, n//2]
+
+
+# for z in range(100):
+#     res = solve(z)
+#     log(z, res)
+#     if res != [-1]:
+#         i,j,k = res
+#         log(z, res, i^j + j^k + k^i)
+#         assert (i^j) + (j^k) + (k^i) == z
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    z = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -80,13 +105,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(z)  # include input here
+
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
