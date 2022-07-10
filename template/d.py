@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,9 +49,16 @@ def minus_one_matrix(mrr):
 
 
 def solve_(mrr,n,m,k):
-    # your solution here
 
-    return ""
+    depth = [0 for _ in range(n)]
+
+    for _ in range(k):
+        new_depth = [0 for _ in range(n)]
+        for a,b in mrr:
+            new_depth[b] = max(new_depth[b], depth[a] + 1)
+        depth = new_depth
+
+    return n - sum(x < k for x in depth)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -78,7 +82,7 @@ for case_num in range(int(input())):
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(m)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = minus_one_matrix(mrr)
 
     res = solve(mrr,n,m,k)  # include input here
 
@@ -91,6 +95,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
