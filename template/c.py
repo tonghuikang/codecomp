@@ -99,7 +99,7 @@ def solve_(arr, brr, n, m):
                 mincost = min(mincost, cost)
                 aptr += 1
             else:
-                new_dp[new_idxs[bptr]] = min(new_dp[new_idxs[bptr]], new_idxs[bptr] + mincost) 
+                new_dp[new_idxs[bptr]] = new_idxs[bptr] + mincost
                 bptr += 1
             # log(aptr, bptr, mincost)
         return new_dp
