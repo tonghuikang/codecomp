@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -50,11 +47,49 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+LARGE = 10**19
 
 def solve_(arr,brr,n,m,k):
     # your solution here
 
-    return ""
+    asum = [0]
+    for x in arr:
+        asum.append(asum[-1] + x)
+
+    bsum = [0]
+    for x in brr:
+        bsum.append(bsum[-1] + x)
+
+    amin = [LARGE for _ in range(n+1)]
+    bmin = [LARGE for _ in range(m+1)]
+    amin[0] = 0
+    bmin[0] = 0
+
+    for i,x in enumerate(asum):
+        for j,y in enumerate(asum[i+1:], start=i+1):
+            dist = j-i
+            val = y-x
+            amin[dist] = min(amin[dist], val)
+
+    for i,x in enumerate(bsum):
+        for j,y in enumerate(bsum[i+1:], start=i+1):
+            dist = j-i
+            val = y-x
+            bmin[dist] = min(bmin[dist], val)
+
+    # log(amin)
+    # log(bmin)
+
+    minres = 10**18
+    for i in range(n+1):
+        j = n+m-k-i
+        if j > m or j < 0:
+            continue
+        res = amin[i] + bmin[j]
+        # log(i,j,res)
+        minres = min(minres, res)
+
+    return sum(arr) + sum(brr) - minres
 
 
 # for case_num in [0]:  # no loop over test case
