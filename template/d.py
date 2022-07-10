@@ -56,19 +56,25 @@ def solve_(mrr,n,m,k):
     # how many alibi each person has
 
     for _ in range(k):
-        new_depth = [set([x]) for x in range(n)]
         for a,b in mrr:
-            if len(depth[a]) > k+1 or -1 in depth[a]:
-                new_depth[b] = set([-1])
+            if depth[b] == -1:
+                continue
+            if depth[a] == -1:
+                depth[b] = -1
             else:
                 for x in depth[a]:
-                    new_depth[b].add(x)
+                    depth[b].add(x)
+                    if len(depth[b]) > k:
+                        depth[b] = -1
+                        break
 
-        depth = new_depth
-    
-    # log(depth)
+    return n - sum(x != -1 for x in depth)
 
-    return n - sum(((len(x) <= k) and (-1 not in x)) for x in depth)
+# edges = []
+# for i in range(1,100_000):
+#     edges.append([0,i])
+# edges.append([i,0])
+# solve(edges, 100_000, 100_000, 20)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
