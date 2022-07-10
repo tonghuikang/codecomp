@@ -50,16 +50,23 @@ def minus_one_matrix(mrr):
 
 def solve_(mrr,n,m,k):
 
-    depth = [0 for _ in range(n)]
+    depth = [set([x]) for x in range(n)]
+
+    # -1 is the exempt card
 
     for _ in range(k):
-        new_depth = [0 for _ in range(n)]
+        new_depth = [set([x]) for x in range(n)]
         for a,b in mrr:
-            new_depth[b] = max(new_depth[b], depth[a] + 1)
+            if len(depth[a]) > k+1 or -1 in depth[a]:
+                new_depth[b] = set([-1])
+            else:
+                new_depth[b] = new_depth[b] | depth[a]
+
         depth = new_depth
+    
+    # log(depth)
 
-    return n - sum(x < k for x in depth)
-
+    return n - sum(((len(x) <= k) and (-1 not in x)) for x in depth)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
