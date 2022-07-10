@@ -53,6 +53,7 @@ def solve_(mrr,n,m,k):
     depth = [set([x]) for x in range(n)]
 
     # -1 is the exempt card
+    # how many alibi each person has
 
     for _ in range(k):
         new_depth = [set([x]) for x in range(n)]
@@ -60,7 +61,8 @@ def solve_(mrr,n,m,k):
             if len(depth[a]) > k+1 or -1 in depth[a]:
                 new_depth[b] = set([-1])
             else:
-                new_depth[b] = new_depth[b] | depth[a]
+                for x in depth[a]:
+                    new_depth[b].add(x)
 
         depth = new_depth
     
