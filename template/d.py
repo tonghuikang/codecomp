@@ -76,6 +76,13 @@ def solve_(mrr,n,m,k):
 # edges.append([i,0])
 # solve(edges, 100_000, 100_000, 20)
 
+# edges = []
+# for i in range(20,5_000):
+#     for j in range(20):
+#         edges.append([i,j])
+#     edges.append([i,0])
+# solve(edges, 100_000, 100_000, 20)
+
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
