@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -61,7 +58,7 @@ def remove_consecutive_duplicates(lst):
 
 
 LARGE = 10**18
-LARGE2 = 10**16
+LARGE2 = 10**8
 
 def solve_(arr, brr, n, m):
     # your solution here
@@ -77,7 +74,7 @@ def solve_(arr, brr, n, m):
     for k in key_to_loc:
         key_to_loc[k].append(LARGE2)
 
-    log(key_to_loc)
+    # log(key_to_loc)
 
     dp = {}
     for idx in key_to_loc[arr[0]]:
@@ -86,8 +83,8 @@ def solve_(arr, brr, n, m):
     dp[LARGE2] = LARGE
 
     def transition(dp, old_idxs, new_idxs):
-        assert len(old_idxs) == len(dp)
-        assert set(dp.keys()) == set(old_idxs)
+        # assert len(old_idxs) == len(dp)
+        # assert set(dp.keys()) == set(old_idxs)
 
         new_dp = {idx:LARGE for idx in new_idxs}
         aptr = 0
@@ -109,7 +106,7 @@ def solve_(arr, brr, n, m):
         new_idxs = key_to_loc[b]
 
         new_dp1 = transition(dp, old_idxs, new_idxs)
-        new_dp2 = transition({-k:v for k,v in dp.items()}, [-x for x in old_idxs], [-x for x in new_idxs])
+        new_dp2 = transition({-k:v for k,v in dp.items()}, [-x for x in old_idxs[::-1]], [-x for x in new_idxs[::-1]])
 
         # log()
         # log(dp)
@@ -121,7 +118,7 @@ def solve_(arr, brr, n, m):
         for k,v in new_dp1.items():
             dp[k] = min(v, new_dp2[-k])
 
-        log(dp)
+        # log(dp)
 
     return min(dp.values())
 
