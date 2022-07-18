@@ -51,8 +51,14 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, qrr, n, m, q):
     # your solution here
+
+    # each connected component is a sortedList of intervals
+    # merge the smaller component into the larger component
+    # during merging, if a query can be answered, update the query's answer
+
+    # not sure how tourist did this in 7 minutes
 
     return ""
 
@@ -71,16 +77,17 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,q = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
+    qrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, qrr, n, m, q)  # include input here
 
     # print length if applicable
     # print(len(res))
