@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,7 +52,21 @@ def minus_one_matrix(mrr):
 def solve_(arr, k):
     # your solution here
 
-    return ""
+    d = defaultdict(list)
+
+    for i,x in enumerate(arr):
+        d[x].append(i)
+
+    res = [0 for _ in range(k)]
+
+    for k,v in d.items():
+        val = len(v)
+        for a,b in zip(v,v[1:]):
+            if (b-a)%2 == 0:
+                val -= 1
+        res[k] = val
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,7 +85,7 @@ for case_num in range(int(input())):
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
@@ -86,7 +98,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
