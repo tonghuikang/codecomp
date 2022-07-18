@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -51,10 +48,20 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,arr):
     # your solution here
 
-    return ""
+    res = ["B" for _ in range(m)]
+
+    for x in arr:
+        if x >= m//2:
+            x = m-x-1
+        if res[x] == "A":
+            res[~x] = "A"
+        else:
+            res[x] = "A"
+
+    return "".join(res)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -71,16 +78,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
