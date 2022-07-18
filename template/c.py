@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,7 +51,53 @@ def minus_one_matrix(mrr):
 def solve_(arr, k):
     # your solution here
 
-    return ""
+    # if odd only one way
+
+    if k%2 == 1:
+        cnt = 0
+        for a,b,c in zip(arr[::2], arr[1::2], arr[2::2]):
+            if b > max(a,c):
+                continue
+            cnt += max(a,c) + 1 - b
+        return cnt
+
+    minres = 10**18
+
+    lrr = [-1 for _ in range(k)]
+    rrr = [-1 for _ in range(k)]
+
+    cnt = 0
+    for i,a,b,c in (zip(range(0,k,2), arr[::2], arr[1::2], arr[2::2])):
+        i += 1
+        if b > max(a,c):
+            pass
+        else:
+            cnt += max(a,c) + 1 - b
+        lrr[i] = cnt
+    minres = min(minres, cnt)
+
+    cnt = 0
+    arr = arr[::-1]
+    for i,a,b,c in (zip(range(0,k,2), arr[::2], arr[1::2], arr[2::2])):
+        i += 1
+        if b > max(a,c):
+            pass
+        else:
+            cnt += max(a,c) + 1 - b
+        rrr[~i] = cnt
+    minres = min(minres, cnt)
+
+    # log(lrr)
+    # log(rrr)
+    for a,b in zip(lrr, rrr[3:]):
+        if a < 0 or b < 0:
+            continue
+        res = a+b
+        minres = min(minres, res)
+
+    # if even check two ways
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
