@@ -3,50 +3,6 @@ import sys
 import heapq
 input = sys.stdin.readline  # to read input quickly
 
-# available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
-# import scipy
-
-m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
-# d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
-# d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
-e18 = 10**18 + 10
-
-# if testing locally, print to terminal with a different color
-OFFLINE_TEST = False
-CHECK_OFFLINE_TEST = True
-CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
-if CHECK_OFFLINE_TEST:
-    import getpass
-    OFFLINE_TEST = getpass.getuser() == "htong"
-
-def log(*args):
-    if CHECK_OFFLINE_TEST and OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
-
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
-
 # ---------------------------- template ends here ----------------------------
 # import time
 
@@ -68,25 +24,27 @@ def ungroup(x):
 
 def group(a,b,c):
     val = (a << 36) ^ (b << 18) ^ c
-    assert ungroup(val) == (a,b,c)
+    # assert ungroup(val) == (a,b,c)
     return val
 
-def solve_(arr, n, k):
-    arr = set(arr)
-    # your solution here
-    maxarr = max(arr)
-    minarr = min(arr)
-    minres = maxarr - minarr
+for case_num in range(int(input())):
+    n,k = list(map(int,input().split()))
 
-    arr = [group((x//k),k,x) for i,x in enumerate(arr)]
-    arr.sort()
+    n_cooldown = 100*n
+    cnt = n_cooldown
+
+    # your solution here
+
+    arr = [group((x//k),k,x) for x in map(int,input().split())]
+    # arr.sort()
 
     minn = ungroup(arr[0])[0]
     maxx = ungroup(arr[-1])[0]
     minres = maxx - minn
 
     if minres == 0:
-        return 0
+        print(0)
+        continue
 
     maxx = max(1, maxx)
 
@@ -95,7 +53,7 @@ def solve_(arr, n, k):
     # jump = 1
     # log(jump)
 
-    while ungroup(arr[0])[1] > 1:
+    while ungroup(arr[0])[1] > 1 and cnt > 0:
         nx,i,x = ungroup(heapq.heappop(arr))
 
         i = max(1, min(ceiling_division(x, maxx), x // (nx+1)))
@@ -108,11 +66,14 @@ def solve_(arr, n, k):
         minn = ungroup(arr[0])[0]
         # if maxx - minn < minres:
         #     log((nx,i,x), maxx - minn)
-        minres = min(minres, maxx - minn)
+        cnt -= 1
+        if maxx - minn < minres:
+            minres = maxx - minn
+            cnt = n_cooldown
         if minres == 0:
             break
 
-    return minres
+    print(minres)
 
 # LARGE = 3000
 # res = solve([1] + [LARGE]*(LARGE-1), LARGE, LARGE)
@@ -133,7 +94,6 @@ def solve_(arr, n, k):
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -147,8 +107,6 @@ for case_num in range(int(input())):
     # nsum = 0
 
     # read one line and parse each word as an integer
-    n,k = list(map(int,input().split()))
-    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # nsum += n
@@ -158,7 +116,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(arr, n, k)  # include input here
+    # res = solve(arr, n, k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -171,4 +129,3 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
