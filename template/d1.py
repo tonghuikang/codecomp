@@ -48,7 +48,28 @@ def minus_one_matrix(mrr):
     return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
+# import time
 
+# upper_limit = time.time() + 3.9
+
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+mask = 2**18 - 1
+m0 = mask
+m1 = mask << 18
+m2 = mask << 36
+
+# print(bin(m2))
+
+
+def ungroup(x):
+    return (x&m2) >> 36, (x&m1) >> 18, (x&m0) 
+
+def group(a,b,c):
+    val = (a << 36) ^ (b << 18) ^ c
+    assert ungroup(val) == (a,b,c)
+    return val
 
 def solve_(arr, n, k):
     arr = set(arr)
@@ -57,11 +78,11 @@ def solve_(arr, n, k):
     minarr = min(arr)
     minres = maxarr - minarr
 
-    arr = [((x//k),k,x) for i,x in enumerate(arr)]
+    arr = [group((x//k),k,x) for i,x in enumerate(arr)]
     arr.sort()
 
-    minn = arr[0][0]
-    maxx = arr[-1][0]
+    minn = ungroup(arr[0])[0]
+    maxx = ungroup(arr[-1])[0]
     minres = maxx - minn
 
     if minres == 0:
@@ -74,18 +95,17 @@ def solve_(arr, n, k):
     # jump = 1
     # log(jump)
 
-    while arr[0][1] > 1:
-        nx,i,x = heapq.heappop(arr)
-        i = max(1, (x // maxx) + 1)
-        while i > 1 and (x//i) == nx:
-            i -= 1
+    while ungroup(arr[0])[1] > 1:
+        nx,i,x = ungroup(heapq.heappop(arr))
+
+        i = max(1, min(ceiling_division(x, maxx), x // (nx+1)))
         nx = (x//i)
-        heapq.heappush(arr, (nx,i,x))
+        heapq.heappush(arr, group(nx,i,x))
 
         # log((nx,i,x))
 
         maxx = max(maxx, nx)
-        minn = arr[0][0]
+        minn = ungroup(arr[0])[0]
         # if maxx - minn < minres:
         #     log((nx,i,x), maxx - minn)
         minres = min(minres, maxx - minn)
@@ -124,10 +144,14 @@ for case_num in range(int(input())):
     # read one line and parse each word as a string
     # arr = input().split()
 
+    # nsum = 0
+
     # read one line and parse each word as an integer
     n,k = list(map(int,input().split()))
     arr = list(map(int,input().split()))
     # arr = minus_one(arr)
+
+    # nsum += n
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
