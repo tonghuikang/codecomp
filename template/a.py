@@ -51,10 +51,70 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,k,arr):
     # your solution here
+    
+    # cnt = n*m
 
-    return ""
+    brr = [x//n for x in arr]
+    brr = [x for x in brr if x >= 2]
+    # log(brr, m)
+
+    sumbrr = sum(brr)
+    if sumbrr >= m+2:
+        return "Yes"
+
+    if sumbrr == m:
+        return "Yes"
+
+    if sumbrr == m+1:
+        for x in brr:
+            if x > 2:
+                return "Yes"
+
+
+
+    n,m = m,n
+
+    brr = [x//n for x in arr]
+    brr = [x for x in brr if x >= 2]
+    # log(brr, m)
+
+    sumbrr = sum(brr)
+    if sumbrr >= m+2:
+        return "Yes"
+
+    if sumbrr == m:
+        return "Yes"
+
+    if sumbrr == m+1:
+        for x in brr:
+            if x > 2:
+                return "Yes"
+
+
+
+    # for x in arr:
+    #     if x // n < 2:
+    #         break        
+    #     cnt -= (x // n)*n
+    # else:
+    #     if cnt <= 0:
+    #         return "Yes"
+    
+    # n,m = m,n
+
+    # cnt = n*m
+    # for x in arr:
+    #     if x // n < 2:
+    #         break
+    #     cnt -= (x // n)*n
+    # else:
+    #     if cnt <= 0:
+    #         return "Yes"
+
+
+    return "No"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -71,8 +131,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -80,7 +140,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,k,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
