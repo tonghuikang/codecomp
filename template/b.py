@@ -1,9 +1,61 @@
-#!/usr/bin/env python3
+# https://codeforces.com/blog/entry/82989
+# Some code to make your Python code run faster
+
+import os
 import sys
-# import math, random
-# import functools, itertools, collections, heapq, bisect
-# from collections import Counter, defaultdict, deque
-input = sys.stdin.readline  # to read input quickly
+from io import BytesIO, IOBase
+sys.setrecursionlimit(300000)
+
+BUFSIZE = 8192
+
+
+class FastIO(IOBase):
+    newlines = 0
+
+    def __init__(self, file):
+        self._fd = file.fileno()
+        self.buffer = BytesIO()
+        self.writable = "x" in file.mode or "r" not in file.mode
+        self.write = self.buffer.write if self.writable else None
+
+    def read(self):
+        while True:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            if not b:
+                break
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines = 0
+        return self.buffer.read()
+
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines -= 1
+        return self.buffer.readline()
+
+    def flush(self):
+        if self.writable:
+            os.write(self._fd, self.buffer.getvalue())
+            self.buffer.truncate(0), self.buffer.seek(0)
+
+
+class IOWrapper(IOBase):
+    def __init__(self, file):
+        self.buffer = FastIO(file)
+        self.flush = self.buffer.flush
+        self.writable = self.buffer.writable
+        self.write = lambda s: self.buffer.write(s.encode("ascii"))
+        self.read = lambda: self.buffer.read().decode("ascii")
+        self.readline = lambda: self.buffer.readline().decode("ascii")
+
+
+sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -18,8 +70,9 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
+OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -39,14 +92,6 @@ def solve(*args):
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
 
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
 
@@ -63,10 +108,10 @@ def solve_(n,m,mrr):
     diffs.sort()
     minval = diffs[0][0] - 1
 
-    diffs = [(x-minval, y) for x,y in diffs]
+    # diffs = [(x-minval, y) for x,y in diffs]
 
     # log(diffs)
-    arr = [(0,0)]
+    arr = [(-2*minval,0)]
     grad = 0
 
     for cur_x,d in diffs:
@@ -87,25 +132,23 @@ def solve_(n,m,mrr):
 
     # log(arr)
 
-    prr = [x-y for x,y in arr]
-    qrr = [x+y for x,y in arr]
-
-    minprr = min(prr)
-    maxqrr = max(qrr)
+    minprr = min(x-y for x,y in arr)
+    maxqrr = max(x+y for x,y in arr)
 
     req_height = (maxqrr - minprr) / 2
     req_midpt = (maxqrr + minprr) / 2
 
     # log(req_height, req_midpt)
 
-    res = ""
-    for x,p in mrr:
-        x -= minval
+    res = ["0" for _ in mrr]
+    for i,(x,p) in enumerate(mrr):
+        # x -= minval
         # log(x+p, x-p)
         if x + p >= maxqrr and x - p <= minprr:
-            res += "1"
+            res[i] = "1"
         else:
-            res += "0"
+            pass
+            # res += "0"
 
     return res
 
@@ -139,7 +182,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = "".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
