@@ -58,12 +58,12 @@ def solve_(n,m,k,arr):
 
     brr = [x//n for x in arr]
     brr = [x for x in brr if x >= 2]
-    # log(brr, m)
+    log(brr, m)
 
     sumbrr = sum(brr)
     alltwos = brr.count(2) == len(brr)
 
-    if alltwos and brr%2 == 1:
+    if alltwos and m%2 == 1:
         pass
     else:
         if sumbrr >= m:
@@ -74,12 +74,12 @@ def solve_(n,m,k,arr):
 
     brr = [x//n for x in arr]
     brr = [x for x in brr if x >= 2]
-    # log(brr, m)
+    log(brr, m)
 
     sumbrr = sum(brr)
     alltwos = brr.count(2) == len(brr)
 
-    if alltwos and brr%2 == 1:
+    if alltwos and m%2 == 1:
         pass
     else:
         if sumbrr >= m:
