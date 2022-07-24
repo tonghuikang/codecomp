@@ -54,104 +54,45 @@ def minus_one_matrix(mrr):
 def solve_(arr, brr):
     # your solution here
 
-    log(sorted(arr))
-    log(sorted(brr))
-
-    a0 = arr[0]
-    b0 = brr[0]
-    curres = arr[0] + brr[0]
-    cells = []
-    # cells = [(arr[0] + brr[0], 0, 0)]
-    
-    arr = [(x,i) for i,x in enumerate(arr[1:])]
-    brr = [(x,i) for i,x in enumerate(brr[1:])]
-
-    arr.sort()
-    brr.sort()
-
-    if len(arr) >= 10:
-        arr = arr[2:] + arr[-2:]
-
-    if len(brr) >= 10:
-        brr = brr[2:] + brr[-2:]
-
-    for x,i in arr:
-        for y,j in brr:
-            cells.append((x+y,i,j))
-    
-    for x,i in arr:
-        y,j = [b0, 0]
-        cells.append((x+y,i,j))        
-
-    for y,j in brr:
-        x,i = [a0, 0]
-        cells.append((x+y,i,j))        
-
-
-
-    log(cells)
-
-    res = 0
-    curmin = True
-    curval = curres
-    curcell = (curres, 0, 0)
-
-    while cells:
-        log(cells)
-        _, ci, cj = curcell
-        if curmin:
-            mincell = curcell
-            for cell in cells:
-                z,i,j = cell
-                if i == ci or j == cj:
-                    if mincell[0] > cell[0]:
-                        mincell = cell
-            if mincell == curcell:
-                return curcell[0]
-            cells.remove(mincell)
-            curcell = mincell
-        else:
-            maxcell = curcell
-            for cell in cells:
-                z,i,j = cell
-                if i == ci or j == cj:
-                    if maxcell[0] < cell[0]:
-                        maxcell = cell
-            if maxcell == curcell:
-                return curcell[0]
-            cells.remove(maxcell)
-            curcell = maxcell
-        
-        curmin = not curmin
-
-    return curcell[0]
-            
-
-
-
-
-
+    minres = arr[0] + brr[0]
 
     # second largest, second smallest
-    # arr2 = sorted(arr)
-    # brr2 = sorted(brr)
+    arr.sort(reverse=True)
+    brr.sort()
 
-    # log(arr)
-    # log(brr)
+    res = 0
 
-    # res = 0
+    if len(arr) == 1:
+        res += arr[0]
+    else:
+        res += arr[1]
 
-    # if len(arr2) == 1:
-    #     res += arr2[0]
-    # else:
-    #     res += arr2[1]
+    if len(brr) == 1:
+        res += brr[0]
+    else:
+        res += brr[1]
 
-    # if len(brr2) == 1:
-    #     res += brr2[0]
-    # else:
-    #     res += brr2[1]
+    minres = min(minres, res)
 
-    return res
+    # second largest, second smallest
+    arr.sort()
+    brr.sort(reverse=True)
+
+    res = 0
+
+    if len(arr) == 1:
+        res += arr[0]
+    else:
+        res += arr[1]
+
+    if len(brr) == 1:
+        res += brr[0]
+    else:
+        res += brr[1]
+
+    minres = min(minres, res)
+
+    return minres
 
 
 for case_num in [0]:  # no loop over test case
