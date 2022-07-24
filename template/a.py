@@ -61,17 +61,13 @@ def solve_(n,m,k,arr):
     # log(brr, m)
 
     sumbrr = sum(brr)
-    if sumbrr >= m+2:
-        return "Yes"
+    alltwos = brr.count(2) == len(brr)
 
-    if sumbrr == m:
-        return "Yes"
-
-    if sumbrr == m+1:
-        for x in brr:
-            if x > 2:
-                return "Yes"
-
+    if alltwos and brr%2 == 1:
+        pass
+    else:
+        if sumbrr >= m:
+            return "Yes"
 
 
     n,m = m,n
@@ -81,17 +77,13 @@ def solve_(n,m,k,arr):
     # log(brr, m)
 
     sumbrr = sum(brr)
-    if sumbrr >= m+2:
-        return "Yes"
+    alltwos = brr.count(2) == len(brr)
 
-    if sumbrr == m:
-        return "Yes"
-
-    if sumbrr == m+1:
-        for x in brr:
-            if x > 2:
-                return "Yes"
-
+    if alltwos and brr%2 == 1:
+        pass
+    else:
+        if sumbrr >= m:
+            return "Yes"
 
 
     # for x in arr:
