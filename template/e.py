@@ -51,15 +51,112 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    log(sorted(arr))
+    log(sorted(brr))
+
+    a0 = arr[0]
+    b0 = brr[0]
+    curres = arr[0] + brr[0]
+    cells = []
+    # cells = [(arr[0] + brr[0], 0, 0)]
+    
+    arr = [(x,i) for i,x in enumerate(arr[1:])]
+    brr = [(x,i) for i,x in enumerate(brr[1:])]
+
+    arr.sort()
+    brr.sort()
+
+    if len(arr) >= 10:
+        arr = arr[2:] + arr[-2:]
+
+    if len(brr) >= 10:
+        brr = brr[2:] + brr[-2:]
+
+    for x,i in arr:
+        for y,j in brr:
+            cells.append((x+y,i,j))
+    
+    for x,i in arr:
+        y,j = [b0, 0]
+        cells.append((x+y,i,j))        
+
+    for y,j in brr:
+        x,i = [a0, 0]
+        cells.append((x+y,i,j))        
 
 
-# for case_num in [0]:  # no loop over test case
+
+    log(cells)
+
+    res = 0
+    curmin = True
+    curval = curres
+    curcell = (curres, 0, 0)
+
+    while cells:
+        log(cells)
+        _, ci, cj = curcell
+        if curmin:
+            mincell = curcell
+            for cell in cells:
+                z,i,j = cell
+                if i == ci or j == cj:
+                    if mincell[0] > cell[0]:
+                        mincell = cell
+            if mincell == curcell:
+                return curcell[0]
+            cells.remove(mincell)
+            curcell = mincell
+        else:
+            maxcell = curcell
+            for cell in cells:
+                z,i,j = cell
+                if i == ci or j == cj:
+                    if maxcell[0] < cell[0]:
+                        maxcell = cell
+            if maxcell == curcell:
+                return curcell[0]
+            cells.remove(maxcell)
+            curcell = maxcell
+        
+        curmin = not curmin
+
+    return curcell[0]
+            
+
+
+
+
+
+
+    # second largest, second smallest
+    # arr2 = sorted(arr)
+    # brr2 = sorted(brr)
+
+    # log(arr)
+    # log(brr)
+
+    # res = 0
+
+    # if len(arr2) == 1:
+    #     res += arr2[0]
+    # else:
+    #     res += arr2[1]
+
+    # if len(brr2) == 1:
+    #     res += brr2[0]
+    # else:
+    #     res += brr2[1]
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -71,8 +168,9 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -80,7 +178,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))
