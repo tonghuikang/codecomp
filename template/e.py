@@ -52,8 +52,12 @@ def minus_one_matrix(mrr):
 
 
 def solve_(arr, brr):
+    arr = [x for x in arr]
+    brr = [x for x in brr]
     # your solution here
 
+    a0 = arr[0]
+    b0 = brr[0]
     minres = arr[0] + brr[0]
 
     # second largest, second smallest
@@ -64,28 +68,14 @@ def solve_(arr, brr):
 
     if len(arr) == 1:
         res += arr[0]
-    else:
-        res += arr[1]
-
-    if len(brr) == 1:
-        res += brr[0]
-    else:
-        res += brr[1]
-
-    minres = min(minres, res)
-
-    # second largest, second smallest
-    arr.sort()
-    brr.sort(reverse=True)
-
-    res = 0
-
-    if len(arr) == 1:
+    elif len(arr)%2 == 1 and not a0 == arr[0]:
         res += arr[0]
     else:
         res += arr[1]
 
     if len(brr) == 1:
+        res += brr[0]
+    elif len(brr)%2 == 0 and not b0 == brr[0]:
         res += brr[0]
     else:
         res += brr[1]
@@ -118,9 +108,11 @@ for case_num in [0]:  # no loop over test case
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
-
+    minres = arr[0] + brr[0]
     res = solve(arr, brr)  # include input here
-
+    minres = min(minres, res)
+    res = solve(brr, arr)  # include input here
+    minres = min(minres, res)
     # print length if applicable
     # print(len(res))
 
@@ -132,4 +124,4 @@ for case_num in [0]:  # no loop over test case
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    print(minres)
