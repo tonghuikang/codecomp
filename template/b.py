@@ -4,7 +4,7 @@
 import os
 import sys
 from io import BytesIO, IOBase
-sys.setrecursionlimit(300000)
+# sys.setrecursionlimit(300000)
 
 BUFSIZE = 8192
 
