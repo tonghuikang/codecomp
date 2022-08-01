@@ -52,10 +52,85 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, d12, d23, d31):
     # your solution here
 
-    return ""
+    # d12 = a+b
+    # d23 = b+c
+    # d31 = a+c
+
+    if (d12 + d23 + d31)%2 != 0:
+        return []
+
+    abc = (d12 + d23 + d31)//2
+    a = abc - d23
+    b = abc - d31
+    c = abc - d12
+
+    if a < 0 or b < 0 or c < 0:
+        return []
+    log(a,b,c)
+
+    if a + b + c > n-1:
+        return []
+
+    p4 = 3
+    if a == 0:
+        p4 = 0
+    if b == 0:
+        p4 = 1
+    if c == 0:
+        p4 = 2
+
+    aseq = [0]
+    bseq = [1]
+    cseq = [2]
+    zseq = [0]
+
+    if p4 == 3:
+        cur = 4
+    else:
+        cur = 3
+
+    if a != 0:
+        for _ in range(a):
+            aseq.append(cur)
+            cur += 1
+        cur -= 1
+        aseq.pop()
+        aseq.append(p4)
+
+    if b != 0:
+        for _ in range(b):
+            bseq.append(cur)
+            cur += 1
+        cur -= 1
+        bseq.pop()
+        bseq.append(p4)
+    
+    if c != 0:
+        for _ in range(c):
+            cseq.append(cur)
+            cur += 1
+        cur -= 1
+        cseq.pop()
+        cseq.append(p4)
+
+    for _ in range(cur, n):
+        zseq.append(cur)
+        cur += 1
+
+    res = []
+    for a,b in zip(aseq, aseq[1:]):
+        res.append((a,b))
+    for a,b in zip(bseq, bseq[1:]):
+        res.append((a,b))
+    for a,b in zip(cseq, cseq[1:]):
+        res.append((a,b))
+    for a,b in zip(zseq, zseq[1:]):
+        res.append((a,b))
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,7 +148,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n, d12, d23, d31 = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -81,7 +156,12 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, d12, d23, d31)  # include input here
+
+    if not res:
+        print("NO")
+        continue
+    print("YES")
 
     # print length if applicable
     # print(len(res))
@@ -89,7 +169,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x+1) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
