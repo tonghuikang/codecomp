@@ -37,29 +37,21 @@ def solve(*args):
         log("----- ------- ------")
     return solve_(*args)
 
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
 
 # ---------------------------- template ends here ----------------------------
 
 # recusion template that does not use recursion
 
 def dfs(start, g, entry_operation, exit_operation):
+    # g is map of node to nodes
+    # assumes g is bidirectional
     # https://codeforces.com/contest/1646/submission/148435078
     # https://codeforces.com/contest/1656/submission/150799881
+    # https://codeforces.com/contest/1714/submission/166648312
     entered = set([start])
     exiting = set()
-    stack = collections.deque([start])
-    pointer = collections.Counter()
+    ptr = {x:0 for x in g}
+    stack = [start]
     prev = {}
 
     null_pointer = "NULL"
@@ -69,8 +61,9 @@ def dfs(start, g, entry_operation, exit_operation):
         cur = stack[-1]
 
         if cur not in exiting:
-            for nex in g[cur][pointer[cur]:]:
-                pointer[cur] += 1
+            while ptr[cur] < len(g[cur]):
+                nex = g[cur][ptr[cur]]
+                ptr[cur] += 1
                 if nex in entered:
                     continue
 
@@ -80,7 +73,7 @@ def dfs(start, g, entry_operation, exit_operation):
                 stack.append(nex)
                 prev[nex] = cur
                 break
-            else:
+            if ptr[cur] == len(g[cur]):
                 exiting.add(cur)
 
         else:
@@ -95,13 +88,15 @@ def exit_operation(prev, cur):
     pass
 
 
-def solve_(n, mrr):
+def solve_(n):
     # your solution here
     amap = {}
     bmap = {}
 
     g = defaultdict(list)
-    for i,(p,a,b) in enumerate(mrr, start=1):
+    for i in range(n-1):
+        p,a,b = list(map(int,input().split()))
+        i += 1
         p -= 1
         g[i].append(p)
         g[p].append(i)
@@ -114,26 +109,28 @@ def solve_(n, mrr):
 
     # log(g)
 
-    asum = [0]
-    bsum = [0]
+    asum = 0
+    bsum = 0
     psum = [0]
     res = [0 for _ in range(n)]
 
     def entry_operation(prev, cur, nex):
+        nonlocal asum, bsum
         a = amap[cur, nex]
         b = bmap[cur, nex]
-        asum[0] += a
-        bsum[0] += b
-        psum.append(bsum[0])
-        res[nex] = bisect.bisect_right(psum, asum[0]) - 1
+        asum += a
+        bsum += b
+        psum.append(bsum)
+        res[nex] = bisect.bisect_right(psum, asum) - 1
 
     def exit_operation(prev, cur):
+        nonlocal asum, bsum
         if prev == "NULL":
             return
         a = amap[cur, prev]
         b = bmap[cur, prev]
-        asum[0] -= a
-        bsum[0] -= b
+        asum -= a
+        bsum -= b
         psum.pop()
 
     dfs(0, g, entry_operation, exit_operation)
@@ -161,10 +158,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    mrr = read_matrix(n-1)  # and return as a list of list of int
+    # mrr = read_matrix(n-1)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, mrr)  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
