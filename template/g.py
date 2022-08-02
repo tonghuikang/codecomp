@@ -88,7 +88,7 @@ def exit_operation(prev, cur):
     pass
 
 def encode(a,b):
-    return a << 32 + b
+    return (a << 32) ^ b
 
 
 def solve_(n):
