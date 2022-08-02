@@ -105,7 +105,9 @@ t.join()
 
 # recusion template that does not use recursion
 
-def dfs(start, g, entry_operation, exit_operation):
+def not_dfs(start, g, entry_operation, exit_operation):
+    # g is map of node to nodes
+    # not dfs because it checks all the edges on entering
     # https://codeforces.com/contest/1646/submission/148435078
     # https://codeforces.com/contest/1656/submission/150799881
     entered = set([start])
@@ -134,6 +136,47 @@ def dfs(start, g, entry_operation, exit_operation):
         else:
             stack.pop()
             exit_operation(prev[cur], cur)
+
+
+def dfs(start, g, entry_operation, exit_operation):
+    # g is map of node to nodes
+    # assumes g is bidirectional
+    # https://codeforces.com/contest/1714/submission/166648312
+    entered = set([start])
+    exiting = set()
+    ptr = {x:0 for x in g}
+    stack = [start]
+    prev = {}
+
+    null_pointer = "NULL"
+    # might be faster to use an integer for null_pointer
+    # especially if you avoid string compare when checking if null pointer
+    # leaving as a string for safety reasons
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            while ptr[cur] < len(g[cur]):
+                nex = g[cur][ptr[cur]]
+                ptr[cur] += 1
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+                break
+            if ptr[cur] == len(g[cur]):
+                exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
 
 def entry_operation(prev, cur, nex):
     # note that prev is `null_pointer` at the root node
