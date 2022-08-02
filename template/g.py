@@ -51,11 +51,94 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# recusion template that does not use recursion
 
-def solve_():
+def dfs(start, g, entry_operation, exit_operation):
+    # https://codeforces.com/contest/1646/submission/148435078
+    # https://codeforces.com/contest/1656/submission/150799881
+    entered = set([start])
+    exiting = set()
+    stack = collections.deque([start])
+    pointer = collections.Counter()
+    prev = {}
+
+    null_pointer = "NULL"
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            for nex in g[cur][pointer[cur]:]:
+                pointer[cur] += 1
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+                break
+            else:
+                exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
+def entry_operation(prev, cur, nex):
+    # note that prev is `null_pointer` at the root node
+    pass
+
+def exit_operation(prev, cur):
+    pass
+
+
+def solve_(n, mrr):
     # your solution here
+    amap = {}
+    bmap = {}
 
-    return ""
+    g = defaultdict(list)
+    for i,(p,a,b) in enumerate(mrr, start=1):
+        p -= 1
+        g[i].append(p)
+        g[p].append(i)
+
+        amap[p,i] = a
+        amap[i,p] = a
+
+        bmap[p,i] = b
+        bmap[i,p] = b
+
+    # log(g)
+
+    asum = [0]
+    bsum = [0]
+    psum = [0]
+    res = [0 for _ in range(n)]
+
+    def entry_operation(prev, cur, nex):
+        a = amap[cur, nex]
+        b = bmap[cur, nex]
+        asum[0] += a
+        bsum[0] += b
+        psum.append(bsum[0])
+        res[nex] = bisect.bisect_right(psum, asum[0]) - 1
+
+    def exit_operation(prev, cur):
+        if prev == "NULL":
+            return
+        a = amap[cur, prev]
+        b = bmap[cur, prev]
+        asum[0] -= a
+        bsum[0] -= b
+        psum.pop()
+
+    dfs(0, g, entry_operation, exit_operation)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +146,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -78,16 +161,16 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n-1)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res[1:])
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
