@@ -87,6 +87,9 @@ def entry_operation(prev, cur, nex):
 def exit_operation(prev, cur):
     pass
 
+def encode(a,b):
+    return a << 32 + b
+
 
 def solve_(n):
     # your solution here
@@ -101,11 +104,11 @@ def solve_(n):
         g[i].append(p)
         g[p].append(i)
 
-        amap[p,i] = a
-        amap[i,p] = a
+        amap[encode(p,i)] = a
+        amap[encode(i,p)] = a
 
-        bmap[p,i] = b
-        bmap[i,p] = b
+        bmap[encode(p,i)] = b
+        bmap[encode(i,p)] = b
 
     # log(g)
 
@@ -116,8 +119,8 @@ def solve_(n):
 
     def entry_operation(prev, cur, nex):
         nonlocal asum, bsum
-        a = amap[cur, nex]
-        b = bmap[cur, nex]
+        a = amap[encode(cur, nex)]
+        b = bmap[encode(cur, nex)]
         asum += a
         bsum += b
         psum.append(bsum)
@@ -127,8 +130,8 @@ def solve_(n):
         nonlocal asum, bsum
         if prev == "NULL":
             return
-        a = amap[cur, prev]
-        b = bmap[cur, prev]
+        a = amap[encode(cur, prev)]
+        b = bmap[encode(cur, prev)]
         asum -= a
         bsum -= b
         psum.pop()
