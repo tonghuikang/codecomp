@@ -2,7 +2,7 @@
 
 This contains my templates and snippets for competitive programming in (mostly) Python.
 
-![Badge](https://cp-logo.vercel.app/codeforces/huikang)
+[![Badge](https://cp-logo.vercel.app/codeforces/huikang)](https://codeforces.com/profile/huikang)
 
 ## Introduction
 
