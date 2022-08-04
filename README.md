@@ -2,6 +2,8 @@
 
 This contains my templates and snippets for competitive programming in (mostly) Python.
 
+![Badge](https://cp-logo.vercel.app/codeforces/huikang)
+
 ## Introduction
 
 For beginners, I recommend starting out on [LeetCode](https://leetcode.com/problemset/all/). You can try their exercises and participate in the [weekly contests](https://leetcode.com/contest/). You do not need to install anything on your computer because the IDE is built-in. Neither do you need to parse input and output, or search for the wrong test cases.
