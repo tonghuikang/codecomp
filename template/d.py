@@ -25,19 +25,54 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
-def query(pos):
-    print("{}".format(pos+1), flush=True)
+def query(a,b):
+    print("? {} {}".format(a+1,b+1), flush=True)
     response = int(input())
     return response
 
 def alert(pos):
-    print("! {}".format(pos), flush=True)
-    sys.exit()
+    print("! {}".format(pos+1), flush=True)
 
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-# k = int(input())
+cases = int(input())
+
+import random
+
+for _ in range(cases):
+
+    k = int(input())
+    arr = list(range(2**k))
+
+    pool = set()
+    random.shuffle(arr)
+    arr.append(arr[0])
+    for a,b in zip(arr[0::2], arr[1::2]):
+        x = query(a,b)
+        if x == 1:
+            pool.add(a)
+        if x == 2:
+            pool.add(b)
+        else:
+            pass
+
+    while len(pool) > 1:
+        arr = list(pool)
+
+        pool = set()
+        random.shuffle(arr)
+        arr.append(arr[0])
+        for a,b in zip(arr[0::2], arr[1::2]):
+            x = query(a,b)
+            if x == 1:
+                pool.add(a)
+            if x == 2:
+                pool.add(b)
+            else:
+                pass
+
+    alert(list(pool)[0])
 
 # read line as a string
 # srr = input().strip()
@@ -52,3 +87,4 @@ def alert(pos):
 # -----------------------------------------------------------------------------
 
 # your code here
+sys.exit()
