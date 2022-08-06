@@ -61,10 +61,10 @@ def solve_(mrr):
     for x,y in mrr:
         xmax = max(xmax, x)
         ymax = max(ymax, y)
-        xmin = max(xmin, x)
-        ymin = max(ymin, y)
+        xmin = min(xmin, x)
+        ymin = min(ymin, y)
 
-    return (xmax + ymax + xmin + ymin)*2
+    return (xmax + ymax - xmin - ymin)*2
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,7 +72,7 @@ def solve_(mrr):
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -87,10 +87,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
