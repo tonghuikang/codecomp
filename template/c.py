@@ -55,6 +55,8 @@ def minus_one_matrix(mrr):
 def solve_(k):
     # your solution here
 
+    
+
     return ""
 
 
