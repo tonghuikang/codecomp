@@ -45,9 +45,12 @@ for _ in range(cases):
     k = int(input())
     arr = list(range(2**k))
 
+    # log(2/3 * 2**k)
+
     pool = set()
     random.shuffle(arr)
-    arr.append(arr[0])
+    if len(arr)%2:
+        pool.add(arr[-1])
     for a,b in zip(arr[0::2], arr[1::2]):
         x = query(a,b)
         if x == 1:
@@ -58,11 +61,13 @@ for _ in range(cases):
             pass
 
     while len(pool) > 1:
+        log(pool)
         arr = list(pool)
 
         pool = set()
         random.shuffle(arr)
-        arr.append(arr[0])
+        if len(arr)%2:
+            pool.add(arr[-1])
         for a,b in zip(arr[0::2], arr[1::2]):
             x = query(a,b)
             if x == 1:
