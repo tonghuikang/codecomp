@@ -51,13 +51,29 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
+def is_square(x):
+    return int(x**0.5)**2 == x
+
 
 def solve_(k):
     # your solution here
 
-    
+    res = list(range(k))
 
-    return ""
+    for i in range(k-1,-1,-1):
+        if is_square(res[i] + i):
+            continue
+        x = int(ceiling_division(i**0.5, 1))
+        target = x**2
+        remainder = target-i
+        # log(res, target, remainder, res[remainder:i+1])
+        res[remainder:i+1] = res[remainder:i+1][::-1]
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -89,7 +105,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
