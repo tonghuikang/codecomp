@@ -52,10 +52,19 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
+    xmax = 0
+    ymax = 0
+    xmin = 0
+    ymin = 0
+    for x,y in mrr:
+        xmax = max(xmax, x)
+        ymax = max(ymax, y)
+        xmin = max(xmin, x)
+        ymin = max(ymin, y)
 
-    return ""
+    return (xmax + ymax + xmin + ymin)*2
 
 
 # for case_num in [0]:  # no loop over test case
