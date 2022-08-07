@@ -624,6 +624,27 @@ def evaluate_expression(data: str) -> Number:
 # evaluate_expression("cos(1 + sin(ln(5) - exp(8))^2)")
 
 
+# -------------------- sprague-grundy function --------------------
+
+
+def mex(arr):
+    arr = set(arr)
+    i = 0
+    while i in arr:
+        i += 1
+    return i
+
+# https://cp-algorithms.com/game_theory/sprague-grundy-nim.html
+# https://oeis.org/A002187
+dawson_arr = [0,1,1]
+for n in range(len(dawson_arr), 500):
+    dawson_arr.append(mex(
+        [dawson_arr[n-2]] +
+        [dawson_arr[n-j-3] ^ dawson_arr[j] for j in range(n-2)]
+    ))
+# has period 34 after the first 52 elements
+
+
 # ------------------------- other methods -------------------------
 
 
