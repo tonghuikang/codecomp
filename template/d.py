@@ -89,25 +89,26 @@ def solve_(arr, n, k):
         if k0 > 1:
 
             idx = 0
-            if a <= brr[k]:
+            if a < brr[k]:
                 idx += 1
-            if b <= brr[k]:
+            if b < brr[k]:
                 idx += 1
 
-            res = brr[k-idx]*2
+            res = brr[k+1-idx]*2
             maxres = max(maxres, res)
 
         # make either inf
         idx = 0
-        if a <= brr[k] and b <= brr[k]:
+        if a < brr[k] and b < brr[k]:
             idx += 1
 
-        res = min(brr[k-idx]*2, max(a,b))
+        res = min(brr[k+1-idx]*2, max(a,b))
         # log(res)
         maxres = max(maxres, res)
 
         # make neither inf
-        res = min(brr[k]*2, min(a,b))
+        idx = 0
+        res = min(brr[k+1-idx]*2, min(a,b))
         # log(res)
         maxres = max(maxres, res)
 
