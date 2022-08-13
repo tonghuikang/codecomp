@@ -54,19 +54,49 @@ def minus_one_matrix(mrr):
 
 def solve_(arr, n, k):
     # your solution here
+    LARGE = 10**9
+
+    maxarr = max(arr)
 
     # assign smallest
     if k == n:
         return 10**9
     
-    arr.sort()
-    if k == 1:
-        return min(arr[-1], 2*arr[k])
+    if n == 2 and k == 1:
+        return maxarr
 
     if k == n-1:
-        return arr[-1]*2
+        # inf-inf
+        return maxarr*2
 
-    return max(arr[-1], 2*arr[k])
+    brr = sorted(arr)
+    baseline = brr[k]
+    # log(baseline)
+
+    maxval = 0
+    if k == 1:
+        for a,b in zip(arr, arr[1:]):
+            if a <= baseline or b <= baseline:
+                val = max(a,b)
+            else:
+                val = min(a,b)
+            maxval = max(maxval, val)
+            
+        return min(2*baseline, maxval)
+
+    # inf-inf
+    maxval = 0
+    for a,b in zip(arr, arr[1:]):
+        if a <= baseline and b <= baseline:
+            continue
+        if a <= baseline or b <= baseline:
+            val = max(a,b)
+        else:
+            val = min(a,b)
+        maxval = max(maxval, val)
+
+    return min(2*baseline, maxval)
+
 
 
 # for case_num in [0]:  # no loop over test case
