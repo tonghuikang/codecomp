@@ -57,63 +57,66 @@ def solve_(arr, n, k):
     k0 = k
     LARGE = 10**9
 
-    maxarr = max(arr)
-    minarr = min(arr)
+    # maxarr = max(arr)
+    # minarr = min(arr)
 
     # assign smallest
     if k == n:
         return 10**9
     
-    if n == 2 and k == 1:
-        return maxarr
+    # if n == 2 and k == 1:
+    #     return maxarr
 
-    if k == n-1:
-        # inf-inf
-        return maxarr*2
+    # if k == n-1:
+    #     # inf-inf
+    #     return maxarr*2
 
-    arr = [LARGE] + arr + [LARGE]
+    # arr = [LARGE] + arr + [LARGE]
 
     brr = sorted(arr)
 
     k -= 1
-    while k+1 < n and brr[k+1] == brr[k]:
-        k += 1
+    # while k+1 < n and brr[k+1] == brr[k]:
+    #     k += 1
 
     # log(baseline)
 
     maxres = 0
 
     for a,b in zip(arr, arr[1:]):
+        # log(a,b)
 
         # make both inf
         if k0 > 1:
 
             idx = 0
-            if a < brr[k]:
+            if not a <= brr[k]:
                 idx += 1
-            if b < brr[k]:
+            if not b <= brr[k]:
                 idx += 1
 
             res = brr[k+1-idx]*2
+            # log(res, brr[k+1-idx])
             maxres = max(maxres, res)
 
         # make either inf
         idx = 0
-        if a < brr[k] and b < brr[k]:
+        if not (a <= brr[k] or b <= brr[k]):
             idx += 1
 
         res = min(brr[k+1-idx]*2, max(a,b))
-        # log(res)
+        # log(res, brr[k+1-idx])
         maxres = max(maxres, res)
 
         # make neither inf
         idx = 0
         res = min(brr[k+1-idx]*2, min(a,b))
-        # log(res)
+        # log(res, brr[k+1-idx])
         maxres = max(maxres, res)
 
         # log()
     
+    # log(k)
     return maxres
 
 
