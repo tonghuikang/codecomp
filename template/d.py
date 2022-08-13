@@ -54,9 +54,11 @@ def minus_one_matrix(mrr):
 
 def solve_(arr, n, k):
     # your solution here
+    k0 = k
     LARGE = 10**9
 
     maxarr = max(arr)
+    minarr = min(arr)
 
     # assign smallest
     if k == n:
@@ -69,33 +71,49 @@ def solve_(arr, n, k):
         # inf-inf
         return maxarr*2
 
+    arr = [LARGE] + arr + [LARGE]
+
     brr = sorted(arr)
-    baseline = brr[k]
+
+    k -= 1
+    while k+1 < n and brr[k+1] == brr[k]:
+        k += 1
+
     # log(baseline)
 
-    maxval = 0
-    if k == 1:
-        for a,b in zip(arr, arr[1:]):
-            if a <= baseline or b <= baseline:
-                val = max(a,b)
-            else:
-                val = min(a,b)
-            maxval = max(maxval, val)
-            
-        return min(2*baseline, maxval)
+    maxres = 0
 
-    # inf-inf
-    maxval = 0
     for a,b in zip(arr, arr[1:]):
-        if a <= baseline and b <= baseline:
-            continue
-        if a <= baseline or b <= baseline:
-            val = max(a,b)
-        else:
-            val = min(a,b)
-        maxval = max(maxval, val)
 
-    return min(2*baseline, maxval)
+        # make both inf
+        if k0 > 1:
+
+            idx = 0
+            if a <= brr[k]:
+                idx += 1
+            if b <= brr[k]:
+                idx += 1
+
+            res = brr[k-idx]*2
+            maxres = max(maxres, res)
+
+        # make either inf
+        idx = 0
+        if a <= brr[k] and b <= brr[k]:
+            idx += 1
+
+        res = min(brr[k-idx]*2, max(a,b))
+        # log(res)
+        maxres = max(maxres, res)
+
+        # make neither inf
+        res = min(brr[k]*2, min(a,b))
+        # log(res)
+        maxres = max(maxres, res)
+
+        # log()
+    
+    return maxres
 
 
 
