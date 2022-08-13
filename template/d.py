@@ -61,10 +61,13 @@ def solve_(arr, n, k):
     if k == 1:
         return arr[-1]
 
+    if k == n-1:
+        return arr[-1]*2
+
     if k == n:
         return 10**9
 
-    return 2*arr[k]
+    return max(arr[-1], 2*arr[k])
 
 
 # for case_num in [0]:  # no loop over test case
