@@ -58,8 +58,8 @@ def solve_(arr, n, k):
     # assign smallest
     
     arr.sort()
-    if k == 1:
-        return arr[-1]
+    # if k == 1:
+    #     return arr[-1]
 
     if k == n:
         return 10**9
