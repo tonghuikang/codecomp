@@ -54,8 +54,18 @@ def minus_one_matrix(mrr):
 
 def solve_(k):
     # your solution here
+    
+    res = list(range(1, k+1))[::-1]
 
-    return ""
+    if k%2 == 1:
+        res.pop()
+    
+    res[0::2], res[1::2] = res[1::2], res[0::2]
+
+    if k%2 == 1:
+        res.append(1)
+    
+    return res[::-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -81,13 +91,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
