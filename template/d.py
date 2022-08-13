@@ -56,16 +56,15 @@ def solve_(arr, n, k):
     # your solution here
 
     # assign smallest
+    if k == n:
+        return 10**9
     
     arr.sort()
     if k == 1:
-        return arr[-1]
+        return min(arr[-1], 2*arr[k])
 
     if k == n-1:
         return arr[-1]*2
-
-    if k == n:
-        return 10**9
 
     return max(arr[-1], 2*arr[k])
 
