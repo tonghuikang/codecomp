@@ -168,7 +168,7 @@ for case_num in [0]:  # no loop over test case
         else:
             i,j = i-1,j-1
         qrr.append((i,j,k))    
-    qrr.sort(key=lambda x: (x[0], -x[1]))
+    # qrr.sort(key=lambda x: (x[0], -x[1]))
 
     res = solve(n, qrr)  # include input here
 
