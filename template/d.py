@@ -56,6 +56,7 @@ class IOWrapper(IOBase):
 sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
 input = lambda: sys.stdin.readline().rstrip("\r\n")
 
+from collections import defaultdict
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -72,7 +73,7 @@ e18 = 10**18 + 10
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -118,15 +119,39 @@ def solve_(n, qrr):
         zero_mask[i] = zero_mask[i] | boo
         zero_mask[j] = zero_mask[j] | boo
 
+
+    g = defaultdict(list)
     for i,j,x in qrr:
-        one_mask[i] = (zero_mask[j]&x) | one_mask[i]
-        one_mask[j] = (zero_mask[i]&x) | one_mask[j]
-        one_mask[j] = (one_mask[j] | (((one_mask[i] | one_mask[j]) ^ allmask) & x))
+        g[i].append((j,x))
+        g[j].append((i,x))
+    for k in g:
+        g[k].sort()
+
+    for cur in range(n):
+        val = 0
+        required2 = allmask
+
+        for nex, edgeval in g[cur]:
+            required = zero_mask[nex] & edgeval
+            val = val | required
+
+            if nex <= cur:
+                required2 = required2 & ((one_mask[nex] ^ allmask) & edgeval)
+        
+        if required2 != allmask:
+            val = val | required2
+
+        one_mask[cur] = val
+        log(list(bin(x) for x in one_mask))
+
+
 
     # log(list(bin(x) for x in zero_mask))
     # log(list(bin(x) for x in one_mask))
 
     res = one_mask
+
+    log(res)
 
     for i,j,x in qrr:
         assert res[i] | res[j] == x
