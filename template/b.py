@@ -55,12 +55,49 @@ def minus_one_matrix(mrr):
 def solve_(arr, n, m, k):
     # your solution here
 
-    return ""
+    # force from left
+    
+    res = ""
+
+    for i in range(32, -1, -1):
+        # log(arr, m, res)
+
+        arr.sort(reverse=True)
+        mreq = 0
+        bitval = 1 << i
+        mask = bitval - 1
+
+        cnt = 0
+        for i,x in enumerate(arr):
+            if i < k:
+                mreq += max(0, bitval - x)
+            if x >= bitval:
+                cnt += 1
+
+        # log(mreq, m)
+
+        if mreq > m:
+            res += ("0")
+            # not possible
+            arr = [x & mask for x in arr]
+
+        else:
+            res += ("1")
+            # possible
+            if cnt >= k:
+                arr = arr[:cnt]
+            else:
+                arr = arr[:k]
+            
+            m -= mreq
+            arr = [x & mask if x >= bitval else 0 for x in arr]
+        
+    return int(res,2)
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())

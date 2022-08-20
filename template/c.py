@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -52,18 +52,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(k):
     # your solution here
 
-    return ""
+    total = pow(2,pow(2,k,m9),m9)
+    subtract = pow(2,pow(2,k,m9)-1-k,m9) - 1
+
+    log(total)
+    log(subtract)
+
+    return (total - subtract)%m9
 
 
-# for case_num in [0]:  # no loop over test case
+for k in range(1,5):
+    n = 2**k
+    cnt = 0
+    res = 0
+    for comb in itertools.product([0,1], repeat=n):
+        val = 0
+        for c,x in zip(comb, range(n)):
+            if c:
+                val = val^x
+        if val == 0 and sum(comb) % 2 == 0 and sum(comb) > 0:
+            cnt += 1
+        if val > 0 or sum(comb) % 2 == 1 or sum(comb) == 0:
+            res += 1
+    log(k, cnt, res)
+
+
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -81,7 +105,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
