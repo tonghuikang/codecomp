@@ -52,15 +52,48 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, mrr, n, m):
     # your solution here
 
+    val = n * (n+1) // 2
+
+    brr = [0]*(n-1)
+    for i,x in enumerate(brr, start=1):
+        left = i
+        right = n-left
+        brr[i-1] = left*right    
+    
+    diff = [1-int(a==b) for a,b in zip(arr, arr[1:])]
+
+    val += sum(a*b for a,b in zip(brr, diff))
+    log(brr)
+    log(diff)
+    log(val)
+
+    for i,x in mrr:
+        i -= 1
+
+        if i > 0:
+            val -= diff[i-1] * brr[i-1]
+            diff[i-1] = 1 - int(x == arr[i-1])
+            val += diff[i-1] * brr[i-1]
+
+        if i < n-1:
+            val -= diff[i] * brr[i]
+            diff[i] = 1 - int(x == arr[i+1])
+            val += diff[i] * brr[i]
+
+        arr[i] = x
+        log(arr)
+        log(diff)
+        print(val)
+        
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -72,16 +105,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, mrr, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -94,4 +127,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
