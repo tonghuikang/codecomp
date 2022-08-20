@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,7 +52,43 @@ def minus_one_matrix(mrr):
 def solve_(n, qrr):
     # your solution here
 
-    return ""
+    res = [0 for _ in range(n)]
+    qrr = [sorted([i-1, j-1]) + [k] for i,j,k in qrr]
+    qrr.sort()
+
+    for b in range(30):
+        mask = 1 << b
+        arr = [-1 for _ in range(n)]
+
+        for i,j,x in qrr:
+            boo = x & mask
+            # log(i,j,x,boo)
+            if not boo:
+                arr[i] = 0
+                arr[j] = 0
+                
+        for i,j,x in qrr:
+            boo = x & mask
+            if boo:
+                if arr[j] == 0:
+                    arr[i] = 1
+                elif arr[i] == 0:
+                    arr[j] = 1
+                elif arr[i] == 1:
+                    pass
+                elif arr[j] == 1:
+                    pass
+                elif arr[j] == -1 and arr[i] == -1:
+                    arr[j] = 1
+        
+
+        for i,x in enumerate(arr):
+            if x > 0:
+                res[i] += mask
+
+        # log(b, arr)
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
@@ -87,7 +120,7 @@ for case_num in [0]:  # no loop over test case
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
