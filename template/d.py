@@ -1,6 +1,61 @@
-#!/usr/bin/env python3
+# https://codeforces.com/blog/entry/82989
+# Some code to make your Python code run faster
+
+import os
 import sys
-input = sys.stdin.readline  # to read input quickly
+from io import BytesIO, IOBase
+# sys.setrecursionlimit(300000)
+
+BUFSIZE = 8192
+
+
+class FastIO(IOBase):
+    newlines = 0
+
+    def __init__(self, file):
+        self._fd = file.fileno()
+        self.buffer = BytesIO()
+        self.writable = "x" in file.mode or "r" not in file.mode
+        self.write = self.buffer.write if self.writable else None
+
+    def read(self):
+        while True:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            if not b:
+                break
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines = 0
+        return self.buffer.read()
+
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines -= 1
+        return self.buffer.readline()
+
+    def flush(self):
+        if self.writable:
+            os.write(self._fd, self.buffer.getvalue())
+            self.buffer.truncate(0), self.buffer.seek(0)
+
+
+class IOWrapper(IOBase):
+    def __init__(self, file):
+        self.buffer = FastIO(file)
+        self.flush = self.buffer.flush
+        self.writable = self.buffer.writable
+        self.write = lambda s: self.buffer.write(s.encode("ascii"))
+        self.read = lambda: self.buffer.read().decode("ascii")
+        self.readline = lambda: self.buffer.readline().decode("ascii")
+
+
+sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -17,7 +72,7 @@ e18 = 10**18 + 10
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -49,11 +104,18 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, qrr):
+def solve_(n, q):
     # your solution here
 
     res = [0 for _ in range(n)]
-    qrr = [sorted([i-1, j-1]) + [k] for i,j,k in qrr]
+    qrr = []
+    for _ in range(q):
+        i,j,k = list(map(int,input().split()))
+        if i > j:
+            i,j = j-1,i-1
+        else:
+            i,j = i-1,j-1
+        qrr.append((i,j,k))    
     qrr.sort()
 
     for b in range(30):
@@ -74,13 +136,8 @@ def solve_(n, qrr):
                     arr[i] = 1
                 elif arr[i] == 0:
                     arr[j] = 1
-                elif arr[i] == 1:
-                    pass
-                elif arr[j] == 1:
-                    pass
                 elif arr[j] == -1 and arr[i] == -1:
                     arr[j] = 1
-        
 
         for i,x in enumerate(arr):
             if x > 0:
@@ -89,6 +146,9 @@ def solve_(n, qrr):
         # log(b, arr)
 
     return res
+
+
+# solve(10**5, 0)
 
 
 for case_num in [0]:  # no loop over test case
@@ -111,10 +171,10 @@ for case_num in [0]:  # no loop over test case
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    qrr = read_matrix(q)  # and return as a list of list of int
+    # qrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, qrr)  # include input here
+    res = solve(n, q)  # include input here
 
     # print length if applicable
     # print(len(res))
