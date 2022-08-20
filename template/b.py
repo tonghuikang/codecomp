@@ -55,7 +55,22 @@ def minus_one_matrix(mrr):
 def solve_(n,k,b,s):
     # your solution here
 
-    return ""
+    if s // k < b:
+        return -1
+    
+    res = [0 for _ in range(n)]
+    res[0] = b*k
+    s -= b*k
+
+    for idx in range(n):
+        val = max(0, min(k-1, s))
+        res[idx] += val
+        s -= val
+    
+    if s != 0:
+        return -1
+
+    return " ".join(str(x) for x in res)
 
 
 # for case_num in [0]:  # no loop over test case
