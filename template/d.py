@@ -104,46 +104,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, q):
+def solve_(n, qrr):
     # your solution here
 
-    res = [0 for _ in range(n)]
-    qrr = []
-    for _ in range(q):
-        i,j,k = list(map(int,input().split()))
-        if i > j:
-            i,j = j-1,i-1
-        else:
-            i,j = i-1,j-1
-        qrr.append((i,j,k))    
-    qrr.sort()
+    zero_mask = [0 for _ in range(n)]
+    one_mask = [0 for _ in range(n)]
 
-    for b in range(30):
-        mask = 1 << b
-        arr = [-1 for _ in range(n)]
+    allmask = 2**31 - 1
 
-        for i,j,x in qrr:
-            boo = x & mask
-            # log(i,j,x,boo)
-            if not boo:
-                arr[i] = 0
-                arr[j] = 0
-                
-        for i,j,x in qrr:
-            boo = x & mask
-            if boo:
-                if arr[j] == 0:
-                    arr[i] = 1
-                elif arr[i] == 0:
-                    arr[j] = 1
-                elif arr[j] == -1 and arr[i] == -1:
-                    arr[j] = 1
+    for i,j,x in qrr:
+        boo = x ^ allmask
+        # log(i,j,x,boo)
+        zero_mask[i] = zero_mask[i] | boo
+        zero_mask[j] = zero_mask[j] | boo
 
-        for i,x in enumerate(arr):
-            if x > 0:
-                res[i] += mask
+    for i,j,x in qrr:
+        one_mask[i] = (zero_mask[j]&x) | one_mask[i]
+        one_mask[j] = (zero_mask[i]&x) | one_mask[j]
+        one_mask[j] = (one_mask[j] | (((one_mask[i] | one_mask[j]) ^ allmask) & x))
 
-        # log(b, arr)
+    # log(list(bin(x) for x in zero_mask))
+    # log(list(bin(x) for x in one_mask))
+
+    res = one_mask
+
+    for i,j,x in qrr:
+        assert res[i] | res[j] == x
 
     return res
 
@@ -174,7 +160,17 @@ for case_num in [0]:  # no loop over test case
     # qrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, q)  # include input here
+    qrr = []
+    for _ in range(q):
+        i,j,k = list(map(int,input().split()))
+        if i > j:
+            i,j = j-1,i-1
+        else:
+            i,j = i-1,j-1
+        qrr.append((i,j,k))    
+    qrr.sort(key=lambda x: (x[0], -x[1]))
+
+    res = solve(n, qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
