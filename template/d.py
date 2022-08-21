@@ -11,7 +11,7 @@ input = sys.stdin.readline  # to read input quickly
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -52,10 +52,64 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,p,m,ar,ac,arr,prr):
     # your solution here
 
-    return ""
+    arr = [x.split() for x in arr]
+
+    op_map = {
+        "+": lambda x: x[0]+x[1],
+        "-": lambda x: x[0]-x[1],
+        "*": lambda x: x[0]*x[1],
+        "/": lambda x: x[0]//x[1],
+    }
+    
+    arr = [(op_map[x], int(y)) for x,y in arr]
+
+    def ops(dx,dy,val):
+        # north
+        if (dx,dy) == (-1,0):
+            op, y = arr[0]
+            return op((val, y))
+
+        # east
+        if (dx,dy) == (0,1):
+            op, y = arr[1]
+            return op((val, y))
+
+        # west
+        if (dx,dy) == (0,-1):
+            op, y = arr[2]
+            return op((val, y))
+
+        # south
+        if (dx,dy) == (1,0):
+            op, y = arr[3]
+            return op((val, y))
+
+        assert False
+
+    
+    states = {(ar-1,ac-1): 0}
+    for turn in range(m):
+
+        new_states = {k:v for k,v in states.items()}
+        for (x,y), val in states.items():
+            for dx,dy in d4:
+                xx = x+dx
+                yy = y+dy
+                if 0 <= xx < n and 0 <= yy < n:
+                    next_val = ops(dx,dy,val)
+                    if (xx,yy) in new_states:
+                        new_states[xx,yy] = max(new_states[xx,yy], next_val)
+                    else:
+                        new_states[xx,yy] = next_val
+
+        log(new_states)
+        states = new_states
+        
+    return max(states.values())
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,16 +126,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,p,m,ar,ac = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    arr = read_strings(4)  # and return as a list of str
+    prr = read_matrix(p)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,p,m,ar,ac,arr,prr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -92,6 +146,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
