@@ -55,6 +55,9 @@ def minus_one_matrix(mrr):
 def solve_(n,p,m,ar,ac,arr,prr):
     # your solution here
 
+    prr = [(x-1, y-1, c) for x,y,c in prr]
+    # log(prr)
+
     arr = [x.split() for x in arr]
 
     op_map = {
@@ -64,6 +67,7 @@ def solve_(n,p,m,ar,ac,arr,prr):
         "/": lambda x: x[0]//x[1],
     }
     
+    allmask = (1 << p) - 1
     arr = [(op_map[x], int(y)) for x,y in arr]
 
     def ops(dx,dy,val):
@@ -89,26 +93,51 @@ def solve_(n,p,m,ar,ac,arr,prr):
 
         assert False
 
-    
-    states = {(ar-1,ac-1): 0}
+    states = {(ar-1,ac-1,0): 0}   # x,y,delivery_status
     for turn in range(m):
 
         new_states = {k:v for k,v in states.items()}
-        for (x,y), val in states.items():
+        for (x,y,pval), val in states.items():
             for dx,dy in d4:
                 xx = x+dx
                 yy = y+dy
                 if 0 <= xx < n and 0 <= yy < n:
                     next_val = ops(dx,dy,val)
-                    if (xx,yy) in new_states:
-                        new_states[xx,yy] = max(new_states[xx,yy], next_val)
+                    if (xx,yy,pval) in new_states:
+                        new_states[xx,yy,pval] = max(new_states[xx,yy,pval], next_val)
                     else:
-                        new_states[xx,yy] = next_val
+                        new_states[xx,yy,pval] = next_val
 
-        log(new_states)
-        states = new_states
-        
-    return max(states.values())
+        # log(new_states)
+
+        states = {k:v for k,v in new_states.items()}
+        for i,(x,y,c) in enumerate(prr):
+            mask = 1<<i
+
+            for pval in range(allmask+1):
+                if pval & mask:  # already delivered
+                    continue
+                if (x,y,pval) in new_states:
+                    val = new_states[x,y,pval]
+                    new_pval = pval^mask
+                    if (x,y,new_pval) in states:
+                        states[x,y,new_pval] = max(new_states[x,y,new_pval], val+c)
+                    else:
+                        states[x,y,new_pval] = val+c
+
+        # log(states)
+        # log()
+
+
+    res = -1
+    for (x,y,pval),v in states.items():
+        if pval == allmask:
+            res = max(res, v)
+
+    if res == -1:
+        return "IMPOSSIBLE"
+
+    return res
 
 
 
