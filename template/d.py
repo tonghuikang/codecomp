@@ -52,7 +52,6 @@ def minus_one_matrix(mrr):
 def solve_(n,p,m,ar,ac,arr,prr):
     # your solution here
 
-    prr = [(x-1, y-1, c) for x,y,c in prr]
     # log(prr)
 
     arr = [x.split() for x in arr]
@@ -90,8 +89,8 @@ def solve_(n,p,m,ar,ac,arr,prr):
 
         assert False
 
-    states = {(ar-1,ac-1,0): 0}   # x,y,delivery_status
-    for turn in range(m):
+    states = {(ar,ac,0): 0}   # x,y,delivery_status
+    for _ in range(m):
 
         new_states = {k:v for k,v in states.items()}
         for (x,y,pval), val in states.items():
@@ -104,8 +103,9 @@ def solve_(n,p,m,ar,ac,arr,prr):
                         new_states[xx,yy,pval] = max(new_states[xx,yy,pval], next_val)
                     else:
                         new_states[xx,yy,pval] = next_val
+            del xx,yy,pval
 
-        # log(new_states)
+        log(new_states)
 
         states = {k:v for k,v in new_states.items()}
         for i,(x,y,c) in enumerate(prr):
@@ -121,17 +121,18 @@ def solve_(n,p,m,ar,ac,arr,prr):
                         states[x,y,new_pval] = max(new_states[x,y,new_pval], val+c)
                     else:
                         states[x,y,new_pval] = val+c
+            del x,y,c,i
 
-        # log(states)
-        # log()
+        log(states)
+        log()
 
 
-    res = -1
+    res = -10**18
     for (x,y,pval),v in states.items():
         if pval == allmask:
             res = max(res, v)
 
-    if res == -1:
+    if res == -10**18:
         return "IMPOSSIBLE"
 
     return res
@@ -160,6 +161,9 @@ for case_num in range(int(input())):
     arr = read_strings(4)  # and return as a list of str
     prr = read_matrix(p)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+    ar -= 1
+    ac -= 1
+    prr = [(x-1, y-1, c) for x,y,c in prr]
 
     res = solve(n,p,m,ar,ac,arr,prr)  # include input here
 
