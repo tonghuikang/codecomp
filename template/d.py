@@ -81,8 +81,21 @@ def solve_(arr, brr, n):
             new_ranges = []
             for i,j in ranges:
                 acount = sum(x&topmask > 0 for x in brr[i:j])
-                arr[i:j] = sorted(arr[i:j], key=lambda x:x&topmask)
-                brr[i:j] = sorted(brr[i:j], key=lambda x:x&topmask, reverse=True)
+                # arr[i:j] = sorted(arr[i:j], key=lambda x:x&topmask)
+                # brr[i:j] = sorted(brr[i:j], key=lambda x:x&topmask, reverse=True)
+
+                ptr = j-1
+                for idx in range(i,j):
+                    if arr[idx]&topmask and not arr[ptr]&topmask and ptr > idx:
+                        arr[idx], arr[ptr] = arr[ptr], arr[idx]
+                        ptr -= 1
+
+                ptr = j-1
+                for idx in range(i,j):
+                    if not brr[idx]&topmask and brr[ptr]&topmask and ptr > idx:
+                        brr[idx], brr[ptr] = brr[ptr], brr[w]
+                        ptr -= 1
+
                 new_ranges.append((i,i+acount))
                 new_ranges.append((acount+i,j))
             ranges = new_ranges
