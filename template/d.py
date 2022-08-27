@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,49 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr, n):
     # your solution here
 
-    return ""
+    res = []
+
+    pools = [(arr, brr),]
+
+    for i in range(30,-1,-1):
+        # log(pools)
+        topmask = 2**i
+        onemask = topmask - 1
+    
+        fail = False
+        for ar,br in pools:
+            assert len(ar) == len(br)
+            acount = sum(x&topmask > 0 for x in ar)
+            bcount = sum(x&topmask > 0 for x in br)
+            # log(acount, bcount, len(ar))
+            if acount + bcount != len(ar):
+                fail = True
+        
+        if fail:
+            res.append(0)
+            pools = [
+                ([x&onemask for x in ar], [x&onemask for x in br]) 
+                for ar, br in pools
+            ]
+
+        else:
+            new_pools = []
+            res.append(1)
+            for ar,br in pools:
+                ar0 = [a for a in ar if not a&topmask]
+                ar1 = [a^topmask for a in ar if a&topmask]
+                br0 = [b for b in br if not b&topmask]
+                br1 = [b^topmask for b in br if b&topmask]
+                new_pools.append((ar0, br1))
+                new_pools.append((ar1, br0))
+            pools = new_pools
+
+    log(res)
+
+    return int("".join(str(x) for x in res),2)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +99,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,7 +109,8 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -81,7 +118,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
