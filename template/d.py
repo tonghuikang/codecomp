@@ -56,7 +56,7 @@ def solve_(arr, brr, n):
 
     res = []
 
-    ranges = {0:n}
+    ranges = [(0,n)]
 
     for i in range(30,-1,-1):
         log()
@@ -67,7 +67,7 @@ def solve_(arr, brr, n):
         onemask = topmask - 1
     
         fail = False
-        for i,j in ranges.keys():
+        for i,j in ranges:
             acount = sum(x&topmask > 0 for x in arr[i:j])
             bcount = sum(x&topmask > 0 for x in brr[i:j])
             # log(acount, bcount, len(ar))
@@ -81,7 +81,7 @@ def solve_(arr, brr, n):
         else:
             res.append(1)
             new_ranges = []
-            for i,j in ranges.keys():
+            for i,j in ranges:
                 acount = sum(x&topmask > 0 for x in brr[i:j])
                 # arr[i:j] = sorted(arr[i:j], key=lambda x:x&topmask)
                 # brr[i:j] = sorted(brr[i:j], key=lambda x:x&topmask, reverse=True)
@@ -103,8 +103,8 @@ def solve_(arr, brr, n):
                 # assert arr[i:j] == sorted(arr[i:j], key=lambda x:x&topmask)
                 # assert brr[i:j] == sorted(brr[i:j], key=lambda x:x&topmask, reverse=True)
 
-                new_ranges[i] = i+acount
-                new_ranges[i+acount] = j
+                new_ranges.append((i,i+acount))
+                new_ranges.append((acount+i,j))
             ranges = new_ranges
         
     log()
