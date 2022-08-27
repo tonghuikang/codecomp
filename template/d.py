@@ -50,6 +50,8 @@ def minus_one_matrix(mrr):
 
 
 def solve_(arr, brr, n):
+    arr.sort()
+    brr.sort(reverse=True)
     # your solution here
 
     res = []
@@ -86,15 +88,20 @@ def solve_(arr, brr, n):
 
                 ptr = j-1
                 for idx in range(i,j):
-                    if arr[idx]&topmask and not arr[ptr]&topmask and ptr > idx:
-                        arr[idx], arr[ptr] = arr[ptr], arr[idx]
+                    while arr[ptr]&topmask and ptr > i:
                         ptr -= 1
+                    if arr[idx]&topmask and ptr > idx:
+                        arr[idx], arr[ptr] = arr[ptr], arr[idx]
 
                 ptr = j-1
                 for idx in range(i,j):
-                    if not brr[idx]&topmask and brr[ptr]&topmask and ptr > idx:
-                        brr[idx], brr[ptr] = brr[ptr], brr[idx]
+                    while not brr[ptr]&topmask and ptr > i:
                         ptr -= 1
+                    if not brr[idx]&topmask and ptr > idx:
+                        brr[idx], brr[ptr] = brr[ptr], brr[idx]
+
+                # assert arr[i:j] == sorted(arr[i:j], key=lambda x:x&topmask)
+                # assert brr[i:j] == sorted(brr[i:j], key=lambda x:x&topmask, reverse=True)
 
                 new_ranges.append((i,i+acount))
                 new_ranges.append((acount+i,j))
@@ -133,6 +140,14 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr, brr, n)  # include input here
+
+    # if OFFLINE_TEST:
+    #     for _ in range(100):
+    #         import random
+    #         random.shuffle(arr)
+    #         random.shuffle(brr)
+            
+    #         assert res == solve(arr, brr, n)
 
     # print length if applicable
     # print(len(res))
