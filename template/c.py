@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-from collections import Counter
+from collections import Counter, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -62,23 +62,24 @@ def solve_(arr, brr, n):
             ptr -= 1
         minidx[i] = ptr
 
-    minres = [brr[i] - a for a,i in zip(arr, minidx)]
+    minres = [brr[i] for i in minidx]
     log(minres)
 
-    print(*minres)
+    print(*[b-a for a,b in zip(arr, minres)])
 
     c = Counter(minidx)
 
-    gaps = 0
+    queue = deque([])
     for i in range(n-1,-1,-1):
-        maxidx[i] = i+gaps
-        gaps += 1
-        gaps -= c[i]
+        queue.appendleft(brr[i])
+        maxidx[i] = queue[-1]
+        for _ in range(c[i]):
+            queue.popleft()
 
-    maxres = [brr[i] - a for a,i in zip(arr, maxidx)]
+    maxres = maxidx
     log(maxres)
 
-    print(*maxres)
+    print(*[b-a for a,b in zip(arr, maxres)])
 
 
 # for case_num in [0]:  # no loop over test case
