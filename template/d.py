@@ -63,7 +63,6 @@ def solve_(arr, brr, n):
     
         fail = False
         for ar,br in pools:
-            assert len(ar) == len(br)
             acount = sum(x&topmask > 0 for x in ar)
             bcount = sum(x&topmask > 0 for x in br)
             # log(acount, bcount, len(ar))
@@ -93,6 +92,8 @@ def solve_(arr, brr, n):
 
     return int("".join(str(x) for x in res),2)
 
+
+solve(range(2**17))
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
