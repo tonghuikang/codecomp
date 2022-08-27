@@ -93,7 +93,7 @@ def solve_(arr, brr, n):
                 ptr = j-1
                 for idx in range(i,j):
                     if not brr[idx]&topmask and brr[ptr]&topmask and ptr > idx:
-                        brr[idx], brr[ptr] = brr[ptr], brr[w]
+                        brr[idx], brr[ptr] = brr[ptr], brr[idx]
                         ptr -= 1
 
                 new_ranges.append((i,i+acount))
