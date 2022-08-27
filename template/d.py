@@ -17,7 +17,7 @@ e18 = 10**18 + 10
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -54,41 +54,42 @@ def solve_(arr, brr, n):
 
     res = []
 
-    pools = [(arr, brr),]
+    ranges = [(0,n)]
 
     for i in range(30,-1,-1):
-        # log(pools)
+        log()
+        log(arr)
+        log(brr)
+        log(ranges)
         topmask = 2**i
         onemask = topmask - 1
     
         fail = False
-        for ar,br in pools:
-            assert len(ar) == len(br)
-            acount = sum(x&topmask > 0 for x in ar)
-            bcount = sum(x&topmask > 0 for x in br)
+        for i,j in ranges:
+            acount = sum(x&topmask > 0 for x in arr[i:j])
+            bcount = sum(x&topmask > 0 for x in brr[i:j])
             # log(acount, bcount, len(ar))
-            if acount + bcount != len(ar):
+            if acount + bcount != j-i:
+                log(topmask, acount, bcount)
                 fail = True
         
         if fail:
             res.append(0)
-            pools = [
-                ([x&onemask for x in ar], [x&onemask for x in br]) 
-                for ar, br in pools
-            ]
 
         else:
-            new_pools = []
             res.append(1)
-            for ar,br in pools:
-                ar0 = [a for a in ar if not a&topmask]
-                ar1 = [a^topmask for a in ar if a&topmask]
-                br0 = [b for b in br if not b&topmask]
-                br1 = [b^topmask for b in br if b&topmask]
-                new_pools.append((ar0, br1))
-                new_pools.append((ar1, br0))
-            pools = new_pools
-
+            new_ranges = []
+            for i,j in ranges:
+                acount = sum(x&topmask > 0 for x in brr[i:j])
+                arr[i:j] = sorted(arr[i:j], key=lambda x:x&topmask)
+                brr[i:j] = sorted(brr[i:j], key=lambda x:x&topmask, reverse=True)
+                new_ranges.append((i,i+acount))
+                new_ranges.append((acount+i,j))
+            ranges = new_ranges
+        
+    log()
+    log(arr)
+    log(brr)
     log(res)
 
     return int("".join(str(x) for x in res),2)
