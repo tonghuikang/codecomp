@@ -17,7 +17,7 @@ e18 = 10**18 + 10
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -50,66 +50,47 @@ def minus_one_matrix(mrr):
 
 
 def solve_(arr, brr, n):
-    arr.sort()
-    brr.sort(reverse=True)
     # your solution here
 
     res = []
 
-    ranges = {0:n}
+    pools = [(arr, brr),]
 
     for i in range(30,-1,-1):
-        log()
-        log(arr)
-        log(brr)
-        log(ranges)
+        # log(pools)
         topmask = 2**i
         onemask = topmask - 1
     
         fail = False
-        for i,j in ranges.items():
-            acount = sum(x&topmask > 0 for x in arr[i:j])
-            bcount = sum(x&topmask > 0 for x in brr[i:j])
+        for ar,br in pools:
+            assert len(ar) == len(br)
+            acount = sum(x&topmask > 0 for x in ar)
+            bcount = sum(x&topmask > 0 for x in br)
             # log(acount, bcount, len(ar))
-            if acount + bcount != j-i:
-                log(topmask, acount, bcount)
+            if acount + bcount != len(ar):
                 fail = True
         
         if fail:
             res.append(0)
+            pools = [
+                ([x&onemask for x in ar], [x&onemask for x in br]) 
+                for ar, br in pools
+            ]
 
         else:
+            new_pools = []
             res.append(1)
-            new_ranges = {}
-            for i,j in ranges.items():
-                acount = sum(x&topmask > 0 for x in brr[i:j])
-                arr[i:j] = sorted(arr[i:j], key=lambda x:x&topmask)
-                brr[i:j] = sorted(brr[i:j], key=lambda x:x&topmask, reverse=True)
+            for ar,br in pools:
+                ar0 = [a for a in ar if not a&topmask]
+                ar1 = [a^topmask for a in ar if a&topmask]
+                br0 = [b for b in br if not b&topmask]
+                br1 = [b^topmask for b in br if b&topmask]
+                if ar0:
+                    new_pools.append((ar0, br1))
+                if ar1:
+                    new_pools.append((ar1, br0))
+            pools = new_pools
 
-                # ptr = j-1
-                # for idx in range(i,j):
-                #     while arr[ptr]&topmask and ptr > i:
-                #         ptr -= 1
-                #     if arr[idx]&topmask and ptr > idx:
-                #         arr[idx], arr[ptr] = arr[ptr], arr[idx]
-
-                # ptr = j-1
-                # for idx in range(i,j):
-                #     while not brr[ptr]&topmask and ptr > i:
-                #         ptr -= 1
-                #     if not brr[idx]&topmask and ptr > idx:
-                #         brr[idx], brr[ptr] = brr[ptr], brr[idx]
-
-                # assert arr[i:j] == sorted(arr[i:j], key=lambda x:x&topmask)
-                # assert brr[i:j] == sorted(brr[i:j], key=lambda x:x&topmask, reverse=True)
-
-                new_ranges[i] = i+acount # .append((i,i+acount))
-                new_ranges[i+acount] = j # .append((acount+i,j))
-            ranges = new_ranges
-        
-    log()
-    log(arr)
-    log(brr)
     log(res)
 
     return int("".join(str(x) for x in res),2)
@@ -140,14 +121,6 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr, brr, n)  # include input here
-
-    # if OFFLINE_TEST:
-    #     for _ in range(100):
-    #         import random
-    #         random.shuffle(arr)
-    #         random.shuffle(brr)
-            
-    #         assert res == solve(arr, brr, n)
 
     # print length if applicable
     # print(len(res))
