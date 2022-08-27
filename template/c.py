@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,7 +53,32 @@ def minus_one_matrix(mrr):
 def solve_(arr, brr, n):
     # your solution here
 
-    return ""
+    minidx = [0 for _ in range(n)]
+    maxidx = [0 for _ in range(n)]
+
+    ptr = n-1
+    for i in range(n-1,-1,-1):
+        while ptr > 0 and brr[ptr-1] >= arr[i]:
+            ptr -= 1
+        minidx[i] = ptr
+
+    minres = [brr[i] - a for a,i in zip(arr, minidx)]
+    log(minres)
+
+    print(*minres)
+
+    c = Counter(minidx)
+
+    gaps = 0
+    for i in range(n-1,-1,-1):
+        maxidx[i] = i+gaps
+        gaps += 1
+        gaps -= c[i]
+
+    maxres = [brr[i] - a for a,i in zip(arr, maxidx)]
+    log(maxres)
+
+    print(*maxres)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -95,4 +118,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
