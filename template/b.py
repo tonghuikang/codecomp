@@ -55,7 +55,23 @@ def minus_one_matrix(mrr):
 def solve_(n,m,sx,sy,d):
     # your solution here
 
-    return ""
+    sx -= 1
+    sy -= 1
+
+    if abs(n-1 - sx) + abs(m-1 - sy) <= d:
+        return -1
+
+    if sx - d <= 0 and sy - d <= 0:
+        return -1
+
+    if sx + d >= n-1 and sy + d >= m-1:
+        return -1
+
+    if sx - d > 0 or sx + d < n-1:
+        if sy - d > 0 or sy + d < m-1:
+            return n-1 + m-1
+
+    return -1
 
 
 # for case_num in [0]:  # no loop over test case
