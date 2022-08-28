@@ -61,17 +61,17 @@ def solve_(mrr, qrr, n, m, q):
         g[a][b] = c
         g[b][a] = c
 
+    cost = [0]
     cache = {}
-    @functools.lru_cache(maxsize=3*10**5)
     def call(x,y):
-        if (x,y) in cache:
-            return cache[x,y]
         if len(g[x]) > len(g[y]):
             x,y = y,x
+        if (x,y) in cache:
+            return cache[x,y]
         res = 0
         if y in g[x]:
             res += 2*g[x][y]
-        # log(len(g[x]), x, y)
+        cost[0] += len(g[x])
         for k,v1 in g[x].items():
             if k in g[y]:
                 res += min(v1, g[y][k])
@@ -82,6 +82,7 @@ def solve_(mrr, qrr, n, m, q):
     for x,y in qrr:
         res = call(x,y)
         allres.append(res)
+    log(cost)
 
     return allres
 
