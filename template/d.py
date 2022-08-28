@@ -62,6 +62,7 @@ def solve_(mrr, qrr, n, m, q):
         g[b][a] = c
 
     cache = {}
+    @functools.lru_cache(maxsize=3*10**5)
     def call(x,y):
         if (x,y) in cache:
             return cache[x,y]
@@ -70,6 +71,7 @@ def solve_(mrr, qrr, n, m, q):
         res = 0
         if y in g[x]:
             res += 2*g[x][y]
+        # log(len(g[x]), x, y)
         for k,v1 in g[x].items():
             if k in g[y]:
                 res += min(v1, g[y][k])
