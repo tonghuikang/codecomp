@@ -20,7 +20,7 @@ e18 = 10**18 + 10
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
