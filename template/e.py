@@ -63,7 +63,8 @@ def solve_(r,c,mrr):
     if r == 1 or c == 1:
         return False, []
 
-    mrr = [list(row) for row in mrr]
+    mrr_original = mrr
+    mrr = [list(row) for row in mrr_original]
 
     visited = set()  # stoned
     stones = []
@@ -97,6 +98,24 @@ def solve_(r,c,mrr):
                     
         
     mrr = ["".join(row).replace(".", "^").replace("x", ".") for row in mrr]
+
+    for x in range(r):
+        for y in range(c):
+            if mrr[x][y] == "#":
+                assert mrr_original[x][y] == "#"
+            elif mrr[x][y] == ".":
+                assert mrr_original[x][y] == "."
+            elif mrr[x][y] == "^":
+                assert mrr_original[x][y] == "^" or mrr_original[x][y] == "."
+                count = 0
+                for dx,dy in d4:
+                    xx = x+dx
+                    yy = y+dy
+                    if 0 <= xx < r and 0 <= yy < c:
+                        if mrr[x][y] == "^":
+                            count += 1
+                assert count >= 2
+
     return True, mrr
 
 
