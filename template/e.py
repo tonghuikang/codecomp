@@ -11,7 +11,7 @@ input = sys.stdin.readline  # to read input quickly
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -63,7 +63,41 @@ def solve_(r,c,mrr):
     if r == 1 or c == 1:
         return False, []
 
-    return True, ["^"*c for _ in range(r)]
+    mrr = [list(row) for row in mrr]
+
+    visited = set()  # stoned
+    stones = []
+    for x in range(r):
+        for y in range(c):
+            if mrr[x][y] == "#":
+                stones.append((x,y))
+                visited.add((x,y))
+    
+    while stones:
+        x,y = stones.pop()
+        for dx,dy in d4:
+            xx = x+dx
+            yy = y+dy
+            if 0 <= xx < r and 0 <= yy < c:
+                if (xx,yy) in visited:
+                    continue
+                count = 0
+                for dx2, dy2 in d4:
+                    xx2 = xx+dx2
+                    yy2 = yy+dy2
+                    if 0 <= xx2 < r and 0 <= yy2 < c:
+                        if not (mrr[xx2][yy2] == "#" or mrr[xx2][yy2] == "x"):
+                            count += 1
+                if count < 2:
+                    stones.append((xx,yy))
+                    visited.add((xx,yy))
+                    if mrr[xx][yy] == "^":
+                        return False, []
+                    mrr[xx][yy] = "x"
+                    
+        
+    mrr = ["".join(row).replace(".", "^").replace("x", ".") for row in mrr]
+    return True, mrr
 
 
 # for case_num in [0]:  # no loop over test case
