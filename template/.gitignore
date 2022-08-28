@@ -18,3 +18,4 @@ htmlcov
 *.txt
 e4
 e4.out
+c8.out

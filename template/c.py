@@ -52,10 +52,33 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, n):
     # your solution here
 
-    return ""
+    # unique 3-prefix, 2**7
+
+    ref_prefix = srr[:3]
+    loadout_length = 10 - len(ref_prefix)
+
+    res = []
+    for comb in itertools.product([".", "-"], repeat=loadout_length):
+        loadout = "".join(comb)
+        if loadout.startswith(ref_prefix):
+            continue
+        if srr.startswith(loadout):
+            continue
+        res.append(ref_prefix + loadout)
+
+    log(len(res))
+
+    assert len(res) >= 99
+
+    return res[:n-1]
+
+
+
+# for _ in range(10**6):
+#     solve("".join(random.sample([".", "-"], 1)[0] for _ in range(random.randint(1,100))), 100)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,10 +86,10 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -81,17 +104,17 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}:".format(case_num+1))   # Google and Facebook - case number required
 
     print(res)
