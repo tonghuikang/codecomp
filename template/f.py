@@ -54,6 +54,76 @@ def minus_one_matrix(mrr):
 
 def solve_(n,q,mrr,qrr):
     # your solution here
+    g = defaultdict(list)
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    queue = deque([0])
+    visited = set([0])
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            queue.append(nex)
+            visited.add(nex)
+        
+    log(cur)
+    start = cur
+
+    prev = {}
+
+    queue = deque([start])
+    visited = set([start])
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            prev[nex] = cur
+            queue.append(nex)
+            visited.add(nex)
+        
+    end = cur
+    log(end)
+
+    series = [end]
+    while cur in prev:
+        cur = prev[cur]
+        series.append(cur)
+
+    log(series)
+
+    ancestors = defaultdict(list)
+    depth = {}
+
+    for a,b,c in zip(series, series[1:], series[2:]):
+        visited = set([a,b,c])
+        queue = deque([b])
+        depth[b] = 0
+        prev = {}
+        while queue:
+            cur = queue.popleft()
+            for nex in g[cur]:
+                if nex in visited:
+                    continue
+                prev[nex] = cur
+                depth[nex] = depth[cur] + 1
+                ancestors[nex].append(cur)
+
+                anc = cur
+                idx = 0
+                while len(ancestors[anc]) >= len(ancestors[nex]):
+                    ancestors[nex].append(ancestors[anc][idx])
+                    anc = ancestors[anc][idx]
+                    idx += 1
+                
+                queue.append(nex)
+                visited.add(nex)
+
+    log(ancestors)
+    log(depth)
 
     return ""
 
@@ -79,9 +149,10 @@ for case_num in [0]:  # no loop over test case
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(n-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
     q = int(input())
     qrr = read_matrix(q)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    qrr = minus_one_matrix(qrr)
 
     res = solve(n,q,mrr,qrr)  # include input here
 
