@@ -97,14 +97,18 @@ def solve_(n,q,mrr,qrr):
 
     ancestors = defaultdict(list)
     depth = {}
+    header = {}
+    header[series[0]] = 0
+    header[series[-1]] = len(series) - 1
 
-    for a,b,c in zip(series, series[1:], series[2:]):
+    for header_idx,(a,b,c) in enumerate(zip(series, series[1:], series[2:]), start=1):
         visited = set([a,b,c])
         queue = deque([b])
         depth[b] = 0
         prev = {}
         while queue:
             cur = queue.popleft()
+            header[cur] = header_idx
             for nex in g[cur]:
                 if nex in visited:
                     continue
@@ -123,7 +127,12 @@ def solve_(n,q,mrr,qrr):
                 visited.add(nex)
 
     log(ancestors)
-    log(depth)
+    log([depth[x] for x in range(n)])
+    log([header[x] for x in range(n)])
+
+    for a,b in qrr:
+        if depth[a] <= b:
+            if 
 
     return ""
 
