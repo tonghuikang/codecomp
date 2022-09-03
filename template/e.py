@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +50,74 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def binary_search(func_,       # condition function
+                  first=True,  # else last
+                  target=True, # else False
+                  left=0, right=2**31-1) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
+
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first^target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:      # find last False
+        return left-1
+
+
 def solve_(n,m,arr,mrr):
     # your solution here
 
-    return ""
+    def func(x):
+        g = defaultdict(list)
+        costs = [0 for _ in range(n)]
+        queue = []
+        visited = set()
+
+        for a,b in mrr:
+            g[a].append(b)
+            g[b].append(a)
+            costs[b] += arr[a]
+            costs[a] += arr[b]
+        
+        for i,c in enumerate(costs):
+            if c <= x:
+                queue.append(i)
+                visited.add(i)
+        
+        while queue:
+            cur = queue.pop()
+            for nex in g[cur]:
+                if nex in visited:
+                    continue
+                costs[nex] -= arr[cur]
+                if costs[nex] <= x:
+                    visited.add(nex)
+                    queue.append(nex) 
+       
+        return len(visited) == n
+
+
+    # log("2", func(2))
+    # log("3", func(3))
+    # log("4", func(4))
+    return binary_search(func, first=True, target=True, left=0, right=10**15)
 
 
 for case_num in [0]:  # no loop over test case
@@ -79,7 +141,7 @@ for case_num in [0]:  # no loop over test case
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(m)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = minus_one_matrix(mrr)
 
     res = solve(n,m,arr,mrr)  # include input here
 
