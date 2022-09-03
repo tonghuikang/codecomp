@@ -60,9 +60,10 @@ def solve_(n,m,arr):
     # what position how many chosen
     for i in range(n):
         new_dp = [x for x in dp]
-        for j in range(1,m):
+        for j in range(1,m+1):
             new_dp[j] = max(new_dp[j], dp[j-1] + j*arr[i])
         dp = new_dp
+        # log(dp[j-1] + j*arr[i])
 
     return dp[-1]
 
