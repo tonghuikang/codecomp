@@ -83,18 +83,18 @@ def binary_search(func_,       # condition function
 
 def solve_(n,m,arr,mrr):
     # your solution here
+    init_costs = [0 for _ in range(n)]
+    g = defaultdict(list)
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+        init_costs[b] += arr[a]
+        init_costs[a] += arr[b]
 
     def func(x):
-        g = defaultdict(list)
-        costs = [0 for _ in range(n)]
         queue = []
         visited = set()
-
-        for a,b in mrr:
-            g[a].append(b)
-            g[b].append(a)
-            costs[b] += arr[a]
-            costs[a] += arr[b]
+        costs = [x for x in init_costs]
         
         for i,c in enumerate(costs):
             if c <= x:
@@ -117,7 +117,7 @@ def solve_(n,m,arr,mrr):
     # log("2", func(2))
     # log("3", func(3))
     # log("4", func(4))
-    return binary_search(func, first=True, target=True, left=0, right=10**15)
+    return binary_search(func, first=True, target=True, left=0, right=sum(arr))
 
 
 for case_num in [0]:  # no loop over test case
