@@ -126,9 +126,9 @@ def solve_(n,q,mrr,qrr):
                 queue.append(nex)
                 visited.add(nex)
 
-    # log(ancestors)
-    # log([depth[x] for x in range(n)])
-    # log([header[x] for x in range(n)])
+    log(ancestors)
+    log([depth[x] for x in range(n)])
+    log([header[x] for x in range(n)])
 
     allres = []
     for a,b in qrr:
@@ -146,12 +146,13 @@ def solve_(n,q,mrr,qrr):
         else:
             anc_idx = 0
             cur = a
-            if b%2:
-                cur = ancestors[cur][anc_idx]
-            else:
-                pass
-            b = b // 2
-            anc_idx += 1
+            while b:
+                if b%2:
+                    cur = ancestors[cur][anc_idx]
+                else:
+                    pass
+                b = b // 2
+                anc_idx += 1
             res = cur
         
         allres.append(res)
