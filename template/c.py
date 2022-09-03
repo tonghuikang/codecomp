@@ -52,7 +52,7 @@ def minus_one_matrix(mrr):
 def solve_(n,m,arr):
     # your solution here
 
-    maxres = 0
+    maxres = -10**18
     res = 0
     cursum = 0
     for i in range(m):
