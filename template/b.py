@@ -9,8 +9,8 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+# m9 = 10**9 + 7  # 998244353
+yes, no = "Yes", "No"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -52,21 +52,49 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
+    if srr[0] == "1":
+        return no
     # your solution here
 
-    return ""
+    srr = set(i for i,x in enumerate(srr, start=1) if x == "1")
+
+    log(srr)
+
+    # 7 8 9 0 
+    #  4 5 6
+    #   2 3
+    #    1
+
+    arr = [
+        [7],
+        [4],
+        [8,2],
+        [5,1],
+        [9,3],
+        [6],
+        [10],
+    ]
+
+    for i in range(len(arr)-1):
+        for j in range(2+i, len(arr)):
+            for z in range(i+1, j):
+                # log(i,z,j)
+                if not(srr&set(arr[z])) and (srr&set(arr[i])) and (srr&set(arr[j])):
+                    return yes
+
+    return no
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -81,7 +109,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
