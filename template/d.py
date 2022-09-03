@@ -54,7 +54,17 @@ def solve_(n,m,arr):
 
     maxres = -10**18
 
-    return maxres
+    dp = [-e18 for _ in range(m+1)]
+    dp[0] = 0
+
+    # what position how many chosen
+    for i in range(n):
+        new_dp = [x for x in dp]
+        for j in range(1,m):
+            new_dp[j] = max(new_dp[j], dp[j-1] + j*arr[i])
+        dp = new_dp
+
+    return dp[-1]
 
 
 for case_num in [0]:  # no loop over test case
