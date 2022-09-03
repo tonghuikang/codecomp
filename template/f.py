@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -100,6 +98,8 @@ def solve_(n,q,mrr,qrr):
     header = {}
     header[series[0]] = 0
     header[series[-1]] = len(series) - 1
+    depth[series[0]] = 0
+    depth[series[-1]] = 0
 
     for header_idx,(a,b,c) in enumerate(zip(series, series[1:], series[2:]), start=1):
         visited = set([a,b,c])
@@ -126,15 +126,37 @@ def solve_(n,q,mrr,qrr):
                 queue.append(nex)
                 visited.add(nex)
 
-    log(ancestors)
-    log([depth[x] for x in range(n)])
-    log([header[x] for x in range(n)])
+    # log(ancestors)
+    # log([depth[x] for x in range(n)])
+    # log([header[x] for x in range(n)])
 
+    allres = []
     for a,b in qrr:
+        b += 1
+        res = -2
+        
         if depth[a] <= b:
-            if 
+            header_idx = header[a]
+            dist = b - depth[a]
+            log(dist)
+            if header_idx - dist >= 0:
+                res = series[header_idx - dist]
+            if header_idx + dist < len(series):
+                res = series[header_idx + dist]
+        else:
+            anc_idx = 0
+            cur = a
+            if b%2:
+                cur = ancestors[cur][anc_idx]
+            else:
+                pass
+            b = b // 2
+            anc_idx += 1
+            res = cur
+        
+        allres.append(res)
 
-    return ""
+    return allres
 
 
 for case_num in [0]:  # no loop over test case
@@ -169,7 +191,8 @@ for case_num in [0]:  # no loop over test case
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = "\n".join(str(x+1) for x in res)
+    # res = "\n".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
