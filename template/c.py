@@ -79,8 +79,7 @@ def solve_(mrr, n):
                 pos.append(a)
     pos.sort()
 
-    # log(pos)
-        
+    log(pos)
 
     # arr.sort()
     # brr.sort()
