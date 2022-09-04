@@ -55,7 +55,50 @@ def minus_one_matrix(mrr):
 def solve_(mrr, n):
     # your solution here
 
-    return ""
+    
+
+    # mrr.sort()
+
+    arr = [x[0] for x in mrr]
+    brr = [x[1] for x in mrr]
+
+    crr = arr + brr
+    crr.sort()
+    
+    middle = crr[n]
+    log(middle)
+
+    pos = []
+    for a,b in mrr:
+        if a <= middle <= b:
+            pos.append(middle)
+        else:
+            if abs(middle-a) > abs(middle-b):
+                pos.append(b)
+            else:
+                pos.append(a)
+    pos.sort()
+
+    # log(pos)
+        
+
+    # arr.sort()
+    # brr.sort()
+
+    minres = 0
+
+    # # flush all to left, move them right
+    for i,(a,b) in enumerate(zip(pos, pos[1:])):
+        minres += (n-1)*(b-a)
+
+    # arr.reverse()
+    # brr.reverse()
+
+    # ptr = arr[-1]
+    # while len(arr) and brr:
+    #     arr.pop()
+
+    return minres
 
 
 for case_num in [0]:  # no loop over test case
