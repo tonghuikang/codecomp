@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,20 +49,46 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+# https://www.geeksforgeeks.org/sum-manhattan-distances-pairs-points/
+def distancesum(arr):
+    n = len(arr)
+     
+    # sorting the array.
+    arr.sort()
+     
+    # for each point, finding
+    # the distance.
+    res = 0
+    sum = 0
+    for i in range(n):
+        res += (arr[i] * i - sum)
+        sum += arr[i]
+     
+    return res
+
 def solve_(mrr, n):
     # your solution here
 
     
+
 
     # mrr.sort()
 
     arr = [x[0] for x in mrr]
     brr = [x[1] for x in mrr]
 
+    # arr.sort()
+    # brr.sort()
+
+    # if brr[0] >= arr[-1]:
+    #     return 0
+
+    # pos = [brr[0]] + [arr[-1]] * (n-1)
+
     crr = arr + brr
     crr.sort()
     
-    middle = crr[n]
+    middle = crr[n-1]
     log(middle)
 
     pos = []
@@ -84,11 +107,7 @@ def solve_(mrr, n):
     # arr.sort()
     # brr.sort()
 
-    minres = 0
-
-    # # flush all to left, move them right
-    for i,(a,b) in enumerate(zip(pos, pos[1:])):
-        minres += (n-1)*(b-a)
+    minres = distancesum(pos)
 
     # arr.reverse()
     # brr.reverse()
