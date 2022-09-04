@@ -52,18 +52,60 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr_original, n):
     # your solution here
 
-    return ""
+    arr = [[x,i,(i+x)%2] for i,x in enumerate(arr_original, start=1)]
+
+    log(arr)
+
+    # send them to back
+    res = []
+
+    for _ in range(n):
+        for i in range(n-3, -1, -1):
+            if arr[i][-1] == 1 and arr[i+2][-1] == 0:
+                res.append(("B", i))
+                arr[i], arr[i+2] = arr[i+2], arr[i]
+
+    log(arr)
+
+    for i in range(n-1):
+        if arr[i][-1] == 1 and arr[i+1][-1] == 1:
+            res.append(("A", i))
+            arr[i], arr[i+1] = arr[i+1], arr[i]
+            arr[i][-1] = 0
+            arr[i+1][-1] = 0
+
+    log(arr)
+
+    for _ in range(n):
+        for i in range(n-3, -1, -1):
+            if arr[i][0] > arr[i+2][0]:
+                res.append(("B", i))
+                arr[i], arr[i+2] = arr[i+2], arr[i]
+
+    log(arr)
+
+    for a,i in res:
+        if a == "A":
+            arr_original[i], arr_original[i+1] = arr_original[i+1], arr_original[i]
+        else:
+            arr_original[i], arr_original[i+2] = arr_original[i+2], arr_original[i]
+
+    log(arr_original)
+    assert arr_original == sorted(arr_original)
+
+    res = [(a,i+1) for a,i in res]
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,7 +115,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -81,7 +123,8 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, n)  # include input here
+    print(len(res))
 
     # print length if applicable
     # print(len(res))
@@ -89,7 +132,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
