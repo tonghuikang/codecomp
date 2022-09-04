@@ -55,6 +55,8 @@ def minus_one_matrix(mrr):
 def solve_(n, m):
     if n == 1:
         return pow(2, m, m9)
+    if m == 1:
+        return 1
     # your solution here
 
     return ""
