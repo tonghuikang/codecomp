@@ -176,6 +176,47 @@ def count_inversions(perm):
     return res
 
 
+
+def binary_lifting_preprocessing(graph, start_node):
+    """graph: map or list of node to nodes"""
+
+    ancestors_binary = defaultdict(list)
+    visited = set([start_node])
+    queue = deque([start_node])
+
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            depth[nex] = depth[cur] + 1
+            ancestors_binary[nex].append(cur)
+
+            anc = cur
+            idx = 0
+            while len(ancestors_binary[anc]) >= len(ancestors_binary[nex]):
+                ancestors_binary[nex].append(ancestors_binary[anc][idx])
+                anc = ancestors_binary[anc][idx]
+                idx += 1
+            
+            queue.append(nex)
+            visited.add(nex)
+
+    return ancestors_binary
+
+
+def binary_lifting_query(node, height, ancestors_binary):
+    idx = 0
+    while b:
+        if b&1:
+            node = ancestors[node][idx]
+        else:
+            pass
+        b = b >> 1
+        idx += 1
+    return node
+
+
 # ----------------------- Self-balancing Trees -----------------------
 
 # todo
