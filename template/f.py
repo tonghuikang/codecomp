@@ -7,6 +7,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
+m9 = 10**9 + 7
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -80,7 +81,7 @@ def binary_lifting_query(node, height, ancestors_binary):
 for case_num in [0]:  # no loop over test case
     # your solution here
     n = int(input())
-    g = defaultdict(list)
+    g = [[] for _ in range(n)]
     for a,b in read_matrix(n-1):
         a -= 1
         b -= 1
@@ -89,29 +90,46 @@ for case_num in [0]:  # no loop over test case
 
     queue = deque([0])
     visited = set([0])
+    d1 = [0 for _ in range(n)]
     while queue:
         cur = queue.popleft()
         for nex in g[cur]:
             if nex in visited:
                 continue
+            d1[nex] = d1[cur] + 1
             queue.append(nex)
             visited.add(nex)
         
+    queue = deque([cur])
+    visited = set([cur])
+    d1 = [0 for _ in range(n)]
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            d1[nex] = d1[cur] + 1
+            queue.append(nex)
+            visited.add(nex)
+
     log(cur)
     start = cur
 
     queue = deque([start])
     visited = set([start])
+    d2 = [0 for _ in range(n)]
     while queue:
         cur = queue.popleft()
         for nex in g[cur]:
             if nex in visited:
                 continue
+            d2[nex] = d2[cur] + 1
             queue.append(nex)
             visited.add(nex)
         
     end = cur
     log(end)
+    log(d1)
 
     a1 = binary_lifting_preprocessing(g, start)
     a2 = binary_lifting_preprocessing(g, end)
@@ -121,14 +139,16 @@ for case_num in [0]:  # no loop over test case
     for a,b in read_matrix(q):
         a -= 1
         res = -2
-        try:
-            res = max(res, binary_lifting_query(a,b,a1))
-        except IndexError:
-            pass
-        try:
-            res = max(res, binary_lifting_query(a,b,a2))
-        except IndexError:
-            pass
+        if d1[a] < d2[a]:
+            try:
+                res = max(res, binary_lifting_query(a,b,a1))
+            except IndexError:
+                pass
+        else:
+            try:
+                res = max(res, binary_lifting_query(a,b,a2))
+            except IndexError:
+                pass
         allres.append(res)
 
     print("\n".join(str(x+1) for x in allres))
