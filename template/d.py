@@ -113,24 +113,16 @@ def solve_(n,m,mrr):
     if n-1 == m:
         return [1]*m
 
-    ds = DisjointSet()
-    for i,(u, v) in enumerate(mrr):
-        if ds.find(u) != ds.find(v):
-            ds.union(u, v)
-        else:
-            break
-
-    blocked = i    
-
-    res = [0 for _ in range(m)]
+    count = 3
 
     ds = DisjointSet()
     for i,(u, v) in enumerate(mrr):
-        if i == blocked:
+        if count == 3:
             continue
         if ds.find(u) != ds.find(v):
             ds.union(u, v)
             res[i] = 1
+            count -= 1
 
     return res
 
