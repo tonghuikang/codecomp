@@ -116,10 +116,6 @@ def solve_(n,m,mrr):
     if n == m:
         return [1]*(m-1) + [0]
 
-    if n+1 == m:
-        return [1]*(m-2) + [0,0]
-
-
     missed = set()
     res = [0 for _ in range(m)]
     ds = DisjointSet()
