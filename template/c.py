@@ -52,10 +52,34 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    val = [0]
+    dopen = defaultdict(list)
+    dclose = defaultdict(list)
+
+    for i,x in enumerate(arr, start=1):
+        if x == "(":
+            dopen[val[-1]].append(i-1)
+            val.append(val[-1] + 1)
+        else:
+            val.append(val[-1] - 1)
+            dclose[val[-1]].append(i)
+
+    # log(val)
+    # log(dopen)
+    # log(dclose)
+
+    res = 0
+    for k in dopen:
+        res += 1
+        for v1, v2 in zip(dopen[k][1:], dclose[k]):
+            if v1 == v2:
+                continue
+            res += 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,10 +87,10 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -81,7 +105,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
