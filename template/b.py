@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+yes, no = "Yes", "No"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -55,7 +55,24 @@ def minus_one_matrix(mrr):
 def solve_(n,m):
     # your solution here
 
-    return ""
+    if n > m:
+        return []
+
+    res = [1]*n
+    remainder = m-n
+
+    log(remainder)
+    
+    if len(res)%2 == 1:
+        res[0] += remainder
+        return res
+
+    if len(res)%2 == 0 and remainder%2 == 0:
+        res[0] += remainder // 2
+        res[1] += remainder // 2
+        return res
+
+    return []
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,11 +100,16 @@ for case_num in range(int(input())):
 
     res = solve(n,m)  # include input here
 
+    if not res:
+        print(no)
+        continue
+
+    print(yes)
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
