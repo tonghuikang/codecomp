@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -142,6 +140,12 @@ def solve_(n,m,mrr):
     for eidx in missed:
         a,b = mrr[eidx]
         for eidx2 in node_to_eidx[a]:
+            if eidx2 in missed:
+                continue
+            res[eidx], res[eidx2] = res[eidx2], res[eidx]
+            return res
+
+        for eidx2 in node_to_eidx[b]:
             if eidx2 in missed:
                 continue
             res[eidx], res[eidx2] = res[eidx2], res[eidx]
