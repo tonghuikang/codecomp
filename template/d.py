@@ -116,7 +116,7 @@ def solve_(n,m,mrr):
         random.shuffle(order)
         missed = set()
         res = [0 for _ in range(m)]
-        ds = DisjointSet(m)
+        ds = DisjointSet(n)
         for i in order:
             u, v  = mrr[i]
             if ds.find(u) != ds.find(v):
