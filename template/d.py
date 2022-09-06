@@ -52,10 +52,87 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.leader(a)]
+
+
+def minimum_spanning_tree(edges, costs):
+    # leetcode.com/problems/min-cost-to-connect-all-points
+    if len(edges) == len(costs) == 0:
+        return 0
+    ds = DisjointSet()
+    total_tree_cost = 0
+    costs, edges = zip(*sorted(zip(costs, edges)))  # sort based on costs
+    for cost, (u, v) in zip(costs, edges):
+        if ds.find(u) != ds.find(v):
+            ds.union(u, v)
+            total_tree_cost += cost
+    return total_tree_cost
+
+
 def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    if n-1 == m:
+        return [1]*m
+
+    ds = DisjointSet()
+    for i,(u, v) in enumerate(mrr):
+        if ds.find(u) != ds.find(v):
+            ds.union(u, v)
+        else:
+            break
+
+    blocked = i    
+
+    res = [0 for _ in range(m)]
+
+    ds = DisjointSet()
+    for i,(u, v) in enumerate(mrr):
+        if i == blocked:
+            continue
+        if ds.find(u) != ds.find(v):
+            ds.union(u, v)
+            res[i] = 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -79,7 +156,7 @@ for case_num in range(int(input())):
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(m)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = minus_one_matrix(mrr)
 
     res = solve(n,m,mrr)  # include input here
 
@@ -87,7 +164,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = "".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
