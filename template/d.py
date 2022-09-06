@@ -110,6 +110,11 @@ def minimum_spanning_tree(edges, costs):
 def solve_(n,m,mrr):
     # your solution here
 
+    node_to_eidx = defaultdict(list)
+    for i,(a,b) in enumerate(mrr):
+        node_to_eidx[a].append(i)
+        node_to_eidx[b].append(i)
+
     missed = set()
     res = [0 for _ in range(m)]
     ds = DisjointSet()
@@ -133,10 +138,16 @@ def solve_(n,m,mrr):
         # log('no triangle')
         return res
 
-    idx0, idx1 = res.index(0), res.index(1)
-    res[idx0], res[idx1] = res[idx1], res[idx0]
 
-    return res
+    for eidx in missed:
+        a,b = mrr[eidx]
+        for eidx2 in node_to_eidx[a]:
+            if eidx2 in missed:
+                continue
+            res[eidx], res[eidx2] = res[eidx2], res[eidx]
+            return res
+    
+    assert False
 
 
 
