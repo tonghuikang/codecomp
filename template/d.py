@@ -110,12 +110,6 @@ def minimum_spanning_tree(edges, costs):
 def solve_(n,m,mrr):
     # your solution here
 
-    if n-1 == m:
-        return [1]*m
-
-    if n == m:
-        return [1]*(m-1) + [0]
-
     missed = set()
     res = [0 for _ in range(m)]
     ds = DisjointSet()
