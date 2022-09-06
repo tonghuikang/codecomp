@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -51,11 +51,76 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def inversePermutation(arr):
+    # https://www.geeksforgeeks.org/inverse-permutation/
+    size = len(arr)
+ 
+    # To store element to index mappings
+    arr2 = [0] * (size)
+     
+    # Inserting position at their
+    # respective element in second array
+    for i in range(0, size) :
+        arr2[arr[i]] = i
+     
+    return arr2
 
-def solve_():
+
+def solve_(n):
+    dp = defaultdict(int)  # how many unswapped
+    dp[0] = 1
+    
+    for i in range(n):
+        new_dp = defaultdict(int)
+        for k,v in dp.items():
+            if k == 0:
+                new_dp[k+1] += dp[k]
+            else:
+                new_dp[k+1] += dp[k]
+                new_dp[k-1] += dp[k]*(k)
+        dp = new_dp
+        log(dp)
+            
+    return sum(dp.values())
+
+
+def solve_(n):
+    res = 0
+    for comb in itertools.permutations(list(range(n))):
+        inv = inversePermutation(comb)
+        for a,b in zip(inv,comb):
+            if abs(a-b) > 1:
+                break
+        else:
+            log(inv, comb)
+            res += 1
+    return res
+
+
+def solve_ref(n):
     # your solution here
 
-    return ""
+    dp = [[0, 0], [0, 0]]   # (first_taken, second_taken)
+    dp[1][1] = 1
+
+    for i in range(n):
+        new_dp = [[0, 0], [0, 0]] 
+
+        # no add
+        new_dp[0][0] += dp[0][0] + dp[1][0]
+        new_dp[1][0] += dp[0][1] + dp[1][1]
+
+        # right add
+        new_dp[1][1] += dp[0][0] + dp[1][0]
+
+        # middle add
+        new_dp[0][1] += dp[0][0]
+        new_dp[1][1] += dp[0][1]
+
+        dp = [[x%m9 for x in row] for row in new_dp]
+        log(dp)
+
+    return sum(sum(x) for x in dp)%m9
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +128,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -81,7 +146,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
