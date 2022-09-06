@@ -113,11 +113,12 @@ def solve_(n,m,mrr):
     if n-1 == m:
         return [1]*m
 
+    res = [0 for _ in range(m)]
     count = 3
 
     ds = DisjointSet()
     for i,(u, v) in enumerate(mrr):
-        if count == 3:
+        if count == 0:
             continue
         if ds.find(u) != ds.find(v):
             ds.union(u, v)
