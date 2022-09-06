@@ -113,18 +113,22 @@ def solve_(n,m,mrr):
     if n-1 == m:
         return [1]*m
 
+    if n == m:
+        return [1]*(m-1) + [0]
+
+    if n+1 == m:
+        return [1]*(m-2) + [0,0]
+
     res = [0 for _ in range(m)]
-    count = 3
+    c = defaultdict(list)    
+    for i,(a,b) in enuemrate(mrr):
+        c[a].append(i)
+        c[b].append(i)
 
-    ds = DisjointSet()
-    for i,(u, v) in enumerate(mrr):
-        if count == 0:
-            continue
-        if ds.find(u) != ds.find(v):
-            ds.union(u, v)
-            res[i] = 1
-            count -= 1
-
+    for k,vs in c.items():
+        if len(vs) >= 3:
+            for v in vs[:3]:
+                res[v] = 1
     return res
 
 
