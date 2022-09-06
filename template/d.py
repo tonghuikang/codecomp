@@ -110,18 +110,13 @@ import random
 def solve_(n,m,mrr):
     # your solution here
 
-    node_to_eidx = defaultdict(list)
-    for i,(a,b) in enumerate(mrr):
-        node_to_eidx[a].append(i)
-        node_to_eidx[b].append(i)
-
     order = list(range(m))
 
     while True:
         random.shuffle(order)
         missed = set()
         res = [0 for _ in range(m)]
-        ds = DisjointSet()
+        ds = DisjointSet(m)
         for i in order:
             u, v  = mrr[i]
             if ds.find(u) != ds.find(v):
