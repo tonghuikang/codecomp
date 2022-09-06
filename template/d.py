@@ -121,7 +121,7 @@ def solve_(n,m,mrr):
 
     res = [0 for _ in range(m)]
     c = defaultdict(list)    
-    for i,(a,b) in enuemrate(mrr):
+    for i,(a,b) in enumerate(mrr):
         c[a].append(i)
         c[b].append(i)
 
@@ -129,6 +129,7 @@ def solve_(n,m,mrr):
         if len(vs) >= 3:
             for v in vs[:3]:
                 res[v] = 1
+            break
     return res
 
 
