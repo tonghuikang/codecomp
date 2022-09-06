@@ -130,15 +130,17 @@ def solve_(n,m,mrr):
         else:
             missed.add(i)
 
+    log(missed)
+
     ds2 = DisjointSet()
-    for i in missed
-        if res[i]:
-            continue
-            if ds2.find(u) != ds2.find(v):
-                ds2.union(u, v)
-            else:
-                break
+    for i in missed:
+        u,v = mrr[i]
+        if ds2.find(u) != ds2.find(v):
+            ds2.union(u, v)
+        else:
+            break
     else:
+        # log('no triangle')
         return res
 
     idx0, idx1 = res.index(0), res.index(1)
