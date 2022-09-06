@@ -105,6 +105,8 @@ def minimum_spanning_tree(edges, costs):
     return total_tree_cost
 
 
+import random
+
 def solve_(n,m,mrr):
     # your solution here
 
@@ -113,43 +115,48 @@ def solve_(n,m,mrr):
         node_to_eidx[a].append(i)
         node_to_eidx[b].append(i)
 
-    missed = set()
-    res = [0 for _ in range(m)]
-    ds = DisjointSet()
-    for i,(u, v) in enumerate(mrr):
-        if ds.find(u) != ds.find(v):
-            ds.union(u, v)
-            res[i] = 1
+    order = list(range(m))
+
+    while True:
+        random.shuffle(order)
+        missed = set()
+        res = [0 for _ in range(m)]
+        ds = DisjointSet()
+        for i in order:
+            u, v  = mrr[i]
+            if ds.find(u) != ds.find(v):
+                ds.union(u, v)
+                res[i] = 1
+            else:
+                missed.add(i)
+
+        log(missed)
+
+        ds2 = DisjointSet()
+        for i in missed:
+            u,v = mrr[i]
+            if ds2.find(u) != ds2.find(v):
+                ds2.union(u, v)
+            else:
+                break
         else:
-            missed.add(i)
-
-    log(missed)
-
-    ds2 = DisjointSet()
-    for i in missed:
-        u,v = mrr[i]
-        if ds2.find(u) != ds2.find(v):
-            ds2.union(u, v)
-        else:
-            break
-    else:
-        # log('no triangle')
-        return res
-
-
-    for eidx in missed:
-        a,b = mrr[eidx]
-        for eidx2 in node_to_eidx[a]:
-            if eidx2 in missed:
-                continue
-            res[eidx], res[eidx2] = res[eidx2], res[eidx]
+            # log('no triangle')
             return res
 
-        for eidx2 in node_to_eidx[b]:
-            if eidx2 in missed:
-                continue
-            res[eidx], res[eidx2] = res[eidx2], res[eidx]
-            return res
+
+    # for eidx in missed:
+    #     a,b = mrr[eidx]
+    #     for eidx2 in node_to_eidx[a]:
+    #         if eidx2 in missed:
+    #             continue
+    #         res[eidx], res[eidx2] = res[eidx2], res[eidx]
+    #         return res
+
+    #     for eidx2 in node_to_eidx[b]:
+    #         if eidx2 in missed:
+    #             continue
+    #         res[eidx], res[eidx2] = res[eidx2], res[eidx]
+    #         return res
     
     assert False
 
