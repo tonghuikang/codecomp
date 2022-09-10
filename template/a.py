@@ -63,6 +63,9 @@ def solve_(arr, brr, n, k):
     crr = [g[x] for x in arr]
     drr = list(range(n))
 
+    if n < 20:
+        log(crr)
+
     # log(crr)
 
     if n == 2:
@@ -79,15 +82,20 @@ def solve_(arr, brr, n, k):
     
     if offset == 0:
         if k == 1:
+            log("offset 0 k 1")
             return no
+        log("offset 0 k not 1")
         return yes
 
     if offset != 1:
+        log("offset not 1")
         return no
 
     if k == 0:
+        log("k 0 offset not 0")
         return no
 
+    log("ok")
     return yes
 
 
