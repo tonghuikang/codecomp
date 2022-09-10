@@ -52,18 +52,46 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(nrr, mrr, n, m):
     # your solution here
 
-    return ""
+    base = sum(a for a,b in nrr)
+    brr = [b-a for a,b in nrr]
+
+    brr.sort(reverse=True)
+    log(brr)
+    log(base)
+
+    psum = [base]
+    for b in brr:
+        psum.append(psum[-1] + b)
+    
+    log(psum)
+
+    res = []
+
+    for x,y in mrr:
+        # ax + by = n
+        if n%math.gcd(x,y):
+            res.append(-1)
+            continue
 
 
-# for case_num in [0]:  # no loop over test case
+        res.append(0)
+
+
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
+    nrr = read_matrix(n)  # and return as a list of list of int
+    # nrr = list(map(int,input().split()))
 
     # read line as a string
     # srr = input().strip()
@@ -76,19 +104,21 @@ for case_num in range(int(input())):
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
+    m = int(input())
+    # mrr = list(map(int,input().split()))
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(nrr, mrr, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
