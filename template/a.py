@@ -52,52 +52,61 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def z_function(S):
+    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/z_algorithm.py
+    # https://cp-algorithms.com/string/z-function.html
+    n = len(S)
+    Z = [0] * n
+    l = r = 0
+
+    for i in range(1, n):
+        z = Z[i - l]
+        if i + z >= r:
+            z = max(r - i, 0)
+            while i + z < n and S[z] == S[i + z]:
+                z += 1
+
+            l, r = i, i + z
+
+        Z[i] = z
+
+    Z[0] = n
+    return Z
+
 
 def solve_(arr, brr, n, k):
     # your solution here
 
-    g = {x:i for i,x in enumerate(brr)}
-
-    # log(g)
-
-    crr = [g[x] for x in arr]
-    drr = list(range(n))
-
-    if n < 20:
-        log(crr)
-
-    # log(crr)
-
-    if n == 2:
-        if crr == drr and k%2 == 0:
-            return yes
-        if crr != drr and k%2 == 1:
+    if k == 0:
+        if arr == brr:
             return yes
         return no
 
-    offset = 0
-    for a,b in zip(crr, crr[1:]):
-        if a + 1 != b:
-            offset += 1
-    
-    if offset == 0:
+    if arr == brr:
+        crr = z_function(arr + arr)
         if k == 1:
-            log("offset 0 k 1")
-            return no
-        log("offset 0 k not 1")
+            if n < 10:
+                log(crr)
+            if max(crr[1:]) < n:
+                return no
         return yes
 
-    if offset != 1:
-        log("offset not 1")
+    if n == 2:
+        # arr != brr already
+        if k%2:
+            return yes
         return no
 
-    if k == 0:
-        log("k 0 offset not 0")
-        return no
+    crr = z_function(arr + [-1] + brr + brr)
 
-    log("ok")
-    return yes
+    if n < 10:
+        log(crr)
+        log(crr[-2*n:])
 
+    if max(crr[-2*n:]) >= n:
+        return yes
+
+    return no
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified

@@ -33,7 +33,7 @@ def solve(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        # log(*args)
         log("----- ------- ------")
     return solve_(*args)
 
@@ -52,11 +52,58 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def z_function(S):
+    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/z_algorithm.py
+    # https://cp-algorithms.com/string/z-function.html
+    n = len(S)
+    Z = [0] * n
+    l = r = 0
+
+    for i in range(1, n):
+        z = Z[i - l]
+        if i + z >= r:
+            z = max(r - i, 0)
+            while i + z < n and S[z] == S[i + z]:
+                z += 1
+
+            l, r = i, i + z
+
+        Z[i] = z
+
+    Z[0] = n
+    return Z
+
+
+def solve_(arr, brr, n, k):
     # your solution here
 
-    return ""
+    if k == 0:
+        if arr == brr:
+            return yes
+        return no
 
+    if arr == brr:
+        crr = z_function(arr)
+        if k == 1 and max(crr[1:]) == 0:
+            return no
+        return yes
+
+    if n == 2:
+        # arr != brr already
+        if k%2:
+            return yes
+        return no
+
+    crr = z_function(arr + [-1] + brr + brr)
+
+    if n < 10:
+        log(crr)
+        log(crr[-2*n:])
+
+    if max(crr[-2*n:]) >= n:
+        return yes
+
+    return no
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -73,15 +120,21 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    n, k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
+    arr = minus_one(arr)
+    brr = minus_one(brr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    if n < 10:
+        log(arr, brr, n, k)
+
+    res = solve(arr, brr, n, k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -92,6 +145,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
