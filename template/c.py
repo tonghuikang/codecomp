@@ -33,7 +33,7 @@ def solve(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        # log(*args)
         log("----- ------- ------")
     return solve_(*args)
 
@@ -52,10 +52,93 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+# https://github.com/cheran-senthil/PyRival/blob/master/pyrival/geometry/convex_hull.py
+
+def remove_middle(a, b, c):
+    cross = (a[0] - b[0]) * (c[1] - b[1]) - (a[1] - b[1]) * (c[0] - b[0])
+    dot = (a[0] - b[0]) * (c[0] - b[0]) + (a[1] - b[1]) * (c[1] - b[1])
+    return cross < 0 or cross == 0 and dot <= 0
+
+
+def convex_hull(points):
+    spoints = sorted(points)
+    hull = []
+    for p in spoints + spoints[::-1]:
+        while len(hull) >= 2 and remove_middle(hull[-2], hull[-1], p):
+            hull.pop()
+        hull.append(p)
+    hull.pop()
+    return hull
+
+
+
+def dijkstra(list_of_indexes_and_costs, start):
+    # shortest path with nonnegative edge costs
+    # leetcode.com/problems/path-with-maximum-probability/
+    # leetcode.com/problems/network-delay-time/
+    length = len(list_of_indexes_and_costs)
+    visited = [False]*length
+    weights = [MAXINT]*length
+    path = [None]*length
+    queue = []
+    weights[start] = 0
+    heapq.heappush(queue, (0, start))
+    while queue:
+        g, u = heapq.heappop(queue)
+        if visited[u]:
+            continue
+        visited[u] = True
+        for v, w in list_of_indexes_and_costs[u]:
+            if not visited[v]:
+                f = g + w
+                if f < weights[v]:
+                    weights[v] = f
+                    path[v] = u
+                    heapq.heappush(queue, (f, v))
+    return path, weights
+
+
+
+
 def solve_(n,k,d,nrr):
     # your solution here
+    k = k
+    d = d**2
 
-    return ""
+    start = nrr[0]
+    end = nrr[-1]
+
+    arr = convex_hull(nrr)
+    point_to_idx = {(x,y):i for i,(x,y) in enumerate(arr)}
+    m = len(arr)
+
+    start_idx = point_to_idx[tuple(start)]
+    end_idx = point_to_idx[tuple(end)]
+
+    log("point_size", len(arr))
+
+    def calc_dist(x1,y1,x2,y2):
+        return (x1-x2)**2 + (y1-y2)**2
+
+    def scoring(x1,y1,x2,y2):
+        dist = calc_dist(x1,y1,x2,y2)
+        if dist > d:
+            return MAXINT
+        else:
+            return max(k, dist)
+
+    g = [[] for _ in range(m)]
+
+    for i in range(m):
+        x1, y1 = arr[i]
+        for j in range(i+1, m):
+            x2, y2 = arr[j]        
+            dist = scoring(x1,y1,x2,y2)
+            g[i].append((j, dist))
+            g[j].append((i, dist))
+    
+    return dijkstra(g, start_idx)[-1][end_idx]
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -85,6 +168,9 @@ for case_num in range(int(input())):
 
     res = solve(n,k,d,nrr)  # include input here
 
+    if res >= MAXINT:
+        res = -1
+
     # print length if applicable
     # print(len(res))
 
@@ -94,6 +180,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
