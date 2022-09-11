@@ -33,7 +33,7 @@ def solve(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        # log(*args)
         log("----- ------- ------")
     return solve_(*args)
 
@@ -55,11 +55,17 @@ def minus_one_matrix(mrr):
 def solve_(nrr, qrr, n, q):
     # your solution here
 
+    c1 = Counter(x for x,y in nrr)
+    c2 = Counter(y for x,y in nrr)
+
     res = []
     for a,b in qrr:
+        # log(a,b)
         val = 0
-        for x,y in nrr:
-            val += (x-a)**2 + (y-b)**2
+        for x in c1.keys():
+            val += (x-a)**2 * c1[x]
+        for y in c2.keys():
+            val += (y-b)**2 * c2[y]
         # log(val)
         res.append(val)
 
@@ -90,6 +96,8 @@ for case_num in range(int(input())):
     # arr = read_strings(k)  # and return as a list of str
     qrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+
+    log(case_num,n,q)
 
     res = solve(nrr, qrr, n, q)  # include input here
 
