@@ -349,7 +349,7 @@ class LazySegTree:
 
 # Possible range queries
 # - sum
-# - maximum, minimum
+# - maximum, minimum (pyrival version)
 # - greatest common divisor, least common multiple
 # - number of zeros, k-th zeros (or any other number?)
 # - first element larger than q

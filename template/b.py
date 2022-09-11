@@ -29,13 +29,17 @@ def log(*args):
     if CHECK_OFFLINE_TEST and OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve(*args):
+def solve(nrr, qrr, n, q):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
         # log(*args)
         log("----- ------- ------")
-    return solve_(*args)
+    res = solve_(nrr, qrr, n, q)
+    if max(nrr) <= 3005 and max(qrr) <= 3005:
+        log("checking")
+        assert res == solve_ref(nrr, qrr, n, q)
+    return res
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -52,7 +56,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(nrr, qrr, n, q):
+def solve_ref(nrr, qrr, n, q):
     # your solution here
 
     dist = [0 for _ in range(3010)]
@@ -65,8 +69,19 @@ def solve_(nrr, qrr, n, q):
     for a in qrr:
         res += dist[a]
 
-    return res            
+    return res
 
+
+def solve_(nrr, qrr, n, q):
+
+    b2 = sum(x*x for x in nrr)
+    b1 = sum(nrr) 
+
+    res = 0
+    for a in qrr:
+        res += n * a**2 + b2 - 2 * a * b1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -116,6 +131,8 @@ for case_num in range(int(input())):
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+
+    assert res < m9
 
     # print result
     print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
