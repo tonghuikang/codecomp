@@ -55,21 +55,18 @@ def minus_one_matrix(mrr):
 def solve_(nrr, qrr, n, q):
     # your solution here
 
-    c1 = Counter(x for x,y in nrr)
-    c2 = Counter(y for x,y in nrr)
+    dist = [0 for _ in range(3010)]
+    cntr = Counter(nrr).items()
+    for x in range(3010):
+        for a,c in cntr:
+            dist[x] += c * ((x-a)**2)
 
-    res = []
-    for a,b in qrr:
-        # log(a,b)
-        val = 0
-        for x in c1.keys():
-            val += (x-a)**2 * c1[x]
-        for y in c2.keys():
-            val += (y-b)**2 * c2[y]
-        # log(val)
-        res.append(val)
+    res = 0
+    for a in qrr:
+        res += dist[a]
 
-    return sum(res)%m9
+    return res            
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -99,7 +96,18 @@ for case_num in range(int(input())):
 
     log(case_num,n,q)
 
-    res = solve(nrr, qrr, n, q)  # include input here
+    res1 = solve(
+        [x for x,y in nrr], 
+        [x for x,y in qrr],
+        n, q
+    )  # include input here
+    res2 = solve(
+        [y for x,y in nrr], 
+        [y for x,y in qrr],
+        n, q
+    )  # include input here
+
+    res = (res1 + res2)%m9
 
     # print length if applicable
     # print(len(res))
