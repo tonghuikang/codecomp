@@ -112,6 +112,9 @@ def solve_(n,k,d,nrr):
     point_to_idx = {(x,y):i for i,(x,y) in enumerate(arr)}
     m = len(arr)
 
+    log(nrr)
+    log(arr)
+
     start_idx = point_to_idx[tuple(start)]
     end_idx = point_to_idx[tuple(end)]
 
@@ -183,3 +186,14 @@ for case_num in range(int(input())):
     print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
     # print(res)
+
+
+# with open("lemonade_life_input.txt") as f:
+#     srr = f.readlines()
+
+# import matplotlib.pyplot as plt
+# mrr = [list(map(int, row.strip().split())) for row in srr[2:2+7818]]
+# mrr.sort()
+# plt.scatter(*zip(*mrr))
+# plt.xlim(1,2000)
+# plt.ylim(497354+100000,497354-100000)
