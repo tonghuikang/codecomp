@@ -71,34 +71,7 @@ def convex_hull(points):
     return hull
 
 
-
-def dijkstra(list_of_indexes_and_costs, start):
-    # shortest path with nonnegative edge costs
-    # leetcode.com/problems/path-with-maximum-probability/
-    # leetcode.com/problems/network-delay-time/
-    length = len(list_of_indexes_and_costs)
-    visited = [False]*length
-    weights = [MAXINT]*length
-    path = [None]*length
-    queue = []
-    weights[start] = 0
-    heapq.heappush(queue, (0, start))
-    while queue:
-        g, u = heapq.heappop(queue)
-        if visited[u]:
-            continue
-        visited[u] = True
-        for v, w in list_of_indexes_and_costs[u]:
-            if not visited[v]:
-                f = g + w
-                if f < weights[v]:
-                    weights[v] = f
-                    path[v] = u
-                    heapq.heappush(queue, (f, v))
-    return path, weights
-
-
-
+LARGE = 10**14
 
 def solve_(n,k,d,nrr):
     # your solution here
@@ -112,8 +85,8 @@ def solve_(n,k,d,nrr):
     point_to_idx = {(x,y):i for i,(x,y) in enumerate(arr)}
     m = len(arr)
 
-    log(nrr)
-    log(arr)
+    # log(nrr)
+    # log(arr)
 
     start_idx = point_to_idx[tuple(start)]
     end_idx = point_to_idx[tuple(end)]
@@ -130,17 +103,31 @@ def solve_(n,k,d,nrr):
         else:
             return max(k, dist)
 
-    g = [[] for _ in range(m)]
+    dp = [LARGE for _ in range(m)]
+    dp[start_idx] = 0
+    visited = set()
 
-    for i in range(m):
-        x1, y1 = arr[i]
-        for j in range(i+1, m):
-            x2, y2 = arr[j]        
-            dist = scoring(x1,y1,x2,y2)
-            g[i].append((j, dist))
-            g[j].append((i, dist))
-    
-    return dijkstra(g, start_idx)[-1][end_idx]
+    while len(visited) < m:
+        # log(visited)
+        x,i = LARGE+1, -1
+        for q in range(m):
+            if q in visited:
+                continue
+            if dp[q] < x:
+                x = dp[i]
+                i = q
+        log(i)
+        x1,y1 = arr[i]
+        visited.add(i)
+
+        for j in range(m):
+            if j in visited:
+                continue
+            x2,y2 = arr[j]
+            val = dp[i] + scoring(x1,y1,x2,y2)
+            dp[j] = min(val, dp[j])
+
+    return dp[end_idx]
 
 
 
@@ -171,7 +158,7 @@ for case_num in range(int(input())):
 
     res = solve(n,k,d,nrr)  # include input here
 
-    if res >= MAXINT:
+    if res >= LARGE:
         res = -1
 
     # print length if applicable
