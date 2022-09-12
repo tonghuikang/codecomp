@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import functools
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +50,45 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, trr):
     # your solution here
 
-    return ""
+    s = len(srr)
+    t = len(trr)
+
+    pos = []
+    for i in range(s-t+1):
+        if srr[i:i+t] == trr:
+            pos.append(i)
+
+    @functools.lru_cache(maxsize=510*510)
+    def dp(l,r):
+        breakpoints = []
+        for x in pos:
+            if x >= l and x + t <= r:
+                breakpoints.append(x)
+        if not breakpoints:
+            return 0, 1  # num step, num way
+        nexres = []
+        minval = s
+        for x in breakpoints:
+            n1, w1 = dp(l,x)
+            if n1 != 0:
+                continue
+            n2, w2 = dp(x+t,r)
+            n = n1 + n2 + 1
+            w = (w1 * w2)%m9
+            nexres.append((n,w))
+            minval = min(minval, n)
+
+        way = 0
+        for n,w in nexres:
+            if n == minval:
+                way += w
+        # log(l,r,breakpoints,minval, way)
+        return minval, way
+
+    return dp(0, s)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -66,7 +99,8 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    trr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -81,13 +115,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, trr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x%m9) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
