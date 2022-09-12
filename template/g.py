@@ -74,7 +74,7 @@ def solve_(srr, trr):
         for x in breakpoints:
             n1, w1 = dp(l,x)
             if n1 != 0:
-                continue
+                break
             n2, w2 = dp(x+t,r)
             n = n1 + n2 + 1
             w = (w1 * w2)%m9
@@ -89,6 +89,9 @@ def solve_(srr, trr):
         return minval, way
 
     return dp(0, s)
+
+
+# solve("a"*500, "a")
 
 
 # for case_num in [0]:  # no loop over test case
