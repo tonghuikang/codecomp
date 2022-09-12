@@ -199,6 +199,7 @@ def chinese_remainder_theorem(divisors, remainders):
 
 def solve_diophantine(x,y,n):
     # finds a solution for ax + by = n, if it exists
+    # https://codeforces.com/blog/entry/106805
 
     # long long gcd(long long a, long long b, long long& x, long long& y) {
     # 	if (b == 0) {
