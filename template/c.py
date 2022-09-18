@@ -52,10 +52,50 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(d,n,daily_capacity,qlv):
+    # d -= 1
+    del n
+    # starting from the end date
+    # plant the most profitable seed possible
+    # process in blocks
 
-    return ""
+    available = []  # neg_profit, qty
+    # count, required, profit
+    qlv.sort(key=lambda x:x[1], reverse=True)
+
+    time_blocks = set(l for q,l,v in qlv)
+    time_blocks.add(0)
+    time_blocks.add(d)
+    time_blocks = sorted(time_blocks)
+    # log(time_blocks)
+    # log(qlv)
+
+    res = 0
+    for x,y in zip(time_blocks, time_blocks[1:]):
+        while qlv and qlv[-1][1] <= x:
+            count, required, profit = qlv.pop()
+            heapq.heappush(available, (-profit, count))
+
+        interval = y-x
+        capacity = interval * daily_capacity
+
+        # log(x,y,available,capacity)
+
+        while capacity and available:
+            neg_profit, count = heapq.heappop(available)
+
+            taken = min(capacity, count)
+            res += -neg_profit * taken
+
+            capacity -= taken
+            count -= taken
+
+            if count > 0:
+                heapq.heappush(available, (-profit, count))
+
+    # log(available)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,16 +112,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    d,n,x = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qlv = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(d,n,x,qlv)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -92,6 +132,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

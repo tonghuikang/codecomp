@@ -52,10 +52,42 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,q,nrr,qrr):
     # your solution here
 
-    return ""
+    depth = [-1 for _ in range(n)]
+    depth[0] = 0
+
+    g = defaultdict(list)
+    for a,b in nrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    stack = [0]
+    visited = set(stack)
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            stack.append(nex)
+            visited.add(nex)
+            depth[nex] = depth[cur] + 1
+
+    c = sorted(Counter(depth).items())
+    vals = [v for k,v in c]
+
+    log(vals)
+
+    res = 0
+    for x in vals:
+        q -= x
+        if q >= 0:
+            res += x
+        else:
+            break
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,16 +104,18 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,q = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    nrr = read_matrix(n-1)  # and return as a list of list of int
+    qrr = read_matrix(q)  # and return as a list of list of int
+    nrr = minus_one_matrix(nrr)
+    qrr = minus_one_matrix(qrr)
 
-    res = solve()  # include input here
+    res = solve(n,q,nrr,qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -92,6 +126,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
