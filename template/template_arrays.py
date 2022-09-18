@@ -71,6 +71,13 @@ def split_into_number_and_char(srr):
     return arr
 
 
+def interval_overlap(x1,x2,y1,y2):
+    # given intervals [x1,x2], [y1,y2]
+    # [start, end] of overlapping interval    
+    # if start > end, there is no overlapping inteval
+    return max(x1,y1), min(x2,y2)
+
+
 def count_peaks_and_valleys(lst):
     # leetcode.com/problems/count-hills-and-valleys-in-an-array/
     if len(lst) <= 2:
