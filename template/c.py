@@ -91,7 +91,7 @@ def solve_(d,n,daily_capacity,qlv):
             count -= taken
 
             if count > 0:
-                heapq.heappush(available, (-profit, count))
+                heapq.heappush(available, (neg_profit, count))
 
     # log(available)
 
