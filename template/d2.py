@@ -55,6 +55,8 @@ def minus_one_matrix(mrr):
 def solve_(n,x,y,diff):
     # your solution here
 
+    assert x>=y
+
     if sum(diff)%2 == 1:
         return -1
 
