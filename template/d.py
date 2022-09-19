@@ -1790,10 +1790,10 @@ def solve_(n,k,x,d,plr):
             ops.append((val, val+1))
             techlead_to_mcount[p] += 1
 
-        # log()
-        # log(left, right)
-        # log(left_leads, right_leads)
-        # log(ops)
+        log()
+        log(left, right)
+        log(left_leads, right_leads)
+        log(ops)
 
         for cur, nex in ops:
             if cur in left_leads:
