@@ -58,6 +58,18 @@ def modinv_p(base, p=10**9+7):
     return pow(base, p-2, p)
 
 
+LARGE = 10**5 + 10
+p = 10**9 + 7
+factorial_mod_p = [1 for _ in range(LARGE)]
+for i in range(1,LARGE):
+    factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
+psum = [1]
+for x in factorial_mod_p:
+    psum.append((psum[-1]*x)%p)
+
+
+
+
 def solve_(n,k,mrr):
     # reduce the weight to lighter, equal to, or heavier than batch one
 
@@ -80,19 +92,29 @@ def solve_(n,k,mrr):
     # probably of not choosing anything from larger in c tries
     
     cur = 1
+    x,y = a + b, a + b + c
+    numer = psum[x + k+1] * psum[x]
+    demon = psum[y] * psum[y + k+1]
+    cur = (cur * numer * modinv_p(demon)) % p
+
+    cur2 = 1
+    x,y = a, a + b
+    numer = psum[x + k+1] * psum[x]
+    demon = psum[y] * psum[y + k+1]
+    cur2 = (cur2 * numer * modinv_p(demon)) % p
 
     # not selecting any of the larger ones
-    for i in range(k+1):
-        numer = a + b - i
-        demon = a + b + c - i
-        cur = (cur * numer * modinv_p(demon)) % p
+    # for i in range(k+1):
+    #     numer = a + b - i
+    #     demon = a + b + c - i
+    #     cur = (cur * numer * modinv_p(demon)) % p
 
-    # selecting all of the smaller ones | not selecting any of the larger ones
-    cur2 = 1
-    for i in range(k+1):
-        numer = a - i
-        demon = a + b - i
-        cur2 = (cur2 * numer * modinv_p(demon)) % p
+    # # selecting all of the smaller ones | not selecting any of the larger ones
+    # cur2 = 1
+    # for i in range(k+1):
+    #     numer = a - i
+    #     demon = a + b - i
+    #     cur2 = (cur2 * numer * modinv_p(demon)) % p
 
     cur = (cur * (1 - cur2)) % p
 
