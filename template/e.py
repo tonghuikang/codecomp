@@ -33,7 +33,7 @@ def solve(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        # log(*args)
         log("----- ------- ------")
     return solve_(*args)
 
@@ -51,11 +51,73 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+abc = "abcdefghijklmnopqrstuvwxyz"
+abc_map = {c:i for i,c in enumerate(abc)}
 
-def solve_():
+
+def solve_(srr, qrr):
     # your solution here
 
-    return ""
+    srr = [abc_map[x] for x in srr]
+
+    cur = [0 for _ in range(26)]
+    dp = [tuple(cur)]
+    for x in srr:
+        cur[x] += 1
+        dp.append(tuple(cur))
+    
+    res = 0
+    for a,b in qrr:
+        b += 1
+        if (b-a)%2 == 0:
+            # log(a,b,False)
+            continue
+        
+        midleft = (a+b)//2
+        midright = (a+b+1)//2
+        # log(a,b,midleft,midright)
+
+        left_count = [(y-x) for x,y in zip(dp[a], dp[midleft])]
+        right_count = [(y-x) for x,y in zip(dp[midleft], dp[b])]
+
+        # log(left_count)
+        # log(right_count)
+
+        extra_count = 0
+        for x,y in zip(left_count, right_count):
+            if x+1 == y:
+                extra_count += 1
+            elif x == y:
+                continue
+            else:
+                break
+        else:
+            if extra_count == 1:
+                res += 1
+                continue
+        # log(extra_count)
+
+        left_count = [(y-x) for x,y in zip(dp[a], dp[midright])]
+        right_count = [(y-x) for x,y in zip(dp[midright], dp[b])]
+
+        # log(left_count)
+        # log(right_count)
+
+        extra_count = 0
+        for x,y in zip(left_count, right_count):
+            if x == y+1:
+                extra_count += 1
+            elif x == y:
+                continue
+            else:
+                break
+        else:
+            if extra_count == 1:
+                res += 1
+                continue
+        # log(extra_count)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,11 +125,11 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
+    k = int(input())
     # read one line and parse each word as a string
     # arr = input().split()
 
@@ -78,10 +140,11 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    qrr = read_matrix(k)  # and return as a list of list of int
+    qrr = minus_one_matrix(qrr)
+    log(len(srr), k)
 
-    res = solve()  # include input here
+    res = solve(srr, qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
