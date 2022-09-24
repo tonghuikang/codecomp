@@ -11,3 +11,9 @@ META-INF/
 # unittest results
 htmlcov
 .coverage
+
+*2
+*3
+*2.out
+*.zip
+*.txt
