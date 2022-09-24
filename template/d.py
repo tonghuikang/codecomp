@@ -52,10 +52,88 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+class FenwickTree:
+    # also known as Binary Indexed Tree
+    # binarysearch.com/problems/Virtual-Array
+    # https://leetcode.com/problems/create-sorted-array-through-instructions
+    # may need to be implemented again to reduce constant factor
+
+    # ALL ELEMENTS ARE TO BE POSITIVE
+    def __init__(self, bits=31):
+        self.c = defaultdict(int)
+        self.LARGE = 2**bits
+
+    def update(self, x, increment):
+        # future query(y) to increase for all y >= x
+        x += 1  # to avoid infinite loop at x > 0
+        while x <= self.LARGE:
+            # increase by the greatest power of two that divides x
+            self.c[x] += increment
+            x += x & -x
+
+    def query(self, x):
+        x += 1  # to avoid infinite loop at x > 0
+        res = 0
+        while x > 0:
+            # decrease by the greatest power of two that divides x
+            res += self.c[x]
+            x -= x & -x
+        return res
+
+
+
+def solve_(state,mrr,n,m):
     # your solution here
 
-    return ""
+    c1 = FenwickTree()
+    c2 = FenwickTree()
+    c3 = FenwickTree()
+    c2c = [None, c1, c2, c3]
+
+    acnt = [0,0,0,0]
+
+    state = nrr
+
+    for i,val in enumerate(nrr, start=1):
+        c2c[val].update(i, 1)
+        acnt[val] += 1
+
+    res = 0
+
+    for i,new_val,z in mrr:
+        prev_val = state[i-1]
+        c2c[prev_val].update(i, -1)
+        c2c[new_val].update(i, 1)
+        acnt[prev_val] -= 1
+        acnt[new_val] += 1
+        state[i-1] = new_val
+
+        m1, m2, m3 = c1.query(z), c2.query(z), c3.query(z)
+
+        # log(i,new_val,z)
+        # log(state)
+        # log(acnt)
+        
+        leftsum = m1 * 1 + m2 * 2 + m3 * 3
+        rightsum = sum(i*x for i,x in enumerate(acnt)) - leftsum
+
+        n1, n2, n3 = acnt[1] - m1, acnt[2] - m2, acnt[3] - m3
+
+
+        if leftsum == rightsum:
+            continue
+        if leftsum > rightsum:
+            m1, m2, m3, n1, n2, n3 = n1, n2, n3, m1, m2, m3
+            leftsum, rightsum = rightsum, leftsum
+
+        log()
+        log(m1, m2, m3)
+        log(n1, n2, n3)
+        log(leftsum, rightsum)
+        log()
+
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,16 +150,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    nrr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(nrr,mrr,n,m)  # include input here
 
     # print length if applicable
     # print(len(res))
