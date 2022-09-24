@@ -52,8 +52,23 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(n,k,abxy):
+    # n * k <= 1 million
+
+    # largest k simple paths in a DAG
+
+    selling = defaultdict(list)  # day to px, idx
+    buying = defaultdict(list)  # day to px, idx
+
+    for i,(a,b,x,y) in enumerate(abxy):
+        selling[a].append((x,i))
+        buying[b].append((y,i))
+
+    log(selling)
+    log(buying)
+
+    # 500k buyers, 500k sellers on the same day
+    
 
     return ""
 
@@ -72,16 +87,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    abxy = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,abxy)  # include input here
 
     # print length if applicable
     # print(len(res))
