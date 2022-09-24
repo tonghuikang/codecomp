@@ -51,11 +51,57 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+p = 10**9+7
 
-def solve_():
-    # your solution here
+def modinv_p(base, p=10**9+7):
+    # modular if the modulo is a prime
+    return pow(base, p-2, p)
 
-    return ""
+
+def solve_(n,k,mrr):
+    # reduce the weight to lighter, equal to, or heavier than batch one
+
+    a = 0
+    b = 0
+    c = 0
+    d = mrr[0][0]
+    wref = mrr[0][1]
+
+    for cnt,w in mrr:
+        if w < wref:
+            a += cnt
+        if w == wref:
+            b += cnt
+        if w > wref:
+            c += cnt
+
+    log(a,b,c,d,k)
+
+    # probably of not choosing anything from larger in c tries
+    
+    cur = 1
+
+    # not selecting any of the larger ones
+    for i in range(k+1):
+        numer = a + b - i
+        demon = a + b + c - i
+        cur = (cur * numer * modinv_p(demon)) % p
+
+    # selecting all of the smaller ones | not selecting any of the larger ones
+    cur2 = 1
+    for i in range(k+1):
+        numer = a - i
+        demon = a + b - i
+        cur2 = (cur2 * numer * modinv_p(demon)) % p
+
+    cur = cur * (1 - cur2)
+
+    # the remaining cookie is from batch one
+    numer = d
+    demon = b
+    cur = (cur * numer * modinv_p(demon)) % p
+
+    return cur
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,16 +118,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
