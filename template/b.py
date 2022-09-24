@@ -68,7 +68,7 @@ def solve_(n,k,abxy):
     log(buying)
 
     # 500k buyers, 500k sellers on the same day
-    
+
 
     return ""
 

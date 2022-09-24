@@ -81,16 +81,47 @@ class FenwickTree:
         return res
 
 
+def binary_search(func_,       # condition function
+                  first=True,  # else last
+                  target=True, # else False
+                  left=0, right=2**31-1) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
+
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first^target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:      # find last False
+        return left-1
+
+
 
 def solve_(state,mrr,n,m):
     # your solution here
+    # binary serach on fenwick tree
 
     c1 = FenwickTree()
     c2 = FenwickTree()
-    c3 = FenwickTree()
-    c2c = [None, c1, c2, c3]
+    c2c = [None, c1, c2, ]
 
-    acnt = [0,0,0,0]
+    acnt = [0,0,0]
 
     state = nrr
 
@@ -108,15 +139,15 @@ def solve_(state,mrr,n,m):
         acnt[new_val] += 1
         state[i-1] = new_val
 
-        m1, m2, m3 = c1.query(z), c2.query(z), c3.query(z)
-        n1, n2, n3 = acnt[1] - m1, acnt[2] - m2, acnt[3] - m3
+        m1, m2 = c1.query(z), c2.query(z)
+        n1, n2 = acnt[1] - m1, acnt[2] - m2
 
         # log(i,new_val,z)
         # log(state)
         # log(acnt)
         
-        leftsum = m1 * 1 + m2 * 2 + m3 * 3
-        rightsum = n1 * 1 + n2 * 2 + n3 * 3
+        leftsum = m1 * 1 + m2 * 2
+        rightsum = n1 * 1 + n2 * 2
 
         val = 0
 
@@ -129,54 +160,38 @@ def solve_(state,mrr,n,m):
             continue
         if leftsum == rightsum:
             continue
-        if leftsum > rightsum:
-            m1, m2, m3, n1, n2, n3 = n1, n2, n3, m1, m2, m3
-            leftsum, rightsum = rightsum, leftsum
-
-        #  0 0 3 = 9
-        # 11 0 0 = 11
-        # need to borrow ???
 
         diff = (rightsum - leftsum) // 2
+        log(state)
+        log(diff)
+        log()
 
-        swap_2_available = min(m1, n3)
-        swap_2_use = min(swap_2_available, diff // 2)
+        if diff < 0:
+            # left is smaller
+            if m1 < diff or n2 < diff:
+                # not enough to swap
+                res -= 1
+                continue
+            
+            # get k rightmost ones on left
+            # get last position where count one is less than m1-k
+            def func(x):
+                q = c1.query(x)
+                return q <= m1 - k
 
-        # log()
-        # log(m1, m2, m3)
-        # log(n1, n2, n3)
-        # log(diff)
-        # log(swap_2_available)
+            # get k leftmost twos on right
+            # get first position where count one is more than m2+k
+            def func(x):
+                q = c2.query(x)
+                return q >= m1 - k
 
-        diff -= swap_2_use * 2
-        m3 += swap_2_use
-        n3 -= swap_2_use
-        m1 -= swap_2_use
-        n1 += swap_2_use
-        val += swap_2_use
+                
 
-        leftsum  = m1 * 1 + m2 * 2 + m3 * 3
-        rightsum = n1 * 1 + n2 * 2 + n3 * 3 - leftsum
+            binary_search()
 
-        if leftsum == rightsum:
-            # log("val", val, swap_2_use)
-            res += val
-            continue
+        
 
-        swap_1_available = min(m1, n2) + min(m2, n3)
-        swap_1_use = min(swap_1_available, diff)
 
-        diff -= swap_1_use
-        val += swap_1_use
-
-        if diff == 0:
-            # log("val", val)
-            res += val
-            continue
-
-        val = -1
-        # log("val", val)
-        res += val
 
     return res
 
