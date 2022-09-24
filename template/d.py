@@ -174,6 +174,14 @@ def solve_(state,mrr,n,m):
             res += val
             continue
 
+        if diff == 1:
+            swap_reverse_available = min(n1, m2) + min(n2, m3)
+            if swap_2_available and swap_reverse_available:
+                val += 2
+                res += val
+                log("check")
+                continue
+
         val = -1
         # log("val", val)
         res += val
