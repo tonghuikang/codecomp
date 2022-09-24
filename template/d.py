@@ -159,7 +159,7 @@ def solve_(state,mrr,n,m):
         rightsum = n1 * 1 + n2 * 2 + n3 * 3 - leftsum
 
         if leftsum == rightsum:
-            log("val", val, swap_2_use)
+            # log("val", val, swap_2_use)
             res += val
             continue
 
