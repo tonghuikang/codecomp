@@ -33,7 +33,7 @@ def solve(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        # log(*args)
         log("----- ------- ------")
     return solve_(*args)
 
@@ -94,7 +94,7 @@ def solve_(n,k,mrr):
         demon = a + b - i
         cur2 = (cur2 * numer * modinv_p(demon)) % p
 
-    cur = cur * (1 - cur2)
+    cur = (cur * (1 - cur2)) % p
 
     # the remaining cookie is from batch one
     numer = d
