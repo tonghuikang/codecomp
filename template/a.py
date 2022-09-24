@@ -70,12 +70,12 @@ def solve_(srr, qrr):
     for a,b in qrr:
         b += 1
         if (b-a)%2 == 0:
-            log(a,b,False)
+            # log(a,b,False)
             continue
         
         midleft = (a+b)//2
         midright = (a+b+1)//2
-        log(a,b,midleft,midright)
+        # log(a,b,midleft,midright)
 
         left_count = [(y-x) for x,y in zip(dp[a], dp[midleft])]
         right_count = [(y-x) for x,y in zip(dp[midleft], dp[b])]
