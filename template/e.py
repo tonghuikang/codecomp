@@ -58,9 +58,9 @@ abc_map = {c:i for i,c in enumerate(abc)}
 def solve_(srr, qrr):
     # your solution here
 
-    srr = [abc_map[x] for x in srr]
+    # srr = [abc_map[x] for x in srr]
 
-    cur = [0 for _ in range(26)]
+    cur = defaultdict(int)
     dp = [tuple(cur)]
     for x in srr:
         cur[x] += 1
@@ -125,6 +125,7 @@ def solve_(srr, qrr):
 for case_num in range(int(input())):
 
     # read line as an integer
+    k = int(input())
 
     # read line as a string
     srr = input().strip()
