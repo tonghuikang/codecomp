@@ -33,7 +33,7 @@ def solve(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        # log(*args)
         log("----- ------- ------")
     return solve_(*args)
 
@@ -109,29 +109,74 @@ def solve_(state,mrr,n,m):
         state[i-1] = new_val
 
         m1, m2, m3 = c1.query(z), c2.query(z), c3.query(z)
+        n1, n2, n3 = acnt[1] - m1, acnt[2] - m2, acnt[3] - m3
 
         # log(i,new_val,z)
         # log(state)
         # log(acnt)
         
         leftsum = m1 * 1 + m2 * 2 + m3 * 3
-        rightsum = sum(i*x for i,x in enumerate(acnt)) - leftsum
+        rightsum = n1 * 1 + n2 * 2 + n3 * 3
 
-        n1, n2, n3 = acnt[1] - m1, acnt[2] - m2, acnt[3] - m3
+        val = 0
 
-
+        if (leftsum + rightsum) % 2 == 1:
+            # log()
+            # log(leftsum, rightsum)
+            # log("val", -1)
+            # log()
+            res -= 1
+            continue
         if leftsum == rightsum:
             continue
         if leftsum > rightsum:
             m1, m2, m3, n1, n2, n3 = n1, n2, n3, m1, m2, m3
             leftsum, rightsum = rightsum, leftsum
 
-        log()
-        log(m1, m2, m3)
-        log(n1, n2, n3)
-        log(leftsum, rightsum)
-        log()
+        #  0 0 3 = 9
+        # 11 0 0 = 11
+        # need to borrow ???
 
+        diff = (rightsum - leftsum) // 2
+
+        swap_2_available = min(m1, n3)
+        swap_2_use = min(swap_2_available, diff // 2)
+
+        # log()
+        # log(m1, m2, m3)
+        # log(n1, n2, n3)
+        # log(diff)
+        # log(swap_2_available)
+
+        diff -= swap_2_use * 2
+        m3 += swap_2_use
+        n3 -= swap_2_use
+        m1 -= swap_2_use
+        n1 += swap_2_use
+        val += swap_2_use
+
+        leftsum  = m1 * 1 + m2 * 2 + m3 * 3
+        rightsum = n1 * 1 + n2 * 2 + n3 * 3 - leftsum
+
+        if leftsum == rightsum:
+            log("val", val, swap_2_use)
+            res += val
+            continue
+
+        swap_1_available = min(m1, n2) + min(m2, n3)
+        swap_1_use = min(swap_1_available, diff)
+
+        diff -= swap_1_use
+        val += swap_1_use
+
+        if diff == 0:
+            # log("val", val)
+            res += val
+            continue
+
+        val = -1
+        # log("val", val)
+        res += val
 
     return res
 
@@ -152,6 +197,8 @@ for case_num in range(int(input())):
     # read one line and parse each word as an integer
     n,m = list(map(int,input().split()))
     nrr = list(map(int,input().split()))
+
+    log("qq",case_num,n,n)
     # arr = minus_one(arr)
 
     # read multiple rows
