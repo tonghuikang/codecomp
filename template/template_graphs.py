@@ -330,7 +330,7 @@ class DisjointSet:
         return a
 
     def size(self, a: int) -> int:
-        return -self.parent_or_size[self.leader(a)]
+        return -self.parent_or_size[self.find(a)]
 
 
 def minimum_spanning_tree(edges, costs):
