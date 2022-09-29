@@ -52,21 +52,59 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr, k):
     # your solution here
 
-    return ""
+    arr = [0,0] + arr + [0,0]
+    brr = [0,0] + brr + [0,0]
+    k += 4
+
+    # state = (0 if top, x, y, z)
+    dp = defaultdict(lambda: k*2)
+    dp[0,0,0,0] = 0
+
+    for a,b,c,d in zip(arr, brr, arr[1:], brr[1:]):
+
+        for x,y in zip([0,1], [1,0]):
+            # vertical movements
+            dp[x,0,0,1] = min(dp[x,0,0,1], dp[y,1,1,1] + 1)
+            dp[x,0,0,0] = min(dp[x,0,0,0], dp[y,1,0,0])
+            dp[x,0,0,1] = min(dp[x,0,0,1], dp[y,1,1,0])
+            dp[x,0,1,0] = min(dp[x,0,1,0], dp[y,1,0,1])
+
+        log(dp)
+        new_dp = defaultdict(lambda: k*2)
+        
+        for x,p,q in zip([0,1], [d,c], [c,d]):
+            # horizontal movements
+            new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,0,0,0])
+            new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,1,1,1] + 1)
+
+            new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,0,0,1])
+            new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,0,1,0])
+            new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,1,0,0] + 1)
+
+            new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,1,0,1] + 1)
+            new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,0,1,1])
+            new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,1,1,0] + 1)
+
+        dp = new_dp
+
+    return min(dp.values())
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    arr = [int(x) for x in srr]
+    srr = input().strip()
+    brr = [int(x) for x in srr]
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -81,8 +119,9 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
-
+    res = solve(arr, brr, k)  # include input here
+    log(res)
+    res = sum(arr) + sum(brr) - res
     # print length if applicable
     # print(len(res))
 
