@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -52,10 +52,53 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+LARGE = 120
+p = m9
+factorial_mod_p = [1 for _ in range(LARGE)]
+for i in range(1,LARGE):
+    factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
+
+def ncr_mod_p(n, r, p=p):
+    if n < 0 or r < 0:
+        return 0
+    num = factorial_mod_p[n]
+    dem = factorial_mod_p[r]*factorial_mod_p[n-r]
+    return (num * pow(dem, p-2, p))%p
+
+
+def solve_(n_):
     # your solution here
 
-    return ""
+    a,b,c = 0,0,0
+    boo = True
+
+    for x in range(n_, -2, -2):
+        if boo:
+            n = x-1
+            r = x//2 - 1
+            # log("a", n, r)
+            a += ncr_mod_p(n,r)
+
+            n = x-2
+            r = x//2 - 2
+            # log("b", n, r)
+            b += ncr_mod_p(n,r)
+
+        else:
+            n = x-1
+            r = x//2 - 1
+            # log("a", n, r)
+            b += ncr_mod_p(n,r)
+
+            n = x-2
+            r = x//2 - 2
+            # log("b", n, r)
+            a += ncr_mod_p(n,r)
+
+        boo = not boo
+
+
+    return a%p, b%p, 1
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +106,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -81,13 +124,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
