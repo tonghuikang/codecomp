@@ -96,24 +96,19 @@ def solve_(arr, n, k):
         depth = [0 for _ in range(n)]
         for cur in range(n-1, 0, -1):
             parent = arr[cur]
-            if parent == 0:
+            if parent != 0:
                 if depth[cur] + 1 >= h:
-                    cnt += 1
-                else:
-                    depth[parent] = depth[cur] + 1
-            else:
-                if depth[cur] + 1 >= h - 1:
                     cnt += 1
                 else:
                     depth[parent] = depth[cur] + 1
         # log(h, depth, cnt)
         return cnt <= k
 
-    # for h in range(10):
-        # log(h, func(h))
-        # log()
+    # for h in range(1,7):
+    #     log(h, func(h))
+    #     log()
 
-    return max(1, binary_search(func, first=True, target=True, left=1, right=n) - 1)
+    return binary_search(func, first=True, target=True, left=1, right=n)
 
 
 # for case_num in [0]:  # no loop over test case
