@@ -82,11 +82,11 @@ def solve_(arr, brr, k):
 
             new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,0,0,1])
             new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,0,1,0])
-            # new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,1,0,0] + 1)
+            new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,1,0,0] + 1)
 
             new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,1,0,1] + 1)
             new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,0,1,1])
-            # new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,1,1,0] + 1)
+            new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,1,1,0] + 1)
 
         dp = new_dp
 
