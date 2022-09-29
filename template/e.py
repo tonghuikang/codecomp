@@ -70,9 +70,9 @@ def solve_(arr, brr, k):
             dp[x,0,0,1] = min(dp[x,0,0,1], dp[y,1,1,1] + 1)
             dp[x,0,0,0] = min(dp[x,0,0,0], dp[y,1,0,0])
             dp[x,0,0,1] = min(dp[x,0,0,1], dp[y,1,1,0])
-            dp[x,0,1,0] = min(dp[x,0,1,0], dp[y,1,0,1])
+            dp[x,0,0,0] = min(dp[x,0,0,0], dp[y,1,0,1] + 1)
 
-        log(dp)
+        # log(dp)
         new_dp = defaultdict(lambda: k*2)
         
         for x,p,q in zip([0,1], [d,c], [c,d]):
@@ -82,11 +82,11 @@ def solve_(arr, brr, k):
 
             new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,0,0,1])
             new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,0,1,0])
-            new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,1,0,0] + 1)
+            # new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,1,0,0] + 1)
 
             new_dp[x,0,p,q] = min(new_dp[x,0,p,q], dp[x,1,0,1] + 1)
             new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,0,1,1])
-            new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,1,1,0] + 1)
+            # new_dp[x,1,p,q] = min(new_dp[x,1,p,q], dp[x,1,1,0] + 1)
 
         dp = new_dp
 
