@@ -86,6 +86,7 @@ def binary_search(func_,       # condition function
 
 
 def solve_(arr, n, k):
+    assert len(arr) == n-1
     # your solution here
     arr = [-1] + [x-1 for x in arr]
     # log(arr)
@@ -101,10 +102,12 @@ def solve_(arr, n, k):
                     cnt += 1
                 else:
                     depth[parent] = depth[cur] + 1
+            else:
+                depth[parent] = depth[cur] + 1
         # log(h, depth, cnt)
         return cnt <= k
 
-    # for h in range(1,7):
+    # for h in range(1,12):
     #     log(h, func(h))
     #     log()
 
