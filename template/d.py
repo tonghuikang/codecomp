@@ -91,6 +91,13 @@ def solve_(arr, n, k):
     arr = [-1] + [x-1 for x in arr]
     # log(arr)
 
+    depth = [0 for _ in range(n)]
+    for cur in range(n-1, 0, -1):
+        parent = arr[cur]
+        depth[parent] = depth[cur] + 1
+                
+    log(depth)
+    
     def func(h):
         # whether the number of ops needed to achieve h is less than k
         cnt = 0
@@ -104,20 +111,23 @@ def solve_(arr, n, k):
                     depth[parent] = depth[cur] + 1
             else:
                 depth[parent] = depth[cur] + 1
-        # log(h, depth, cnt)
+        assert max(depth) <= h
+        log(h, depth, cnt)
         return cnt <= k
 
-    # for h in range(1,12):
-    #     log(h, func(h))
-    #     log()
+    for h in range(1,12):
+        log(h, func(h))
+        log()
 
     return binary_search(func, first=True, target=True, left=1, right=n)
 
+# flag = True
+# debug = False
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
-
+    
     # read line as an integer
     # k = int(input())
 
@@ -129,6 +139,11 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     n,k = list(map(int,input().split()))
+    # if flag:
+    #     flag = False
+    #     if n == 2 and k == 1:
+    #         debug = True
+
     arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -139,6 +154,13 @@ for case_num in range(int(input())):
 
     res = solve(arr, n, k)  # include input here
 
+    # if case_num == 2062 and debug:
+        # 1,2,2,4,2,4,4,3,3,10,8,1,6|1|3
+        # strr = str(",".join(str(x) for x in arr) + "|" + str(k) + "|" + str(res)).replace(" ", "")
+        # print(strr)
+
+    # strr = str(",".join(str(x) for x in arr) + "|" + str(k) + "|" + str(res)).replace(" ", "")
+    # print(strr)
     # print length if applicable
     # print(len(res))
 
