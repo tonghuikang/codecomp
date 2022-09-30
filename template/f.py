@@ -74,7 +74,7 @@ class DisjointSet:
     def size(self, a: int) -> int:
         return -self.parent_or_size[self.find(a)]
 
-
+import random
 # get highest degree
 # get adjacent nodes
 # if nodes is in previous group, join
@@ -99,7 +99,9 @@ for case_num in range(int(input())):
 
     taken = set()
     arr = [(x,i) for i,x in enumerate(degrees)]
+    # random.shuffle(arr)
     arr.sort()
+    # arr.reverse()
 
     log(arr)
     query_cnt = 0
@@ -135,7 +137,16 @@ for case_num in range(int(input())):
 
     assert max(res) <= n
     assert min(res) >= 1
+
+    cnt_nodes = defaultdict(int)
+    cnt_edges = defaultdict(int)
+    for i,x in enumerate(res):
+        cnt_nodes[x] += 1
+        cnt_edges[x] += degrees[i]
     
+    for i in range(n):
+        assert cnt_edges[i] <= cnt_nodes[i]**2
+
     alert(res)
 
     # -----------------------------------------------------------------------------
