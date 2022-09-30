@@ -36,19 +36,25 @@ def alert(pos):
 
 # -----------------------------------------------------------------------------
 
-# read line as an integer
-# k = int(input())
+# get highest degree
+# get adjacent nodes
+# if nodes is in previous group, join
 
-# read line as a string
-# srr = input().strip()
+for case_num in range(int(input())):
 
-# read one line and parse each word as a string
-# lst = input().split()
+    # read line as an integer
+    k = int(input())
 
-# read one line and parse each word as an integer
-# a,b,c = list(map(int,input().split()))
-# lst = list(map(int,input().split()))
+    # read line as a string
+    # srr = input().strip()
 
-# -----------------------------------------------------------------------------
+    # read one line and parse each word as a string
+    # lst = input().split()
 
-# your code here
+    # read one line and parse each word as an integer
+    # a,b,c = list(map(int,input().split()))
+    degrees = list(map(int,input().split()))
+
+    # -----------------------------------------------------------------------------
+
+    # your code here
