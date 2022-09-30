@@ -94,9 +94,9 @@ def solve_(arr, n, k):
     depth = [0 for _ in range(n)]
     for cur in range(n-1, 0, -1):
         parent = arr[cur]
-        depth[parent] = depth[cur] + 1
+        depth[parent] = max(depth[parent], depth[cur] + 1)
                 
-    log(depth)
+    # log(depth)
     
     def func(h):
         # whether the number of ops needed to achieve h is less than k
@@ -108,16 +108,16 @@ def solve_(arr, n, k):
                 if depth[cur] + 1 >= h:
                     cnt += 1
                 else:
-                    depth[parent] = depth[cur] + 1
+                    depth[parent] = max(depth[parent], depth[cur] + 1)
             else:
-                depth[parent] = depth[cur] + 1
+                depth[parent] = max(depth[parent], depth[cur] + 1)
         assert max(depth) <= h
-        log(h, depth, cnt)
+        # log(h, depth, cnt)
         return cnt <= k
 
-    for h in range(1,12):
-        log(h, func(h))
-        log()
+    # for h in range(1,12):
+    #     log(h, func(h))
+    #     log()
 
     return binary_search(func, first=True, target=True, left=1, right=n)
 
