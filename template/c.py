@@ -58,7 +58,10 @@ def solve_(arr, k):
     b = sum(x&1 == 0 for x in arr)
     log(a,b)
 
-    return ""
+    if a == b:
+        return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
