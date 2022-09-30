@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+yes, no = "Alice", "Bob"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -54,6 +54,9 @@ def minus_one_matrix(mrr):
 
 def solve_(arr, k):
     # your solution here
+    a = sum(x&1 == 1 for x in arr)
+    b = sum(x&1 == 0 for x in arr)
+    log(a,b)
 
     return ""
 
