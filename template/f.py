@@ -92,7 +92,7 @@ for case_num in range(int(input())):
 
     ds = DisjointSet()
     for i in range(n):
-        ds.find(n)
+        ds.find(i)
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     degrees = list(map(int,input().split()))
@@ -117,6 +117,9 @@ for case_num in range(int(input())):
             taken.add(nex)
 
     assert query_cnt <= n
+
+    for i in range(n):
+        ldr = ds.find(i)
 
     cntr = 1
     val_to_cntr = {}
