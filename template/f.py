@@ -111,6 +111,7 @@ for case_num in range(int(input())):
         x,cur = arr.pop()
         if cur in taken:
             continue
+        taken.add(cur)
         for _ in range(x):
             nex = query(cur)
             query_cnt += 1
@@ -145,7 +146,7 @@ for case_num in range(int(input())):
         cnt_nodes[x] += 1
         cnt_edges[x] += degrees[i]
     
-    for i in range(n):
+    for i in cnt_nodes.keys():
         assert cnt_edges[i] <= cnt_nodes[i]**2
 
     alert(res)
