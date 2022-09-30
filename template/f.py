@@ -27,14 +27,54 @@ def log(*args):
 
 def query(pos):
     print("? {}".format(pos+1), flush=True)
-    response = int(input())
+    response = int(input()) - 1
     return response
 
-def alert(pos):
-    print("! {}".format(pos+1), flush=True)
+def alert(arr):
+    print("! {}".format(" ".join(str(x) for x in arr)), flush=True)
     sys.exit()
 
 # -----------------------------------------------------------------------------
+
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.find(a)]
+
 
 # get highest degree
 # get adjacent nodes
@@ -43,7 +83,7 @@ def alert(pos):
 for case_num in range(int(input())):
 
     # read line as an integer
-    k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -51,9 +91,44 @@ for case_num in range(int(input())):
     # read one line and parse each word as a string
     # lst = input().split()
 
+    ds = DisjointSet()
+    for i in range(n):
+        ds.find(n)
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     degrees = list(map(int,input().split()))
+
+    taken = set()
+    arr = [(x,i) for i,x in enumerate(degrees)]
+    arr.sort()
+
+    log(arr)
+
+    while arr:
+        x,cur = arr.pop()
+        if cur in taken:
+            continue
+        for _ in range(x):
+            nex = query(cur)
+            taken.add(nex)
+            ds.union(cur, nex)
+
+    cntr = 1
+    val_to_cntr = {}
+    for i in range(n):
+        ldr = ds.find(i)
+        if ldr not in val_to_cntr:
+            val_to_cntr[ldr] = cntr
+            cntr += 1
+
+    res = [-1 for _ in range(n)]
+    for i in range(n):
+        res[i] = val_to_cntr[ds.find(i)]
+
+    assert max(res) <= n
+    assert min(res) >= 1
+    
+    alert(res)
 
     # -----------------------------------------------------------------------------
 
