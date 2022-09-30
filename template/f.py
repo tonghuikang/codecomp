@@ -32,7 +32,6 @@ def query(pos):
 
 def alert(arr):
     print("! {}".format(" ".join(str(x) for x in arr)), flush=True)
-    sys.exit()
 
 # -----------------------------------------------------------------------------
 
@@ -139,3 +138,4 @@ for case_num in range(int(input())):
     # -----------------------------------------------------------------------------
 
     # your code here
+sys.exit()
