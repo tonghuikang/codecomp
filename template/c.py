@@ -54,14 +54,50 @@ def minus_one_matrix(mrr):
 
 def solve_(arr, k):
     # your solution here
-    a = sum(x&1 == 1 for x in arr)
-    b = sum(x&1 == 0 for x in arr)
-    log(a,b)
+    a = sum(x&1 == 0 for x in arr)
+    b = sum(x&1 == 1 for x in arr)
+    # log(a,b)
 
-    if a == b:
-        return no
+    bob_wants_even = bool(b%2)
+    # log("bob_wants_even", bob_wants_even)
 
-    return yes
+    @functools.lru_cache(maxsize=100*100*4)
+    def dp(a,b,is_alice,is_even):
+        # return whether is Alice winning from this state
+
+        if a == 0 and b == 0:
+            if is_alice:
+                if is_even:
+                    return True
+                return False
+            else:
+                if is_even:
+                    return True
+                return False
+
+        if is_alice:
+            x,y = 0,0
+            if a > 0:
+                x = dp(a-1, b, not is_alice, is_even)
+            if b > 0:
+                y = dp(a, b-1, not is_alice, not is_even)
+            res = max(x,y)
+            # log(a,b,is_alice,is_even,res)
+            return res
+        
+        else:
+            x,y = 1,1
+            if a > 0:
+                x = dp(a-1, b, not is_alice, is_even)
+            if b > 0:
+                y = dp(a, b-1, not is_alice, is_even)
+            res = min(x,y)
+            # log(a,b,is_alice,is_even,res)
+            return res
+    
+    if dp(a,b,True,True):
+        return yes
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
