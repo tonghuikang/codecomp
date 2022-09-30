@@ -112,8 +112,10 @@ for case_num in range(int(input())):
         for _ in range(x):
             nex = query(cur)
             query_cnt += 1
-            taken.add(nex)
             ds.union(cur, nex)
+            if nex in taken:
+                break
+            taken.add(nex)
 
     assert query_cnt <= n
 
