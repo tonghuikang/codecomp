@@ -28,6 +28,7 @@ def log(*args):
 def query(pos):
     print("? {}".format(pos+1), flush=True)
     response = int(input()) - 1
+    assert response >= 0
     return response
 
 def alert(arr):
@@ -90,7 +91,7 @@ for case_num in range(int(input())):
     # read one line and parse each word as a string
     # lst = input().split()
 
-    ds = DisjointSet()
+    ds = DisjointSet(n)
     for i in range(n):
         ds.find(i)
     # read one line and parse each word as an integer
@@ -103,7 +104,7 @@ for case_num in range(int(input())):
     arr.sort()
     # arr.reverse()
 
-    log(arr)
+    # log(arr)
     query_cnt = 0
 
     while arr:
