@@ -55,6 +55,8 @@ def minus_one_matrix(mrr):
 def solve_(n,k,arr):
     if n == 1:
         return yes
+    if k == 1:
+        return yes
     # your solution here
     arr.reverse()
     brr = [a-b for a,b in zip(arr, arr[1:])]
