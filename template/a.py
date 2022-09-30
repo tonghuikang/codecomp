@@ -63,6 +63,9 @@ def solve_(a2, b2):
         else:
             brr.append(b)
 
+    arr.sort()
+    brr.sort()
+
     maxres = 0
 
     res = 0
@@ -86,6 +89,9 @@ def solve_(a2, b2):
             arr.append(b)
         else:
             brr.append(b)
+
+    arr.sort()
+    brr.sort()
 
     res = 0
     while True:
