@@ -103,6 +103,7 @@ for case_num in range(int(input())):
     arr.sort()
 
     log(arr)
+    query_cnt = 0
 
     while arr:
         x,cur = arr.pop()
@@ -110,8 +111,11 @@ for case_num in range(int(input())):
             continue
         for _ in range(x):
             nex = query(cur)
+            query_cnt += 1
             taken.add(nex)
             ds.union(cur, nex)
+
+    assert query_cnt <= n
 
     cntr = 1
     val_to_cntr = {}
