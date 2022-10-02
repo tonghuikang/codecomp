@@ -88,9 +88,10 @@ def solve_2(arr, brr, n):
         cntr = Counter(arr_left)
         brr_right = []
         for x in brr:
-            val = p2 - x
-            if cntr[val] > 0:
-                cntr[val] -= 1
+            if cntr[p2 - x] > 0:
+                cntr[p2 - x] -= 1
+            elif cntr[p2 + x] > 0:
+                cntr[p2 + x] -= 1
             else:
                 brr_right.append(p2 + x)
         arr_right = []
@@ -98,6 +99,11 @@ def solve_2(arr, brr, n):
             arr_right.extend([p1 + (p1 - k)]*v)
         brr_right.sort()
         arr_right.sort()
+
+        log("p2", p2)
+        log(arr_right)
+        log(brr_right)
+        log()
 
         if arr_right == brr_right:
             cntr_actual = Counter(arr_left) - cntr
@@ -145,9 +151,11 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    locations, p1, p2 = solve(arr, brr, n)  # include input here
-    if not locations:
-        locations, p2, p1 = solve(brr, arr, n)  # include input here
+    locations = []
+
+    # locations, p1, p2 = solve(arr, brr, n)  # include input here
+    # if not locations:
+    #     locations, p2, p1 = solve(brr, arr, n)  # include input here
 
     if not locations:
         locations, p1, p2 = solve_2(arr, brr, n)
