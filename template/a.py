@@ -52,10 +52,17 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n):
     # your solution here
 
-    return ""
+    val = n - 4
+    # 1, something, something
+
+    z = (2 * val) // 3
+    y = val - z
+    x = 1
+
+    return min(abs(x-y), abs(y-z), abs(z-x))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +70,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -81,7 +88,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
