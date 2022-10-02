@@ -76,6 +76,44 @@ def solve_(arr, brr, n):
     return [], -1, -1
 
 
+def solve_2(arr, brr, n):
+    log(" ---- ")
+    arr_left = [arr[-1] - x for x in arr[::-1]]
+    p1 = arr[-1]   # always possible
+
+    log(arr, brr, n)
+    log("arr_left", arr_left)
+
+    for p2 in brr:
+        cntr = Counter(arr_left)
+        brr_right = []
+        for x in brr:
+            val = p2 - x
+            if cntr[val] > 0:
+                cntr[val] -= 1
+            else:
+                brr_right.append(p2 + x)
+        arr_right = []
+        for k,v in cntr.items():
+            arr_right.extend([p1 + (p1 - k)]*v)
+        brr_right.sort()
+        arr_right.sort()
+
+        if arr_right == brr_right:
+            cntr_actual = Counter(arr_left) - cntr
+            # log(cntr_actual)
+            arr_left_actual = []
+            for k,v in cntr_actual.items():
+                arr_left_actual.extend([k]*v)
+            # log(arr_left_actual)
+            locations = arr_left_actual + brr_right
+            return locations, p1, p2
+    
+    return [], -1, -1
+        
+
+
+
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
@@ -111,7 +149,13 @@ for case_num in range(int(input())):
     if not locations:
         locations, p2, p1 = solve(brr, arr, n)  # include input here
 
+    if not locations:
+        locations, p1, p2 = solve_2(arr, brr, n)
+        if not locations:
+            locations, p2, p1 = solve_2(brr, arr, n)
+
     if locations:
+        log(locations, p1, p2)
         shift = -min(0, p1, p2)
         locations = [x + shift for x in locations]
         p1 += shift
