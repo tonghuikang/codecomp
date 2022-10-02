@@ -60,19 +60,32 @@ def solve_(mrr, n, k):
 
     mrr = set(tuple(x) for x in mrr)
 
+    res = 0
+    for arr in mrr:
+        cnt = 0
+        for brr in mrr:
+            if arr == brr:
+                continue
+            crr = tuple(a if a == b else 3 - a - b for a,b in zip(arr, brr))
+            # log(arr, brr, crr)
+            if crr in mrr:
+                cnt += 1
+        val = cnt // 2
+        res += val * (val-1) // 2
+        # log(val)
 
-
-    return ""
+    return res
 
 if OFFLINE_TEST:
-    import random
-    k = 20
-    n = 1000
-    allset = set()
-    for i in range(n*10):
-        allset.add(tuple(random.randint(0,2) for x in range(k)))
-    mrr = list(allset)[:n]
-    solve(mrr, n, k)
+    if False:
+        import random
+        k = 20
+        n = 1000
+        allset = set()
+        for i in range(n*10):
+            allset.add(tuple(random.randint(0,2) for x in range(k)))
+        mrr = list(allset)[:n]
+        solve(mrr, n, k)
 
 
 for case_num in [0]:  # no loop over test case
@@ -95,7 +108,7 @@ for case_num in [0]:  # no loop over test case
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
     res = solve(mrr, n, k)  # include input here
