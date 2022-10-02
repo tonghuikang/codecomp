@@ -52,10 +52,20 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
 def solve_(arr, k):
     # your solution here
 
-    return ""
+    res = 0
+    val = arr[0] * 2 - 1
+    for x in arr:
+        res += (ceiling_division(x, val) - 1)
+
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
