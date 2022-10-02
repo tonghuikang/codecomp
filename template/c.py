@@ -61,6 +61,30 @@ def solve_(srr):
 
     log(arr)
 
+    seen = set()
+    untaken = list(range(26))
+    untaken.reverse()
+
+    res = []
+
+    for i,x in enumerate(arr):
+        if x in seen:
+            continue
+        if untaken[0] == x:
+            val = untaken[1]
+            untaken.remove(val)
+            res.append(val)
+            seen.add(x)
+        else:
+            val = untaken[0]
+            untaken.remove(val)
+            res.append(val)
+            seen.add(x)
+    
+    log(res)
+            
+
+
 
 
 
