@@ -51,6 +51,48 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.find(a)]
+
+
+
 abc = "abcdefghijklmnopqrstuvwxyz"
 abc_map = {c:i for i,c in enumerate(abc)}
 
@@ -63,32 +105,45 @@ def solve_(srr):
 
     seen = set()
     untaken = list(range(26))
-    untaken.reverse()
+    # untaken.reverse()
 
-    res = []
+    ds = DisjointSet()
+
+    old = []
+    new = []
 
     for i,x in enumerate(arr):
         if x in seen:
             continue
-        if untaken[0] == x:
-            val = untaken[1]
-            untaken.remove(val)
-            res.append(val)
-            seen.add(x)
+        if ds.find(x) == ds.find(untaken[0]):
+            if len(untaken) == 1:
+                pass
+            else:
+                val = untaken[1]
+                untaken.remove(val)
+                old.append(x)
+                new.append(val)
+                ds.union(x, val)
+                seen.add(x)
         else:
             val = untaken[0]
             untaken.remove(val)
-            res.append(val)
+            old.append(x)
+            new.append(val)
+            ds.union(x, val)
             seen.add(x)
+
+    if len(untaken) == 1:
+        old.append(list(set(range(26)) - set(seen))[0])
+        new.append(untaken[0])
     
-    log(res)
-            
+    # log(old)
+    # log(new)
+    mapp = {a:b for a,b in zip(old, new)}
+    # log(mapp)
+    qrr = [abc[mapp[x]] for x in arr]
 
-
-
-
-
-    return ""
+    return "".join(qrr)
 
 
 # for case_num in [0]:  # no loop over test case
