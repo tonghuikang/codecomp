@@ -57,6 +57,7 @@ def solve_(arr, brr, n):
 
     locations = [arr[-1] - x for x in arr]
     locations.reverse()
+    log(locations)
 
     p1 = arr[-1]
 
@@ -71,8 +72,6 @@ def solve_(arr, brr, n):
     brr_candidate = [abs(x - p2) for x in locations]
     if brr == sorted(brr_candidate):
         return locations, p1, p2
-
-    log(locations)
 
     return [], -1, -1
 
@@ -98,9 +97,9 @@ for case_num in range(int(input())):
     brr.sort()
 
     swap = False
-    if arr[-1] < brr[-1]:
-        swap = True
-        arr, brr = brr, arr
+    # if arr[-1] < brr[-1]:
+    #     swap = True
+    #     arr, brr = brr, arr
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -109,19 +108,20 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     locations, p1, p2 = solve(arr, brr, n)  # include input here
+    if not locations:
+        locations, p2, p1 = solve(brr, arr, n)  # include input here
+        if not locations:
+            print(no)
+            continue
+
     shift = -min(0, p1, p2)
     locations = [x + shift for x in locations]
     p1 += shift
     p2 += shift
 
-    if not locations:
-        print(no)
-        continue
-    print(yes)
-
-    if swap:
-        p1, p2 = p2, p1
-        arr, brr = brr, arr
+    # if swap:
+    #     p1, p2 = p2, p1
+    #     arr, brr = brr, arr
 
     arr_check = sorted(abs(x - p1) for x in locations)
     brr_check = sorted(abs(x - p2) for x in locations)
@@ -139,5 +139,6 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
+    print(yes)
     print(" ".join(str(x) for x in locations))
     print(p1, p2)
