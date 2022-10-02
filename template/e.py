@@ -153,9 +153,9 @@ for case_num in range(int(input())):
 
     locations = []
 
-    # locations, p1, p2 = solve(arr, brr, n)  # include input here
-    # if not locations:
-    #     locations, p2, p1 = solve(brr, arr, n)  # include input here
+    locations, p1, p2 = solve(arr, brr, n)  # include input here
+    if not locations:
+        locations, p2, p1 = solve(brr, arr, n)  # include input here
 
     if not locations:
         locations, p1, p2 = solve_2(arr, brr, n)
