@@ -110,23 +110,25 @@ for case_num in range(int(input())):
     locations, p1, p2 = solve(arr, brr, n)  # include input here
     if not locations:
         locations, p2, p1 = solve(brr, arr, n)  # include input here
-        if not locations:
-            print(no)
-            continue
 
-    shift = -min(0, p1, p2)
-    locations = [x + shift for x in locations]
-    p1 += shift
-    p2 += shift
+    if locations:
+        shift = -min(0, p1, p2)
+        locations = [x + shift for x in locations]
+        p1 += shift
+        p2 += shift
 
-    # if swap:
-    #     p1, p2 = p2, p1
-    #     arr, brr = brr, arr
+        # if swap:
+        #     p1, p2 = p2, p1
+        #     arr, brr = brr, arr
 
-    arr_check = sorted(abs(x - p1) for x in locations)
-    brr_check = sorted(abs(x - p2) for x in locations)
-    assert arr_check == arr
-    assert brr_check == brr
+        arr_check = sorted(abs(x - p1) for x in locations)
+        brr_check = sorted(abs(x - p2) for x in locations)
+        assert arr_check == arr
+        assert brr_check == brr
+
+    if not locations:
+        print(no)
+        continue
 
     # print length if applicable
     # print(len(res))
