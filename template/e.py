@@ -177,6 +177,10 @@ for case_num in range(int(input())):
         brr_check = sorted(abs(x - p2) for x in locations)
         assert arr_check == arr
         assert brr_check == brr
+        assert 0 <= min(locations) <= 2*10**9
+        assert 0 <= max(locations) <= 2*10**9
+        assert 0 <= p1 <= 2*10**9
+        assert 0 <= p2 <= 2*10**9
 
     if not locations:
         print(no)
