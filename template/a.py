@@ -64,12 +64,22 @@ def solve_(srr, n, k):
 
     for i in range(k):
         arr = []
+        cut = "a"
         for a in abc:
             if len(arr) < d:
                 if cntr[a] == 0:
                     break
                 cntr[a] -= 1
+                cut = a
                 arr.append(a)
+
+        for a in abc[::-1]:
+            if a <= cut:
+                break
+            while cntr[a] > 0 and len(arr) < d:
+                cntr[a] -= 1
+                arr.append(a)
+        
 
         while len(arr) < d:
             maxval = max(cntr.values())
@@ -77,7 +87,7 @@ def solve_(srr, n, k):
                 if cntr[a] == maxval and len(arr) < d:
                     cntr[a] -= 1
                     arr.append(a)
-        # log(arr)
+        log(arr)
 
         arr = set(arr)
         for a in abc:
