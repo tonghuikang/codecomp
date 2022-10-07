@@ -104,9 +104,11 @@ def solve_(mrr, n, m):
     for a in range(n):
         for b in range(n):
             g3[encode(a,b)].append((encode(b,a), 0))
+            g3[encode(a,a)].append((encode(a,b), 1))
+            g3[encode(b,b)].append((encode(a,b), 1))
             for nex in g[b]:
                 log(a,b,a,nex)
-                g3[encode(a,b)].append((encode(a,nex), 1))
+                g3[encode(a,nex)].append((encode(a,b), 1))
                 # g3[encode(a,nex)].append((encode(a,b), 1))
 
     # log("g3", g3)
