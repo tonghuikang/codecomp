@@ -51,11 +51,41 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+abc = "abcdefghijklmnopqrstuvwxyz"
 
-def solve_():
+def solve_(srr, n, k):
     # your solution here
 
-    return ""
+    d = n // k
+
+    cntr = Counter(srr)
+
+    res = ""
+
+    for i in range(k):
+        arr = []
+        for a in abc:
+            if len(arr) < d:
+                if cntr[a] == 0:
+                    break
+                cntr[a] -= 1
+                arr.append(a)
+
+        while len(arr) < d:
+            maxval = max(cntr.values())
+            for a in abc[::-1]:
+                if cntr[a] == maxval and len(arr) < d:
+                    cntr[a] -= 1
+                    arr.append(a)
+        # log(arr)
+
+        arr = set(arr)
+        for a in abc:
+            if a not in arr:
+                res += a
+                break
+        
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -66,13 +96,13 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    n,k = list(map(int,input().split()))
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -81,7 +111,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, n, k)  # include input here
 
     # print length if applicable
     # print(len(res))
