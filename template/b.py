@@ -52,10 +52,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(l,r):
+def solve_(x):
     # your solution here
+    if x < 100:
+        res = 0
+        for x in range(1,x+1):
+            if x % int(x**0.5) == 0:
+                res += 1
+        return res
 
-    return ""
+    n = (int(x ** 0.5) - 2)
+    cnt = 3 * n
+    for d in [0,1,2,3,4,5]:
+        q = n + d
+        if q*q <= x:
+            cnt += 1
+        if q*q-1 <= x:
+            cnt += 1
+        if q*(q+1) <= x:
+            cnt += 1
+    
+    log(x, n, cnt)
+    return cnt - 4
+
+for x in range(1,50):
+    if x % int(x**0.5) == 0:
+        log(x, int(x**0.5))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -81,7 +103,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(l,r)  # include input here
+    res = solve(r) - solve(l-1)  # include input here
 
     # print length if applicable
     # print(len(res))
