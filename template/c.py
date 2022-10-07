@@ -55,7 +55,35 @@ def minus_one_matrix(mrr):
 def solve_(r1,c1,r2,c2,r3,c3,x,y,n):
     # your solution here
 
-    return ""
+    # if (x,y) in [(r1,c1),(r2,c2),(r3,c3)]:
+    #     return yes
+
+    arr = sorted([(r1,c1),(r2,c2),(r3,c3)])
+    if arr == sorted([(1,1),(1,2),(2,1)]):
+        if x != 1 and y != 1:
+            return no
+    if arr == sorted([(n-1,1),(n,1),(n,2)]):
+        if x != n and y != 1:
+            return no
+    if arr == sorted([(1,n-1),(1,n),(2,n)]):
+        if x != 1 and y != n:
+            return no
+    if arr == sorted([(n-1,n),(n,n-1),(n,n)]):
+        if x != n and y != n:
+            return no
+
+    seen = set()
+    seen.add((r1%2, c1%2))
+    seen.add((r2%2, c2%2))
+    seen.add((r3%2, c3%2))
+
+    log(seen)
+    log((x%2, y%2))
+
+    if (x%2, y%2) in seen:
+        return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case

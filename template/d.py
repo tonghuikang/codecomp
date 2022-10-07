@@ -51,11 +51,54 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def dijkstra(list_of_indexes_and_costs, start):
+    # shortest path with nonnegative edge costs
+    # leetcode.com/problems/path-with-maximum-probability/
+    # leetcode.com/problems/network-delay-time/
+    length = len(list_of_indexes_and_costs)
+    visited = [False]*length
+    weights = [MAXINT]*length
+    path = [None]*length
+    queue = []
+    weights[start] = 0
+    heapq.heappush(queue, (0, start))
+    while queue:
+        g, u = heapq.heappop(queue)
+        if visited[u]:
+            continue
+        visited[u] = True
+        for v, w in list_of_indexes_and_costs[u]:
+            if not visited[v]:
+                f = g + w
+                if f < weights[v]:
+                    weights[v] = f
+                    path[v] = u
+                    heapq.heappush(queue, (f, v))
+    return weights
 
-def solve_():
+
+def solve_(mrr, n, m):
     # your solution here
 
-    return ""
+    g = [[] for _ in range(n)]
+    for a,b,w in mrr:
+        g[a].append((b,1))
+        g[b].append((a,1))
+
+    from_1 = dijkstra(g, 0)
+    from_n = dijkstra(g, n-1)
+
+    log(from_1)
+    log(from_n)
+
+    minres = 10**18
+    for a,b,w in mrr:
+        dist = min(from_1[a], from_1[b]) + min(from_n[a], from_n[b])
+        # log(a,b,w,dist)
+        res = (dist+1)*w
+        minres = min(minres, res)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,16 +115,17 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = [(x-1,y-1,z) for x,y,z in mrr]
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
