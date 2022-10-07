@@ -80,31 +80,53 @@ def dijkstra(list_of_indexes_and_costs, start):
 def solve_(mrr, n, m):
     # your solution here
 
-    g2 = [[] for _ in range(n)]
+    def encode(a,b):
+        return a*n + b
+
+    minres = 10**18
+
+    # g2 = [[] for _ in range(n)]
+    # for a,b,w in mrr:
+    #     g2[a].append((b,w))
+    #     g2[b].append((a,w))
+
+    # minres = dijkstra(g2, 0)[-1]
+    # del g2
+
+    g = [set() for _ in range(n)]
     for a,b,w in mrr:
-        g2[a].append((b,w))
-        g2[b].append((a,w))
+        g[a].add(b)
+        g[b].add(a)
 
-    minres = dijkstra(g2, 0)[-1]
+    log(g)
 
-    g = [[] for _ in range(n)]
-    for a,b,w in mrr:
-        g[a].append((b,1))
-        g[b].append((a,1))
+    g3 = [[] for _ in range(n*n)]
+    for a in range(n):
+        for b in range(n):
+            g3[encode(a,b)].append((encode(b,a), 0))
+            for nex in g[b]:
+                log(a,b,a,nex)
+                g3[encode(a,b)].append((encode(a,nex), 1))
+                # g3[encode(a,nex)].append((encode(a,b), 1))
 
-    from_1 = dijkstra(g, 0)
-    from_n = dijkstra(g, n-1)
+    # log("g3", g3)
+
+    from_1 = dijkstra(g3, encode(0,n-1))
+    from_n = dijkstra(g3, encode(n-1,0))
 
     log(from_1)
     log(from_n)
 
     d = from_1[-1]
     for a,b,w in mrr:
-        dist = min(from_1[a], from_1[b]) + min(from_n[a], from_n[b])
-
-        if abs(from_1[a] - from_n[a]) == d and abs(from_1[b] - from_n[b]) == d:
-            dist += 1
+        dist = min(
+            from_1[encode(a,b)],
+            from_n[encode(a,b)],
+            from_1[encode(b,a)],
+            from_n[encode(b,a)],
+        )
         res = (dist+1)*w
+        log(a,b,w,dist,res)
         minres = min(minres, res)
 
     return minres
