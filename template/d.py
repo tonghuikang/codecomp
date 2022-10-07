@@ -80,6 +80,13 @@ def dijkstra(list_of_indexes_and_costs, start):
 def solve_(mrr, n, m):
     # your solution here
 
+    g2 = [[] for _ in range(n)]
+    for a,b,w in mrr:
+        g2[a].append((b,w))
+        g2[b].append((a,w))
+
+    minres = dijkstra(g2, 0)[-1]
+
     g = [[] for _ in range(n)]
     for a,b,w in mrr:
         g[a].append((b,1))
@@ -91,10 +98,12 @@ def solve_(mrr, n, m):
     log(from_1)
     log(from_n)
 
-    minres = 10**18
+    d = from_1[-1]
     for a,b,w in mrr:
         dist = min(from_1[a], from_1[b]) + min(from_n[a], from_n[b])
-        # log(a,b,w,dist)
+
+        if abs(from_1[a] - from_n[a]) == d and abs(from_1[b] - from_n[b]) == d:
+            dist += 1
         res = (dist+1)*w
         minres = min(minres, res)
 
