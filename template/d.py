@@ -54,8 +54,38 @@ def minus_one_matrix(mrr):
 
 def solve_(n,e,xyc):
     # your solution here
+    xyc = [(x+2, y+2, c) for x,y,c in xyc]
 
-    return ""
+    g = defaultdict(list)
+
+    # x,y,0 if right and 1 if left
+
+    mapp = defaultdict(int)
+    for x,y,c in xyc:
+        mapp[x,y] = c
+        
+    dp = [[[-10**18 for _ in range(2)] for _ in range(511)] for _ in range(511)]
+    dp[510][0][0] = 0  # [y][x][right]
+    for i in range(510,-1,-1):
+
+        dp[i][0][0]   = max(dp[i][0][0],   dp[i][0][1] - e)  # turn right
+        dp[i][510][1] = max(dp[i][510][1], dp[i][509][0] - e)  # turn left
+
+        for j in range(510):
+            # move right
+            dp[i][j+1][0] = max(dp[i][j+1][0], dp[i][j][0] + mapp[i,j])
+            # move down
+            dp[i-1][j][0] = max(dp[i-1][j][0], dp[i][j][0] + mapp[i,j])
+
+        for j in range(510,0,-1):
+            # move left
+            dp[i][j-1][1] = max(dp[i][j-1][1], dp[i][j][1] + mapp[i,j])
+            # move down
+            dp[i-1][j][1] = max(dp[i-1][j][1], dp[i][j][1] + mapp[i,j])
+
+    # log(dp[0])
+
+    return max(max(x[0] for x in dp[0]), max(x[1] for x in dp[0]))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -92,6 +122,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
