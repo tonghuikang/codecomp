@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import collections
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,11 +51,68 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, k):
+def solve_(arr, n):
+    assert n == len(arr)
     # your solution here
     # sliding window, calculate contribution
 
-    return ""
+    # arr.append(0)
+    psum = defaultdict(collections.deque)
+
+    prevsum = 0
+    psum[0].append(0)
+    for i,x in enumerate(arr, start=1):
+        prevsum += x
+        psum[prevsum].append(i)
+
+    log(psum)
+
+    intervals = []
+    prevsum = 0
+    for left,x in enumerate(arr, start=0):
+        minright = n+10
+        for diff in range(1, 801):
+            # find the idx number that drop below prevsum-diff
+            baseline = prevsum - diff
+            while psum[baseline] and psum[baseline][0] <= left:
+                psum[baseline].popleft()
+            if psum[baseline]:
+                # log(left, x, baseline, minright)
+                minright = min(minright, psum[baseline][0])
+        if minright == n+10:
+            intervals.append((left, n-1))
+        elif minright-1 > left:
+            intervals.append((left, minright-2))
+        prevsum += x
+
+    log(intervals)    
+
+    # calcluate contribution
+    grad_boost = [0 for _ in range(n+1)]
+    start_decr = [0 for _ in range(n+1)]
+    end_decr = [0 for _ in range(n+1)]
+    for a,b in intervals:
+        grad_boost[a] += b-a + 1
+        start_decr[a] += 1
+        end_decr[b+1] += 1
+
+    contrib = [0 for _ in range(n)]
+    log(grad_boost)
+    log(start_decr)
+    log(end_decr)
+
+    cur_val = 0
+    cur_grad = 0
+    for i in range(n):
+        cur_val += grad_boost[i]
+        contrib[i] += cur_val
+        cur_grad -= start_decr[i]
+        cur_grad += end_decr[i]
+        cur_val += cur_grad
+
+    log(contrib)
+
+    return sum(a*b for a,b in zip(contrib, arr))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -64,7 +120,7 @@ def solve_(arr, k):
 for case_num in range(int(input())):
 
     # read line as an integer
-    k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -82,7 +138,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(arr, k)  # include input here
+    res = solve(arr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -93,6 +149,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
