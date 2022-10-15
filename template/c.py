@@ -19,7 +19,7 @@ e18 = 10**18 + 10
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -57,7 +57,7 @@ def solve_(arr, n):
     # sliding window, calculate contribution
 
     # arr.append(0)
-    psum = defaultdict(collections.deque)
+    psum = defaultdict(list)
 
     prevsum = 0
     psum[0].append(0)
@@ -65,6 +65,10 @@ def solve_(arr, n):
         prevsum += x
         psum[prevsum].append(i)
 
+    for k in psum:
+        psum[k].reverse()
+
+    minbase = min(psum.keys())
     log(psum)
 
     intervals = []
@@ -74,11 +78,15 @@ def solve_(arr, n):
         for diff in range(1, 801):
             # find the idx number that drop below prevsum-diff
             baseline = prevsum - diff
-            while psum[baseline] and psum[baseline][0] <= left:
-                psum[baseline].popleft()
+            if baseline < minbase:
+                break
+            if baseline not in psum:
+                continue
+            while psum[baseline] and psum[baseline][-1] <= left:
+                psum[baseline].pop()
             if psum[baseline]:
                 # log(left, x, baseline, minright)
-                minright = min(minright, psum[baseline][0])
+                minright = min(minright, psum[baseline][-1])
         if minright == n+10:
             intervals.append((left, n-1))
         elif minright-1 > left:
@@ -113,6 +121,10 @@ def solve_(arr, n):
     log(contrib)
 
     return sum(a*b for a,b in zip(contrib, arr))
+
+
+# if OFFLINE_TEST:
+# solve_([800]*400_000, 400_000)
 
 
 # for case_num in [0]:  # no loop over test case
