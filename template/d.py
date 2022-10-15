@@ -54,7 +54,7 @@ def minus_one_matrix(mrr):
 
 def solve_(n,e,xyc):
     # your solution here
-    xyc = [(x+2, y+2, c) for x,y,c in xyc]
+    xyc = [(x+3, y+3, c) for x,y,c in xyc]
 
     g = defaultdict(list)
 
@@ -66,10 +66,10 @@ def solve_(n,e,xyc):
         
     dp = [[[-10**18 for _ in range(2)] for _ in range(511)] for _ in range(511)]
     dp[510][0][0] = 0  # [y][x][right]
-    for i in range(510,-1,-1):
+    for i in range(510,0,-1):
 
-        dp[i][0][0]   = max(dp[i][0][0],   dp[i][0][1] - e)  # turn right
-        dp[i][510][1] = max(dp[i][510][1], dp[i][509][0] - e)  # turn left
+        dp[i][1][0]   = max(dp[i][1][0],   dp[i][1][1] - e)  # turn right
+        dp[i][509][1] = max(dp[i][509][1], dp[i][509][0] - e)  # turn left
 
         for j in range(510):
             # move right
@@ -85,7 +85,7 @@ def solve_(n,e,xyc):
 
     # log(dp[0])
 
-    return max(max(x[0] for x in dp[0]), max(x[1] for x in dp[0]))
+    return max(max(x[0] for x in dp[1]), max(x[1] for x in dp[1]))
 
 
 # for case_num in [0]:  # no loop over test case
