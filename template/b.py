@@ -52,10 +52,23 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(rs,rh,xys,zws,n,m):
     # your solution here
 
-    return ""
+    arr = [x**2 + y**2 for x,y in xys] + [10**18]
+    brr = [z**2 + w**2 for z,w in zws] + [10**18]
+    radius = (rh + rs)**2
+    log(radius)
+    log(arr)
+    log(brr)
+
+    areq = min(radius, min(brr))
+    breq = min(radius, min(arr))
+
+    apts = sum(a <= areq for a in arr)
+    bpts = sum(b <= breq for b in brr)
+
+    return [apts, bpts]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,26 +85,29 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    rs,rh = list(map(int,input().split()))
+    n = int(input())
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    xys = read_matrix(n)  # and return as a list of list of int
+    m = int(input())
+    zws = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(rs,rh,xys,zws,n,m)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

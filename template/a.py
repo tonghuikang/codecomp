@@ -52,10 +52,21 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(m,n,p,mrr):
     # your solution here
 
-    return ""
+    arr = mrr[p-1]
+
+    log(arr)
+    maxarr = [0 for _ in arr]
+    for brr in mrr:
+        res = [b-a for a,b in zip(arr, brr)]
+        for i in range(len(maxarr)):
+            maxarr[i] = max(maxarr[i], res[i])
+    
+    log(maxarr)
+
+    return sum(maxarr)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,16 +83,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    m,n,p = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(m,n,p,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -92,6 +103,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
