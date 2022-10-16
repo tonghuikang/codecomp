@@ -60,30 +60,46 @@ def solve_(n,e,xyc):
 
     # x,y,0 if right and 1 if left
 
+    map_row = defaultdict(int)
     mapp = defaultdict(int)
     for x,y,c in xyc:
         mapp[x,y] = c
+        map_row[y] += c
         
     dp = [[[-10**18 for _ in range(2)] for _ in range(511)] for _ in range(511)]
-    dp[510][0][0] = 0  # [y][x][right]
+    dp[510][2][0] = 0  # [y][x][right]
     for i in range(510,0,-1):
 
-        dp[i][1][0]   = max(dp[i][1][0],   dp[i][1][1] - e)  # turn right
-        dp[i][509][1] = max(dp[i][509][1], dp[i][509][0] - e)  # turn left
+        dp[i][2][0]   = max(dp[i][2][0],   dp[i][2][1] - e)  # turn right
+        dp[i][508][1] = max(dp[i][508][1], dp[i][508][0] - e)  # turn left
 
         for j in range(510):
             # move right
             dp[i][j+1][0] = max(dp[i][j+1][0], dp[i][j][0] + mapp[i,j])
             # move down
             dp[i-1][j][0] = max(dp[i-1][j][0], dp[i][j][0] + mapp[i,j])
+            if 3 <= j <= 507:
+                val = 0
+                for x,y,c in xyc:
+                    if y == i-1 and x > j:
+                        val += c
+                # move down swipe right turn left
+                dp[i-1][j][1] = max(dp[i-1][j][1], dp[i][j][0] + mapp[i,j] + val - e)
 
         for j in range(510,0,-1):
             # move left
             dp[i][j-1][1] = max(dp[i][j-1][1], dp[i][j][1] + mapp[i,j])
             # move down
             dp[i-1][j][1] = max(dp[i-1][j][1], dp[i][j][1] + mapp[i,j])
+            if 3 <= j <= 507:
+                val = 0
+                for x,y,c in xyc:
+                    if y == i-1 and x < j:
+                        val += c
+                # move down swipe left turn right
+                dp[i-1][j][0] = max(dp[i-1][j][0], dp[i][j][1] + mapp[i,j] + val - e)
 
-    # log(dp[0])
+    log(dp[:5])
 
     return max(max(x[0] for x in dp[1]), max(x[1] for x in dp[1]))
 
