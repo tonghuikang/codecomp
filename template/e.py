@@ -64,6 +64,7 @@ def solve_(p1, t1, p2, t2, h, s):
 
     # t2 is continouosly shooting
 
+    @functools.cache()
     def dp(h, c1, c2):
         # health remaining, cooldown 1, cooldown 2
         # return best time need
