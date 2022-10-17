@@ -53,6 +53,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+@functools.lru_cache(maxsize=10_000)
 def solve_(p1, t1, p2, t2, h, s):
     if h <= 0:
         return 0
@@ -78,13 +79,22 @@ def solve_(p1, t1, p2, t2, h, s):
     
     minres = t
 
-    package_time = t2
-    laser_1_addn_attempts = t2 // t1 - 1
-    damage = (p1 + p2 - s) + (p1 - s) * laser_1_addn_attempts
-    # log(laser_1_addn_attempts, damage)
 
-    res = t2 + solve(p1, t1, p2, t2, h - damage, s)
-    minres = min(minres, res)
+    for num_package in range(1, 5001):
+
+        package_time = t2 * num_package
+        laser_1_addn_attempts = package_time // t1 - 1
+        laser_2_addn_attempts = num_package - 1
+        damage = (p1 + p2 - s) + (p2 - s) * laser_2_addn_attempts + (p1 - s) * laser_1_addn_attempts
+        # log(laser_1_addn_attempts, damage)
+
+        if h - damage <= 0:
+            res = package_time
+            minres = min(minres, res)
+            break
+
+        res = package_time + solve_(p1, t1, p2, t2, h - damage, s)
+        minres = min(minres, res)
 
     return minres
 
