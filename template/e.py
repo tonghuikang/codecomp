@@ -16,7 +16,7 @@ yes, no = "YES", "NO"
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
-e18 = 10**18 + 10
+LARGE = e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
@@ -53,50 +53,46 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-@functools.lru_cache(maxsize=10_000)
 def solve_(p1, t1, p2, t2, h, s):
-    if h <= 0:
-        return 0
-    # your solution here
 
-    # baseline - shoot independently
-    x = h
-    t = 0
-    e1 = t1
-    e2 = t2
-    while x > 0:
-        t = min(e1, e2)
-        if e1 == e2 == t:
-            e1 += t1
-            e2 += t2
-            x -= (p1 + p2 - s)
-        if e1 == t:
-            e1 += t1
-            x -= (p1 - s)
-        if e2 == t:
-            e2 += t2
-            x -= (p2 - s)
-    
-    minres = t
+    d12 = p1 + p2 - s
+    d1 = p1 - s
+    d2 = p2 - s
 
+    # t2 is continouosly shooting
 
-    for num_package in range(1, 5001):
+    def dp(h, t):
+        # health remaining, current time
+        # return best time
+        if h <= 0:
+            return t
+        
+        minres = LARGE
 
-        package_time = t2 * num_package
-        laser_1_addn_attempts = package_time // t1 - 1
-        laser_2_addn_attempts = num_package - 1
-        damage = (p1 + p2 - s) + (p2 - s) * laser_2_addn_attempts + (p1 - s) * laser_1_addn_attempts
-        # log(laser_1_addn_attempts, damage)
-
-        if h - damage <= 0:
-            res = package_time
-            minres = min(minres, res)
-            break
-
-        res = package_time + solve_(p1, t1, p2, t2, h - damage, s)
+        # no wait
+        tnex = t + t1
+        times_t1_shot = (tnex - t) // t1  # 1
+        times_t2_shot = tnex // t2 - t // t2
+        damage = d1 * times_t1_shot + times_t2_shot * d2
+        res = dp(h - damage, tnex)
+        # log("no wait", h, t, tnex, damage)
         minres = min(minres, res)
 
-    return minres
+        # wait for t2
+        tnex = max(t + t1, (t // t2 + 1) * t2)
+        times_t1_shot = (tnex - t) // t1 - 1
+        times_t2_shot = tnex // t2 - t // t2 - 1
+        damage = d12 + times_t1_shot * d1 + times_t2_shot * d2
+        res = dp(h - damage, tnex)
+        # log("wait", h, t, tnex, damage)
+        minres = min(minres, res)
+
+        # log(h, t, minres)
+        # log()
+        return minres
+
+
+    return dp(h, 0)
 
 
 for case_num in [0]:  # no loop over test case
@@ -124,10 +120,11 @@ for case_num in [0]:  # no loop over test case
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    if t1 > t2:
-        p1, t1, p2, t2 = p2, t2, p1, t1
-
-    res = solve(p1, t1, p2, t2, h, s)  # include input here
+    res = min(
+        solve(p1, t1, p2, t2, h, s),
+        solve(p2, t2, p1, t1, h, s),
+        LARGE,
+    )
 
     # print length if applicable
     # print(len(res))
