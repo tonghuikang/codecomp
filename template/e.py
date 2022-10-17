@@ -53,6 +53,9 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
 def solve_(p1, t1, p2, t2, h, s):
 
     d12 = p1 + p2 - s
@@ -61,38 +64,31 @@ def solve_(p1, t1, p2, t2, h, s):
 
     # t2 is continouosly shooting
 
-    def dp(h, t):
-        # health remaining, current time
-        # return best time
+    def dp(h, c1, c2):
+        # health remaining, cooldown 1, cooldown 2
+        # return best time need
         if h <= 0:
-            return t
-        
+            return 0
+
         minres = LARGE
+        
+        if c2 > t1:
+            # c1 fire
+            res = c1 + dp(h - d1, t1, c2 - t1)
+            minres = min(minres, res)
 
-        # no wait
-        tnex = t + t1
-        times_t1_shot = (tnex - t) // t1  # 1
-        times_t2_shot = tnex // t2 - t // t2
-        damage = d1 * times_t1_shot + times_t2_shot * d2
-        res = dp(h - damage, tnex)
-        # log("no wait", h, t, tnex, damage)
+        if c1 > t2:
+            # c2 fire
+            res = c2 + dp(h - d2, c1 - t2, t2)
+            minres = min(minres, res)
+
+        # both fire
+        res = max(c1, c2) + dp(h - d12, t1, t2)
         minres = min(minres, res)
 
-        # wait for t2
-        tnex = max(t + t1, (t // t2 + 1) * t2)
-        times_t1_shot = (tnex - t) // t1 - 1
-        times_t2_shot = tnex // t2 - t // t2 - 1
-        damage = d12 + times_t1_shot * d1 + times_t2_shot * d2
-        res = dp(h - damage, tnex)
-        # log("wait", h, t, tnex, damage)
-        minres = min(minres, res)
-
-        # log(h, t, minres)
-        # log()
         return minres
 
-
-    return dp(h, 0)
+    return dp(h, t1, t2)
 
 
 for case_num in [0]:  # no loop over test case
