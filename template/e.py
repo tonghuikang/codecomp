@@ -64,8 +64,8 @@ def solve_(p1, t1, p2, t2, h, s):
 
     # t2 is continouosly shooting
 
-    @functools.cache()
-    def dp(h, c1, c2):
+    @functools.lru_cache(maxsize=None)
+    def dp(h, c1, c2, block_a=False, block_b=False):
         # health remaining, cooldown 1, cooldown 2
         # return best time need
         if h <= 0:
@@ -73,14 +73,14 @@ def solve_(p1, t1, p2, t2, h, s):
 
         minres = LARGE
         
-        if c2 > c1:
+        if c2 > c1 and not block_a:
             # c1 fire
-            res = c1 + dp(h - d1, t1, c2 - c1)
+            res = c1 + dp(h - d1, t1, c2 - c1, block_b=True)
             minres = min(minres, res)
 
-        if c1 > c2:
+        if c1 > c2 and not block_b:
             # c2 fire
-            res = c2 + dp(h - d2, c1 - c2, t2)
+            res = c2 + dp(h - d2, c1 - c2, t2, block_a=True)
             minres = min(minres, res)
 
         # both fire
