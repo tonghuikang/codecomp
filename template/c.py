@@ -51,29 +51,48 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+LARGE = 10**18
 
-def solve_():
+def solve_(arr, srr, n):
     # your solution here
 
-    return ""
+    # val = srr.count("1")
 
+    # res = sum(sorted(arr, reverse=True)[:val])
+
+    x = 0  # not borrowing
+    y = -LARGE  # borrowing
+    for a,b in zip(srr[::-1], arr[::-1]):
+        x2, y2 = -LARGE, -LARGE
+        if a == "1":
+            x2 = max(x2, x + b)
+            y2 = max(y2, y + b)
+            y2 = max(y2, x)
+        if a == "0":
+            x2 = max(x2, x)
+            x2 = max(x2, y + b)
+
+        x,y = x2,y2
+    
+    return max(x, y)
+        
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -81,7 +100,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, srr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
