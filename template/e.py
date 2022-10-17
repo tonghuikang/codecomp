@@ -72,12 +72,12 @@ def solve_(p1, t1, p2, t2, h, s):
 
         minres = LARGE
         
-        if c2 > t1:
+        if c2 > c1:
             # c1 fire
             res = c1 + dp(h - d1, t1, c2 - c1)
             minres = min(minres, res)
 
-        if c1 > t2:
+        if c1 > c2:
             # c2 fire
             res = c2 + dp(h - d2, c1 - c2, t2)
             minres = min(minres, res)
