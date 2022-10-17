@@ -55,6 +55,17 @@ def minus_one_matrix(mrr):
 def solve_(srr, n):
     # your solution here
 
+    srr = srr.lstrip("0")
+
+    trr = "".join("1" if x == "0" else "0" for x in srr).lstrip("0")
+
+    if not srr:
+        return 0
+
+
+    log(srr)
+    log(trr)
+
     return ""
 
 

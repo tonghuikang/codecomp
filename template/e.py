@@ -4,6 +4,7 @@ import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
+sys.setrecursionlimit(10_000)
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -52,15 +53,45 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(p1, t1, p2, t2, h, s):
+    if h <= 0:
+        return 0
     # your solution here
 
-    return ""
+    # baseline - shoot independently
+    x = h
+    t = 0
+    e1 = t1
+    e2 = t2
+    while x > 0:
+        t = min(e1, e2)
+        if e1 == e2 == t:
+            e1 += t1
+            e2 += t2
+            x -= (p1 + p2 - s)
+        if e1 == t:
+            e1 += t1
+            x -= (p1 - s)
+        if e2 == t:
+            e2 += t2
+            x -= (p2 - s)
+    
+    minres = t
+
+    package_time = t2
+    laser_1_addn_attempts = t2 // t1 - 1
+    damage = (p1 + p2 - s) + (p1 - s) * laser_1_addn_attempts
+    # log(laser_1_addn_attempts, damage)
+
+    res = t2 + solve(p1, t1, p2, t2, h - damage, s)
+    minres = min(minres, res)
+
+    return minres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -72,7 +103,9 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    p1, t1 = list(map(int,input().split()))
+    p2, t2 = list(map(int,input().split()))
+    h, s = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -81,7 +114,10 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    if t1 > t2:
+        p1, t1, p2, t2 = p2, t2, p1, t1
+
+    res = solve(p1, t1, p2, t2, h, s)  # include input here
 
     # print length if applicable
     # print(len(res))
