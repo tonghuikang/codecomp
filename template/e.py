@@ -11,7 +11,8 @@ input = sys.stdin.readline  # to read input quickly
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d42 = [(1,1),(1,-1),(-1,1),(-1,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -52,10 +53,64 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    for x in range(n):
+        for y in range(m):
+            if mrr[x][y] == 1:
+                for dx,dy in d4:
+                    xx = x+dx
+                    yy = y+dy
+                    if 0 <= xx < n and 0 <= yy < m:
+                        if mrr[xx][yy] == 0:
+                            mrr[xx][yy] = 2
+
+    # for row in mrr:
+    #     log(row)
+
+    # 0-1 BFS from left to right
+    LARGE = 10**18
+    # cost = [[LARGE for _ in range(m)] for _ in range(n)]
+    cost = {}
+    
+    queue = collections.deque()
+
+    for i in range(n):
+        if mrr[i][0] == 0:
+            cost[i,0] = 1
+            queue.append((i,0))
+        if mrr[i][0] == 1:
+            cost[i,0] = 0
+            queue.appendleft((i,0))
+
+    while queue:
+        x,y = queue.popleft()
+        log(x, y, queue)
+        cur = cost[x,y]
+        for dx, dy in d42:
+            xx = x+dx
+            yy = y+dy
+            if 0 <= xx < n and 0 <= yy < m:
+                if mrr[xx][yy] == 2:
+                    continue
+                if (xx,yy) in cost:
+                    continue
+                if mrr[xx][yy] == 1:
+                    cost[xx,yy] = cur
+                    queue.appendleft((xx,yy))
+                if mrr[xx][yy] == 1:
+                    cost[xx,yy] = cur + 1
+                    queue.append((xx,yy))
+
+
+    minres = LARGE  
+    for i in range(n):
+        if (i, m-1) in cost:
+            res = cost[i, m-1]
+            minres = min(minres, res)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -72,16 +127,21 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    # srr = read_strings(n)  # and return as a list of str
+    # mrr = read_matrix(n)  # and return as a list of list of int
+    mrr = []
+    for _ in range(n):
+        row = [0 if x == "." else 1 for x in input().strip()]
+        mrr.append(row)
+
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
