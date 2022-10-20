@@ -55,13 +55,37 @@ def minus_one_matrix(mrr):
 def solve_(arr,n):
     # your solution here
 
-    for k in range(1, n+1):
+    for k in range(101, -1, -1):
+    # for k in [3,2,1,0]:
+
+        cntr = [0 for _ in range(102)]
+        for x in arr:
+            cntr[x] += 1
+
+        # log()
+        # log(k)
         for i in range(1, k+1):
-            print()
-            print(k-i+1)
+            # log(cntr)
+            # Alice remove largest possible
+            for val in range(k-i+1, 0, -1):
+                # print(val)
+                if cntr[val] > 0:
+                    cntr[val] -= 1
+                    break
+            else:
+                break
+            if i != k:
+                # Bob remove smallest possible
+                for val in range(1, 102):
+                    if cntr[val] > 0:
+                        cntr[val] -= 1
+                        break
+                else:
+                    break
+        else:
+            break
 
-
-    return ""
+    return k
 
 
 # for case_num in [0]:  # no loop over test case
