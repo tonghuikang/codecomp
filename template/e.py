@@ -75,18 +75,22 @@ def solve_(n,m,mrr):
     cost = {}
     
     queue = collections.deque()
+    prev = {}
 
     for i in range(n):
         if mrr[i][0] == 0:
             cost[i,0] = 1
             queue.append((i,0))
+            prev[i,0] = (-1,-1)
         if mrr[i][0] == 1:
             cost[i,0] = 0
             queue.appendleft((i,0))
+            prev[i,0] = (-1,-1)
+
 
     while queue:
         x,y = queue.popleft()
-        log(x, y, queue)
+        # log(x, y, queue, cost)
         cur = cost[x,y]
         for dx, dy in d42:
             xx = x+dx
@@ -96,19 +100,46 @@ def solve_(n,m,mrr):
                     continue
                 if (xx,yy) in cost:
                     continue
+
+                prev[xx,yy] = (x,y)
+
                 if mrr[xx][yy] == 1:
+                    log("added", xx, yy)
                     cost[xx,yy] = cur
                     queue.appendleft((xx,yy))
-                if mrr[xx][yy] == 1:
+                if mrr[xx][yy] == 0:
+                    # log("added", xx, yy)
                     cost[xx,yy] = cur + 1
                     queue.append((xx,yy))
 
-
-    minres = LARGE  
+    target = (-1,-1)
+    minres = LARGE
     for i in range(n):
         if (i, m-1) in cost:
             res = cost[i, m-1]
-            minres = min(minres, res)
+            if res < minres:
+                target = (i, m-1)
+                minres = res
+
+    if minres == LARGE:
+        print("NO")
+        return
+    print("YES")
+
+    # log(minres)
+
+    path = [target]
+    while True:
+        target = prev[target]
+        if target == (-1,-1):
+            break
+        path.append(target)
+
+    # log(path)
+    path = set(path)
+
+    for x in range(n):
+        print("".join(["#" if (mrr[x][y] == "#" or (x,y) in path) else "." for y in range(m)]))
 
     return minres
 
@@ -154,4 +185,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
