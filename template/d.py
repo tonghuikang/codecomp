@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -51,16 +51,77 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
-def solve_():
+
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+SIZE_OF_PRIME_ARRAY = 40
+largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+primes = set(primes)
+
+
+
+# sequence = []
+# p2 = set([1])
+# for i in range(1, 42):
+#     if i in primes:
+#         p2.add(i)
+#     val = math.lcm(*p2)
+#     print(val)
+#     sequence.append(val)
+
+# print(sequence)
+# log(sequence)
+
+seqeuence = [
+    1, 2, 6, 6, 30, 30, 210, 210, 210, 210, 2310, 2310, 30030, 30030, 30030, 30030, 
+    510510, 510510, 9699690, 9699690, 9699690, 9699690, 
+    223092870, 223092870, 223092870, 223092870, 223092870, 223092870, 
+    6469693230, 6469693230, 
+    200560490130, 200560490130, 200560490130, 200560490130, 200560490130, 200560490130, 
+    7420738134810, 7420738134810, 7420738134810, 7420738134810, 7420738134810
+]
+
+
+# assert sequence[-1] > 10**12
+
+def solve_(n, m):
     # your solution here
 
-    return ""
+    res = 0
+    val = m  # number of unambiguous
+    # val = m  # number of ambiguous already
+    for i in range(2, n+1):
+        invalid = 0
+        if i < 39:
+            req = seqeuence[i-1]
+            invalid = m // req
+        # valid = m - invalid
+        val = (val*invalid)%m9
+        res += pow(m, i, m9) - val
+
+        # log(i, req, val, invalid)
+
+    return res%m9
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -72,7 +133,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -81,7 +142,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m)  # include input here
 
     # print length if applicable
     # print(len(res))
