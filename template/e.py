@@ -139,7 +139,7 @@ def solve_(n,m,mrr):
     path = set(path)
 
     for x in range(n):
-        print("".join(["#" if (mrr[x][y] == "#" or (x,y) in path) else "." for y in range(m)]))
+        print("".join(["#" if (mrr[x][y] == 1 or (x,y) in path) else "." for y in range(m)]))
 
     return minres
 
