@@ -4,7 +4,7 @@ import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
-sys.setrecursionlimit(10_000)
+sys.setrecursionlimit(50_000)
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -65,7 +65,7 @@ def solve_(p1, t1, p2, t2, h, s):
     # t2 is continouosly shooting
 
     @functools.lru_cache(maxsize=None)
-    def dp(h, c1, c2, block_a=False, block_b=False):
+    def dp(h, c1, c2):
         # health remaining, cooldown 1, cooldown 2
         # return best time need
         if h <= 0:
@@ -73,14 +73,14 @@ def solve_(p1, t1, p2, t2, h, s):
 
         minres = LARGE
         
-        if c2 > c1 and not block_a:
+        if c2 > c1:
             # c1 fire
-            res = c1 + dp(h - d1, t1, c2 - c1, block_b=True)
+            res = c1 + dp(h - d1, t1, c2 - c1)
             minres = min(minres, res)
 
-        if c1 > c2 and not block_b:
+        if c1 > c2:
             # c2 fire
-            res = c2 + dp(h - d2, c1 - c2, t2, block_a=True)
+            res = c2 + dp(h - d2, c1 - c2, t2)
             minres = min(minres, res)
 
         # both fire
@@ -119,7 +119,7 @@ for case_num in [0]:  # no loop over test case
 
     res = min(
         solve(p1, t1, p2, t2, h, s),
-        solve(p2, t2, p1, t1, h, s),
+        # solve(p2, t2, p1, t1, h, s),
         LARGE,
     )
 
