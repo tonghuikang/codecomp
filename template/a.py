@@ -54,34 +54,84 @@ def minus_one_matrix(mrr):
 
 def solve_(arr):
     # your solution here
+    n = len(arr)
+    arr = [0] + arr
 
     if sum(abs(x) for x in arr)%2 == 1:
         return [-1]
 
-    idxs = [i for i,x in enumerate(arr) if x != 0]
-
-    start_points = [0]
-
-    for a,b in zip(idxs[::2], idxs[1::2]):
-        if arr[a] == arr[b]:
-            start_points.append(a)
-        else:
-            start_points.append(a)
-            start_points.append(b)
-
-    start_points.append(len(arr))
+    series = []
+    while arr:
+        x = arr.pop()
+        if x == 0:
+            series.append((0,))
+            continue
+        y = arr.pop()
+        series.append((y,x))
+    
+    series.reverse()
+    log(series)                
 
     res = []
-    for a,b in zip(start_points, start_points[1:]):
-        if a == b:
+    idx = 0
+    to_deduct = False
+    for ser in series:
+        log(idx, ser)
+        if ser == (0,):
+            res.append((idx, idx))
+            idx += 1
             continue
-        res.append([a+1, b])
+        if ser == (1,1):
+            res.append((idx, idx+1))
+            idx += 2
+            continue
+        if ser == (1,-1):
+            res.append((idx, idx))
+            res.append((idx+1, idx+1))
+            idx += 2
+            continue
+        if ser == (-1,1):
+            res.append((idx, idx))
+            res.append((idx+1, idx+1))
+            idx += 2
+            continue
+        if ser == (0,-1):
+            if to_deduct:
+                res.append((idx, idx))
+                res.append((idx+1, idx+1))
+                idx += 2
+                to_deduct = not to_deduct
+                continue
+            else:
+                res.append((idx, idx+1))
+                idx += 2
+                to_deduct = not to_deduct
+                continue
+        if ser == (0,1):
+            if to_deduct:
+                res.append((idx, idx+1))
+                idx += 2
+                to_deduct = not to_deduct
+                continue
+            else:
+                res.append((idx, idx))
+                res.append((idx+1, idx+1))
+                idx += 2
+                to_deduct = not to_deduct
+                continue
+        assert False
 
-    for (a,b),(c,d) in zip(res, res[1:]):
-        assert b + 1 == c
+
+    if res[0] == (0,0):
+        res = res[1:]
+
+    if res[0][0] == 0:
+        res[0] = (1, res[0][1])
+
+    log(res)
 
     assert res[0][0] == 1
-    assert res[-1][-1] == len(arr)
+    assert res[-1][-1] == n
 
     return res
 
