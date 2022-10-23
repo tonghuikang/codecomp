@@ -52,10 +52,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    gcd = arr[0]
+    for x in arr:
+        gcd = math.gcd(gcd, x)
+    if gcd == 1:
+        return 0
+
+    arr1 = [x for x in arr]
+    arr1[-1] = math.gcd(arr[-1], n)
+    gcd = arr1[0]
+    for x in arr1:
+        gcd = math.gcd(gcd, x)
+    if gcd == 1:
+        return 1
+
+    arr2 = [x for x in arr]
+    arr2[-1] = math.gcd(arr[-2], n-1)
+    gcd = arr2[0]
+    for x in arr2:
+        gcd = math.gcd(gcd, x)
+    if gcd == 1:
+        return 2
+    
+    return 3
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +85,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,7 +95,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -81,7 +103,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
