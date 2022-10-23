@@ -85,6 +85,7 @@ def solve_(n,m,p,q,mrr):
             edges[i,j].append(((i+2,j), q))
             edges[i+2,j].append(((i,j), q))
 
+    log(edges)
 
     costmap = {}
     for i in range(n):
