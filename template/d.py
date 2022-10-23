@@ -106,6 +106,7 @@ def solve_(n,m,p,q,mrr):
         cost,(i,j) = heapq.heappop(queue)
         if (i,j) in visited:
             continue
+        visited.add((i,j))
         for nex,addn in edges[i,j]:
             if nex in visited:
                 continue
