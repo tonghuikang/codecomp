@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+yes, no = "Yes", "No"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -52,15 +52,24 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,x,arr):
     # your solution here
 
-    return ""
+    cntr = Counter(arr)
+
+    for i in range(1, x):
+        if cntr[i] == 0:
+            continue
+        if cntr[i]%(i+1):
+            return no
+        cntr[i+1] += cntr[i] // (i+1)
+
+    return yes
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # k = int(input())
@@ -72,8 +81,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,x = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -81,7 +90,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,x,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
