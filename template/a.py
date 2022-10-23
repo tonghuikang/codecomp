@@ -53,6 +53,7 @@ def minus_one_matrix(mrr):
 
 
 def solve_(arr):
+    arr2 = [x for x in arr]
     # your solution here
     n = len(arr)
     # arr = [0] + arr
@@ -77,7 +78,7 @@ def solve_(arr):
 
     res = []
     idx = 1
-    to_deduct = False
+    balance = 0
     for ser in series:
         log(idx, ser)
         if ser == (0,):
@@ -87,9 +88,18 @@ def solve_(arr):
         if ser == (1,):
             res.append((idx, idx))
             idx += 1
-            to_deduct = True
+            balance += 1
+            continue
+        if ser == (-1,):
+            res.append((idx, idx))
+            idx += 1
+            balance -= 1
             continue
         if ser == (1,1):
+            res.append((idx, idx+1))
+            idx += 2
+            continue
+        if ser == (-1,-1):
             res.append((idx, idx+1))
             idx += 2
             continue
@@ -104,28 +114,28 @@ def solve_(arr):
             idx += 2
             continue
         if ser == (0,-1):
-            if to_deduct:
+            if balance >= 0:
                 res.append((idx, idx))
                 res.append((idx+1, idx+1))
                 idx += 2
-                to_deduct = not to_deduct
+                balance -= 1
                 continue
             else:
                 res.append((idx, idx+1))
                 idx += 2
-                to_deduct = not to_deduct
+                balance += 1
                 continue
         if ser == (0,1):
-            if to_deduct:
+            if balance >= 0:
                 res.append((idx, idx+1))
                 idx += 2
-                to_deduct = not to_deduct
+                balance -= 1
                 continue
             else:
                 res.append((idx, idx))
                 res.append((idx+1, idx+1))
                 idx += 2
-                to_deduct = not to_deduct
+                balance += 1
                 continue
         assert False
 
@@ -134,11 +144,29 @@ def solve_(arr):
     for (a,b),(c,d) in zip(res, res[1:]):
         assert b+1 == c
 
+    log(res)
+
+    val = 0
+    for a,b in res:
+        sgn = 1
+        for i in range(a-1, b):
+            log(i)
+            sgn = -sgn
+            val += arr2[i]*sgn
+    assert val == 0
+
     assert res[0][0] == 1
     assert res[-1][-1] == n
 
     return res
 
+
+import random
+if OFFLINE_TEST:
+    for _ in range(10000):
+        arr = [random.choice([-1,0,1]) for _ in range(10)]
+        log(arr)
+        val = solve(arr)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
