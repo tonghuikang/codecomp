@@ -77,6 +77,9 @@ def solve_(arr):
             continue
         res.append([a+1, b])
 
+    for (a,b),(c,d) in zip(res, res[1:]):
+        assert b + 1 == c
+
     return res
 
 
