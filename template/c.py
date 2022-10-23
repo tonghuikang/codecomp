@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -51,19 +51,49 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# from fractions import Fraction
 
-def solve_():
+
+# modular inverse
+# https://stackoverflow.com/a/29762148/5894029
+modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+
+
+def modinv_p(base, p=m9):
+    # modular if the modulo is a prime
+    return pow(base, p-2, p)
+
+
+def solve_(arr, k):
+    if arr == sorted(arr):
+        return 0
     # your solution here
 
-    return ""
+    # what matters is you need to cross the line
 
+    z = sum(arr)
+
+    left_ones = sum(x for x in arr[:k-z])
+    right_zeros = sum(x == 0 for x in arr[k-z:])
+
+    log(left_ones)
+
+    res = 0
+    for x in range(left_ones):
+        q = left_ones - x
+        numer = k * (k-1) // 2
+        denom = q * q
+        log(numer, denom)
+        res += numer * modinv_p(denom)
+
+    return res%m9
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -73,7 +103,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -81,7 +111,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, k)  # include input here
 
     # print length if applicable
     # print(len(res))
