@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import heapq
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -33,7 +32,7 @@ def solve(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        # log(*args)
         log("----- ------- ------")
     return solve_(*args)
 
@@ -57,7 +56,12 @@ LARGE = 10**18
 def solve_(n,m,p,q,mrr):
     # your solution here
 
-    edges = defaultdict(list)
+    edges = [[] for _ in range(n*m+2)]
+    def encode(i,j):
+        return i*m + j
+    
+    def decode(k):
+        return divmod(k, m)
 
     for i in range(n-1):
         for j in range(m-1):
@@ -66,48 +70,48 @@ def solve_(n,m,p,q,mrr):
                 continue
             if mrr[i][j] != "#" or mrr[i+1][j+1] != "#":
                 if mrr[i+1][j] != "#" and mrr[i][j+1] != "#":
-                    edges[i+1,j].append(((i,j+1), p))
-                    edges[i,j+1].append(((i+1,j), p))
+                    edges[encode(i+1,j)].append((encode(i,j+1), p))
+                    edges[encode(i,j+1)].append((encode(i+1,j), p))
             if mrr[i+1][j] != "#" or mrr[i][j+1] != "#":
                 if mrr[i][j] != "#" and mrr[i+1][j+1] != "#":
-                    edges[i,j].append(((i+1,j+1), p))
-                    edges[i+1,j+1].append(((i,j), p))
+                    edges[encode(i,j)].append((encode(i+1,j+1), p))
+                    edges[encode(i+1,j+1)].append((encode(i,j), p))
     
     for i in range(n):
         for j in range(m-2):
             if (mrr[i][j] == "#") + (mrr[i][j+1] == "#") + (mrr[i][j+2] == "#") >= 1:
                 continue
-            edges[i,j].append(((i,j+2), q))
-            edges[i,j+2].append(((i,j), q))
+            edges[encode(i,j)].append((encode(i,j+2), q))
+            edges[encode(i,j+2)].append((encode(i,j), q))
 
     for i in range(n-2):
         for j in range(m):
             if (mrr[i][j] == "#") + (mrr[i+1][j] == "#") + (mrr[i+2][j] == "#") >= 1:
                 continue
-            edges[i,j].append(((i+2,j), q))
-            edges[i+2,j].append(((i,j), q))
+            edges[encode(i,j)].append((encode(i+2,j), q))
+            edges[encode(i+2,j)].append((encode(i,j), q))
 
-    log(edges)
+    # log(edges)
 
     costmap = {}
     for i in range(n):
         for j in range(m):
-            costmap[i,j] = LARGE
+            costmap[encode(i,j)] = LARGE
 
     queue = []
     for i in range(n):
         for j in range(m):
             if mrr[i][j] == ".":
-                costmap[i,j] = 0
-                queue.append((0,(i,j)))
+                costmap[encode(i,j)] = 0
+                queue.append((0,encode(i,j)))
     
     visited = set()
     while queue:
-        cost,(i,j) = heapq.heappop(queue)
-        if (i,j) in visited:
+        cost,cur = heapq.heappop(queue)
+        if cur in visited:
             continue
-        visited.add((i,j))
-        for nex,addn in edges[i,j]:
+        visited.add(cur)
+        for nex,addn in edges[cur]:
             if nex in visited:
                 continue
             new_cost = cost+addn
@@ -119,21 +123,23 @@ def solve_(n,m,p,q,mrr):
     mincost = LARGE
     for i in range(n-1):
         for j in range(m):
-            val = costmap[i,j] + costmap[i+1,j]
+            val = costmap[encode(i,j)] + costmap[encode(i+1,j)]
             mincost = min(mincost, val)
 
     for i in range(n):
         for j in range(m-1):
-            val = costmap[i,j] + costmap[i,j+1]
+            val = costmap[encode(i,j)] + costmap[encode(i,j+1)]
             mincost = min(mincost, val)
     
     if mincost >= LARGE:
         mincost = -1
 
-    log(costmap)
+    # log(costmap)
 
     return mincost
 
+
+# solve(500,500,107,103,["L"*500, "."*500]*250)
 
 
 for case_num in [0]:  # no loop over test case
