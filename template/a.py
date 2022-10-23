@@ -55,7 +55,7 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
     n = len(arr)
-    arr = [0] + arr
+    # arr = [0] + arr
 
     if sum(abs(x) for x in arr)%2 == 1:
         return [-1]
@@ -64,7 +64,10 @@ def solve_(arr):
     while arr:
         x = arr.pop()
         if x == 0:
-            series.append((0,))
+            series.append((x,))
+            continue
+        if not arr:
+            series.append((x,))
             continue
         y = arr.pop()
         series.append((y,x))
@@ -73,13 +76,18 @@ def solve_(arr):
     log(series)                
 
     res = []
-    idx = 0
+    idx = 1
     to_deduct = False
     for ser in series:
         log(idx, ser)
         if ser == (0,):
             res.append((idx, idx))
             idx += 1
+            continue
+        if ser == (1,):
+            res.append((idx, idx))
+            idx += 1
+            to_deduct = True
             continue
         if ser == (1,1):
             res.append((idx, idx+1))
@@ -121,14 +129,10 @@ def solve_(arr):
                 continue
         assert False
 
-
-    if res[0] == (0,0):
-        res = res[1:]
-
-    if res[0][0] == 0:
-        res[0] = (1, res[0][1])
-
     log(res)
+
+    for (a,b),(c,d) in zip(res, res[1:]):
+        assert b+1 == c
 
     assert res[0][0] == 1
     assert res[-1][-1] == n
