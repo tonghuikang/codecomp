@@ -80,6 +80,9 @@ def solve_(arr):
     for (a,b),(c,d) in zip(res, res[1:]):
         assert b + 1 == c
 
+    assert res[0][0] == 1
+    assert res[-1][-1] == len(arr)
+
     return res
 
 
