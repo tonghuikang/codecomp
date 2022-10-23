@@ -61,22 +61,12 @@ def solve_(n, arr):
     if gcd == 1:
         return 0
 
-    arr1 = [x for x in arr]
-    arr1[-1] = math.gcd(arr[-1], n)
-    gcd = arr1[0]
-    for x in arr1:
-        gcd = math.gcd(gcd, x)
-    if gcd == 1:
+    if math.gcd(gcd, n) == 1:
         return 1
 
-    arr2 = [x for x in arr]
-    arr2[-1] = math.gcd(arr[-2], n-1)
-    gcd = arr2[0]
-    for x in arr2:
-        gcd = math.gcd(gcd, x)
-    if gcd == 1:
+    if math.gcd(gcd, n-1) == 1:
         return 2
-    
+
     return 3
 
 
