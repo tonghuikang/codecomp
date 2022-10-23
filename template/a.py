@@ -55,16 +55,27 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
-    if len(arr) % 2 == 1:
+    if sum(abs(x) for x in arr)%2 == 1:
         return [-1]
 
-    res = []
-    for i,(a,b) in enumerate(zip(arr[::2], arr[1::2])):
-        if a == b:
-            res.append([2*i+1, 2*i+2])
+    idxs = [i for i,x in enumerate(arr) if x != 0]
+
+    start_points = [0]
+
+    for a,b in zip(idxs[::2], idxs[1::2]):
+        if arr[a] == arr[b]:
+            start_points.append(a)
         else:
-            res.append([2*i+1, 2*i+1])
-            res.append([2*i+2, 2*i+2])
+            start_points.append(a)
+            start_points.append(b)
+
+    start_points.append(len(arr))
+
+    res = []
+    for a,b in zip(start_points, start_points[1:]):
+        if a == b:
+            continue
+        res.append([a+1, b])
 
     return res
 
