@@ -65,11 +65,13 @@ def solve_(n,m,p,q,mrr):
             if (mrr[i][j] == "#") + (mrr[i+1][j+1] == "#") + (mrr[i+1][j] == "#") + (mrr[i][j+1] == "#") > 1:
                 continue
             if mrr[i][j] != "#" or mrr[i+1][j+1] != "#":
-                edges[i+1,j].append(((i,j+1), p))
-                edges[i,j+1].append(((i+1,j), p))
+                if mrr[i+1][j] != "#" and mrr[i][j+1] != "#":
+                    edges[i+1,j].append(((i,j+1), p))
+                    edges[i,j+1].append(((i+1,j), p))
             if mrr[i+1][j] != "#" or mrr[i][j+1] != "#":
-                edges[i,j].append(((i+1,j+1), p))
-                edges[i+1,j+1].append(((i,j), p))
+                if mrr[i][j] != "#" and mrr[i+1][j+1] != "#":
+                    edges[i,j].append(((i+1,j+1), p))
+                    edges[i+1,j+1].append(((i,j), p))
     
     for i in range(n):
         for j in range(m-2):
@@ -113,22 +115,15 @@ def solve_(n,m,p,q,mrr):
             costmap[nex] = new_cost
             heapq.heappush(queue, (new_cost,nex))
 
-    for i in range(n):
-        for j in range(m):
-            if mrr[i][j] == "#":
-                costmap[i,j] = LARGE
-
     mincost = LARGE
     for i in range(n-1):
         for j in range(m):
             val = costmap[i,j] + costmap[i+1,j]
-            log(val, i, j, i+1, j)
             mincost = min(mincost, val)
 
     for i in range(n):
         for j in range(m-1):
             val = costmap[i,j] + costmap[i,j+1]
-            log(val, i, j, i, j+1)
             mincost = min(mincost, val)
     
     if mincost >= LARGE:
