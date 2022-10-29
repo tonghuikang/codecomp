@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,13 +53,22 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
-    brr = set(arr)
-    if len(brr) < 3:
-        return arr[-1] - arr[0] + arr[-1] - arr[-2]
+    c = Counter(arr)
+    minarr = min(arr)
+    maxarr = max(arr)
+    brr = sorted(set(arr))
 
-    arr = sorted(brr)
+    if len(brr) == 1:
+        return 0
 
-    return arr[-1] - arr[0] + arr[-1] - arr[-2]
+    maxres = 0
+    for x in brr:
+        res = abs(x - brr[1]) + abs(x - brr[-1])
+        maxres = max(maxres, res)
+        res = abs(x - brr[-2]) + abs(x - brr[0])
+        maxres = max(maxres, res)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -84,13 +94,7 @@ for case_num in range(int(input())):
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
-    maxres = 0
     res = solve(arr)  # include input here
-    # log(res)
-    maxres = max(maxres, res)
-    res = solve([-x for x in arr[::-1]])  # include input here
-    # log(res)
-    maxres = max(maxres, res)
     
     # print length if applicable
     # print(len(res))
@@ -103,4 +107,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(maxres)
+    print(res)
