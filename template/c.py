@@ -52,19 +52,40 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+    res = 0
+    for x1 in range(9):
+        for y1 in range(9):        
+            for x2 in range(9):
+                for y2 in range(9):
+                    if x1 == x2 and y1 == y2:
+                        continue                       
+                    if srr[x1][y1] == "#" and srr[x2][y2] == "#":
+                        # https://math.stackexchange.com/a/506853/353989
+
+                        xc = (x1 + x2)/2  ;  yc = (y1 + y2)/2  ;    # Center point
+                        xd = (x1 - x2)/2  ;  yd = (y1 - y2)/2  ;    # Half-diagonal
+
+                        x3 = xc - yd  ;  y3 = yc + xd;    # Third corner
+                        x4 = xc + yd  ;  y4 = yc - xd;    # Fourth corner
+
+                        if x3 == int(x3) and x4 == int(x4) and y3 == int(y3) and y4 == int(y4):
+                            if 0 <= x3 < 9 and 0 <= x4 < 9 and 0 <= y3 < 9 and 0 <= y4 < 9:
+                                if srr[int(x3)][int(y3)] == "#" and srr[int(x4)][int(y4)] == "#":
+                                    res += 1
+
+    return res // 4
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
-    # k = int(input())
+    k = 9
 
     # read line as a string
     # srr = input().strip()
@@ -78,11 +99,11 @@ for case_num in range(int(input())):
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
