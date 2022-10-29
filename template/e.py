@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -60,6 +57,7 @@ def modinv_p(base, p=m9):
 
 def solve_(n,m,k):
     # your solution here
+    val = modinv_p(m)
 
     dp = [0 for _ in range(n+1)]
     dp[0] = 1
@@ -67,16 +65,22 @@ def solve_(n,m,k):
     for _ in range(k):
         new_dp = [0 for _ in range(n+1)]
         new_dp[n] = dp[n]
-        for i,x in enumerate(dp):
-            if i == n:
-                continue
+        for i,x in enumerate(dp[:-1]):
+            # if i == n:
+            #     continue
             for j in range(m):
-                new_pos = (i + j + 1)%(n+1)
-                new_dp[new_pos] += x * modinv_p(m)
+                new_pos = (i + j + 1)
+                if new_pos > n:
+                    new_pos = n - (new_pos-n)
+                new_dp[new_pos] += x * val
         dp = [x%m9 for x in new_dp]
-        log(dp)
+        # log(dp)
+        # assert sum(dp)%m9 == 1
 
-    return dp[n]
+    return dp[n]%m9
+
+
+# solve(1000,10,1000)
 
 
 for case_num in [0]:  # no loop over test case
