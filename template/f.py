@@ -52,15 +52,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, m):
     # your solution here
 
-    return ""
+    inf = 10_000
+
+    old_dp = [inf for _ in range(m+1)]
+    cur_dp = [inf for _ in range(m+1)]
+    old_dp[0] = 1
+    cur_dp[arr[0]] = 1
+
+    for x in arr[1:]:
+        new_dp = [inf for _ in range(m+1)]
+        for y in range(x,m+1):
+            new_dp[y] = min(new_dp[y], cur_dp[y-x])
+            new_dp[y] = min(new_dp[y], old_dp[y-x] + 1)
+        old_dp = [min(x,y) for x,y in zip(cur_dp,old_dp)]
+        cur_dp = new_dp
+        log()
+        log(x)
+        log(old_dp)
+        log(cur_dp)
+
+    old_dp = [min(x,y) for x,y in zip(cur_dp,old_dp)]
+
+    for i in range(m+1):
+        if old_dp[i] == inf:
+            old_dp[i] = -1
+
+    if sum(arr) <= m:
+        old_dp[sum(arr)] = 0
+
+    return old_dp[1:]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,8 +101,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,14 +110,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, m)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
