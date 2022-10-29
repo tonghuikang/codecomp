@@ -52,10 +52,31 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
 
-    return ""
+
+SIZE_OF_PRIME_ARRAY = 10**6 + 10
+largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+primes2 = set(primes)
+random.shuffle(primes)
+
+
+def solve_(x):
+    # your solution here
+    if x == 2:
+        return 2
+
+    return 65537
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +84,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -81,7 +102,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(k)  # include input here
 
     # print length if applicable
     # print(len(res))
