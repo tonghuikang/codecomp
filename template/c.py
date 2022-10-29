@@ -52,6 +52,12 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
+    brr = set(arr)
+    if len(brr) < 3:
+        return arr[-1] - arr[0] + arr[-1] - arr[-2]
+
+    arr = sorted(brr)
+
     return arr[-1] - arr[0] + arr[-1] - arr[-2]
 
 
