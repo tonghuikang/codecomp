@@ -57,12 +57,21 @@ def solve_(n,m,k,arr):
 
     nm = n*m
 
-    limit = nm - 2
+    available = nm - 3
+    maxheap = []
+    req = k
 
     for i,x in enumerate(arr, start=1):
-        # log(i,x,limit)
-        if i >= limit and x >= limit:
+        # log(i,x,available,maxheap)
+
+        if len(maxheap) >= available:
             return no
+
+        while maxheap and maxheap[0] == -req:
+            heapq.heappop(maxheap)
+            req -= 1
+
+        heapq.heappush(maxheap, -x)
 
     return yes
 
