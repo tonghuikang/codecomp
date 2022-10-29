@@ -52,7 +52,7 @@ def minus_one_matrix(mrr):
 def solve_(mrr):
     # your solution here
 
-    mrr = [sorted([x,y], reverse=True) for x,y in mrr]
+    mrr = [(x,y) if x > y else (y,x) for x,y in mrr]
 
     mrr.sort(reverse=True)
 
