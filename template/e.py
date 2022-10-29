@@ -91,30 +91,55 @@ def solve_brute_force(arr, n):
             else:
                 res = longest_increasing_subsequence(krr)
                 if res > maxres:
+                    log(arr, krr, res)
                     maxres = max(maxres, res)
 
     return maxres
         
 
-
 def solve_(arr, n):
+    arr = [x-1 for x in arr]
     # your solution here
 
-    # exclude yourself if you have more than one children
+    # sum of children's score, or the longest depth
+    score = [0 for _ in range(n)]
+    depth = [0 for _ in range(n)]
+    parents = {i:x for i,x in enumerate(arr, start=1)}
 
     g = defaultdict(list)
     for i,x in enumerate(arr, start=1):
         g[x].append(i)
 
-    # log(g)
+    log(g)
+    log(parents)
 
     res = 0
-    for i in range(1,n+1):
-        if len(g[i]) > 1:
-            continue
-        res += 1
+    for cur in range(n-1,-1,-1):
+        val = 0
+        dep = 1
+        for nex in g[cur]:
+            val += score[nex]
+            dep = max(dep, depth[nex] + 1)
+        val = max(val, dep)
+        depth[cur] = dep
+        score[cur] = val
 
-    return res
+    # log("depth", depth)
+
+    return score[0]
+
+
+
+while OFFLINE_TEST:
+    n = random.randint(2,5)
+    arr = [random.randint(1,x-1) for x in range(2,n+1)]
+    if OFFLINE_TEST:
+        p = solve(arr, n)
+        log(p)
+        q = solve_brute_force(arr, n)
+        log(arr, p, q)
+        assert p == q
+
 
 
 for case_num in [0]:  # no loop over test case
@@ -133,7 +158,6 @@ for case_num in [0]:  # no loop over test case
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
@@ -141,10 +165,10 @@ for case_num in [0]:  # no loop over test case
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr, n)  # include input here
-    if OFFLINE_TEST:
-        p,q = solve(arr, n), solve_brute_force(arr, n)
-        log(arr, p, q)
-        assert p == q
+    # if OFFLINE_TEST:
+    #     p,q = solve(arr, n), solve_brute_force(arr, n)
+    #     log(arr, p, q)
+    #     assert p == q
 
     # print length if applicable
     # print(len(res))
