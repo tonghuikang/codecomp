@@ -67,11 +67,12 @@ def solve_(n,m,k,arr):
         if len(maxheap) >= available:
             return no
 
+        heapq.heappush(maxheap, -x)
+
         while maxheap and maxheap[0] == -req:
             heapq.heappop(maxheap)
             req -= 1
 
-        heapq.heappush(maxheap, -x)
 
     return yes
 
