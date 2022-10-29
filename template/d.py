@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+yes, no = "YA", "TIDAK"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
