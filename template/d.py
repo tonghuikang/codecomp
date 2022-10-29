@@ -60,7 +60,7 @@ def solve_(n,m,k,arr):
     limit = nm - 2
 
     for i,x in enumerate(arr, start=1):
-        # log(i,x,limit)
+        log(i,x,limit)
         if i >= limit and x >= limit:
             return no
         if x >= limit:
