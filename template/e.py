@@ -56,13 +56,19 @@ def minus_one_matrix(mrr):
 def solve_(arr, n):
     # your solution here
 
-    seen = set()
+    # exclude yourself if you have more than one children
 
-    res = n
-    for x in arr:
-        if x in seen:
-            res -= 1
-        seen.add(x)
+    g = defaultdict(list)
+    for i,x in enumerate(arr, start=1):
+        g[x].append(i)
+
+    # log(g)
+
+    res = 0
+    for i in range(1,n+1):
+        if len(g[i]) > 1:
+            continue
+        res += 1
 
     return res
 
