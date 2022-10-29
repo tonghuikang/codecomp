@@ -52,6 +52,50 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def longest_increasing_subsequence(nums):
+    # leetcode.com/problems/longest-increasing-subsequence/discuss/667975/
+    dp = [MAXINT] * (len(nums) + 1)
+    for elem in nums:
+        dp[bisect.bisect_right(dp, elem)] = elem  # nondecreasing
+    # log(dp)
+    return dp.index(MAXINT)
+
+
+# log(longest_increasing_subsequence([1,1,2,3,-100,-200,1]))
+# log(longest_increasing_subsequence([1,1,2,3,1]))
+# log(longest_increasing_subsequence([1,1,1,1,1]))
+
+
+def solve_brute_force(arr, n):
+    arr = [x-1 for x in arr]
+
+    parents = {i:x for i,x in enumerate(arr, start=1)}
+
+    maxres = 0
+    for assignment in itertools.permutations(list(range(n))):
+        for removal in itertools.permutations(list(range(n))):
+            vals = list(assignment)
+            krr = []
+            g = defaultdict(set)
+            for i,x in enumerate(arr, start=1):
+                g[x].add(i)
+            # log(assignment, removal)
+            for x in removal:
+                if g[x]:
+                    break
+                krr.append(vals[x])
+                if x != 0:
+                    # log(removal,g,x,parents[x])
+                    g[parents[x]].remove(x)
+                    vals[parents[x]] = min(vals[parents[x]], vals[x])
+            else:
+                res = longest_increasing_subsequence(krr)
+                if res > maxres:
+                    maxres = max(maxres, res)
+
+    return maxres
+        
+
 
 def solve_(arr, n):
     # your solution here
@@ -97,6 +141,10 @@ for case_num in [0]:  # no loop over test case
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr, n)  # include input here
+    if OFFLINE_TEST:
+        p,q = solve(arr, n), solve_brute_force(arr, n)
+        log(arr, p, q)
+        assert p == q
 
     # print length if applicable
     # print(len(res))
