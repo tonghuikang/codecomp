@@ -49,26 +49,63 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+import itertools
+
+def solve_brute_force(arr):
+    maxres = 0
+    for pdt1 in itertools.product([0,1], repeat=len(arr)):
+        if sum(pdt1) == 0:
+            continue
+        for pdt2 in itertools.product([0,1], repeat=len(arr)):
+            if sum(pdt2) == 0:
+                continue
+            for a,b in zip(pdt1, pdt2):
+                if a == b == 1:
+                    continue
+                xrr = [x for x,y in zip(arr,pdt1) if y == 1]
+                yrr = [x for x,y in zip(arr,pdt2) if y == 1]
+                zrr = [x for x,y,z in zip(arr,pdt1,pdt2) if y == 0 and z == 0]
+
+                if len(zrr) == 0:
+                    continue
+
+                w1 = 10**18
+                for x in xrr:
+                    for y in yrr:
+                        w1 = min(w1, abs(x-y))
+                w2 = 10**18
+                for x in xrr:
+                    for y in zrr:
+                        w2 = min(w2, abs(x-y))
+                res = w1 + w2
+                maxres = max(maxres, res)
+
+    # log(maxres)
+    return maxres
+
+
 
 def solve_(arr):
     # your solution here
 
-    c = Counter(arr)
-    minarr = min(arr)
-    maxarr = max(arr)
-    brr = sorted(set(arr))
-
-    if len(brr) == 1:
-        return 0
-
     maxres = 0
-    for x in brr:
-        res = abs(x - brr[1]) + abs(x - brr[-1])
+
+    for a,b in zip(arr, arr[1:]):
+        res = b-a + arr[-1] - a
         maxres = max(maxres, res)
-        res = abs(x - brr[-2]) + abs(x - brr[0])
+
+        res = b-a + b - arr[0]
         maxres = max(maxres, res)
 
     return maxres
+
+
+# import random
+# while True:
+#     arr = [random.randint(1, 10) for x in range(random.randint(3,4))]
+#     arr.sort()
+#     log(arr, solve_(arr), solve_brute_force(arr))
+#     assert solve_(arr) == solve_brute_force(arr)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -95,7 +132,9 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
     res = solve(arr)  # include input here
-    
+
+    # if OFFLINE_TEST:
+    #     assert solve(arr) == solve_brute_force(arr)
     # print length if applicable
     # print(len(res))
 
