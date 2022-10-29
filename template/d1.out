@@ -1,0 +1,4 @@
+YA
+TIDAK
+YA
+YA
