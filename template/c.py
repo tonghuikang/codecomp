@@ -63,6 +63,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
+    # n = int(input())
     # k = int(input())
 
     # read line as a string
