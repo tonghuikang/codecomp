@@ -74,6 +74,7 @@ def solve_(n,m,k):
                 new_pos = (i + j + 1)%(n+1)
                 new_dp[new_pos] += x * modinv_p(m)
         dp = [x%m9 for x in new_dp]
+        log(dp)
 
     return dp[n]
 
