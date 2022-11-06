@@ -52,10 +52,28 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+    psum = [0]
+    for x in srr:
+        psum.append(psum[-1] + x)
+
+    log(psum)
+
+    res = 0
+    for i,x in enumerate(psum):
+        minval = psum[i]
+        for j in range(i-1, -1, -1):
+            minval = min(minval, psum[j])
+            diff = abs(psum[j] - psum[i])
+            depr = psum[i] - minval
+            addn = max(diff, depr)
+            log(i,j,minval,"|",diff,depr)
+            res += addn
+        log()
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,11 +81,12 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    srr = [1 if x == "(" else -1 for x in srr]
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -82,7 +101,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))

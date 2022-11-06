@@ -93,6 +93,8 @@ def solve_(n,m,arr):
     for new_gcd in arr[1:]:
         if new_gcd > prev_gcd:
             return 0
+        if prev_gcd % new_gcd != 0:
+            return 0
         if new_gcd == prev_gcd == 1:
             # log(m)
             res = (res*m) % m9
@@ -101,15 +103,15 @@ def solve_(n,m,arr):
         c = m // new_gcd
         factors = set(get_prime_factors(diff))
 
-        # log(c,diff,factors)
+        log(c,diff,factors)
         count = count_coprime(c, factors)
-        # log(count)
-        # log()
+        log(count)
+        log()
 
         res = (res*count) % m9
         prev_gcd = new_gcd
 
-    return res
+    return res % m9
 
 
 # for case_num in [0]:  # no loop over test case
