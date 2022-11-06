@@ -52,10 +52,29 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def split_by_same_elements(lst):
+    res = []
+    for x in lst:
+        if res and x == res[-1][0]:
+            res[-1][-1] += 1
+            continue
+        res.append([x,1])
+    return res
+
+
+
+def solve_(srr):
     # your solution here
 
-    return ""
+    c = Counter(srr)
+    res = c[0] * c[1]
+
+    arr = split_by_same_elements(srr)
+    for a,b in arr:
+        val = b*b
+        res = max(res, val)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -64,10 +83,11 @@ for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
-    # k = int(input())
+    k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    srr = [int(x) for x in srr]
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -82,7 +102,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
