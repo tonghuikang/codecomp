@@ -68,7 +68,7 @@ def solve_(srr, trr, n):
         if a == 1:
             res.append((i,i))
 
-    if count%2 == 0:
+    if count%2 == 1:
         res.append((1,1))
         res.append((2,n))
 
