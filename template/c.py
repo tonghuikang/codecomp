@@ -55,21 +55,38 @@ def minus_one_matrix(mrr):
 def solve_(srr, trr, n):
     # your solution here
 
+    # arr = [x for x in srr]
+    # brr = [x for x in trr]
     res = []
 
     if srr == trr:
         srr = [1-x for x in srr]
         res.append((1,n))
 
-    count = srr.count(1)
+    count = srr.count(0)
     for i,(a,b) in enumerate(zip(srr, trr), start=1):
         if a + b != 1:
             return False, []
-        if a == 1:
+        if a == 0:
             res.append((i,i))
 
-    res.append((1,1))
-    res.append((2,n))
+    res.append((1,n))
+    if count%2 == 1:
+        res.append((1,n))
+        res.append((1,1))
+        res.append((2,n))
+
+    # log(arr)
+    # log(brr)
+    # log()
+
+    # for a,b in res:
+    #     arr = [1-x if a <= i <= b else x      for i,x in enumerate(arr, start=1)]
+    #     brr = [1-x if not(a <= i <= b) else x for i,x in enumerate(brr, start=1)]
+    #     log(a,b)
+    #     log(arr)
+    #     log(brr)
+    #     log()
 
     return True, res
 
