@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import math
+import itertools
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +51,65 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+def count_coprime(c, factors):
+    n = len(factors)
+    res = 0
+    # https://math.stackexchange.com/questions/218890/how-many-numbers-in-a-given-range-are-coprime-to-n
+    for i in range(1,n+1):
+        if i%2 == 1:
+            sign = 1
+        else:
+            sign = -1
+        for comb in itertools.combinations(factors, i):
+            pdt = 1
+            for x in comb:
+                pdt = pdt*x
+            res += sign * (c // pdt)
+    return c-res
+
+
 def solve_(n,m,arr):
     # your solution here
 
-    return ""
+    res = 1
+    prev_gcd = arr[0]
+    for new_gcd in arr[1:]:
+        if new_gcd > prev_gcd:
+            return 0
+        if new_gcd == prev_gcd == 1:
+            # log(m)
+            res = (res*m) % m9
+            continue
+        diff = prev_gcd // new_gcd
+        c = m // new_gcd
+        factors = set(get_prime_factors(diff))
+
+        # log(c,diff,factors)
+        count = count_coprime(c, factors)
+        # log(count)
+        # log()
+
+        res = (res*count) % m9
+        prev_gcd = new_gcd
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
