@@ -85,7 +85,7 @@ if __name__ == "__main__":
     chrome://extensions/?options=cjnmckjndlpiamhfimnnjmnckgghkjbl
     
     Run this script
-    python3 sample_listen.py
+    python3 sample_gen.py
     
     Download tasks from contest website
     https://codeforces.com/contest/1480/

@@ -353,3 +353,22 @@ def manachers(S):
         if i + Z[i] > right:
             center, right = i, i + Z[i]
     return Z[2:-2:2]
+
+
+def get_palindromic_ranges(s):
+    # https://leetcode.com/problems/maximum-number-of-non-overlapping-palindrome-substrings/
+    # Tested in https://leetcode.com/problems/palindromic-substrings/submissions/
+    # if s is a palindrome, s[1:-1] is also a palindrome
+    n = len(s)
+    arr = manachers("|" + "|".join(s) + "|")
+    bridges = [[] for _ in range(n)]
+
+    for i,x in enumerate(arr):
+        start = (i-(x-2)//2)//2
+        end = (i+(x-2)//2)//2
+        while start <= end:
+            bridges[start].append(end+1)
+            start += 1
+            end -= 1
+            
+    return bridges
