@@ -38,7 +38,7 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+    return [[int(x) for x in list(input().strip())] for _ in range(rows)]
 
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
@@ -52,10 +52,17 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, n):
     # your solution here
 
-    return ""
+    res = [[x] for x in range(n)]
+
+    for i in range(n):
+        for j in range(n):
+            if mrr[i][j] == 1:
+                res[j].append(i)
+
+    return [sorted(row) for row in res]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +70,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -79,18 +86,18 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
-
+    res = solve(mrr, n)  # include input here
+    # log(res)
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(str(len(row)) + " " + " ".join(str(x+1) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required

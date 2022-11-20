@@ -58,6 +58,9 @@ def solve_(arr):
     if len(arr) <= 3:
         return len(arr)
 
+    if len(set(arr)) >= 3:
+        return len(arr)
+
     ptr = 3
     res = len(arr)
 
