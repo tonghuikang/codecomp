@@ -51,16 +51,43 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+LARGE = 10**6 + 10
+p = 10**9 + 7
+factorial_mod_p = [1 for _ in range(LARGE)]
+for i in range(1,LARGE):
+    factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
 
-def solve_():
+
+def ncr_mod_p(n, r, p=p):
+    if r > n:
+        return 0
+    num = factorial_mod_p[n]
+    dem = factorial_mod_p[r]*factorial_mod_p[n-r]
+    return (num * pow(dem, p-2, p))%p
+
+
+# assert(pow(2,3)) == 8
+
+def solve_(n,k):
     # your solution here
 
-    return ""
+    res = 0
+
+    for r in range(n+1):
+        val = ncr_mod_p(n, r) * ncr_mod_p(r, k) * pow(2, n-r, p)
+        # log(r, val, ncr_mod_p(n, r), ncr_mod_p(r, k), pow(2, n-r, p))
+        res += val
+
+    # res -= ncr_mod_p(n, k)
+
+    # sum of mCr times kCr
+
+    return res%p
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,7 +100,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,7 +109,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
