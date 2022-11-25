@@ -52,18 +52,36 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n):
     # your solution here
 
-    return ""
+    if n%2:
+        return [1] * n
 
+    if n%4:
+        res = [1,3] * (n//2)
+
+    else:
+        res = [13,2,8,1] + [6] * ((n//4)-1)*4
+
+    xor = 0
+    for x in res:
+        xor = x^xor
+
+    # log(xor)
+    # log(res)
+    # log(sum(res) / len(res))
+
+    assert sum(res) / len(res) == xor
+
+    return res
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -82,13 +100,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
