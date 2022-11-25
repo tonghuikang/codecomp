@@ -73,12 +73,13 @@ def solve_(n,x):
 
     assert len(res) == n
     assert res[0] == x
+    assert res[-1] == 1
     assert set(res) == set(range(1,n+1))
     return res
 
 
 if OFFLINE_TEST:
-    for i in range(2,100):
+    for i in range(2,1000):
         for j in range(2,i+1):
             log(solve(i,j))
 

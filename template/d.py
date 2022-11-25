@@ -52,8 +52,102 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def count_sum(x):
+    return x * (x+1) // 2
+
+
+def count_interval_inclusive(a,b):
+    return count_sum(b) - count_sum(a-1)
+
+
+def solve_(n):
     # your solution here
+
+    if n > 10:
+        return
+
+    if n == 2:
+        return [3,1]
+
+
+    res = list(range(3*n,3*n-(n-2),-1))
+
+    for diff in range(10**6):
+        if count_interval_inclusive(diff,diff+n) > (n-1)**2:
+            break
+
+    # LARGE = n//2
+    # if n == 5:
+    #     return [20, 29, 18, 26, 28]
+    # if n == 4:
+    #     return [25, 21, 23, 31]
+
+    LARGE = 10**9
+    for left in range(1,n-1):
+        right = n-left
+        allsum = count_interval_inclusive(1,left) + count_interval_inclusive(LARGE-right+1, LARGE)
+        # log(allsum)
+        # log(n**2)
+        if allsum > (LARGE-1)**2:
+            break
+
+    res = list(range(1,left+1)) + list(range(LARGE-right+1,LARGE+1))
+    log(res)
+    log(left, right)
+    log(allsum - n**2)
+    log((LARGE-1)**2)
+
+
+
+    
+    # res = list(range(diff+1,diff+n+2))
+
+    # maxres = max(res)
+    # minres = min(res)
+    # sumres = sum(res)
+
+    # log("max", maxres)
+    # log("min", minres)
+    # log("mm2", (maxres - minres)**2)
+    # log("sum", sumres)
+    # log("sum2", sumres**0.5)
+
+    # for i in range(1,2*n):
+    #     if (maxres-i)**2 < sumres:
+    #         break
+    # # i -= 1
+    
+    # res.append(i-1)
+
+    # maxres = max(res)
+    # minres = min(res)
+    # sumres = sum(res)
+
+    # log(len(res))
+    # log("max", maxres)
+    # log("min", minres)
+    # log("mm2", (maxres - minres)**2)
+    # log("sum", sumres)
+    # log("sum2", sumres**0.5)
+
+    # log()
+
+    # res.append((maxres-minres)**2 - sumres)
+    # log(res[-1])
+
+    # maxres = max(res)
+    # minres = min(res)
+    # sumres = sum(res)
+
+    # log(len(res))
+    # log(maxres)
+    # log(minres)
+    # log(sumres**0.5)
+    # log(sumres)
+    # log((maxres - minres)**2)
+
+    # assert maxres - minres == sumres**0.5
+    # assert len(res) == n
 
     return ""
 
@@ -63,7 +157,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -82,13 +176,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
