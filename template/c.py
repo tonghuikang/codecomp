@@ -55,14 +55,14 @@ def minus_one_matrix(mrr):
 def solve_(n,x):
     # your solution here
 
-    if n == 1:
-        return [1]
-    if x == 1:
-        return [-1]
+    # if n == 1:
+    #     return [1]
+    # if x == 1:
+    #     return [-1]
 
     res = [x]
 
-    untaken = set(range(2,n+1))
+    untaken = set(range(1,n+1))
     untaken.remove(x)
 
     for i in range(2,n):
@@ -73,6 +73,9 @@ def solve_(n,x):
                 return [-1]
         untaken.remove(cur)
         res.append(cur)
+
+    if 1 not in untaken:
+        return [-1]
 
     res.append(1)
     return res
