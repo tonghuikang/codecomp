@@ -61,32 +61,8 @@ def solve_(arr):
 
     arr = [x // gcd for x in arr]
 
-    if arr[0] == 1:
-        return arr[-1]
+    return arr[-1]
 
-    for _ in range(100):
-        a = random.choice(arr)
-        b = random.choice(arr)
-        if a == b:
-            continue
-        arr.append(abs(b-a))        
-
-    log(arr)
-
-    arr = sorted(arr)
-
-    # res = 0
-    # while arr[0] != 1:
-    #     res += 1
-    #     maxval = arr[-1]
-    #     arr2 = set(arr[:-1])
-    #     for x in arr[:-1]:
-    #         arr2.add(maxval - x)
-    #     arr = sorted(arr2)
-
-    # res += arr[-1]
-
-    return res
 
 
 # for case_num in [0]:  # no loop over test case
