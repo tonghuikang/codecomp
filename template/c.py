@@ -80,7 +80,7 @@ def get_prime_factors_with_precomp_sqrt(num):
         return []
  
     factors = [] 
-    for p in primes:
+    for p in primes1000:
         while num%p == 0:
             factors.append(p)
             num = num // p
