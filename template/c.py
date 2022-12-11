@@ -64,9 +64,10 @@ def get_largest_prime_factors(num):
     return largest_prime_factors
 
 
-SIZE_OF_PRIME_ARRAY = int(10**4.6)
+SIZE_OF_PRIME_ARRAY = int(10**6 + 10)
 largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
 primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+primes1000 = [x for x in primes[:170]]
 
 
 def get_prime_factors_with_precomp_sqrt(num):
@@ -85,14 +86,25 @@ def get_prime_factors_with_precomp_sqrt(num):
             num = num // p
         # if num < p:  # remaining factor is a prime?
         #     break
-    if num > 1:
+    if num > 1_000_000:
         # remaining number is a prime
         factors.append(num)
- 
+        return factors
+    
+    lf = largest_prime_factors[num]
+    while lf != num:
+        factors.append(lf)
+        num //= lf
+        lf = largest_prime_factors[num]
+    if num > 1:
+        factors.append(num)
     return factors
 
 
+
 def solve_(arr):
+    if len(arr) >= 80_000:
+        return no
     # your solution here
 
     # on whether any two numbers are not coprime
@@ -102,7 +114,7 @@ def solve_(arr):
         factors = get_prime_factors_with_precomp_sqrt(x)
         factors = set(factors)
         for factor in factors:
-            log(x, factor)
+            # log(x, factor)
             if factor == 1:
                 continue
             if factor in seen:
