@@ -108,8 +108,7 @@ def solve_(arr, mrr, n):
                 if arr[left] == arr[right] and left != right and left_prev != -1 and left_prev != left and left not in g[right]:
                     dp[left][right] = max(dp[left][right], 2 + dp[left_prev][right_prev])
                     dp[right][left] = dp[left][right]
-                    log(left, right, dp[left][right], left_prev, right_prev)
-                else:
+                elif left != right and left_prev != -1 and left_prev != left and left not in g[right]:
                     dp[left][right] = max(dp[left][right], dp[left_prev][right], dp[left][right_prev])
                     dp[right][left] = dp[left][right]
                 for left_nex in g[left]:
