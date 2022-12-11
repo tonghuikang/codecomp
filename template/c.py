@@ -69,18 +69,26 @@ largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take 
 primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
 
 
-def get_prime_factors_with_precomp(num):
-    # requires precomputed `largest_prime_factors``
-    # for numbers below SIZE_OF_PRIME_ARRAY
-    # O(log n)
-    factors = []
-    lf = largest_prime_factors[num]
-    while lf != num:
-        factors.append(lf)
-        num //= lf
-        lf = largest_prime_factors[num]
+def get_prime_factors_with_precomp_sqrt(num):
+    # requires precomputed `primes``
+    # for numbers below SIZE_OF_PRIME_ARRAY**2
+    # O(sqrt(n) / log(n))
+
+    if num == 1:
+        # may need to edit depending on use case
+        return []
+ 
+    factors = [] 
+    for p in primes:
+        while num%p == 0:
+            factors.append(p)
+            num = num // p
+        # if num < p:  # remaining factor is a prime?
+        #     break
     if num > 1:
+        # remaining number is a prime
         factors.append(num)
+ 
     return factors
 
 
@@ -91,7 +99,7 @@ def solve_(arr):
 
     seen = set()
     for x in arr:
-        factors = get_prime_factors_with_precomp(x)
+        factors = get_prime_factors_with_precomp_sqrt(x)
         factors = set(factors)
         for factor in factors:
             log(x, factor)
