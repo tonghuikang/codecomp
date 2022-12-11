@@ -52,8 +52,23 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
+    # mrr = [sorted([a,b]) for a,b in mrr]
     # your solution here
+
+    d = defaultdict(list)
+    for a,b in mrr:
+        if a < b:
+            a,b = b,a
+        d[a].append(b)
+
+    right = 0
+    not_friends = 0
+    for left in range(n):
+        for b in d[left]:
+            not_friends[b] -= 1
+            if not_friends[b] == 0:
+                del not_friends[b]
 
     return ""
 
@@ -73,16 +88,14 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    n,m = list(map(int,input().split()))
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
