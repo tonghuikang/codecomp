@@ -71,7 +71,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
