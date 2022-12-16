@@ -52,19 +52,24 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(srr):
+def solve_(srr, n):
     # your solution here
 
     srr = srr[::-1]
 
-    res = 0
+    left = 0
     for x in srr:
         if x == "1":
-            res = 2*res + 1
+            left = 2*left + 1
 
-    
+    right = 0
+    for x in srr:
+        if x == "0":
+            right = 2*right + 1
 
-    return ""
+    res = [i for i in range(left + 1, 2**(n) - right + 1)]
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
@@ -72,7 +77,7 @@ for case_num in [0]:  # no loop over test case
 # for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -91,13 +96,13 @@ for case_num in [0]:  # no loop over test case
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(srr)  # include input here
+    res = solve(srr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

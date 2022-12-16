@@ -52,15 +52,60 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def is_bipartite(map_from_node_to_nodes):
+    # leetcode.com/problems/is-graph-bipartite/discuss/119514/
+    graph = map_from_node_to_nodes
+    n, colored = len(map_from_node_to_nodes), {}
+    for i in range(n):
+        if i not in colored and graph[i]:
+            colored[i] = 1
+            queue = collections.deque([i])
+            while queue:
+                cur = queue.popleft()
+                for nex in graph[cur]:
+                    if nex not in colored:
+                        colored[nex] = -colored[cur]
+                        queue.append(nex)
+                    elif colored[nex] == colored[cur]:
+                        return False, colored
+    # you can obtain 2-coloring from the `colored` as well
+    return False, colored
+
+
+
+def solve_(n,m,crr,xrr):
     # your solution here
+
+    res = 0
+
+    res += xrr[crr[0]]
+    xrr[crr[0]] = 0
+    res += xrr[crr[-1]]
+    xrr[crr[-1]] = 0
+
+    log("base", res)
+    
+    seen = set(crr)
+
+    xrr = [x if i in seen else 0 for i,x in enumerate(xrr)]
+
+    g = defaultdict(set)
+
+    for i,(a,b) in enumerate(zip(crr, crr[1:])):
+        if a != b:
+            g[a].add(b)
+            g[b].add(a)
+
+    # minimum cost to choose such that one is colored
+
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,16 +118,18 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    n,m = list(map(int,input().split()))
+    crr = list(map(int,input().split()))
+    xrr = list(map(int,input().split()))
+
+    crr = minus_one(crr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,crr,xrr)  # include input here
 
     # print length if applicable
     # print(len(res))
