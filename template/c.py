@@ -52,19 +52,88 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(srr):
+def solve_(mrr, n):
     # your solution here
 
-    srr = srr[::-1]
-
-    res = 0
-    for x in srr:
-        if x == "1":
-            res = 2*res + 1
-
+    nrr = [[1 for _ in range(n)] for _ in range(n)]
     
+    for i in range(n):
+        for j in range(i,n):
+            nrr[i][j] = mrr[i][j-i]
 
-    return ""
+    for i in range(n):
+        if nrr[i][i] == 2:
+            log("edge not 1")
+            return 0
+        nrr[i][i] = 1
+
+    for i in range(n):
+        for j in range(i,n):
+            if nrr[i][j] == 1:
+                for x in range(i,n):
+                    for y in range(j+1):
+                        if nrr[x][y] == 2:
+                            log("inner not 1")
+                            return 0
+                        nrr[x][y] = 1
+
+            if nrr[i][j] == 2:
+                for x in range(i+1):
+                    for y in range(j,n):
+                        if nrr[x][y] == 1:
+                            log("inner not 2")
+                            return 0
+                        nrr[x][y] = 2
+
+    # log("\n" + "\n".join("".join(map(str, row)) for row in nrr))
+    # log()
+    
+    for i in range(2,n):
+        sx, sy = 0, i
+        for j in range(n-i):
+            x, y = sx + j, sy + j
+            log(x,y)
+            if nrr[x+1][y] == 1 and nrr[x][y-1] == 1:
+                if nrr[x][y] == 2:
+                    log("12")
+                    log("01")
+                    return 0
+                nrr[x][y] = 1
+
+    # log("\n" + "\n".join("".join(map(str, row)) for row in nrr))
+    # log()
+
+    dp1 = [[1 for _ in range(n)] for _ in range(n)]  # could be same or different
+    dp2 = [[1 for _ in range(n)] for _ in range(n)]  # must be different
+
+    for i in range(n):
+        dp1[i][i] = 2
+        dp2[i][i] = 0
+
+    # log("\n" + "\n".join("".join(map(str, row)) for row in res))
+
+    for i in range(1,n):
+        sx, sy = 0, i
+        for j in range(n-i):
+            x, y = sx + j, sy + j
+            log(x,y)
+            # log("\n" + "\n".join("".join(map(str, row)) for row in res))
+            log()
+
+            if nrr[x][y] == 1:
+                dp1[x][y] = 2
+                dp2[x][y] = 0
+                continue
+            if nrr[x][y] == 2:
+                dp2[x][y] = dp2[x+1][y-1] - dp1[x+1][y-1]
+                dp1[x][y] = dp2[x][y]  # must be different
+                continue
+            if nrr[x][y] == 0:
+                res[x][y] = res[x+1][y] * res[x][y-1] // res[x+1][y-1]
+                continue
+
+
+    return res[0][-1] % m9
 
 
 for case_num in [0]:  # no loop over test case
@@ -72,11 +141,11 @@ for case_num in [0]:  # no loop over test case
 # for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
-    srr = input().strip()
+    # srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -88,10 +157,10 @@ for case_num in [0]:  # no loop over test case
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(srr)  # include input here
+    res = solve(mrr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
