@@ -52,10 +52,14 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(x1,y1,x2,y2,x3,y3):
     # your solution here
 
-    return ""
+    if x1 == x2 or x2 == x3 or x3 == x1:
+        if y1 == y2 or y2 == y3 or y3 == y1:
+            return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
@@ -74,7 +78,9 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    x1,y1 = list(map(int,input().split()))
+    x2,y2 = list(map(int,input().split()))
+    x3,y3 = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,7 +88,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(x1,y1,x2,y2,x3,y3)  # include input here
 
     # print length if applicable
     # print(len(res))
