@@ -77,7 +77,7 @@ def solve_(n,m,mrr):
         holes.sort()
         donor.sort(reverse=True)
         for (_,x),(_,y) in zip(holes, donor):
-            res.append((j, x, y))
+            res.append((x, y, j))
             rowcounts[x] += 1
             rowcounts[y] -= 1
 
