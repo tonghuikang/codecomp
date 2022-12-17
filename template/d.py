@@ -70,12 +70,16 @@ def solve_(n,m,mrr):
         holes = []  # cnt, idx
         donor = []
         for i in range(n):
-            if rowcounts[i] < target:
+            if rowcounts[i] < target and mrr[i][j] == 0:
                 holes.append((rowcounts[i], i))
-            if rowcounts[i] > target:
+            if rowcounts[i] > target and mrr[i][j] == 1:
                 donor.append((rowcounts[i], i))
         holes.sort()
         donor.sort(reverse=True)
+        # log(j)
+        # log(holes)
+        # log(donor)
+        # log()
         for (_,x),(_,y) in zip(holes, donor):
             res.append((x, y, j))
             rowcounts[x] += 1

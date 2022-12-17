@@ -52,15 +52,99 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr,arr,brr):
     # your solution here
 
-    return ""
+    # count the number of nodes both of them need to visit
+
+    # populate the other set and prune
+
+    g = defaultdict(list)
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    aset = set(arr)
+    bset = set(brr)
 
 
-# for case_num in [0]:  # no loop over test case
+    ptrs = [0 for _ in range(n)]
+    stack = [0]
+    prev = [-1 for _ in range(n)]
+
+    while stack:
+        cur = stack[-1]
+        if ptrs[cur] >= len(g[cur]):
+            stack.pop()
+            continue
+        nex = g[cur][ptrs[cur]]
+
+        if nex == prev[cur]:
+            ptrs[cur] += 1
+            continue
+        prev[nex] = cur
+
+        # ops
+        if len(stack) >= m:
+            if nex in aset:
+                log("b", nex, stack)
+                bset.add(stack[-m])
+            if nex in bset:
+                log("b", nex, stack)
+                aset.add(stack[-m])
+        
+        stack.append(nex)
+        ptrs[cur] += 1
+
+
+    
+    ptrs = [0 for _ in range(n)]
+    stack = [0]
+    prev = [-1 for _ in range(n)]
+
+    while stack:
+        cur = stack[-1]
+        if ptrs[cur] >= len(g[cur]):
+            stack.pop()
+            continue
+        nex = g[cur][ptrs[cur]]
+
+        if nex == prev[cur]:
+            ptrs[cur] += 1
+            continue
+        prev[nex] = cur
+
+        # ops
+        if nex in aset:
+            idx = len(stack) - 1
+            while idx >= 0:
+                if stack[idx] not in aset:
+                    aset.add(stack[idx])
+                    idx -= 1
+                else:
+                    break
+        if nex in bset:
+            idx = len(stack) - 1
+            while idx >= 0:
+                if stack[idx] not in bset:
+                    aset.add(stack[idx])
+                    idx -= 1
+                else:
+                    break
+
+        stack.append(nex)
+        ptrs[cur] += 1
+
+    
+    log(aset)
+    log(bset)
+
+    return (len(aset) + len(bset) - 2) * 2
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,16 +157,21 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(n-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    arr = list(map(int,input().split()))[1:]
+    brr = list(map(int,input().split()))[1:]
+
+    arr = minus_one(arr)
+    brr = minus_one(brr)
+
+    res = solve(n,m,mrr,arr,brr)  # include input here
 
     # print length if applicable
     # print(len(res))
