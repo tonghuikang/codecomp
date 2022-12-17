@@ -127,7 +127,7 @@ def solve_(n,m,mrr,arr,brr):
             idx = len(stack) - 1
             while idx >= 0:
                 if stack[idx] not in bset:
-                    aset.add(stack[idx])
+                    bset.add(stack[idx])
                     idx -= 1
                 else:
                     break
