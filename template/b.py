@@ -52,10 +52,19 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
+def solve_(n,m,k,arr):
     # your solution here
 
-    return ""
+    maxarr = max(arr)
+
+    if ceiling_division(n,k) >= maxarr:
+        return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
