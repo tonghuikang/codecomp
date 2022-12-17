@@ -55,7 +55,16 @@ def minus_one_matrix(mrr):
 def solve_(arr, n):
     # your solution here
 
-    return ""
+    curset = set()
+    res = []
+    for i,x in enumerate(arr, start=1):
+        curset.add(x)
+        if len(curset) == 1:
+            res.append(1)
+        else:
+            res.append(i)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -89,7 +98,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
