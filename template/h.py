@@ -52,10 +52,59 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def calc(perm):
+    minsum = sum(perm[:k])
+    for i in range(n-k+1):
+        minsum = min(minsum, sum(perm[i:i+k]))
+    return minsum
 
-    return ""
+
+def solve(n,k):
+    vals = deque(range(1,n+1))
+    left = []
+    right = []
+    bias_right = True
+    while vals:
+        for _ in range(k//2):
+#             print(bias_right)
+#             print(left)
+#             print(right[::-1])
+            
+            if not vals: continue
+            if bias_right:
+                bias_right = not bias_right
+                left.append(vals.popleft()) 
+                if not vals: continue
+                right.append(vals.popleft()) 
+            else:
+                bias_right = not bias_right
+                right.append(vals.popleft())
+                if not vals: continue
+                left.append(vals.popleft()) 
+
+        right_tmp = []
+        left_tmp = []
+        for _ in range(k - k//2):
+            if not vals: continue
+            if bias_right:
+                bias_right = not bias_right
+                right_tmp.append(vals.pop()) 
+                if not vals: continue
+                left_tmp.append(vals.pop()) 
+            else:
+                bias_right = not bias_right
+                left_tmp.append(vals.pop()) 
+                if not vals: continue
+                right_tmp.append(vals.pop()) 
+        
+        if sum(right_tmp) < sum(left_tmp):
+            left_tmp, right_tmp = right_tmp, left_tmp
+        right.extend(right_tmp[::-1])
+        left.extend(left_tmp[::-1])
+        
+    # print(left)
+    # print(right[::-1])
+    return left + right[::-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,7 +122,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,13 +131,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = str(calc(perm)) + " " + " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -87,10 +85,10 @@ def solve_(n,m,mrr,arr,brr):
         # ops
         if len(stack) >= m:
             if nex in aset:
-                log("b", nex, stack)
+                # log("b", nex, stack)
                 bset.add(stack[-m])
             if nex in bset:
-                log("b", nex, stack)
+                # log("b", nex, stack)
                 aset.add(stack[-m])
         
         stack.append(nex)
@@ -136,8 +134,8 @@ def solve_(n,m,mrr,arr,brr):
         ptrs[cur] += 1
 
     
-    log(aset)
-    log(bset)
+    # log(aset)
+    # log(bset)
 
     return (len(aset) + len(bset) - 2) * 2
 

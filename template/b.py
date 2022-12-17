@@ -59,12 +59,26 @@ def ceiling_division(numer, denom):
 def solve_(n,m,k,arr):
     # your solution here
 
+    if k > m:
+        # log("not enough colors")
+        return no
+
     maxarr = max(arr)
 
-    if ceiling_division(n,k) >= maxarr:
-        return yes
+    arr.sort(reverse=True)
 
-    return no
+    limits = [n//k for _ in range(k)]
+    remainder = n - sum(limits)
+    for i in range(remainder):
+        limits[i] += 1
+
+    log(limits)
+
+    for a,b in zip(arr, limits):
+        if a > b:
+            return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
