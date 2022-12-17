@@ -55,14 +55,16 @@ def minus_one_matrix(mrr):
 def solve_(arr, n):
     # your solution here
 
-    curset = set()
+    curlen = 0
+    prev = -1
     res = []
-    for i,x in enumerate(arr, start=1):
-        curset.add(x)
-        if len(curset) == 1:
-            res.append(1)
+    for i,x in enumerate(arr, start=2):
+        if x == prev:
+            curlen += 1
         else:
-            res.append(i)
+            prev = x
+            curlen = 1
+        res.append(i - curlen)
 
     return res
 

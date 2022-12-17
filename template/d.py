@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,40 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    rowcounts = [0 for _ in range(n)]
+
+    for i,row in enumerate(mrr):
+        for j,cell in enumerate(row):
+            if cell:
+                rowcounts[i] += 1
+
+    allsum = sum(rowcounts)
+    if allsum % n != 0:
+        return False, []
+
+    target = allsum // n
+
+    res = []
+    for j in range(m):
+        holes = []  # cnt, idx
+        donor = []
+        for i in range(n):
+            if rowcounts[i] < target:
+                holes.append((rowcounts[i], i))
+            if rowcounts[i] > target:
+                donor.append((rowcounts[i], i))
+        holes.sort()
+        donor.sort(reverse=True)
+        for (_,x),(_,y) in zip(holes, donor):
+            res.append((j, x, y))
+            rowcounts[x] += 1
+            rowcounts[y] -= 1
+
+    # log(res)
+    return True, res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,16 +100,26 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    boo, res = solve(n,m,mrr)  # include input here
+
+    if not boo:
+        print(-1)
+        continue
+    
+    print(len(res))
+
+    for val in res:
+        val = " ".join(str(x+1) for x in val)
+        print(val)
 
     # print length if applicable
     # print(len(res))
@@ -95,4 +132,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
