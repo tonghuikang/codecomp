@@ -71,12 +71,14 @@ def solve_(arr):
     log(asc_diff)
     log(dsc_diff)
 
-    # log(asc_diff - dsc_diff)
+    diff = asc_diff - dsc_diff
 
-    if asc_diff + 0 <= dsc_diff:
+    # log(diff)
+
+    if diff <= -1:
         return "First"
-
-    if dsc_diff + 3 <= asc_diff:
+    
+    if diff >= 3:
         return "Second"
 
     return "Tie"
