@@ -52,10 +52,23 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(matrix):
     # your solution here
 
-    return ""
+    for _ in range(4):
+        matrix = [col[::-1] for col in zip(*matrix)]  # once
+        if matrix[0][0] > matrix[0][1]:
+            continue
+        if matrix[1][0] > matrix[1][1]:
+            continue
+        if matrix[0][0] > matrix[1][0]:
+            continue
+        if matrix[0][1] > matrix[1][1]:
+            continue
+        return yes
+
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -79,10 +92,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(2)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))

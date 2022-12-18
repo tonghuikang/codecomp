@@ -52,10 +52,34 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    # if everything needs to move, no one would do anything
+
+    asc_diff = 0
+    dsc_diff = 0
+
+    for i,x in enumerate(arr):
+        if i != x:
+            asc_diff += 1
+
+    for i,x in enumerate(arr[::-1]):
+        if i != x:
+            dsc_diff += 1
+
+    log(asc_diff)
+    log(dsc_diff)
+
+    # log(asc_diff - dsc_diff)
+
+    if asc_diff + 0 <= dsc_diff:
+        return "First"
+
+    if dsc_diff + 3 <= asc_diff:
+        return "Second"
+
+    return "Tie"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +87,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,15 +98,15 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    arr = list(map(int,input().split()))
+    arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
