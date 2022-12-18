@@ -148,7 +148,7 @@ def solve_(n,m,k,mrrs):
     def entry_operation(prev, cur, nex):
         # note that prev is `null_pointer` at the root node
         res.append((1, 1+mapp[cur, nex][0], 1+mapp[cur, nex][1]))
-        res.append((2, nex))
+        res.append((2, nex+1))
         pass
 
     def exit_operation(prev, cur):
