@@ -52,8 +52,8 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-LARGE = 110
-p = 10**9 + 7
+LARGE = 1000
+p = m9
 factorial_mod_p = [1 for _ in range(LARGE)]
 for i in range(1,LARGE):
     factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
@@ -77,6 +77,14 @@ def solve_(n,i,j,x,y):
         assert i < j
         log(n,i,j,x,y)
 
+    arr = ["?" for _ in range(n)]
+    arr[i] = x
+    arr[j] = y
+    log(arr)
+
+    if j == n-1 and y == n-1:
+        return 0
+
     diff = abs(x-y) - 1
     peak_count = n - y - 1
     base_count = x
@@ -97,18 +105,20 @@ def solve_(n,i,j,x,y):
         res += val
 
     # assume N is in the right of j
-    new_res = 0
     left_arm = j - i - 1
     right_arm = diff - left_arm
     # log("side left_arm", left_arm)
     # log("side right_arm", right_arm)
 
     if peak_count >= 1 and left_arm >= 0 and right_arm >= 0 and base_count >= i:
-        peak_res = pow(2, peak_count-1, p)
+        peak_discount = 0
+        right_base_count = base_count - i
+        if right_base_count + right_arm == 0:
+            peak_discount = 1
+        peak_res = pow(2, peak_count-1, p) - peak_discount
         arm_res = ncr_mod_p(diff, left_arm)
         side_res = ncr_mod_p(base_count, i)
         val = peak_res * side_res * arm_res
-        log(val)
         res += val
 
     # Y is peak
@@ -127,7 +137,40 @@ def solve_(n,i,j,x,y):
 
     # log(res)
 
+    return res%p
+
+
+def brute_solve(n,i,j,x,y):
+    res = 0
+    for comb in itertools.permutations(list(range(n))):
+        if comb[0] == n-1 or comb[-1] == n-1:
+            continue
+        if comb[i] == x and comb[j] == y:
+            peak_idx = comb.index(n-1)
+            if list(comb[:peak_idx+1]) == sorted(comb[:peak_idx+1]):
+                if list(comb[peak_idx:]) == sorted(comb[peak_idx:], reverse=True):
+                    res += 1
     return res
+
+
+if OFFLINE_TEST:
+    n = random.randint(3, 4)
+    i,j,x,y = [random.randint(1, n) for _ in range(4)]
+    if i < j and x != y:
+        i -= 1
+        j -= 1
+        x -= 1
+        y -= 1
+        val = brute_solve(n,i,j,x,y)
+        sol = solve(n,i,j,x,y)
+        arr = ["?" for _ in range(n)]
+        arr[i] = x
+        arr[j] = y
+        log(arr, val, sol)
+        assert val == sol
+
+
+# solve_ = brute_solve
 
 
 # for case_num in [0]:  # no loop over test case
