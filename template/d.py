@@ -52,10 +52,82 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+LARGE = 110
+p = 10**9 + 7
+factorial_mod_p = [1 for _ in range(LARGE)]
+for i in range(1,LARGE):
+    factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
 
-    return ""
+
+def ncr_mod_p(n, r, p=p):
+    if r < 0:
+        return 0
+    num = factorial_mod_p[n]
+    dem = factorial_mod_p[r]*factorial_mod_p[n-r]
+    return (num * pow(dem, p-2, p))%p
+
+
+
+def solve_(n,i,j,x,y):
+    # your solution here
+    
+    if x > y:
+        x, y = y, x
+        i,j = n-j-1, n-i-1
+        assert i < j
+        log(n,i,j,x,y)
+
+    diff = abs(x-y) - 1
+    peak_count = n - y - 1
+    base_count = x
+
+    # assume N is in the middle of i and j
+    left_arm = j - i - 1 - peak_count
+    right_arm = diff - left_arm
+    # log("mid left_arm", left_arm)
+    # log("mid right_arm", right_arm)
+
+    res = 0
+    if peak_count >= 1 and left_arm >= 0 and right_arm >= 0 and base_count >= i:
+        peak_res = pow(2, peak_count-1, p)
+        arm_res = ncr_mod_p(diff, left_arm)
+        side_res = ncr_mod_p(base_count, i)
+        val = peak_res * side_res * arm_res
+        log(val)
+        res += val
+
+    # assume N is in the right of j
+    new_res = 0
+    left_arm = j - i - 1
+    right_arm = diff - left_arm
+    # log("side left_arm", left_arm)
+    # log("side right_arm", right_arm)
+
+    if peak_count >= 1 and left_arm >= 0 and right_arm >= 0 and base_count >= i:
+        peak_res = pow(2, peak_count-1, p)
+        arm_res = ncr_mod_p(diff, left_arm)
+        side_res = ncr_mod_p(base_count, i)
+        val = peak_res * side_res * arm_res
+        log(val)
+        res += val
+
+    # Y is peak
+    if y == n-1:
+        left_arm = j - i - 1
+        right_arm = diff - left_arm
+        # log("peak left_arm", left_arm)
+        # log("peak right_arm", right_arm)
+        if left_arm >= 0 and right_arm >= 0 and base_count >= i:
+            peak_res = 1
+            arm_res = ncr_mod_p(diff, left_arm)
+            side_res = ncr_mod_p(base_count, i)
+            val = peak_res * side_res * arm_res
+            log(val)
+            res += val
+
+    # log(res)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,7 +145,11 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,i,j,x,y = list(map(int,input().split()))
+    i -= 1
+    j -= 1
+    x -= 1
+    y -= 1
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,7 +158,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,i,j,x,y)  # include input here
 
     # print length if applicable
     # print(len(res))
