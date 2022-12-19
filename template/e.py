@@ -67,11 +67,11 @@ def solve_(n):
         x -= triangle_numbers[-1]
         arr.append(len(triangle_numbers) - 1)
 
-    log(arr)
+    # log(arr)
 
     prev = 0
     cnt = 0
-    for x in arr:
+    for x in arr[::-1]:
         cnt += x * prev
         prev += x
 
