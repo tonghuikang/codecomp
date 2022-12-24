@@ -11,7 +11,7 @@ input = sys.stdin.readline  # to read input quickly
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -52,10 +52,56 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+LARGE = 10**9
+
 def solve_(h,w,mrr):
     # your solution here
 
-    return ""
+    mrr = [[2]*w] + mrr + [[2]*w]
+
+    log(mrr)
+
+    dp = [[LARGE, LARGE], [0, 0]]  # [p1_swapped][p2_swapped]
+    for row1, row2, row3 in zip(mrr, mrr[1:], mrr[2:]):
+        new_dp = [[LARGE, LARGE], [LARGE, LARGE]]
+
+        for p1_swapped in [0,1]:
+            if p1_swapped:
+                arr = [1-x if x != 2 else x for x in row1]
+            else:
+                arr = [x for x in row1]
+
+            for p2_swapped in [0,1]:
+                if p2_swapped:
+                    brr = [1-x if x != 2 else x for x in row2]
+                else:
+                    brr = [x for x in row2]
+                
+                for p3_swapped in [0,1]:
+                    if p3_swapped:
+                        crr = [1-x if x != 2 else x for x in row3]
+                    else:
+                        crr = [x for x in row3]
+                        
+                        qrr = [arr, brr, crr]
+                        for j in range(w):
+                            x, y = 1,j
+                            for dx,dy in d4:
+                                xx = x+dx
+                                yy = y+dy
+                                if 0 <= yy < w:
+                                    if qrr[xx][yy] == 2:
+                                        continue
+                                    if qrr[xx][yy] == qrr[x][y]:
+                                        new_dp[p2_swapped][p3_swapped] = min(
+                                            new_dp[p2_swapped][p3_swapped],
+                                            new_dp[p1_swapped][p2_swapped] + p3_swapped
+                                        )
+
+        log(new_dp)
+        dp = new_dp
+
+    return min(min(row) for row in dp)
 
 
 for case_num in [0]:  # no loop over test case
