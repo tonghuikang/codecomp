@@ -59,9 +59,9 @@ def solve_(h,w,mrr):
 
     mrr = [[2]*w] + mrr + [[2]*w]
 
-    log(mrr)
+    # log(mrr)
 
-    dp = [[LARGE, LARGE], [0, 0]]  # [p1_swapped][p2_swapped]
+    dp = [[LARGE, LARGE], [0, 1]]  # [p1_swapped][p2_swapped]
     for row1, row2, row3 in zip(mrr, mrr[1:], mrr[2:]):
         new_dp = [[LARGE, LARGE], [LARGE, LARGE]]
 
@@ -83,25 +83,40 @@ def solve_(h,w,mrr):
                     else:
                         crr = [x for x in row3]
                         
-                        qrr = [arr, brr, crr]
-                        for j in range(w):
-                            x, y = 1,j
-                            for dx,dy in d4:
-                                xx = x+dx
-                                yy = y+dy
-                                if 0 <= yy < w:
-                                    if qrr[xx][yy] == 2:
-                                        continue
-                                    if qrr[xx][yy] == qrr[x][y]:
-                                        new_dp[p2_swapped][p3_swapped] = min(
-                                            new_dp[p2_swapped][p3_swapped],
-                                            new_dp[p1_swapped][p2_swapped] + p3_swapped
-                                        )
+                    qrr = [arr, brr, crr]
+                        
+                    # log()
+                    # log(p1_swapped, p2_swapped,p3_swapped)
+                    # for row in qrr:
+                    #     log(row)
 
-        log(new_dp)
+                    for j in range(w):
+                        x, y = 1,j
+                        flag = False
+                        for dx,dy in d4:
+                            xx = x+dx
+                            yy = y+dy
+                            if 0 <= yy < w:
+                                if qrr[xx][yy] == 2:
+                                    continue
+                                if qrr[xx][yy] == qrr[x][y]:
+                                    flag = True
+                        if not flag:
+                            break
+                    else:
+                        # log("ok")
+                        new_dp[p2_swapped][p3_swapped] = min(
+                            new_dp[p2_swapped][p3_swapped],
+                            dp[p1_swapped][p2_swapped] + p3_swapped
+                        )
+
+        # log(new_dp)
         dp = new_dp
 
-    return min(min(row) for row in dp)
+    res = min(min(row) for row in dp)
+    if res == LARGE:
+        return -1
+    return res
 
 
 for case_num in [0]:  # no loop over test case

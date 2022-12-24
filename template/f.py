@@ -4,7 +4,7 @@ input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
-import scipy.spatial
+# import scipy.spatial
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
@@ -49,7 +49,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, arr):
+def solve_old_(n, arr):
     # your solution here
 
     arr = [[i,x] for i,x in enumerate(arr)]
@@ -62,6 +62,26 @@ def solve_(n, arr):
         allres.append(int(res[0][1]))
 
     return allres
+
+
+def solve_(n, xrr):
+
+    arr = [+i+x for i,x in enumerate(xrr)]
+    brr = [+i-x for i,x in enumerate(xrr)]
+    # crr = [-i+x for i,x in enumerate(xrr)]
+    # drr = [-i-x for i,x in enumerate(xrr)]
+
+    log(arr)
+    log(brr)
+    # log(crr)
+    # log(drr)
+
+    
+
+
+    res = []
+    return res
+
 
 
 for case_num in [0]:  # no loop over test case
