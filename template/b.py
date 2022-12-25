@@ -55,10 +55,14 @@ def minus_one_matrix(mrr):
 def solve_(n,m,k,srr):
     # your solution here
 
-    req = srr.count("DR") + srr.count("RD") - srr.count("RDRD") - srr.count("DRDR")
 
-    log("req", req)
-    if req <= k:
+    base = srr.count("DR") + srr.count("RD")
+
+    base = min(base, n-1, m-1)
+
+    log("base", base)
+    if base <= k:
+        log("base ok")
         return yes
 
     return no
