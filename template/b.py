@@ -55,10 +55,10 @@ def minus_one_matrix(mrr):
 def solve_(n,m,k,srr):
     # your solution here
 
-    turning_points = srr.count("DR") + srr.count("RD")
+    req = srr.count("DR") + srr.count("RD") - srr.count("RDRD") - srr.count("DRDR")
 
-    log("turning_points", turning_points)
-    if turning_points <= k:
+    log("req", req)
+    if req <= k:
         return yes
 
     return no
