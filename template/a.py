@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+abc = "abcdefghijklmnopqrstuvwxyz?"
+abc_map = {c:i for i,c in enumerate(abc)}
+
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -52,22 +52,57 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, srr):
     # your solution here
 
-    return ""
+    # as long as there isn't
+    # aa
+    # a*a
+
+    arr = [abc_map[x] for x in srr]
+
+    cntr = []
+    dp = [[0 for _ in range(26)] for _ in range(26)]
+    dp[0][0] = 1
+
+    for idx,x in enumerate(arr):
+        new_dp = [[0 for _ in range(26)] for _ in range(26)]
+        if x == 26:  # ?
+            for i in range(26):
+                for j in range(26):
+                    for k in range(26):
+                        if i == k and idx >= 2:
+                            continue
+                        if j == k and idx >= 1:
+                            continue
+                        new_dp[j][k] += dp[i][j]%m9
+        else:
+            for i in range(26):
+                for j in range(26):
+                    k = x
+                    if i == k and idx >= 2:
+                        continue
+                    if j == k and idx >= 1:
+                        continue
+                    new_dp[j][k] += dp[i][j]%m9
+
+        # log(sum(sum(row) for row in dp)%m9)
+        dp = new_dp
+
+    return sum(sum(row) for row in dp)%m9
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -82,7 +117,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, srr)  # include input here
 
     # print length if applicable
     # print(len(res))
