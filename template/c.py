@@ -48,31 +48,47 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+import math
+
+# def solve_(arr):
+#     if len(set(arr)) < len(arr):
+#         return no
+
+#     for x in range(1,1000):
+#         flag = False
+#         for i,a in enumerate(arr):
+#             for b in arr[i+1:]:
+#                 if math.gcd(a+x,b+x) > 1:
+#                     # log(a,b)
+#                     flag = True
+#                     break
+#             if flag:
+#                 break
+#         if not flag:
+#             log(x)
+#             return yes
+
+#     return no
+
 
 def solve_(arr):
     if len(set(arr)) < len(arr):
         return no
     # your solution here
 
-    for x in range(1,1000):
-        # log(x)
-        # flag = False
-        # for i,a in enumerate(arr):
-        #     for b in arr[i+1:]:
-        #         if math.gcd(a+x,b+x) > 1:
-        #             # log(a,b)
-        #             flag = True
-        #             break
-        #     if flag:
-        #         break
-        # if not flag:
-        #     return yes
+    # differences = set()
+    # for i,a in enumerate(arr):
+    #     for b in arr[i+1:]:
+    #         differences.add(abs(a-b))
 
+    # log(differences)
+
+    for x in range(2,1000):
         classes = [0 for _ in range(x)]
         for y in arr:
             classes[y%x] += 1
-        # log(classes)
-        if sum(1 if x > 1 else 0 for x in classes) >= 2:
+        if sum(1 if x > 1 else 0 for x in classes) == x:
+            log(classes)
             return no
 
     return yes
