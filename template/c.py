@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -57,21 +54,28 @@ def solve_(arr):
         return no
     # your solution here
 
-    for x in range(1,200):
+    for x in range(1,1000):
         # log(x)
-        flag = False
-        for i,a in enumerate(arr):
-            for b in arr[i+1:]:
-                if math.gcd(a+x,b+x) > 1:
-                    # log(a,b)
-                    flag = True
-                    break
-            if flag:
-                break
-        if not flag:
-            return yes
+        # flag = False
+        # for i,a in enumerate(arr):
+        #     for b in arr[i+1:]:
+        #         if math.gcd(a+x,b+x) > 1:
+        #             # log(a,b)
+        #             flag = True
+        #             break
+        #     if flag:
+        #         break
+        # if not flag:
+        #     return yes
 
-    return no
+        classes = [0 for _ in range(x)]
+        for y in arr:
+            classes[y%x] += 1
+        # log(classes)
+        if sum(1 if x > 1 else 0 for x in classes) >= 2:
+            return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
