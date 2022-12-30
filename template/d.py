@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -52,10 +52,151 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,arr,brr):
     # your solution here
 
-    return ""
+    cntr = Counter(arr + brr)
+    if len(cntr) < n:
+        return 0
+
+    wildcards = set()
+    idx1 = defaultdict(list)
+    idx2 = defaultdict(list)
+
+    xrr = []
+    yrr = []
+
+    for i,(a,b) in enumerate(zip(arr,brr)):
+        if a == b and a in wildcards:
+            return 0
+        if a == b:
+            wildcards.add(a)
+            continue
+        if cntr[a] == 1 and cntr[b] == 1:
+            return 0
+        idx1[a].append(i)
+        idx2[b].append(i)
+
+    prune = set()   # force all alternate appearances
+
+    for a,b in zip(arr,brr):
+        if a == b and a in wildcards:
+            continue
+        if a in wildcards:
+            if b in prune:
+                return 0
+            prune.add(b)
+            continue
+        if b in wildcards:
+            if a in prune:
+                return 0
+            prune.add(a)
+            continue
+        if cntr[a] == 1:
+            prune.add(b)
+            continue
+        if cntr[b] == 1:
+            prune.add(a)
+            continue
+        
+    # log(arr)
+    # log(brr)
+    # log(prune)
+    stack = list(prune)
+
+    while stack:
+        cur = stack.pop()
+        for i in idx1[cur]:
+            b = brr[i]
+            if b in prune:
+                return 0
+            if b in wildcards:
+                continue
+            prune.add(b)
+            stack.append(b)
+        for i in idx2[cur]:
+            a = arr[i]
+            if a in prune:
+                return 0
+            if a in wildcards:
+                continue
+            prune.add(a)
+            stack.append(a)
+
+    for a,b in zip(arr,brr):
+        if a in wildcards or b in wildcards:
+            continue
+        if a in prune or b in prune:
+            continue
+        if a > b:
+            a,b = b,a
+        xrr.append(a)
+        yrr.append(b)
+
+
+    pairs = Counter()
+    num_cycles = 0
+
+    for a,b in zip(xrr, yrr):
+        if a in wildcards and b in wildcards:
+            return 0
+        if a in wildcards:
+            continue
+        if b in wildcards:
+            continue
+        pairs[a,b] += 1
+        if pairs[a,b] == 2:
+            num_cycles += 1
+        if pairs[a,b] > 2:
+            return 0
+
+    g = defaultdict(list)
+
+    cntr2 = Counter()
+
+    for a,b in zip(xrr, yrr):
+        if a in wildcards:
+            continue
+        if b in wildcards:
+            continue
+        if pairs[a,b] == 2:
+            continue
+        g[a].append(b)
+        g[b].append(a)
+        cntr2[a] += 1
+        cntr2[b] += 1
+
+    assert all(v == 2 for v in cntr2.values())
+    for v in g.values():
+        assert len(v) == 2
+        assert v[0] != v[1]
+        # assert len(v) == len(set(v))
+
+    visited = set()
+
+    for x in list(g.keys()):
+        if x in visited:
+            continue
+        stack = [x]
+        num_cycles += 1
+        while stack:
+            cur = stack.pop()
+            for nex in g[cur]:
+                if nex in visited:
+                    continue
+                visited.add(nex)
+                stack.append(nex)
+
+    # (n ** something) * (2 ** something)
+
+    return (pow(n, len(wildcards), m9) * pow(2, num_cycles, m9)) % m9
+
+
+# while OFFLINE_TEST:
+#     n = random.randint(1,10)
+#     arr = [random.randint(1,n) for _ in range(n)]
+#     brr = [random.randint(1,n) for _ in range(n)]
+#     solve_(n, arr, brr)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +204,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,7 +215,8 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,7 +224,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,arr,brr)  # include input here
 
     # print length if applicable
     # print(len(res))
