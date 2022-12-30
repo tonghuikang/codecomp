@@ -53,9 +53,25 @@ def minus_one_matrix(mrr):
 
 
 def solve_(arr):
+    if len(set(arr)) < len(arr):
+        return no
     # your solution here
 
-    return ""
+    for x in range(1,200):
+        # log(x)
+        flag = False
+        for i,a in enumerate(arr):
+            for b in arr[i+1:]:
+                if math.gcd(a+x,b+x) > 1:
+                    # log(a,b)
+                    flag = True
+                    break
+            if flag:
+                break
+        if not flag:
+            return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
