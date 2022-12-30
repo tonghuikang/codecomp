@@ -56,12 +56,13 @@ def solve_(n,arr,brr):
     # your solution here
 
     cntr = Counter(arr + brr)
+    cntr3 = Counter(arr + brr)
     if len(cntr) < n:
         return 0
 
     wildcards = set()
-    idx1 = defaultdict(list)
-    idx2 = defaultdict(list)
+    idx1 = defaultdict(set)
+    idx2 = defaultdict(set)
 
     xrr = []
     yrr = []
@@ -74,31 +75,28 @@ def solve_(n,arr,brr):
             continue
         if cntr[a] == 1 and cntr[b] == 1:
             return 0
-        idx1[a].append(i)
-        idx2[b].append(i)
+        idx1[a].add(i)
+        idx2[b].add(i)
 
     prune = set()   # force all alternate appearances
 
-    for a,b in zip(arr,brr):
+    for i,(a,b) in enumerate(zip(arr,brr)):
         if a == b and a in wildcards:
             continue
-        if a in wildcards:
+        if a in wildcards or cntr[b] <= 1:
             if b in prune:
                 return 0
-            prune.add(b)
+            cntr3[b] -= 1
+            if cntr3[b] <= 1:
+                prune.add(b)
             continue
-        if b in wildcards:
+        if b in wildcards or cntr[a] <= 1:
             if a in prune:
                 return 0
-            prune.add(a)
+            cntr3[a] -= 1
+            if cntr3[a] <= 1:
+                prune.add(a)
             continue
-        if cntr[a] == 1:
-            prune.add(b)
-            continue
-        if cntr[b] == 1:
-            prune.add(a)
-            continue
-        
     # log(arr)
     # log(brr)
     # log(prune)
@@ -106,33 +104,42 @@ def solve_(n,arr,brr):
 
     while stack:
         cur = stack.pop()
+
         for i in idx1[cur]:
             b = brr[i]
             if b in prune:
                 return 0
             if b in wildcards:
                 continue
-            prune.add(b)
+            cntr3[b] -= 1
+            if cntr3[b] <= 1:
+                prune.add(b)
             stack.append(b)
+
         for i in idx2[cur]:
             a = arr[i]
             if a in prune:
                 return 0
             if a in wildcards:
                 continue
-            prune.add(a)
+            cntr3[a] -= 1
+            if cntr3[a] <= 1:
+                prune.add(a)
             stack.append(a)
 
+    assert not(prune & wildcards)
+
+    # log(wildcards, prune)
+
     for a,b in zip(arr,brr):
-        if a in wildcards or b in wildcards:
-            continue
-        if a in prune or b in prune:
+        if a in wildcards or a in prune:
+            assert b in wildcards or b in prune
+        if a in wildcards or b in wildcards or a in prune or b in prune:
             continue
         if a > b:
             a,b = b,a
         xrr.append(a)
         yrr.append(b)
-
 
     pairs = Counter()
     num_cycles = 0
@@ -166,10 +173,22 @@ def solve_(n,arr,brr):
         cntr2[a] += 1
         cntr2[b] += 1
 
+    paired = set()
+    for (a,b),c in pairs.items():
+        if c == 2:
+            paired.add(a)
+            paired.add(b)
+
+    assert len(prune | wildcards | set(cntr2.keys()) | paired) == n
+    assert len(prune) + len(wildcards) + len(cntr2.keys()) + len(paired) == n
+
+    # log(g)
     assert all(v == 2 for v in cntr2.values())
-    for v in g.values():
+    for k,v in g.items():
         assert len(v) == 2
         assert v[0] != v[1]
+        assert k != v[0]
+        assert k != v[1]
         # assert len(v) == len(set(v))
 
     visited = set()
@@ -177,6 +196,7 @@ def solve_(n,arr,brr):
     for x in list(g.keys()):
         if x in visited:
             continue
+        visited.add(x)
         stack = [x]
         num_cycles += 1
         while stack:
@@ -189,6 +209,9 @@ def solve_(n,arr,brr):
 
     # (n ** something) * (2 ** something)
 
+    log(len(wildcards), num_cycles, g)
+    # log(g)
+  
     return (pow(n, len(wildcards), m9) * pow(2, num_cycles, m9)) % m9
 
 
