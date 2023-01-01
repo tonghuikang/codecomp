@@ -294,12 +294,38 @@ def min_cost_flow(map_from_node_to_nodes_and_capcities, demands):
 
 
 class DisjointSet:
-    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+    # leetcode.com/problems/accounts-merge/
+    def __init__(self, parent={}):
+        if not parent:
+            parent = {}
+        self.parent = parent
 
+    def find(self, item):
+        if item not in self.parent:
+            self.parent[item] = item
+            return item
+        elif self.parent[item] == item:
+            return item
+        else:
+            res = self.find(self.parent[item])
+            self.parent[item] = res
+            return res
+
+    def union(self, set1, set2):
+        root1 = self.find(set1)
+        root2 = self.find(set2)
+        self.parent[root1] = root2
+
+
+
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+    # faster implementation of DSU
     def __init__(self, n: int = 0) -> None:
         if n > 0:  # constant size DSU
             self.parent_or_size = [-1]*n
         else:
+            # WARNING: non-negative numeric elements only
             self.parent_or_size = defaultdict(lambda: -1)
 
     def union(self, a: int, b: int) -> int:
