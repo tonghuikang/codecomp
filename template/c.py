@@ -61,7 +61,23 @@ def solve_(n,m,arr):
     log(left)
     log(right)
 
-    return ""
+    res = 0
+
+    psum = 0
+    for x in right:
+        psum += x
+        if psum < 0:
+            res += 1
+            psum -= 2*x
+
+    psum = 0
+    for x in left[1:][::-1]:
+        psum -= x
+        if psum < 0:
+            res += 1
+            psum += 2*x
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
