@@ -55,10 +55,24 @@ def minus_one_matrix(mrr):
 def solve_(n):
     # your solution here
 
-    if n%2 == 1:
+    if n == 3:
         return []
 
-    return [1, -1]*(n//2)
+    if n%2 == 0:
+        return [1, -1]*(n//2)
+
+    y = 1-(n//2)
+    x = 1-y
+
+    arr = [y] + [x,y] * (n//2)
+    # log(arr)
+    assert sum(arr) == x+y
+
+    return arr
+
+if OFFLINE_TEST:
+    for n in range(2,1001):
+        solve(n)
 
 
 # for case_num in [0]:  # no loop over test case
