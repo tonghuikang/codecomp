@@ -25,19 +25,29 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
-def query(pos):
-    print("? {}".format(pos+1), flush=True)
+def query(pos, arr):
+    print("? {} {}".format(pos+1, "".join(str(x) for x in arr)), flush=True)
     response = int(input())
     return response
 
 def alert(pos):
-    print("! {}".format(pos+1), flush=True)
+    print("! {}".format("".join(str(x) for x in arr)), flush=True)
     sys.exit()
 
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-# k = int(input())
+n = int(input())
+
+best = 0
+for nex in range(1,n):
+    arr = [0 for _ in range(n)]
+    arr[nex] = 1
+    val = query(best, nex)
+    if val == 0:
+        best = nex
+
+
 
 # read line as a string
 # srr = input().strip()

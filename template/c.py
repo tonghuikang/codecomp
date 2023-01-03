@@ -69,6 +69,7 @@ def solve_(n,m,arr):
         if psum < 0:
             res += 1
             psum -= 2*x
+        assert psum >= 0
 
     psum = 0
     for x in left[::-1]:
@@ -76,6 +77,7 @@ def solve_(n,m,arr):
         if psum < 0:
             res += 1
             psum += 2*x
+        assert psum >= 0
 
     return res
 
