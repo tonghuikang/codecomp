@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter, defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +50,96 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+    # faster implementation of DSU
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            # WARNING: non-negative numeric elements only
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.find(a)]
+
+
+
+def solve_(n,m,arr,brr,xrr):
     # your solution here
 
-    return ""
+    for a,b in zip(arr, brr):
+        if a < b:
+            return no
+
+    ds = DisjointSet(n)
+
+    valset = set(arr) | set(brr) | set(xrr)
+    cxrr = Counter(xrr)
+
+    bidx = defaultdict(list)
+    for i,x in enumerate(brr):
+        bidx[x].append(i)
+
+    vals = sorted(valset)
+
+    seen = [0 for _ in range(n)]
+
+    for x in vals:
+        if x not in bidx:
+            continue
+        cnt = cxrr[x]
+
+        for idx in bidx[x]:
+            seen[idx] = 1
+            if idx != 0 and seen[idx-1] == 1:
+                ds.union(idx, idx-1)
+            if idx != n-1 and seen[idx+1] == 1:
+                ds.union(idx, idx+1)
+
+        for idx in bidx[x]:
+            ds.find(idx)
+
+        leaders = set()
+        for idx in bidx[x]:
+            leader = ds.find(idx)
+            if brr[idx] == arr[idx]:
+                continue
+            leaders.add(leader)
+        
+        log(x, cnt, len(leaders), seen)
+
+        if len(leaders) > cnt:
+            return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,8 +147,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
-    # k = int(input())
+    n = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -74,15 +157,19 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
+
+    m = int(input())
+    xrr = list(map(int,input().split()))
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,arr,brr,xrr)  # include input here
 
     # print length if applicable
     # print(len(res))

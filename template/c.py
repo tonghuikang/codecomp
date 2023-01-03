@@ -55,7 +55,7 @@ def minus_one_matrix(mrr):
 def solve_(n,m,arr):
     # your solution here
 
-    left = arr[:m]
+    left = arr[1:m]
     right = arr[m:]
 
     log(left)
@@ -71,7 +71,7 @@ def solve_(n,m,arr):
             psum -= 2*x
 
     psum = 0
-    for x in left[1:][::-1]:
+    for x in left[::-1]:
         psum -= x
         if psum < 0:
             res += 1
