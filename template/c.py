@@ -55,6 +55,12 @@ def minus_one_matrix(mrr):
 def solve_(n,m,arr):
     # your solution here
 
+    left = arr[:m]
+    right = arr[m:]
+
+    log(left)
+    log(right)
+
     return ""
 
 
