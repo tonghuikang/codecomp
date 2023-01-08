@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import bisect
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +50,45 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+
 def solve_(n,m,arr):
     # your solution here
 
-    return ""
+    # you need to win n-place games for ith place
+    # case on whether you with the current n-place user
+
+    vals = sorted(arr)
+    # if sum(vals[:-1]) <= m:
+    #     return 1
+
+    psum = [0]
+    for x in vals:
+        psum.append(psum[-1] + x)
+
+    pool = set()
+    remainder = m
+    for x in vals:
+        remainder -= m
+        if remainder < 0:
+            pool.add(x)
+
+    maxres = 0
+    for i,x in enumerate(arr):        
+        # idx = how many other people you can win if won against x
+        if m - x >= 0:
+            idx = bisect.bisect_right(psum, m - x) - 1
+            if x not in pool:
+                idx -= 1
+            res = idx
+            if res+1 == i:
+                res += 1
+            res += 1
+            # log(i,x,idx,res)
+            maxres = max(maxres, res)
+
+    # log(maxres)
+
+    return n + 1 - maxres
 
 
 # for case_num in [0]:  # no loop over test case
