@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,33 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,arr,brr):
     # your solution here
 
-    return ""
+    psum = [0 for _ in range(n+1)]
+
+    for a,b in zip(arr, brr):
+        if a <= b:
+            continue
+        a -= 1
+        b -= 1
+        psum[b] += 1
+        psum[a] -= 1
+
+    log(psum)
+
+    vals = [0]
+    for x in psum:
+        vals.append(vals[-1] + x)
+
+    log(vals)
+
+    res = []
+    for i in range(1, n+1):
+        if vals[i] == 0:
+            res.append(i)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +83,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,7 +94,8 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,13 +103,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
-
+    res = solve(n,arr,brr)  # include input here
+    print(len(res))
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

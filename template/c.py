@@ -83,7 +83,7 @@ def solve_(n,m,arr):
             if res+1 == i:
                 res += 1
             res += 1
-            # log(i,x,idx,res)
+            log(i,x,idx,res)
             maxres = max(maxres, res)
 
     # log(maxres)
