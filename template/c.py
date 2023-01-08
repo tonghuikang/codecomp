@@ -58,8 +58,8 @@ def solve_(n,m,arr):
     # case on whether you with the current n-place user
 
     vals = sorted(arr)
-    # if sum(vals[:-1]) <= m:
-    #     return 1
+    if sum(vals[:-1]) <= m:
+        return 1
 
     psum = [0]
     for x in vals:
@@ -77,12 +77,15 @@ def solve_(n,m,arr):
         # idx = how many other people you can win if won against x
         if m - x >= 0:
             idx = bisect.bisect_right(psum, m - x) - 1
-            if x not in pool:
-                idx -= 1
+            boo = True
+            if x < vals[idx]:
+                idx = bisect.bisect_right(psum, m) - 1
+                boo = False
             res = idx
             if res+1 == i:
                 res += 1
-            res += 1
+            if boo:
+                res += 1
             log(i,x,idx,res)
             maxres = max(maxres, res)
 
