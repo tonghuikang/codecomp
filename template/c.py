@@ -57,6 +57,11 @@ def solve_(n,m,arr):
     # you need to win n-place games for ith place
     # case on whether you with the current n-place user
 
+    if n == 1:
+        if m < arr[0]:
+            return 2
+        return 1
+
     vals = sorted(arr)
     if sum(vals[:-1]) <= m:
         return 1
@@ -73,7 +78,7 @@ def solve_(n,m,arr):
             pool.add(x)
 
     maxres = 0
-    for i,x in enumerate(arr):        
+    for i,x in enumerate(arr):
         # idx = how many other people you can win if won against x
         if m - x >= 0:
             idx = bisect.bisect_right(psum, m - x) - 1
