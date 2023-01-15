@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,37 +50,107 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def get_prime_factors(nr):
-    # factorise a single number into primes in O(sqrt(n))
-    i = 2
-    factors = []
-    while i <= nr:
-        if i > math.sqrt(nr):
-            i = nr
-        if (nr % i) == 0:
-            factors.append(i)
-            nr = nr // i
-        elif i == 2:
-            i = 3
-        else:
-            i = i + 2
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+SIZE_OF_PRIME_ARRAY = 10**5 + 10
+largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+
+
+def get_prime_factors_with_precomp_sqrt(num):
+    # requires precomputed `primes``
+    # for numbers below SIZE_OF_PRIME_ARRAY**2
+    # O(sqrt(n) / log(n))
+
+    if num == 1:
+        # may need to edit depending on use case
+        return []
+ 
+    factors = [] 
+    for p in primes:
+        while num%p == 0:
+            factors.append(p)
+            num = num // p
+        # if num < p:  # remaining factor is a prime?
+        #     break
+    if num > 1:
+        # remaining number is a prime
+        factors.append(num)
+ 
     return factors
 
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j]*prime_pow)
+
+    # NOT IN SORTED ORDER
+    return divs
+
+
+
+def check_square(x):
+    return (x**0.5 // 1)**2 == x
 
 
 def solve_(arr):
     # factorize each difference for candidate x
 
-
+    kset = set()
     for i,x in enumerate(arr):
         for j,y in enumerate(arr[i+1:], start=i+1):
             diff = y-x
-            factors = get_prime_factors(nr)
-            log(factors)
+            factors = get_prime_factors_with_precomp_sqrt(diff)
+            divisors = get_all_divisors_given_prime_factorization(factors)
+            # log(divisors)
+            for p in divisors:
+                q = diff // p
+                if (p + q) % 2 != 0:
+                    continue
+                if (p - q) % 2 != 0:
+                    continue
+                a = (p - q) // 2
+                b = (p + q) // 2
+                a = a*a
+                b = b*b
+                if a < x:
+                    continue
+                if b < y:
+                    continue
+                k = a - x
+                # log(x,y,a,b,k)
+                kset.add(k)
 
+    # log(kset)
 
+    maxres = 1
+    for k in kset:
+        res = 0
+        for x in arr:
+            if check_square(x+k):
+                res += 1
+        maxres = max(maxres, res)
 
-    return ""
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -90,7 +158,7 @@ def solve_(arr):
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -101,7 +169,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -109,7 +177,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
