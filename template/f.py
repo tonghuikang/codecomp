@@ -59,8 +59,8 @@ def solve_(n,p):
     # your solution here
 
     q = 10000-p
-    p = p*modinv_p(10000)
-    q = q*modinv_p(10000)
+    p = (p*modinv_p(10000))%m9
+    q = (q*modinv_p(10000))%m9
 
     dp = {}
     arr = [0 for _ in range(LARGE)]
@@ -100,7 +100,7 @@ def solve_(n,p):
 
         dp = new_dp
 
-    log(dp)
+    # log(dp)
 
     return sum(dp.values())%m9
 
