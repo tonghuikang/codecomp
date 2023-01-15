@@ -9,6 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
+abc = "abcdefghijklmnopqrstuvwxyz"
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
@@ -52,10 +53,72 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, srr):
     # your solution here
 
-    return ""
+    cntr = Counter(srr)
+    vals = sorted(list(cntr.values()))[::-1] + [0]*(n-len(cntr))
+    log(cntr)
+    log(vals)
+
+    minval = 0
+    mincnt = n
+    for x in range(1,27):
+        if n%x:
+            continue
+        target = [n//x]*x + [0]*(26-x)
+        log(vals)
+        log(target)
+        cnt = 0
+        for a,b in zip(vals, target):
+            cnt += abs(a-b)
+        log(cnt)
+        if cnt < mincnt:
+            mincnt = cnt
+            minval = x
+
+    x = minval
+    # log(mincnt)
+    assert mincnt%2 == 0
+    print(mincnt // 2)
+    # log(minval)
+
+    vals = sorted(cntr.items(), key=lambda x:x[1], reverse=True)
+    target = [(k,n//minval) for k,v in vals[:minval]]
+    for a in abc:
+        if (a,n//minval) not in target:
+            vals.append((a,0))
+    for a in abc:
+        if (a,n//minval) not in target:
+            if len(target) < minval:
+                target.append((a,n//minval))
+            else:
+                target.append((a,0))
+    
+    c2 = Counter()
+    for k,v in target:
+        c2[k] = v
+
+    # log(c2)
+    assert sum(c2.values()) == n
+
+    res = []
+    for c in srr:
+        if cntr[c] > c2[c]:
+            for a in abc:
+                if cntr[a] < c2[a]:
+                    res.append(a)
+                    cntr[c] -= 1
+                    cntr[a] += 1
+                    break
+        else:
+            res.append(c)
+
+    # log(res)
+    assert len(res) == len(srr)
+    assert sum(a != b for a,b in zip(res, srr)) == mincnt // 2
+
+    return "".join(res)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,11 +126,11 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -82,7 +145,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, srr)  # include input here
 
     # print length if applicable
     # print(len(res))
