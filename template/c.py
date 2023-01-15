@@ -57,28 +57,31 @@ def solve_(n, srr):
     # your solution here
 
     cntr = Counter(srr)
-    vals = sorted(list(cntr.values()))[::-1] + [0]*(n-len(cntr))
+    vals = sorted(list(cntr.values()))[::-1] + [0]*(26-len(cntr))
     # log(cntr)
     # log(vals)
 
     minval = 0
-    mincnt = n
+    mincnt = 2*n+1
     for x in range(1,27):
         if n%x:
             continue
         target = [n//x]*x + [0]*(26-x)
-        # log(vals)
-        # log(target)
         cnt = 0
         for a,b in zip(vals, target):
             cnt += abs(a-b)
+
+        # log(vals)
+        # log(target)
+        # log(cnt)
+
         # log(cnt)
         if cnt < mincnt:
             mincnt = cnt
             minval = x
 
     x = minval
-    # log(mincnt)
+    log(minval, mincnt)
     assert mincnt%2 == 0
     print(mincnt // 2)
     # log(minval)
@@ -121,9 +124,9 @@ def solve_(n, srr):
     return "".join(res)
 
 
-while OFFLINE_TEST:
+while OFFLINE_TEST and False:
     n = random.randint(1,100)
-    srr = [random.choice(abc) for x in range(n)]
+    srr = "".join([random.choice(abc) for x in range(n)])
     solve(n, srr)
 
 
