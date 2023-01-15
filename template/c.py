@@ -121,6 +121,12 @@ def solve_(n, srr):
     return "".join(res)
 
 
+while OFFLINE_TEST:
+    n = random.randint(1,100)
+    srr = [random.choice(abc) for x in range(n)]
+    solve(n, srr)
+
+
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
