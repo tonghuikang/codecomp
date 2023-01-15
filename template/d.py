@@ -52,8 +52,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def get_prime_factors(nr):
+    # factorise a single number into primes in O(sqrt(n))
+    i = 2
+    factors = []
+    while i <= nr:
+        if i > math.sqrt(nr):
+            i = nr
+        if (nr % i) == 0:
+            factors.append(i)
+            nr = nr // i
+        elif i == 2:
+            i = 3
+        else:
+            i = i + 2
+    return factors
+
+
+
+def solve_(arr):
+    # factorize each difference for candidate x
+
+
+    for i,x in enumerate(arr):
+        for j,y in enumerate(arr[i+1:], start=i+1):
+            diff = y-x
+            factors = get_prime_factors(nr)
+            log(factors)
+
+
 
     return ""
 
