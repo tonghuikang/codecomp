@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -51,16 +49,65 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def modinv_p(base, p=m9):
+    # modular if the modulo is a prime
+    return pow(base, p-2, p)
 
-def solve_():
+LARGE = 25
+
+def solve_(n,p):
     # your solution here
 
-    return ""
+    q = 10000-p
+    p = p*modinv_p(10000)
+    q = q*modinv_p(10000)
+
+    dp = {}
+    arr = [0 for _ in range(LARGE)]
+    arr[0] = 2
+    arr[1] = 1
+    dp[tuple(arr)] = p
+
+    for k in range(1,n):
+        new_dp = Counter()
+        numpos = 2*k+1
+        mpos = modinv_p(numpos)
+        for arr,v in dp.items():
+            v = (v%m9 * mpos)%m9
+            arr = list(arr)
+
+            for i in range(0, LARGE-2):
+                if arr[i] == 0:
+                    continue
+                cnt = arr[i]
+
+                arr[i+1] += 1
+                arr[i] += 1
+                new_dp[tuple(arr)] += cnt * v * p
+                arr[i+1] -= 1
+                arr[i] -= 1
+
+            for i in range(1, LARGE-2):
+                if arr[i] == 0:
+                    continue
+                cnt = arr[i]
+
+                arr[i-1] += 1
+                arr[i] += 1
+                new_dp[tuple(arr)] += cnt * v * q
+                arr[i-1] -= 1
+                arr[i] -= 1
+
+        dp = new_dp
+
+    log(dp)
+
+    return sum(dp.values())%m9
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,7 +120,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,p = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,7 +129,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,p)  # include input here
 
     # print length if applicable
     # print(len(res))
