@@ -109,13 +109,14 @@ def get_all_divisors_given_prime_factorization(factors):
 
 
 def check_square(x):
-    return (x**0.5 // 1)**2 == x
+    root = int(x**0.5)
+    return root*root == x
 
 
 def solve_(arr):
     # factorize each difference for candidate x
 
-    kset = set()
+    kset = set([0,1,2])
     for i,x in enumerate(arr):
         for j,y in enumerate(arr[i+1:], start=i+1):
             diff = y-x
@@ -124,21 +125,22 @@ def solve_(arr):
             # log(divisors)
             for p in divisors:
                 q = diff // p
-                if (p + q) % 2 != 0:
-                    continue
-                if (p - q) % 2 != 0:
-                    continue
+                # if (p + q) % 2 != 0:
+                #     continue
+                # if (p - q) % 2 != 0:
+                #     continue
                 a = (p - q) // 2
                 b = (p + q) // 2
                 a = a*a
                 b = b*b
-                if a < x:
-                    continue
-                if b < y:
-                    continue
+                # if a < x:
+                #     continue
+                # if b < y:
+                #     continue
                 k = a - x
                 # log(x,y,a,b,k)
-                kset.add(k)
+                if k >= 0:
+                    kset.add(k)
 
     # log(kset)
 
