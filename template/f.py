@@ -53,7 +53,7 @@ def modinv_p(base, p=m9):
     # modular if the modulo is a prime
     return pow(base, p-2, p)
 
-LARGE = 25
+LARGE = 1005
 
 def solve_(n,p):
     # your solution here
@@ -69,6 +69,7 @@ def solve_(n,p):
     dp[tuple(arr)] = p
 
     for k in range(1,n):
+        log(k, len(dp))
         new_dp = Counter()
         numpos = 2*k+1
         mpos = modinv_p(numpos)

@@ -52,10 +52,93 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,mrr):
     # your solution here
 
-    return ""
+    rects = []   # left, right, 1,2,3, idx
+
+    for idx,(u,l,d,r) in enumerate(mrr):
+        if u == d == 1:
+            rects.append([l,r,1,idx])
+        elif u == d == 2:
+            rects.append([l,r,2,idx])
+        elif u == 1 and d == 2:
+            rects.append([l,r,3,idx])
+        else:
+            log(u,l,d,r)
+            assert False
+
+    rects.sort()
+
+    curtop = -1
+    curbot = -1
+    curtopidx = -1
+    curbotidx = -1
+
+    # end current rectangle if incoming rectangle ends later
+    
+    for l,r,ty,idx in rects:
+        log(l,r,ty,idx)
+        log(mrr)
+
+        if ty == 3:
+            if curtop >= r and curbot >= r:
+                mrr[idx] = [0,0,0,0]
+                continue
+            elif curbot >= r:
+                mrr[idx][0] = 1
+                mrr[idx][2] = 1
+                ty = 1
+            elif curtop >= r:
+                mrr[idx][0] = 2
+                mrr[idx][2] = 2
+                ty = 2
+            else:
+                log(l,r,ty,idx)
+                if curtop >= l and curtopidx >= 0:
+                    mrr[curtopidx][3] = l
+                if curbot >= l and curbotidx >= 0:
+                    mrr[curbotidx][3] = l
+                curtop = r
+                curbot = r
+                curtopidx = idx
+                curbotidx = idx
+                continue
+    
+        if ty == 1:
+            if curtop >= r:
+                mrr[idx] = [0,0,0,0]
+                continue
+            if curtop >= l and curtopidx >= 0:
+                mrr[idx][3] = l
+            curtop = r
+            curtopidx = idx
+            continue
+        
+        if ty == 2:
+            if curbot >= r:
+                mrr[idx] = [0,0,0,0]
+                continue
+            if curbot >= l and curbotidx >= 0:
+                mrr[idx][3] = l
+            curbot = r
+            curbotidx = idx
+            continue
+
+    res = 0
+    ret = []
+    for u,l,d,r in mrr:
+        if u == 0:
+            ret.append([0,0,0,0])
+            continue
+        if r <= l:
+            ret.append([0,0,0,0])
+            continue
+        ret.append((u,d,l,r-1))
+        res += (d-u+1) * (r-l)
+    print(res)
+
+    return mrr
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +146,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -79,10 +162,11 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
+    mrr = [[u,l,d,r+1] for u,l,d,r in mrr]
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -90,7 +174,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
