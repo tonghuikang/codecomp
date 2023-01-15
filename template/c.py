@@ -58,8 +58,8 @@ def solve_(n, srr):
 
     cntr = Counter(srr)
     vals = sorted(list(cntr.values()))[::-1] + [0]*(n-len(cntr))
-    log(cntr)
-    log(vals)
+    # log(cntr)
+    # log(vals)
 
     minval = 0
     mincnt = n
@@ -67,12 +67,12 @@ def solve_(n, srr):
         if n%x:
             continue
         target = [n//x]*x + [0]*(26-x)
-        log(vals)
-        log(target)
+        # log(vals)
+        # log(target)
         cnt = 0
         for a,b in zip(vals, target):
             cnt += abs(a-b)
-        log(cnt)
+        # log(cnt)
         if cnt < mincnt:
             mincnt = cnt
             minval = x
