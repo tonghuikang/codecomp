@@ -123,6 +123,54 @@ def split_when_different(lst):
     return res
 
 
+def two_pointers(arr, entry_func, exit_func, condition):
+    # number of subarrays that passes condition
+
+    nonlocal cnt
+    n = len(arr)
+    # entry_func(right) -> None
+    # exit_func(left) -> None
+    # condition() -> bool
+
+    res = 0
+    right = 0
+    for left in range(n):
+        # advance until condition passes
+        while right < n and not condition():
+            entry_func(right)
+            right += 1
+        if condition():  # possible that right == n and not pass
+            res += n - right + 1
+        exit_func(left)
+    return res
+
+
+# def entry_func(right):
+#     nonlocal cnt
+#     x = nums[right]
+#     prev = cntr[x]
+#     cntr[x] += 1
+#     after = cntr[x]
+#     diff = (after * (after-1) // 2) - (prev * (prev-1) // 2)
+#     cnt += diff
+
+# def exit_func(left):
+#     nonlocal cnt
+#     x = nums[left]
+#     prev = cntr[x]
+#     cntr[x] -= 1
+#     after = cntr[x]
+#     diff = (after * (after-1) // 2) - (prev * (prev-1) // 2)
+#     cnt += diff
+    
+# def condition():
+#     return cnt >= k
+
+# cntr = Counter()
+# cnt = 0
+# res = two_pointers(nums, entry_func, exit_func, condition)
+
+
 def gathering_cost(xpos):
     # the cost to gather every item to each location
     xpos = sorted(xpos)
