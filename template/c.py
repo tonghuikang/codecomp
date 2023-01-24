@@ -90,7 +90,7 @@ def solve_(n, arr):
 
     log(a,b)
 
-    cur = left + 1
+    cur = left - 1
     c1 = 0
     while a >= 0:
         if arr[a] == cur:
@@ -100,7 +100,7 @@ def solve_(n, arr):
         else:
             a -= 1
 
-    cur = right - 1
+    cur = right + 1
     c2 = 0
     while b < n:
         if arr[b] == cur:
