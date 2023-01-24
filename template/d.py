@@ -52,10 +52,37 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def inverse_permutation(perm):
+    # https://stackoverflow.com/questions/9185768/inverting-permutations-in-python
+    return sorted(range(len(perm)), key=perm.__getitem__)
+
+
+def solve_(n, k, mrr):
     # your solution here
 
-    return ""
+    seen = set()
+
+    for perm in mrr:
+        inv = inverse_permutation(perm)
+        # log(perm)
+        # log(inv)
+        # log()
+        for i in range(1, k+1):
+            val = tuple(inv[:i])
+            seen.add(val)
+
+    res = []
+    for perm in mrr:
+        inv = inverse_permutation(perm)
+        for i in range(k, 0, -1):
+            val = tuple(perm[:i])
+            if val in seen:
+                res.append(i)
+                break
+        else:
+            res.append(0)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,22 +100,22 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n, k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(n)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, k, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

@@ -117,6 +117,12 @@ def solve_(n,m1,m2):
     factor1 = get_prime_factors_with_precomp_sqrt(m1)
     factor2 = get_prime_factors_with_precomp_sqrt(m2)
 
+    arr = get_all_divisors_given_prime_factorization(factor1)
+    arr.sort()
+
+    # log(arr)
+    log(len(arr))
+
     arr = get_all_divisors_given_prime_factorization(factor1 + factor2)
     arr.sort()
 
