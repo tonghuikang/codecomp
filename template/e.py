@@ -108,6 +108,7 @@ def get_prime_factors_with_precomp_sqrt(num):
     return factors
 
 
+import bisect
 
 def solve_(n,m1,m2):
     # your solution here
@@ -120,55 +121,24 @@ def solve_(n,m1,m2):
     arr = get_all_divisors_given_prime_factorization(factor1 + factor2)
     arr.sort()
 
-    primes2 = sorted(Counter(factor1 + factor2).keys())
-    # log(primes2)
-
-    def get_prime_factors_with_precomp_sqrt2(num):
-        # requires precomputed `primes2``
-        # for numbers below SIZE_OF_PRIME_ARRAY**2
-        # O(sqrt(n) / log(n))
-
-        if num == 1:
-            # may need to edit depending on use case
-            return []
-    
-        factors = [] 
-        for p in primes2:
-            while num%p == 0:
-                factors.append(p)
-                num = num // p
-            # if num < p:  # remaining factor is a prime?
-            #     break
-        if num > 1:
-            # remaining number is a prime
-            factors.append(num)
-    
-        return factors
-
-    # brr = []
-    # crr = []
-
     n2 = n*n
+
+    log(arr)
 
     res = []
     for x in arr:
         if x <= n:
             res.append(1)
-            # brr.append(x)
         elif x <= n2:
-            factors = get_prime_factors_with_precomp_sqrt2(x)
-            vals = get_all_divisors_given_prime_factorization(factors)
-            # log(x, vals)
-            minval = n+1
-            for y in vals:
-                if y <= n and x // y <= n:
-                    minval = min(minval, x, y)
-            if minval == n+1:
-                res.append(0)
-            else:
-                res.append(minval)
+            idx = max(0, bisect.bisect_right(arr, x // n) - 2)
+            while idx < len(arr) and arr[idx] <= n:
+                if x % arr[idx] == 0 and x // arr[idx] <= n:
+                    log(x, arr[idx])
+                    res.append(arr[idx])
+                    break
+                idx += 1
         else:
-            res.append(0)
+            break
 
     # log(arr)
     # log(res)
@@ -177,7 +147,7 @@ def solve_(n,m1,m2):
     for x in res:
         ret = ret^x
 
-    return len(res) - res.count(0), ret
+    return len(res), ret
 
 
 # for case_num in [0]:  # no loop over test case
