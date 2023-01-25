@@ -92,7 +92,7 @@ def alert2(pos):
         assert False
 
 
-for x in range(1, 1000):
+for x in range(1, 10000):
     log()
     log()
     log(x)
