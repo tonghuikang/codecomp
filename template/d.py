@@ -49,24 +49,32 @@ def solve(init, query, alert):
 
     global cnt
     cnt = 30
-    prev = 0
+    diff = 0
     prevk = k
 
     for q in range(30):
+        log()
         if k == 0:
             break
 
         prevk = k
-        val = 2**q
+        val = 2**q + diff
         log("-", val)
         res += val
         k = query(val)
 
-        if prevk <= k:
-            val = 2**q
-            log("-", val)
-            res += val
-            k = query(val)
+        if prevk < k:
+            diff = 2**q
+        elif prevk == k:
+            diff = 2**q - 2**(q+1)
+            # log("-", val)
+            # res += val
+            # k = query(val)
+        else:
+            diff = 0
+        log("diff", diff)
+
+
 
     assert cnt >= 0
     return res
@@ -84,7 +92,9 @@ def query2(pos):
         assert False
     x -= pos
     log(bin(x))
-    return bin(x).count("1")
+    k = bin(x).count("1")
+    log("k", k)
+    return k
 
 def alert2(pos):
     global x
@@ -92,7 +102,7 @@ def alert2(pos):
         assert False
 
 
-for x in range(1, 10000):
+for x in range(1, 100):
     log()
     log()
     log(x)
