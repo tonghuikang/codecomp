@@ -35,18 +35,46 @@ def alert(pos):
 
 # -----------------------------------------------------------------------------
 
-# read line as an integer
-for case_num in range(int(input())):
+
+def solve(init, query, alert):
     res = 0
-    k = int(input())
+    k = init
     for _ in range(30):
         if k == 0:
             break
         val = 2**(k) - 1
-        # log(val)
+        log("-", val)
         res += val
         k = query(val)
+        log(k)
+    else:
+        assert False
+    return res
 
+
+def query2(pos):
+    global x
+    if x < pos:
+        assert False
+    x -= pos
+    log(bin(x))
+    return bin(x).count("1")
+
+def alert2(pos):
+    global x
+    if x != pos:
+        assert False
+
+
+for x in range(1, 10000):
+    log(x)
+    solve(bin(x).count("1"), query2, alert2)
+
+
+# read line as an integer
+for case_num in range(int(input())):
+    k = int(input())
+    res = solve(k, query, alert)
     alert(res)
 
     # read line as a string
