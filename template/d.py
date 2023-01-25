@@ -45,34 +45,42 @@ def solve(init, query, alert):
     log(init)
     res = 0
     k = init
+    log("k", k)
 
     global cnt
     cnt = 30
-    while cnt:
-        prev = k
+    prev = 0
+    prevk = k
+
+    for q in range(30):
         if k == 0:
             break
-        val = 1
+
+        prevk = k
+        val = 2**q
         log("-", val)
         res += val
         k = query(val)
 
-        if k == 0:
-            break
-        if prev < k:
-            continue
+        if prevk <= k:
+            val = 2**q
+            log("-", val)
+            res += val
+            k = query(val)
 
-        val = 2**(k) - 1
-        log("-", val)
-        res += val
-        k = query(val)
-        log(k)
+    assert cnt >= 0
     return res
 
 
 def query2(pos):
     global x
+    global cnt
+    if cnt <= 0:
+        log("no cnt")
+        assert False
+    cnt -= 1
     if x < pos:
+        log("over pos")
         assert False
     x -= pos
     log(bin(x))
@@ -84,9 +92,18 @@ def alert2(pos):
         assert False
 
 
+for x in range(1, 1000):
+    log()
+    log()
+    log(x)
+    log(bin(x))
+    solve(bin(x).count("1"), query2, alert2)
+
+
 while OFFLINE_TEST:
     x = random.randint(1, 2**30 - 1)
     log(x)
+    log(bin(x))
     solve(bin(x).count("1"), query2, alert2)
 
 
