@@ -26,6 +26,10 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def query(pos):
+    global cnt
+    if cnt <= 0:
+        assert False
+    cnt -= 1
     print("- {}".format(pos), flush=True)
     response = int(input())
     return response
@@ -35,20 +39,34 @@ def alert(pos):
 
 # -----------------------------------------------------------------------------
 
+global cnt
 
 def solve(init, query, alert):
+    log(init)
     res = 0
     k = init
-    for _ in range(30):
+
+    global cnt
+    cnt = 30
+    while cnt:
+        prev = k
         if k == 0:
             break
+        val = 1
+        log("-", val)
+        res += val
+        k = query(val)
+
+        if k == 0:
+            break
+        if prev < k:
+            continue
+
         val = 2**(k) - 1
         log("-", val)
         res += val
         k = query(val)
         log(k)
-    else:
-        assert False
     return res
 
 
@@ -66,7 +84,8 @@ def alert2(pos):
         assert False
 
 
-for x in range(1, 10000):
+while OFFLINE_TEST:
+    x = random.randint(1, 2**30 - 1)
     log(x)
     solve(bin(x).count("1"), query2, alert2)
 
