@@ -26,19 +26,28 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def query(pos):
-    print("- {}".format(pos+1), flush=True)
+    print("- {}".format(pos), flush=True)
     response = int(input())
     return response
 
 def alert(pos):
-    print("! {}".format(pos+1), flush=True)
-    sys.exit()
+    print("! {}".format(pos), flush=True)
 
 # -----------------------------------------------------------------------------
 
 # read line as an integer
 for case_num in range(int(input())):
-    # k = int(input())
+    res = 0
+    k = int(input())
+    for _ in range(30):
+        if k == 0:
+            break
+        val = 2**(k) - 1
+        # log(val)
+        res += val
+        k = query(val)
+
+    alert(res)
 
     # read line as a string
     # srr = input().strip()
@@ -53,3 +62,4 @@ for case_num in range(int(input())):
 # -----------------------------------------------------------------------------
 
 # your code here
+sys.exit()
