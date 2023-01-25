@@ -52,10 +52,27 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,arr,crr):
     # your solution here
 
-    return ""
+    brr = list(Counter(arr).values())
+    crr.sort(reverse=True)
+
+    brr = [-x for x in brr]
+    heapq.heapify(brr)
+
+    res = 0
+    for x in crr:
+        if not brr:
+            break
+        y = -heapq.heappop(brr)
+        seated = min(x,y)
+        res += seated
+        y -= seated
+        if y:
+            heapq.heappush(brr, -y)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,8 +90,9 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    crr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,7 +100,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,arr,crr)  # include input here
 
     # print length if applicable
     # print(len(res))

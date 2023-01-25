@@ -55,7 +55,27 @@ def minus_one_matrix(mrr):
 def solve_(n,arr):
     # your solution here
 
-    return ""
+    # for x in arr:
+    #     if x%2 == 1:
+    #         break
+    # else:
+    #     return []
+
+    evens = []
+    odds = []
+    for i,x in enumerate(arr, start=1):
+        if x%2:
+            odds.append(i)
+        else:
+            evens.append(i)
+
+    if len(odds) >= 3:
+        return odds[:3]
+
+    if len(evens) >= 2 and len(odds) >= 1:
+        return evens[:2] + odds[:1]
+
+    return []
 
 
 # for case_num in [0]:  # no loop over test case
@@ -84,11 +104,17 @@ for case_num in range(int(input())):
 
     res = solve(n,arr)  # include input here
 
+    if not res:
+        print(no)
+        continue
+
+    print(yes)
+
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
