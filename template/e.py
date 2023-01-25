@@ -52,18 +52,27 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
 def solve_(l, r):
     if r > 3*l:
         log("shortcut")
         return r//2
 
-    allset = set()
-    for x in range(l, r):
-        for y in range(x+1, r+1):
-            z = math.gcd(x,y)
-            allset.add(z)
+    # allset = set()
+    # for x in range(l, r):
+    #     for y in range(x+1, r+1):
+    #         z = math.gcd(x,y)
+    #         allset.add(z)
 
-    return len(allset)
+    res = 0
+    for x in range(1, r-l+1):
+        if r // x != ceiling_division(l, x):
+            res += 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
