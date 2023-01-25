@@ -53,9 +53,17 @@ def minus_one_matrix(mrr):
 
 
 def solve_(l, r):
-    # your solution here
+    if r > 3*l:
+        log("shortcut")
+        return r//2
 
-    return ""
+    allset = set()
+    for x in range(l, r):
+        for y in range(x+1, r+1):
+            z = math.gcd(x,y)
+            allset.add(z)
+
+    return len(allset)
 
 
 # for case_num in [0]:  # no loop over test case
