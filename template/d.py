@@ -26,7 +26,7 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def query(pos):
-    print("? {}".format(pos+1), flush=True)
+    print("- {}".format(pos+1), flush=True)
     response = int(input())
     return response
 
@@ -37,17 +37,18 @@ def alert(pos):
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-# k = int(input())
+for case_num in range(int(input())):
+    # k = int(input())
 
-# read line as a string
-# srr = input().strip()
+    # read line as a string
+    # srr = input().strip()
 
-# read one line and parse each word as a string
-# lst = input().split()
+    # read one line and parse each word as a string
+    # lst = input().split()
 
-# read one line and parse each word as an integer
-# a,b,c = list(map(int,input().split()))
-# lst = list(map(int,input().split()))
+    # read one line and parse each word as an integer
+    # a,b,c = list(map(int,input().split()))
+    # lst = list(map(int,input().split()))
 
 # -----------------------------------------------------------------------------
 
