@@ -113,8 +113,8 @@ def solve_(n):
     return res
 
 
-for _ in range(1000):
-    solve(333333009)
+# for _ in range(1000):
+#     solve(333333009)
 
 
 # for case_num in [0]:  # no loop over test case
