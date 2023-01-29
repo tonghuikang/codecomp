@@ -84,7 +84,7 @@ def solve_(n,k,x):
         if x in taken:
             continue
 
-        log(x, res, prevs)
+        # log(x, res, prevs)
 
         y = x^target
         if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
