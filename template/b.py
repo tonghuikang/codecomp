@@ -64,7 +64,7 @@ def get_largest_prime_factors(num):
     return largest_prime_factors
 
 
-SIZE_OF_PRIME_ARRAY = 10**6 + 10
+SIZE_OF_PRIME_ARRAY = int(10**(4.5)) + 10
 largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
 primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
 
