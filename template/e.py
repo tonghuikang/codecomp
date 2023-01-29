@@ -119,7 +119,7 @@ def solve_(n,k,x):
         if x not in taken:
             res[-1].append(x)
 
-    log(res)
+    # log(res)
 
     if len(res) < k or res[-1] == []:
         return []
