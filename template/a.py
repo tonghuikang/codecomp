@@ -55,16 +55,22 @@ def minus_one_matrix(mrr):
 LARGE = 10**9
 d = {}
 
-for x in range(10000):
-    for y in range(10000):
+for x in range(1,10000):
+    for y in range(1,10000):
         val = x**y * y + y**x * x
         if val <= LARGE:
-            d[val] = (x,y)
+            if val not in d:
+                d[val] = (x,y)
         else:
             break
 
+# log(d)
+log(len(d))
 
 def solve_(n):
+
+    if n%2 == 0:
+        return [n//2, 1]
     # your solution here
 
     if n in d:
