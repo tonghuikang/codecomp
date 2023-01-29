@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,77 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
+    arr = [0] + arr
 
-    return ""
+    # you can't jump to any loops, any of your ancestors
+    g = [[] for _ in range(n+1)]
+
+    for i,x in enumerate(arr[1:], start=1):
+        nex = i+x
+        if 1 <= nex <= n:
+            g[nex].append(i)
+
+    # positions in loops
+    visited = set()
+    loop_set = set()
+    for i,x in enumerate(arr[1:], start=1):
+        if i in visited:
+            continue
+        cur = i
+        cur_visited = set([cur])
+        while True:
+            nex = arr[cur] + cur
+            if not (1 <= nex <= n):
+                visited.update(cur_visited)
+                break
+            if nex in cur_visited or nex in loop_set:
+                visited.update(cur_visited)
+                loop_set.update(cur_visited)
+                break
+            cur_visited.add(nex)
+            cur = nex
+
+    # log(loop_set)
+    # log(g)
+
+    cur = 1
+    cyclic = True
+
+    res = n * (2*n + 1)
+
+    seen = loop_set
+    pathset = set()
+    while True:
+        stack = [cur]
+        pathset.add(cur)
+        while stack:
+            a = stack.pop()
+            seen.add(a)
+            for b in g[a]:
+                if b in seen:
+                    continue
+                seen.add(b)
+                stack.append(b)
+        # log(cur, seen)
+        res -= len(seen)
+        cur = cur + arr[cur]
+        if not (1 <= cur <= n):
+            cyclic = False
+            break
+        if cur in pathset:
+            break
+
+    # log("cyclic", cyclic)
+
+    if not cyclic:
+        return res
+
+
+    return len(pathset) * (2*n+1 - len(loop_set)) 
+
+    
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +127,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,7 +138,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,7 +146,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
