@@ -52,10 +52,25 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+LARGE = 10**9
+d = {}
+
+for x in range(10000):
+    for y in range(10000):
+        val = x**y * y + y**x * x
+        if val <= LARGE:
+            d[val] = (x,y)
+        else:
+            break
+
+
+def solve_(n):
     # your solution here
 
-    return ""
+    if n in d:
+        return d[n]
+
+    return [-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +78,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -82,13 +97,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
