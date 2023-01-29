@@ -86,13 +86,13 @@ def solve_(n,k,x):
             continue
         if x == y:
             continue
-        if y == 0:
-            taken.add(x)
-            res.append([x])
-            continue
+        
         taken.add(x)
         taken.add(y)
-        res.append([x,y])
+        if y == 0:
+            res.append([x])
+        else:
+            res.append([x,y])
     
     if len(res) < k:
         res.append([])
