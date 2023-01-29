@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
 input = sys.stdin.readline  # to read input quickly
-from collections import deque
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -57,7 +56,7 @@ def solve_(n,k,x):
     xand = 0
     for i in range(1,n+1):
         xor = xor^i
-        xand = xor|i
+        xand = xand|i
 
     if k%2 and xor != x:
         return []
@@ -76,74 +75,25 @@ def solve_(n,k,x):
 
     res = []
 
-    for x in range(n,1,-1):
+    for x in range(n,0,-1):
         if len(res) == k:
             break
 
         y = x^target
-        if (not (y in taken)) and (not (y > n)) and (not (x == y)):   
-            if len(bin(x)) == len(bin(y)):
-                taken.add(x)
-                taken.add(y)
-                if y == 0:
-                    res.append([x])
-                else:
-                    res.append([x,y])
-                continue
-
-
-    for x in range(n,1,-1):
-        if len(res) == k:
-            break
-
-        y = x^target
-        if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
+        if y in taken:
+            continue
+        if y > n:
+            continue
+        if x == y:
+            continue
+        if y == 0:
             taken.add(x)
-            taken.add(y)
-            if y == 0:
-                res.append([x])
-            else:
-                res.append([x,y])
+            res.append([x])
             continue
-
-    prevs = deque([])
-
-    for x in range(n,1,-1):
-        if len(res) == k:
-            break
-
-        if x in taken:
-            continue
-
-        # log(x, res, prevs)
-
-        while prevs and prevs[-1] in taken:
-            prevs.pop()
-
-        if prevs:
-            z = prevs.pop()
-            y = x^z^target
-            if (not (y in taken)) and (not (y > n)) and (not (x == y)) and (not(x == z)) and (not (y == z)):        
-                taken.add(x)
-                taken.add(y)
-                taken.add(z)
-                res.append([x,y,z])
-                continue
-
-            prevs.append(z)
-
-        y = x^target
-        if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
-            taken.add(x)
-            taken.add(y)
-            if y == 0:
-                res.append([x])
-            else:
-                res.append([x,y])
-            continue
-        
-        prevs.appendleft(x)
-
+        taken.add(x)
+        taken.add(y)
+        res.append([x,y])
+    
     if len(res) < k:
         res.append([])
 
@@ -167,22 +117,8 @@ def solve_(n,k,x):
             check.add(x)
             xor = xor^x
         assert xor == target
-    assert len(check) == n
 
     return res
-
-
-# import random
-# while True:
-#     n = random.randint(1,100)
-#     k = random.randint(1,n)
-#     x = random.randint(1,n)
-
-#     if k%2:
-#         x = 0
-#         for i in range(1,n+1):
-#             x = x^i
-#     solve(n,k,x)        
 
 
 # for case_num in [0]:  # no loop over test case
