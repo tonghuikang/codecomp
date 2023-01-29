@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -99,10 +97,20 @@ def solve_(n):
     
     factors = get_prime_factors_with_precomp_sqrt(n)
 
-    log(factors)
+    c = Counter(factors)
 
+    res = 0
 
-    return ""
+    while c:
+        val = 1
+        for k in list(c.keys()):
+            c[k] -= 1
+            if c[k] == 0:
+                del c[k]
+            val = val*k
+        res += val
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
