@@ -77,7 +77,7 @@ def solve_(n,k,x):
     res = []
     prevs = deque([])
 
-    for x in range(n,0,-1):
+    for x in range(n,1,-1):
         if len(res) == k:
             break
 
@@ -100,7 +100,7 @@ def solve_(n,k,x):
             prevs.append(x)
             continue
 
-        z = prevs.popleft()
+        z = prevs.pop()
         y = x^z^target
         if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
             taken.add(x)
@@ -109,8 +109,8 @@ def solve_(n,k,x):
             res.append([x,y,z])
             continue
 
+        prevs.appendleft(z)
         prevs.append(x)
-        prevs.append(z)
 
     if len(res) < k:
         res.append([])
@@ -119,7 +119,7 @@ def solve_(n,k,x):
         if x not in taken:
             res[-1].append(x)
 
-    # log(res)
+    log(res)
 
     if len(res) < k or res[-1] == []:
         return []
@@ -137,6 +137,19 @@ def solve_(n,k,x):
         assert xor == target
 
     return res
+
+
+# import random
+# while True:
+#     n = random.randint(1,10)
+#     k = random.randint(1,n)
+#     x = random.randint(1,n)
+
+#     if k%2:
+#         x = 0
+#         for i in range(1,n+1):
+#             x = x^i
+#     solve(n,k,x)        
 
 
 # for case_num in [0]:  # no loop over test case
