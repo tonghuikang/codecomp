@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -76,15 +73,52 @@ def solve_(n,k,x):
 
     taken = set()
 
+    res = []
+
     for x in range(n,0,-1):
+        if len(res) == k:
+            break
+
         y = x^target
         if y in taken:
-            break
-        log(x, y)
+            continue
+        if y > n:
+            continue
+        if x == y:
+            continue
+        if y == 0:
+            taken.add(x)
+            res.append([x])
+            continue
+        taken.add(x)
+        taken.add(y)
+        res.append([x,y])
+    
+    if len(res) < k:
+        res.append([])
 
-    log(xor)
+    for x in range(n,0,-1):
+        if x not in taken:
+            res[-1].append(x)
 
-    return ""
+    log(res)
+
+    if len(res) < k or res[-1] == []:
+        return []
+
+    assert len(res) == k
+    check = set()
+    for arr in res:
+        xor = 0
+        assert len(arr) >= 1
+        for x in arr:
+            assert 1 <= x <= n
+            assert x not in check
+            check.add(x)
+            xor = xor^x
+        assert xor == target
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -116,6 +150,8 @@ for case_num in range(int(input())):
     if res == []:
         print(no)
         continue
+    
+    print(yes)
 
     # print length if applicable
     # print(len(res))
@@ -123,7 +159,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(str(len(row)) + " " + " ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
