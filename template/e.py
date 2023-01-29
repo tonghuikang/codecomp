@@ -86,6 +86,18 @@ def solve_(n,k,x):
 
         # log(x, res, prevs)
 
+        if prevs:
+            z = prevs.pop()
+            y = x^z^target
+            if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
+                taken.add(x)
+                taken.add(y)
+                taken.add(z)
+                res.append([x,y,z])
+                continue
+
+            prevs.appendleft(z)
+
         y = x^target
         if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
             taken.add(x)
@@ -96,20 +108,6 @@ def solve_(n,k,x):
                 res.append([x,y])
             continue
         
-        if not prevs:
-            prevs.append(x)
-            continue
-
-        z = prevs.pop()
-        y = x^z^target
-        if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
-            taken.add(x)
-            taken.add(y)
-            taken.add(z)
-            res.append([x,y,z])
-            continue
-
-        prevs.appendleft(z)
         prevs.append(x)
 
     if len(res) < k:
