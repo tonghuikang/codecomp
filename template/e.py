@@ -70,7 +70,17 @@ def solve_(n,k,x):
     if xand < x:
         return []
 
-    
+
+    target = x
+    del x
+
+    taken = set()
+
+    for x in range(n,0,-1):
+        y = x^target
+        if y in taken:
+            break
+        log(x, y)
 
     log(xor)
 
