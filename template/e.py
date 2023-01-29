@@ -75,6 +75,37 @@ def solve_(n,k,x):
     taken = set()
 
     res = []
+
+    for x in range(n,1,-1):
+        if len(res) == k:
+            break
+
+        y = x^target
+        if (not (y in taken)) and (not (y > n)) and (not (x == y)):   
+            if len(bin(x)) == len(bin(y)):
+                taken.add(x)
+                taken.add(y)
+                if y == 0:
+                    res.append([x])
+                else:
+                    res.append([x,y])
+                continue
+
+
+    for x in range(n,1,-1):
+        if len(res) == k:
+            break
+
+        y = x^target
+        if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
+            taken.add(x)
+            taken.add(y)
+            if y == 0:
+                res.append([x])
+            else:
+                res.append([x,y])
+            continue
+
     prevs = deque([])
 
     for x in range(n,1,-1):
@@ -86,17 +117,20 @@ def solve_(n,k,x):
 
         # log(x, res, prevs)
 
+        while prevs and prevs[-1] in taken:
+            prevs.pop()
+
         if prevs:
             z = prevs.pop()
             y = x^z^target
-            if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
+            if (not (y in taken)) and (not (y > n)) and (not (x == y)) and (not(x == z)) and (not (y == z)):        
                 taken.add(x)
                 taken.add(y)
                 taken.add(z)
                 res.append([x,y,z])
                 continue
 
-            prevs.appendleft(z)
+            prevs.append(z)
 
         y = x^target
         if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
@@ -108,7 +142,7 @@ def solve_(n,k,x):
                 res.append([x,y])
             continue
         
-        prevs.append(x)
+        prevs.appendleft(x)
 
     if len(res) < k:
         res.append([])
@@ -133,13 +167,14 @@ def solve_(n,k,x):
             check.add(x)
             xor = xor^x
         assert xor == target
+    assert len(check) == n
 
     return res
 
 
 # import random
 # while True:
-#     n = random.randint(1,10)
+#     n = random.randint(1,100)
 #     k = random.randint(1,n)
 #     x = random.randint(1,n)
 
