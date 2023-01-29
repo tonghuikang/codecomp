@@ -52,10 +52,47 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,s,arr):
+def solve_(n,s,nums):
     # your solution here
 
-    return ""
+    # allocate a-s or s to one side
+    # if a >= s, allocate a or 0 to one or the other side
+
+    arr = [nums[0]]
+    brr = [nums[0]]
+
+    for a in nums[1:-1]:
+        if a <= s:                
+            arr.append(0)
+            brr.append(a)
+        else:
+            arr.append(min(a-s, s))
+            brr.append(max(a-s, s))
+    
+    arr.append(nums[-1])
+    brr.append(nums[-1])
+
+    # log(arr)
+    # log(brr)
+
+    small = 0
+    big = 0
+
+    for (a1,b1,a2,b2) in zip(arr, brr, arr[1:], brr[1:]):
+        nex_small = min(big + a1*a2, small + b1*a2)
+        nex_big =   min(big + a1*b2, small + b1*b2)
+
+        # log()
+        # log(a1,b1,a2,b2)
+        # log(big + a1*a2, small + b1*a2)
+        # log(big + a1*b2, small + b1*b2)
+        # log(small, big)
+
+        small = nex_small
+        big = nex_big
+        # log(small, big)
+
+    return min(small, big)
 
 
 # for case_num in [0]:  # no loop over test case
