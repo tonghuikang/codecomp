@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 input = sys.stdin.readline  # to read input quickly
+from collections import deque
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -74,26 +75,43 @@ def solve_(n,k,x):
     taken = set()
 
     res = []
+    prevs = deque([])
 
     for x in range(n,0,-1):
         if len(res) == k:
             break
 
+        if x in taken:
+            continue
+
+        log(x, res, prevs)
+
         y = x^target
-        if y in taken:
-            continue
-        if y > n:
-            continue
-        if x == y:
+        if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
+            taken.add(x)
+            taken.add(y)
+            if y == 0:
+                res.append([x])
+            else:
+                res.append([x,y])
             continue
         
-        taken.add(x)
-        taken.add(y)
-        if y == 0:
-            res.append([x])
-        else:
-            res.append([x,y])
-    
+        if not prevs:
+            prevs.append(x)
+            continue
+
+        z = prevs.popleft()
+        y = x^z^target
+        if (not (y in taken)) and (not (y > n)) and (not (x == y)):        
+            taken.add(x)
+            taken.add(y)
+            taken.add(z)
+            res.append([x,y,z])
+            continue
+
+        prevs.append(x)
+        prevs.append(z)
+
     if len(res) < k:
         res.append([])
 
