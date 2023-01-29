@@ -68,11 +68,33 @@ def solve_(l, r):
     #         allset.add(z)
 
     res = 0
-    for x in range(1, r-l+1):
+    prev = 0
+    start = 0
+    for x in range(1, r-l+2):
         if r // x != ceiling_division(l, x):
+            if x != prev + 1:
+                log(start, prev)
+                start = x
+
             res += 1
+            prev = x
+
+    log(start, prev)
 
     return res
+
+
+def solve(L, R):
+    ans = max(0, R // 2 - L + 1)
+    left = 1
+    while left < L:
+        C = (L + left - 1) // left
+        right = (L + C - 2) // (C - 1) - 1
+        val = max(0, min(right, R // (C + 1)) - left + 1)
+        log(left, right, C, val)
+        ans += val
+        left = right + 1
+    return ans
 
 
 # for case_num in [0]:  # no loop over test case
