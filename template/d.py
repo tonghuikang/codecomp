@@ -1,6 +1,61 @@
 #!/usr/bin/env python3
+# https://codeforces.com/blog/entry/82989
+# Some code to make your Python code run faster
+
+import os
 import sys
-input = sys.stdin.readline  # to read input quickly
+from io import BytesIO, IOBase
+
+BUFSIZE = 8192
+
+
+class FastIO(IOBase):
+    newlines = 0
+
+    def __init__(self, file):
+        self._fd = file.fileno()
+        self.buffer = BytesIO()
+        self.writable = "x" in file.mode or "r" not in file.mode
+        self.write = self.buffer.write if self.writable else None
+
+    def read(self):
+        while True:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            if not b:
+                break
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines = 0
+        return self.buffer.read()
+
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self.buffer.tell()
+            self.buffer.seek(0, 2), self.buffer.write(b), self.buffer.seek(ptr)
+        self.newlines -= 1
+        return self.buffer.readline()
+
+    def flush(self):
+        if self.writable:
+            os.write(self._fd, self.buffer.getvalue())
+            self.buffer.truncate(0), self.buffer.seek(0)
+
+
+class IOWrapper(IOBase):
+    def __init__(self, file):
+        self.buffer = FastIO(file)
+        self.flush = self.buffer.flush
+        self.writable = self.buffer.writable
+        self.write = lambda s: self.buffer.write(s.encode("ascii"))
+        self.read = lambda: self.buffer.read().decode("ascii")
+        self.readline = lambda: self.buffer.readline().decode("ascii")
+
+
+sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip("\r\n")
+
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -63,26 +118,32 @@ def solve_(n, cnt):
     if n == cnt:
         return 0
 
-    sequence = [0, 1]
+    # sequence = [0, 1]
+    a,b = 0,1
     # sequence2 = [0, 1]
 
+    left = cnt
+
     for x in range(2, n+1):
-        numer = n * sequence[-1] - (x-1) * sequence[-2] + n
+        numer = n * b - (x-1) * a + n
         demon = n - (x-1)
         # numer2 = n * sequence2[-1] - (x-1) * sequence2[-2] + n
         demon2 = n - (x-1)
         val = (numer * modinv_p(demon)) % m9
         # val2 = (numer2 / demon2)
-        sequence.append(val)
+        # sequence.append(val)
+        if cnt == x:
+            left = val
+        a,b = b,val
         # sequence2.append(val2)
 
     # log(sequence)
     # log(sequence2)
 
-    return (sequence[-1] - sequence[cnt])%m9
+    return (b - left)%m9
 
 
-solve(10**6, 10)
+# solve(10**6, 10)
 
 
 # for case_num in [0]:  # no loop over test case
