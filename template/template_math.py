@@ -150,6 +150,7 @@ def get_prime_factors_with_precomp(num):
 
 
 def get_prime_factors_with_precomp_sqrt(num):
+    limit = int(num**0.5) + 2
     # requires precomputed `primes``
     # for numbers below SIZE_OF_PRIME_ARRAY**2
     # O(sqrt(n) / log(n))
@@ -165,6 +166,8 @@ def get_prime_factors_with_precomp_sqrt(num):
             num = num // p
         # if num < p:  # remaining factor is a prime?
         #     break
+        if p > limit:
+            break
     if num > 1:
         # remaining number is a prime
         factors.append(num)
