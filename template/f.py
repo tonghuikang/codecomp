@@ -82,6 +82,8 @@ def solve_(n,k,arr,mrr):
 
     leaves = []
 
+    zrr = [x for x in arr]
+
     for x in range(n):
         if len(children[x]) == 0:
             leaves.append((arr[x], x))
@@ -92,28 +94,29 @@ def solve_(n,k,arr,mrr):
     k -= 1
 
     while leaves and k:
-        # log(leaves, k, children)
+        log(leaves, k, children, arr)
         val, cur = heapq.heappop(leaves)
         # log(cur)
         if cur == 0:
             break
         par = parents[cur]
-        arr[par] = math.gcd(arr[par], arr[cur] * arr[cur])
+        arr[par] = math.gcd(arr[par], zrr[cur] * zrr[cur])
         
         children[par].remove(cur)
         if len(children[par]) == 0:
             heapq.heappush(leaves, (arr[par], par))
-        if val < arr[par]:
+        if math.gcd(val, arr[par]) != arr[par]:
             k -= 1
         arr[cur] = 0
 
+    log(leaves, k, children, arr)
 
     brr = [x for x in arr if x != 0]
     gcd = brr[0]
     for x in brr:
         gcd = math.gcd(gcd, x)
 
-    return arr[0] * gcd
+    return zrr[0] * gcd
 
 
 # for case_num in [0]:  # no loop over test case
