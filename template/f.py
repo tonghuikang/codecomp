@@ -77,8 +77,8 @@ def solve_(n,k,arr,mrr):
             children[cur].add(nex)
             stack.append(nex)
 
-    log(parents)
-    log(children)
+    # log(parents)
+    # log(children)
 
     leaves = []
 
