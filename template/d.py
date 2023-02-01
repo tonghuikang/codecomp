@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
+p = m9
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -52,10 +50,36 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+
+def modinv_p(base, p=p):
+    # modular if the modulo is a prime
+    return pow(base, p-2, p)
+
+
+
 def solve_(n, cnt):
     # your solution here
 
-    return ""
+    if n == cnt:
+        return 0
+
+    sequence = [0, 1]
+    # sequence2 = [0, 1]
+
+    for x in range(2, n+1):
+        numer = n * sequence[-1] - (x-1) * sequence[-2] + n
+        demon = n - (x-1)
+        # numer2 = n * sequence2[-1] - (x-1) * sequence2[-2] + n
+        demon2 = n - (x-1)
+        val = (numer * modinv_p(demon)) % m9
+        # val2 = (numer2 / demon2)
+        sequence.append(val)
+        # sequence2.append(val2)
+
+    log(sequence)
+    # log(sequence2)
+
+    return (sequence[-1] - sequence[cnt])%m9
 
 
 # for case_num in [0]:  # no loop over test case
