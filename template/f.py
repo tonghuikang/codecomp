@@ -52,8 +52,58 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k,arr,mrr):
     # your solution here
+
+    g = defaultdict(list)
+
+    for a,b in mrr:
+        a -= 1
+        b -= 1
+        g[a].append(b)
+        g[b].append(a)
+
+    subtree_gcd = {}
+    parents = [-1 for _ in range(n)]
+    children = [set() for _ in range(n)]
+
+    stack = [0]
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex == parents[cur]:
+                continue
+            parents[nex] = cur
+            children[cur].add(nex)
+            stack.append(nex)
+
+    log(parents)
+    log(children)
+
+    leaves = []
+
+    for x in range(n):
+        if len(children[x]) == 0:
+            leaves.append((arr[x], x))
+
+    leaves.sort()
+
+    log(leaves)
+
+    while leaves and k:
+        val, cur = heapq.heappop(leaves)
+        par = parents[cur]
+        if val == arr[parent]:
+            continue
+
+
+            
+    
+
+    # operate on the element with the smallest subtree gcd
+    # maximum result is one million
+
+
 
     return ""
 
@@ -73,16 +123,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n-1)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,arr,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
