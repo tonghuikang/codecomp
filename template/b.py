@@ -55,7 +55,33 @@ def minus_one_matrix(mrr):
 def solve_(n,m,d,prr,arr):
     # your solution here
 
-    return ""
+    loc = {x:i for i,x in enumerate(prr, start=1)}
+
+    minres = n
+
+    for a,b in zip(arr, arr[1:]):
+        x = loc[a]
+        y = loc[b]
+        log(x,y)
+
+        res = n
+
+        if x > y:
+            return 0
+
+        if x + d < y:
+            return 0
+
+        res = y-x
+
+        if d+2 <= n:
+            # log("x", x+d, n)
+            res = min((x+d) - y + 1, y-x)
+    
+        minres = min(minres, res)
+        
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case

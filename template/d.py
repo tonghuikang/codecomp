@@ -108,7 +108,7 @@ def minus_one_matrix(mrr):
 
 def modinv_p(base, p=p):
     # modular if the modulo is a prime
-    return pow(base, p-2, p)
+    return pow(base, -1, p)
 
 
 
@@ -144,6 +144,10 @@ def solve_(n, cnt):
 
 
 # solve(10**6, 10)
+
+# for i in range(1,10):
+#     for j in range(i+1):
+#         solve(i,j)
 
 
 # for case_num in [0]:  # no loop over test case
