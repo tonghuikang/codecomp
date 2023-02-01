@@ -76,10 +76,13 @@ def solve_(n, cnt):
         sequence.append(val)
         # sequence2.append(val2)
 
-    log(sequence)
+    # log(sequence)
     # log(sequence2)
 
     return (sequence[-1] - sequence[cnt])%m9
+
+
+solve(10**6, 10)
 
 
 # for case_num in [0]:  # no loop over test case
