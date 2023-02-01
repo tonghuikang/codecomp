@@ -128,7 +128,7 @@ def solve_(n, cnt):
         numer = n * b - (x-1) * a + n
         demon = n - (x-1)
         # numer2 = n * sequence2[-1] - (x-1) * sequence2[-2] + n
-        demon2 = n - (x-1)
+        # demon2 = n - (x-1)
         val = (numer * modinv_p(demon)) % m9
         # val2 = (numer2 / demon2)
         # sequence.append(val)
