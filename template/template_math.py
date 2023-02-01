@@ -184,8 +184,10 @@ modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N
 
 
 def modinv_p(base, p):
-    # modular if the modulo is a prime
-    return pow(base, p-2, p)
+    
+    # modular inverse if the modulo is a prime
+    return pow(base, -1, p)  # for Python 3.8+
+    # return pow(base, p-2, p)  # if Python version is below 3.8
 
 
 def chinese_remainder_theorem(divisors, remainders):
