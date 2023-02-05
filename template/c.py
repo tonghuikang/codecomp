@@ -1761,45 +1761,54 @@ def solve_check(arr):
     arr = sorted(arr)
 
     sl2 = []
-    c2 = Counter()
+    sl3 = []
 
     res = 0
     prev = 0
     for i,x in enumerate(arr):
         if x == prev:
-            c2[x] += 1
+            sl3.append(x)
             continue
         sl2.append(x)
         prev += 1
         res += x - prev
 
-    return res,sl2,c2
+    return res,sl2,sl3
 
 
 def solve_(arr):
     # your solution here
 
 
-    check,sl2,c2 = solve_check(arr)
+    check,sl2,sl3 = solve_check(arr)
 
     res = [check]
     sl = SortedList(sl2)
-    slsum = sum(sl2)
-    tsum = len(sl2) * (len(sl2) + 1) // 2
+    sl3 = SortedList(sl3)
+    slsum = sum(sl)
+    tsum = len(sl) * (len(sl) + 1) // 2
 
     log(check, slsum - tsum)
-    log(sl2)
-    log(c2)
+    log(sl)
+    log(sl3)
+    log()
 
     for x in arr[::-1]:
-        if c2[x] > 0:
-            c2[x] -= 1
+        log(sl)
+        if x in sl3:
+            sl3.remove(x)
             res.append(res[-1])
             continue
         slsum -= x
-        tsum -= len(sl)
+        if sl3 and sl3[-1] > x:
+            slsum += sl3[-1]
+            sl.add(sl3[-1])
+            sl3.remove(sl3[-1])
+        else:
+            tsum -= len(sl)
         res.append(slsum - tsum)
         sl.remove(x)
+
 
     assert res[-1] == 0
     res = res[::-1][1:]
