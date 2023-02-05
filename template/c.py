@@ -1790,7 +1790,6 @@ def solve_(arr):
     log(check, slsum - tsum)
     log(sl2)
     log(c2)
-    lensl = len(sl2)
 
     for x in arr[::-1]:
         if c2[x] > 0:
@@ -1800,11 +1799,22 @@ def solve_(arr):
         slsum -= x
         tsum -= len(sl)
         res.append(slsum - tsum)
-        lensl -= 1
         sl.remove(x)
 
     assert res[-1] == 0
-    return res[::-1][1:]
+    res = res[::-1][1:]
+
+    ref = []
+    for i in range(1,len(arr)+1):
+        check,sl2,c2 = solve_check(arr[:i])
+        ref.append(check)
+
+    log("check")
+    log(res)
+    log(ref)
+    assert ref == res
+
+    return res
 
 
 # import random
