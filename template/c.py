@@ -1788,22 +1788,24 @@ def solve_(arr):
     slsum = sum(sl)
     tsum = len(sl) * (len(sl) + 1) // 2
 
-    log(check, slsum - tsum)
-    log(sl)
-    log(sl3)
-    log()
+    # log(check, slsum - tsum)
+    # log(sl)
+    # log(sl3)
+    # log()
 
     for x in arr[::-1]:
-        log(sl)
+        # log(sl)
         if x in sl3:
             sl3.remove(x)
             res.append(res[-1])
             continue
         slsum -= x
-        if sl3 and (sl3[-1] > x or sl3[-1] > len(sl)):
-            slsum += sl3[-1]
-            sl.add(sl3[-1])
-            sl3.remove(sl3[-1])
+        if sl3 and (sl3[-1] > x):
+            # log(x, sl3, sl3.bisect_left(x))
+            take = sl3[sl3.bisect_left(x)]
+            slsum += take
+            sl.add(take)
+            sl3.remove(take)
         else:
             tsum -= len(sl)
         res.append(slsum - tsum)
@@ -1813,15 +1815,15 @@ def solve_(arr):
     assert res[-1] == 0
     res = res[::-1][1:]
 
-    ref = []
-    for i in range(1,len(arr)+1):
-        check,sl2,c2 = solve_check(arr[:i])
-        ref.append(check)
+    # ref = []
+    # for i in range(1,len(arr)+1):
+    #     check,sl2,c2 = solve_check(arr[:i])
+    #     ref.append(check)
 
-    log("check")
-    log(res)
-    log(ref)
-    assert ref == res
+    # log("check")
+    # log(res)
+    # log(ref)
+    # assert ref == res
 
     return res
 
