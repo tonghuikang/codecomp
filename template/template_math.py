@@ -268,24 +268,24 @@ def solve_diophantine(x,y,n):
 # ----------------------------- combinatorics  -----------------------------
 
 
-def ncr(n, r):
-    # if python version == 3.8+, use comb()
-    if r == 0:
-        return 1
-    return n * ncr(n-1, r-1) // r
+LARGE = 2**20
+p = 998244353  # CHANGE WHEN NEEDED
 
+factorial_mod_p = [1]
+for i in range(1, LARGE+1):
+    factorial_mod_p.append((factorial_mod_p[-1]*i)%p)
 
-LARGE = 10**5 + 10
-p = 10**9 + 7
-factorial_mod_p = [1 for _ in range(LARGE)]
-for i in range(1,LARGE):
-    factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
-
+ifactorial_mod_p = [1]*(LARGE+1)
+ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p-2, p)
+for i in range(LARGE-1, 1, -1):
+    ifactorial_mod_p[i] = ifactorial_mod_p[i+1]*(i+1)%p
 
 def ncr_mod_p(n, r, p=p):
+    # https://codeforces.com/contest/1785/submission/192389526
+    if r < 0 or n < r: return 0
     num = factorial_mod_p[n]
-    dem = factorial_mod_p[r]*factorial_mod_p[n-r]
-    return (num * pow(dem, p-2, p))%p
+    dem = (ifactorial_mod_p[r]*ifactorial_mod_p[n-r])%p
+    return (num * dem)%p 
 
 
 # ----------------------------- floor sums  -----------------------------
