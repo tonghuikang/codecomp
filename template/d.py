@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+# m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -51,27 +51,21 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-md = 998244353
- 
-def nHr(hn, hr):
-    return nCr(hn+hr-1, hr-1)
- 
-def nPr(com_n, com_r):
-    if com_r < 0: return 0
-    if com_n < com_r: return 0
-    return fac[com_n]*ifac[com_n-com_r]%md
- 
-def nCr(com_n, com_r):
-    if com_r < 0: return 0
-    if com_n < com_r: return 0
-    return fac[com_n]*ifac[com_r]%md*ifac[com_n-com_r]%md
- 
-n_max = 2**20
-fac = [1]
-for i in range(1, n_max+1): fac.append(fac[-1]*i%md)
-ifac = [1]*(n_max+1)
-ifac[n_max] = pow(fac[n_max], md-2, md)
-for i in range(n_max-1, 1, -1): ifac[i] = ifac[i+1]*(i+1)%md
+LARGE = 2**20
+p = 998244353
+factorial_mod_p = [1 for _ in range(LARGE)]
+for i in range(1,LARGE):
+    factorial_mod_p[i] = (factorial_mod_p[i-1]*i)%p
+
+
+def ncr_mod_p(n, r, p=p):
+    if r < 0:
+        return 0
+    if n < r:
+        return 0
+    num = factorial_mod_p[n]
+    dem = factorial_mod_p[r]*factorial_mod_p[n-r]
+    return (num * pow(dem, p-2, p))%p 
 
 
 # https://codeforces.com/contest/1785/submission/192347383
@@ -79,20 +73,21 @@ def solve_(n):
     n2 = 1 << n
     dp = [0]*n2
     w = n2//2
-    dp[0] = 2*fac[w]%md
+    dp[0] = 2*factorial_mod_p[w]%p
     for _ in range(n-1):
         w >>= 1
         ndp = [0]*n2
         s = 0
         for i in range(n2):
-            ndp[i] = 2*s*nCr(n2-i-w-1, w-1)%md*fac[w]%md
-            ndp[i] %= md
+            ndp[i] = 2*s*ncr_mod_p(n2-i-w-1, w-1)%p*factorial_mod_p[w]%p
+            ndp[i] %= p
             s += dp[i]
-            s %= md
+            s %= p
         dp = ndp
+        log(ndp)
  
     cs = [0]
-    for d in dp: cs.append((cs[-1]+d)%md)
+    for d in dp: cs.append((cs[-1]+d)%p)
     return cs[:n2]
 
 
