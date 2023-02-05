@@ -51,19 +51,58 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+md = 998244353
+ 
+def nHr(hn, hr):
+    return nCr(hn+hr-1, hr-1)
+ 
+def nPr(com_n, com_r):
+    if com_r < 0: return 0
+    if com_n < com_r: return 0
+    return fac[com_n]*ifac[com_n-com_r]%md
+ 
+def nCr(com_n, com_r):
+    if com_r < 0: return 0
+    if com_n < com_r: return 0
+    return fac[com_n]*ifac[com_r]%md*ifac[com_n-com_r]%md
+ 
+n_max = 2**20
+fac = [1]
+for i in range(1, n_max+1): fac.append(fac[-1]*i%md)
+ifac = [1]*(n_max+1)
+ifac[n_max] = pow(fac[n_max], md-2, md)
+for i in range(n_max-1, 1, -1): ifac[i] = ifac[i+1]*(i+1)%md
 
-def solve_():
-    # your solution here
 
-    return ""
+# https://codeforces.com/contest/1785/submission/192347383
+def solve_(n):
+    n2 = 1 << n
+    dp = [0]*n2
+    w = n2//2
+    dp[0] = 2*fac[w]%md
+    for _ in range(n-1):
+        w >>= 1
+        ndp = [0]*n2
+        s = 0
+        for i in range(n2):
+            ndp[i] = 2*s*nCr(n2-i-w-1, w-1)%md*fac[w]%md
+            ndp[i] %= md
+            s += dp[i]
+            s %= md
+        dp = ndp
+ 
+    cs = [0]
+    for d in dp: cs.append((cs[-1]+d)%md)
+    return cs[:n2]
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -82,14 +121,14 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
