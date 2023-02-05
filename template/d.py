@@ -80,6 +80,7 @@ def solve_(n):
         s = 0
         for i in range(n2):
             ndp[i] = 2*s*ncr_mod_p(n2-i-w-1, w-1)%p*factorial_mod_p[w]%p
+            log(_, i, s, n2-i-w-1, w-1)
             ndp[i] %= p
             s += dp[i]
             s %= p
