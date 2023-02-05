@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # This is faster than PyRival's implementation of sortedlist
@@ -1754,28 +1755,61 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,arr):
+def solve_check(arr):
     # your solution here
 
-    sl = SortedList()
+    arr = sorted(arr)
+
+    sl2 = []
+    c2 = Counter()
+
     res = 0
-    slsum = 0
-    tsum = 0
-    res = []
-
-    for x in arr:
-        idx = sl.bisect_right(x)
-        # log(idx, x)
-        # log(sl)
-        if x < idx + 1:
-            res.append(slsum - tsum)
+    prev = 0
+    for i,x in enumerate(arr):
+        if x == prev:
+            c2[x] += 1
             continue
-        sl.add(x)
-        slsum += x
-        tsum += len(sl)
-        res.append(slsum - tsum)
+        sl2.append(x)
+        prev += 1
+        res += x - prev
 
-    return res
+    return res,sl2,c2
+
+
+def solve_(arr):
+    # your solution here
+
+
+    check,sl2,c2 = solve_check(arr)
+
+    res = [check]
+    # sl = SortedList(sl2)
+    slsum = sum(sl2)
+    tsum = len(sl2) * (len(sl2) + 1) // 2
+
+    # log(check, slsum - tsum)
+    # log(sl2)
+    # log(c2)
+    lensl = len(sl2)
+
+    for x in arr[::-1]:
+        if c2[x] > 0:
+            c2[x] -= 1
+            res.append(res[-1])
+            continue
+        slsum -= x
+        tsum -= lensl
+        res.append(slsum - tsum)
+        lensl -= 1
+        # sl.remove(x)
+
+    assert res[-1] == 0
+    return res[::-1][1:]
+
+
+# import random
+# while True:
+#     solve([random.randint(1,10) for _ in range(random.randint(1,5))])
 
 
 # for case_num in [0]:  # no loop over test case
@@ -1802,7 +1836,9 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,arr)  # include input here
+    res = solve(arr)  # include input here
+
+    assert len(res) == len(arr)
 
     # print length if applicable
     # print(len(res))
