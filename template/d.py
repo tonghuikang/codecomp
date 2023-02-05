@@ -73,14 +73,15 @@ def solve_(n):
     n2 = 1 << n
     dp = [0]*n2
     w = n2//2
-    dp[0] = 2*factorial_mod_p[w]%p
-    for _ in range(n-1):
-        w >>= 1
+    dp[0] = 2 * factorial_mod_p[w]%p
+    # log(dp)
+    for h in range(n-2,-1,-1):
+        w = 2**h
         ndp = [0]*n2
         s = 0
         for i in range(n2):
-            ndp[i] = 2*s*ncr_mod_p(n2-i-w-1, w-1)%p*factorial_mod_p[w]%p
-            log(_, i, s, n2-i-w-1, w-1)
+            ndp[i] = 2 * s * ncr_mod_p(n2-i-w-1, w-1)%p * factorial_mod_p[w]%p
+            # log(h, i, s, n2-i-w-1, w-1, w)
             ndp[i] %= p
             s += dp[i]
             s %= p
