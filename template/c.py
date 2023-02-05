@@ -1800,7 +1800,7 @@ def solve_(arr):
             res.append(res[-1])
             continue
         slsum -= x
-        if sl3 and sl3[-1] > x:
+        if sl3 and (sl3[-1] > x or sl3[-1] > len(sl)):
             slsum += sl3[-1]
             sl.add(sl3[-1])
             sl3.remove(sl3[-1])
