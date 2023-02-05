@@ -1783,13 +1783,13 @@ def solve_(arr):
     check,sl2,c2 = solve_check(arr)
 
     res = [check]
-    # sl = SortedList(sl2)
+    sl = SortedList(sl2)
     slsum = sum(sl2)
     tsum = len(sl2) * (len(sl2) + 1) // 2
 
-    # log(check, slsum - tsum)
-    # log(sl2)
-    # log(c2)
+    log(check, slsum - tsum)
+    log(sl2)
+    log(c2)
     lensl = len(sl2)
 
     for x in arr[::-1]:
@@ -1798,10 +1798,10 @@ def solve_(arr):
             res.append(res[-1])
             continue
         slsum -= x
-        tsum -= lensl
+        tsum -= len(sl)
         res.append(slsum - tsum)
         lensl -= 1
-        # sl.remove(x)
+        sl.remove(x)
 
     assert res[-1] == 0
     return res[::-1][1:]
