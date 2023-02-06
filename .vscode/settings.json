@@ -1,0 +1,4 @@
+{
+    "editor.wordBasedSuggestionsMode": "currentDocument",
+    "editor.acceptSuggestionOnEnter": "off"
+}

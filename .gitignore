@@ -1,8 +1,8 @@
 .DS_Store
 .ipynb_checkpoints/
 __pycache__/
-.vscode/
+.vscode/*
 
 *.pyc
 
-! .vscode/tasks.json
+!/.vscode/settings.json

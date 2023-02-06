@@ -21,6 +21,9 @@ alias sa="conda activate"
 alias jn="jupyter notebook"
 alias code="open -a /Applications/Visual\ Studio\ Code.app"
 
+alias gen="python3 sample_gen.py"
+alias cfgen="python3 sample_crawl_cf.py"
+
 alias gcm="git checkout master"
 alias ggc="git add . && git commit -m checkpoint"
 alisa ggs="python3 sample_gen.py"
