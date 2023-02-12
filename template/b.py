@@ -83,6 +83,7 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(a,b)  # include input here
+    print(len(res))
 
     # print length if applicable
     # print(len(res))
