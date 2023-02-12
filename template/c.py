@@ -59,7 +59,7 @@ def solve_(n, xrr):
 
     while arr:
         if arr[0] == maxi:
-            maxi += 1
+            maxi -= 1
             arr.popleft()
             continue
         if arr[0] == mini:
@@ -67,7 +67,7 @@ def solve_(n, xrr):
             arr.popleft()
             continue
         if arr[-1] == maxi:
-            maxi += 1
+            maxi -= 1
             arr.pop()
             continue
         if arr[-1] == mini:
@@ -80,8 +80,8 @@ def solve_(n, xrr):
         return [-1]
 
     log(arr)
-
-    return xrr.index(arr[0]) + 1, xrr.index(arr[-1]) + 1
+    if arr:
+        return xrr.index(arr[0]) + 1, xrr.index(arr[-1]) + 1
 
 
 # for case_num in [0]:  # no loop over test case
