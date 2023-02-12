@@ -52,10 +52,21 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b,n,m):
     # your solution here
 
-    return ""
+    m1 = m+1
+    aset = a*m
+    bset = b*m1
+
+    setcost = min(aset, bset)
+
+    res = min(
+        (n // m1) * setcost + (n % m1) * min(a,b),
+        ((n // m1) + 1) * setcost
+    )
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
