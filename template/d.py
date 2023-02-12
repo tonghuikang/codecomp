@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import random
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -51,11 +49,103 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def mex(arr):
+    for i in range(1, len(arr) + 2):
+        if i not in arr:
+            return i
+
+
+
+def solve_check(n, arr, brr):
+    # your solution here
+
+    res = 0
+
+    for i in range(n):
+        for j in range(i+1,n+1):
+            xrr = arr[i:j]
+            yrr = brr[i:j]
+            if mex(xrr) == mex(yrr):
+                log(i,j,mex(xrr),xrr)
+                res += 1
+
+    return res
+
+def cnt(x):
+    return (x * (x+1)) // 2
 
 def solve_(n, arr, brr):
     # your solution here
 
-    return ""
+    aidxs = {x:i for i,x in enumerate(arr)}
+    bidxs = {x:i for i,x in enumerate(brr)}
+
+    left1 = arr.index(1)
+    left2 = brr.index(1)
+
+    a,b = min(left1, left2), max(left1, left2)
+    x,y,z = a, max(0, b-a-1), n-b-1
+
+    log(x,y,z)
+
+    res = cnt(x) + cnt(y) + cnt(z)
+
+    left, right = a,b
+    apool = set(arr[left:right+1])
+    bpool = set(brr[left:right+1])
+
+    for x in range(1,n):
+        log()
+        log(x)
+        log(arr[left:right+1])
+        log(brr[left:right+1])
+        aidx = aidxs[x+1]
+        bidx = bidxs[x+1]
+
+        if not((left <= aidx <= right) or (left <= bidx <= right)):
+            left_limit = 0
+            right_limit = n-1
+
+            if aidx <= left:
+                left_limit = max(left_limit, aidx + 1)
+            if bidx <= left:
+                left_limit = max(left_limit, bidx + 1)
+
+            if right <= aidx:
+                right_limit = min(right_limit, aidx - 1)
+            if right <= bidx:
+                right_limit = min(right_limit, bidx - 1)
+
+            left_space = left - left_limit + 1
+            right_space = right_limit - right + 1
+
+            log(left_space, right_space)
+            res += left_space * right_space
+
+        new_left = min(left, aidx, bidx)
+        new_right = max(right, aidx, bidx)
+
+        left = new_left
+        right = new_right
+
+    return res + 1
+
+
+while OFFLINE_TEST:
+    n = random.randint(1,5)
+    arr = list(range(1,n+1))
+    brr = list(range(1,n+1))
+    import random
+    random.shuffle(arr)
+    random.shuffle(brr)
+    a = solve(n, arr, brr)
+    b = solve_check(n, arr, brr)
+    if a != b:
+        log(arr)
+        log(brr)
+        log(a,b)
+        assert False
+
 
 
 for case_num in [0]:  # no loop over test case
