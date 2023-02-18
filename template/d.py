@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import random
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -86,7 +85,7 @@ def solve_(n, arr, brr):
     a,b = min(left1, left2), max(left1, left2)
     x,y,z = a, max(0, b-a-1), n-b-1
 
-    log(x,y,z)
+    # log(x,y,z)
 
     res = cnt(x) + cnt(y) + cnt(z)
 
@@ -95,10 +94,10 @@ def solve_(n, arr, brr):
     bpool = set(brr[left:right+1])
 
     for x in range(1,n):
-        log()
-        log(x)
-        log(arr[left:right+1])
-        log(brr[left:right+1])
+        # log()
+        # log(x)
+        # log(arr[left:right+1])
+        # log(brr[left:right+1])
         aidx = aidxs[x+1]
         bidx = bidxs[x+1]
 
@@ -119,7 +118,7 @@ def solve_(n, arr, brr):
             left_space = left - left_limit + 1
             right_space = right_limit - right + 1
 
-            log(left_space, right_space)
+            # log(left_space, right_space)
             res += left_space * right_space
 
         new_left = min(left, aidx, bidx)
@@ -131,20 +130,20 @@ def solve_(n, arr, brr):
     return res + 1
 
 
-while OFFLINE_TEST:
-    n = random.randint(1,5)
-    arr = list(range(1,n+1))
-    brr = list(range(1,n+1))
-    import random
-    random.shuffle(arr)
-    random.shuffle(brr)
-    a = solve(n, arr, brr)
-    b = solve_check(n, arr, brr)
-    if a != b:
-        log(arr)
-        log(brr)
-        log(a,b)
-        assert False
+# while OFFLINE_TEST:
+#     n = random.randint(1,5)
+#     arr = list(range(1,n+1))
+#     brr = list(range(1,n+1))
+#     import random
+#     random.shuffle(arr)
+#     random.shuffle(brr)
+#     a = solve(n, arr, brr)
+#     b = solve_check(n, arr, brr)
+#     if a != b:
+#         log(arr)
+#         log(brr)
+#         log(a,b)
+#         assert False
 
 
 
