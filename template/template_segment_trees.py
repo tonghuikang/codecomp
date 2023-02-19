@@ -342,9 +342,230 @@ class LazySegTree:
 
 
 
-# Todo
+"""
+Guides
+- https://cp-algorithms.com/data_structures/segment_tree.html
+- https://atcoder.github.io/ac-library/production/document_en/segtree.html
+- https://atcoder.github.io/ac-library/production/document_en/lazysegtree.html
+- https://atcoder.jp/contests/practice2/editorial
+"""
 
-# https://cp-algorithms.com/data_structures/segment_tree.html#simplest-form-of-a-segment-tree
+
+"""
+[SEGMENT TREE]
+If there are range updates, you should use the Lazy Segment Tree instead.
+
+The following should be defined.
+- The type `S`
+- The binary operation `S op(S a, S b)`
+- The identity element `S e()`
+
+Some explanation
+- `op()` is used for the range queries
+- `e()` in S is analogous to zero in the addition field in integers.
+- `e()` in S is analogous to one in the multiplication field in integers.
+- `op(a, e()) = op(e(), a) = op(a)` for all `a`
+
+
+LONGEST SUBSTRING OF ONE REPEATING CHARACTER
+# https://leetcode.com/problems/longest-substring-of-one-repeating-character/
+
+e = -1, -1, -1, -1, True, True, 0
+# left count, left value, right count, right value, is contiguous, is empty, max result
+
+def op(left, right):
+    lc1, lv1, rc1, rv1, contig1, empty1, mr1 = left
+    lc2, lv2, rc2, rv2, contig2, empty2, mr2 = right
+
+    if empty1 and empty2:
+        return e
+    if empty1:
+        return right
+    if empty2:
+        return left
+
+    if contig1 and contig2 and rv1 == lv2:
+        return mr1 + mr2, lv1, mr1 + mr2, rv2, True, False, mr1 + mr2
+
+    mr = max(mr1, mr2)
+    if rv1 == lv2:
+        mr = max(mr, rc1 + lc2)
+
+        if contig1:
+            return mr1 + lc2, lv1, rc2, rv2, False, False, mr
+
+        if contig2:
+            return lc1, lv1, rc1 + mr2, rv2, False, False, mr
+
+    return lc1, lv1, rc2, rv2, False, False, mr
+
+def init(val):
+    return 1, val, 1, val, True, False, 1
+
+st = SegTree(op, e, [init(x) for x in s])
+res = []
+st.set(idx, init(a))
+st.prod(0, len(s))[-1]
+
+
+MAJORITY ELEMENT OF AN SUBARRAY
+# https://leetcode.com/problems/online-majority-element-in-subarray/
+(Apparently need a Merge Sort Tree to solve this?)
+"""
+
+
+"""
+[LAZY SEGMENT TREE]
+If there are range updates, you should use the Lazy Segment Tree
+
+Conditions to apply Lazy Segment Tree
+- $F$ contains the identity map $\mathrm{id}$, where the identity map is the map that satisfies $\mathrm{id}(x) = x$ for all $x \in S$.
+- $F$ is closed under composition, i.e., $f \circ g \in F$ holds for all $f, g \in F$.
+- $F$ is homomorphic, i.e. $f(x \cdot y) = f(x) \cdot f(y)$ holds for all $f \in F$ and $x, y \in S$.
+
+You need to define the following
+- The type `S` of the monoid
+- The binary operation `S op(S a, S b)`
+- The function `S e() -> S` that returns $e$
+- The type `F` of the map
+- The function `S mapping(F f, S x)` that returns $f(x)$
+- The function `F composition(F f, F g)` that returns $f \circ g$
+- The function `F id()` that returns $\mathrm{id}$
+
+Some explanation
+- `op()` is used for the range queries, `f` is used for the range updates
+- `e()` in S is analogous to zero in the addition field in integers.
+- `e()` in S is analogous to one in the multiplication field in integers.
+- `op(a, e()) = op(e(), a) = op(a)` for all `a`
+- `id` is an identity function.
+- `id(x) = x` for all `x` 
+- `composition(id, f) = composition(f, id) = f`
+
+
+RANGE NEGATION
+x -> -x
+# https://leetcode.cn/contest/biweekly-contest-98/problems/handling-sum-queries-after-update/
+
+op = lambda a,b: a+b
+e = 0
+mapping = lambda f,x: f(x)
+composition = lambda f,g: (lambda x: f(g(x)))
+id_ = lambda x: x
+f = lambda x: -x
+
+st = LazySegTree(op, e, mapping, composition, id_, arr)
+st.apply(l, r, f)   # l inclusive, r exclusive
+st.prod(l, r)
+
+However, the above code TLE in Python.
+id_ and f is defined for every element in the array.
+We can represent f and id_ as an integer instead, and let mapping execute the function
+
+op = lambda a,b: a+b
+e = 0
+mapping = lambda f,x: f(x)
+composition = lambda f,g: (lambda x: f(g(x)))
+id_ = 1
+f = -1
+
+
+RANGE ADDITION (not verified)
+x -> a+x
+We could use Fenwick Tree for this, but let us try using LST
+
+op = lambda a,b: a+b
+e = 0
+mapping = lambda f,x: f(x)
+composition = lambda f,g: (lambda x: f(g(x)))
+id_ = lambda x: x
+f = lambda x: a+x   
+
+st = LazySegTree(op, e, mapping, composition, id_, arr)
+st.apply(l, r, f)   # redefine f before calling this
+st.prod(l, r)
+
+We can avoid using functions to represent f and id_
+
+op = lambda a,b: a+b
+e = 0
+mapping = lambda f,x: f+x
+composition = lambda f,g: (lambda x: f(g(x)))
+id_ = 0
+f = a
+
+st = LazySegTree(op, e, mapping, composition, id_, arr)
+st.apply(l, r, f)   # redefine f before calling this
+st.prod(l, r)
+
+
+RANGE AFFINE TRANSFORM
+x -> b*x + c
+# https://github.com/not522/ac-library-python/blob/master/example/lazysegtree_practice_k_wo_modint.py
+
+def op(x: Tuple[int, int], y: Tuple[int, int]) -> Tuple[int, int]:
+    return (x[0] + y[0]) % mod, x[1] + y[1]
+e = 0,0
+def mapping(x: Tuple[int, int], y: Tuple[int, int]) -> Tuple[int, int]:
+    return (x[0] * y[0] + x[1] * y[1]) % mod, y[1]
+def composition(x: Tuple[int, int], y: Tuple[int, int]) -> Tuple[int, int]:
+    return (x[0] * y[0]) % mod, (x[0] * y[1] + x[1]) % mod
+id_ = 1,0
+f = b,c
+
+st = LazySegTree(op, e, mapping, composition, id_, a)
+st.apply(l, r, (b, c))
+st.prod(l, r)[0]
+
+`f` can be different between queries.
+
+
+LONGEST SUBSTRING OF ONE REPEATING CHARACTER
+x -> y
+# https://leetcode.com/problems/longest-substring-of-one-repeating-character/
+
+e = -1, -1, -1, -1, True, True, 0
+
+def op(left, right):
+    # print(left)
+    # print(right)
+    # print()
+    lc1, lv1, rc1, rv1, contig1, empty1, mr1 = left
+    lc2, lv2, rc2, rv2, contig2, empty2, mr2 = right
+
+    if empty1 and empty2:
+        return e
+    if empty1:
+        return right
+    if empty2:
+        return left
+
+    if contig1 and contig2 and rv1 == lv2:
+        return mr1 + mr2, lv1, mr1 + mr2, rv2, True, False, mr1 + mr2
+
+    mr = max(mr1, mr2)
+    if rv1 == lv2:
+        mr = max(mr, rc1 + lc2)
+
+        if contig1:
+            return mr1 + lc2, lv1, rc2, rv2, False, False, mr
+
+        if contig2:
+            return lc1, lv1, rc1 + mr2, rv2, False, False, mr
+
+    return lc1, lv1, rc2, rv2, False, False, mr
+
+def init(val):
+    return 1, val, 1, val, True, False, 1
+
+st = SegTree(op, e, [init(x) for x in s])
+res = []
+for a,idx in zip(queryCharacters, queryIndices):
+    # print(a, idx)
+    # print()
+    st.set(idx, init(a))
+    res.append(st.prod(0, len(s))[-1])
+"""
+
 
 
 # Possible range queries
