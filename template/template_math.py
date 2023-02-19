@@ -81,15 +81,17 @@ def is_prime(n):
 
 
 def get_prime_factors(nr):
-    # factorise a single number into primes in O(sqrt(n))
+    # factorize a single number into primes in O(sqrt(n))
+    sqrt = math.sqrt(nr)
     i = 2
     factors = []
     while i <= nr:
-        if i > math.sqrt(nr):
+        if i > sqrt:
             i = nr
         if (nr % i) == 0:
             factors.append(i)
             nr = nr // i
+            sqrt = math.sqrt(nr)
         elif i == 2:
             i = 3
         else:
