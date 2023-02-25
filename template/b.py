@@ -65,8 +65,11 @@ def solve_(arr):
         arr.popleft()
         arr.pop()
 
+    log(arr)
+
     # your solution here
     n = len(arr) // 2
+    arr = list(arr)
     xrr = arr[:n]
     yrr = arr[-n:][::-1]
 
@@ -99,11 +102,11 @@ def solve_(arr):
         if a != b:
             break
 
-    log(xrr[:i])
-    log(yrr[:i])
+    # log(xrr[:i])
+    # log(yrr[:i])
 
-    log(xrr[i:])
-    log(yrr[i:])
+    # log(xrr[i:])
+    # log(yrr[i:])
 
     for _,(a,b) in enumerate(zip(xrr[i:], yrr[i:])):
         if a == b:
