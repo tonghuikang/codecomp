@@ -61,8 +61,8 @@ def solve_(arr):
     xrr = arr[:n]
     yrr = arr[-n:][::-1]
 
-    # log(xrr)
-    # log(yrr)
+    log(xrr)
+    log(yrr)
 
     if xrr == [1-x for x in yrr]:
         return yes
