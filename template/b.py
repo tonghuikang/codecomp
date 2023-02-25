@@ -56,6 +56,15 @@ def solve_(arr):
     if len(arr) == 1:
         return yes
 
+    if arr == arr[::-1]:
+        return yes
+
+    arr = deque(arr)
+
+    while len(arr) >= 2 and arr[0] == arr[-1]:
+        arr.popleft()
+        arr.pop()
+
     # your solution here
     n = len(arr) // 2
     xrr = arr[:n]
@@ -77,11 +86,32 @@ def solve_(arr):
     # log(xrr[i:])
     # log(yrr[i:])
 
-    for i,(a,b) in enumerate(zip(xrr[i:], yrr[i:])):
+    for _,(a,b) in enumerate(zip(xrr[i:], yrr[i:])):
         if a != b:
-            return no
+            break
+    else:
+        return yes
 
-    return yes
+
+    ###
+
+    for i,(a,b) in enumerate(zip(xrr, yrr)):
+        if a != b:
+            break
+
+    log(xrr[:i])
+    log(yrr[:i])
+
+    log(xrr[i:])
+    log(yrr[i:])
+
+    for _,(a,b) in enumerate(zip(xrr[i:], yrr[i:])):
+        if a == b:
+            break
+    else:
+        return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
