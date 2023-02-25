@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,7 +52,43 @@ def minus_one_matrix(mrr):
 def solve_(n,m,arr,mrr):
     # your solution here
 
-    return ""
+    enters = [[] for _ in range(n+m+1)]
+    exits = [[] for _ in range(n+m+1)]
+
+    for x in arr:
+        enters[x].append(0)
+
+    for q,(i,nex) in enumerate(mrr, start=1):
+        i -= 1
+        cur = arr[i]
+        exits[cur].append(q)
+        enters[nex].append(q)
+        arr[i] = nex
+
+    for x in arr:
+        exits[x].append(m+1)
+
+    res = 0
+
+    for i,(arr,brr) in enumerate(zip(enters, exits)):
+        # log(i)
+        # log(arr)
+        # log(brr)
+        # log()
+
+        x = 0
+        for a,b in zip(arr, brr):
+            x += b-a
+        y = m + 1 - x
+
+        # log(x,y)
+        val = x * y + x * (x-1) // 2
+        # log(val)
+        # log()
+
+        res += val
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
