@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import itertools
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -128,7 +127,7 @@ def solve_(arr):
         if num_repeat == 2:
             for i in range(1, n):
                 val = longest_common_subsequence(brr[:i], brr[i:])
-                log(val)
+                # log(val)
                 res = max(res, val * num_repeat)
 
         if num_repeat == 3:
