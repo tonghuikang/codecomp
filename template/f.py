@@ -102,10 +102,49 @@ def lcs3(a, b, c):
 
     return lcs
 
+# def lcs3(X,Y,Z):
+#     # X = "AGGT12"
+#     # Y = "12TXAYB"
+#     # Z = "12XBA"
+    
+#     # Returns length of LCS for
+#     # X[0..m-1], Y[0..n-1] and Z[0..o-1]
+#     def lcsOf3(i, j, k) :
+    
+#         if(i == -1 or j == -1 or k == -1) :
+#             return 0
+            
+#         if(dp[i][j][k] != -1) :
+#             return dp[i][j][k]
+        
+#         if(X[i] == Y[j] and Y[j] == Z[k]) :
+#             dp[i][j][k] = 1 + lcsOf3(i - 1,
+#                                     j - 1, k - 1)
+#             return dp[i][j][k]
+            
+#         else :
+#             dp[i][j][k] = max(max(lcsOf3(i - 1, j, k),
+#                                 lcsOf3(i, j - 1, k)),
+#                                 lcsOf3(i, j, k - 1))
+            
+#             return dp[i][j][k]
+    
+#     m = len(X)
+#     n = len(Y)
+#     o = len(Z)
+
+#     dp = [[[-1 for i in range(o+1)]
+#             for j in range(n+1)]
+#             for k in range(m+1)]
+
+#     return(lcsOf3(m - 1, n - 1, o - 1))
+
 
 def solve_(arr):
     # your solution here
     c = Counter(arr)
+
+    log(c)
 
     res = 0
 
@@ -130,10 +169,23 @@ def solve_(arr):
                 # log(val)
                 res = max(res, val * num_repeat)
 
+        log(res)
+
         if num_repeat == 3:
             for a,b in itertools.combinations(list(range(1,n)), 2):
                 val = lcs3(brr[:a], brr[a:b], brr[b:])
                 res = max(res, val * num_repeat)
+
+        log(res)
+
+        if num_repeat == 4:
+            continue
+
+        if num_repeat == 6:
+            continue
+
+        if num_repeat != 5:
+            continue
 
         def count_seq(perm):
             n = len(perm)
@@ -148,14 +200,45 @@ def solve_(arr):
             # log(perm, cnt)
             return cnt
 
-        if num_repeat == 7:
-            allset = set(brr)
-            n = len(allset)
-            for perm in itertools.permutations(list(allset)):
-                for i in range(1, n+1):
-                    per = perm[:i]
-                    val = len(per) * count_seq(per)
-                    res = max(res, val)
+        # log(brr)
+
+        idxs = [len(brr) // 5] * 5
+        remainder = n - sum(idxs)
+        for ptr in range(5):
+            if remainder:
+                idxs[ptr] += 1
+                remainder -= 1
+        
+        sections = []
+        psum = [0]
+
+        for idx in idxs:
+            psum.append(psum[-1] + idx)
+
+        # log(psum)
+
+        allset = set()
+
+        for a,b in zip(psum, psum[1:]):
+            # log(a,b)
+            qrr = brr[a:b]
+            # log(qrr)
+            for prod in itertools.product([0,1], repeat=len(qrr)):
+                query = []
+                for a,b in zip(prod, qrr):
+                    if a:
+                        query.append(b)
+                allset.add(tuple(query))
+        
+        # log(brr)
+        # log(allset)
+
+        for seq in allset:
+            if not seq:
+                continue
+            val = count_seq(seq)
+            # log(seq, val)
+            res = max(res, val*len(seq))
 
     return res
 
@@ -172,7 +255,7 @@ for case_num in [0]:  # no loop over test case
     srr = input().strip()
     arr = [abc_map[x] for x in srr]
 
-
+    log(len(srr))
 
     # read one line and parse each word as a string
     # arr = input().split()
