@@ -52,10 +52,77 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
+    n = len(srr)
 
-    return ""
+    srr = sorted(list(srr), reverse=True)
+
+    c = sorted(Counter(list(srr)).items())
+
+    # log(c)
+
+    left = []
+    right = []
+    allres = []
+    hold = None
+
+    for i,(k,v) in enumerate(c):
+        num_pairs = v // 2
+        for _ in range(num_pairs):
+            left.append(k)
+            right.append(k)
+
+        # log(left)
+        # log(right)
+        # log()
+
+        if v%2 and hold is not None:
+            # log("check")
+            left.append(k)
+            for (k2,v2) in (c[i+1:]):
+                for _ in range(v2):
+                    left.append(k2)
+            right.append(hold)
+            # log(left)
+            # log(right)
+            # log()
+            break
+
+        if v%2 and hold is None:
+            hold = k
+            # for (_,v2) in (c[i+1:]):
+            #     if v2%2:
+            #         break
+            # else:
+            #     for (k2,v2) in (c[i+1:]):
+            #         for _ in range(v2//2):
+            #             left2.append(k2)
+            #             right2.append(k2)
+            #     right2.append(k)
+            #     res2 = left2 + right2[::-1]
+
+        if hold is not None:
+            left2 = [x for x in left]
+            right2 = [x for x in right]
+            for (k,v) in (c[i+1:]):
+                for _ in range(v):
+                    left2.append(k)
+            right2.append(hold)
+            res2 = left2 + right2[::-1]
+            # log("check", res2, left2, right2, len(res2), n)
+            assert len(res2) == n
+            allres.append(res2)
+
+    else:
+        if hold is not None:
+            right.append(hold)
+
+    res2 = left + right[::-1]
+    # log(res2)
+    assert len(res2) == n
+    allres.append(res2)
+    return "".join(min(allres))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +134,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -82,7 +149,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
