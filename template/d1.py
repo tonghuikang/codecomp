@@ -430,7 +430,7 @@ class LazySegmentTree:
         self._build(start_copy)
         self._build(stop_copy - 1)
 
-    def query(self, start, stop, default=0):
+    def query(self, start, stop, default=LARGE):
         """func of data[start, stop)"""
         start += self._size
         stop += self._size
@@ -469,11 +469,11 @@ def solve_(n, k, arr, crr, hrr):
     # x -> a+x
     # We could use Fenwick Tree for this, but let us try using LST
 
-    op = lambda a,b: min(a,b)
-    e = LARGE
-    mapping = lambda f,x: f+x
-    composition = lambda f,g: f+g
-    id_ = 0
+    # op = lambda a,b: min(a,b)
+    # e = LARGE
+    # mapping = lambda f,x: f+x
+    # composition = lambda f,g: f+g
+    # id_ = 0
 
     dp = [LARGE for _ in range(k)]
     dp.append(0)
@@ -500,21 +500,22 @@ def solve_(n, k, arr, crr, hrr):
 
         # new_dp = [x + crr[idx] for x in dp]
         # log(idx, crr)
-        f = crr[idx]
+        # f = crr[idx]
 
         # new_dp[idx] = min(min(dp) + crr[idx], dp[idx] + hrr[idx])
         min_dp = st.query(0, k+1)
         dp_idx = st.query(idx, idx+1)
         new_dp_idx = min(min_dp + crr[idx], dp_idx + hrr[idx])
 
-        st.apply(0, k+1, f)
+        st.add(0, k+1, crr[idx])
         st.add(idx, idx+1, new_dp_idx - st.query(idx, idx+1))
 
         # new_dp[prev] = min(new_dp[prev], dp[idx] + hrr[idx])
-        dp_prev = st.get(prev)
+        dp_prev = st.query(prev, prev+1)
         new_dp_prev = min(dp_prev, dp_idx + hrr[idx])
-        st.add(prev, prev+1, new_dp_prev - st.query(prev, prev+1))
+        st.add(prev, prev+1, new_dp_prev - dp_prev)
 
+        log(st, min_dp, dp_idx, dp_prev, new_dp_idx - st.query(idx, idx+1))
         # dp = new_dp
         prev = idx
 
