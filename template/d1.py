@@ -494,6 +494,8 @@ def solve_(n, k, arr, crr, hrr):
     # st.apply(l, r, f)   # redefine f before calling this
     # st.prod(l, r)
 
+    # log([st.query(idx, idx+1) for idx in range(k+1)])
+
     prev = k
     for idx in arr:
         # log(dp)
@@ -510,12 +512,15 @@ def solve_(n, k, arr, crr, hrr):
         st.add(0, k+1, crr[idx])
         st.add(idx, idx+1, new_dp_idx - st.query(idx, idx+1))
 
+        log([st.query(idx, idx+1) for idx in range(k+1)])
+
         # new_dp[prev] = min(new_dp[prev], dp[idx] + hrr[idx])
         dp_prev = st.query(prev, prev+1)
         new_dp_prev = min(dp_prev, dp_idx + hrr[idx])
         st.add(prev, prev+1, new_dp_prev - dp_prev)
 
-        log(st, min_dp, dp_idx, dp_prev, new_dp_idx - st.query(idx, idx+1))
+        log([st.query(idx, idx+1) for idx in range(k+1)])
+        log()
         # dp = new_dp
         prev = idx
 
