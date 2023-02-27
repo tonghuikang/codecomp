@@ -463,8 +463,8 @@ We can represent f and id_ as an integer instead, and let mapping execute the fu
 
 op = lambda a,b: a+b
 e = 0
-mapping = lambda f,x: f(x)
-composition = lambda f,g: (lambda x: f(g(x)))
+mapping = lambda f,x: f*x
+composition = lambda f,g: f*g
 id_ = 1
 f = -1
 
