@@ -51,11 +51,35 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
-def solve_():
+
+
+def solve_(arr):
     # your solution here
 
-    return ""
+    res = []
+
+    n = len(arr)
+    if len(set(arr)) == 1:
+        return []
+    if arr.count(1) > 0:
+        return -1
+
+    while True:
+        if len(set(arr)) == 1:
+            break
+        idx1 = arr.index(max(arr))
+        idx2 = arr.index(min(arr))
+        res.append([idx1, idx2])
+        arr[idx1] = ceiling_division(arr[idx1], arr[idx2])
+
+        # log(arr)
+
+    assert len(res) <= 30*n
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +87,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,7 +98,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,15 +106,22 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
+
+    if res == -1:
+        print(-1)
+        continue
 
     # print length if applicable
-    # print(len(res))
+    print(len(res))
+
+    if len(res) == 0:
+        continue
 
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x+1) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
