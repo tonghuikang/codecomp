@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import functools
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -102,6 +101,7 @@ primes_set = set(primes)
 
 def solve_(n, arr):
     # your solution here
+    n = len(arr) // 2
 
     c = Counter(arr)
 
@@ -122,36 +122,41 @@ def solve_(n, arr):
     if len(arr) < n:
         return 0
 
-    # you have some balls, you extract k unique balls, how many ways to arrange the remaining balls
-
-    # dp = [[0 for _ in range(n+1)] for _ in range(n+1)]
-    # dp[number of colors][number of balls] = arrangements
-
-    dp = [0 for _ in range(2*n+1)]
-    # dp[number of balls] = arrangements
-    dp[0] = 1
-
-    for x in arr:
-        new_dp = [0 for _ in range(2*n+1)]
-        for i in range(n):
-            val = dp[i]
-            new_dp[i+x] += val%p * ncr_mod_p(i+x,i)
-            new_dp[i+x-1] += val%p * ncr_mod_p(i+x-1,i)
-        dp = new_dp
-        log(dp)
-    # dp[n]
-
-    res = dp[n - len(brr)]
-
-    val = factorial_mod_p[len(brr)]
-    q = len(brr)
+    common_factor = factorial_mod_p[n]
     for x in brr:
-        val = (val*ncr_mod_p(q, x))%p
-        q -= x
-    res = (res*val)%p
-    res = res*ncr_mod_p(n, len(brr))
+        common_factor = (common_factor * ifactorial_mod_p[x])%p
 
-    return res%p
+    dp = [[0 for _ in range(2*n+1)] for _ in range(2*n+1)]
+
+    for x in range(len(arr),-1,-1):
+        for y in range(n+1):
+            # log(x,y,n)
+            if x == len(arr) and y == 0:
+                dp[x][y] = 1
+                continue
+            if x == len(arr):
+                continue
+            if y < 0:
+                continue
+            val = ifactorial_mod_p[arr[x]] * dp[x+1][y] + ifactorial_mod_p[arr[x]-1] * dp[x+1][y-1]
+            # log(x,y,val)
+            dp[x][y] = val%p
+
+    log(common_factor)
+
+    # res = dp[n - len(brr)]
+
+    # val = factorial_mod_p[len(brr)]
+    # q = len(brr)
+    # for x in brr:
+    #     val = (val*ncr_mod_p(q, x))%p
+    #     q -= x
+    # res = (res*val)%p
+    # res = res*ncr_mod_p(n, len(brr))
+
+    # return res%p
+
+    return (common_factor * dp[0][n])%p
 
 
 for case_num in [0]:  # no loop over test case
