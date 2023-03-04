@@ -54,54 +54,13 @@ def minus_one_matrix(mrr):
 
 def solve_(arr):
     # your solution here
-    res = [0]
-    for i,x in enumerate(arr):
-        prev = res[-1]
-        if i%2 == 1:  # make odd
-            if x == 1:
-                res.append(x+2)
-            elif x%2 == 1:
-                res.append(x)
-            elif x%2 == 0:
-                res.append(x+1)
-        else:  # make even, but not double of previous
-            if x%2 == 1:
-                if (x+1) // 2 == prev:
-                    res.append(x+3)
-                else:
-                    res.append(x+1)
-            elif x%2 == 0:
-                if x // 2 == prev:
-                    res.append(x+2)
-                else:
-                    res.append(x)
-    
-    return res[1:]
-
-
-def solve2_(arr):
-    # your solution here
-    res = [0]
+    res = [2]
     for i,x in enumerate(arr, start=1):
         prev = res[-1]
-        if i%2 == 1:  # make odd
-            if x == 1:
-                res.append(x+2)
-            elif x%2 == 1:
-                res.append(x)
-            elif x%2 == 0:
-                res.append(x+1)
-        else:  # make even, but not double of previous
-            if x%2 == 1:
-                if (x+1) // 2 == prev:
-                    res.append(x+3)
-                else:
-                    res.append(x+1)
-            elif x%2 == 0:
-                if x // 2 == prev:
-                    res.append(x+2)
-                else:
-                    res.append(x)
+        log(x, prev, x%prev, res)
+        while x%prev == 0 or x == 1:
+            x += 1
+        res.append(x)
     
     return res[1:]
 
@@ -130,11 +89,6 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr)  # include input here
-    res2 = solve2_(arr)  # include input here
-
-    if sum(res) > sum(res2):
-        res = res2
-
     # print length if applicable
     # print(len(res))
 
