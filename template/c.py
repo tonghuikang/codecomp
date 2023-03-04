@@ -67,7 +67,7 @@ def solve_(n, arr):
     res = [ptr]
     for _ in range(n-1):
         arr.pop()
-        if arr[-ptr] < ptr and ptr == 1:
+        if arr[-ptr] < ptr:
             ptr -= 1
         res.append(max(1,ptr))
         log(ptr, arr[-ptr:])
