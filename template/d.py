@@ -64,6 +64,35 @@ def get_largest_prime_factors(num):
     return largest_prime_factors
 
 
+LARGE = 2**20
+p = 998244353  # CHANGE WHEN NEEDED
+
+
+
+def modinv_p(base, p=p):
+    
+    # modular inverse if the modulo is a prime
+    return pow(base, -1, p)  # for Python 3.8+
+    # return pow(base, p-2, p)  # if Python version is below 3.8
+
+
+factorial_mod_p = [1]
+for i in range(1, LARGE+1):
+    factorial_mod_p.append((factorial_mod_p[-1]*i)%p)
+
+ifactorial_mod_p = [1]*(LARGE+1)
+ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p-2, p)
+for i in range(LARGE-1, 1, -1):
+    ifactorial_mod_p[i] = ifactorial_mod_p[i+1]*(i+1)%p
+
+def ncr_mod_p(n, r, p=p):
+    # https://codeforces.com/contest/1785/submission/192389526
+    if r < 0 or n < r: return 0
+    num = factorial_mod_p[n]
+    dem = (ifactorial_mod_p[r]*ifactorial_mod_p[n-r])%p
+    return (num * dem)%p 
+
+
 SIZE_OF_PRIME_ARRAY = 10**6 + 10
 largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
 primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
@@ -84,10 +113,45 @@ def solve_(n, arr):
         else:
             brr.append(v)
 
+    arr.sort()
+    brr.sort()
+
     log(arr)
     log(brr)
 
-    return ""
+    if len(arr) < n:
+        return 0
+
+    # you have some balls, you extract k unique balls, how many ways to arrange the remaining balls
+
+    # dp = [[0 for _ in range(n+1)] for _ in range(n+1)]
+    # dp[number of colors][number of balls] = arrangements
+
+    dp = [0 for _ in range(2*n+1)]
+    # dp[number of balls] = arrangements
+    dp[0] = 1
+
+    for x in arr:
+        new_dp = [0 for _ in range(2*n+1)]
+        for i in range(n):
+            val = dp[i]
+            new_dp[i+x] += val%p * ncr_mod_p(i+x,i)
+            new_dp[i+x-1] += val%p * ncr_mod_p(i+x-1,i)
+        dp = new_dp
+        log(dp)
+    # dp[n]
+
+    res = dp[n - len(brr)]
+
+    val = factorial_mod_p[len(brr)]
+    q = len(brr)
+    for x in brr:
+        val = (val*ncr_mod_p(q, x))%p
+        q -= x
+    res = (res*val)%p
+    res = res*ncr_mod_p(n, len(brr))
+
+    return res%p
 
 
 for case_num in [0]:  # no loop over test case
