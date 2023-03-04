@@ -62,17 +62,16 @@ def solve_(n, arr):
     while ptr > 0 and arr[-ptr] < ptr:
         ptr -= 1
     
-    res = [ptr]
-    for _ in range(n):
-        ptr -= 1
-        if arr[-ptr] >= ptr:
-            ptr += 1
-        res.append(ptr)
-
     log(ptr, arr[-ptr:])
 
-    # for i in range(n):
-    #     while ptr < i and arr[ptr] < n
+    res = [ptr]
+    for _ in range(n-1):
+        arr.pop()
+        if arr[-ptr] < ptr and ptr == 1:
+            ptr -= 1
+        res.append(max(1,ptr))
+        log(ptr, arr[-ptr:])
+
 
     return res[::-1]
 
@@ -107,7 +106,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
