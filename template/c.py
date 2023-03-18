@@ -55,10 +55,11 @@ def minus_one_matrix(mrr):
 def solve_(n, arr):
     # your solution here
 
-    if len(arr) == 2:
-        return abs(arr[0] - arr[1])
-
     minres = sum(abs(x) for x in arr)
+
+    if len(arr) == 2:
+        res = abs(arr[0] - arr[1])
+        minres = min(minres, res)
 
     if len(arr) == 4:
         brr = [2]*4
