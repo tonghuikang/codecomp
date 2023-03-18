@@ -77,13 +77,13 @@ def solve_(n, arr):
         res = sum(abs(x-y) for x,y in zip(arr, brr))
         minres = min(minres, res)
 
-    if n%2 == 1:
-        val = -1+(n-1)
-        brr = [val]*1 + [-1]*(2*n-1)
-        brr.sort()
-        log(brr)
-        res = sum(abs(x-y) for x,y in zip(arr, brr))
-        minres = min(minres, res)
+    # if n%2 == 1:
+    #     val = -1+(n-1)
+    #     brr = [val]*1 + [-1]*(2*n-1)
+    #     brr.sort()
+    #     log(brr)
+    #     res = sum(abs(x-y) for x,y in zip(arr, brr))
+    #     minres = min(minres, res)
 
     return minres
 
