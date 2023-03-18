@@ -52,10 +52,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b,x,y):
     # your solution here
 
-    return ""
+    if y < b:
+        log("y<b")
+        return -1
+
+    res = y-b
+    a += res
+
+    if a < x:
+        log("a>x")
+        return -1
+    res += a-x
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,7 +85,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,x,y = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,7 +94,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,x,y)  # include input here
 
     # print length if applicable
     # print(len(res))
