@@ -69,6 +69,8 @@ def solve_(n, arr):
     # log(c[0], (n+1)//2)
 
     if c[0] > (n+1)//2:
+        if c[0] + c[1] == n:
+            return 2
         return 1
 
     return 0
