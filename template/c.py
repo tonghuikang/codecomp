@@ -53,6 +53,8 @@ def minus_one_matrix(mrr):
 
 
 def solve_(n, arr):
+    arr.sort()
+    assert n*2 == len(arr)
     # your solution here
 
     minres = sum(abs(x) for x in arr)
@@ -63,14 +65,25 @@ def solve_(n, arr):
 
     if len(arr) == 4:
         brr = [2]*4
+        log(brr)
         res = sum(abs(x-y) for x,y in zip(arr, brr))
         minres = min(minres, res)
 
-    brr = [n]*1 + [-1]*(2*n-1)
-    brr.sort()
-    # log(brr)
-    res = sum(abs(x-y) for x,y in zip(arr, brr))
-    minres = min(minres, res)
+    if n%2 == 0:
+        val = 1+(n-1)
+        brr = [val]*1 + [-1]*(2*n-1)
+        brr.sort()
+        log(brr)
+        res = sum(abs(x-y) for x,y in zip(arr, brr))
+        minres = min(minres, res)
+
+    if n%2 == 1:
+        val = -1+(n-1)
+        brr = [val]*1 + [-1]*(2*n-1)
+        brr.sort()
+        log(brr)
+        res = sum(abs(x-y) for x,y in zip(arr, brr))
+        minres = min(minres, res)
 
     return minres
 
