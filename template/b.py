@@ -53,9 +53,25 @@ def minus_one_matrix(mrr):
 
 
 def solve_(n, arr):
-    # your solution here
+    # possible to avoid consec zero -> 0
+    # else 1
 
-    return ""
+    if arr.count(0) == 0:
+        return 0
+
+    c = Counter(arr)
+
+    # maxres = 2
+
+    # if c[0] + c[1] < arr[0]:
+    #     return 1
+
+    # log(c[0], (n+1)//2)
+
+    if c[0] > (n+1)//2:
+        return 1
+
+    return 0
 
 
 # for case_num in [0]:  # no loop over test case
