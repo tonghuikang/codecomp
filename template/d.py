@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,74 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def interval_overlap(x1,x2,y1,y2):
+    # given intervals [x1,x2], [y1,y2]
+    # [start, end] of overlapping interval    
+    # if start > end, there is no overlapping inteval
+    return max(x1,y1), min(x2,y2)
+
+
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
+
+
+def solve_(mrr):
     # your solution here
 
-    return ""
+    res = []
+
+    # inclusive
+    minheight = 1
+    maxheight = 5*10**18 + 10
+
+    def calc_days(a,b,h):
+        h -= a
+        diff = a-b
+        num_sets = max(0, ceiling_division(h, diff))  # ceiling?
+        # num_sets = max(0, h // diff)  # ceiling?
+        return num_sets + 1
+    
+    def calc_max_height_attainable(a,b,n):
+        if n == 0:
+            return 0
+        diff = a-b
+        return diff*(n-1) + a
+
+
+    for arr in mrr:
+        if arr[0] == 1:
+            a,b,n = arr[1:]
+            minheight_new = calc_max_height_attainable(a,b,n-1) + 1
+            maxheight_new = calc_max_height_attainable(a,b,n)
+            
+            # log(minheight_new, maxheight_new)
+
+            start,end = interval_overlap(minheight_new, maxheight_new, minheight, maxheight)
+
+            if start > end:
+                res.append(0)
+            else:
+                minheight = max(minheight, minheight_new)
+                maxheight = min(maxheight, maxheight_new)
+                res.append(1)
+
+        if arr[0] == 2:
+            a,b = arr[1:]
+            upper = calc_days(a,b,minheight)
+            lower = calc_days(a,b,maxheight)
+            # log(minheight, maxheight)
+            # log(lower, upper)
+            # log()
+            if upper == lower:
+                res.append(upper)
+            else:
+                res.append(-1)
+
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -64,7 +125,7 @@ for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
-    # k = int(input())
+    q = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -79,16 +140,16 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
