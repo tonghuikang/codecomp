@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import heapq
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +51,46 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(n,m,arr,mrr):
+    # if you are ringfenced
+    # no matter where you start in a connected component within the ringfence, you cannot complete
 
-    return ""
+    g = defaultdict(set)
+    for a,b in mrr:
+        g[a].add(b)
+        g[b].add(a)
+
+    failed = set()
+
+    # consider all starting points
+    for start in range(n):
+        if start in failed:
+            continue
+
+        stack = [start]
+        curset = set(stack)
+        indexed = set(stack)
+
+        neighbors = []
+        while stack:
+            cur = stack.pop()
+            for nex in g[cur]:
+                if nex in indexed:
+                    continue
+                indexed.add(nex)
+                heapq.heappush(neighbors, (arr[nex], nex))
+
+            while neighbors and neighbors[0][1] <= len(curset):
+                x,i = heapq.heappop(neighbors)
+                stack.append(i)
+                curset.add(i)
+
+        if len(curset) == n:
+            return yes
+
+        failed.update(curset)
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -74,15 +109,16 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,arr,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
