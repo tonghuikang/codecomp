@@ -64,6 +64,9 @@ def solve_(n,m,arr,mrr):
 
     # consider all starting points
     for start in range(n):
+        if arr[start] != 0:
+            continue
+        # log("start", start)
         if start in failed:
             continue
 
@@ -80,7 +83,9 @@ def solve_(n,m,arr,mrr):
                 indexed.add(nex)
                 heapq.heappush(neighbors, (arr[nex], nex))
 
-            while neighbors and neighbors[0][1] <= len(curset):
+            # log(neighbors)
+
+            while neighbors and neighbors[0][0] <= len(curset):
                 x,i = heapq.heappop(neighbors)
                 stack.append(i)
                 curset.add(i)
