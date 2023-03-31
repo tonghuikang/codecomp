@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,19 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,c,d,arr):
     # your solution here
+    brr = sorted(set(arr))
 
-    return ""
+    basecost = (len(arr) - len(brr)) * c
+    mincost = n*c + d
+
+    for i,x in enumerate(brr, start=1):
+        cost = basecost + (x-i)*d + (len(brr) - i)*c
+        # log(cost)
+        mincost = min(mincost, cost)
+
+    return mincost
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,8 +79,9 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,c,d = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    # arr.sort()
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,7 +89,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,c,d,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
