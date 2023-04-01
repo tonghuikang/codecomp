@@ -406,6 +406,42 @@ def detect_cycle(map_from_node_to_nodes):
     return topological_sort(map_from_node_to_nodes) == []
 
 
+def findShortestCycle(n: int, edges: List[List[int]]) -> int:
+    # https://web.archive.org/web/20170829175217/http://webcourse.cs.technion.ac.il/234247/Winter2003-2004/ho/WCFiles/Girth.pdf
+    
+    g = defaultdict(set)
+    for a,b in edges:
+        g[a].add(b)
+        g[b].add(a)
+
+    inf = 10**18
+    minres = inf
+
+    for start in range(n):
+        visited = set()
+        queue = deque([start])
+        parents = {start: None}
+        depth = {start: 0}
+
+        while queue:
+            x = queue.popleft()
+            visited.add(x)
+
+            for y in g[x]:
+                if y == parents[x]:
+                    continue
+                if y not in visited:
+                    parents[y] = x
+                    depth[y] = depth[x] + 1
+                    queue.append(y)
+                else:
+                    minres = min(minres, depth[x] + depth[y] + 1)
+
+    if minres == inf:
+        return -1
+    return minres
+
+
 def longest_path(map_from_node_to_nodes_and_costs):
     return NotImplementedError
 
