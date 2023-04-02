@@ -81,6 +81,8 @@ def solve_(n,mrr,arr):
     if acnt[maxval] > 2:
         return res
 
+    assert acnt[maxval] == 2
+
     # find the path between the two maximums
     start = arr.index(maxval)
     queue = deque([start])
@@ -148,11 +150,11 @@ def solve_(n,mrr,arr):
     right_duplicate_candidates = [] # maxheap
 
     for val in leading[path[0]]:
-        left_counter[val] += 1
+        left_counter[arr[val]] += 1
 
     for x in path[1:]:
         for val in leading[x]:
-            right_counter[val] += 1
+            right_counter[arr[val]] += 1
 
     left_duplicate_candidates = [-x for x in left_counter.keys()]
     right_duplicate_candidates = [-x for x in right_counter.keys()]
