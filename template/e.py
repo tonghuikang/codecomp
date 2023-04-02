@@ -100,6 +100,8 @@ def solve_(n,mrr,arr):
                 break
 
     assert start != nex
+    assert arr[nex] == maxval
+    assert arr[start] == maxval
     # log("start", start, arr.index(maxval))
     # log(parent)
     cur = nex
@@ -108,6 +110,8 @@ def solve_(n,mrr,arr):
         cur = parent[cur]
         path.append(cur)
 
+    assert path[0] == nex
+    assert path[-1] == start
     assert len(path) >= 2
 
     # log(path)
@@ -131,7 +135,7 @@ def solve_(n,mrr,arr):
     
     leading = defaultdict(list)
     for x,ldr in leader.items():
-        if arr[x] >= 0:
+        if arr[x] > 0:
             leading[ldr].append(arr[x])
 
     # log(path)
@@ -206,6 +210,8 @@ for case_num in [0]:  # no loop over test case
     mrr = minus_one_matrix(mrr)
 
     res = solve(n,mrr,arr)  # include input here
+
+    assert len(res) == n-1
 
     # print length if applicable
     # print(len(res))
