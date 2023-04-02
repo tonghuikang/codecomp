@@ -60,8 +60,8 @@ def solve_(n,m,krr,abcrr):
     krr = sorted(set([x[0] for x in krr]))
 
     for a,b,c in abcrr:
-        left = b - (4*a*c)**0.5
-        right = b + (4*a*c)**0.5
+        # left = b - (4*a*c)**0.5
+        # right = b + (4*a*c)**0.5
 
         idx = bisect.bisect_left(krr, b)
         for i in range(idx-2, idx+3):
