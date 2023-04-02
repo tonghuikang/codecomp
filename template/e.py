@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
+import heapq
 from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
@@ -73,10 +72,12 @@ def solve_(n,mrr,arr):
     for i in range(n):
         if acnt[arr[i]] == 1:
             arr[i] = 0
+    # log(arr)
 
     maxval = max(arr)
+    res = [maxval for _ in range(n-1)]
     if acnt[maxval] > 2:
-        return [maxval for _ in range(n)]
+        return res
 
     # find the path between the two maximums
     start = arr.index(maxval)
@@ -86,7 +87,7 @@ def solve_(n,mrr,arr):
     flag = True
     while queue and flag:
         cur = queue.popleft()
-        log(cur, parent)
+        # log(cur, parent)
         for nex in g[cur]:
             if nex in parent:
                 continue
@@ -97,16 +98,83 @@ def solve_(n,mrr,arr):
                 break
 
     start = nex
-    log("start", start, arr.index(maxval))
-    log(parent)
+    # log("start", start, arr.index(maxval))
+    # log(parent)
+    cur = start
     path = [start]
     while parent[cur] != -1:
         cur = parent[cur]
         path.append(cur)
 
-    log(path)
+    # log(path)
 
-    return []
+    for a,b in zip(path, path[1:]):
+        edge_idx = edges_to_idx[a,b] 
+        res[edge_idx] = -1
+
+    # leader classification
+    visited = set(path)
+    leader = {x:x for x in path}
+    stack = list(visited)
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            stack.append(nex)
+            leader[nex] = leader[cur]
+    
+    leading = defaultdict(list)
+    for x,ldr in leader.items():
+        if arr[x] > 0:
+            leading[ldr].append(arr[x])
+
+    # log(path)
+    # log(leading)
+
+    left_counter = Counter()
+    left_duplicate_candidates = []  # maxheap
+
+    right_counter = Counter()
+    right_duplicate_candidates = [] # maxheap
+
+    for val in leading[path[0]]:
+        left_counter[val] += 1
+
+    for x in path[1:]:
+        for val in leading[x]:
+            right_counter[val] += 1
+
+    left_duplicate_candidates = [-x for x in left_counter.keys()]
+    right_duplicate_candidates = [-x for x in right_counter.keys()]
+
+    for a,b in zip(path, path[1:]):
+
+        while left_duplicate_candidates and left_counter[-left_duplicate_candidates[0]] < 2:
+            heapq.heappop(left_duplicate_candidates)
+        maxval = 0
+        if left_duplicate_candidates:
+            val = -left_duplicate_candidates[0]
+            maxval = max(maxval, val)
+
+        while right_duplicate_candidates and right_counter[-right_duplicate_candidates[0]] < 2:
+            heapq.heappop(right_duplicate_candidates)
+        maxval = 0
+        if right_duplicate_candidates:
+            val = -right_duplicate_candidates[0]
+            maxval = max(maxval, val)
+
+        edge_idx = edges_to_idx[a,b]
+        res[edge_idx] = maxval
+
+        # transfer
+        for val in leading[b]:
+            right_counter[val] -= 1
+            left_counter[val] += 1
+            heapq.heappush(left_duplicate_candidates, val)
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
