@@ -137,11 +137,11 @@ def solve_(n,mrr,arr):
     
     leading = defaultdict(list)
     for x,ldr in leader.items():
-        if arr[x] > 0:
+        if arr[x] >= 0:
             leading[ldr].append(arr[x])
 
     # log(path)
-    # log(leading)
+    log(leading)
 
     left_counter = Counter()
     left_duplicate_candidates = []  # maxheap
@@ -149,15 +149,23 @@ def solve_(n,mrr,arr):
     right_counter = Counter()
     right_duplicate_candidates = [] # maxheap
 
+    count_check = 0
     for val in leading[path[0]]:
-        left_counter[arr[val]] += 1
+        left_counter[val] += 1
+        count_check += 1
 
     for x in path[1:]:
         for val in leading[x]:
-            right_counter[arr[val]] += 1
+            right_counter[val] += 1
+            count_check += 1
+    
+    assert count_check == n
 
     left_duplicate_candidates = [-x for x in left_counter.keys()]
     right_duplicate_candidates = [-x for x in right_counter.keys()]
+
+    left_duplicate_candidates.sort()
+    right_duplicate_candidates.sort()
 
     for a,b in zip(path, path[1:]):
 
