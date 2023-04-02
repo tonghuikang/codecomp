@@ -58,6 +58,7 @@ def solve_(n,m,krr,abcrr):
     # b - sqrt(4ac) < k < b + sqrt(4ac)
 
     krr = sorted(set([x[0] for x in krr]))
+    n = len(krr)
 
     for a,b,c in abcrr:
         # left = b - (4*a*c)**0.5
