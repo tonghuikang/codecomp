@@ -103,10 +103,12 @@ def solve_(n,mrr,arr):
     # log("start", start, arr.index(maxval))
     # log(parent)
     cur = nex
-    path = [start]
+    path = [cur]
     while parent[cur] != -1:
         cur = parent[cur]
         path.append(cur)
+
+    assert len(path) >= 2
 
     # log(path)
 
@@ -129,7 +131,7 @@ def solve_(n,mrr,arr):
     
     leading = defaultdict(list)
     for x,ldr in leader.items():
-        if arr[x] > 0:
+        if arr[x] >= 0:
             leading[ldr].append(arr[x])
 
     # log(path)
@@ -173,7 +175,7 @@ def solve_(n,mrr,arr):
         for val in leading[b]:
             right_counter[val] -= 1
             left_counter[val] += 1
-            heapq.heappush(left_duplicate_candidates, val)
+            heapq.heappush(left_duplicate_candidates, -val)
 
     return res
 
