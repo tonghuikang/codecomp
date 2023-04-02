@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,7 +53,115 @@ def minus_one_matrix(mrr):
 def solve_(n,mrr):
     # your solution here
 
-    return ""
+    # conjecture: the center (or two centers) of the diameter is unique
+
+    g = [[] for _ in range(n)]
+    
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    # log(g)
+
+    start = 0
+    queue = deque([start])
+    parent = {start:-1}
+
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in parent:
+                continue
+            parent[nex] = cur
+            queue.append(nex)
+
+    start = cur
+    queue = deque([start])
+    parent = {start:-1}
+
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in parent:
+                continue
+            parent[nex] = cur
+            queue.append(nex)
+
+
+    start = cur
+    queue = deque([start])
+    parent = {start:-1}
+
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in parent:
+                continue
+            parent[nex] = cur
+            queue.append(nex)
+
+
+    start = cur
+    queue = deque([start])
+    parent = {start:-1}
+
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in parent:
+                continue
+            parent[nex] = cur
+            queue.append(nex)
+
+
+    start = cur
+    path = [start]
+    while parent[cur] != -1:
+        cur = parent[cur]
+        path.append(cur)
+    
+
+    if len(path)%2 == 1:
+        starts = [path[len(path) // 2]]
+    if len(path)%2 == 0:
+        starts = [path[len(path) // 2 - 1], path[len(path) // 2]]
+
+    # log(path)
+    # log(starts)
+
+    depths = [-1000 for _ in range(n)]
+    queue = deque(starts)
+    for start in starts:
+        depths[start] = 0
+    visited = set(starts)
+
+    while queue:
+        cur = queue.popleft()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            depths[nex] = depths[cur] + 1
+            queue.append(nex)
+    
+    starting_value = len(path) // 2
+
+    res = [1 for _ in range(n)]
+
+    cntr = Counter(depths)
+    cursum = 0
+
+    for k,v in sorted(cntr.items()):
+        cursum += v
+        res[starting_value + k] = 1 + cursum
+
+    for q in range(starting_value + k, n):
+        res[q] = 1 + cursum
+
+    res = [min(n, x) for x in res]
+    # log(depths)
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
@@ -80,7 +186,7 @@ for case_num in [0]:  # no loop over test case
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(n-1)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = minus_one_matrix(mrr)
 
     res = solve(n,mrr)  # include input here
 
@@ -88,7 +194,7 @@ for case_num in [0]:  # no loop over test case
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

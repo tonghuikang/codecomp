@@ -52,18 +52,69 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(n,mrr,arr):
+    # prune to the largest number, and the next etc
 
-    return ""
+    # cast all unique values to zero
+    # if there is three of the largest number, the answer is all largest
+    #   not possible to break between three of them at once
+
+    edges_to_idx = {}
+    res = [-1 for _ in range(n)]
+    g = [[] for _ in range(n)]
+
+    for i,(a,b) in enumerate(mrr):
+        edges_to_idx[a,b] = i
+        edges_to_idx[b,a] = i
+        g[a].append(b)
+        g[b].append(a)
+
+    acnt = Counter(arr)
+    for i in range(n):
+        if acnt[arr[i]] == 1:
+            arr[i] = 0
+
+    maxval = max(arr)
+    if acnt[maxval] > 2:
+        return [maxval for _ in range(n)]
+
+    # find the path between the two maximums
+    start = arr.index(maxval)
+    queue = deque([start])
+    parent = {start:-1}
+
+    flag = True
+    while queue and flag:
+        cur = queue.popleft()
+        log(cur, parent)
+        for nex in g[cur]:
+            if nex in parent:
+                continue
+            parent[nex] = cur
+            queue.append(nex)
+            if arr[nex] == maxval:
+                flag = False
+                break
+
+    start = nex
+    log("start", start, arr.index(maxval))
+    log(parent)
+    path = [start]
+    while parent[cur] != -1:
+        cur = parent[cur]
+        path.append(cur)
+
+    log(path)
+
+    return []
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -79,17 +130,18 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(n-1)  # and return as a list of list of int
+    arr = list(map(int,input().split()))
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,mrr,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
