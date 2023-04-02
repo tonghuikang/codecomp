@@ -99,10 +99,10 @@ def solve_(n,mrr,arr):
                 flag = False
                 break
 
-    start = nex
+    assert start != nex
     # log("start", start, arr.index(maxval))
     # log(parent)
-    cur = start
+    cur = nex
     path = [start]
     while parent[cur] != -1:
         cur = parent[cur]
