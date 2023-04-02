@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import bisect
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,8 +50,29 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,krr,abcrr):
     # your solution here
+
+    # (b-k)^2 - 4ac < 0
+
+    # b - sqrt(4ac) < k < b + sqrt(4ac)
+
+    krr = sorted(set([x[0] for x in krr]))
+
+    for a,b,c in abcrr:
+        left = b - (4*a*c)**0.5
+        right = b + (4*a*c)**0.5
+
+        idx = bisect.bisect_left(krr, b)
+        for i in range(idx-2, idx+3):
+            if 0 <= i < n:
+                k = krr[i]
+                if (b-k)**2 < 4*a*c:
+                    print(yes)
+                    print(k)
+                    break
+        else:
+            print(no)
 
     return ""
 
@@ -73,16 +92,17 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    krr = read_matrix(n)  # and return as a list of list of int
+    abcrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,krr,abcrr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -95,4 +115,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

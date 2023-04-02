@@ -51,11 +51,41 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+abc = "abcdefghijklmnopqrstuvwxyz"
+abc_map = {c:i for i,c in enumerate(abc)}
+
+
 
 def solve_(n, srr):
     # your solution here
 
-    return ""
+    arr = [abc_map[x] for x in srr]
+    brr = sorted(arr)
+
+    minbrr = brr[0]
+
+    if arr == brr:
+        return arr
+    
+    for i,(a,b) in enumerate(zip(arr, brr)):
+        if a != b:
+            break
+
+    left = arr[:i]
+    right = arr[i:]
+
+    log(left)
+    log(right)
+
+    if minbrr not in right:
+        return arr
+
+    right = right[::-1]
+    idx = right.index(minbrr)
+    q = right[idx]
+    del right[idx]
+
+    return left + [q] + right[::-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -88,7 +118,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = "".join(abc[x] for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
