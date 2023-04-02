@@ -53,6 +53,8 @@ def minus_one_matrix(mrr):
 
 def solve_(n,mrr,arr):
     # prune to the largest number, and the next etc
+    assert len(mrr) == n-1
+    assert len(arr) == n
 
     # cast all unique values to zero
     # if there is three of the largest number, the answer is all largest
@@ -160,7 +162,6 @@ def solve_(n,mrr,arr):
 
         while right_duplicate_candidates and right_counter[-right_duplicate_candidates[0]] < 2:
             heapq.heappop(right_duplicate_candidates)
-        maxval = 0
         if right_duplicate_candidates:
             val = -right_duplicate_candidates[0]
             maxval = max(maxval, val)
