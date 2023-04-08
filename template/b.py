@@ -55,6 +55,9 @@ def minus_one_matrix(mrr):
 def solve_(n,k,mrr):
     # your solution here
 
+    matrix = [col[::-1] for col in zip(*matrix)]  # once
+    for row in matrix:
+        log(row)
 
 
     return ""
