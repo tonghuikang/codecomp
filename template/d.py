@@ -50,6 +50,14 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def encode(ss, idx):
+    return -ss*1_000_000 + idx
+
+
+def decode(code):
+    nss, idx = divmod(code, 1_000_000)
+    return -nss, idx
+    
 
 def solve_(n,m,arr,mrr,qrr):
     # your solution here
@@ -93,7 +101,7 @@ def solve_(n,m,arr,mrr,qrr):
 
     mapping = [[] for _ in range(n)]
     for i,x in enumerate(parents[1:], start=1):
-        heapq.heappush(mapping[x], (-subtree_size[i], i))
+        heapq.heappush(mapping[x], encode(subtree_size[i], i))
 
     removal = [[] for _ in range(n)]
 
@@ -110,16 +118,16 @@ def solve_(n,m,arr,mrr,qrr):
             if not mapping[x]:  # leaf
                 continue
 
-            nss, s = heapq.heappop(mapping[x])
+            _, s = decode(heapq.heappop(mapping[x]))
             father = parents[x]
             
-            heapq.heappush(removal[father], (-subtree_size[x], x))
+            heapq.heappush(removal[father], encode(subtree_size[x], x))
             parents[x] = s
             parents[s] = father
             subtree_size[s], subtree_size[x] = subtree_size[x], subtree_size[x] - subtree_size[s]
             importance[s], importance[x] = importance[x], importance[x] - importance[s]
-            heapq.heappush(mapping[s], (-subtree_size[x], x))
-            heapq.heappush(mapping[father], (-subtree_size[s], s))
+            heapq.heappush(mapping[s], encode(subtree_size[x], x))
+            heapq.heappush(mapping[father], encode(subtree_size[s], s))
 
             log(parents)
             log(subtree_size)
