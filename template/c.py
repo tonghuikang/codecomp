@@ -62,24 +62,33 @@ for case_num in range(int(input())):
 
     top_left = query(0,0)
     top_right = query(0,m-1)
+
+    if top_left + top_right == m-1:
+        y = query(top_left,0)
+        alert(top_left,y)
+        continue
+
     bottom_left = query(n-1,0)
 
-    xrr = []
-    yrr = []
+    qrr = []
+    for q in [top_left, top_right, bottom_left]:
+        qrr.append(q)
 
-    xrr.append(top_left)
-    yrr.append(top_left)
+    # xrr = []
+    # yrr = []
 
-    xrr.append(top_right)
-    yrr.append(m-1-top_right)
+    # xrr.append(top_left)
+    # yrr.append(top_left)
 
-    xrr.append(n-1-bottom_left)
-    yrr.append(bottom_left)
+    # xrr.append(top_right)
+    # yrr.append(m-1-top_right)
 
-    rx,ry = -1,-1
+    # xrr.append(n-1-bottom_left)
+    # yrr.append(bottom_left)
+
     allcnt = 0
-    for x in xrr:
-        for y in yrr:
+    for x in qrr:
+        for y in qrr:
             if check(x,y,top_left,top_right,bottom_left):
                 allcnt += 1
                 alert(x,y)
