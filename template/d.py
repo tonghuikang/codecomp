@@ -52,10 +52,81 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,m,arr,mrr):
+def solve_(n,m,arr,mrr,qrr):
     # your solution here
 
-    return ""
+    # just implementation?
+
+    g = defaultdict(set)
+    for a,b in mrr:
+        g[a].add(b)
+        g[b].add(a)
+    
+    stack = [0]
+    parents = [-1 for _ in range(n)]
+    childrens = [set() for _ in range(n)]
+    visited = set(stack)
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            stack.append(nex)
+            parents[nex] = cur
+            childrens[cur].add(nex)
+
+    importance = [x for x in arr]
+    subtree_size = [1 for _ in range(n)]
+
+    leaves = [i for i,x in enumerate(childrens) if len(x) == 0]
+
+    while leaves:
+        cur = leaves.pop()
+        par = parents[cur]
+        if par == -1:
+            break
+        childrens[par].remove(cur)
+        importance[par] += importance[cur]
+        subtree_size[par] += subtree_size[cur]
+        if len(childrens[par]) == 0:
+            leaves.append(par)
+
+    mapping = [[] for _ in range(n)]
+    for i,x in enumerate(parents[1:], start=1):
+        heapq.heappush(mapping[x], (-subtree_size[i], i))
+
+    removal = [[] for _ in range(n)]
+
+    # log(parents)
+    # log(subtree_size)
+    # log(importance)
+    # log(mapping)
+    # log(removal)
+
+    allres = []
+    for q,x in qrr:
+        if q == 0:  # query
+            allres.append(importance[x])
+        else:  # rotate
+            while removal[x] and mapping[x] and removal[x][0] == mapping[x][0]:
+                heapq.heappop(removal[x])
+                heapq.heappop(mapping[x])
+
+            if not mapping[x]:  # leaf
+                continue
+
+            nss, s = heapq.heappop(mapping[x])
+            father = parents[x]
+            
+            heapq.heappush(removal[father], (-subtree_size[x], x))
+            parents[x] = s
+            parents[s] = father
+            subtree_size[s], subtree_size[x] = subtree_size[x], subtree_size[x] - subtree_size[s]
+            importance[s], importance[x] = importance[x], importance[x] - importance[s]
+            heapq.heappush(mapping[s], (-subtree_size[x], i))
+
+    return allres
 
 
 for case_num in [0]:  # no loop over test case
@@ -80,16 +151,18 @@ for case_num in [0]:  # no loop over test case
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(n-1)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    qrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
+    qrr = minus_one_matrix(qrr)
 
-    res = solve(n,m,arr,mrr)  # include input here
+    res = solve(n,m,arr,mrr,qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
