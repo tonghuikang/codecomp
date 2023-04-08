@@ -64,8 +64,8 @@ for case_num in range(int(input())):
     top_right = query(0,m-1)
 
     if top_left + top_right == m-1:
-        y = query(top_left,0)
-        alert(top_left,y)
+        x = query(0,top_left)
+        alert(x,top_left)
         continue
 
     bottom_left = query(n-1,0)
