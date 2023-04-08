@@ -32,7 +32,7 @@ def query(x,y):
 
 def alert(x,y):
     print("! {} {}".format(x+1,y+1), flush=True)
-    sys.exit()
+    # sys.exit()
 
 # -----------------------------------------------------------------------------
 
@@ -86,6 +86,8 @@ for case_num in range(int(input())):
     # xrr.append(n-1-bottom_left)
     # yrr.append(bottom_left)
 
+    qrr = sorted(set(qrr))
+
     allcnt = 0
     for x in qrr:
         for y in qrr:
@@ -96,5 +98,5 @@ for case_num in range(int(input())):
     assert allcnt == 1
 
 # -----------------------------------------------------------------------------
-
+sys.exit()
 # your code here
