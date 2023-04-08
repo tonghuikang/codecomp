@@ -103,9 +103,9 @@ def solve_(n,m,arr,mrr,qrr):
         if q == 0:  # query
             allres.append(importance[x])
         else:  # rotate
-            # while removal[x] and mapping[x] and removal[x][0] == mapping[x][0]:
-            #     heapq.heappop(removal[x])
-            #     heapq.heappop(mapping[x])
+            while removal[x] and mapping[x] and removal[x][0] == mapping[x][0]:
+                heapq.heappop(removal[x])
+                heapq.heappop(mapping[x])
 
             if not mapping[x]:  # leaf
                 continue
@@ -119,6 +119,7 @@ def solve_(n,m,arr,mrr,qrr):
             subtree_size[s], subtree_size[x] = subtree_size[x], subtree_size[x] - subtree_size[s]
             importance[s], importance[x] = importance[x], importance[x] - importance[s]
             heapq.heappush(mapping[s], (-subtree_size[x], x))
+            heapq.heappush(mapping[father], (-subtree_size[s], s))
 
             log(parents)
             log(subtree_size)
