@@ -116,7 +116,7 @@ def solve_(n,m,arr,mrr,qrr):
             heapq.heappush(removal[father], (-subtree_size[x], x))
             parents[x] = s
             parents[s] = father
-            subtree_size[s], subtree_size[x] = subtree_size[x], subtree_size[x] - subtree_size[s]
+            subtree_size[s], subtree_size[x] = subtree_size[x], -((-subtree_size[x]) - (-subtree_size[s]))
             importance[s], importance[x] = importance[x], importance[x] - importance[s]
             heapq.heappush(mapping[s], (-subtree_size[x], x))
 
