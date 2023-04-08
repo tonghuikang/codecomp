@@ -97,7 +97,7 @@ def solve_(n,m,arr,mrr,qrr):
 
     removal = [[] for _ in range(n)]
 
-
+    # del i
     allres = []
     for q,x in qrr:
         if q == 0:  # query
@@ -118,7 +118,7 @@ def solve_(n,m,arr,mrr,qrr):
             parents[s] = father
             subtree_size[s], subtree_size[x] = subtree_size[x], subtree_size[x] - subtree_size[s]
             importance[s], importance[x] = importance[x], importance[x] - importance[s]
-            heapq.heappush(mapping[s], (-subtree_size[x], i))
+            heapq.heappush(mapping[s], (-subtree_size[x], x))
 
             log(parents)
             log(subtree_size)
