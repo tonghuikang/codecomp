@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,15 +49,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,k,mrr):
-    # your solution here
+def solve_(n,k,matrix):
 
-    matrix = [col[::-1] for col in zip(*matrix)]  # once
-    for row in matrix:
-        log(row)
+    mapping = [[(i,j) for j in range(n)] for i in range(n)]
+    mapping = [col[::-1] for col in mapping][::-1]
 
+    # for row in mapping:
+    #     log(row)
 
-    return ""
+    cnt = 0
+    for i in range(n):
+        for j in range(n):
+            x,y = mapping[i][j]
+            if matrix[x][y] != matrix[i][j]:
+                # log(x,y)
+                cnt += 1
+
+    # log()
+    # log(cnt, k)
+
+    if (cnt//2)%2 != k%2:
+        return no
+
+    if k < cnt // 2:
+        return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
