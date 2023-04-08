@@ -65,13 +65,17 @@ def solve_(n,k,matrix):
                 # log(x,y)
                 cnt += 1
 
+    assert cnt%2 == 0
+    cnt = cnt // 2
+
     # log()
     # log(cnt, k)
 
-    if (cnt//2)%2 != k%2:
-        return no
+    if n%2 == 0:
+        if cnt%2 != k%2:
+            return no
 
-    if k < cnt // 2:
+    if k < cnt:
         return no
 
     return yes

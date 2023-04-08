@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys
+import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
@@ -10,7 +10,6 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -18,81 +17,75 @@ MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
-OFFLINE_TEST = False
-CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
-if CHECK_OFFLINE_TEST:
-    import getpass
-    OFFLINE_TEST = getpass.getuser() == "htong"
-
+OFFLINE_TEST = getpass.getuser() == "htong"
+# OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
-    if CHECK_OFFLINE_TEST and OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
-
-def solve(*args):
-    # screen input
     if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-def minus_one(arr):
-    return [x-1 for x in arr]
-
-def minus_one_matrix(mrr):
-    return [[x-1 for x in row] for row in mrr]
+        print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
 # ---------------------------- template ends here ----------------------------
 
+def query(x,y):
+    print("? {} {}".format(x+1,y+1), flush=True)
+    response = int(input())
+    return response
 
-def solve_():
-    # your solution here
+def alert(x,y):
+    print("! {} {}".format(x+1,y+1), flush=True)
+    sys.exit()
 
-    return ""
+# -----------------------------------------------------------------------------
+
+def dist(a,b,x,y):
+    return abs(a-x) + abs(b-y) - min(abs(a-x), abs(b-y))
 
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
+def check(i,j,top_left,top_right,bottom_left):
+    if dist(i,j,0,0) == top_left:
+        if dist(i,j,0,m-1) == top_right:
+            if dist(i,j,n-1,0) == bottom_left:
+                return True
+    return False
+
+# read line as an integer
 for case_num in range(int(input())):
-
-    # read line as an integer
-    # n = int(input())
-    # k = int(input())
 
     # read line as a string
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    # arr = input().split()
+    # lst = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    n,m = list(map(int,input().split()))
+    # lst = list(map(int,input().split()))
 
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    top_left = query(0,0)
+    top_right = query(0,m-1)
+    bottom_left = query(n-1,0)
 
-    res = solve()  # include input here
+    xrr = []
+    yrr = []
 
-    # print length if applicable
-    # print(len(res))
+    xrr.append(top_left)
+    yrr.append(top_left)
 
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    xrr.append(top_right)
+    yrr.append(m-1-top_right)
 
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    xrr.append(n-1-bottom_left)
+    yrr.append(bottom_left)
 
-    print(res)
+    rx,ry = -1,-1
+    allcnt = 0
+    for x in xrr:
+        for y in yrr:
+            if check(x,y,top_left,top_right,bottom_left):
+                allcnt += 1
+                alert(x,y)
+
+    assert allcnt == 1
+
+# -----------------------------------------------------------------------------
+
+# your code here
