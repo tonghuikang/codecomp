@@ -103,9 +103,9 @@ def solve_(n,m,arr,mrr,qrr):
         if q == 0:  # query
             allres.append(importance[x])
         else:  # rotate
-            while removal[x] and mapping[x] and removal[x][0] == mapping[x][0]:
-                heapq.heappop(removal[x])
-                heapq.heappop(mapping[x])
+            # while removal[x] and mapping[x] and removal[x][0] == mapping[x][0]:
+            #     heapq.heappop(removal[x])
+            #     heapq.heappop(mapping[x])
 
             if not mapping[x]:  # leaf
                 continue
