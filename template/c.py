@@ -55,7 +55,14 @@ def minus_one_matrix(mrr):
 def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    nodes_with_conditions = [1]
+    for a,b in mrr:
+        nodes_with_conditions.append(a)
+    
+    if len(set(nodes_with_conditions)) < n:
+        return []
+
+    return [1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,12 +90,18 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(n,m,mrr)  # include input here
+    if res == []:
+        print("INFINITE")
+        continue
+
+    print("FINITE")
+
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
