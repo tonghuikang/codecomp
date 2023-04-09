@@ -28,6 +28,7 @@ def log(*args):
 def add(pos):
     print("+ {}".format(pos+1), flush=True)
     response = int(input())
+    assert response == 1
     return response
 
 def query(a,b):
@@ -40,6 +41,9 @@ def alert(perm1, perm2):
         " ".join(str(x) for x in perm1),
         " ".join(str(x) for x in perm2),        
     ), flush=True)
+    response = int(input())
+    assert response == 1
+
 
 # -----------------------------------------------------------------------------
 
@@ -57,6 +61,11 @@ for case_num in range(int(input())):
     for i in range(2,n):   # 2n-4
         d0 = query(0,i)
         d1 = query(1,i)
+        dist_from_zero.append(d0)
+        dist_from_one.append(d1)
+    
+    del d0
+    del d1
     
     p0 = max(dist_from_zero)
     p1 = max(dist_from_one)
@@ -83,13 +92,13 @@ for case_num in range(int(input())):
         if d0 > d1:
             # on the p1 side
             perm_to_order[i] = p0 - d0  # or p1 - d1
-            assert p0 - d0 == or p1 - d1
+            assert p0 - d0 == p1 - d1
             continue
 
         if d0 < d1:
             # on the p0 side
             perm_to_order[i] = p0 + d0  # or p1 + d1
-            assert p0 + d0 == or p1 + d1
+            assert p0 + d0 == p1 + d1
             continue
 
     assert -1 not in perm_to_order
