@@ -47,9 +47,20 @@ def alert(perm1, perm2):
 
 # -----------------------------------------------------------------------------
 
-for case_num in range(int(input())):
+def solve():
     # read line as an integer
     n = int(input())
+
+    arr = list(range(n // 2))[::-1]
+    brr = list(range(n // 2, n))
+
+    order = []
+    while arr or brr:
+        if arr:
+            order.append(arr.pop())
+        if brr:
+            order.append(brr.pop())
+    log(order)
 
     add(n)
     add(n+1)
@@ -70,9 +81,6 @@ for case_num in range(int(input())):
     p0 = max(dist_from_zero)
     p1 = max(dist_from_one)
     p1 = n-1-p1
-
-    arr = list(range(n // 2))[::-1]
-    brr = list(range(n // 2, n))
 
     perm_to_order = [-1 for _ in range(n)]
     perm_to_order[0] = p0
@@ -104,13 +112,6 @@ for case_num in range(int(input())):
     assert -1 not in perm_to_order
     assert sorted(perm_to_order) == list(range(n))
 
-    order = []
-    while arr or brr:
-        if arr:
-            order.append(arr.pop())
-        if brr:
-            order.append(brr.pop())
-    # print(order)
 
     perm1 = [-1 for _ in range(n)]
     for i,x in enumerate(perm_to_order):
@@ -122,8 +123,15 @@ for case_num in range(int(input())):
     for i,x in enumerate(perm_to_order):
         perm1[x] = order[i]
 
+    assert sorted(perm1) == list(range(n))
+    assert sorted(perm2) == list(range(n))
+
     alert(perm1, perm2)
 
+
+
+for case_num in range(int(input())):
+    solve()
 
 
 sys.exit()
