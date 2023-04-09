@@ -38,8 +38,8 @@ def query(a,b):
 
 def alert(perm1, perm2):
     print("! {} {}".format(
-        " ".join(str(x) for x in perm1),
-        " ".join(str(x) for x in perm2),        
+        " ".join(str(x+1) for x in perm1),
+        " ".join(str(x+1) for x in perm2),        
     ), flush=True)
     response = int(input())
     assert response == 1
@@ -71,61 +71,20 @@ def solve(n, add=add, query=query, alert=alert):
     add(n)
     add(n+1)
 
-    dist = query(0,1)
-    log("dist", dist)
-    dist_from_zero = [-1,-1]
-    dist_from_one = [-1,-1]
+    dist_from_zero = [0 for _ in range(n)]
+    for i in range(1,n):
+        dist_from_zero[i] = query(0,i)
 
-    dist_from_zero[1] = dist
-    dist_from_one[0] = dist
-
-    for i in range(2,n):   # 2n-4
-        d0 = query(0,i)
-        d1 = query(1,i)
-        dist_from_zero.append(d0)
-        dist_from_one.append(d1)
-    
-    del d0
-    del d1
-    
-    perm_to_order = [-1 for _ in range(n)]
-
-    p0 = max(dist_from_zero)
-    p1 = max(dist_from_one)
-
-    log("p0p1", p0, p1)
-
-    p1 = p0-dist
-
-    log("p0p1", p0, p1, "d")
-
-    perm_to_order[0] = p0
-    perm_to_order[1] = p1
-    
-    for i in range(2, n):
-        # find where the item on position i of perm is on the order
-        d0 = dist_from_zero[i]
-        d1 = dist_from_one[i]
-        log("d0d1", d0, d1)
-
-        if d0 + d1 == dist:
-            # in the middle
-            perm_to_order[i] = p1 + d1  # p0 - d0
-            assert p0 - d0 == p1 + d1
+    idx = dist_from_zero.index(max(dist_from_zero))
+    dist_from_extreme = [0 for _ in range(n)]
+    for i in range(n):
+        if i == idx:
             continue
-        
-        if d0 > d1:
-            # on the p1 side
-            perm_to_order[i] = p0 - d0  # or p1 - d1
-            assert p0 - d0 == p1 - d1
-            continue
+        dist_from_extreme[i] = query(idx,i)
 
-        if d0 < d1:
-            # on the p0 side
-            perm_to_order[i] = p0 + d0  # or p1 + d1
-            assert p0 + d0 == p1 + d1
-            continue
+    perm_to_order = dist_from_extreme
 
+    log("order", order)
     log("perm_to_order", perm_to_order)
 
     assert -1 not in perm_to_order
@@ -134,13 +93,13 @@ def solve(n, add=add, query=query, alert=alert):
 
     perm1 = [-1 for _ in range(n)]
     for i,x in enumerate(perm_to_order):
-        perm1[x] = order[i]
+        perm1[i] = order[x]
 
     order.reverse()
 
     perm2 = [-1 for _ in range(n)]
     for i,x in enumerate(perm_to_order):
-        perm2[x] = order[i]
+        perm2[i] = order[x]
 
     log(perm1)
     log(perm2)
@@ -152,9 +111,9 @@ def solve(n, add=add, query=query, alert=alert):
 
 
 import random
-while True:
+while OFFLINE_TEST and False:
 
-    n = random.randint(2,10)
+    n = random.randint(2,4)
 
     perm = list(range(n))
     random.shuffle(perm)
@@ -172,6 +131,7 @@ while True:
 
     def alert2(perm1, perm2):
         assert perm1 == perm or perm2 == perm
+        pass
 
     solve(n, add=add2, query=query2, alert=alert2)
 
@@ -180,4 +140,4 @@ for case_num in range(int(input())):
     n = int(input())
     solve(n)
 
-    sys.exit()
+sys.exit()
