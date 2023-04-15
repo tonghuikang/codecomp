@@ -55,7 +55,41 @@ def minus_one_matrix(mrr):
 def solve_(n,k,arr):
     # your solution here
 
-    return ""
+    brr = sorted(arr)
+
+    xrr = [brr[0]]
+    for x in brr:
+        if abs(xrr[-1] - x) < k:
+            continue
+        else:
+            xrr.append(x)
+
+    yrr = [brr[-1]]
+    for x in brr[::-1]:
+        if abs(yrr[-1] - x) < k:
+            continue
+        else:
+            yrr.append(x)
+    yrr = yrr[::-1]
+
+    assert len(xrr) == len(yrr)
+    q = len(xrr)
+
+    accepted = set()
+    rejected = set()
+    for x in brr[::-1]:
+        while xrr and x < xrr[-1]:
+            xrr.pop()
+            yrr.pop()
+        if xrr and xrr[-1] <= x <= yrr[-1]:
+            accepted.add(x)
+        else:
+            rejected.add(x)
+
+    log(accepted)
+    log(rejected)
+
+    return [q if x in accepted else q-1 for x in arr]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -88,11 +122,11 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

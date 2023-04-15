@@ -130,11 +130,11 @@ def solve_(w,n,d,arr):
     dinv1 = modinv(d2, n2)
     dinv2 = modinv(n2-d2, n2)
 
+    assert dinv1 != -1
+    assert dinv2 != -1
+
     for a,b in zip(arr[::-1], arr[:w//2]):
         log(a,b)
-
-        n2 = n
-        d2 = d
 
         if gcd != 1:
             if a%d != b%d:
@@ -143,21 +143,27 @@ def solve_(w,n,d,arr):
             a = a // gcd
             b = b // gcd
         
+        q1 = (a*dinv1-b*dinv1)%n2
+        q2 = (a*dinv2-b*dinv2)%n2
 
-        q1 = ((a-b)*dinv1)%n2
-        q2 = ((a-b)*dinv2)%n2
-
-        # log(n2, d2, dinv1, dinv2, "|", a, b)
-        # log(q1, q2)
-        # log()
+        log(n2, d2, dinv1, dinv2, "|", a, b)
+        log(q1, q2)
+        if a != b:
+            assert q1 + q2 == n2
+        log()
 
         res += min(q1, q2)
 
     return res
 
 
-
-
+while True:
+    w = random.randint(2,200)
+    n = random.randint(2,200)
+    d = random.randint(1,n-1)
+    arr = [random.randint(1,n) for x in range(w)]
+    arr = minus_one(arr)
+    solve(w,n,d,arr)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
