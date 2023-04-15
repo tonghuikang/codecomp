@@ -55,7 +55,62 @@ def minus_one_matrix(mrr):
 def solve_(w,n,d,arr):
     # your solution here
 
-    return ""
+    seen = set()
+    idx_to_series = {}
+    series_sequence = {}
+    series_sequence_index = {}
+
+    for i in range(n):
+        i0 = i
+
+        if i in seen:
+            continue
+        seen.add(i)
+        sequence = [i]
+        idx_to_series[i] = i
+        i = (i+d)%n
+
+        while i not in seen:
+            seen.add(i)
+            sequence.append(i)
+            idx_to_series[i] = i0
+            i = (i+d)%n
+
+        series_sequence[i0] = sequence
+
+        mapping = {}
+        for i,x in enumerate(sequence):
+            mapping[x] = i
+        series_sequence_index[i0] = mapping
+
+    log(series_sequence)
+    log(idx_to_series)
+    log(series_sequence_index)
+
+    log("n", n)
+    log("d", d)
+    res = 0
+
+    for a,b in zip(arr[::-1], arr[:w//2]):
+        log(a,b)
+
+        if idx_to_series[a] != idx_to_series[b]:
+            return -1
+
+        series_idx = idx_to_series[a]
+        log(series_sequence_index[series_idx])
+
+        p1 = series_sequence_index[series_idx][a]
+        p2 = series_sequence_index[series_idx][b]
+        k = len(series_sequence_index[series_idx])
+
+        minval = abs(p1 - p2)
+        for a1 in range(-2, 2):
+            val = abs(p1 + a1*k - p2)
+            minval = min(minval, val)
+        res += minval
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -75,7 +130,7 @@ for case_num in range(int(input())):
     # read one line and parse each word as an integer
     w,n,d = list(map(int,input().split()))
     arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
@@ -83,6 +138,8 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(w,n,d,arr)  # include input here
+    if res == -1:
+        res = "IMPOSSIBLE"
 
     # print length if applicable
     # print(len(res))
@@ -93,6 +150,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
