@@ -52,50 +52,13 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,arr,a,b,x0,y0):
+def solve_(arr):
     # your solution here
 
-    psum = [0]
-    for q in arr:
-        psum.append(psum[-1] + q)
+    arr = [sorted(list(xrr)) for x in arr]
+    log(arr)
 
-    minres = psum[-1]
-
-    for i in range(a,b+1):
-        if x0 < i < y0: 
-            left = i-1
-            right = i+1
-            left_choice = psum[i]
-            right_choice = psum[-1] - psum[i+1]
-            res = max(left_choice, right_choice)
-            minres = min(minres, res)
-
-        elif i >= y0:
-            y = y0
-            if i == y:
-                y -= 1
-            left_choice = y
-            # log(y, arr)
-            mid_point = (i + left_choice + 1) // 2
-            res = psum[mid_point]
-            minres = min(minres, res)
-            # log("L", i, y, mid_point, res)
-
-        elif i <= x0:
-            x = x0
-            if i == x:
-                x += 1
-            right_choice = x
-            mid_point = (i + right_choice) // 2
-            res = psum[-1] - psum[mid_point+1]
-            minres = min(minres, res)
-            # log("R", i, x, mid_point, res)
-        
-        else:
-            assert False
-
-
-    return psum[-1] - minres
+    return ""
 
 
 # for case_num in [0]:  # no loop over test case
@@ -103,22 +66,18 @@ def solve_(n,arr,a,b,x0,y0):
 for case_num in range(int(input())):
 
     # read line as an integer
-    n = int(input())
+    # n = int(input())
     # k = int(input())
 
     # read line as a string
     # srr = input().strip()
 
     # read one line and parse each word as a string
-    # arr = input().split()
+    arr = input().split()
 
     # read one line and parse each word as an integer
-    arr = list(map(int,input().split()))
-    a,b,x,y = list(map(int,input().split()))
-    a -= 1
-    b -= 1
-    x -= 1
-    y -= 1
+    # a,b,c = list(map(int,input().split()))
+    # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -126,7 +85,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,arr,a,b,x,y)  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -137,6 +96,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    # print(res)
+    print(res)
