@@ -55,10 +55,34 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
-    arr = [sorted(list(xrr)) for x in arr]
+    arr = [sorted(list(x)) for x in arr]
     log(arr)
+    allres = [arr[0]]
 
-    return ""
+    prev = arr[0]
+    for xrr in arr[1:]:
+        if prev >= xrr[::-1]:
+            return []
+
+        res = []
+        flag = False
+        for x in prev:
+            for y in xrr:
+                if y >= x:
+                    xrr.remove(y)
+                    res.append(y)
+                    if y != x:
+                        res.extend(sorted(xrr))
+                        flag = True
+                    break
+            if flag:
+                break
+
+        allres.append(res)
+        log(prev, res)
+        prev = res
+
+    return allres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -66,7 +90,7 @@ def solve_(arr):
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -86,16 +110,19 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr)  # include input here
-
+    if res == []:
+        print("Case #{}: {}".format(case_num+1, "IMPOSSIBLE"))   # Google and Facebook - case number required
+        continue
     # print length if applicable
     # print(len(res))
+
+    print("Case #{}: {}".format(case_num+1, "POSSIBLE"))   # Google and Facebook - case number required
 
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = " ".join("".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
     print(res)
