@@ -88,6 +88,8 @@ def solve_(given):
     assert len(given) == len(allres)
     for a,b in zip(given, allres):
         assert sorted(a) == sorted(b)
+    for a,b in zip(allres, allres[1:]):
+        assert a <= b
 
     return allres
 
