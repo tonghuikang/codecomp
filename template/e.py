@@ -52,7 +52,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, drr, crr):
+def solve_ref(n, drr, crr):
     # your solution here
     minres = 10**18
 
@@ -66,6 +66,74 @@ def solve_(n, drr, crr):
         minres = min(minres, res)
 
     return minres
+
+
+def solve_(n, drr, crr):
+    # your solution here
+
+    # prune all nodes with no incoming
+
+    g = defaultdict(set)
+
+    for i,x in enumerate(drr):
+        g[x].add(i)
+
+    current_cars = [0 for _ in range(n)]
+    visited = set()
+    prune = []
+
+    res = 0
+
+    for i in range(n):
+        if len(g[i]) == 0:
+            prune.append(i)
+
+    while prune:
+        cur = prune.pop()
+        visited.add(cur)
+        res += max(0, crr[cur] - current_cars[cur])
+        nex = drr[cur]
+        current_cars[nex] += crr[cur]
+        g[nex].remove(cur)
+        if len(g[nex]) == 0:
+            prune.append(nex)
+
+    # what remains is cycles
+
+    for cur in range(n):
+        minpenalty = 10**18
+
+        if cur in visited:  # pruned
+            continue
+        visited.add(cur)
+        sequence = [cur]
+        while True:
+            cur = drr[cur]
+            if cur in visited:
+                break
+            visited.add(cur)
+            sequence.append(cur)
+        
+        starting_count = [current_cars[x] for x in sequence]
+        ending_count = [x for x in starting_count]
+
+        for i,x in enumerate(sequence):
+            ending_count[(i+1)%len(sequence)] += crr[x]
+
+        # log()
+        # log(sequence)
+        # log(starting_count)
+        # log(ending_count)
+
+        for i,x in enumerate(sequence):
+            res += max(0, crr[x] - ending_count[i])
+            penalty = max(0, crr[x] - starting_count[i]) + max(0, crr[x] - ending_count[i])
+            minpenalty = min(minpenalty, penalty)
+        
+        res += minpenalty
+
+    return res
+
 
 
 # for case_num in [0]:  # no loop over test case
