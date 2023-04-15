@@ -67,7 +67,7 @@ def solve_(arr):
         res = []
         flag = False
         for x in prev:
-            for y in xrr:
+            for y in prev:
                 if y >= x:
                     xrr.remove(y)
                     res.append(y)
