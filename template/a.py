@@ -52,22 +52,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr):
+def solve_(given):
     # your solution here
-
-    arr = [sorted(list(x)) for x in arr]
+    given = [list(x) for x in given]
+    arr = [sorted(list(x)) for x in given]
     log(arr)
     allres = [arr[0]]
 
     prev = arr[0]
     for xrr in arr[1:]:
-        if prev >= xrr[::-1]:
+        if prev > xrr[::-1]:
             return []
 
         res = []
         flag = False
         for x in prev:
-            for y in prev:
+            for y in xrr:
                 if y >= x:
                     xrr.remove(y)
                     res.append(y)
@@ -81,6 +81,13 @@ def solve_(arr):
         allres.append(res)
         log(prev, res)
         prev = res
+
+    log()
+    log(allres)
+    log(given)
+    assert len(given) == len(allres)
+    for a,b in zip(given, allres):
+        assert sorted(a) == sorted(b)
 
     return allres
 
