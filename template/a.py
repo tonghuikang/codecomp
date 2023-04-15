@@ -17,6 +17,10 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
+abc = "abcdefghijklmnopqrstuvwxyz".upper()
+abc_map = {c:i for i,c in enumerate(abc)}
+
+
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
@@ -52,10 +56,20 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, mrr):
     # your solution here
 
-    return ""
+    seen = set()
+
+    for code in mrr:
+        brr = tuple([arr[abc_map[c]] for c in code])
+        # log(brr)
+
+        if brr in seen:
+            return yes        
+        seen.add(brr)
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -64,7 +78,6 @@ for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
-    # k = int(input())
 
     # read line as a string
     # srr = input().strip()
@@ -74,15 +87,16 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
+    k = int(input())
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    mrr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -93,6 +107,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

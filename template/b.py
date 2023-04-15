@@ -52,10 +52,31 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(m,r,n,arr):
     # your solution here
 
-    return ""
+    brr = [(x-r, x+r-1) for x in arr]
+    log(brr)
+    
+    cnt = 0
+    curright = m
+    while brr:
+        a,b  = brr.pop()
+        log(a,b,curright)
+        if b < curright-1:
+            return -1
+        if brr and brr[-1][1] >= curright-1:
+            continue
+        log(brr)
+        curright = a
+        cnt += 1
+        if a <= 0:
+            break
+
+    if curright > 0:
+        return -1
+
+    return cnt
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,8 +94,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    m,r,n = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,8 +103,9 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
-
+    res = solve(m,r,n,arr)  # include input here
+    if res == -1:
+        res = "IMPOSSIBLE"
     # print length if applicable
     # print(len(res))
 
@@ -93,6 +115,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

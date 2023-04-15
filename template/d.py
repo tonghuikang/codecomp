@@ -17,6 +17,9 @@ yes, no = "YES", "NO"
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
+abc = "abcdefghijklmnopqrstuvwxyz".upper()
+abc_map = {c:i for i,c in enumerate(abc)}
+
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
@@ -51,11 +54,48 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# for i = 1 to 1e100:
+#   for letter = A to Z:
+#     print letter i times
 
-def solve_():
+srr = []
+for i in range(200):
+    for a in "abcdefghijklmnopqrstuvwxyz".upper():
+        for _ in range(i):
+            srr.append(a)
+
+# log(len(srr))
+# log(srr[:30])
+
+def solve_(n):
+    n -= 1
+    n0 = n
     # your solution here
 
-    return ""
+    block_number = n // 26
+
+    repeat_count = (-1 + (1+8*block_number)**0.5) / 2
+    repeat_count = int(repeat_count)
+
+    prev = (repeat_count * (repeat_count + 1)) // 2
+    n -= prev * 26
+
+    log(repeat_count, n)
+
+    assert 0 <= n < (repeat_count + 1) * 26
+
+    idx = n // (repeat_count + 1)
+    res = abc[idx]
+
+    if n0 < len(srr):
+        # log(idx, res, srr[n0], res == srr[n0])
+        assert res == srr[n0]
+
+    return res
+
+
+# for n in range(1,10**6):
+#     solve(n)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +103,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -82,7 +122,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -93,6 +133,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
