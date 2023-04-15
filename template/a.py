@@ -54,7 +54,7 @@ def minus_one_matrix(mrr):
 
 def solve_(given):
     # your solution here
-    given = [list(x) for x in given]
+    given = [sorted(list(x)) for x in given]
     arr = [sorted(list(x)) for x in given]
     log(arr)
     allres = [arr[0]]
@@ -73,10 +73,14 @@ def solve_(given):
                     res.append(y)
                     if y != x:
                         res.extend(sorted(xrr))
+                        xrr = []
                         flag = True
                     break
             if flag:
                 break
+
+        if xrr:
+            res.extend(sorted(xrr))
 
         allres.append(res)
         log(prev, res)
@@ -85,11 +89,14 @@ def solve_(given):
     log()
     log(allres)
     log(given)
-    assert len(given) == len(allres)
-    for a,b in zip(given, allres):
-        assert sorted(a) == sorted(b)
-    for a,b in zip(allres, allres[1:]):
-        assert a <= b
+    try:
+        assert len(given) == len(allres)
+        for a,b in zip(given, allres):
+            assert sorted(a) == sorted(b)
+        for a,b in zip(allres, allres[1:]):
+            assert a <= b
+    except:
+        return []
 
     return allres
 
