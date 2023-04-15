@@ -54,8 +54,18 @@ def minus_one_matrix(mrr):
 
 def solve_(n, drr, crr):
     # your solution here
+    minres = 10**18
 
-    return ""
+    for perm in itertools.permutations(list(range(n))):
+        res = 0
+        current_cars = [0 for _ in range(n)]
+        for x in perm:
+            res += max(0, crr[x] - current_cars[x])
+            current_cars[x] -= crr[x]
+            current_cars[drr[x]] += crr[x]
+        minres = min(minres, res)
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -76,7 +86,7 @@ for case_num in range(int(input())):
     # a,b,c = list(map(int,input().split()))
     drr = list(map(int,input().split()))
     crr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    drr = minus_one(drr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
