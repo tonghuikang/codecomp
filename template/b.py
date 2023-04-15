@@ -52,63 +52,104 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+# modular inverse
+# https://stackoverflow.com/a/29762148/5894029
+modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+
+
 def solve_(w,n,d,arr):
     # your solution here
-
-    seen = set()
-    idx_to_series = {}
-    series_sequence = {}
-    series_sequence_index = {}
-
-    for i in range(n):
-        i0 = i
-
-        if i in seen:
-            continue
-        seen.add(i)
-        sequence = [i]
-        idx_to_series[i] = i
-        i = (i+d)%n
-
-        while i not in seen:
-            seen.add(i)
-            sequence.append(i)
-            idx_to_series[i] = i0
-            i = (i+d)%n
-
-        series_sequence[i0] = sequence
-
-        mapping = {}
-        for i,x in enumerate(sequence):
-            mapping[x] = i
-        series_sequence_index[i0] = mapping
-
-    log(series_sequence)
-    log(idx_to_series)
-    log(series_sequence_index)
 
     log("n", n)
     log("d", d)
     res = 0
+    gcd = math.gcd(n,d)
+    d2 = d // gcd
+    n2 = n // gcd
+    dinv1 = modinv(d2, n2)
+    dinv2 = modinv(n2-d2, n2)
 
     for a,b in zip(arr[::-1], arr[:w//2]):
         log(a,b)
 
-        if idx_to_series[a] != idx_to_series[b]:
-            return -1
+        n2 = n
+        d2 = d
 
-        series_idx = idx_to_series[a]
-        log(series_sequence_index[series_idx])
+        if gcd != 1:
+            if a%d != b%d:
+                return -1
+            
+            a = a // gcd
+            b = b // gcd
+        
 
-        p1 = series_sequence_index[series_idx][a]
-        p2 = series_sequence_index[series_idx][b]
-        k = len(series_sequence_index[series_idx])
+        q1 = ((a-b)*dinv1)%n2
+        q2 = ((a-b)*dinv2)%n2
 
-        minval = abs(p1 - p2)
-        for a1 in range(-2, 2):
-            val = abs(p1 + a1*k - p2)
-            minval = min(minval, val)
-        res += minval
+        # log(n2, d2, dinv1, dinv2, "|", a, b)
+        # log(q1, q2)
+        # log()
+
+        res += min(q1, q2)
+
+
+        
+
+
+
+
+    # seen = set()
+    # idx_to_series = {}
+    # series_sequence = {}
+    # series_sequence_index = {}
+
+    # for i in range(n):
+    #     i0 = i
+
+    #     if i in seen:
+    #         continue
+    #     seen.add(i)
+    #     sequence = [i]
+    #     idx_to_series[i] = i
+    #     i = (i+d)%n
+
+    #     while i not in seen:
+    #         seen.add(i)
+    #         sequence.append(i)
+    #         idx_to_series[i] = i0
+    #         i = (i+d)%n
+
+    #     series_sequence[i0] = sequence
+
+    #     mapping = {}
+    #     for i,x in enumerate(sequence):
+    #         mapping[x] = i
+    #     series_sequence_index[i0] = mapping
+
+    # log(series_sequence)
+    # log(idx_to_series)
+    # log(series_sequence_index)
+
+    # log("n", n)
+    # log("d", d)
+    # res = 0
+
+
+    #     if idx_to_series[a] != idx_to_series[b]:
+    #         return -1
+
+    #     series_idx = idx_to_series[a]
+    #     log(series_sequence_index[series_idx])
+
+    #     p1 = series_sequence_index[series_idx][a]
+    #     p2 = series_sequence_index[series_idx][b]
+    #     k = len(series_sequence_index[series_idx])
+
+    #     minval = abs(p1 - p2)
+    #     for a1 in range(-2, 2):
+    #         val = abs(p1 + a1*k - p2)
+    #         minval = min(minval, val)
+    #     res += minval
 
     return res
 
