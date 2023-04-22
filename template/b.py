@@ -52,7 +52,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(w,n,d,arr):
+def solve_ref(w,n,d,arr):
     # your solution here
 
     seen = set()
@@ -115,7 +115,10 @@ def solve_(w,n,d,arr):
 
 # modular inverse
 # https://stackoverflow.com/a/29762148/5894029
-modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+modinv = lambda A,n,s=1,t=0,N=0: (
+    n < 2 and t%N or modinv(
+        n, A%n, t, s-A//n*t, N or n), -1
+    )[n<1]
 
 
 def solve_(w,n,d,arr):
@@ -134,10 +137,10 @@ def solve_(w,n,d,arr):
     assert dinv2 != -1
 
     for a,b in zip(arr[::-1], arr[:w//2]):
-        log(a,b)
+        # log(a,b)
 
         if gcd != 1:
-            if a%d != b%d:
+            if a%gcd != b%gcd:
                 return -1
             
             a = a // gcd
@@ -146,24 +149,25 @@ def solve_(w,n,d,arr):
         q1 = (a*dinv1-b*dinv1)%n2
         q2 = (a*dinv2-b*dinv2)%n2
 
-        log(n2, d2, dinv1, dinv2, "|", a, b)
-        log(q1, q2)
+        # log(n2, d2, dinv1, dinv2, "|", a, b)
+        # log(q1, q2)
         if a != b:
             assert q1 + q2 == n2
-        log()
+        # log()
 
         res += min(q1, q2)
 
     return res
 
 
-while True:
-    w = random.randint(2,200)
-    n = random.randint(2,200)
-    d = random.randint(1,n-1)
-    arr = [random.randint(1,n) for x in range(w)]
-    arr = minus_one(arr)
-    solve(w,n,d,arr)
+# while True:
+#     w = random.randint(2,2)
+#     n = random.randint(2,6)
+#     d = random.randint(1,n-1)
+#     arr = [random.randint(1,n) for x in range(w)]
+#     arr = minus_one(arr)
+#     solve(w,n,d,arr)
+#     assert solve(w,n,d,arr) == solve_ref(w,n,d,arr)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -183,7 +187,7 @@ for case_num in range(int(input())):
     w,n,d = list(map(int,input().split()))
     arr = list(map(int,input().split()))
     arr = minus_one(arr)
-
+    
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
@@ -192,6 +196,7 @@ for case_num in range(int(input())):
     res = solve(w,n,d,arr)  # include input here
     if res == -1:
         res = "IMPOSSIBLE"
+
 
     # print length if applicable
     # print(len(res))
