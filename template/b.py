@@ -52,10 +52,34 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(list)
+    gset = defaultdict(set)
+
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+        gset[a].add(b)
+        gset[b].add(a)
+
+    for ctr in range(n):
+        if len(g[ctr]) < 4:
+            continue
+
+        for nex in g[ctr]:
+            cycle_found = False
+            visited = [False] * n
+            if not visited[nex]:
+                cycle_found = dfs(g, nex, visited, ctr)
+
+            if cycle_found:
+                result.append((ctr, nex))
+                gset[ctr].remove(nex)
+                gset[nex].remove(ctr)
+
+    return []
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,17 +97,29 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
+    if res == []:
+        print(no)
+        continue
 
+    z,a,b,c,d,e = res
+
+    print(yes)
+    print(z,a)
+    print(z,b)
+    print(z,c)
+    print(z,d)
+    print(a,e)
+    print(b,e)
     # print length if applicable
     # print(len(res))
 
@@ -95,4 +131,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
