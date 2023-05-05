@@ -55,16 +55,23 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
+    if arr.count(0) == len(arr):
+        return 0
+
     # there is one number that is correct
     
-    for i,x in enumerate(arr):
-        if x <= i:
+    for i,(x,y) in enumerate(zip(arr, arr[1:]), start=1):
+        # log(i,x,y)
+        if y <= i and x > i:
             return i
 
     return -1
 
 
-solve([1])
+# print(solve_([1]))
+# print(solve_([1,2,3,4,5]))
+# print("--------")
+
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
