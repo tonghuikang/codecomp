@@ -25,16 +25,75 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
-def query(pos):
-    print("? {}".format(pos+1), flush=True)
-    response = int(input())
-    return response
+def query(a,b,c):
+    print("? {} {} {}".format(a,b,c), flush=True)
+    response = list(map(float,input().split()))
+    xrr = response[0::2]
+    yrr = response[1::2]
+    return [[x,y] for x,y in zip(xrr, yrr)]
 
-def alert(pos):
-    print("! {}".format(pos+1), flush=True)
-    sys.exit()
+def alert(arr):
+    res = " ".join(f"{x} {y}" for x,y in arr)
+    print("! {}".format(res), flush=True)
 
 # -----------------------------------------------------------------------------
+
+# From GPT-4
+def project_point_onto_line(x, y, a, b, c):
+    # Calculate the line's magnitude
+    line_magnitude = (a**2 + b**2)**0.5
+
+    # Normalize the line coefficients
+    a_normalized = a / line_magnitude
+    b_normalized = b / line_magnitude
+    c_normalized = c / line_magnitude
+
+    # Calculate the distance from the point to the line
+    distance = a_normalized * x + b_normalized * y + c_normalized
+
+    # Calculate the projected point coordinates
+    x_projected = x - a_normalized * distance
+    y_projected = y - b_normalized * distance
+
+    return x_projected, y_projected
+
+
+X_CONST = 93.1230172983
+Y_CONST = 96.3218973211
+
+# for case_num in [0]:  # no loop over test case
+# for case_num in range(100):  # if the number of test cases is specified
+for case_num in range(int(input())):
+
+    # read line as an integer
+    n = int(input())
+    # k = int(input())
+
+    arr = query(1, 0, 0)
+    yrr = [y for x,y in arr]
+
+    arr = query(0, 1, 0)
+    xrr = [x for x,y in arr]
+
+    # log("xrr", xrr)
+    # log("yrr", yrr)
+
+    arr = query(X_CONST, Y_CONST, 0)
+
+    allres = []
+
+    for px,py in arr:
+        minres = [100,0,0]
+        for x in xrr:
+            for y in yrr:
+                cx, cy = project_point_onto_line(x, y, X_CONST, Y_CONST, 0)
+                res = [abs(cx-px) + abs(cy-py), x, y]
+                minres = min(minres, res)
+        log(minres)
+        allres.append([minres[1], minres[2]])
+
+    alert(allres)
+
 
 # read line as an integer
 # k = int(input())
@@ -52,3 +111,4 @@ def alert(pos):
 # -----------------------------------------------------------------------------
 
 # your code here
+sys.exit()
