@@ -62,6 +62,8 @@ X_CONST = 93.1230172983
 Y_CONST = 96.3218973211
 C_CONST = 98.1283719231
 
+import random
+
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
@@ -79,6 +81,35 @@ for case_num in range(int(input())):
     # log("xrr", xrr)
     # log("yrr", yrr)
 
+    flag = True
+    while flag:
+        flag = False
+        X_CONST = random.uniform(-100, 100)
+        Y_CONST = random.uniform(-100, 100)
+        C_CONST = random.uniform(-100, 100)
+
+        if abs(X_CONST) + abs(Y_CONST) < 0.2:
+            flag = True
+
+        xvals = []
+        yvals = []
+        for i,x in enumerate(xrr):
+            for j,y in enumerate(yrr):
+                cx, cy = project_point_onto_line(x, y, X_CONST, Y_CONST, C_CONST)
+                xvals.append(cx)
+                yvals.append(cy)
+
+        xvals.sort()
+        yvals.sort()
+
+        for a,b in zip(xvals, xvals[1:]):
+            if abs(b-a) < 10**(-3):
+                flag = True
+
+        for a,b in zip(yvals, yvals[1:]):
+            if abs(b-a) < 10**(-3):
+                flag = True
+        
     arr = query(X_CONST, Y_CONST, C_CONST)
 
     allres = []
