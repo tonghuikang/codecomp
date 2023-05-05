@@ -103,6 +103,10 @@ def solve_(n,m):
     return no
 
 
+# for _ in range(10**5):
+#     solve_(720720, 720720)
+
+
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
