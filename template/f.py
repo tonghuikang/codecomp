@@ -58,9 +58,43 @@ def project_point_onto_line(x, y, a, b, c):
     return x_projected, y_projected
 
 
+def perpendicular_line(x1, y1, a, b, c):
+    if a == 0 and b == 0:
+        raise ValueError("Both a and b cannot be zero.")
+    elif a == 0:
+        a_new, b_new, c_new = 1, 0, -x1
+    elif b == 0:
+        a_new, b_new, c_new = 0, 1, -y1
+    else:
+        a_new, b_new = b, -a
+        c_new = -a_new * x1 - b_new * y1
+
+    return a_new, b_new, c_new
+
+
+def find_intersection(a1, b1, c1, a2, b2, c2):
+    determinant = a1 * b2 - a2 * b1
+    if determinant == 0:
+        print("The lines are parallel or coincident and do not have a unique intersection point.")
+        return None
+    else:
+        x = (b2 * c1 - b1 * c2) / determinant
+        y = (a1 * c2 - a2 * c1) / determinant
+        return (x, y)
+
+
+X_CONST_1 = 89.213721983
+Y_CONST_1 = 0.2138179231
+C_CONST_1 = 1.1238719833
+
+X_CONST_2 = 0.1278316213
+Y_CONST_2 = 87.213892179
+C_CONST_2 = 2.1238971981
+
 X_CONST = 93.1230172983
 Y_CONST = 96.3218973211
 C_CONST = 98.1283719231
+
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -70,11 +104,8 @@ for case_num in range(int(input())):
     n = int(input())
     # k = int(input())
 
-    arr = query(1, 0, 0)
-    yrr = [y for x,y in arr]
-
-    arr = query(0, 1, 0)
-    xrr = [x for x,y in arr]
+    arr = query(X_CONST_1, Y_CONST_1, C_CONST_1)
+    brr = query(X_CONST_2, Y_CONST_2, C_CONST_2)
 
     # log("xrr", xrr)
     # log("yrr", yrr)
@@ -84,9 +115,13 @@ for case_num in range(int(input())):
     allres = []
 
     for px,py in arr:
-        minres = [100,0,0]
-        for x in xrr:
-            for y in yrr:
+        minres = [10000,0,0]
+        for ax,ay in arr:
+            for bx,by in brr:
+                aax, aay, aac = perpendicular_line(ax, ay, X_CONST_1, Y_CONST_1, C_CONST_1)
+                bbx, bby, bbc = perpendicular_line(bx, by, X_CONST_2, Y_CONST_2, C_CONST_2)
+                x, y = find_intersection(aax, aay, aac, bbx, bby, bbc)
+                log(x,y)
                 cx, cy = project_point_onto_line(x, y, X_CONST, Y_CONST, C_CONST)
                 res = [(cx-px)**2 + (cy-py)**2, x, y]
                 minres = min(minres, res)
