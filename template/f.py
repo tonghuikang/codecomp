@@ -60,6 +60,7 @@ def project_point_onto_line(x, y, a, b, c):
 
 X_CONST = 93.1230172983
 Y_CONST = 96.3218973211
+C_CONST = 98.1283719231
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -78,7 +79,7 @@ for case_num in range(int(input())):
     # log("xrr", xrr)
     # log("yrr", yrr)
 
-    arr = query(X_CONST, Y_CONST, 0)
+    arr = query(X_CONST, Y_CONST, C_CONST)
 
     allres = []
 
@@ -86,8 +87,8 @@ for case_num in range(int(input())):
         minres = [100,0,0]
         for x in xrr:
             for y in yrr:
-                cx, cy = project_point_onto_line(x, y, X_CONST, Y_CONST, 0)
-                res = [abs(cx-px) + abs(cy-py), x, y]
+                cx, cy = project_point_onto_line(x, y, X_CONST, Y_CONST, C_CONST)
+                res = [(cx-px)**2 + (cy-py)**2, x, y]
                 minres = min(minres, res)
         log(minres)
         allres.append([minres[1], minres[2]])
