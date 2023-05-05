@@ -52,7 +52,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, k):
+def solve_(arr):
     # your solution here
 
     # there is one number that is correct
@@ -63,6 +63,8 @@ def solve_(arr, k):
 
     return -1
 
+
+solve([1])
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -91,7 +93,7 @@ for case_num in range(int(input())):
     arr.reverse()
 
 
-    res = solve(arr, k)  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
