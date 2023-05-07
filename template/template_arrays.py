@@ -204,6 +204,40 @@ def rabin_karp(arr, window_size, modulus):
     return all_hashes
 
 
+def sort_deques(deques):
+    # in place sort
+    # allow big-small merge
+    # O((sum(k) - max(k)) * log(n))
+    deques.sort()
+
+
+def join_deques(deques):
+    # modifies and returns the largest deque
+    # https://leetcode.cn/problems/qoQAMX/
+    # allow big-small merge
+    # O(sum(k) - max(k))
+    if not deques:
+        return deque([])
+    
+    maxlen = 0
+    maxidx = 0
+    for i,dq in enumerate(deques):
+        if len(dq) > maxlen:
+            maxlen = len(dq)
+            maxidx = i
+    
+    ptr = deques[maxidx]
+    
+    for left in deques[:maxidx][::-1]:
+        left.reverse()
+        ptr.extendleft(left)
+
+    for right in deques[maxidx+1:]:
+        ptr.extend(right)
+
+    return ptr
+
+
 # ---------------------- longest subsequence or subarray ----------------------
 
 

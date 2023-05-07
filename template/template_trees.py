@@ -85,6 +85,18 @@ def getLast(u, f):
     return u
 
 
+import itertools
+def iterate_all_full_binary_trees(n):
+    # https://stackoverflow.com/a/41617394/5894029
+    if n == 1:
+        yield [1]
+    for split in range(1, n):
+        gen_left = all_possible_trees(split)
+        gen_right = all_possible_trees(n-split)
+        for left, right in itertools.product(gen_left, gen_right):
+            yield [left, right]
+
+
 # ----------------------------------- Trie -----------------------------------
 
 
