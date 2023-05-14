@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import bisect
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +50,53 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr, brr):
     # your solution here
 
-    return ""
+    for a,b in zip(arr, brr):
+        if a <= b:
+            return 0
+
+    # psum = [0 for _ range(n)]
+
+    idxs = []
+    for x in arr:
+        idx = bisect.bisect_right(brr, x-1)
+        idxs.append(idx)
+    
+    diff = [0 for _ in range(n)]
+
+    for x in idxs:
+        diff[x-1] += 1
+
+    # log(diff)
+    
+    psum = [0]
+
+    for x in diff[::-1]:
+        psum.append(psum[-1] + x)
+    
+    psum = psum[1:][::-1]
+
+    # log(psum)
+
+    psum = [x - (n-i-1) for i,x in enumerate(psum)]
+    
+    # log(psum)
+
+    res = 1
+    for x in psum:
+        res = (res*x)%m9
+
+    return res
+
+
+# while True:
+#     n = random.randint(1,10)
+#     solve_(
+#         [random.randint(1,10) for x in range(n)],
+#         [random.randint(1,10) for x in range(n)],
+#     )
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +104,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,15 +115,19 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
+
+    arr.sort()
+    brr.sort()
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))
