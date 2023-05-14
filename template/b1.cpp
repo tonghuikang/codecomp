@@ -1,40 +1,64 @@
-def solve_(n, arr_original):
-    # your solution here
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
 
-    res = 0
+int solve_(int n, const std::vector<int>& arr_original) {
+    int res = 0;
 
-    for i in range(n):
-        for j in range(i+1, n+1):
-            arr = arr_original[i:j]
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j <= n; ++j) {
+            std::vector<int> arr(arr_original.begin() + i, arr_original.begin() + j);
 
-            pos = {x:i for i,x in enumerate(arr)}
+            std::unordered_map<int, int> pos;
+            for (int k = 0; k < arr.size(); ++k) {
+                pos[arr[k]] = k;
+            }
 
-            brr = sorted(arr)
+            std::vector<int> brr = arr;
+            std::sort(brr.begin(), brr.end());
 
-            crr = [pos[x] for x in brr]
+            std::vector<int> crr;
+            for (int x : brr) {
+                crr.push_back(pos[x]);
+            }
 
-            # log(crr)
+            int left = 0;
+            int right = 0;
+            int count = 0;
+            for (int k = 0; k < crr.size(); ++k) {
+                right = std::max(right, crr[k]);
+                if (right == k) {
+                    if (right > left) {
+                        count += right - left;
+                    }
+                    left = k + 1;
+                }
+            }
 
-            left = 0
-            right = 0
-            count = 0
-            for i,x in enumerate(crr):
-                right = max(right, x)
-                if right == i:
-                    # log(left, right)
-                    if right > left:
-                        count += right - left
-                    left = i+1
-            
-            # log(arr, crr, count)
-            res += count
+            res += count;
+        }
+    }
 
-    return res
+    return res;
+}
 
+int main() {
+    int num_cases;
+    std::cin >> num_cases;
 
-for case_num in range(int(input())):
+    for (int case_num = 0; case_num < num_cases; ++case_num) {
+        int n;
+        std::cin >> n;
 
-    n = int(input())
-    arr = list(map(int,input().split()))
-    res = solve(n, arr)  # include input here
-    print(res)
+        std::vector<int> arr(n);
+        for (int i = 0; i < n; ++i) {
+            std::cin >> arr[i];
+        }
+
+        int res = solve_(n, arr);
+        std::cout << res << std::endl;
+    }
+
+    return 0;
+}
