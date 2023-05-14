@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,47 +49,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, arr):
+def solve_(n, arr_original):
     # your solution here
 
-    return ""
+    res = 0
+
+    for i in range(n):
+        for j in range(i+1, n+1):
+            arr = arr_original[i:j]
+
+            pos = {x:i for i,x in enumerate(arr)}
+
+            brr = sorted(arr)
+
+            crr = [pos[x] for x in brr]
+
+            # log(crr)
+
+            left = 0
+            right = 0
+            count = 0
+            for i,x in enumerate(crr):
+                right = max(right, x)
+                if right == i:
+                    # log(left, right)
+                    if right > left:
+                        count += right - left
+                    left = i+1
+            
+            # log(arr, crr, count)
+            res += count
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
-# for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
 
-    # read line as an integer
     n = int(input())
-    # k = int(input())
-
-    # read line as a string
-    # srr = input().strip()
-
-    # read one line and parse each word as a string
-    # arr = input().split()
-
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
-
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
-
     res = solve(n, arr)  # include input here
-
-    # print length if applicable
-    # print(len(res))
-
-    # parse result
-    # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
-
-    # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
-
     print(res)

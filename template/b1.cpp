@@ -1,43 +1,29 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <unordered_map>
 
-int solve_(int n, const std::vector<int>& arr_original) {
+int solve_(int n, const std::vector<int>& arr) {
     int res = 0;
+    std::vector<std::pair<int, int>> arr_with_indices(n);
 
     for (int i = 0; i < n; ++i) {
-        for (int j = i + 1; j <= n; ++j) {
-            std::vector<int> arr(arr_original.begin() + i, arr_original.begin() + j);
+        arr_with_indices[i] = {arr[i], i};
+    }
 
-            std::unordered_map<int, int> pos;
-            for (int k = 0; k < arr.size(); ++k) {
-                pos[arr[k]] = k;
+    std::sort(arr_with_indices.begin(), arr_with_indices.end());
+
+    for (int i = 0; i < n; ++i) {
+        int left = 0;
+        int right = 0;
+        int count = 0;
+        for (int j = i; j < n; ++j) {
+            right = std::max(right, arr_with_indices[j].second);
+            if (right - left == j - i) {
+                count += right - left;
+                left = right;
             }
-
-            std::vector<int> brr = arr;
-            std::sort(brr.begin(), brr.end());
-
-            std::vector<int> crr;
-            for (int x : brr) {
-                crr.push_back(pos[x]);
-            }
-
-            int left = 0;
-            int right = 0;
-            int count = 0;
-            for (int k = 0; k < crr.size(); ++k) {
-                right = std::max(right, crr[k]);
-                if (right == k) {
-                    if (right > left) {
-                        count += right - left;
-                    }
-                    left = k + 1;
-                }
-            }
-
-            res += count;
         }
+        res += count;
     }
 
     return res;
