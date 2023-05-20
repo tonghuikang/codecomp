@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import itertools
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,18 +51,60 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,arr):
     # your solution here
 
-    return ""
+
+    cntr = Counter()
+
+    for a,b in zip(arr, sorted(arr)):
+        if a == b:
+            continue
+        cntr[a,b] += 1
+
+    res = 0
+    for a in range(4):
+        for b in range(4):
+            swap = min(cntr[a,b], cntr[b,a])
+            if swap > 0:
+                res += swap
+                cntr[a,b] -= swap
+                cntr[b,a] -= swap
 
 
-# for case_num in [0]:  # no loop over test case
+    # resolve triangles
+
+    for x in range(4):
+        arr = list(range(4))
+        arr.remove(x)
+        for a,b,c in itertools.permutations(arr):
+            swap = min(cntr[a,b], cntr[b,c], cntr[c,a])
+            cntr[a,b] -= swap
+            cntr[b,c] -= swap
+            cntr[c,a] -= swap
+            res += swap*2
+
+    val = sum(cntr.values())
+    log(val)
+
+    assert val%4 == 0
+
+    res += val//4 * 3
+
+    # for k,v in cntr.items():
+    #     if v > 0:
+    #         log(k,v)
+
+
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,15 +115,15 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    arr = list(map(int,input().split()))
+    arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,arr)  # include input here
 
     # print length if applicable
     # print(len(res))

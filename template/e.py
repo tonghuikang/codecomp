@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,7 +52,38 @@ def minus_one_matrix(mrr):
 def solve_(n,q,mrr):
     # your solution here
 
-    return ""
+    # ds = DisjointSet(n=6*10**5+10)
+    res = []
+    cnt = n
+
+    edges = [set() for _ in range(n)]
+
+    for q,*arr in mrr:
+        if q == 0:  # already deducted one
+            u,v = arr
+            if len(edges[u]) == 0:
+                cnt -= 1
+            if len(edges[v]) == 0:
+                cnt -= 1
+            edges[u].add(v)
+            edges[v].add(u)
+        else:
+            v, = arr
+            if len(edges[v]) == 0:
+                cnt -= 1
+
+            for nex in list(edges[v]):
+                edges[nex].remove(v)
+                edges[v].remove(nex)
+                if len(edges[nex]) == 0:
+                    cnt += 1
+
+            if len(edges[v]) == 0:
+                cnt += 1
+        res.append(cnt)
+
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
@@ -80,7 +108,7 @@ for case_num in [0]:  # no loop over test case
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(q)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = minus_one_matrix(mrr)
 
     res = solve(n,q,mrr)  # include input here
 
@@ -89,7 +117,7 @@ for case_num in [0]:  # no loop over test case
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
