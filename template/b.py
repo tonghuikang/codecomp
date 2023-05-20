@@ -51,16 +51,30 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 
-def solve_():
+def solve_(h,w,arr):
     # your solution here
 
-    return ""
+    target = "snuke"
+    for x in range(h):
+        for y in range(w):
+            for dx,dy in d8:
+                res = []
+                for i in range(5):
+                    xx,yy = x+dx*i, y+dy*i
+                    if not (0 <= xx < h and 0 <= yy < w and target[i] == arr[xx][yy]):
+                        break
+                    res.append((xx,yy))
+                else:
+                    return res
+
+    return []
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,16 +87,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    h,w = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(h)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(h,w,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -90,7 +104,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x+1) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
