@@ -80,7 +80,7 @@ for case_num in [0]:  # no loop over test case
     # arr = read_strings(k)  # and return as a list of str
     mrr = read_matrix(n)  # and return as a list of list of int
     nrr = read_matrix(n-1)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    nrr = minus_one_matrix(nrr)
 
     res = solve(n,mrr,nrr)
 
