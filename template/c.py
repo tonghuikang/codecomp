@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import itertools
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -10,7 +8,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+yes, no = "Yes", "No"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -55,7 +53,14 @@ def minus_one_matrix(mrr):
 def solve_(n,arr):
     # your solution here
 
-    return ""
+    for comb in itertools.permutations(arr):
+        for x,y in zip(comb, comb[1:]):
+            if sum(a != b for a,b in zip(x,y)) != 1:
+                break
+        else:
+            return yes
+
+    return no
 
 
 for case_num in [0]:  # no loop over test case
