@@ -52,15 +52,28 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,d,arr,brr):
     # your solution here
 
-    return ""
+    maxres = -1
+    ptr = 0
+    for x in arr:
+        while ptr < m-1 and brr[ptr+1] <= x + d:
+            # always attempt to move if next gift is acceptable
+            ptr += 1
+
+        # log(x, ptr)
+        # log(brr[ptr])
+
+        if abs(brr[ptr] - x) <= d:
+            maxres = max(maxres, brr[ptr] + x)
+    
+    return maxres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,8 +86,11 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m,d = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
+    arr.sort()
+    brr.sort()
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,7 +98,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,d,arr,brr)  # include input here
 
     # print length if applicable
     # print(len(res))
