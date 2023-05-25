@@ -67,7 +67,7 @@ def solve_(arr):
 
     arr = split_by_same_elements(arr)
 
-    return max(y for x,y in arr)
+    return max(y for x,y in arr) + 1
 
 
 # for case_num in [0]:  # no loop over test case
