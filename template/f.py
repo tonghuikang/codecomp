@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import itertools
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -1814,16 +1813,62 @@ def solve_wrong(arr, n, k):
 
 
 def solve_(arr, n, k):
-    # your solution here
+    sorted_arr = sorted(arr)
 
-    minres = sum(arr)
+    def func(target):
+        right_pool = SortedList(sorted_arr[:k])
+        left_pool = SortedList([])
 
-    def func(x):
-        right_pool = SortedList(arr)
+        right_excess = SortedList(sorted_arr[k:])
+        left_excess = SortedList([])
+
+        right_pool_sum = sum(right_pool)
+        left_pool_sum = 0   # need to be kept under target
+
+        for x in arr:
+            left_pool.add(x)
+            left_pool_sum += x
+
+            if x in right_pool:
+                right_pool.remove(x)
+                right_pool_sum -= x
+            else:
+                right_excess.remove(x)
+                if right_pool:
+                    val = right_pool.pop()
+                    right_pool_sum -= val
+                    right_excess.add(val)
+                else:  # not gonna help?
+                    pass
+
+            if left_pool_sum > target:
+                if not right_excess:
+                    return False
+
+                val = left_pool.pop()
+                left_pool_sum -= val
+                left_excess.add(val)
+
+                val = right_excess.pop(index=0)
+                right_pool_sum += val
+                right_pool.add(val)
+
+            # log()
+            # log(left_pool)
+            # log(left_excess)
+            # log(right_pool)
+            # log(right_excess)
+            # log()
+
+            if max(left_pool_sum, right_pool_sum) <= target:
+                return True
 
         return False
 
-    return binary_search(func, left=0, right=10**16)
+    # for target in range(10):
+    #     log(target, func(target))
+
+    return binary_search(func, left=0, right=10**16, first=True, target=True)
 
 
 def solve_ref(arr, n, k):
@@ -1844,19 +1889,21 @@ def solve_ref(arr, n, k):
             left += x
             res = max(left, right)
             minres = min(minres, res)
+            # if res == minres:
+            #     log(brr)
 
     return minres
 
 
-while True:
-    n = random.randint(1, 4)
-    k = random.randint(1, n)
-    arr = [random.randint(1,4) for x in range(n)]
+# while True:
+#     n = random.randint(1, 10)
+#     k = random.randint(1, n)
+#     arr = [random.randint(1, 10) for x in range(n)]
 
-    x = solve(arr, n, k)
-    y = solve_ref(arr, n, k)
+#     x = solve(arr, n, k)
+#     y = solve_ref(arr, n, k)
 
-    assert x == y, (x, y)
+#     assert x == y, (x, y)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -1884,6 +1931,9 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(arr, n, k)  # include input here
+
+    if OFFLINE_TEST:
+        solve_ref(arr, n, k)
 
     # print length if applicable
     # print(len(res))
