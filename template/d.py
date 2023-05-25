@@ -55,7 +55,30 @@ def minus_one_matrix(mrr):
 def solve_(n, srr):
     # your solution here
 
-    return ""
+    if srr.count("(") != srr.count(")"):
+        return []
+
+    cur = 0
+
+    res = []
+    prev = 0
+
+    for x in srr:
+        if x == "(":
+            cur += 1
+        else:
+            cur -= 1
+
+        if cur > 0 or prev > 0:
+            res.append(1)
+        else:
+            res.append(2)
+        prev = cur
+
+    if len(set(res)) == 1:
+        return [1]*n
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -84,11 +107,17 @@ for case_num in range(int(input())):
 
     res = solve(n, srr)  # include input here
 
+    if res == []:
+        print(-1)
+        continue
+
+    print(len(set(res)))
+
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
