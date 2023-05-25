@@ -52,10 +52,13 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k):
     # your solution here
 
-    return ""
+    if n%k == 0:
+        return [n-1, 1]
+
+    return [n]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -86,9 +89,9 @@ for case_num in range(int(input())):
 
     # print length if applicable
     # print(len(res))
-
+    print(len(res))
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
