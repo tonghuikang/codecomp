@@ -6,9 +6,9 @@
 #include <numeric>
 #include <unordered_set>
 
-int binary_search(std::function<bool(int)> func, int left, int right) {
+long long binary_search(std::function<bool(long long)> func, long long left, long long right) {
     while (left < right) {
-        int mid = (left + right) / 2;
+        long long mid = (left + right) / 2;
         if (func(mid)) {
             right = mid;
         } else {
@@ -18,21 +18,21 @@ int binary_search(std::function<bool(int)> func, int left, int right) {
     return left;
 }
 
-int solve_(const std::vector<int>& arr, int n, int k) {
-    std::vector<int> sorted_arr(arr);
+long long solve_(const std::vector<long long>& arr, int n, int k) {
+    std::vector<long long> sorted_arr(arr);
     std::sort(sorted_arr.begin(), sorted_arr.end());
 
-    auto func = [&](int target) {
-        std::multiset<int> right_pool(sorted_arr.begin(), sorted_arr.begin() + k);
-        std::multiset<int> left_pool;
+    auto func = [&](long long target) {
+        std::multiset<long long> right_pool(sorted_arr.begin(), sorted_arr.begin() + k);
+        std::multiset<long long> left_pool;
 
-        std::multiset<int> right_excess(sorted_arr.begin() + k, sorted_arr.end());
-        std::unordered_multiset<int> left_excess;
+        std::multiset<long long> right_excess(sorted_arr.begin() + k, sorted_arr.end());
+        std::unordered_multiset<long long> left_excess;
 
-        int right_pool_sum = std::accumulate(right_pool.begin(), right_pool.end(), 0);
-        int left_pool_sum = 0;
+        long long right_pool_sum = std::accumulate(right_pool.begin(), right_pool.end(), 0LL);
+        long long left_pool_sum = 0;
 
-        for (int x : arr) {
+        for (long long x : arr) {
             left_pool.insert(x);
             left_pool_sum += x;
 
@@ -42,7 +42,7 @@ int solve_(const std::vector<int>& arr, int n, int k) {
             } else {
                 right_excess.erase(right_excess.find(x));
                 if (!right_pool.empty()) {
-                    int val = *right_pool.rbegin();
+                    long long val = *right_pool.rbegin();
                     right_pool_sum -= val;
                     right_pool.erase(right_pool.find(val));
                     right_excess.insert(val);
@@ -54,7 +54,7 @@ int solve_(const std::vector<int>& arr, int n, int k) {
                     return false;
                 }
 
-                int val = *left_pool.rbegin();
+                long long val = *left_pool.rbegin();
                 left_pool_sum -= val;
                 left_pool.erase(left_pool.find(val));
                 left_excess.insert(val);
@@ -73,7 +73,7 @@ int solve_(const std::vector<int>& arr, int n, int k) {
         return false;
     };
 
-    return binary_search(func, *std::min_element(sorted_arr.begin(), sorted_arr.end()), std::accumulate(sorted_arr.begin(), sorted_arr.end(), 0));
+    return binary_search(func, *std::min_element(sorted_arr.begin(), sorted_arr.end()), std::accumulate(sorted_arr.begin(), sorted_arr.end(), 0LL));
 }
 
 int main() {
@@ -82,11 +82,11 @@ int main() {
     for (int case_num = 0; case_num < t; ++case_num) {
         int n, k;
         std::cin >> n >> k;
-        std::vector<int> arr(n);
+        std::vector<long long> arr(n);
         for (int i = 0; i < n; ++i) {
             std::cin >> arr[i];
         }
-        int res = solve_(arr, n, k);
+        long long res = solve_(arr, n, k);
         std::cout << res << '\n';
     }
     return 0;
