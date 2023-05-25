@@ -11,8 +11,8 @@ using namespace std;
 // scan to variable
 #define SCAN_INT(var) scanf("%d", &var);
 #define SCAN_LL(var) scanf("%lld", &var);
-#define SCAN_ARR(arr, n) \
-    REP(i, 0, n)     \
+#define SCAN_ARR(arr, k) \
+    REP(i, 1, n + 1)     \
     scanf("%lld", &arr[i]);
 // scan matrix (tbc)
 // scan string
@@ -21,6 +21,10 @@ using namespace std;
 #define FAST                 \
     ios::sync_with_stdio(0); \
     cin.tie(0);
+
+// debug
+#define dbg(x) cerr << ">>> " << #x << " = " << x << "\n";
+
 
 #include <algorithm>
 #include <functional>
@@ -108,10 +112,9 @@ int main() {
         int n, k;
         std::cin >> n >> k;
         std::vector<long long> arr(n);
-        // for (int i = 0; i < n; ++i) {
-        //     std::cin >> arr[i];
-        // }
-        SCAN_ARR(arr, n)
+        for (int i = 0; i < n; ++i) {
+            std::cin >> arr[i];
+        }
         long long res = solve_(arr, n, k);
         std::cout << res << '\n';
     }
