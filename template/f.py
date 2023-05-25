@@ -1780,8 +1780,7 @@ def solve_ref(arr, n, k):
 
 # from sortedcontainers import SortedList
 
-def binary_search(func,       # condition function
-                  left=0, right=2**31-1) -> int:
+def binary_search(func, left, right) -> int:
     while left < right:
         mid = (left + right) // 2
         if func(mid):
@@ -1837,7 +1836,7 @@ def solve_(arr, n, k):
 
         return False
 
-    return binary_search(func, left=0, right=10**16)
+    return binary_search(func, left=min(sorted_arr), right=sum(sorted_arr))
 
 for case_num in range(int(input())):
     n,k = list(map(int,input().split()))
