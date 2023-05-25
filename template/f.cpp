@@ -1,3 +1,27 @@
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,sse4.1,sse4.2,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// for loops
+#define REP(i, A, B) for (int i = A; i < B; ++i)   // for i in range(A,B)
+#define REPn(i, A, B) for (int i = A; i > B; --i)  // for i in range(A,B,-1)
+
+// scan to variable
+#define SCAN_INT(var) scanf("%d", &var);
+#define SCAN_LL(var) scanf("%lld", &var);
+#define SCAN_ARR(arr, n) \
+    REP(i, 0, n)     \
+    scanf("%lld", &arr[i]);
+// scan matrix (tbc)
+// scan string
+
+// fast io
+#define FAST                 \
+    ios::sync_with_stdio(0); \
+    cin.tie(0);
+
 #include <algorithm>
 #include <functional>
 #include <iostream>
@@ -77,15 +101,17 @@ long long solve_(const std::vector<long long>& arr, int n, int k) {
 }
 
 int main() {
+    FAST
     int t;
     std::cin >> t;
     for (int case_num = 0; case_num < t; ++case_num) {
         int n, k;
         std::cin >> n >> k;
         std::vector<long long> arr(n);
-        for (int i = 0; i < n; ++i) {
-            std::cin >> arr[i];
-        }
+        // for (int i = 0; i < n; ++i) {
+        //     std::cin >> arr[i];
+        // }
+        SCAN_ARR(arr, n)
         long long res = solve_(arr, n, k);
         std::cout << res << '\n';
     }
