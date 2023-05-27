@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -51,11 +48,77 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def binary_search(func_,       # condition function
+                  first=True,  # else last
+                  target=True, # else False
+                  left=0, right=2**31-1) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
 
-def solve_(n,h,mrr):
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first^target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:      # find last False
+        return left-1
+
+
+def solve_(n,h0,mrr):
     # your solution here
 
-    return ""
+    def func(duration):
+        h = h0
+        # log(complete_spells)
+        # log(incomplete_spells)
+
+        complete_spells = [(0, 0)]                 # for lifetime damage
+        incomplete_spells = [(0, 10**19)]          # for damage until duration
+        mrr.sort()
+        mrr.sort(key=lambda x: (x[0], -x[1]))
+
+        for t,d in mrr:
+            if t*d > complete_spells[-1][0]:
+                complete_spells.append((t*d, t))     # increasing damage, increasing t
+
+        for t,d in mrr[::-1]:
+            if d > incomplete_spells[-1][0]:
+                incomplete_spells.append((d, t))     # decreasing damage, increasing t
+        incomplete_spells.reverse()
+        complete_spells.reverse()
+
+        for i in range(duration+1):
+            while incomplete_spells[-1][1] < i:
+                incomplete_spells.pop()
+            while len(complete_spells) >= 2 and complete_spells[-2][1] <= i:
+                complete_spells.pop()
+
+            best_damage = max(complete_spells[-1][0], i*incomplete_spells[-1][0])
+            # log(duration, i, best_damage)
+            h -= best_damage
+            if h <= 0:
+                return True
+
+        return False
+        # you lose access to incomplete spells as you go back in time
+        # you gain access to complete spells as you go back in time
+
+    return binary_search(func, first=True, target=True, left=0, right=10**18+10)
 
 
 for case_num in [0]:  # no loop over test case
