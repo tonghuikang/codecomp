@@ -73,6 +73,8 @@ def solve_(n,m,h,k,srr,mrr):
             return no
         if (x,y) in allset and h < k:
             h = k
+            allset.remove((x,y))
+        log(x,y,h)
 
     return yes
 
