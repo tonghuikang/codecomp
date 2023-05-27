@@ -102,14 +102,15 @@ def solve_(n,h0,mrr):
         incomplete_spells.reverse()
         complete_spells.reverse()
 
+        best_complete_spell = 0
         for i in range(duration+1):
             while incomplete_spells[-1][1] < i:
                 incomplete_spells.pop()
-            while len(complete_spells) >= 2 and complete_spells[-2][1] <= i:
-                complete_spells.pop()
+            while complete_spells and complete_spells[-1][1] <= i:
+                best_complete_spell = complete_spells.pop()[0]
 
-            best_damage = max(complete_spells[-1][0], i*incomplete_spells[-1][0])
-            # log(duration, i, best_damage)
+            best_damage = max(best_complete_spell, i*incomplete_spells[-1][0])
+            log(duration, i, best_damage)
             h -= best_damage
             if h <= 0:
                 return True
