@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,8 +53,24 @@ def minus_one_matrix(mrr):
 def solve_(n, mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(set)
+    for a,b in mrr:
+        g[a].add(b)
+        g[b].add(a)
 
+    res = []
+    cnt = n
+    for i in range(n):
+        if len(g[i]) >= 3:
+            res.append(len(g[i]))
+            cnt -= len(g[i]) + 1
+    
+    assert cnt%3 == 0
+    for _ in range(cnt//3):
+        res.append(2)
+    res.sort()
+
+    return res
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -88,7 +102,7 @@ for case_num in [0]:  # no loop over test case
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
