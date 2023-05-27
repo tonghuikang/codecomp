@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,7 +52,20 @@ def minus_one_matrix(mrr):
 def solve_(x,y,z,srr):
     # your solution here
 
-    return ""
+    a = 0
+    b = MAXINT
+
+    for q in srr:
+        a,b = min(a,b+z), min(a+z,b)
+
+        if q == "a":
+            a = a+x
+            b = b+y
+        else:
+            a = a+y
+            b = b+x
+
+    return min(a,b)
 
 
 for case_num in [0]:  # no loop over test case
