@@ -3,7 +3,6 @@
 #include <set>
 #include <algorithm>
 #include <cstdlib>
-#include <ctime>
 
 using namespace std;
 
@@ -37,20 +36,20 @@ int query(int pos) {
     cout.flush();
     int response;
     cin >> response;
+    cout.flush();
     return response;
 }
 
 // -----------------------------------------------------------------------------
 
 int main() {
-    srand(time(0));
-
     int n;
     cin >> n;
     vector<int> arr(n);
     for (int i = 0; i < n; ++i) {
         cin >> arr[i];
     }
+    cout.flush();
 
     if (compute(arr)) {
         cout << "Second" << endl;
