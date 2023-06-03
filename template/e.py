@@ -128,7 +128,7 @@ if compute(arr):
         else:
             right_val = arr[idx]
             right_idx = right.index(arr[idx])
-            for left_idx, left_val in enumerate(right):
+            for left_idx, left_val in enumerate(left):
                 if left_val > 0:
                     other_val = left_val
                     break
@@ -136,6 +136,8 @@ if compute(arr):
                 assert False
 
         val = min(left_val, right_val)
+        log(left, right)
+        log(left_val, right_val)
 
         for pos in range(n):
             if pos == idx:
