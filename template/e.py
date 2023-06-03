@@ -18,7 +18,6 @@ def compute(arr):
             if x+y >= -suffix_size:
                 new_vals.add(x-y)
         vals = new_vals
-    # log(arr, 0 in vals)
     return 0 in vals
 
 
@@ -40,7 +39,6 @@ arr = list(map(int,input().split()))
 if compute(arr):
     print("Second", flush=True)
     while True:
-        log(arr)
         response = int(input())
         if response == 0:
             sys.exit()
