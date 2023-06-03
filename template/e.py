@@ -29,34 +29,50 @@ def compute(arr):
 
 
 from collections import Counter
-def distribute_to_equal_subset_sum(arr):
+def can_partition(arr):
     total_sum = sum(arr)
-
+    
     if total_sum % 2 != 0:
-        return None
-
+        return False
+    
     target_sum = total_sum // 2
     n = len(arr)
 
-    # Initialize the dynamic programming table
     dp = [False] * (target_sum + 1)
     dp[0] = True
 
-    for i in range(n):
-        for j in range(target_sum, arr[i] - 1, -1):
-            if not dp[j]:
-                dp[j] = dp[j - arr[i]]
+    for num in arr:
+        for j in range(target_sum, num - 1, -1):
+            dp[j] = dp[j] or dp[j - num]
 
-    if not dp[target_sum]:
+    return dp[target_sum]
+
+
+def find_subset(arr):
+    if not can_partition(arr):
         return None
 
-    # Backtrack to find the subset
+    total_sum = sum(arr)
+    target_sum = total_sum // 2
+    n = len(arr)
+
+    dp = [[False] * (target_sum + 1) for _ in range(n + 1)]
+    for i in range(n + 1):
+        dp[i][0] = True
+
+    for i in range(1, n + 1):
+        for j in range(1, target_sum + 1):
+            dp[i][j] = dp[i - 1][j]
+            if arr[i - 1] <= j:
+                dp[i][j] = dp[i][j] or dp[i - 1][j - arr[i - 1]]
+
     subset = []
-    j = target_sum
-    for i in range(n - 1, -1, -1):
-        if j >= arr[i] and dp[j - arr[i]]:
-            subset.append(arr[i])
-            j -= arr[i]
+    i, j = n, target_sum
+    while i > 0 and j > 0:
+        if dp[i][j] != dp[i - 1][j]:
+            subset.append(arr[i - 1])
+            j -= arr[i - 1]
+        i -= 1
 
     left = subset
 
@@ -94,7 +110,6 @@ arr = list(map(int,input().split()))
 if compute(arr):
     print("Second", flush=True)
 
-    left = distribute_to_equal_subset_sum
     while True:
         log(arr)
         response = int(input())
@@ -104,20 +119,23 @@ if compute(arr):
         assert arr[idx] != 0
 
         brr = [x for x in arr if x > 0]
-        left, right = distribute_to_equal_subset_sum(brr)
+        left, right = find_subset(brr)
         if arr[idx] in left:
             candidate = right[-1]
         else:
             candidate = left[-1]
 
+        # log(left, right)
+
         for pos in range(n):
-            if candidate != arr[pos]:
-                continue
             if pos == idx:
                 continue
-            break
+            if candidate == arr[pos]:
+                break
         else:
             assert False
+
+        # log(arr[idx], arr[pos], idx, pos, candidate)
 
         val = min(arr[pos], arr[idx])
         arr[pos] -= val
