@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,59 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def split_by_same_elements(lst):
+    res = []
+    for x in lst:
+        if res and x == res[-1][0]:
+            res[-1][-1] += 1
+            continue
+        res.append([x,1])
+    return res
+
+
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    # last number zero always possible?
+
+    if arr[-1] == 1:
+        return []
+
+    arr = [x for x in arr[::-1]]
+
+    res = []
+
+    for a,b in split_by_same_elements(arr):
+        if a == 0:
+            for _ in range(b):
+                res.append(0)
+        if a == 1:
+            for _ in range(b-1):
+                res.append(0)
+            res.append(b)
+
+    return res
+
+
+def process(arr):
+    brr = []
+    for x in arr:
+        assert x <= len(brr)
+        brr.insert(x, 0)
+        brr[:x] = [1-x for x in brr[:x]]
+    return brr
+
+
+# while True:
+#     n = random.randint(1,30)
+#     arr = [random.randint(0,1) for _ in range(n)]
+#     if arr[-1] == 1:
+#         continue
+#     res = solve(n, arr)
+#     arr_check = process(res)
+#     log(arr, arr_check, res)
+#     assert arr_check == arr
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +109,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,7 +120,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,13 +128,19 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
+
+    if not res:
+        print(no)
+        continue
+
+    print(yes)
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
