@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -26,7 +23,7 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def compute(arr):
-    # arr = sorted(arr)
+    arr = sorted(arr)
     vals = set([0])
     for x in arr:
         new_vals = set()
@@ -47,6 +44,8 @@ def query(pos):
 
 # -----------------------------------------------------------------------------
 
+import random
+
 # read line as an integer
 n = int(input())
 arr = list(map(int,input().split()))
@@ -61,7 +60,10 @@ if compute(arr):
         idx = response - 1
         assert arr[idx] != 0
 
-        for pos in range(n):
+        candidates = list(range(n))
+        random.shuffle(candidates)
+
+        for pos in candidates:
             if pos == idx:
                 continue
             if arr[pos] == 0:
