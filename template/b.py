@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,7 +53,26 @@ def minus_one_matrix(mrr):
 def solve_(n, arr):
     # your solution here
 
-    return ""
+    # simulation
+
+    arr.sort(key = lambda x: (x[0], -x[1]))
+    # log(arr)
+
+    lamp_break_threshold = deque([])  # currently on
+    lamp_current_threshold = 0
+    score = 0
+
+    for a,b in arr:
+        if a <= lamp_current_threshold:
+            continue
+        while lamp_break_threshold and lamp_break_threshold[0] <= lamp_current_threshold:
+            lamp_break_threshold.popleft()
+        lamp_break_threshold.append(a)
+        score += b
+        lamp_current_threshold = len(lamp_break_threshold)
+        # log(score, lamp_current_threshold, lamp_break_threshold)
+
+    return score
 
 
 # for case_num in [0]:  # no loop over test case
