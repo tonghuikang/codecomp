@@ -55,7 +55,7 @@ def solve_(n, arr):
 
     # simulation
 
-    arr.sort(key = lambda x: (x[0], -x[1]))
+    arr.sort(key = lambda x: (1000000000 * x[0] -x[1]))
     # log(arr)
 
     lamp_break_threshold = deque([])  # currently on
