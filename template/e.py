@@ -34,7 +34,7 @@ def compute(arr):
             new_vals.add(x+y)
             new_vals.add(x-y)
         vals = new_vals
-    log(arr, 0 in vals)
+    # log(arr, 0 in vals)
     return 0 in vals
 
 
@@ -44,9 +44,6 @@ def query(pos):
     return response
 
 
-# def alert(pos):
-#     print("! {}".format(pos+1), flush=True)
-#     sys.exit()
 
 # -----------------------------------------------------------------------------
 
@@ -64,20 +61,33 @@ if compute(arr):
         idx = response - 1
         assert arr[idx] != 0
 
-        for i in range(n):
-            if i == idx:
+        for pos in range(n):
+            if pos == idx:
                 continue
-            if arr[i] == 0:
+            if arr[pos] == 0:
                 continue
             brr = [x for x in arr]
-            brr[i] -= min(arr[i], arr[idx])
-            brr[idx] -= min(arr[i], arr[idx])
+
+            val = min(arr[pos], arr[idx])
+            brr[pos] -= val
+            brr[idx] -= val
+
             if compute(brr):
                 arr = brr
-                print("{}".format(i+1), flush=True)
+                print("{}".format(pos+1), flush=True)
                 break
         else:
             break
 
 else:
     print("First", flush=True)
+    while True:
+        pos = arr.index(max(arr))
+        idx = query(pos)
+        if idx == 0:
+            sys.exit()
+        idx -= 1
+
+        val = min(arr[pos], arr[idx])
+        arr[pos] -= val
+        arr[idx] -= val
