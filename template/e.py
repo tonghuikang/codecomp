@@ -26,6 +26,7 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 def compute(arr):
+    # arr = sorted(arr)
     vals = set([0])
     for x in arr:
         new_vals = set()
@@ -33,6 +34,7 @@ def compute(arr):
             new_vals.add(x+y)
             new_vals.add(x-y)
         vals = new_vals
+    log(arr, 0 in vals)
     return 0 in vals
 
 
@@ -49,21 +51,33 @@ def query(pos):
 # -----------------------------------------------------------------------------
 
 # read line as an integer
-k = int(input())
+n = int(input())
 arr = list(map(int,input().split()))
 
-# read line as a string
-# srr = input().strip()
+if compute(arr):
+    print("Second", flush=True)
+    while True:
+        log(arr)
+        response = int(input())
+        if response == 0:
+            sys.exit()
+        idx = response - 1
+        assert arr[idx] != 0
 
-# read one line and parse each word as a string
-# lst = input().split()
+        for i in range(n):
+            if i == idx:
+                continue
+            if arr[i] == 0:
+                continue
+            brr = [x for x in arr]
+            brr[i] -= min(arr[i], arr[idx])
+            brr[idx] -= min(arr[i], arr[idx])
+            if compute(brr):
+                arr = brr
+                print("{}".format(i+1), flush=True)
+                break
+        else:
+            break
 
-# read one line and parse each word as an integer
-# a,b,c = list(map(int,input().split()))
-# lst = list(map(int,input().split()))
-
-# -----------------------------------------------------------------------------
-
-# your code here
-
-sys.exit()
+else:
+    print("First", flush=True)
