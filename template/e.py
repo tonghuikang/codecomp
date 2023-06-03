@@ -49,9 +49,6 @@ def can_partition(arr):
 
 
 def find_subset(arr):
-    if not can_partition(arr):
-        return None
-
     total_sum = sum(arr)
     target_sum = total_sum // 2
     n = len(arr)
@@ -110,6 +107,7 @@ arr = list(map(int,input().split()))
 if compute(arr):
     print("Second", flush=True)
 
+    left, right = find_subset(arr)
     while True:
         log(arr)
         response = int(input())
@@ -118,26 +116,39 @@ if compute(arr):
         idx = response - 1
         assert arr[idx] != 0
 
-        brr = [x for x in arr if x > 0]
-        left, right = find_subset(brr)
         if arr[idx] in left:
-            candidate = right[-1]
+            left_val = arr[idx]
+            left_idx = left.index(arr[idx])
+            for right_idx, right_val in enumerate(right):
+                if right_val > 0:
+                    other_val = right_val
+                    break
+            else:
+                assert False
         else:
-            candidate = left[-1]
+            right_val = arr[idx]
+            right_idx = right.index(arr[idx])
+            for left_idx, left_val in enumerate(right):
+                if left_val > 0:
+                    other_val = left_val
+                    break
+            else:
+                assert False
 
-        # log(left, right)
+        val = min(left_val, right_val)
 
         for pos in range(n):
             if pos == idx:
                 continue
-            if candidate == arr[pos]:
+            if other_val == arr[pos]:
                 break
         else:
             assert False
 
         # log(arr[idx], arr[pos], idx, pos, candidate)
 
-        val = min(arr[pos], arr[idx])
+        left[left_idx] -= val
+        right[right_idx] -= val
         arr[pos] -= val
         arr[idx] -= val
         print("{}".format(pos+1), flush=True)
