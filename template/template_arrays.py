@@ -238,6 +238,70 @@ def join_deques(deques):
     return ptr
 
 
+def can_partition_array_into_equal_subset_sum(arr):
+    # https://codeforces.com/contest/1839/submission/208368758
+    total_sum = sum(arr)
+    
+    if total_sum % 2 != 0:
+        return False
+    
+    target_sum = total_sum // 2
+    n = len(arr)
+
+    dp = [False] * (target_sum + 1)
+    dp[0] = True
+
+    for num in arr:
+        for j in range(target_sum, num - 1, -1):
+            dp[j] = dp[j] or dp[j - num]
+
+    return dp[target_sum]
+
+
+def find_equal_subset_sum_subset(arr):
+    # https://codeforces.com/contest/1839/submission/208368758
+    # assuming you can
+    # GPT-4 generated, should be optimized
+    total_sum = sum(arr)
+    target_sum = total_sum // 2
+    n = len(arr)
+
+    dp = [[False] * (target_sum + 1) for _ in range(n + 1)]
+    for i in range(n + 1):
+        dp[i][0] = True
+
+    for i in range(1, n + 1):
+        for j in range(1, target_sum + 1):
+            dp[i][j] = dp[i - 1][j]
+            if arr[i - 1] <= j:
+                dp[i][j] = dp[i][j] or dp[i - 1][j - arr[i - 1]]
+
+    subset = []
+    i, j = n, target_sum
+    while i > 0 and j > 0:
+        if dp[i][j] != dp[i - 1][j]:
+            subset.append(arr[i - 1])
+            j -= arr[i - 1]
+        i -= 1
+
+    left = subset
+
+    c = Counter(left)
+    right = []
+    for x in arr:
+        log(x, c[x])
+        if c[x] > 0:
+            c[x] -= 1
+            continue
+        right.append(x)
+
+    log(sum(left), sum(right), sum(arr))
+    assert sum(left) == sum(right)
+    assert sum(left) + sum(right) == sum(arr)
+    assert sorted(left + right) == sorted(arr)
+    return left, right
+
+
 # ---------------------- longest subsequence or subarray ----------------------
 
 
