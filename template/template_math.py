@@ -290,6 +290,62 @@ def ncr_mod_p(n, r, p=p):
     return (num * dem)%p 
 
 
+# ----------------------------- counting  -----------------------------
+
+from math import comb
+from functools import cache
+
+@cache
+def count_numbers_with_certain_sum_of_digits_and_number_of_digits(n, k, mu=10):  # digit_sum, num_digits
+    # https://math.stackexchange.com/a/1125403/353989
+    limit = min(k, n // mu)
+    total = 0
+
+    for i in range(limit + 1):
+        total += ((-1) ** i) * math.comb(k, i) * math.comb(n - mu * i + k - 1, k - 1)
+
+    return total
+
+
+@cache
+def count_numbers_with_at_most_certain_sum_of_digits_and_number_of_digits(n, k):  # digit_sum, num_digits
+    # includes 0
+    # does not include 10**k
+    if k == 0 or n == 0:
+        return 1
+    res = 0
+    for n2 in range(n+1):
+        res += count_numbers_with_certain_sum_of_digits(n2, k)
+    return res
+
+
+def count_numbers_with_at_most_certain_sum_of_digits(req_digit_sum, target):
+    # https://leetcode.com/contest/weekly-contest-348/problems/count-of-integers/
+    # You have a function (say from Stack Overflow) that calculates the value 
+    #   f(x, y) = f'(x, k), where y = 10**k is a power of 10
+    # You want to find the value of f(x, y) where y may not be a power of 10
+    # x may also be affected by the integer prefix
+    # Note the requirements for f(x, y)
+
+    x = str(target)
+    res = 0
+    remaining_digit_sum = req_digit_sum
+    remaining_digits = len(x)
+
+    for i,c in enumerate(x):
+        c = int(c)
+        remaining_digits -= 1
+        for _ in range(c):
+            if remaining_digit_sum < 0:
+                break
+            val = count_numbers_with_at_most_certain_sum_of_digits_and_number_of_digits(
+                remaining_digit_sum, remaining_digits)
+            res += val
+            remaining_digit_sum -= 1
+            
+    return res
+
+
 # ----------------------------- floor sums  -----------------------------
 
 
