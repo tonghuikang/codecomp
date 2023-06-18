@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -61,7 +58,32 @@ def solve_(srr, trr):
     log(a)
     log(b)
 
-    return ""
+    if a == 0:
+        return 0
+    if b == 0:
+        return 2
+
+    res = 2*len(srr)
+
+    if a%2 == 1:
+        num_swaps = a - 1
+        val = a + num_swaps
+        res = min(res, val)
+    if a%2 == 0:
+        num_swaps = a
+        val = a + num_swaps + 1
+        res = min(res, val)
+
+    if b%2 == 0:
+        num_swaps = b - 1
+        val = b + num_swaps
+        res = min(res, val)
+    if b%2 == 1:
+        num_swaps = b
+        val = b + num_swaps
+        res = min(res, val)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -69,7 +91,7 @@ def solve_(srr, trr):
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
