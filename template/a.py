@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -82,7 +79,7 @@ def solve_(a,b,c,k):
         if b_curmin > b_curmax:
             break
 
-        if k - cntr <= b_curmax - b_curmin + 1:
+        if k - cntr < b_curmax - b_curmin + 1:
             log(a_val, b_curmin, b_curmax)
             b_curmin += k - cntr
             return a_val, b_curmin
@@ -134,7 +131,7 @@ for case_num in range(int(input())):
     assert len(str(y)) == b
     assert len(str(z)) == c
 
-    print(x,y,z)
+    print(x,"+",y,"=",z)
     # print length if applicable
     # print(len(res))
 
