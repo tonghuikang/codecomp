@@ -76,7 +76,7 @@ def solve2(a,b):
         res = min(res, val)
     if a%2 == 0:
         num_swaps = a
-        val = a + num_swaps + 1
+        val = a + num_swaps
         res = min(res, val)
 
     if b%2 == 0 and b > 0:
@@ -94,9 +94,9 @@ def solve2(a,b):
     return res
 
 
-# for a in range(10):
-#     for b in range(10):
-#         log(a,b,solve2(a,b))
+for a in range(10):
+    for b in range(10):
+        log(a,b,solve2(a,b))
 
 
 # for case_num in [0]:  # no loop over test case
