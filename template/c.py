@@ -58,12 +58,17 @@ def solve_(srr, trr):
     log(a)
     log(b)
 
+    return solve2(a,b)
+
+
+def solve2(a,b):
+    res = 10**9
+
     if a == 0:
         return 0
-    if b == 0:
-        return 2
 
-    res = 2*len(srr)
+    if b == 0:
+        res = min(res, 2)
 
     if a%2 == 1:
         num_swaps = a - 1
@@ -74,16 +79,24 @@ def solve_(srr, trr):
         val = a + num_swaps + 1
         res = min(res, val)
 
-    if b%2 == 0:
+    if b%2 == 0 and b > 0:
         num_swaps = b - 1
         val = b + num_swaps
         res = min(res, val)
-    if b%2 == 1:
+    if b%2 == 1 and b > 0:
         num_swaps = b
         val = b + num_swaps
         res = min(res, val)
 
+
+    assert res >= 0
+
     return res
+
+
+# for a in range(10):
+#     for b in range(10):
+#         log(a,b,solve2(a,b))
 
 
 # for case_num in [0]:  # no loop over test case
