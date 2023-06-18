@@ -72,12 +72,15 @@ def solve_(a,b,c,k):
 
     a_val = a_min
 
-    while cntr <= k:
+    while cntr <= k and a_val <= a_max:
         b_curmin = max(b_min, c_min - a_val)
         b_curmax = min(b_max, c_max - a_val)
 
+        # log(a_val, b_curmin, b_curmax)
+
         if b_curmin > b_curmax:
-            break
+            a_val += 1
+            continue
 
         if k - cntr < b_curmax - b_curmin + 1:
             log(a_val, b_curmin, b_curmax)
@@ -86,8 +89,6 @@ def solve_(a,b,c,k):
 
         cntr += b_curmax - b_curmin + 1
         a_val += 1
-        if a_val > a_max:
-            break
 
     return -1
 
