@@ -52,8 +52,28 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,k,mrr):
     # your solution here
+
+    d = defaultdict(list)
+    e = defaultdict(list)
+
+    for a,b in mrr:
+        d[a].append(b)
+        d[b].append(a)
+
+    visited = set()
+    for start in range(n):
+        if start in visited:
+            continue
+
+        # check all incoming and outgoing
+        point = start
+
+    # the bases need to belong to a cycle
+    # each cycle has a certain gcd, or no gcd
+    # if the cycle has no gcd, all pairs and all individual works
+    # k%gcd has to be zero, all pairs with the same 
 
     return ""
 
@@ -73,16 +93,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,k,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
