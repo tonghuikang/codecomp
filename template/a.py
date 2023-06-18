@@ -52,10 +52,47 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b,c,k):
     # your solution here
 
-    return ""
+    if c < a or c < b:
+        return -1
+
+    if max(a,b) + 1 < c:
+        return -1
+
+    cntr = 0
+    k -= 1
+
+    a_min = int("1" + "0"*(a-1))
+    a_max = int("9"*a)
+
+    b_min = int("1" + "0"*(b-1))
+    b_max = int("9"*b)
+
+    c_min = int("1" + "0"*(c-1))
+    c_max = int("9"*c)
+
+    a_val = a_min
+
+    while cntr <= k:
+        b_curmin = max(b_min, c_min - a_val)
+        b_curmax = min(b_max, c_max - a_val)
+
+        if b_curmin > b_curmax:
+            break
+
+        if k - cntr <= b_curmax - b_curmin + 1:
+            log(a_val, b_curmin, b_curmax)
+            b_curmin += k - cntr
+            return a_val, b_curmin
+
+        cntr += b_curmax - b_curmin + 1
+        a_val += 1
+        if a_val > a_max:
+            break
+
+    return -1
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,7 +110,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,8 +119,22 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,c,k)  # include input here
 
+    if res == -1:
+        print(res)
+        continue
+
+    x,y = res
+    z = x+y
+
+    log(x,y,z)
+
+    assert len(str(x)) == a
+    assert len(str(y)) == b
+    assert len(str(z)) == c
+
+    print(x,y,z)
     # print length if applicable
     # print(len(res))
 
@@ -95,4 +146,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
