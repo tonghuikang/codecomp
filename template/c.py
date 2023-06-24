@@ -52,10 +52,40 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
+    LARGE = 10**10
 
-    return ""
+    # dp = [-LARGE for _ in range(n+1)]
+    # dp[0] = 0
+
+    # how many left in front
+    cntr = defaultdict(lambda: LARGE)
+    left = 0
+    minres = n
+
+    carryover = True
+
+    for i,x in enumerate(arr):
+        if not carryover:
+            left += 1
+
+        carryover = False
+        if x in cntr:
+            carryover = True
+
+        left = min(left, cntr[x])
+        right = (n - i - 1)
+
+        log(i,x,left,right)
+        minres = min(minres, left + right)
+
+        propagate = min(i, left)
+        cntr[x] = min(cntr[x], propagate)
+
+    print(cntr)
+
+    return n - minres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +93,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -74,7 +104,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,7 +112,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))

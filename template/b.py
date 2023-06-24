@@ -60,6 +60,10 @@ def solve_(n,x,arr,brr,crr):
     cur = 0
     mask = 2**40 - 1
     mask = mask^x
+    
+    arr.reverse()
+    brr.reverse()
+    crr.reverse()
 
     for xrr in [arr, brr, crr]:
         while xrr:
