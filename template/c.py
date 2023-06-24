@@ -64,7 +64,7 @@ def solve_(n, arr):
 
     for i,x in enumerate(arr):
 
-        if x in cntr[x]:
+        if x in cntr:
             prevs.append(True)
         else:
             prevs.append(False)
@@ -82,7 +82,7 @@ def solve_(n, arr):
 
         left += 1
 
-    print(cntr)
+    # print(cntr)
 
     return n - minres
 
