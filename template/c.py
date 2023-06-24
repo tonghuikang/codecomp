@@ -56,32 +56,20 @@ def solve_(n, arr):
     # your solution here
     LARGE = 10**10
 
-    # dp = [-LARGE for _ in range(n+1)]
-    # dp[0] = 0
-
-    # how many left in front
     cntr = defaultdict(lambda: LARGE)
     left = 0
     minres = n
 
-    carryover = True
-
     for i,x in enumerate(arr):
-        if not carryover:
-            left += 1
 
-        carryover = False
-        if x in cntr:
-            carryover = True
-
-        left = min(left, cntr[x])
+        left = min(left, i+1, cntr[x])
         right = (n - i - 1)
 
-        log(i,x,left,right)
         minres = min(minres, left + right)
 
-        propagate = min(i, left)
-        cntr[x] = min(cntr[x], propagate)
+        cntr[x] = min(cntr[x], left)
+
+        left += 1
 
     print(cntr)
 
