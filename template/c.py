@@ -54,7 +54,13 @@ def minus_one_matrix(mrr):
 
 def solve_(n, arr):
     # your solution here
+    if len(arr) == 1:
+        return 0
+    n = len(arr)
+
     LARGE = 10**10
+
+    # arr = [-1] + arr + [-2]
 
     cntr = defaultdict(lambda: LARGE)
     left = 0
@@ -69,8 +75,10 @@ def solve_(n, arr):
         else:
             prevs.append(False)
 
-        left = min(left, i+1, cntr[x])
+        left = min(left+1, i+1, cntr[x])
         right = (n - i - 1)
+
+        log(i,x,left,right)
 
         minres = min(minres, left + right)
 
@@ -79,10 +87,9 @@ def solve_(n, arr):
         else:
             cntr[x] = min(cntr[x], left)
         
-
         left += 1
 
-    # print(cntr)
+    log(cntr)
 
     return n - minres
 
