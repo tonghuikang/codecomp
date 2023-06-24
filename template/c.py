@@ -60,14 +60,25 @@ def solve_(n, arr):
     left = 0
     minres = n
 
+    prevs = [False]
+
     for i,x in enumerate(arr):
+
+        if x in cntr[x]:
+            prevs.append(True)
+        else:
+            prevs.append(False)
 
         left = min(left, i+1, cntr[x])
         right = (n - i - 1)
 
         minres = min(minres, left + right)
 
-        cntr[x] = min(cntr[x], left)
+        if prevs[-2]:
+            cntr[x] = min(cntr[x], left-1)
+        else:
+            cntr[x] = min(cntr[x], left)
+        
 
         left += 1
 
