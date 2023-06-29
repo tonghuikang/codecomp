@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr, lrr, rrr):
     # your solution here
 
-    return ""
+    # until where you collect them all
+
+    lrr = list(lrr[::-1])
+    rrr = list(rrr[::-1])
+
+    sets = []
+    for a,b in zip(lrr, rrr):
+        curset = set()
+        for x in range(int(a), int(b)+1):
+            curset.add(x)
+        sets.append(curset)
+    
+    # log(sets)
+
+    for x in srr:
+        x = int(x)
+        if x in sets[-1]:
+            sets[-1].remove(x)
+        if len(sets[-1]) == 0:
+            sets.pop()
+        if len(sets) == 0:
+            return "NO"
+
+    # log(sets)
+
+    return "YES"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -67,7 +89,10 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    n = int(input())
+    lrr = input().strip()
+    rrr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -82,7 +107,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr, lrr, rrr)  # include input here
 
     # print length if applicable
     # print(len(res))
