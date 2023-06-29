@@ -52,10 +52,31 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    arr.append(0)
+
+    psum = [0]
+    for x in arr:
+        psum.append(psum[-1] + x)
+    
+    curpeaks = [0]
+    for x in psum[1:]:
+        curpeaks.append(max(curpeaks[-1], x))
+
+    best_val = 0
+    k = 0
+    tail = 0
+
+    for x,p in zip(arr[::-1], curpeaks[::-1][1:]):
+        tail += x
+        val = tail + p
+        if val > best_val:
+            best_val = val
+            k = p
+
+    return k
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +84,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -73,7 +94,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,7 +103,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))

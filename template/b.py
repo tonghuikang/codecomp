@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -55,7 +52,25 @@ def minus_one_matrix(mrr):
 def solve_(x,y,a,b,c,d):
     # your solution here
 
-    return ""
+    a -= x
+    b -= y
+
+    c -= x
+    d -= y
+
+    res = 0
+
+    if a < 0 and c < 0:
+        res += min(abs(a),abs(c))
+    if a > 0 and c > 0:
+        res += min(abs(a),abs(c))
+
+    if b < 0 and d < 0:
+        res += min(abs(b),abs(d))
+    if b > 0 and d > 0:
+        res += min(abs(b),abs(d))
+
+    return res + 1
 
 
 # for case_num in [0]:  # no loop over test case
