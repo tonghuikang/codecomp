@@ -52,16 +52,10 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(arr, brr):
+def solve_():
     # your solution here
 
-    if sum(arr) > sum(brr):
-        return "Tsondu"
-    
-    if sum(arr) < sum(brr):
-        return "Tenzing"
-
-    return "Draw"
+    return ""
 
 
 # for case_num in [0]:  # no loop over test case
@@ -79,9 +73,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    a,b = list(map(int,input().split()))
-    arr = list(map(int,input().split()))
-    brr = list(map(int,input().split()))
+    # a,b,c = list(map(int,input().split()))
+    # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -89,7 +82,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(arr, brr)  # include input here
+    res = solve()  # include input here
 
     # print length if applicable
     # print(len(res))
