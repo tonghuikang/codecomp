@@ -142,13 +142,13 @@ def solve_(x,q,m,arr):
         factors = [x for x in factors if x != 2]
 
         for x in factors:
-            if c[x]+1 != m:
+            if (c[x]+1)%m != 0:
                 res = res*modinv_p(c[x]+1, m)
             c2[c[x]] -= 1
 
             c[x] += 1
 
-            if c[x]+1 != m:
+            if (c[x]+1)%m != 0:
                 res = (res*(c[x]+1))%m
             c2[c[x]] += 1
             
