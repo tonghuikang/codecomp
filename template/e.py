@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -84,8 +82,41 @@ def get_prime_factors_with_precomp(num):
     return factors
 
 
+def get_prime_factors_with_precomp_sqrt(num):
+    limit = int(num**0.5) + 2
+    # requires precomputed `primes``
+    # for numbers below SIZE_OF_PRIME_ARRAY**2
+    # O(sqrt(n) / log(n))
+
+    if num == 1:
+        # may need to edit depending on use case
+        return []
+ 
+    factors = [] 
+    for p in primes:
+        while num%p == 0:
+            factors.append(p)
+            num = num // p
+        # if num < p:  # remaining factor is a prime?
+        #     break
+        if p > limit:
+            break
+    if num > 1:
+        # remaining number is a prime
+        factors.append(num)
+ 
+    return factors
+
+
 
 # log(1, get_prime_factors_with_precomp(1))
+
+def modinv_p(base, p):
+    
+    # modular inverse if the modulo is a prime
+    return pow(base, -1, p)  # for Python 3.8+
+    # return pow(base, p-2, p)  # if Python version is below 3.8
+
 
 def solve_(x,q,m,arr):
     # your solution here
@@ -94,19 +125,35 @@ def solve_(x,q,m,arr):
 
     allres = []
 
-    factors = get_prime_factors_with_precomp(x)
+    factors = get_prime_factors_with_precomp_sqrt(x)
+    factors = [x for x in factors if x != 2]
+
+    c = Counter(factors)
+    c2 = Counter(c.values())
+
+    res = 1
+    for k,v in c.items():
+        res = res*(v+1)
+
+    allres = []
+
     for q in arr:
-        if x*q == 1:
-            allres.append(1)
-            continue
-        
-        factors2 = get_prime_factors_with_precomp(q)
-        res = 1
-        log(factors + factors2)
-        for k,v in Counter(factors + factors2).items():
-            if k > 2:
-                res = res*(v+1)
-        # res -= 1
+        factors = get_prime_factors_with_precomp(q)
+        factors = [x for x in factors if x != 2]
+
+        for x in factors:
+            if c[x]+1 != m:
+                res = res*modinv_p(c[x]+1, m)
+            c2[c[x]] -= 1
+
+            c[x] += 1
+
+            if c[x]+1 != m:
+                res = (res*(c[x]+1))%m
+            c2[c[x]] += 1
+            
+        # log(c)
+
         allres.append(res%m)
 
     return allres
