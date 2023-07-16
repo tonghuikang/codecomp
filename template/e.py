@@ -130,6 +130,7 @@ def solve_(x,q,m,arr):
 
     c = Counter(factors)
     c2 = Counter(c.values())
+    c3 = Counter()
 
     res = 1
     for k,v in c.items():
@@ -144,17 +145,29 @@ def solve_(x,q,m,arr):
         for x in factors:
             if (c[x]+1)%m != 0:
                 res = res*modinv_p(c[x]+1, m)
+            else:
+                c3[c[x]+1] -= 1
+                if c3[c[x]+1] == 0:
+                    del c3[c[x]+1]
+
             c2[c[x]] -= 1
 
             c[x] += 1
 
             if (c[x]+1)%m != 0:
                 res = (res*(c[x]+1))%m
+            else:
+                c3[c[x]+1] -= 1
+                if c3[c[x]+1] == 0:
+                    del c3[c[x]+1]
             c2[c[x]] += 1
             
         # log(c)
 
-        allres.append(res%m)
+        if c3:
+            allres.append(0)
+        else:
+            allres.append(res%m)
 
     return allres
 
