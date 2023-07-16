@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,83 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
 
-    return ""
+def find_peak(func_, minimize=False, left=0, right=2**31-1):
+    # https://leetcode.com/problems/peak-index-in-a-mountain-array/discuss/139848/
+    # find the peak value of a function, assumes that the ends are not peaks
+    # ASSUMES THAT THERE IS NO PLATEAUS
+
+    def func(val):
+        # negative the value of func_ if we are minimizing
+        if minimize:
+            return -func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid) < func(mid + 1):
+            left = mid + 1
+        else:
+            right = mid
+
+    return left
+
+
+
+def solve_(s,k):
+    s0 = s
+    maxres = s*k
+    
+    k -= 1
+    s += s%10
+
+    maxres = max(maxres, s*k)
+
+    if s%10 == 0:
+        return maxres
+
+    assert s%2 == 0
+
+    # bonus increases 20 over 4 steps
+    while s%10 != 2 and k > 0:
+        k -= 1
+        s += s%10
+        maxres = max(maxres, s*k)
+
+    if k == 0:
+        return maxres
+
+    log(s,k)
+
+    k_remainder = k%4
+    k_blocks = k//4
+
+    # 4,8,16,22
+
+    def func(k_blocks):
+        nonlocal maxres
+        curs = s + k_blocks*20
+        curk = k - k_blocks*4
+
+        curres = curs * curk
+        maxres_local = curres
+
+        assert curk >= 0
+
+        for i in [2,4,8,6][:k_remainder]:
+            curs += i
+            curk -= 1
+            curres = curs * curk
+            maxres_local = max(maxres_local, curres)
+
+        maxres = max(maxres_local, maxres)
+        # log(k_blocks, maxres_local)
+        return maxres_local        
+
+    k_peak = find_peak(func, right=k_blocks)
+    # log(k_peak)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,7 +143,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    s,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,7 +152,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(s,k)  # include input here
 
     # print length if applicable
     # print(len(res))

@@ -52,11 +52,11 @@ def minus_one_matrix(mrr):
 def solve_(n,arr,brr):
     # your solution here
 
-    crr = [abs(a-b) for a,b in zip(arr, brr)]
-    arr, brr = brr, crr
+    # crr = [abs(a-b) for a,b in zip(arr, brr)]
+    # arr, brr = brr, crr
 
-    crr = [abs(a-b) for a,b in zip(arr, brr)]
-    arr, brr = brr, crr
+    # crr = [abs(a-b) for a,b in zip(arr, brr)]
+    # arr, brr = brr, crr
 
     # log(arr)
     # log(brr)
@@ -72,25 +72,30 @@ def solve_(n,arr,brr):
         if b == 0:
             idxs[1] += 1
             continue
+
+        offset = 0
         
         while True:
             a = a%(b*2)
             c = abs(a-b)
             if c == 0:
-                idxs[2] += 1
+                idxs[(2+offset)%3] += 1
                 break
             b = abs(c-a)
             if a == 0:
-                idxs[0] += 1
+                idxs[(0+offset)%3] += 1
                 break
             a = abs(b-c)
             if b == 0:
-                idxs[1] += 1
+                idxs[(1+offset)%3] += 1
                 break
+
+            a,b = b,c
+            offset += 1
             # log(a,b,c)
         
         # log("-")
-        log(idxs)
+        # log(idxs)
             
     if (idxs[0] > 0) + (idxs[1] > 0) + (idxs[2] > 0) > 1:
         return no
