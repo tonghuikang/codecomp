@@ -52,10 +52,64 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+SIZE_OF_PRIME_ARRAY = 10**6 + 10
+largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
+primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+
+
+def get_prime_factors_with_precomp(num):
+    # requires precomputed `largest_prime_factors``
+    # for numbers below SIZE_OF_PRIME_ARRAY
+    # O(log n)
+    factors = []
+    lf = largest_prime_factors[num]
+    while lf != num:
+        factors.append(lf)
+        num //= lf
+        lf = largest_prime_factors[num]
+    if num > 1:
+        factors.append(num)
+    return factors
+
+
+
+# log(1, get_prime_factors_with_precomp(1))
+
 def solve_(x,q,m,arr):
     # your solution here
 
-    return ""
+    # https://en.wikipedia.org/wiki/Polite_number
+
+    allres = []
+
+    factors = get_prime_factors_with_precomp(x)
+    for q in arr:
+        if x*q == 1:
+            allres.append(1)
+            continue
+        
+        factors2 = get_prime_factors_with_precomp(q)
+        res = 1
+        log(factors + factors2)
+        for k,v in Counter(factors + factors2).items():
+            if k > 2:
+                res = res*(v+1)
+        # res -= 1
+        allres.append(res%m)
+
+    return allres
 
 
 for case_num in [0]:  # no loop over test case
@@ -89,7 +143,7 @@ for case_num in [0]:  # no loop over test case
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
