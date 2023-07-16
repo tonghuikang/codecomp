@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 input = sys.stdin.readline  # to read input quickly
+import math
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
@@ -72,30 +73,15 @@ def solve_(n,arr,brr):
         if b == 0:
             idxs[1] += 1
             continue
-
-        offset = 0
         
-        while True:
-            a = a%(b*2)
-            c = abs(a-b)
-            if c == 0:
-                idxs[(2+offset)%3] += 1
-                break
-            b = abs(c-a)
-            if a == 0:
-                idxs[(0+offset)%3] += 1
-                break
-            a = abs(b-c)
-            if b == 0:
-                idxs[(1+offset)%3] += 1
-                break
-
-            a,b = b,c
-            offset += 1
-            # log(a,b,c)
-        
-        # log("-")
-        # log(idxs)
+        a,b = a/math.gcd(a,b), b/math.gcd(a,b)
+        if a%2 == 0:
+            idxs[0] += 1
+            continue
+        if b%2 == 0:
+            idxs[1] += 1
+            continue
+        idxs[2] += 1
             
     if (idxs[0] > 0) + (idxs[1] > 0) + (idxs[2] > 0) > 1:
         return no
