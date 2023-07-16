@@ -62,7 +62,9 @@ def solve_(n,m,k,x,y,mrr):
         if (x+y)%2 == (a+b)%2:
             count += 1
 
-    if count >= 2:
+    log(count)
+
+    if count >= 1:
         return no
 
     return yes

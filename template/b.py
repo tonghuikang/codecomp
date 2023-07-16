@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +50,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k,arr):
     # your solution here
 
-    return ""
+    # for each color
+
+    c = defaultdict(list)
+    for i,x in enumerate(arr, start=1):
+        c[x].append(i)
+
+    minres = n+1
+
+    for k,v in c.items():
+        v = [0] + v + [n+1]
+        diff = []
+        for a,b in zip(v,v[1:]):
+            diff.append(b-a)
+        diff.sort()
+        
+        z = diff.pop()
+        z1 = z//2
+        z2 = z-z1
+        diff.append(z1)
+        diff.append(z2)
+
+        # log(k, diff)
+
+        minres = min(minres, max(diff))
+
+    return minres-1
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,8 +96,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -82,7 +105,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
