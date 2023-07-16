@@ -157,7 +157,7 @@ def solve_(x,q,m,arr):
             if (c[x]+1)%m != 0:
                 res = (res*(c[x]+1))%m
             else:
-                c3[c[x]+1] -= 1
+                c3[c[x]+1] += 1
                 if c3[c[x]+1] == 0:
                     del c3[c[x]+1]
             c2[c[x]] += 1
