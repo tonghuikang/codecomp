@@ -71,6 +71,14 @@ def find_peak(func_, minimize=False, left=0, right=2**31-1):
     return left
 
 
+def solve_ref(s,k):
+    maxres = s*k
+    while k:
+        s += s%10
+        k -= 1
+        maxres = max(maxres, s*k)
+    return maxres
+
 
 def solve_(s,k):
     s0 = s
@@ -103,7 +111,7 @@ def solve_(s,k):
     k_remainder = k%4
     k_blocks = k//4
 
-    # 4,8,16,22
+    # 2,4,8,16,22
 
     def func(k_blocks):
         nonlocal maxres
@@ -123,11 +131,17 @@ def solve_(s,k):
         # log(k_blocks, maxres_local)
         return maxres_local        
 
-    k_peak = find_peak(func, right=k_blocks)
+    k_peak = find_peak(func, right=k_blocks+1)
     # log(k_peak)
 
     return maxres
 
+
+if OFFLINE_TEST:
+    import random
+    s = random.randint(0,1000)
+    k = random.randint(0,1000)
+    assert solve_(s,k) == solve_ref(s,k), (s,k,solve_(s,k),solve_ref(s,k))
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
