@@ -52,10 +52,20 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,k,x,y,mrr):
     # your solution here
 
-    return ""
+    count = 0
+    for a,b in mrr:
+        if (a,b) == (x,y):
+            return no
+        if (x+y)%2 == (a+b)%2:
+            count += 1
+
+    if count >= 2:
+        return no
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,16 +83,17 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
+    x,y = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,k,x,y,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
