@@ -74,12 +74,14 @@ def find_peak(func_, minimize=False, left=0, right=2**31-1):
 
 def solve_(s,k):
     s0 = s
+    k0 = k
     maxres = s*k
     
     k -= 1
     s += s%10
 
     maxres = max(maxres, s*k)
+    # log("x", s0*k0 - s*k)
 
     if s%10 == 0:
         return maxres
@@ -91,6 +93,7 @@ def solve_(s,k):
         k -= 1
         s += s%10
         maxres = max(maxres, s*k)
+        # log("x", s0*k0 - s*k)
 
     if k == 0:
         return maxres
@@ -109,8 +112,6 @@ def solve_(s,k):
 
         curres = curs * curk
         maxres_local = curres
-
-        assert curk >= 0
 
         for i in [2,4,8]:
             curs += i
