@@ -112,7 +112,7 @@ def solve_(s,k):
 
         assert curk >= 0
 
-        for i in [2,4,8,6][:k_remainder]:
+        for i in [2,4,8]:
             curs += i
             curk -= 1
             curres = curs * curk
