@@ -1,30 +1,28 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <set>
+
 using namespace std;
 
-vector<vector<int>> read_matrix(int rows) {
-    vector<vector<int>> matrix(rows, vector<int>(2));
-    for (int i = 0; i < rows; i++) {
-        cin >> matrix[i][0] >> matrix[i][1];
-        matrix[i][0]--;  // 0-indexing
-        matrix[i][1]--;  // 0-indexing
-    }
-    return matrix;
-}
+int main() {
+    int h, w, n;
+    cin >> h >> w >> n;
 
-int solve(int h, int w, int n, vector<vector<int>>& mrr) {
-    set<pair<int, int>> mrr_set;
-    for (auto& v : mrr) {
-        mrr_set.insert({v[0], v[1]});
+    set<pair<int, int>> mrr;
+    for (int i = 0; i < n; ++i) {
+        int x, y;
+        cin >> x >> y;
+        mrr.insert(make_pair(x - 1, y - 1));
     }
 
     vector<vector<int>> arr(h, vector<int>(w, 0));
     vector<vector<int>> brr(h, vector<int>(w, 0));
     vector<vector<int>> crr(h, vector<int>(w, 0));
 
-    for (int i = 0; i < h; i++) {
+    for (int i = 0; i < h; ++i) {
         int count = 0;
-        for (int j = 0; j < w; j++) {
-            if (mrr_set.count({i,j}) > 0) {
+        for (int j = 0; j < w; ++j) {
+            if (mrr.count(make_pair(i, j)) > 0) {
                 count = 0;
                 continue;
             }
@@ -33,10 +31,10 @@ int solve(int h, int w, int n, vector<vector<int>>& mrr) {
         }
     }
 
-    for (int j = 0; j < w; j++) {
+    for (int j = 0; j < w; ++j) {
         int count = 0;
-        for (int i = 0; i < h; i++) {
-            if (mrr_set.count({i,j}) > 0) {
+        for (int i = 0; i < h; ++i) {
+            if (mrr.count(make_pair(i, j)) > 0) {
                 count = 0;
                 continue;
             }
@@ -45,46 +43,34 @@ int solve(int h, int w, int n, vector<vector<int>>& mrr) {
         }
     }
 
-    for (int i = 0; i < h; i++) {
-        if (mrr_set.count({i,0}) > 0) {
-            continue;
-        }
-        crr[i][0] = 1;
-    }
-
-    for (int j = 0; j < w; j++) {
-        if (mrr_set.count({0,j}) > 0) {
-            continue;
-        }
-        crr[0][j] = 1;
-    }
-
-    for (int i = 1; i < h; i++) {
-        for (int j = 1; j < w; j++) {
-            crr[i][j] = min({arr[i][j], brr[i][j], crr[i-1][j-1] + 1});
+    for (int i = 0; i < h; ++i) {
+        if (mrr.count(make_pair(i, 0)) == 0) {
+            crr[i][0] = 1;
         }
     }
 
-    int res = 0;
-    for (int i = 0; i < h; i++) {
-        for (int j = 0; j < w; j++) {
+    for (int j = 0; j < w; ++j) {
+        if (mrr.count(make_pair(0, j)) == 0) {
+            crr[0][j] = 1;
+        }
+    }
+
+    for (int i = 1; i < h; ++i) {
+        for (int j = 1; j < w; ++j) {
+            if (mrr.count(make_pair(i, j)) == 0) {
+                crr[i][j] = min(arr[i][j], min(brr[i][j], crr[i - 1][j - 1] + 1));
+            }
+        }
+    }
+
+    long long res = 0;
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; ++j) {
             res += crr[i][j];
         }
     }
 
-    return res;
-}
-
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-
-    int h, w, n;
-    cin >> h >> w >> n;
-    vector<vector<int>> mrr = read_matrix(n);
-
-    int res = solve(h, w, n, mrr);
-    cout << res << "\n";
+    cout << res << endl;
 
     return 0;
 }

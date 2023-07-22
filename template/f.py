@@ -54,10 +54,25 @@ def minus_one_matrix(mrr):
 
 def solve_(n,m,mrr):
     # your solution here
+    mrr = [[1 if cell == "#" else 0 for i in range(m)][::-1] for j in range(n)][::-1]
 
-    dp = [[0 for _ in range(m)] for _ in range(m)]
+    dp0 = [[0 for _ in range(m)] for _ in range(m)]
+    dp1 = [[0 for _ in range(m)] for _ in range(m)]
 
-    return ""
+    dp0[0][0] = 1
+    dp1[1][1] = 1
+
+    if mrr[0][0] == 1:
+        dp[0][0] = 0
+
+    for j in range(1,m):
+        if mrr[0][j] == 0:
+            dp0[0][j] = dp0[0][j-1] + dp1[0][j-1]
+        dp1[0][j] = dp0[0][j-1] + dp1[0][j-1]
+
+    for i in range(n):
+        for j in range(w):
+            
 
 
 for case_num in [0]:  # no loop over test case
