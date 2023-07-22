@@ -89,8 +89,8 @@ def solve_(n,m,srr):
             # xx
             # *x
 
-            dp11[i][j] += dp11[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
-            dp01[i][j] += dp11[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+            dp11[i][j] += dp11[i-1][j] * (dp01[i][j-1] + dp11[i][j-1])
+            dp01[i][j] += dp11[i-1][j] * (dp00[i][j-1] + dp10[i][j-1])
 
             if mrr[i][j] == 1:
                 continue
@@ -98,26 +98,26 @@ def solve_(n,m,srr):
             # xx
             # *o
 
-            dp10[i][j] += dp11[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
-            dp00[i][j] += dp11[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+            dp10[i][j] += dp11[i-1][j] * (dp01[i][j-1] + dp11[i][j-1])
+            dp00[i][j] += dp11[i-1][j] * (dp00[i][j-1] + dp10[i][j-1])
 
             # oo
             # *o
 
-            dp10[i][j] += dp00[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
-            dp00[i][j] += dp00[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+            dp10[i][j] += dp00[i-1][j] * (dp01[i][j-1] + dp11[i][j-1])
+            dp00[i][j] += dp00[i-1][j] * (dp00[i][j-1] + dp10[i][j-1])
 
             # xo
             # *o
 
-            dp10[i][j] += dp10[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
-            dp00[i][j] += dp10[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+            dp10[i][j] += dp10[i-1][j] * (dp01[i][j-1] + dp11[i][j-1])
+            dp00[i][j] += dp10[i-1][j] * (dp00[i][j-1] + dp10[i][j-1])
 
             # ox
             # *o
 
-            dp10[i][j] += dp01[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
-            dp00[i][j] += dp01[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+            dp10[i][j] += dp01[i-1][j] * (dp01[i][j-1] + dp11[i][j-1])
+            dp00[i][j] += dp01[i-1][j] * (dp00[i][j-1] + dp10[i][j-1])
 
             dp11[i][j] = dp11[i][j]%998244353
             dp10[i][j] = dp10[i][j]%998244353
