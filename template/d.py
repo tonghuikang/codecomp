@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -11,7 +8,7 @@ input = sys.stdin.readline  # to read input quickly
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 MAXINT = sys.maxsize
@@ -55,7 +52,23 @@ def minus_one_matrix(mrr):
 def solve_(n,m,arr):
     # your solution here
 
-    return ""
+    stack = [(1,1)]
+    visited = set(stack)
+    res = set(stack)
+
+    while stack:
+        ox,oy = stack.pop()
+        for dx,dy in d4:
+            x,y = ox,oy
+            while arr[x+dx][y+dy] != "#":
+                x += dx
+                y += dy
+                res.add((x,y))
+            if (x,y) not in visited:
+                stack.append((x,y))
+                visited.add((x,y))
+
+    return len(res)
 
 
 for case_num in [0]:  # no loop over test case
