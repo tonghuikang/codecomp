@@ -459,6 +459,73 @@ def sliding_window_median(nums, k):
     return ans
 
 
+# ------------------------- largest score -------------------------
+
+
+def rectangular_submatrix_with_largest_sum(matrix):
+    # https://atcoder.jp/contests/abc311/tasks/abc311_g
+    # untested O(n3)
+    h,w = len(matrix), len(matrix[0])
+
+    maxres = 0
+    for i in range(w):
+        rowsum = [0 for _ in range(h)]
+        # minval = [0 for _ in range(h)]
+        for j in range(i,w):
+            for x in range(h):
+                rowsum[x] += matrix[x][j]
+                # minval[x] += min(minval[x], matrix[x][j])
+            res = largest_submatrix_sum(rowsum)
+            maxres = max(maxres, res)
+    return maxres
+
+
+def largest_submatrix_sum(arr):
+    # https://leetcode.com/problems/maximum-subarray/
+    val = arr[0]
+    maxres = arr[0]
+    
+    for x in arr[1:]:
+        val = max(x, val+x)
+        maxres = max(maxres, val)
+
+    return maxres
+
+
+def largest_rectangle_in_histogram(heights):
+    # https://leetcode.com/problems/largest-rectangle-in-histogram/
+    n = len(heights)
+    # left boundary => next smaller element to left
+    stack = []
+    nextSmallerLeft = [0]*n
+    for i in range(n):
+        while stack and heights[stack[-1]] >= heights[i]:
+            stack.pop()
+        if stack:
+            nextSmallerLeft[i] = stack[-1] + 1
+        stack.append(i)
+    
+    # right boundary => next smaller element to right
+    stack = []
+    nextSmallerRight = [n-1]*n
+    for i in range(n-1, -1, -1):
+        while stack and heights[stack[-1]] >= heights[i]:
+            stack.pop()
+        if stack:
+            nextSmallerRight[i] = stack[-1] - 1
+        stack.append(i)
+    
+    res = heights[0]
+    for i in range(n):
+        height = heights[i]
+        width = nextSmallerRight[i] - nextSmallerLeft[i] + 1
+        # width = psum[nextSmallerRight[i]+1] - psum[nextSmallerLeft[i]]
+        area = height * width
+        res = max(res, area)
+        
+    return res
+
+
 # ------------------------- standard algorithms -------------------------
 
 
