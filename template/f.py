@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -52,27 +52,79 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,m,mrr):
+def solve_(n,m,srr):
     # your solution here
-    mrr = [[1 if cell == "#" else 0 for i in range(m)][::-1] for j in range(n)][::-1]
+    mrr = [[1 for _ in range(m+1)] for _ in range(n+1)]
 
-    dp0 = [[0 for _ in range(m)] for _ in range(m)]
-    dp1 = [[0 for _ in range(m)] for _ in range(m)]
+    for i,row in enumerate(srr):
+        for j,cell in enumerate(row):
+            if cell == ".":
+                mrr[~i][~j] = 0
 
-    dp0[0][0] = 1
-    dp1[1][1] = 1
+    for row in mrr:
+        log(row)
 
-    if mrr[0][0] == 1:
-        dp[0][0] = 0
+    dp00 = [[0 for _ in range(m+1)] for _ in range(n+1)]
+    dp11 = [[0 for _ in range(m+1)] for _ in range(n+1)]
+    dp10 = [[0 for _ in range(m+1)] for _ in range(n+1)]
+    dp01 = [[0 for _ in range(m+1)] for _ in range(n+1)]
 
-    for j in range(1,m):
-        if mrr[0][j] == 0:
-            dp0[0][j] = dp0[0][j-1] + dp1[0][j-1]
-        dp1[0][j] = dp0[0][j-1] + dp1[0][j-1]
+    j = 0
+    for i in range(n+1):
+        dp11[i][j] = 1
+        # dp10[i][j] = 1
+        # dp01[i][j] = 1
+        # dp00[i][j] = 1
+        
+    i = 0
+    for j in range(m+1):
+        dp11[i][j] = 1
+        # dp10[i][j] = 1
+        # dp01[i][j] = 1
+        # dp00[i][j] = 1
 
-    for i in range(n):
-        for j in range(w):
-            
+
+    for i in range(1,n+1):
+        for j in range(1,m+1):
+            # xx
+            # *x
+
+            dp11[i][j] += dp11[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
+            dp01[i][j] += dp11[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+
+            if mrr[i][j] == 1:
+                continue
+
+            # xx
+            # *o
+
+            dp10[i][j] += dp11[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
+            dp00[i][j] += dp11[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+
+            # oo
+            # *o
+
+            dp10[i][j] += dp00[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
+            dp00[i][j] += dp00[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+
+            # xo
+            # *o
+
+            dp10[i][j] += dp10[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
+            dp00[i][j] += dp10[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+
+            # ox
+            # *o
+
+            dp10[i][j] += dp01[i-1][j] * (dp01[i-1][j] + dp11[i-1][j])
+            dp00[i][j] += dp01[i-1][j] * (dp00[i-1][j] + dp10[i-1][j])
+
+            dp11[i][j] = dp11[i][j]%998244353
+            dp10[i][j] = dp10[i][j]%998244353
+            dp01[i][j] = dp01[i][j]%998244353
+            dp00[i][j] = dp00[i][j]%998244353
+
+    return (dp00[-1][-1] + dp01[-1][-1] + dp10[-1][-1] + dp11[-1][-1])%m9
 
 
 for case_num in [0]:  # no loop over test case
