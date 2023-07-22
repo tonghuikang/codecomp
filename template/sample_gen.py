@@ -21,7 +21,10 @@ def save_test_case(question, question_count=0):
             break
     else:
         question_number = question["name"].replace('-', '.').split(".")[0].strip().lower()
-    
+
+    if question_number == "ex":
+        question_number = "z"
+
     print("Found problem {} with {} sample cases".format(
         question_number, len(question["tests"])))
 
@@ -94,8 +97,8 @@ if __name__ == "__main__":
     https://atcoder.jp/contests/arc118/tasks/arc118_a
     https://www.codechef.com/LTIME95B/problems/CCHEAVEN
     https://www.facebook.com/codingcompetitions/hacker-cup/2020/round-2/problems/A
-    https://codingcompetitions.withgoogle.com/codejam/round/0000000000435baf/00000000007ae4aa
-    https://codingcompetitions.withgoogle.com/kickstart/round/0000000000435a5b/000000000077a882
+    # https://codingcompetitions.withgoogle.com/codejam/round/0000000000435baf/00000000007ae4aa
+    # https://codingcompetitions.withgoogle.com/kickstart/round/0000000000435a5b/000000000077a882
     '''
     
     if len(argv) == 2:  # if the port is specified
