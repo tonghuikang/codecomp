@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,15 +49,58 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(h,w,n,mrr):
     # your solution here
 
-    return ""
+    mrr = set(tuple(xy) for xy in mrr)
+
+    arr = [[0 for _ in range(w)] for _ in range(h)]  # right
+    brr = [[0 for _ in range(w)] for _ in range(h)]  # down
+    crr = [[0 for _ in range(w)] for _ in range(h)]
+
+    for i in range(h):
+        count = 0
+        for j in range(w):
+            if (i,j) in mrr:
+                count = 0
+                continue
+            count += 1
+            arr[i][j] = count
+
+    for j in range(w):
+        count = 0
+        for i in range(h):
+            if (i,j) in mrr:
+                count = 0
+                continue
+            count += 1
+            brr[i][j] = count
+
+    for i in range(h):
+        if (i,0) in mrr:
+            continue
+        crr[i][0] = 1
+
+    for j in range(w):
+        if (0,j) in mrr:
+            continue
+        crr[0][j] = 1
+
+    for i in range(1,h):
+        for j in range(1,w):
+            crr[i][j] = min(arr[i][j], brr[i][j], crr[i-1][j-1] + 1)
+
+    res = 0
+    for i in range(h):
+        for j in range(w):
+            res += crr[i][j]
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,16 +113,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    h,w,n = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(n)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(h,w,n,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
