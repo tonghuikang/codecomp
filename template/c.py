@@ -14,6 +14,8 @@ yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
+# abc = "abcdefghijklmnopqrstuvwxyz"
+# abc_map = {c:i for i,c in enumerate(abc)}
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
