@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -14,6 +11,8 @@ yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
+# abc = "abcdefghijklmnopqrstuvwxyz"
+# abc_map = {c:i for i,c in enumerate(abc)}
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
@@ -52,50 +51,68 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def max_sum_submatrix(matrix):
-    rows = len(matrix)
-    cols = len(matrix[0])
-    
-    # pre-compute column prefix sums
-    prefix_sums = [[0]*cols for _ in range(rows)]
-    prefix_sums[0] = list(matrix[0])
-    for i in range(1, rows):
-        for j in range(cols):
-            prefix_sums[i][j] = matrix[i][j] + prefix_sums[i-1][j]
-    
-    max_sum = float('-inf')
-    for row1 in range(rows):
-        for row2 in range(row1, rows):
-            dp = [0]*cols
-            for col in range(cols):
-                dp[col] = prefix_sums[row2][col] - (prefix_sums[row1-1][col] if row1-1 >= 0 else 0)
-            
-            # apply Kadane's algorithm
-            curr_max = dp[0]
-            max_ending_here = dp[0]
-            for i in range(1, len(dp)):
-                max_ending_here = max(max_ending_here + dp[i], dp[i])
-                curr_max = max(curr_max, max_ending_here)
-            
-            max_sum = max(max_sum, curr_max)
-    
-    return max_sum
-
-
-def solve_(n,m,mrr):
-    # your solution here
+def rectangular_submatrix_with_largest_sum(matrix):
+    h,w = len(matrix), len(matrix[0])
 
     maxres = 0
-
-    for x in range(301):
-        for i in range(n):
-            for j in range(m):
-                if mrr[i][j] < x:
-                    mrr[i][j] = -300*300*300
-        res = x * max_sum_submatrix(mrr)
-        maxres = max(maxres, res)
-
+    
+    for i in range(w):
+        rowsum = [0 for _ in range(h)]
+        minval = [300 for _ in range(h)]
+        for j in range(i,w):
+            for x in range(h):
+                rowsum[x] += matrix[x][j]
+                minval[x] = min(minval[x], matrix[x][j])
+            res = largest_area_under_histogram(rowsum, minval)
+            maxres = max(maxres, res)
+            log(rowsum)
+            log(minval)
+            log()
     return maxres
+
+
+def largest_area_under_histogram(rowsum, heights):
+    psum = [0]
+    for x in rowsum:
+        psum.append(psum[-1] + x)
+
+    n = len(heights)
+    # left boundary => next smaller element to left
+    stack = []
+    nextSmallerLeft = [0]*n
+    for i in range(n):
+        while stack and heights[stack[-1]] >= heights[i]:
+            stack.pop()
+        if stack:
+            nextSmallerLeft[i] = stack[-1] + 1
+        stack.append(i)
+    
+    # right boundary => next smaller element to right
+    stack = []
+    nextSmallerRight = [n-1]*n
+    for i in range(n-1, -1, -1):
+        while stack and heights[stack[-1]] >= heights[i]:
+            stack.pop()
+        if stack:
+            nextSmallerRight[i] = stack[-1] - 1
+        stack.append(i)
+    
+    res = heights[0]
+    for i in range(n):
+        height = heights[i]
+        width = psum[nextSmallerRight[i]+1] - psum[nextSmallerLeft[i]]
+        area = height * width
+        res = max(res, area)
+        
+    return res
+
+
+
+
+def solve_(mrr):
+    # your solution here
+
+    return rectangular_submatrix_with_largest_sum(mrr)
 
 
 for case_num in [0]:  # no loop over test case
@@ -122,7 +139,7 @@ for case_num in [0]:  # no loop over test case
     mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,m,mrr)  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
