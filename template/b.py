@@ -52,15 +52,38 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def split_by_same_elements(lst):
+    res = []
+    for x in lst:
+        if res and x == res[-1][0]:
+            res[-1][-1] += 1
+            continue
+        res.append([x,1])
+    return res
+
+
+
+def solve_(mrr):
     # your solution here
+    arr = []
+    for col in zip(*mrr):
+        if col.count("o") == len(col):
+            arr.append(1)
+        else:
+            arr.append(0)
 
-    return ""
+    maxres = 0
+    for a,b in split_by_same_elements(arr):
+        if a == 1:
+            maxres = max(maxres, b)
+
+    return maxres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,16 +96,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,d = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_strings(n)  # and return as a list of str
+    # mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
