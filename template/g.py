@@ -52,15 +52,55 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def max_sum_submatrix(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0])
+    
+    # pre-compute column prefix sums
+    prefix_sums = [[0]*cols for _ in range(rows)]
+    prefix_sums[0] = list(matrix[0])
+    for i in range(1, rows):
+        for j in range(cols):
+            prefix_sums[i][j] = matrix[i][j] + prefix_sums[i-1][j]
+    
+    max_sum = float('-inf')
+    for row1 in range(rows):
+        for row2 in range(row1, rows):
+            dp = [0]*cols
+            for col in range(cols):
+                dp[col] = prefix_sums[row2][col] - (prefix_sums[row1-1][col] if row1-1 >= 0 else 0)
+            
+            # apply Kadane's algorithm
+            curr_max = dp[0]
+            max_ending_here = dp[0]
+            for i in range(1, len(dp)):
+                max_ending_here = max(max_ending_here + dp[i], dp[i])
+                curr_max = max(curr_max, max_ending_here)
+            
+            max_sum = max(max_sum, curr_max)
+    
+    return max_sum
+
+
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    maxres = 0
+
+    for x in range(301):
+        for i in range(n):
+            for j in range(m):
+                if mrr[i][j] < x:
+                    mrr[i][j] = -300*300*300
+        res = x * max_sum_submatrix(mrr)
+        maxres = max(maxres, res)
+
+    return maxres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,16 +113,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
