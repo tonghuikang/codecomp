@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,18 +51,53 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def encode(a,b,c):
+    return 100*100*a + 100*b + c
+
+def decode(x):
+    a,bc = divmod(x,100)
+    b,c = divmod(bc,100)
+    return a,b,c
+
+def solve_(mrr):
     # your solution here
 
-    return ""
+    mapping = [-1 for _ in range(100*100*100)]
+
+    for i,(a,b,c,p,q,r) in enumerate(mrr):
+        for x in range(a,p):
+            for y in range(b,q):
+                for z in range(c,r):
+                    mapping[encode(x,y,z)] = i
+
+    adj = [set() for _ in range(len(mrr))]
+
+    for x in range(100):
+        for y in range(100):
+            for z in range(100):
+                f = mapping[encode(x,y,z)]
+                if f == -1:
+                    continue
+                for dx,dy,dz in [(1,0,0),(0,1,0),(0,0,1)]:
+                    xx = x+dx
+                    yy = y+dy
+                    zz = z+dz
+                    if xx >= 100 or yy >= 100 or zz >= 100:
+                        continue
+                    g = mapping[encode(xx,yy,zz)]
+                    if g != -1 and f != g:
+                        adj[f].add(g)
+                        adj[g].add(f)
+
+    return [len(x) for x in adj]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -81,17 +113,17 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result

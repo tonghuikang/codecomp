@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -60,7 +57,22 @@ def solve_(srr):
     if len(srr)%2 == 1:
         return 0
 
-    return ""
+    n = len(srr)
+
+    dp = [0 for _ in range(n + 1)]
+    dp[0] = 1
+
+    for x in srr:
+        new_dp = [0 for _ in range(n + 1)]
+        if x == "?" or x == "(":
+            for i in range(n):
+                new_dp[i+1] += dp[i]%m9
+        if x == "?" or x == ")":
+            for i in range(1,n+1):
+                new_dp[i-1] += dp[i]%m9
+        dp = new_dp
+
+    return dp[0]%m9
 
 
 for case_num in [0]:  # no loop over test case
