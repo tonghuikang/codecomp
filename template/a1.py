@@ -20,7 +20,7 @@ e18 = 10**18 + 10
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -29,13 +29,16 @@ def log(*args):
     if CHECK_OFFLINE_TEST and OFFLINE_TEST:
         print('\033[36m', *args, '\033[0m', file=sys.stderr)
 
-def solve(*args):
+def solve(arr):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        log(arr)
         log("----- ------- ------")
-    return solve_(*args)
+        # solve_(arr[::-1])
+        # solve_([-x for x in arr][::-1])
+        # solve_([-x for x in arr])
+    return solve_(arr)
 
 def read_matrix(rows):
     return [list(map(int,input().split())) for _ in range(rows)]
@@ -57,7 +60,7 @@ def solve_(arr):
 
     arr_original = [x for x in arr]
     n = len(arr)
-
+    assert len(arr) <= 20
     # build a large number and snowball
 
     if sorted(arr) == arr:
@@ -71,18 +74,23 @@ def solve_(arr):
         res.append([i, j])
         num_ops[0] += 1
 
+    pos = sum(x >= 0 for x in arr)
+    neg = sum(x <= 0 for x in arr)
+
     # make positive
     if max(arr) > 0:
         for i in range(n):
-            while arr[i] != max(arr):
+            while arr[i] != max(arr[:i+1]):
                 idx = arr.index(max(arr))
                 op(i, idx)
-                # log(arr)
-
-        if num_ops[0] <= 31:
+                log(arr)
+ 
+        if num_ops[0] <= 6:
             assert sorted(arr) == arr
-            assert num_ops[0] <= 31
+            assert num_ops[0] <= 6
             return res
+
+    log('-')
 
     res = []
     num_ops = [0]
@@ -92,27 +100,36 @@ def solve_(arr):
 
     # make negative
     for i in range(n-1, -1, -1):
-        while arr[i] != min(arr):
+        while arr[i] != min(arr[i:]):
             idx = arr.index(min(arr))
             op(i, idx)
-            # log(arr)
+            log(arr)
 
     assert sorted(arr) == arr
-    assert num_ops[0] <= 31
+    assert num_ops[0] <= 6
     return res
 
 
-if OFFLINE_TEST:
-    solve([x for x in range(20)])
-    solve([x for x in range(1,20+1)])
-    solve([x for x in range(20,0,-1)])
-    solve([-x for x in range(20)])
-    solve([-x for x in range(1,20+1)])
-    solve([-x for x in range(20,0,-1)])
+# if OFFLINE_TEST:
+#     solve([x for x in range(20)])
+#     solve([x for x in range(1,20+1)])
+#     solve([x for x in range(20,0,-1)])
+#     solve([-x for x in range(20)])
+#     solve([-x for x in range(1,20+1)])
+#     solve([-x for x in range(20,0,-1)])
+#     solve([20]*1 + [-x for x in range(1,19)])
+#     solve([20]*1 + [-x for x in range(1,19)][::-1])
+#     solve([1]*1 + [-x for x in range(1,19)])
+#     solve([1]*1 + [-x for x in range(1,19)][::-1])
+#     solve([2]*1 + [1]*18 + [-20])
+#     solve([1,-20] * 10)
+#     solve([20,-1] * 10)
+#     solve([1,-1] * 10)
+#     solve([1,-1] * 10)
 
 
 while OFFLINE_TEST:
-    arr = [random.randint(-20,20) for _ in range(random.randint(1,20))]
+    arr = [random.randint(-20,20) for _ in range(4)]
     solve(arr)
 
 
