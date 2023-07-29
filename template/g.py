@@ -54,18 +54,94 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def dfs(start, g, entry_operation, exit_operation):
+    # g is map of node to nodes
+    # assumes g is bidirectional
+    # https://codeforces.com/contest/1714/submission/166648312
+    entered = set([start])
+    exiting = set()
+    ptr = {x:0 for x in g}
+    stack = [start]
+    prev = {}
+
+    null_pointer = "NULL"
+    # might be faster to use an integer for null_pointer
+    # especially if you avoid string compare when checking if null pointer
+    # leaving as a string for safety reasons
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            while ptr[cur] < len(g[cur]):
+                nex = g[cur][ptr[cur]]
+                ptr[cur] += 1
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+                break
+            if ptr[cur] == len(g[cur]):
+                exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
+
+
+def solve_(n,mrr):
     # your solution here
+
+    g = defaultdict(list)
+
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    child_count = [1 for _ in range(n)]
+    parent = [-1 for _ in range(n)]
+
+    def entry_operation(prev, cur, nex):
+        parent[nex] = cur
+        pass
+
+    def exit_operation(prev, cur):
+        if prev == "NULL":
+            return
+        child_count[prev] += child_count[cur]
+
+    dfs(0, g, entry_operation, exit_operation)
+
+    log(parent)
+    log(child_count)
+
+    res = 0
+
+    for k,v in g.items():
+        arr = []
+        for nei in v:
+            if nei == parent[k]:
+                continue
+            arr.append(child_count[nei])
+        arr.append(n - 1 - sum(arr))
+        log(k, v, arr)
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -81,10 +157,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(n-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))

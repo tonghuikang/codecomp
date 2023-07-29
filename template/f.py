@@ -1775,6 +1775,7 @@ def solve_(n, m, arr, brr, crr):
         m -= 1
 
         while c and brr:
+            c -= 1
             x = brr.pop()
             holding.add(x)
             holding_sum += x
