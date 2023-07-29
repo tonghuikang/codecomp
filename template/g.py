@@ -112,6 +112,8 @@ def sum_product_triplet(arr):
 
 def solve_(n,mrr):
     # your solution here
+    if n <= 2:
+        return 0
 
     g = defaultdict(list)
 
