@@ -102,23 +102,34 @@ def get_all_divisors_given_prime_factorization(factors):
 
 
 def factorize_name(name):
-    factors = sorted(get_all_divisors_given_prime_factorization(len(name)))
+    factors = sorted(get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp(len(name))))
     factors.sort()
 
     for factor in factors:
         if name == name[:factor] * (len(name) // factor):
-            return name[:factor]
+            return (len(name) // factor), name[:factor]
 
 
-def solve_(n,arr):
+def solve_(n,names):
     # your solution here
 
-    factor_to_count = defaultdict(int)
+    factor_to_count = defaultdict(lambda: set([0]))
+    factor_to_mex = defaultdict(lambda: 0)
     res = []
 
     for name in names:
-        factor = factorize_name(name)
-        log(name, factor)
+        count, factor = factorize_name(name)
+        log(count, factor)
+
+        val = 0
+        cur = 0
+        while factor_to_mex[factor] in factor_to_count[factor]:
+            cur += count
+            factor_to_mex[factor] += 1
+            factor_to_count[factor].add(cur)
+            val += 1
+        factor_to_count[factor].add(factor_to_mex[factor])
+        res.append(val)
 
     return res
 
