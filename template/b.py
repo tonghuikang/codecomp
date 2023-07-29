@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,15 +49,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,arr):
     # your solution here
+
+    for i in range(0, n-9+1):
+        for j in range(0, m-9+1):
+            flag = True
+            for x in range(4):
+                for y in range(4):
+                    if x < 3 and y < 3:
+                        if arr[i+x][j+y] != "#":
+                            flag = False
+                            # print(i,j,x,y,arr[i+x][j+y],"#")
+                    else:
+                        if arr[i+x][j+y] != ".":
+                            flag = False
+                            # print(i,j,x,y,arr[i+x][j+y])
+
+            for x in range(4):
+                for y in range(4):
+                    if x < 3 and y < 3:
+                        if arr[i+8-x][j+8-y] != "#":
+                            flag = False
+                            # print(i,j,x,y)
+                    else:
+                        if arr[i+8-x][j+8-y] != ".":
+                            flag = False
+                            # print(i,j,x,y)
+                
+            if flag:
+                print(i+1, j+1)
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -73,16 +98,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    arr = read_strings(n)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -95,4 +120,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
