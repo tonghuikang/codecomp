@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import random
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -22,7 +20,7 @@ e18 = 10**18 + 10
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
+CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
 if CHECK_OFFLINE_TEST:
     import getpass
     OFFLINE_TEST = getpass.getuser() == "htong"
@@ -57,6 +55,7 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
+    arr_original = [x for x in arr]
     n = len(arr)
 
     # build a large number and snowball
@@ -65,49 +64,51 @@ def solve_(arr):
         return []
 
     res = []
+    num_ops = [0]
 
     def op(i,j):
         arr[i] += arr[j]
         res.append([i, j])
+        num_ops[0] += 1
 
+    # make positive
     if max(arr) > 0:
-        # make positive
-        for _ in range(9):
-            idx = arr.index(max(arr))
-            op(idx, idx)
+        for i in range(n):
+            while arr[i] != max(arr):
+                idx = arr.index(max(arr))
+                op(i, idx)
+                # log(arr)
 
-        op(0, idx)
-        
-        for i in range(1, n):
-            idx = arr.index(max(arr))
-            op(i, idx)
+        if num_ops[0] <= 31:
+            assert sorted(arr) == arr
+            assert num_ops[0] <= 31
+            return res
 
-            idx = arr.index(max(arr))
-            op(i, idx)
+    res = []
+    num_ops = [0]
+    arr = arr_original
 
-        log(arr)
-        assert sorted(arr) == arr
-        return res
+    assert min(arr) < 0
 
     # make negative
-    for _ in range(9):
-        idx = arr.index(min(arr))
-        op(idx, idx)
-
-    op(n-1, idx)
-    
     for i in range(n-1, -1, -1):
-        idx = arr.index(min(arr))
-        op(i, idx)
+        while arr[i] != min(arr):
+            idx = arr.index(min(arr))
+            op(i, idx)
+            # log(arr)
 
-        idx = arr.index(min(arr))
-        op(i, idx)
-
-    log(arr)
     assert sorted(arr) == arr
+    assert num_ops[0] <= 31
     return res
 
-    return res
+
+if OFFLINE_TEST:
+    solve([x for x in range(20)])
+    solve([x for x in range(1,20+1)])
+    solve([x for x in range(20,0,-1)])
+    solve([-x for x in range(20)])
+    solve([-x for x in range(1,20+1)])
+    solve([-x for x in range(20,0,-1)])
 
 
 while OFFLINE_TEST:
