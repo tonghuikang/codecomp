@@ -104,6 +104,10 @@ def solve_(arr):
  
     assert min(arr) < 0
  
+    while arr[0] > -max(abs(x) for x in arr):
+        idx = arr.index(max(arr))
+        op(0, idx)
+
     # make negative
     for i in [0] + list(range(n-1, -1, -1)):
         while arr[i] != min(arr[i:]):
