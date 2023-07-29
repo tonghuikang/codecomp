@@ -73,64 +73,83 @@ def solve_(arr):
         arr[i] += arr[j]
         res.append([i, j])
         num_ops[0] += 1
+        log(arr)
 
     pos = sum(x >= 0 for x in arr)
     neg = sum(x <= 0 for x in arr)
 
+    # double the largest number and add it in
+
     # make positive
     if max(arr) > 0:
-        for i in range(n):
+        while arr[n-1] < max(abs(x) for x in arr):
+            idx = arr.index(max(arr))
+            op(n-1, idx)
+
+        for i in [n-1] + list(range(n)):
             while arr[i] != max(arr[:i+1]):
                 idx = arr.index(max(arr))
                 op(i, idx)
-                log(arr)
+                # log(arr)
  
-        if num_ops[0] <= 6:
+        if num_ops[0] <= 31:
             assert sorted(arr) == arr
-            assert num_ops[0] <= 6
+            assert num_ops[0] <= 31
+            log(num_ops[0])
             return res
-
-    log('-')
-
+ 
     res = []
     num_ops = [0]
     arr = arr_original
-
+ 
     assert min(arr) < 0
-
+ 
     # make negative
-    for i in range(n-1, -1, -1):
+    for i in [0] + list(range(n-1, -1, -1)):
         while arr[i] != min(arr[i:]):
             idx = arr.index(min(arr))
             op(i, idx)
-            log(arr)
+            # log(arr)
 
     assert sorted(arr) == arr
-    assert num_ops[0] <= 6
+    assert num_ops[0] <= 31
+    log(num_ops[0])
     return res
 
 
-# if OFFLINE_TEST:
-#     solve([x for x in range(20)])
-#     solve([x for x in range(1,20+1)])
-#     solve([x for x in range(20,0,-1)])
-#     solve([-x for x in range(20)])
-#     solve([-x for x in range(1,20+1)])
-#     solve([-x for x in range(20,0,-1)])
-#     solve([20]*1 + [-x for x in range(1,19)])
-#     solve([20]*1 + [-x for x in range(1,19)][::-1])
-#     solve([1]*1 + [-x for x in range(1,19)])
-#     solve([1]*1 + [-x for x in range(1,19)][::-1])
-#     solve([2]*1 + [1]*18 + [-20])
-#     solve([1,-20] * 10)
-#     solve([20,-1] * 10)
-#     solve([1,-1] * 10)
-#     solve([1,-1] * 10)
+if OFFLINE_TEST:
+    solve([x for x in range(20)])
+    solve([x for x in range(1,20+1)])
+    solve([x for x in range(20,0,-1)])
+    solve([-x for x in range(20)])
+    solve([-x for x in range(1,20+1)])
+    solve([-x for x in range(20,0,-1)])
+    solve([20]*1 + [-x for x in range(1,19)])
+    solve([20]*1 + [-x for x in range(1,19)][::-1])
+    solve([1]*1 + [-x for x in range(1,19)])
+    solve([1]*1 + [-x for x in range(1,19)][::-1])
+    solve([2]*1 + [1]*18 + [-20])
+    solve([1,-20] * 10)
+    solve([20,-1] * 10)
+    solve([1,-1] * 10)
+    solve([1,-1] * 10)
+    solve([1,-20,1,-20] + [1]*16)
+    solve([1,-10,1,-10] + [11]*15 + [-1])
+    solve([1,-19,1,-19] + [2]*15 + [1])
+    solve([1,-19,1,-19,1,-19,1,-19] + [2]*11 + [1])
+    solve([1, -20, 1, -20, 1, -20, 1, -20, 2, 2, 2, 2, 2, 2, 2, 5, 4, 3, 2, 1])
+    solve([1, -20, 1, -20, 1, -20, 1, -20, 2, 2, 2, 2, 8, 7, 6, 5, 4, 3, 2, 1])
+    solve([1, -20, 1, -20, 1, -20, 1, -20, 2, 2, 2, 2, 2, 7, 6, 5, 4, 3, 2, 1])
+    solve([1, -20, 1, -20, 1, -20, 1, -20, 2, -20, 2, 2, 2, 2, 5, 4, 3, 2, 1, 0])
+    solve([1, -20, 1, -20, 1, -20, 1, -20, 2, -20, 1, 1, 1, 1, 5, 4, 3, 2, 1, 0])
+    solve([1, -20, 1, -20, 1, -20, 1, -20, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1])
+    solve([1, -20, 1, -20, 1, -20, 1, -20, 2, -20, 2, -20, 2, 2, 2, 2, 2, 2, 2, 1])
+    solve([1, -20, 1, -20, 1, -20, 1, -20, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 
 
-while OFFLINE_TEST:
-    arr = [random.randint(-20,20) for _ in range(4)]
-    solve(arr)
+# while OFFLINE_TEST:
+#     arr = [random.randint(-20,20) for _ in range(4)]
+#     solve(arr)
 
 
 # for case_num in [0]:  # no loop over test case
