@@ -82,11 +82,11 @@ def solve_(arr):
 
     # make positive
     if max(arr) > 0:
-        while arr[n-1] < max(abs(x) for x in arr):
+        while abs(max(arr)) < max(abs(x) for x in arr):
             idx = arr.index(max(arr))
-            op(n-1, idx)
+            op(idx, idx)
 
-        for i in [n-1] + list(range(n)):
+        for i in list(range(n)):
             while arr[i] != max(arr[:i+1]):
                 idx = arr.index(max(arr))
                 op(i, idx)
@@ -104,12 +104,12 @@ def solve_(arr):
  
     assert min(arr) < 0
  
-    while arr[0] > -max(abs(x) for x in arr):
-        idx = arr.index(max(arr))
-        op(0, idx)
+    while abs(min(arr)) < max(abs(x) for x in arr):
+        idx = arr.index(min(arr))
+        op(idx, idx)
 
     # make negative
-    for i in [0] + list(range(n-1, -1, -1)):
+    for i in list(range(n-1, -1, -1)):
         while arr[i] != min(arr[i:]):
             idx = arr.index(min(arr))
             op(i, idx)
