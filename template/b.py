@@ -60,7 +60,7 @@ def solve_(arr):
     maxres = 0
 
     for i,a in enumerate(arr):
-        if i < min(valid_endpoints):
+        if i > max(valid_endpoints):
             break
 
         psum += a
