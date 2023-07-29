@@ -70,26 +70,27 @@ def solve_(mrr):
                 for z in range(c,r):
                     mapping[encode(x,y,z)] = i
 
-    adj = [set() for _ in range(len(mrr))]
+    res = []
 
-    for x in range(100):
-        for y in range(100):
-            for z in range(100):
-                f = mapping[encode(x,y,z)]
-                if f == -1:
-                    continue
-                for dx,dy,dz in [(1,0,0),(0,1,0),(0,0,1)]:
-                    xx = x+dx
-                    yy = y+dy
-                    zz = z+dz
-                    if xx >= 100 or yy >= 100 or zz >= 100:
-                        continue
-                    g = mapping[encode(xx,yy,zz)]
-                    if g != -1 and f != g:
-                        adj[f].add(g)
-                        adj[g].add(f)
+    for i,(a,b,c,p,q,r) in enumerate(mrr):
+        curset = set()
+        for x in range(a,p):
+            for y in range(b,q):
+                for z in range(c,r):
+                    for dx,dy,dz in [(1,0,0),(0,1,0),(0,0,1),(-1,0,0),(0,-1,0),(0,0,-1)]:
+                        xx = x+dx
+                        yy = y+dy
+                        zz = z+dz
+                        if xx >= 100 or yy >= 100 or zz >= 100:
+                            continue
+                        if xx < 0 or yy < 0 or zz < 0:
+                            continue
+                        g = mapping[encode(xx,yy,zz)]
+                        if g != -1 and i != g:
+                            curset.add(g)
+        res.append(len(curset))
 
-    return [len(x) for x in adj]
+    return res
 
 
 for case_num in [0]:  # no loop over test case
