@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -95,6 +93,22 @@ def dfs(start, g, entry_operation, exit_operation):
             exit_operation(prev[cur], cur)
 
 
+def sum_product_triplet(arr):
+    dp = [x for x in arr]
+
+    for _ in range(2):
+        cursum = sum(dp)
+        new_dp = [0 for _ in arr]
+        for i,x in enumerate(arr):
+            cursum -= dp[i]
+            new_dp[i] = x*cursum
+        dp = new_dp
+        # log(dp)
+    return sum(dp)
+
+
+# log(sum_product_triplet([1,1,1,1,1,1,1]))
+
 
 def solve_(n,mrr):
     # your solution here
@@ -110,7 +124,6 @@ def solve_(n,mrr):
 
     def entry_operation(prev, cur, nex):
         parent[nex] = cur
-        pass
 
     def exit_operation(prev, cur):
         if prev == "NULL":
@@ -119,8 +132,8 @@ def solve_(n,mrr):
 
     dfs(0, g, entry_operation, exit_operation)
 
-    log(parent)
-    log(child_count)
+    # log(parent)
+    # log(child_count)
 
     res = 0
 
@@ -130,10 +143,16 @@ def solve_(n,mrr):
             if nei == parent[k]:
                 continue
             arr.append(child_count[nei])
-        arr.append(n - 1 - sum(arr))
-        log(k, v, arr)
+        leftover = n - 1 - sum(arr)
+        if leftover:
+            arr.append(leftover)
 
-    return ""
+        val = sum_product_triplet(arr)
+        res += val
+
+        # log(k, v, arr, val)
+
+    return res
 
 
 for case_num in [0]:  # no loop over test case
