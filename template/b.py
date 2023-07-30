@@ -54,6 +54,7 @@ def minus_one_matrix(mrr):
 
 def solve_(arr):
     # your solution here
+    # https://codeforces.com/contest/1854/submission/216362932
 
     a = arr
     n = len(arr)
