@@ -55,26 +55,30 @@ def minus_one_matrix(mrr):
 def solve_(arr):
     # your solution here
 
-    valid_endpoints = set([0])
-    psum = 0
-    maxres = 0
+    a = arr
+    n = len(arr)
 
-    for i,a in enumerate(arr):
-        if i > max(valid_endpoints):
-            break
+    MX = (2 * n + 10)
 
-        psum += a
-        if i in valid_endpoints:
-            res = psum - i
-            maxres = max(maxres, res)
+    pref = [0]
+    for v in a:
+        pref.append(pref[-1] + v)
 
-        if a > 0:
-            for x in list(valid_endpoints):
-                valid_endpoints.add(x + a)
+    pref.extend([pref[-1]] * MX)
 
-        log(valid_endpoints)
+    poss = [0] * MX
+    poss[1] = 1
 
-    return maxres
+    for i in range(n):
+        for j in range(n, i, -1):
+            poss[j + a[i]] |= poss[j]
+
+    best = []
+    for i in range(MX):
+        if poss[i]:
+            best.append(pref[i] - i)
+
+    return max(best) + 1
 
 
 for case_num in [0]:  # no loop over test case
