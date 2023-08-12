@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,21 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, mrr):
     # your solution here
 
-    return ""
+    res = 0
+    minval = mrr[0][0]
+    for row in mrr:
+        res += row[1]
+        minval = min(minval, row[0])
+
+    maxret = 0
+    for row in mrr:
+        ret = res - (row[1] - minval)
+        maxret = max(maxret, ret)
+
+    return maxret
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +71,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -79,10 +87,13 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(2*n)[1::2]  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    for i in range(n):
+        mrr[i].sort()
+
+    res = solve(n, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
