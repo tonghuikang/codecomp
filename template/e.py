@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,10 +51,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k,arr,brr):
     # your solution here
 
-    return ""
+    # hypothesis - no segment will be more than length 2
+
+    singletons = [2*abs(a-b) for a,b in zip(arr, brr)]
+    doubles = [abs(a-c) + abs(b-d) for a,b,c,d in zip(arr, brr, arr[1:], brr[1:])]
+
+    if k == 1:
+        return max(singletons)
+
+    dp = [[0 for _ in range(k+1)] for _ in range(n+1)]
+
+    for i in range(n+1):
+        for j in range(k+1):
+            # take one
+            if i+1 <= n and j+1 <= k:
+                dp[i+1][j+1] = max(dp[i+1][j+1], dp[i][j] + singletons[i])
+            # take two
+            if i+2 <= n and j+2 <= k:
+                dp[i+2][j+2] = max(dp[i+2][j+2], dp[i][j] + doubles[i])
+            # take zero
+            if i+1 <= n and j <= k:
+                dp[i+1][j] = max(dp[i+1][j], dp[i][j])
+
+    # log(singletons)
+    # log(doubles)
+
+    return dp[-1][-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -75,8 +97,9 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -84,7 +107,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,arr,brr)  # include input here
 
     # print length if applicable
     # print(len(res))

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import bisect
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,10 +52,58 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def interval_overlap(x1,x2,y1,y2):
+    # given intervals [x1,x2], [y1,y2]
+    # [start, end] of overlapping interval    
+    # if start > end, there is no overlapping inteval
+    return max(x1,y1), min(x2,y2)
+
+def solve_(n,mrr,q,qrr):
     # your solution here
 
-    return ""
+    # r is pointless
+    # a is pointless
+
+    # join all lb, the result is b
+
+    arr = [(l,b) for l,r,a,b in mrr]
+    arr.sort()
+
+    prev_start = -2
+    prev_end = -1
+
+    log(arr)
+
+    brr = []
+
+    for a,b in arr:
+        if a > prev_end:
+            brr.append((prev_start, prev_end))
+            prev_start = a
+        prev_end = max(prev_end, b)
+    
+    brr.append((prev_start, prev_end))
+    brr.append((10**18, 10**18+1))
+
+    # log(brr)
+
+    pts = []
+    for a,b in brr:
+        pts.append((2*a + 0))
+        pts.append((2*b + 1))
+
+    # log(pts)
+
+    res = []
+    for q in qrr:
+        idx = bisect.bisect_right(pts, 2*q)
+        x,i = divmod(pts[idx], 2)
+        if i == 0:
+            res.append(q)
+        else:
+            res.append(pts[idx]//2)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -65,7 +111,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -81,16 +127,18 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
+    q = int(input())
+    qrr = list(map(int,input().split()))
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,mrr,q,qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
