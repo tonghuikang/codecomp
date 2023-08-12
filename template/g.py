@@ -1764,15 +1764,15 @@ def solve_(n,m,h,mrr):
     # you will drop at most 1 amulet
     LARGE = 10**7
 
-    # def encode(value, idx):
-    #     return value * LARGE + idx
+    def encode(value, idx):
+        return value * LARGE + idx
 
-    # def decode(code):
-    #     return divmod(code, LARGE)
+    def decode(code):
+        return divmod(code, LARGE)
 
     health = h
     taken = SortedList([])
-    nottaken = SortedList([(0,i) for i in range(m)])
+    nottaken = SortedList([encode(0,i) for i in range(m)])
     amulet_to_value = [0 for _ in range(m)]
 
     res = []
@@ -1780,25 +1780,25 @@ def solve_(n,m,h,mrr):
     for a,b in mrr:
         b -= 1
 
-        if (amulet_to_value[b], b) in taken:
-            taken.remove((amulet_to_value[b], b))
+        if encode(amulet_to_value[b], b) in taken:
+            taken.remove(encode(amulet_to_value[b], b))
             amulet_to_value[b] += a
-            taken.add((amulet_to_value[b], b))
+            taken.add(encode(amulet_to_value[b], b))
 
-        if (amulet_to_value[b], b) in nottaken:
-            nottaken.remove((amulet_to_value[b], b))
+        if encode(amulet_to_value[b], b) in nottaken:
+            nottaken.remove(encode(amulet_to_value[b], b))
             amulet_to_value[b] += a
             health -= a
-            nottaken.add((amulet_to_value[b], b))
+            nottaken.add(encode(amulet_to_value[b], b))
 
 
         if health <= 0:
-            health += nottaken[-1][0]
+            health += decode(nottaken[-1])[0]
             taken.add(nottaken[-1])
             del nottaken[-1]
 
-            if taken and health - taken[0][0] > 0:
-                health -= taken[0][0]
+            if taken and health - decode(taken[0])[0] > 0:
+                health -= decode(taken[0])[0]
                 nottaken.add(taken[0])
                 del taken[0]
 
