@@ -57,10 +57,12 @@ def solve_(n,k,arr,brr):
     # hypothesis - no segment will be more than length 2
 
     singletons = [2*abs(a-b) for a,b in zip(arr, brr)]
-    doubles = [abs(a-c) + abs(b-d) for a,b,c,d in zip(arr, brr, arr[1:], brr[1:])]
 
     if k == 1:
         return max(singletons)
+
+    doubles = [abs(a-c) + abs(b-d) for a,b,c,d in zip(arr, brr, arr[1:], brr[1:])]
+    triples = [abs(a-c) + abs(b-d) for a,b,c,d in zip(arr, brr, arr[2:], brr[2:])]
 
     dp = [[0 for _ in range(k+1)] for _ in range(n+1)]
 
@@ -72,6 +74,9 @@ def solve_(n,k,arr,brr):
             # take two
             if i+2 <= n and j+2 <= k:
                 dp[i+2][j+2] = max(dp[i+2][j+2], dp[i][j] + doubles[i])
+            # take two
+            if i+3 <= n and j+3 <= k:
+                dp[i+3][j+3] = max(dp[i+3][j+3], dp[i][j] + triples[i])
             # take zero
             if i+1 <= n and j <= k:
                 dp[i+1][j] = max(dp[i+1][j], dp[i][j])
