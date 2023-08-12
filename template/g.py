@@ -1791,16 +1791,20 @@ def solve_(n,m,h,mrr):
             health -= a
             nottaken.add(encode(amulet_to_value[b], b))
 
-
-        if health <= 0:
+        while taken and nottaken and decode(nottaken[-1])[0] > decode(taken[0])[0]:
             health += decode(nottaken[-1])[0]
             taken.add(nottaken[-1])
             del nottaken[-1]
 
-            if taken and health - decode(taken[0])[0] > 0:
-                health -= decode(taken[0])[0]
-                nottaken.add(taken[0])
-                del taken[0]
+            health -= decode(taken[0])[0]
+            nottaken.add(taken[0])
+            del taken[-1]
+
+        while health <= 0:
+            health += decode(nottaken[-1])[0]
+            taken.add(nottaken[-1])
+            del nottaken[-1]
+
 
         # log(taken)
         # log(nottaken)
