@@ -1792,12 +1792,12 @@ def solve_(n,m,h,mrr):
             nottaken.add((amulet_to_value[b], b))
 
 
-        while health <= 0:
+        if health <= 0:
             health += nottaken[-1][0]
             taken.add(nottaken[-1])
             del nottaken[-1]
 
-            while taken and health - taken[0][0] > 0:
+            if taken and health - taken[0][0] > 0:
                 health -= taken[0][0]
                 nottaken.add(taken[0])
                 del taken[0]
