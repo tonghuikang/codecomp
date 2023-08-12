@@ -1771,7 +1771,8 @@ def solve_(n,m,h,mrr):
     #     return divmod(code, LARGE)
 
     health = h
-    amulet_value_and_idx = SortedList([])
+    taken = SortedList([])
+    nottaken = SortedList([(0,i) for i in range(m)])
     amulet_to_value = [0 for _ in range(m)]
 
     res = []
@@ -1779,21 +1780,32 @@ def solve_(n,m,h,mrr):
     for a,b in mrr:
         b -= 1
 
-        if (amulet_to_value[b], b) in amulet_value_and_idx:
-            amulet_value_and_idx.remove((amulet_to_value[b], b))
+        if (amulet_to_value[b], b) in taken:
+            taken.remove((amulet_to_value[b], b))
             amulet_to_value[b] += a
-            amulet_value_and_idx.add((amulet_to_value[b], b))
-        else:
+            taken.add((amulet_to_value[b], b))
+
+        if (amulet_to_value[b], b) in nottaken:
+            nottaken.remove((amulet_to_value[b], b))
             amulet_to_value[b] += a
             health -= a
-            amulet_value_and_idx.add((amulet_to_value[b], b))
-            health += amulet_to_value[b]
-            if health - amulet_value_and_idx[0][0] > 0:
-                cost = amulet_value_and_idx[0][0]
-                health -= cost
-                del amulet_value_and_idx[0]
+            nottaken.add((amulet_to_value[b], b))
 
-        res.append(len(amulet_value_and_idx))
+
+        if health <= 0:
+            health += nottaken[-1][0]
+            taken.add(nottaken[-1])
+            del nottaken[-1]
+
+            if taken and health - taken[0][0] > 0:
+                health -= taken[0][0]
+                nottaken.add(taken[0])
+                del taken[0]
+
+        # log(taken)
+        # log(nottaken)
+
+        res.append(len(taken))
 
     # log(res)
 
