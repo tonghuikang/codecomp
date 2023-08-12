@@ -1786,13 +1786,12 @@ def solve_(n,m,h,mrr):
         else:
             amulet_to_value[b] += a
             health -= a
-            if health <= 0:
-                amulet_value_and_idx.add((amulet_to_value[b], b))
-                health += amulet_to_value[b]
-                if health - amulet_value_and_idx[0][0] > 0:
-                    cost = amulet_value_and_idx[0][0]
-                    health -= cost
-                    del amulet_value_and_idx[0]
+            amulet_value_and_idx.add((amulet_to_value[b], b))
+            health += amulet_to_value[b]
+            if health - amulet_value_and_idx[0][0] > 0:
+                cost = amulet_value_and_idx[0][0]
+                health -= cost
+                del amulet_value_and_idx[0]
 
         res.append(len(amulet_value_and_idx))
 
