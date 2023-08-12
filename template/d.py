@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -40,7 +37,7 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+    return [list(input().split()) for _ in range(rows)]
 
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
@@ -54,18 +51,44 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,s,q,mrr):
     # your solution here
+    arr = list(s.strip())
+    brr = [0 for _ in range(n)]
 
-    return ""
+    # only keep the last upper and lower case op
+
+    last_lower = 0
+    last_upper = 0
+
+    mrr = [(int(x), int(y), z) for x,y,z in mrr]
+
+    for i,(t,x,c) in enumerate(mrr):
+        if t == 2:
+            last_lower = i
+        if t == 3:
+            last_upper = i
+
+    for i,(t,x,c) in enumerate(mrr):
+        if t == 1:
+            x -= 1
+            arr[x] = c
+        if t == 2 and i == last_lower:
+            arr = [x.lower() for x in arr]
+        if t == 3 and i == last_upper:
+            arr = [x.upper() for x in arr]
+
+    return arr
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
+    s = input()
+    q = int(input())
     # k = int(input())
 
     # read line as a string
@@ -80,17 +103,17 @@ for case_num in range(int(input())):
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    # mrr = read_strings(k)  # and return as a list of str
+    mrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,s,q,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = "".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

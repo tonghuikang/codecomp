@@ -58,13 +58,38 @@ def solve_():
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
+
+    g = [[] for _ in range(37)]
+
+    for i in range(n):
+        _ = int(input())
+        arr = list(map(int,input().split()))
+        for x in arr:
+            g[x].append((len(arr), i))
+    
+    log(g)
+
+    q = int(input())
+    res = []
+
+    g[q].sort()
+
+    log(g[q])
+    for x,i in g[q]:
+        if x == g[q][0][0]:
+            res.append(i+1)
+    
+    print(len(res))
+    # print()
+
+
 
     # read line as a string
     # srr = input().strip()
@@ -82,13 +107,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    # res = solve()  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
