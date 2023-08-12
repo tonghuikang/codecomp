@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,15 +51,38 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    nrr = []
+    for c,p,*arr in mrr:
+        # log(c,p,sum(arr)/len(arr))
+        nrr.append(arr)
+
+    # you need k points, find the roulette that best advances you to the goal
+    res = [0 for _ in range(m+1)]
+
+    for cur in range(m-1,-1,-1):
+        minval = 10**18
+        for c,p,*arr in mrr:
+            exp = 0
+            cnt = 0
+            for x in arr:
+                if x == 0:
+                    continue
+                cnt += 1
+                nex = min(m, cur+x)
+                exp += res[nex] / len(arr)
+            val = (c + exp) * (p / cnt)                   
+            minval = min(minval, val)
+        res[cur] = minval
+
+    return res[0]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -75,16 +95,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
