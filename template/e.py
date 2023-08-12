@@ -57,7 +57,7 @@ def solve_(n,k,arr,brr):
     # hypothesis - no segment will be more than length 2
 
     matrix = []
-    for i in range(n):
+    for i in range(k):
         zrr = [abs(a-d) + abs(b-c) for a,b,c,d in zip(arr, brr, arr[i:], brr[i:])]
         matrix.append(zrr)
         # log(i, zrr)
@@ -70,7 +70,7 @@ def solve_(n,k,arr,brr):
             # take zero
             if i+1 <= n and j <= k:
                 dp[i+1][j] = max(dp[i+1][j], dp[i][j])
-            for q in range(1,min(n+1, 7)):
+            for q in range(1,min(k+1, n)):
                 if i+q <= n and j+q <= k:
                     dp[i+q][j+q] = max(dp[i+q][j+q], dp[i][j] + matrix[q-1][i])
 
