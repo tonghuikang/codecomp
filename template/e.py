@@ -74,7 +74,7 @@ def solve_(n,k,arr,brr):
             # take two
             if i+2 <= n and j+2 <= k:
                 dp[i+2][j+2] = max(dp[i+2][j+2], dp[i][j] + doubles[i])
-            # take two
+            # take three
             if i+3 <= n and j+3 <= k:
                 dp[i+3][j+3] = max(dp[i+3][j+3], dp[i][j] + triples[i])
             # take zero
