@@ -186,6 +186,23 @@ def gathering_cost(xpos):
     return cost_arr
 
 
+def all_nearest_smaller_values(arr):
+    # https://en.wikipedia.org/wiki/All_nearest_smaller_values
+    # https://leetcode.cn/contest/weekly-contest-358/problems/apply-operations-to-maximize-score/
+    # https://poe.com/s/Kc2gVwLTM4hZZJ4EJDOg
+    result = [-1 for _ in range(len(arr))]
+    stack = []
+
+    for i in range(len(arr)):
+        while stack and stack[-1][0] >= arr[i]:  # change this if you want to include equalitys
+            stack.pop()
+        if stack:
+            result[i] = stack[-1][1]
+        stack.append((arr[i], i))
+
+    return result
+
+
 def rabin_karp(arr, window_size, modulus):
     # return all hashes of each substring of a certain window_size
     # run this multiple times to avoid hash collisions
