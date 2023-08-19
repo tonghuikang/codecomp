@@ -204,67 +204,38 @@ def chinese_remainder_theorem(divisors, remainders):
 # --------------------- extended eucliean algorithm ---------------------
 
 
-def solve_diophantine(x,y,n):
-    # finds a solution for ax + by = n, if it exists
-    # https://codeforces.com/blog/entry/106805
+def extended_gcd(a, b):
+    # Extended Euclidean Algorithm
+    if a == 0:
+        return b, 0, 1
+    else:
+        gcd, x, y = extended_gcd(b % a, a)
+        return gcd, y - (b // a) * x, x
 
-    # long long gcd(long long a, long long b, long long& x, long long& y) {
-    # 	if (b == 0) {
-    # 		x = 1;
-    # 		y = 0;
-    # 		return a;
-    # 	}
-    # 	long long x1, y1;
-    # 	long long d = gcd(b, a % b, x1, y1);
-    # 	x = y1;
-    # 	y = x1 - y1 * (a / b);
-    # 	return d;
-    # }
+def solve_diophantine(a, b, n):
+    # https://atcoder.jp/contests/abc315/submissions/44768509
+    # Make sure that a and b are not both zero
+    assert not (a == 0 and b == 0), "Both a and b cannot be zero"
 
-    def gcd_helper(a,b,xref,yref):
-        if b == 0:
-            xref[0] = 1
-            yref[0] = 0
-            return a
-        x1ref = [None]
-        y1ref = [None]
-        d = gcd_helper(b, a%b, x1ref, y1ref)
-        xref[0] = y1ref[0]
-        yref[0] = x1ref[0] - y1ref[0] * a // b
-        return d
+    gcd, x, y = extended_gcd(a, b)
 
-    # bool find_any_solution(long long a, long long b, long long c, long long &x0, long long &y0, long long &g) {
-    # 	g = gcd(abs(a), abs(b), x0, y0);
-    # 	if (c % g) {
-    # 		return false;
-    # 	}
-    # 	x0 *= c / g;
-    # 	y0 *= c / g;
-    # 	if (a < 0) x0 = -x0;
-    # 	if (b < 0) y0 = -y0;
-    # 	return true;
-    # }
-
-    def eea_helper(a, b, c, x0ref, y0ref, gref):
-        gref[0] = gcd_helper(abs(a), abs(b), x0ref, y0ref)
-        if c%gref[0]:
-            return False
-        x0ref[0] *= c//gref[0]
-        y0ref[0] *= c//gref[0]
-        if a < 0:
-            x0ref[0] = -x0ref[0]
-        if b < 0:
-            y0ref[0] = -y0ref[0]
-        return True    
-    
-    x0ref, y0ref, gref = [None],[None],[None]
-    if not eea_helper(x,y,n,x0ref, y0ref, gref):
+    # The equation has a solution only if n is a multiple of the gcd of a and b
+    if n % gcd != 0:
         return False, 0, 0
-    a = y0ref[0]
-    b = x0ref[0]
-    assert a*x + b*y == n
-    
-    return True, y0ref[0], x0ref[0]
+
+    # Scale x and y by n/gcd
+    x *= n // gcd
+    y *= n // gcd
+
+    # Check if the solution is correct
+    assert a * x + b * y == n
+
+    x2 = b // math.gcd(a,b)
+    y2 = a // math.gcd(a,b)
+
+    assert a * (x + x2) + b * (y - y2) == n
+
+    return True, x, y
 
 
 # ----------------------------- combinatorics  -----------------------------
