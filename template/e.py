@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -100,11 +98,15 @@ def solve_(n, mrr):
             reachable.add(nex)
     
     for x in g:
-        if x not in reachable:
-            del g[x]
         for q in list(g[x]):
             if q not in reachable:
                 g[x].remove(q)
+
+    for x in list(g.keys()):
+        if len(g[x]) == 0:
+            del g[x]
+
+    # log(g)
 
     return topological_sort(g)[:-1]
 
