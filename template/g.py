@@ -54,15 +54,64 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def extended_gcd(a, b):
+    # Extended Euclidean Algorithm
+    if a == 0:
+        return b, 0, 1
+    else:
+        gcd, x, y = extended_gcd(b % a, a)
+        return gcd, y - (b // a) * x, x
+
+def solve_diophantine(a, b, n):
+    # Make sure that a and b are not both zero
+    assert not (a == 0 and b == 0), "Both a and b cannot be zero"
+
+    gcd, x, y = extended_gcd(a, b)
+
+    # The equation has a solution only if n is a multiple of the gcd of a and b
+    if n % gcd != 0:
+        return None
+
+    # Scale x and y by n/gcd
+    x *= n // gcd
+    y *= n // gcd
+
+    # Check if the solution is correct
+    assert a * x + b * y == n, "Solution does not satisfy the equation"
+
+    return x, y
+
+
+def solve_(n,a,b,c,x):
     # your solution here
 
-    return ""
+    res = 0
+
+    for k in range(1, n+1):
+        m = n - c*k
+
+        # if b + c > m:
+        #     break
+
+        # count number of solutions
+        # b*j + c*k == m
+
+        ret = solve_diophantine(a,b,m)
+        if ret is None:
+            continue
+
+        i,j = ret
+
+        assert a*i + b*j == m
+        log(a,b,m,i,j)
 
 
-# for case_num in [0]:  # no loop over test case
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -75,7 +124,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,a,b,c,x = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -84,7 +133,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,a,b,c,x)  # include input here
 
     # print length if applicable
     # print(len(res))

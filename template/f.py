@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import math
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -67,19 +65,22 @@ def solve_(n, mrr):
         x1,y1 = mrr[i]
         for start in range(30):
             for jump in range(30):
-                if i + jump >= n:
+                if i+jump+1 >= n:
                     continue
-                if start + jump >= 30:
+                if start+jump >= 30:
                     continue
-                x2, y2 = mrr[i+jump]
+                x2, y2 = mrr[i+jump+1]
                 dist = math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
-                dp[i+jump][start+jump] = min(dp[i+jump][start+jump], dp[i][start] + dist)
+                dp[i+jump+1][start+jump] = min(dp[i+jump+1][start+jump], dp[i][start] + dist)
+                # if start == jump == 0:
+                #     log(dist, i+jump+1, start+jump, dp[i+jump+1][start+jump], dp[i][start] + dist)
     
-    log(dp[0])
+    # log(dp[0])
+    # log(dp[1])
 
     minres = dp[-1][0]
     for i in range(1, 30):
-        res = dp[-1][i] + 2**i
+        res = dp[-1][i] + 2**(i-1)
         minres = min(minres, res)
 
     return minres
