@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -72,7 +70,8 @@ def solve_(mrr, n):
         arr.append(vrr[-1])
     
     arr.sort()
-    maxres = max(maxres, arr[-2] + arr[-1])
+    if len(arr) >= 2:
+        maxres = max(maxres, arr[-2] + arr[-1])
 
     return maxres
 

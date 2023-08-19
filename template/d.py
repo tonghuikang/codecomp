@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -14,8 +12,8 @@ yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-# abc = "abcdefghijklmnopqrstuvwxyz"
-# abc_map = {c:i for i,c in enumerate(abc)}
+abc = "abcdefghijklmnopqrstuvwxyz"
+abc_map = {c:i for i,c in enumerate(abc)}
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
 
@@ -54,15 +52,72 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
+    mrr = [list(row) for row in mrr]
 
-    return ""
+    rows = [[0 for _ in range(26)] for _ in range(n)]
+    cols = [[0 for _ in range(26)] for _ in range(m)]
+
+    rowset = set([1 for _ in range(n)])
+    colset = set([1 for _ in range(m)])
+
+    for i in range(n):
+        for j in range(m):
+            x = abc_map[mrr[i][j]]
+            mrr[i][j] = x
+            rows[i][x] += 1
+            cols[j][x] += 1
+
+    log(rows)
+    log(cols)
+    log(mrr)
+
+    def check(counter):
+        return sum(counter) == max(counter)
+
+    flag = True
+    while flag:
+        flag = False
+        rowset_to_remove = set()
+        colset_to_remove = set()
+
+        for i in rowset:
+            c = rows[i]
+            if check(c):
+                flag = True
+                rowset_to_remove.add(i)
+        
+        for j in colset:
+            c = cols[j]
+            if check(c):
+                flag = True
+                colset_to_remove.add(j)
+
+        for i in rowset_to_remove:
+            rowset.remove(i)
+
+        for j in colset_to_remove:
+            colset.remove(j)
+
+        for i in rowset:
+            for j in colset_to_remove:
+                x = mrr[i][j]
+                rows[i][x] -= 1
+
+        for j in colset:
+            for i in rowset_to_remove:
+                x = mrr[i][j]
+                cols[j][x] -= 1
+
+        log(rowset_to_remove, colset_to_remove)
+
+    return sum(sum(row) for row in rows)
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -75,16 +130,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
+    mrr = read_strings(n)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
