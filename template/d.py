@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -69,12 +68,14 @@ def solve_(n,m,mrr):
             rows[i][x] += 1
             cols[j][x] += 1
 
-    log(rows)
-    log(cols)
-    log(mrr)
+    # log(rows)
+    # log(cols)
+    # log(mrr)
 
     def check(counter):
-        return sum(counter) == max(counter)
+        return sum(counter) == max(counter) >= 2
+
+    res = n*m
 
     flag = True
     while flag:
@@ -110,9 +111,9 @@ def solve_(n,m,mrr):
                 x = mrr[i][j]
                 cols[j][x] -= 1
 
-        log(rowset_to_remove, colset_to_remove)
+        # log(rowset_to_remove, colset_to_remove)
 
-    return sum(sum(row) for row in rows)
+    return len(rowset) * len(colset)
 
 
 for case_num in [0]:  # no loop over test case
