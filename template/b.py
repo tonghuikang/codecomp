@@ -56,13 +56,14 @@ def solve_(arr, n):
     # your solution here
 
     sumarr = sum(arr)
-    target = sumarr // 2
+    target = (sumarr+1) // 2
 
     for i,x in enumerate(arr, start=1):
+        # log(i,x,target)
         if x < target:
             target -= x
         else:
-            return (i, target+1)
+            return (i, target)
 
     return ""
 
