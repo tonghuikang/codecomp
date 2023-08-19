@@ -59,8 +59,8 @@ def solve_(n,m,mrr):
     rows = [[0 for _ in range(26)] for _ in range(n)]
     cols = [[0 for _ in range(26)] for _ in range(m)]
 
-    rowset = set([1 for _ in range(n)])
-    colset = set([1 for _ in range(m)])
+    rowset = set(range(n))
+    colset = set(range(m))
 
     for i in range(n):
         for j in range(m):
