@@ -90,8 +90,8 @@ def solve_(n,a,b,c,x):
     for k in range(1, n+1):
         m = n - c*k
 
-        # if b + c > m:
-        #     break
+        if b + c > m:
+            break
 
         # count number of solutions
         # b*j + c*k == m
