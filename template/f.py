@@ -75,6 +75,8 @@ def solve_(n, mrr):
                 dist = math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
                 dp[i+jump][start+jump] = min(dp[i+jump][start+jump], dp[i][start] + dist)
     
+    log(dp[0])
+
     minres = dp[-1][0]
     for i in range(1, 30):
         res = dp[-1][i] + 2**i
