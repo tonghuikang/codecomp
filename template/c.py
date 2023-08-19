@@ -54,18 +54,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr, n):
     # your solution here
 
-    return ""
+    g = defaultdict(list)
+
+    for f,s in mrr:
+        g[f].append(s)
+
+    maxres = 0
+    arr = []
+
+    for f,vrr in g.items():
+        vrr.sort()
+        if len(vrr) >= 2:
+            maxres = max(maxres, vrr[-2] // 2 + vrr[-1])
+        arr.append(vrr[-1])
+    
+    arr.sort()
+    maxres = max(maxres, arr[-2] + arr[-1])
+
+    return maxres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -81,10 +98,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr, n)  # include input here
 
     # print length if applicable
     # print(len(res))
