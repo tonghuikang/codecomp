@@ -53,11 +53,34 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+LARGE = 2**30
 
 def solve_(n, mrr):
     # your solution here
+    # you skip atmost 30 checkpoints at once (1b penalty)
+    # the maximum course size is 2 * (10^4) * (10^4)
 
-    return ""
+    dp = [[LARGE for _ in range(30)] for _ in range(n)]
+    dp[0][0] = 0
+
+    for i in range(n):
+        x1,y1 = mrr[i]
+        for start in range(30):
+            for jump in range(30):
+                if i + jump >= n:
+                    continue
+                if start + jump >= 30:
+                    continue
+                x2, y2 = mrr[i+jump]
+                dist = math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+                dp[i+jump][start+jump] = min(dp[i+jump][start+jump], dp[i][start] + dist)
+    
+    minres = dp[-1][0]
+    for i in range(1, 30):
+        res = dp[-1][i] + 2**i
+        minres = min(minres, res)
+
+    return minres
 
 
 for case_num in [0]:  # no loop over test case
