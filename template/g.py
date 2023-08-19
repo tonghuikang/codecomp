@@ -77,9 +77,18 @@ def solve_diophantine(a, b, n):
     y *= n // gcd
 
     # Check if the solution is correct
-    assert a * x + b * y == n, "Solution does not satisfy the equation"
+    assert a * x + b * y == n
+
+    x2 = b // math.gcd(a,b)
+    y2 = a // math.gcd(a,b)
+
+    assert a * (x + x2) + b * (y - y2) == n
 
     return x, y
+
+
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
 
 
 def solve_(n,a,b,c,x):
@@ -88,10 +97,10 @@ def solve_(n,a,b,c,x):
     res = 0
 
     for k in range(1, n+1):
-        m = n - c*k
+        m = x - c*k
 
-        if b + c > m:
-            break
+        if a + b > m:
+            continue
 
         # count number of solutions
         # b*j + c*k == m
@@ -103,8 +112,33 @@ def solve_(n,a,b,c,x):
         i,j = ret
 
         assert a*i + b*j == m
-        log(a,b,m,i,j)
 
+        i2 = b // math.gcd(a,b)
+        j2 = a // math.gcd(a,b)
+
+        assert a*(i + i2) + b*(j - j2) == m
+
+        small_i = max((m - b*n) // a, i % i2)
+        small_i = ((small_i // i2) * i2) + i%i2
+        big_i = min(n, (m - b) // a)
+        big_i = ((big_i // i2) * i2) + i%i2
+
+        if small_i > big_i:
+            continue
+
+        vals = (big_i - small_i) // i2 + 1
+
+        if small_i <= (m - b*n) / a:
+            vals -= 1
+        if a*big_i == m:
+            vals -= 1
+
+        res += vals
+
+        # log(a,b,m)
+        # log(small_i,big_i,i2)
+        # log(vals)
+        # log()
 
     return res
 
