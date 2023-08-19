@@ -54,15 +54,64 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def topological_sort(map_from_node_to_nodes, all_nodes=set()):
+    # leetcode.com/problems/course-schedule-ii/
+    indegree_counter = defaultdict(int)
+    for lst in map_from_node_to_nodes.values():
+        for v in lst:
+            indegree_counter[v] += 1
+
+    if not all_nodes:  # assume all nodes are found in the map
+        all_nodes = set(indegree_counter.keys()) | set(map_from_node_to_nodes)
+
+    dq = deque([node for node in all_nodes if node not in indegree_counter])
+
+    res = []
+    while dq:
+        cur = dq.popleft()
+        res.append(cur)
+        for nex in map_from_node_to_nodes[cur]:
+            indegree_counter[nex] -= 1
+            if indegree_counter[nex] == 0:
+                dq.append(nex)
+    return res if len(res) == len(all_nodes) else []
+
+
+def solve_(n, mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(set)
+    f = defaultdict(set)
+
+    for i,(c,*row) in enumerate(mrr, start=1):
+        for x in row:
+            g[x].add(i)
+            f[i].add(x)
+
+    reachable = set([1])
+    stack = [1]
+
+    while stack:
+        cur = stack.pop()
+        for nex in f[cur]:
+            if nex in reachable:
+                continue
+            stack.append(nex)
+            reachable.add(nex)
+    
+    for x in g:
+        if x not in reachable:
+            del g[x]
+        for q in list(g[x]):
+            if q not in reachable:
+                g[x].remove(q)
+
+    return topological_sort(g)[:-1]
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     n = int(input())
@@ -90,7 +139,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
