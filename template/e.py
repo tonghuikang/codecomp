@@ -108,7 +108,7 @@ def solve_(n, arr):
     for x in arr:
         for y in arr:
             res = compare(x,y)
-            log(x, y, res)
+            log(x, y, len(bin(x)) - 2, len(bin(y)) - 2, res)
             allres += res
 
     return (allres * modinv_p(n) * modinv_p(n)) % m9
