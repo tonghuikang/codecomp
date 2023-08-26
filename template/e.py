@@ -104,14 +104,28 @@ def solve_(n, arr):
 
     # log(compare(7,7))
 
+    # log([(len(bin(y)) - 2) for y in arr])
+    # log(sum([(bin(y).count("1")) for y in arr]))
+
     allres = 0
     for x in arr:
         for y in arr:
             res = compare(x,y)
-            log(x, y, len(bin(x)) - 2, len(bin(y)) - 2, res)
+            # log(x, y, bin(x)[2:], bin(x)[2:].count("1"), res)
+            log(x, y, bin(x)[2:].count("1"), res)
             allres += res
+            # log(allres)
+
+    # 187
+    log(allres)
 
     return (allres * modinv_p(n) * modinv_p(n)) % m9
+
+
+# for x in range(10000):
+#     if (x * modinv_p(8) * modinv_p(8)) % m9 == 77987843:
+#         log(x)
+#         log("nnn")
 
 
 # for case_num in [0]:  # no loop over test case
@@ -131,6 +145,8 @@ for case_num in range(int(input())):
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
+    arr.sort()
+    # arr = [2*x for x in arr]
     # arr = minus_one(arr)
 
     # read multiple rows
