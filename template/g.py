@@ -81,6 +81,18 @@ def solve_(n,m,mrr):
     return res
 
 
+import random
+while OFFLINE_TEST:
+    n = random.randint(1, 100)
+    m = random.randint(1, 100)
+    mrr = []
+    for _ in range(m):
+        row = list(range(1, n+1))
+        random.shuffle(row)
+        row.append(row)
+    mrr = list(map(list, zip(*mrr)))
+    assert solve_(n,m,mrr) != [], mrr
+
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
