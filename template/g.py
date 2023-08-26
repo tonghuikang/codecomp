@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,15 +52,39 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    # keep choosing the most common element of each row
+
+    res = [[] for _ in range(n)]
+
+    for j in range(m):  # column
+        chosen = set()
+        brr = [(max(Counter(mrr[i]).values()), i) for i in range(n)]
+        brr.sort(reverse=True)
+        for _,i in brr:
+            maxv = 0
+            maxk = -1
+            for k,v in Counter(mrr[i]).items():
+                if k not in chosen and v > maxv:
+                    maxk = k
+                    maxv = v
+            if maxk == -1:
+                return []
+            res[i].append(maxk)
+            mrr[i].remove(maxk)   
+            chosen.add(maxk)
+
+            # log(res)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -75,16 +97,25 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
+
+    for i in range(n):
+        mrr[i].sort()
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
+
+    if res == []:
+        print("No")
+        continue
+
+    print("Yes")
 
     # print length if applicable
     # print(len(res))
@@ -92,7 +123,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required

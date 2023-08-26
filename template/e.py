@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,10 +52,77 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(h,w,mrr):
+def solve_(n,m,arr):
     # your solution here
 
-    return ""
+    d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+    d4map = {
+        ">": (0,1),
+        "v": (1,0),
+        "^": (-1,0),
+        "<": (0,-1),
+    }
+    bitmap = {
+        ">": 1,
+        "v": 2,
+        "^": 4,
+        "<": 8,
+    }
+
+    sx,sy = 0,0
+    ex,ey = 0,0
+
+    mrr = [[0 for _ in range(w)] for _ in range(h)]
+
+    for x in range(h):
+        for y in range(w):
+            sign = arr[x][y]
+            if sign == ".":
+                continue
+            elif sign in [">", "v", "^", "<", "#"]:
+                mrr[x][y] = 15
+            elif sign == "S":
+                sx,sy = x,y
+            elif sign == "G":
+                ex,ey = x,y
+
+    for x in range(h):
+        for y in range(w):
+            ox,oy = x,y
+            sign = arr[ox][oy]
+            if sign in [">", "v", "^", "<"]:
+                dx,dy = d4map[sign]
+                bit = bitmap[sign]
+                ox += dx
+                oy += dy
+                while 0 <= ox < n and 0 <= oy < m:
+                    if mrr[ox][oy] & bit:
+                        break
+                    mrr[ox][oy] = mrr[ox][oy]^bit
+                    ox += dx
+                    oy += dy
+
+    def encode(x,y):
+        return x*m + y
+
+    def decode(z):
+        return divmod(z, m)
+
+    queue = deque([(sx,sy)])
+    visited = {encode(sx,sy): 0}
+    
+    while queue:
+        x,y = queue.popleft()
+        for dx,dy in d4:
+            xx = x+dx
+            yy = y+dy
+            if 0 <= xx < n and 0 <= yy < m:
+                if mrr[xx][yy] == 0:
+                    if encode(xx,yy) not in visited:
+                        visited[encode(xx,yy)] = visited[encode(x,y)] + 1
+                        queue.append((xx,yy))
+
+    return visited.get(encode(ex,ey), -1)
 
 
 for case_num in [0]:  # no loop over test case
