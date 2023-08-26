@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -57,7 +54,26 @@ def minus_one_matrix(mrr):
 def solve_(n, mrr):
     # your solution here
 
-    return ""
+    arr = []
+    sumz = 0
+
+    for x,y,z in mrr:
+        arr.append((max(0, (x+y) // 2 + 1 - x), z))
+        sumz += z
+
+    # log(arr)
+
+    LARGE = 10**18
+
+    dp = [LARGE for _ in range(sumz+1)]
+    dp[0] = 0
+    
+    for cost, value in arr:
+        for i in range(sumz-1,-1,-1):
+            if dp[i] != LARGE:
+                dp[i + value] = min(dp[i + value], dp[i] + cost)
+
+    return min(dp[sumz // 2 + 1:])
 
 
 for case_num in [0]:  # no loop over test case
