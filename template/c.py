@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -57,7 +54,13 @@ def minus_one_matrix(mrr):
 def solve_(x):
     # your solution here
 
-    return ""
+    res = [1]
+    while res[-1]*2 < x:
+        res.append(res[-1] * 2)
+    
+    res.append(x)
+
+    return res[::-1]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -85,12 +88,13 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(x)  # include input here
+    print(len(res))
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
