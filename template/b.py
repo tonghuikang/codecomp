@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -52,10 +49,29 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k,srr):
     # your solution here
 
-    return ""
+    # if k odd
+    # if k even, sort
+
+    if k%2 == 0:
+        return "".join(sorted(list(srr)))
+
+    odd = [x for x in srr[::2]]
+    even = [x for x in srr[1::2]]
+    odd.sort()
+    even.sort()
+
+    odd.append("")
+    even.append("")
+
+    res = []
+    for a,b in zip(odd, even):
+        res.append(a)
+        res.append(b)
+
+    return "".join(res)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -73,7 +89,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    srr = input().strip()
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -82,7 +99,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,srr)  # include input here
 
     # print length if applicable
     # print(len(res))
