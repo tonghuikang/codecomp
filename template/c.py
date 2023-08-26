@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import itertools
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,15 +53,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(dict)
+
+    for a,b,c in mrr:
+        a -= 1
+        b -= 1
+        g[a][b] = c
+        g[b][a] = c
+
+    maxres = 0
+    for perm in itertools.permutations(list(range(n))):
+        cur = 0
+        for a,b in zip(perm, perm[1:]):
+            if b not in g[a]:
+                break
+            cur += g[a][b]
+            maxres = max(maxres, cur)
+
+    return maxres
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -75,16 +91,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
