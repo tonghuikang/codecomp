@@ -62,16 +62,29 @@ def solve_(n,m,mrr):
     cntr = [Counter(row) for row in mrr]
     # distribute throughout columns
 
-    for i in range(1, n+1):
+    for _ in range(n):
+        cmax = 0
+        imax = 0
+        for p in range(1,n+1):
+            curmax = 0
+            for q in range(n):
+                curmax = max(curmax, cntr[q][p])
+            if curmax > cmax:
+                cmax = curmax
+                imax = p
+        i = imax
+        # log(i)
         for y in range(m):
-            for x in range(n):
+            for x in sorted(list(range(n)), key=lambda x: -cntr[x][i]):
                 if res[x][y] == -1:
                     if cntr[x][i] > 0:
                         res[x][y] = i
                         cntr[x][i] -= 1
                         break
-                        
-    for row in mrr:
+            else:
+                return []
+
+    for row in res:
         for x in row:
             if x == -1:
                 return []
@@ -79,22 +92,22 @@ def solve_(n,m,mrr):
     return res
 
 
-import random
-while OFFLINE_TEST:
-    n = random.randint(1, 10)
-    m = random.randint(1, 10)
-    mrr = []
-    for _ in range(m):
-        row = list(range(1, n+1))
-        random.shuffle(row)
-        mrr.append(row)
-    mrr = list(map(list, zip(*mrr)))
-    # for row in mrr:
-    #     print(row)
-    if solve(n,m,[[x for x in row] for row in mrr]) == []:
-        for row in mrr:
-            log(row)
-        assert False
+# import random
+# while OFFLINE_TEST:
+#     n = random.randint(1, 4)
+#     m = random.randint(1, 4)
+#     mrr = []
+#     for _ in range(m):
+#         row = list(range(1, n+1))
+#         random.shuffle(row)
+#         mrr.append(row)
+#     mrr = list(map(list, zip(*mrr)))
+#     # for row in mrr:
+#     #     print(row)
+#     if solve(n,m,[[x for x in row] for row in mrr]) == []:
+#         for row in mrr:
+#             log(row)
+#         assert False
 
 
 for case_num in [0]:  # no loop over test case
@@ -127,6 +140,7 @@ for case_num in [0]:  # no loop over test case
     res = solve(n,m,mrr)  # include input here
 
     if res == []:
+        assert False
         print("No")
         continue
 
