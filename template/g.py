@@ -57,41 +57,44 @@ def solve_(n,m,mrr):
 
     # keep choosing the most common element of each row
 
-    res = [[] for _ in range(n)]
+    res = [[-1 for _ in range(m)] for _ in range(n)]
 
-    for j in range(m):  # column
-        chosen = set()
-        brr = [(max(Counter(mrr[i]).values()), i) for i in range(n)]
-        brr.sort(reverse=True)
-        for _,i in brr:
-            maxv = 0
-            maxk = -1
-            for k,v in Counter(mrr[i]).items():
-                if k not in chosen and v > maxv:
-                    maxk = k
-                    maxv = v
-            if maxk == -1:
+    cntr = [Counter(row) for row in mrr]
+    # distribute throughout columns
+
+    for i in range(1, n+1):
+        for y in range(m):
+            for x in range(n):
+                if res[x][y] == -1:
+                    if cntr[x][i] > 0:
+                        res[x][y] = i
+                        cntr[x][i] -= 1
+                        break
+                        
+    for row in mrr:
+        for x in row:
+            if x == -1:
                 return []
-            res[i].append(maxk)
-            mrr[i].remove(maxk)   
-            chosen.add(maxk)
-
-            # log(res)
 
     return res
 
 
 import random
 while OFFLINE_TEST:
-    n = random.randint(1, 100)
-    m = random.randint(1, 100)
+    n = random.randint(1, 10)
+    m = random.randint(1, 10)
     mrr = []
     for _ in range(m):
         row = list(range(1, n+1))
         random.shuffle(row)
-        row.append(row)
+        mrr.append(row)
     mrr = list(map(list, zip(*mrr)))
-    assert solve_(n,m,mrr) != [], mrr
+    # for row in mrr:
+    #     print(row)
+    if solve(n,m,[[x for x in row] for row in mrr]) == []:
+        for row in mrr:
+            log(row)
+        assert False
 
 
 for case_num in [0]:  # no loop over test case
