@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -57,7 +54,33 @@ def minus_one_matrix(mrr):
 def solve_(n,mrr):
     # your solution here
 
-    return ""
+    left = [0 for _ in range(n)]
+    right = [0 for _ in range(n)]
+    flip = [0 for _ in range(n)]
+
+    res = 0
+
+    for row in mrr:
+        # # propagate
+        # l0 = left[0]
+        # r0 = right[-1]
+
+        left = left[1:] + [0]
+        # left[0] += l0
+
+        right = [0] + right[:-1]
+        # right[-1] += r0
+
+        flip = [x+y+z for x,y,z in zip(flip, left, right)]
+
+        for i,x in enumerate(row):
+            if (x + flip[i]) % 2 == 1:
+                flip[i] += 1
+                left[i] += 1
+                right[i] += 1
+                res += 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case

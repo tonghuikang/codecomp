@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -53,11 +53,65 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def modinv_p(base, p=m9):
+    
+    # modular inverse if the modulo is a prime
+    return pow(base, -1, p)  # for Python 3.8+
+    # return pow(base, p-2, p)  # if Python version is below 3.8
 
-def solve_():
+
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    def compare(x,y):
+        arr = bin(x)[2:]
+        brr = bin(y)[2:]
+        if len(arr) < len(brr) or x == 0:
+            return 1
+        if len(arr) > len(brr) or y == 0:
+            return 2
+
+        crr = []
+        drr = []
+
+        for a,b in zip(arr, brr):
+            if a == b == "0":
+                continue
+            crr.append(a)
+            drr.append(b)
+
+        arr = crr
+        brr = drr
+
+        if len(arr) == 1:
+            return 2
+
+        res = 0
+        for a,b in zip(arr, brr):
+            if a == b == "1":
+                res += 2
+            elif b == "1":
+                res += 1
+                break
+            elif a == "1":
+                res += 0
+                break
+        if a == b == "1":
+            res -= 1
+        
+        return res
+
+
+    # log(compare(7,7))
+
+    allres = 0
+    for x in arr:
+        for y in arr:
+            res = compare(x,y)
+            log(x, y, res)
+            allres += res
+
+    return (allres * modinv_p(n) * modinv_p(n)) % m9
 
 
 # for case_num in [0]:  # no loop over test case
@@ -65,7 +119,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -76,7 +130,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -84,7 +138,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
