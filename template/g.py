@@ -92,22 +92,22 @@ def solve_(n,m,mrr):
     return res
 
 
-import random
-while OFFLINE_TEST:
-    n = random.randint(1, 4)
-    m = random.randint(1, 4)
-    mrr = []
-    for _ in range(m):
-        row = list(range(1, n+1))
-        random.shuffle(row)
-        mrr.append(row)
-    mrr = list(map(list, zip(*mrr)))
-    # for row in mrr:
-    #     print(row)
-    if solve(n,m,[[x for x in row] for row in mrr]) == []:
-        for row in mrr:
-            log(row)
-        assert False
+# import random
+# while OFFLINE_TEST:
+#     n = random.randint(1, 4)
+#     m = random.randint(1, 4)
+#     mrr = []
+#     for _ in range(m):
+#         row = list(range(1, n+1))
+#         random.shuffle(row)
+#         mrr.append(row)
+#     mrr = list(map(list, zip(*mrr)))
+#     # for row in mrr:
+#     #     print(row)
+#     if solve(n,m,[[x for x in row] for row in mrr]) == []:
+#         for row in mrr:
+#             log(row)
+#         assert False
 
 
 for case_num in [0]:  # no loop over test case
