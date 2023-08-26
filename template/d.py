@@ -40,7 +40,7 @@ def solve(*args):
     return solve_(*args)
 
 def read_matrix(rows):
-    return [list(map(int,input().split())) for _ in range(rows)]
+    return [list(map(int,input().strip())) for _ in range(rows)]
 
 def read_strings(rows):
     return [input().strip() for _ in range(rows)]
@@ -54,7 +54,7 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,srr):
+def solve_(n,mrr):
     # your solution here
 
     return ""
@@ -80,11 +80,11 @@ for case_num in range(int(input())):
     # arr = minus_one(arr)
 
     # read multiple rows
-    srr = read_strings(n)  # and return as a list of str
+    mrr = read_matrix(n)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,srr)  # include input here
+    res = solve(n,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))

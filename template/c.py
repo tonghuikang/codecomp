@@ -54,13 +54,23 @@ def minus_one_matrix(mrr):
 def solve_(x):
     # your solution here
 
-    res = [1]
-    while res[-1]*2 < x:
-        res.append(res[-1] * 2)
-    
-    res.append(x)
+    # res = [1]
+    # while res[-1]*2 < x:
+    #     res.append(res[-1] * 2)
 
-    return res[::-1]
+    r2 = [x]
+    for i,x in enumerate(bin(x)[2:][::-1][:-1]):
+        if x == "1":
+            r2.append(r2[-1] - 2**i)
+    
+    while r2[-1] != 1:
+        r2.append(r2[-1] // 2)
+            
+    return r2
+
+
+# for i in range(1,10):
+#     print(solve(i))
 
 
 # for case_num in [0]:  # no loop over test case
