@@ -111,7 +111,10 @@ def solve_ref(n,m,k,arr,mrr):
     
         for i in range(n):
             if len(f[i]) == 0:
-                queue.append((arr[i], i))
+                if arr[i] >= q:
+                    queue.append((arr[i], i))
+                else:
+                    queue.append((arr[i] + k, i))
 
         if not queue:
             continue
@@ -122,7 +125,7 @@ def solve_ref(n,m,k,arr,mrr):
     
         while queue:
             hour, cur = heapq.heappop(queue)
-            log(hour, cur)
+            # log(hour, cur)
             for nex in g[cur]:
                 f[nex].remove(cur)
                 if len(f[nex]) == 0:
@@ -135,7 +138,7 @@ def solve_ref(n,m,k,arr,mrr):
         res = hour - start
         minres = min(minres, res)
  
-    log(minres)
+    # log(minres)
     return minres
 
 
@@ -202,15 +205,18 @@ def solve_(n,m,k,arr,mrr):
             cur = stack.pop()
             # log(cur)
 
-            if len(g[cur]) > 0:            
-                max_start_time = e18
-                for nex in g[cur]:
-                    if arr[cur] <= arr[nex]:
-                        start_time = (starts[nex] // k) * k + arr[cur]
-                    else:
-                        start_time = (starts[nex] // k) * k + arr[cur] - k
-                    max_start_time = min(max_start_time, start_time)
-                starts[cur] = max_start_time
+            if arr[cur] <= hour%k:
+                max_start_time = (hour // k) * k + arr[cur]
+            else:
+                max_start_time = (hour // k) * k + arr[cur] - k
+
+            for nex in g[cur]:
+                if arr[cur] <= arr[nex]:
+                    start_time = (starts[nex] // k) * k + arr[cur]
+                else:
+                    start_time = (starts[nex] // k) * k + arr[cur] - k
+                max_start_time = min(max_start_time, start_time)
+            starts[cur] = max_start_time
 
             for nex in f2[cur]:
                 g2[nex].remove(cur)
@@ -233,6 +239,24 @@ def solve_(n,m,k,arr,mrr):
         minres = min(minres, res)        
 
     return minres
+
+
+for _ in range(500):
+    import random
+    n = random.randint(2, 5)
+    prob = random.uniform(0,1)
+    mrr = []
+    for i in range(n):
+        for j in range(i+1, n):
+            if random.uniform(0,1) > prob:
+                mrr.append([i,j])
+    k = 10
+    m = len(mrr)
+    arr = [random.randint(0, k-1) for _ in range(n)]
+    
+    resx = solve(n,m,k,arr,mrr)
+    resy = solve_ref(n,m,k,arr,mrr)
+    assert resx == resy, (resx, resy)
 
 
 # for case_num in [0]:  # no loop over test case
