@@ -1,0 +1,4 @@
+YES
+NO
+MAYBE
+YES
