@@ -139,6 +139,8 @@ def solve_(n,m,k,arr,mrr):
                         heapq.heappush(queue, ((hour // k) * k + nex_hour + k, nex))
         times.append((start, hour))
 
+    log(times)
+
     times.sort()
     maxend = max(end for _, end in times)
     minres = maxend - times[0][0]
