@@ -132,11 +132,10 @@ def solve_(n,m,k,arr,mrr):
             for nex in g[cur]:
                 f[nex].remove(cur)
                 if len(f[nex]) == 0:
-                    nex_hour = arr[nex]
-                    if nex_hour >= hour:
-                        heapq.heappush(queue, ((hour // k) * k + nex_hour, nex))
+                    if arr[nex] >= arr[cur]:
+                        heapq.heappush(queue, ((hour // k) * k + arr[nex], nex))
                     else:
-                        heapq.heappush(queue, ((hour // k) * k + nex_hour + k, nex))
+                        heapq.heappush(queue, ((hour // k) * k + arr[nex] + k, nex))
         times.append((start, hour))
 
     log(times)
