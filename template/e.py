@@ -99,6 +99,7 @@ def solve_ref(n,m,k,arr,mrr):
  
     minres = e18
     for q in arr:
+
         g = [set() for _ in range(n)]
         f = [set() for _ in range(n)]
         for a,b in mrr:
@@ -111,6 +112,9 @@ def solve_ref(n,m,k,arr,mrr):
         for i in range(n):
             if len(f[i]) == 0:
                 queue.append((arr[i], i))
+
+        if not queue:
+            continue
     
         heapq.heapify(queue)
     
@@ -123,12 +127,13 @@ def solve_ref(n,m,k,arr,mrr):
                 f[nex].remove(cur)
                 if len(f[nex]) == 0:
                     nex_hour = arr[nex]
-                    if nex_hour >= hour:
+                    if arr[nex] >= arr[cur]:
                         heapq.heappush(queue, ((hour // k) * k + nex_hour, nex))
                     else:
                         heapq.heappush(queue, ((hour // k) * k + nex_hour + k, nex))
 
-            minres = min(minres, res)
+        res = hour - start
+        minres = min(minres, res)
  
     log(minres)
     return minres
