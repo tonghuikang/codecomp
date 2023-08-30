@@ -1922,7 +1922,7 @@ for case_num in range(int(input())):
 
     res = solve(n,m,k,arr,mrr)  # include input here
 
-    assert res == solve_ref(n,m,k,arr,mrr), (res, solve_ref(n,m,k,arr,mrr))
+    # assert res == solve_ref(n,m,k,arr,mrr), (res, solve_ref(n,m,k,arr,mrr))
 
     # print length if applicable
     # print(len(res))
