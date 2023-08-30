@@ -101,10 +101,14 @@ def solve_(n,m,k,arr,mrr):
 
     ds = DisjointSet()
     g = [set() for _ in range(n)]
+    g2 = [set() for _ in range(n)]
     f = [set() for _ in range(n)]
+    f2 = [set() for _ in range(n)]
     for a,b in mrr:
         g[a].add(b)
+        g2[a].add(b)
         f[b].add(a)
+        f2[b].add(a)
         ds.union(a,b)
 
     for x in range(n):
@@ -124,11 +128,12 @@ def solve_(n,m,k,arr,mrr):
 
         heapq.heapify(queue)
 
-        start = queue[0][0]
+        starts = {}
 
         while queue:
             hour, cur = heapq.heappop(queue)
-            log(hour, cur)
+            starts[cur] = hour
+            # log(hour, cur)
             for nex in g[cur]:
                 f[nex].remove(cur)
                 if len(f[nex]) == 0:
@@ -136,9 +141,42 @@ def solve_(n,m,k,arr,mrr):
                         heapq.heappush(queue, ((hour // k) * k + arr[nex], nex))
                     else:
                         heapq.heappush(queue, ((hour // k) * k + arr[nex] + k, nex))
-        times.append((start, hour))
 
-    log(times)
+
+        # if all the tasks that depend on yours is completed at least k hours in the future
+        # you can bring yours forward
+
+        # log(starts)
+
+        stack = []
+        for cur in group:
+            if len(g[cur]) == 0:
+                stack.append(cur)
+
+        while stack:
+            cur = stack.pop()
+            # log(cur)
+
+            if len(g[cur]) > 0:            
+                max_start_time = e18
+                for nex in g[cur]:
+                    if arr[cur] <= arr[nex]:
+                        start_time = (starts[nex] // k) * k + arr[cur]
+                    else:
+                        start_time = (starts[nex] // k) * k + arr[cur] - k
+                    max_start_time = min(max_start_time, start_time)
+                starts[cur] = max_start_time
+
+            for nex in f2[cur]:
+                g2[nex].remove(cur)
+                if len(g2[nex]) == 0:
+                    stack.append(nex)
+
+        # log(starts)
+
+        times.append((min(starts.values()), max(starts.values())))
+
+    # log(times)
 
     times.sort()
     maxend = max(end for _, end in times)
