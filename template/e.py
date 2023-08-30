@@ -94,6 +94,46 @@ class DisjointSet:
         return -self.parent_or_size[self.find(a)]
 
 
+def solve_ref(n,m,k,arr,mrr):
+    # your solution here
+ 
+    minres = e18
+    for q in arr:
+        g = [set() for _ in range(n)]
+        f = [set() for _ in range(n)]
+        for a,b in mrr:
+            g[a].add(b)
+            f[b].add(a)
+        
+        queue = []
+        start = 0
+    
+        for i in range(n):
+            if len(f[i]) == 0:
+                queue.append((arr[i], i))
+    
+        heapq.heapify(queue)
+    
+        start = queue[0][0]
+    
+        while queue:
+            hour, cur = heapq.heappop(queue)
+            log(hour, cur)
+            for nex in g[cur]:
+                f[nex].remove(cur)
+                if len(f[nex]) == 0:
+                    nex_hour = arr[nex]
+                    if nex_hour >= hour:
+                        heapq.heappush(queue, ((hour // k) * k + nex_hour, nex))
+                    else:
+                        heapq.heappush(queue, ((hour // k) * k + nex_hour + k, nex))
+
+            minres = min(minres, res)
+ 
+    log(minres)
+    return minres
+
+
 def solve_(n,m,k,arr,mrr):
     # your solution here
 
@@ -215,6 +255,8 @@ for case_num in range(int(input())):
     mrr = minus_one_matrix(mrr)
 
     res = solve(n,m,k,arr,mrr)  # include input here
+
+    assert res == solve_ref(n,m,k,arr,mrr)
 
     # print length if applicable
     # print(len(res))
