@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import heapq
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,39 +53,102 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+    # faster implementation of DSU
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1]*n
+        else:
+            # WARNING: non-negative numeric elements only
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]]
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.find(a)]
+
+
 def solve_(n,m,k,arr,mrr):
     # your solution here
 
+    # for each dependency group there is a start and end time
+
+    ds = DisjointSet()
     g = [set() for _ in range(n)]
     f = [set() for _ in range(n)]
     for a,b in mrr:
         g[a].add(b)
         f[b].add(a)
-    
-    queue = []
-    start = 0
+        ds.union(a,b)
 
-    for i in range(n):
-        if len(f[i]) == 0:
-            queue.append((arr[i], i))
+    for x in range(n):
+        ds.find(x)
+    leaders = defaultdict(list)
+    for x in range(n):
+        leaders[ds.find(x)].append(x)
 
-    heapq.heapify(queue)
+    times = []
+    for group in leaders.values():
+        queue = []
+        start = 0
 
-    start = queue[0][0]
+        for i in group:
+            if len(f[i]) == 0:
+                queue.append((arr[i], i))
 
-    while queue:
-        hour, cur = heapq.heappop(queue)
-        log(hour, cur)
-        for nex in g[cur]:
-            f[nex].remove(cur)
-            if len(f[nex]) == 0:
-                nex_hour = arr[nex]
-                if nex_hour >= hour:
-                    heapq.heappush(queue, ((hour // k) * k + nex_hour, nex))
-                else:
-                    heapq.heappush(queue, ((hour // k) * k + nex_hour + k, nex))
+        heapq.heapify(queue)
 
-    return hour - start
+        start = queue[0][0]
+
+        while queue:
+            hour, cur = heapq.heappop(queue)
+            log(hour, cur)
+            for nex in g[cur]:
+                f[nex].remove(cur)
+                if len(f[nex]) == 0:
+                    nex_hour = arr[nex]
+                    if nex_hour >= hour:
+                        heapq.heappush(queue, ((hour // k) * k + nex_hour, nex))
+                    else:
+                        heapq.heappush(queue, ((hour // k) * k + nex_hour + k, nex))
+        times.append((start, hour))
+
+    times.sort()
+    maxend = max(end for _, end in times)
+    minres = maxend - times[0][0]
+
+    for (a,b),(x,y) in zip(times, times[1:]):
+        maxend = max(maxend, b + k)
+        res = maxend - x
+        minres = min(minres, res)        
+
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
