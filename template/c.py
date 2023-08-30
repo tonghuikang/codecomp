@@ -52,7 +52,7 @@ def minus_one_matrix(mrr):
 
 
 def solve_(n, k, arr):
-    missing = list(set(list(range(n))) - set(arr))[0]
+    missing = list(set(list(range(n+1))) - set(arr))[0]
     # log(missing)
 
     arr_original = [x for x in arr]
@@ -79,13 +79,13 @@ def solve_(n, k, arr):
     return brr[-k:] + brr[:-k-1]
 
 
-while True:
-    import random
-    n = random.randint(1,10)
-    k = random.randint(0,100)
-    arr = list(range(n+1))
-    random.shuffle(arr)
-    solve(n,k,arr[:-1])
+# while True:
+#     import random
+#     n = random.randint(1,10)
+#     k = random.randint(0,100)
+#     arr = list(range(n+1))
+#     random.shuffle(arr)
+#     solve(n,k,arr[:-1])
 
 
 # for case_num in [0]:  # no loop over test case

@@ -54,10 +54,39 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,k,arr,mrr):
     # your solution here
 
-    return ""
+    g = [set() for _ in range(n)]
+    f = [set() for _ in range(n)]
+    for a,b in mrr:
+        g[a].add(b)
+        f[b].add(a)
+    
+    queue = []
+    start = 0
+
+    for i in range(n):
+        if len(f[i]) == 0:
+            queue.append((arr[i], i))
+
+    heapq.heapify(queue)
+
+    start = queue[0][0]
+
+    while queue:
+        hour, cur = heapq.heappop(queue)
+        log(hour, cur)
+        for nex in g[cur]:
+            f[nex].remove(cur)
+            if len(f[nex]) == 0:
+                nex_hour = arr[nex]
+                if nex_hour >= hour:
+                    heapq.heappush(queue, ((hour // k) * k + nex_hour, nex))
+                else:
+                    heapq.heappush(queue, ((hour // k) * k + nex_hour + k, nex))
+
+    return hour - start
 
 
 # for case_num in [0]:  # no loop over test case
@@ -75,16 +104,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,k,arr,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
