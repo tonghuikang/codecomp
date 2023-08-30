@@ -79,6 +79,15 @@ def solve_(n, k, arr):
     return brr[-k:] + brr[:-k-1]
 
 
+while True:
+    import random
+    n = random.randint(1,10)
+    k = random.randint(0,100)
+    arr = list(range(n+1))
+    random.shuffle(arr)
+    solve(n,k,arr[:-1])
+
+
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
