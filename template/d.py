@@ -97,6 +97,9 @@ def solve_(n, arr):
             yrr.append(yrr[-1])
 
     yrr.reverse()
+
+    log(xrr)
+    log(yrr)
     
     minres = min(minres, xrr[-2])
     minres = min(minres, yrr[0])
