@@ -57,21 +57,11 @@ def ceiling_division(numer, denom):
 
 def solve_(n, arr):
     # your solution here
-    base_res = 0
-    prev = -1
-    brr = []
-    for x in arr:
-        if x == prev:
-            base_res += 1
-            continue
-        else:
-            brr.append(x)
-            prev = x
-    
-    if sorted(brr) == brr:
-        return base_res
 
-    assert len(brr) >= 2
+    if len(arr) == 1:
+        return 0
+
+    brr = arr
 
     minres = len(brr) - 1
 
@@ -91,7 +81,7 @@ def solve_(n, arr):
 
     yrr = [0]
     for a,b in zip(brr[::-1], brr[::-1][1:]):
-        if a < b:
+        if a <= b:
             yrr.append(yrr[-1] + 1)
         else:
             yrr.append(yrr[-1])
@@ -107,7 +97,7 @@ def solve_(n, arr):
     for a,b in zip(xrr, yrr[:1]):
         minres = min(minres, a + b)
 
-    return minres + base_res
+    return minres
 
 
 
