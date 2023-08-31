@@ -56,6 +56,7 @@ def ceiling_division(numer, denom):
 
 
 def solve_(n, arr):
+    n = len(arr)
     # your solution here
 
     if len(arr) == 1:
@@ -64,13 +65,6 @@ def solve_(n, arr):
     brr = arr
 
     minres = len(brr) - 1
-
-    # apply when decrease
-    res = 0
-    for a,b in zip(brr, brr[1:]):
-        if a >= b:
-            res += 1
-    minres = min(minres, res)
 
     xrr = [1]
     for a,b in zip(brr, brr[1:]):
@@ -94,7 +88,7 @@ def solve_(n, arr):
     minres = min(minres, xrr[-2])
     minres = min(minres, yrr[0])
 
-    for a,b in zip(xrr, yrr[:1]):
+    for a,b in zip(xrr, yrr[1:]):
         minres = min(minres, a + b)
 
     return minres
