@@ -55,9 +55,30 @@ def minus_one_matrix(mrr):
 def solve_(srr, trr):
     # your solution here
 
-    
+    # a = srr.index("1")
+    # b = trr.index("1")
 
-    return ""
+    # p = 0
+    # q = 0
+
+    # for i,x in enumerate(srr):
+    #     if x == "0":
+    #         p = i
+
+    # for i,x in enumerate(trr):
+    #     if x == "0":
+    #         q = i
+
+    # log(a,b)
+    # log(p,q)
+
+    for a,b,c,d in zip(srr, srr[1:], trr, trr[1:]):
+        if a == "0" and b == "1" and c == "0" and d == "1":
+            return yes
+        # if a == "1" and b == "0" and c == "1" and d == "0":
+        #     return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case

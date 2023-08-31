@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -54,10 +51,70 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr):
     # your solution here
 
-    return ""
+    # if srr.count("0") == 0:
+    #     return yes
+
+    # records = []
+
+    # curlen = 0
+    # for x in srr:
+    #     if x == "+":
+    #         curlen += 1
+    #     if x == "-":
+    #         curlen -= 1
+    #     if x == "0":
+    #         records.append((curlen, 0))
+    #     if x == "1":
+    #         records.append((curlen, 1))
+
+    # log(records)
+
+    # 1 higher
+    # 0 lower
+    # -1 unfixed
+    stack = [1, 1]
+    cntr = [0, 0, 0]
+
+    unknown_idxs = set()
+
+    for x in srr:
+
+        if x == "+":
+            unknown_idxs.add(len(stack))
+            stack.append(-1)
+            cntr[-1] += 1
+
+        if x == "-":
+            val = stack.pop()
+            cntr[val] -= 1
+            if val == -1:
+                unknown_idxs.remove(len(stack))
+
+        if x == "0":
+            if len(stack) == 3:
+                return no
+            if stack[-1] == 1:
+                return no
+            stack[-1] = 0
+            cntr[-1] -= 1
+            cntr[0] += 1
+            unknown_idxs.remove(len(stack)-1)
+
+        if x == "1":
+            if cntr[0] > 0:
+                return no
+            
+            for i in unknown_idxs:
+                # assert stack[i] == -1
+                stack[i] = 1
+                cntr[-1] -= 1
+                cntr[1] += 1
+            unknown_idxs = set()
+
+    return yes
 
 
 # for case_num in [0]:  # no loop over test case
@@ -69,7 +126,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -84,7 +141,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
