@@ -94,6 +94,8 @@ def solve_(srr):
                 unknown_idxs.remove(len(stack))
 
         if x == "0":
+            if stack[-1] == 0:
+                continue
             if len(stack) == 3:
                 return no
             if stack[-1] == 1:
@@ -115,6 +117,23 @@ def solve_(srr):
             unknown_idxs = set()
 
     return yes
+
+
+while OFFLINE_TEST:
+    import random
+    n = random.randint(1,20)
+    srr = "".join(random.choice(["+", "-", "0", "1"]) for _ in range(n))
+    cnt = 0
+    for x in srr:
+        if x == "+":
+            cnt += 1
+        if x == "-":
+            cnt -= 1
+        if cnt < 0:
+            break
+    else:
+        solve(srr)
+
 
 
 # for case_num in [0]:  # no loop over test case
