@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -74,7 +71,7 @@ def solve_(n, arr):
     if sorted(brr) == brr:
         return base_res
 
-    log(brr, base_res)
+    assert len(brr) >= 2
 
     minres = len(brr) - 1
 
@@ -84,27 +81,28 @@ def solve_(n, arr):
         if a >= b:
             res += 1
     minres = min(minres, res)
-    
 
-    # attempting not to change the last number
-    res = 0
-    prev = -1
-    multiplier = 1
-    for x in arr:
-        if x > prev * multiplier:
-            multiplier = 1
-        elif x > prev:
-            pass
+    xrr = [1]
+    for a,b in zip(brr, brr[1:]):
+        if a > b:
+            xrr.append(xrr[-1])
         else:
-            multiplier = ceiling_division(prev * multiplier + 1, x)
-            res += 1
-        prev = x
-        log(x * multiplier)
-        if multiplier > m9:
-            break
-    else:
-        minres = min(minres, res)
-        log("no last", minres)
+            xrr.append(xrr[-1] + 1)
+
+    yrr = [0]
+    for a,b in zip(brr[::-1], brr[::-1][1:]):
+        if a < b:
+            yrr.append(yrr[-1] + 1)
+        else:
+            yrr.append(yrr[-1])
+
+    yrr.reverse()
+    
+    minres = min(minres, xrr[-2])
+    minres = min(minres, yrr[0])
+
+    for a,b in zip(xrr, yrr[:1]):
+        minres = min(minres, a + b)
 
     return minres + base_res
 
