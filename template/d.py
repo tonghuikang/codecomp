@@ -54,25 +54,61 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def ceiling_division(numer, denom):
+    return -((-numer)//denom)
+
+
 def solve_(n, arr):
     # your solution here
-    res = 0
+    base_res = 0
     prev = -1
     brr = []
     for x in arr:
         if x == prev:
-            res += 1
+            base_res += 1
             continue
         else:
             brr.append(x)
             prev = x
     
     if sorted(brr) == brr:
-        return res
+        return base_res
 
-    log(brr, res)
+    log(brr, base_res)
 
-    return ""
+    minres = len(brr) - 1
+
+    # apply when decrease
+    res = 0
+    for a,b in zip(brr, brr[1:]):
+        if a >= b:
+            res += 1
+    minres = min(minres, res)
+    
+
+    # attempting not to change the last number
+    res = 0
+    prev = -1
+    multiplier = 1
+    for x in arr:
+        if x > prev * multiplier:
+            multiplier = 1
+        elif x > prev:
+            pass
+        else:
+            multiplier = ceiling_division(prev * multiplier + 1, x)
+            res += 1
+        prev = x
+        log(x * multiplier)
+        if multiplier > m9:
+            break
+    else:
+        minres = min(minres, res)
+        log("no last", minres)
+
+    return minres + base_res
+
+
 
 
 # for case_num in [0]:  # no loop over test case
