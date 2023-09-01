@@ -9,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -54,15 +54,63 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+LARGE = 2**20
+p = 998244353  # CHANGE WHEN NEEDED
+
+factorial_mod_p = [1]
+for i in range(1, LARGE+1):
+    factorial_mod_p.append((factorial_mod_p[-1]*i)%p)
+
+ifactorial_mod_p = [1]*(LARGE+1)
+ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p-2, p)
+for i in range(LARGE-1, 1, -1):
+    ifactorial_mod_p[i] = ifactorial_mod_p[i+1]*(i+1)%p
+
+
+
+def solve_(n, k):
     # your solution here
+    kfact = factorial_mod_p[k]
+    log(kfact)
 
-    return ""
+    @functools.cache
+    def dp(length, last_complete):  # to cost
+        if length == last_complete == 0:
+            return 0
+        if last_complete < k:
+            return 0
+        # if length == last_complete == k:
+        #     return kfact
+        
+        if length == last_complete:
+            res = kfact
+            for prevlen in range(length):
+                for prevcompl in range(prevlen + 1):
+                    res += dp(prevlen, prevcompl)
+
+            log(length, last_complete, res)
+            return res%m9
+
+        else:
+            res = 0
+            for prevlen in range(length):
+                for prevcompl in range(prevlen):
+                    res += dp(prevlen, prevcompl)
+
+            log(length, last_complete, res)
+            return res%m9
+
+    res = 0
+    for i in range(1, n+1):
+        res += dp(n, i)
+
+    return res%m9
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
 
     # read line as an integer
     # n = int(input())
@@ -75,7 +123,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -84,7 +132,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
