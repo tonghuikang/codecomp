@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -64,12 +62,12 @@ def solve_(n, arr):
 
     res = 0
     for brr in g.values():
-        log(brr)
+        # log(brr)
         diff = [b-a for a,b in zip(brr, brr[1:])]
         cnt = 0
-        for prev,dist in enumerate(diff):
+        for prev,dist in enumerate(diff,start=1):
             cnt += (dist-1)*prev
-            log(prev,dist,cnt)
+            # log(prev,dist,cnt)
             res += cnt
 
     return res
