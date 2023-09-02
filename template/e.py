@@ -64,10 +64,12 @@ def solve_(n, arr):
 
     res = 0
     for brr in g.values():
+        log(brr)
         diff = [b-a for a,b in zip(brr, brr[1:])]
         cnt = 0
         for prev,dist in enumerate(diff):
-            cnt += (dist-1)*i
+            cnt += (dist-1)*prev
+            log(prev,dist,cnt)
             res += cnt
 
     return res
