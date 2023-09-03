@@ -11,10 +11,14 @@ MAXINT = sys.maxsize
 
 # -------------------------- binary search template --------------------------
 
-def binary_search(func_,       # condition function
-                  first=True,  # else last
-                  target=True, # else False
-                  left=0, right=2**31-1) -> int:
+
+def binary_search(
+    func_,  # condition function
+    first=True,  # else last
+    target=True,  # else False
+    left=0,
+    right=2**31 - 1,
+) -> int:
     # https://leetcode.com/discuss/general-discussion/786126/
     # ASSUMES THAT THERE IS A TRANSITION
     # MAY HAVE ISSUES AT THE EXTREMES
@@ -26,7 +30,7 @@ def binary_search(func_,       # condition function
         # if first False or last True, assume search space is in form
         # [True, ..., True, False, ..., False]
         # for this case, func will now be negated
-        if first^target:
+        if first ^ target:
             return not func_(val)
         return func_(val)
 
@@ -38,11 +42,11 @@ def binary_search(func_,       # condition function
             left = mid + 1
     if first:  # find first True
         return left
-    else:      # find last False
-        return left-1
+    else:  # find last False
+        return left - 1
 
 
-def find_peak(func_, minimize=False, left=0, right=2**31-1):
+def find_peak(func_, minimize=False, left=0, right=2**31 - 1):
     # https://leetcode.com/problems/peak-index-in-a-mountain-array/discuss/139848/
     # find the peak value of a function, assumes that the ends are not peaks
     # ASSUMES THAT THERE IS NO PLATEAUS

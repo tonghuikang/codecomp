@@ -10,21 +10,24 @@ MAXINT = sys.maxsize
 # ------------------------ geometry ------------------------
 
 
-def shoelace_formula(xs,ys):
+def shoelace_formula(xs, ys):
     # https://stackoverflow.com/a/30950874/5894029
-    return sum(xs[i]*ys[i-1] - xs[i-1]*ys[i] for i in range(len(xs)))
+    return sum(xs[i] * ys[i - 1] - xs[i - 1] * ys[i] for i in range(len(xs)))
 
-def triangle_formula(xs,ys):
+
+def triangle_formula(xs, ys):
     # shoelace formula is 10x slower for some reason
-    return (xs[0]*ys[1] + xs[1]*ys[2] + xs[2]*ys[0]) - (xs[0]*ys[2] + xs[1]*ys[0] + xs[2]*ys[1])
+    return (xs[0] * ys[1] + xs[1] * ys[2] + xs[2] * ys[0]) - (xs[0] * ys[2] + xs[1] * ys[0] + xs[2] * ys[1])
 
-def get_polygon_area(xs,ys,take_abs=True,take_double=False):
-    signed_area = shoelace_formula(xs,ys)  # switch to func=triangle_formula if needed for speed
+
+def get_polygon_area(xs, ys, take_abs=True, take_double=False):
+    signed_area = shoelace_formula(xs, ys)  # switch to func=triangle_formula if needed for speed
     if not take_double:  # may cause precision issues idk
-        signed_area = signed_area/2
+        signed_area = signed_area / 2
     if take_abs:
         return abs(signed_area)
     return signed_area
+
 
 def checkStraightLine(coordinates):
     # https://leetcode.com/problems/check-if-it-is-a-straight-line/discuss/408984/
@@ -34,13 +37,14 @@ def checkStraightLine(coordinates):
 
 # ------------------------ standard imports ends here ------------------------
 
+
 def ceiling_division(numer, denom):
-    return -((-numer)//denom)
+    return -((-numer) // denom)
 
 
-def lcm(a,b):
+def lcm(a, b):
     # lowest common multiple
-    return a*b//math.gcd(a,b)
+    return a * b // math.gcd(a, b)
 
 
 # ------------------------ single prime factorisation ------------------------
@@ -110,7 +114,7 @@ def get_all_divisors_given_prime_factorization(factors):
         for _ in range(count):
             prime_pow *= prime
             for j in range(l):
-                divs.append(divs[j]*prime_pow)
+                divs.append(divs[j] * prime_pow)
 
     # NOT IN SORTED ORDER
     return divs
@@ -132,8 +136,8 @@ def get_largest_prime_factors(num):
 
 
 SIZE_OF_PRIME_ARRAY = 10**6 + 10
-largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)   # take care that it begins with [1,1,2,...]
-primes = [x for i,x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)  # take care that it begins with [1,1,2,...]
+primes = [x for i, x in enumerate(largest_prime_factors[2:], start=2) if x == i]
 
 
 def get_prime_factors_with_precomp(num):
@@ -160,10 +164,10 @@ def get_prime_factors_with_precomp_sqrt(num):
     if num == 1:
         # may need to edit depending on use case
         return []
- 
-    factors = [] 
+
+    factors = []
     for p in primes:
-        while num%p == 0:
+        while num % p == 0:
             factors.append(p)
             num = num // p
         # if num < p:  # remaining factor is a prime?
@@ -173,7 +177,7 @@ def get_prime_factors_with_precomp_sqrt(num):
     if num > 1:
         # remaining number is a prime
         factors.append(num)
- 
+
     return factors
 
 
@@ -182,11 +186,13 @@ def get_prime_factors_with_precomp_sqrt(num):
 
 # modular inverse
 # https://stackoverflow.com/a/29762148/5894029
-modinv = lambda A,n,s=1,t=0,N=0: (n < 2 and t%N or modinv(n, A%n, t, s-A//n*t, N or n),-1)[n<1]
+modinv = lambda A, n, s=1, t=0, N=0: (
+    n < 2 and t % N or modinv(n, A % n, t, s - A // n * t, N or n),
+    -1,
+)[n < 1]
 
 
 def modinv_p(base, p):
-    
     # modular inverse if the modulo is a prime
     return pow(base, -1, p)  # for Python 3.8+
     # return pow(base, p-2, p)  # if Python version is below 3.8
@@ -194,7 +200,7 @@ def modinv_p(base, p):
 
 def chinese_remainder_theorem(divisors, remainders):
     sum = 0
-    prod = functools.reduce(lambda a, b: a*b, divisors)
+    prod = functools.reduce(lambda a, b: a * b, divisors)
     for n_i, a_i in zip(divisors, remainders):
         p = prod // n_i
         sum += a_i * modinv(p, n_i) * p
@@ -211,6 +217,7 @@ def extended_gcd(a, b):
     else:
         gcd, x, y = extended_gcd(b % a, a)
         return gcd, y - (b // a) * x, x
+
 
 def solve_diophantine(a, b, n):
     # https://atcoder.jp/contests/abc315/submissions/44768509
@@ -230,8 +237,8 @@ def solve_diophantine(a, b, n):
     # Check if the solution is correct
     assert a * x + b * y == n
 
-    x2 = b // math.gcd(a,b)
-    y2 = a // math.gcd(a,b)
+    x2 = b // math.gcd(a, b)
+    y2 = a // math.gcd(a, b)
 
     assert a * (x + x2) + b * (y - y2) == n
 
@@ -245,26 +252,29 @@ LARGE = 2**20
 p = 998244353  # CHANGE WHEN NEEDED
 
 factorial_mod_p = [1]
-for i in range(1, LARGE+1):
-    factorial_mod_p.append((factorial_mod_p[-1]*i)%p)
+for i in range(1, LARGE + 1):
+    factorial_mod_p.append((factorial_mod_p[-1] * i) % p)
 
-ifactorial_mod_p = [1]*(LARGE+1)
-ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p-2, p)
-for i in range(LARGE-1, 1, -1):
-    ifactorial_mod_p[i] = ifactorial_mod_p[i+1]*(i+1)%p
+ifactorial_mod_p = [1] * (LARGE + 1)
+ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p - 2, p)
+for i in range(LARGE - 1, 1, -1):
+    ifactorial_mod_p[i] = ifactorial_mod_p[i + 1] * (i + 1) % p
+
 
 def ncr_mod_p(n, r, p=p):
     # https://codeforces.com/contest/1785/submission/192389526
-    if r < 0 or n < r: return 0
+    if r < 0 or n < r:
+        return 0
     num = factorial_mod_p[n]
-    dem = (ifactorial_mod_p[r]*ifactorial_mod_p[n-r])%p
-    return (num * dem)%p 
+    dem = (ifactorial_mod_p[r] * ifactorial_mod_p[n - r]) % p
+    return (num * dem) % p
 
 
 # ----------------------------- counting  -----------------------------
 
 from math import comb
 from functools import cache
+
 
 @cache
 def count_numbers_with_certain_sum_of_digits_and_number_of_digits(n, k, mu=10):  # digit_sum, num_digits
@@ -285,14 +295,14 @@ def count_numbers_with_at_most_certain_sum_of_digits_and_number_of_digits(n, k):
     if k == 0 or n == 0:
         return 1
     res = 0
-    for n2 in range(n+1):
+    for n2 in range(n + 1):
         res += count_numbers_with_certain_sum_of_digits(n2, k)
     return res
 
 
 def count_numbers_with_at_most_certain_sum_of_digits(req_digit_sum, target):
     # https://leetcode.com/contest/weekly-contest-348/problems/count-of-integers/
-    # You have a function (say from Stack Overflow) that calculates the value 
+    # You have a function (say from Stack Overflow) that calculates the value
     #   f(x, y) = f'(x, k), where y = 10**k is a power of 10
     # You want to find the value of f(x, y) where y may not be a power of 10
     # x may also be affected by the integer prefix
@@ -303,29 +313,31 @@ def count_numbers_with_at_most_certain_sum_of_digits(req_digit_sum, target):
     remaining_digit_sum = req_digit_sum
     remaining_digits = len(x)
 
-    for i,c in enumerate(x):
+    for i, c in enumerate(x):
         c = int(c)
         remaining_digits -= 1
         for _ in range(c):
             if remaining_digit_sum < 0:
                 break
             val = count_numbers_with_at_most_certain_sum_of_digits_and_number_of_digits(
-                remaining_digit_sum, remaining_digits)
+                remaining_digit_sum, remaining_digits
+            )
             res += val
             remaining_digit_sum -= 1
-            
+
     return res
 
 
 # ----------------------------- floor sums  -----------------------------
 
 
-def floor_sum_over_divisor(n,k,j):
+def floor_sum_over_divisor(n, k, j):
     # https://math.stackexchange.com/questions/384520/efficient-computation-of-sum-k-1n-lfloor-fracnk-rfloor
     # https://mathoverflow.net/questions/48357/summation-of-a-series-of-floor-functions
-    def floor_sum_over_divisor_(n,k,j):
-        return sum(n//d for d in range(j+1, k+1))
-    return floor_sum_over_divisor_(n, n//j, n//k) + k*(n//k) - j*(n//j)
+    def floor_sum_over_divisor_(n, k, j):
+        return sum(n // d for d in range(j + 1, k + 1))
+
+    return floor_sum_over_divisor_(n, n // j, n // k) + k * (n // k) - j * (n // j)
 
 
 def floor_sum_over_numerator(n: int, m: int, a: int, b: int) -> int:
@@ -361,74 +373,76 @@ def floor_sum_over_numerator(n: int, m: int, a: int, b: int) -> int:
 # ------------------------- FFT convolution -------------------------
 
 
-def convolution(a,b):
+def convolution(a, b):
     # https://atcoder.jp/contests/abc196/submissions/21089133
 
     ROOT = 3
     MOD = 998244353
-    roots  = [pow(ROOT,(MOD-1)>>i,MOD) for i in range(24)] # 1 の 2^i 乗根
-    iroots = [pow(x,MOD-2,MOD) for x in roots] # 1 の 2^i 乗根の逆元
+    roots = [pow(ROOT, (MOD - 1) >> i, MOD) for i in range(24)]  # 1 の 2^i 乗根
+    iroots = [pow(x, MOD - 2, MOD) for x in roots]  # 1 の 2^i 乗根の逆元
 
-    def untt(a,n):
+    def untt(a, n):
         # inplace modification
         for i in range(n):
-            m = 1<<(n-i-1)
-            for s in range(1<<i):
+            m = 1 << (n - i - 1)
+            for s in range(1 << i):
                 w_N = 1
-                s *= m*2
+                s *= m * 2
                 for p in range(m):
-                    a[s+p], a[s+p+m] = (a[s+p]+a[s+p+m])%MOD, (a[s+p]-a[s+p+m])*w_N%MOD
-                    w_N = w_N*roots[n-i]%MOD
+                    a[s + p], a[s + p + m] = (a[s + p] + a[s + p + m]) % MOD, (a[s + p] - a[s + p + m]) * w_N % MOD
+                    w_N = w_N * roots[n - i] % MOD
 
-    def iuntt(a,n):
+    def iuntt(a, n):
         # inplace modification
         for i in range(n):
-            m = 1<<i
-            for s in range(1<<(n-i-1)):
+            m = 1 << i
+            for s in range(1 << (n - i - 1)):
                 w_N = 1
-                s *= m*2
+                s *= m * 2
                 for p in range(m):
-                    a[s+p], a[s+p+m] = (a[s+p]+a[s+p+m]*w_N)%MOD, (a[s+p]-a[s+p+m]*w_N)%MOD
-                    w_N = w_N*iroots[i+1]%MOD
+                    a[s + p], a[s + p + m] = (a[s + p] + a[s + p + m] * w_N) % MOD, (
+                        a[s + p] - a[s + p + m] * w_N
+                    ) % MOD
+                    w_N = w_N * iroots[i + 1] % MOD
 
-        inv = pow((MOD+1)//2,n,MOD)
-        for i in range(1<<n):
-            a[i] = a[i]*inv%MOD
+        inv = pow((MOD + 1) // 2, n, MOD)
+        for i in range(1 << n):
+            a[i] = a[i] * inv % MOD
 
     la = len(a)
     lb = len(b)
     if min(la, lb) <= 50:
         if la < lb:
-            la,lb = lb,la
-            a,b = b,a
-        res = [0]*(la+lb-1)
+            la, lb = lb, la
+            a, b = b, a
+        res = [0] * (la + lb - 1)
         for i in range(la):
             for j in range(lb):
-                res[i+j] += a[i]*b[j]
-                res[i+j] %= MOD
+                res[i + j] += a[i] * b[j]
+                res[i + j] %= MOD
         return res
 
-    deg = la+lb-2
+    deg = la + lb - 2
     n = deg.bit_length()
-    N = 1<<n
-    a += [0]*(N-len(a))
-    b += [0]*(N-len(b))
-    untt(a,n)
-    untt(b,n)
+    N = 1 << n
+    a += [0] * (N - len(a))
+    b += [0] * (N - len(b))
+    untt(a, n)
+    untt(b, n)
     for i in range(N):
-      a[i] = a[i]*b[i]%MOD
-    iuntt(a,n)
-    return a[:deg+1]
+        a[i] = a[i] * b[i] % MOD
+    iuntt(a, n)
+    return a[: deg + 1]
 
 
-def convolution(f,g):
+def convolution(f, g):
     # https://atcoder.jp/contests/abc196/submissions/26418619
-    size=len(f)+len(g)-1
-    size=1<<(size-1).bit_length()
-    f=np.fft.rfft(f,size)
-    g=np.fft.rfft(g,size)
-    f*=g
-    f=np.fft.irfft(f,size)
+    size = len(f) + len(g) - 1
+    size = 1 << (size - 1).bit_length()
+    f = np.fft.rfft(f, size)
+    g = np.fft.rfft(g, size)
+    f *= g
+    f = np.fft.irfft(f, size)
     return np.rint(f).astype(np.int32)
 
 
@@ -471,40 +485,40 @@ def basic_calculator(s):
     if len(s) == 0:
         return 0
     stack = []
-    sign = '+'
+    sign = "+"
     num = 0
     i = 0
     while i < len(s):
         c = s[i]
         if c.isdigit():
-            num = num*10+int(c)
+            num = num * 10 + int(c)
 
-        if c == '(':
+        if c == "(":
             # find the corresponding ")"
             pCnt = 0
             end = 0
             clone = s[i:]
             while end < len(clone):
-                if clone[end] == '(':
+                if clone[end] == "(":
                     pCnt += 1
-                elif clone[end] == ')':
+                elif clone[end] == ")":
                     pCnt -= 1
                     if pCnt == 0:
                         break
                 end += 1
             # do recursion to calculate the sum within the next (...)
-            num = basic_calculator(s[i+1:i+end])
+            num = basic_calculator(s[i + 1 : i + end])
             i += end
 
-        if i + 1 == len(s) or (c == '+' or c == '-' or c == '*' or c == '/'):
-            if sign == '+':
+        if i + 1 == len(s) or (c == "+" or c == "-" or c == "*" or c == "/"):
+            if sign == "+":
                 stack.append(num)
-            elif sign == '-':
+            elif sign == "-":
                 stack.append(-num)
-            elif sign == '*':
-                stack[-1] = stack[-1]*num
-            elif sign == '/':
-                stack[-1] = int(stack[-1]/float(num))
+            elif sign == "*":
+                stack[-1] = stack[-1] * num
+            elif sign == "/":
+                stack[-1] = int(stack[-1] / float(num))
             sign = c
             num = 0
         i += 1
@@ -533,7 +547,8 @@ class Infix:
 
 # defining hash function for 2-tuple
 from random import randint
-rand = lambda : randint(10**128, 10**256)
+
+rand = lambda: randint(10**128, 10**256)
 S = [rand() for _ in range(4)]
 g = lambda x, salt1, salt2: x * salt1 + salt2
 f = Infix(lambda x, y: g(x, S[0], S[1]) ^ g(y, S[2], S[3]))
@@ -580,7 +595,7 @@ BINARY_OPERATORS = {
     "%": Operator(2, True, False, operator.mod),
     "^": Operator(3, False, False, operator.pow),
     "&": Operator(4, False, False, operator.and_),
-    "|": Operator(4, False, False, operator.or_)
+    "|": Operator(4, False, False, operator.or_),
 }
 
 
@@ -669,16 +684,11 @@ def shunting_yard(tokens: Iterable[str]) -> Iterable[StackItem]:
                 yield op_stack.pop()
             may_be_unary = False
         elif token in OPERATORS:
-            cur_op = (
-                UNARY_OPERATORS[token]
-                if (may_be_unary and token in UNARY_OPERATORS)
-                else BINARY_OPERATORS[token]
-            )
+            cur_op = UNARY_OPERATORS[token] if (may_be_unary and token in UNARY_OPERATORS) else BINARY_OPERATORS[token]
             while op_stack and isinstance(op_stack[-1], Operator):
                 prev_op = op_stack[-1]
                 if cur_op.precedence < prev_op.precedence or (
-                    cur_op.precedence == prev_op.precedence
-                    and cur_op.is_left_associative
+                    cur_op.precedence == prev_op.precedence and cur_op.is_left_associative
                 ):
                     yield op_stack.pop()
                 else:
@@ -734,18 +744,133 @@ def mex(arr):
         i += 1
     return i
 
+
 # https://cp-algorithms.com/game_theory/sprague-grundy-nim.html
 # https://oeis.org/A002187
-dawson_arr = [0,1,1]
+dawson_arr = [0, 1, 1]
 for n in range(len(dawson_arr), 500):
-    dawson_arr.append(mex(
-        [dawson_arr[n-2]] +
-        [dawson_arr[n-j-3] ^ dawson_arr[j] for j in range(n-2)]
-    ))
+    dawson_arr.append(mex([dawson_arr[n - 2]] + [dawson_arr[n - j - 3] ^ dawson_arr[j] for j in range(n - 2)]))
 dawson_arr = [
-    0, 1, 1, 2, 0, 3, 1, 1, 0, 3, 3, 2, 2, 4, 0, 5, 2, 2, 3, 3, 0, 1, 1, 3, 0, 2, 1, 1, 0, 4, 5, 2, 7, 4, 0, 1, 1, 2, 0, 3, 1, 1, 0, 3, 3, 2, 2, 4, 4, 5, 5, 2, 
-    3, 3, 0, 1, 1, 3, 0, 2, 1, 1, 0, 4, 5, 3, 7, 4, 8, 1, 1, 2, 0, 3, 1, 1, 0, 3, 3, 2, 2, 4, 4, 5, 5, 9, 
-    3, 3, 0, 1, 1, 3, 0, 2, 1, 1, 0, 4, 5, 3, 7, 4, 8, 1, 1, 2, 0, 3, 1, 1, 0, 3, 3, 2, 2, 4, 4, 5, 5, 9,
+    0,
+    1,
+    1,
+    2,
+    0,
+    3,
+    1,
+    1,
+    0,
+    3,
+    3,
+    2,
+    2,
+    4,
+    0,
+    5,
+    2,
+    2,
+    3,
+    3,
+    0,
+    1,
+    1,
+    3,
+    0,
+    2,
+    1,
+    1,
+    0,
+    4,
+    5,
+    2,
+    7,
+    4,
+    0,
+    1,
+    1,
+    2,
+    0,
+    3,
+    1,
+    1,
+    0,
+    3,
+    3,
+    2,
+    2,
+    4,
+    4,
+    5,
+    5,
+    2,
+    3,
+    3,
+    0,
+    1,
+    1,
+    3,
+    0,
+    2,
+    1,
+    1,
+    0,
+    4,
+    5,
+    3,
+    7,
+    4,
+    8,
+    1,
+    1,
+    2,
+    0,
+    3,
+    1,
+    1,
+    0,
+    3,
+    3,
+    2,
+    2,
+    4,
+    4,
+    5,
+    5,
+    9,
+    3,
+    3,
+    0,
+    1,
+    1,
+    3,
+    0,
+    2,
+    1,
+    1,
+    0,
+    4,
+    5,
+    3,
+    7,
+    4,
+    8,
+    1,
+    1,
+    2,
+    0,
+    3,
+    1,
+    1,
+    0,
+    3,
+    3,
+    2,
+    2,
+    4,
+    4,
+    5,
+    5,
+    9,
 ]  # has period 34 after the first 52 elements
 
 # ------------------------- other methods -------------------------

@@ -18,6 +18,7 @@ def prefix_sum(arr):
         psum.append(psum[-1] + x)
     return psum
 
+
 def prefix_sum2(arr):
     psum = [0]
     psum2 = [0]
@@ -26,11 +27,13 @@ def prefix_sum2(arr):
         psum2.append(psum2[-1] + psum[-1])
     return psum2
 
+
 def powerset(iterable):
     # https://stackoverflow.com/a/18035641/5894029
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
     s = list(iterable)
-    return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s)+1))
+    return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s) + 1))
+
 
 def colorings(iterable):
     # https://stackoverflow.com/questions/20549341/ not very related
@@ -52,16 +55,17 @@ def split_by_same_elements(lst):
         if res and x == res[-1][0]:
             res[-1][-1] += 1
             continue
-        res.append([x,1])
+        res.append([x, 1])
     return res
 
 
 def split_into_number_and_char(srr):
     import re
+
     # https://stackoverflow.com/q/430079/5894029
     # numbers are grouped together
     arr = []
-    for word in re.split('(\d+)', srr):
+    for word in re.split("(\d+)", srr):
         try:
             num = int(word)
             arr.append(num)
@@ -71,11 +75,11 @@ def split_into_number_and_char(srr):
     return arr
 
 
-def interval_overlap(x1,x2,y1,y2):
+def interval_overlap(x1, x2, y1, y2):
     # given intervals [x1,x2], [y1,y2]
-    # [start, end] of overlapping interval    
+    # [start, end] of overlapping interval
     # if start > end, there is no overlapping inteval
-    return max(x1,y1), min(x2,y2)
+    return max(x1, y1), min(x2, y2)
 
 
 def count_peaks_and_valleys(lst):
@@ -84,7 +88,7 @@ def count_peaks_and_valleys(lst):
         return 0, 0
     peaks = 0
     valleys = 0
-    for a,b,c in zip(lst, lst[1:], lst[2:]):
+    for a, b, c in zip(lst, lst[1:], lst[2:]):
         if a < b and b > c:
             peaks += 1
         if a > b and b < c:
@@ -162,7 +166,7 @@ def two_pointers(arr, entry_func, exit_func, condition):
 #     after = cntr[x]
 #     diff = (after * (after-1) // 2) - (prev * (prev-1) // 2)
 #     cnt += diff
-    
+
 # def condition():
 #     return cnt >= k
 
@@ -176,12 +180,12 @@ def gathering_cost(xpos):
     xpos = sorted(xpos)
     n = len(xpos)
     left_cost = 0
-    right_cost = sum([x-xpos[0] for x in xpos])
+    right_cost = sum([x - xpos[0] for x in xpos])
     cost_arr = [right_cost]
 
-    for i,(prev,nex) in enumerate(zip(xpos,xpos[1:])):
-        left_cost += (i+1)*(nex - prev)
-        right_cost -= (n-i-1)*(nex - prev)
+    for i, (prev, nex) in enumerate(zip(xpos, xpos[1:])):
+        left_cost += (i + 1) * (nex - prev)
+        right_cost -= (n - i - 1) * (nex - prev)
         cost_arr.append(left_cost + right_cost)
     return cost_arr
 
@@ -206,16 +210,16 @@ def all_nearest_smaller_values(arr):
 def rabin_karp(arr, window_size, modulus):
     # return all hashes of each substring of a certain window_size
     # run this multiple times to avoid hash collisions
-    h, t, d = (1<<(17*window_size-17))%modulus, 0, 1<<17
+    h, t, d = (1 << (17 * window_size - 17)) % modulus, 0, 1 << 17
     all_hashes = set()
 
     for i in range(window_size):
-        t = (d * t + arr[i])%modulus
+        t = (d * t + arr[i]) % modulus
 
     all_hashes.add(t)
 
     for i in range(len(arr) - window_size):
-        t = (d*(t-arr[i]*h) + arr[i + window_size])%modulus
+        t = (d * (t - arr[i] * h) + arr[i + window_size]) % modulus
         all_hashes.add(t)
 
     return all_hashes
@@ -235,21 +239,21 @@ def join_deques(deques):
     # O(sum(k) - max(k))
     if not deques:
         return deque([])
-    
+
     maxlen = 0
     maxidx = 0
-    for i,dq in enumerate(deques):
+    for i, dq in enumerate(deques):
         if len(dq) > maxlen:
             maxlen = len(dq)
             maxidx = i
-    
+
     ptr = deques[maxidx]
-    
+
     for left in deques[:maxidx][::-1]:
         left.reverse()
         ptr.extendleft(left)
 
-    for right in deques[maxidx+1:]:
+    for right in deques[maxidx + 1 :]:
         ptr.extend(right)
 
     return ptr
@@ -258,10 +262,10 @@ def join_deques(deques):
 def can_partition_array_into_equal_subset_sum(arr):
     # https://codeforces.com/contest/1839/submission/208368758
     total_sum = sum(arr)
-    
+
     if total_sum % 2 != 0:
         return False
-    
+
     target_sum = total_sum // 2
     n = len(arr)
 
@@ -343,14 +347,15 @@ def longest_common_subarray(arr, brr):
         # slide yrr along xrr
         for i in range(len(xrr)):
             curres = 0  # track current length of common subarray
-            for a,b in zip(xrr[i:], yrr):
+            for a, b in zip(xrr[i:], yrr):
                 if a == b:  # increment if match
                     curres += 1
                     maxres = max(maxres, curres)
                 else:  # reset if mismatch
                     curres = 0
         return maxres
-    return max(slide_along(arr,brr), slide_along(brr,arr))
+
+    return max(slide_along(arr, brr), slide_along(brr, arr))
 
 
 def longest_increasing_subsequence(nums):
@@ -368,9 +373,12 @@ def max_dot_product_of_two_subsequence(A, B):
     for i in range(n):
         for j in range(m):
             dp[i][j] = A[i] * B[j]
-            if i and j: dp[i][j] += max(dp[i - 1][j - 1], 0)
-            if i: dp[i][j] = max(dp[i][j], dp[i - 1][j])
-            if j: dp[i][j] = max(dp[i][j], dp[i][j - 1])
+            if i and j:
+                dp[i][j] += max(dp[i - 1][j - 1], 0)
+            if i:
+                dp[i][j] = max(dp[i][j], dp[i - 1][j])
+            if j:
+                dp[i][j] = max(dp[i][j], dp[i][j - 1])
     return dp[-1][-1]
 
 
@@ -382,27 +390,27 @@ def next_permuation(nums):
     # allow duplicates
     # warning: this algorithm also modifies the input
     k = -1
-    # Find the largest index k such that nums[k] < nums[k + 1]. 
-    for i in range(len(nums)-1):
-        if nums[i] < nums[i+1]:
+    # Find the largest index k such that nums[k] < nums[k + 1].
+    for i in range(len(nums) - 1):
+        if nums[i] < nums[i + 1]:
             k = i
-    
+
     # If no such index exists, just reverse nums and done.
     if k == -1:
         nums.reverse()
         return
 
-    l = k+1
+    l = k + 1
     # Find the largest index l > k such that nums[k] < nums[l].
     for i in range(k, len(nums)):
         if nums[k] < nums[i]:
             l = i
-    
+
     # Swap nums[k] and nums[l]
     nums[k], nums[l] = nums[l], nums[k]
-        
+
     # Reverse the sub-array nums[k + 1:]
-    nums[k+1:] = nums[k+1:][::-1]
+    nums[k + 1 :] = nums[k + 1 :][::-1]
     return nums
 
 
@@ -427,21 +435,21 @@ def get_lexicographic_order_of_permutation(perm):
 def sliding_window_sum(nums, k):
     out = [sum(nums[:k])]
     for i in range(k, len(nums)):
-        out.append(out[-1] - nums[i-k] + nums[i])
+        out.append(out[-1] - nums[i - k] + nums[i])
     return out
 
 
 def sliding_window_maximum(nums, k):
     # leetcode.com/problems/sliding-window-maximum/discuss/65901
     deq, n, ans = deque([0]), len(nums), []
-    for i in range (n):
+    for i in range(n):
         while deq and deq[0] <= i - k:
             deq.popleft()
-        while deq and nums[i] >= nums[deq[-1]] :
+        while deq and nums[i] >= nums[deq[-1]]:
             deq.pop()
         deq.append(i)
         ans.append(nums[deq[0]])
-    return ans[k-1:]
+    return ans[k - 1 :]
 
 
 def sliding_window_median(nums, k):
@@ -451,21 +459,21 @@ def sliding_window_median(nums, k):
         heapq.heappush(h2, (-x, i))
 
     def get_med(h1, h2, k):
-        return h2[0][0] * 1. if k & 1 else (h2[0][0]-h1[0][0]) / 2.
+        return h2[0][0] * 1.0 if k & 1 else (h2[0][0] - h1[0][0]) / 2.0
 
     small, large = [], []
     for i, x in enumerate(nums[:k]):
-        heapq.heappush(small, (-x,i))
-    for _ in range(k-(k>>1)):
+        heapq.heappush(small, (-x, i))
+    for _ in range(k - (k >> 1)):
         move(small, large)
     ans = [get_med(small, large, k)]
     for i, x in enumerate(nums[k:]):
         if x >= large[0][0]:
-            heapq.heappush(large, (x, i+k))
+            heapq.heappush(large, (x, i + k))
             if nums[i] <= large[0][0]:
                 move(large, small)
         else:
-            heapq.heappush(small, (-x, i+k))
+            heapq.heappush(small, (-x, i + k))
             if nums[i] >= large[0][0]:
                 move(small, large)
         while small and small[0][1] <= i:
@@ -482,13 +490,13 @@ def sliding_window_median(nums, k):
 def rectangular_submatrix_with_largest_sum(matrix):
     # https://atcoder.jp/contests/abc311/tasks/abc311_g
     # untested O(n3)
-    h,w = len(matrix), len(matrix[0])
+    h, w = len(matrix), len(matrix[0])
 
     maxres = 0
     for i in range(w):
         rowsum = [0 for _ in range(h)]
         # minval = [0 for _ in range(h)]
-        for j in range(i,w):
+        for j in range(i, w):
             for x in range(h):
                 rowsum[x] += matrix[x][j]
                 # minval[x] += min(minval[x], matrix[x][j])
@@ -501,9 +509,9 @@ def largest_submatrix_sum(arr):
     # https://leetcode.com/problems/maximum-subarray/
     val = arr[0]
     maxres = arr[0]
-    
+
     for x in arr[1:]:
-        val = max(x, val+x)
+        val = max(x, val + x)
         maxres = max(maxres, val)
 
     return maxres
@@ -514,24 +522,24 @@ def largest_rectangle_in_histogram(heights):
     n = len(heights)
     # left boundary => next smaller element to left
     stack = []
-    nextSmallerLeft = [0]*n
+    nextSmallerLeft = [0] * n
     for i in range(n):
         while stack and heights[stack[-1]] >= heights[i]:
             stack.pop()
         if stack:
             nextSmallerLeft[i] = stack[-1] + 1
         stack.append(i)
-    
+
     # right boundary => next smaller element to right
     stack = []
-    nextSmallerRight = [n-1]*n
-    for i in range(n-1, -1, -1):
+    nextSmallerRight = [n - 1] * n
+    for i in range(n - 1, -1, -1):
         while stack and heights[stack[-1]] >= heights[i]:
             stack.pop()
         if stack:
             nextSmallerRight[i] = stack[-1] - 1
         stack.append(i)
-    
+
     res = heights[0]
     for i in range(n):
         height = heights[i]
@@ -539,7 +547,7 @@ def largest_rectangle_in_histogram(heights):
         # width = psum[nextSmallerRight[i]+1] - psum[nextSmallerLeft[i]]
         area = height * width
         res = max(res, area)
-        
+
     return res
 
 
@@ -572,7 +580,7 @@ def manachers(S):
     # https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1389421/
     # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/suffix_array.py
     # https://cp-algorithms.com/string/suffix-array.html
-    A = '@#' + '#'.join(S) + '#$'
+    A = "@#" + "#".join(S) + "#$"
     Z = [0] * len(A)
     center = right = 0
     for i in range(1, len(A) - 1):
@@ -593,12 +601,12 @@ def get_palindromic_ranges(s):
     arr = manachers("|" + "|".join(s) + "|")
     bridges = [[] for _ in range(n)]
 
-    for i,x in enumerate(arr):
-        start = (i-(x-2)//2)//2
-        end = (i+(x-2)//2)//2
+    for i, x in enumerate(arr):
+        start = (i - (x - 2) // 2) // 2
+        end = (i + (x - 2) // 2) // 2
         while start <= end:
-            bridges[start].append(end+1)
+            bridges[start].append(end + 1)
             start += 1
             end -= 1
-            
+
     return bridges

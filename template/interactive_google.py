@@ -20,6 +20,7 @@ import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
+
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -35,25 +36,32 @@ e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "htong"
+
+
 # OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
+        print("\033[36m", *args, "\033[0m", file=sys.stderr)
+
 
 # ---------------------------- template ends here ----------------------------
 
+
 def walk():
     print("W", flush=True)
-    response = list(map(int,input().split()))
+    response = list(map(int, input().split()))
     return response
 
+
 def teleport(pos):
-    print("T {}".format(pos+1), flush=True)
-    response = list(map(int,input().split()))
+    print("T {}".format(pos + 1), flush=True)
+    response = list(map(int, input().split()))
     return response
+
 
 def alert(pos):
     print("E {}".format(pos), flush=True)
+
 
 # -----------------------------------------------------------------------------
 
@@ -75,26 +83,25 @@ def alert(pos):
 # your code here
 
 for case_num in range(int(input())):
-    n,k = list(map(int,input().split()))
+    n, k = list(map(int, input().split()))
     k0 = k
-    log(n,k)
+    log(n, k)
     lst = list(range(n))
     random.shuffle(lst)
 
-    _,_ = list(map(int,input().split()))
+    _, _ = list(map(int, input().split()))
 
     res = []
     weights = []
 
     for x in lst:
-
         if k == 0:
             break
         k -= 1
         _, count = teleport(x)
 
         res.append(count)
-        weights.append(1)    
+        weights.append(1)
 
         if k == 0:
             break
@@ -102,12 +109,12 @@ for case_num in range(int(input())):
         _, count = walk()
 
         res.append(count)
-        weights.append(1/count)
+        weights.append(1 / count)
 
     # log(res)
     # log(weights)
 
-    estimate = int(sum(c*w for c,w in zip(res,weights)) / sum(weights) * n * 0.5)
+    estimate = int(sum(c * w for c, w in zip(res, weights)) / sum(weights) * n * 0.5)
     alert(estimate)
 
 sys.exit()

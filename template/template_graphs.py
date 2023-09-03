@@ -119,9 +119,9 @@ def dijkstra(list_of_indexes_and_costs, start):
     # leetcode.com/problems/path-with-maximum-probability/
     # leetcode.com/problems/network-delay-time/
     length = len(list_of_indexes_and_costs)
-    visited = [False]*length
-    weights = [MAXINT]*length
-    path = [None]*length
+    visited = [False] * length
+    weights = [MAXINT] * length
+    path = [None] * length
     queue = []
     weights[start] = 0
     heapq.heappush(queue, (0, start))
@@ -153,15 +153,15 @@ def dijkstra_with_preprocessing(map_from_node_to_nodes_and_costs, source, target
 
     # assign indexes
     if idxs:
-        idxs = {k:i for i,k in enumerate(idxs)}
+        idxs = {k: i for i, k in enumerate(idxs)}
     else:
-        idxs = {k:i for i,k in enumerate(d.keys())}
+        idxs = {k: i for i, k in enumerate(d.keys())}
 
     # populate list of indexes and costs
     list_of_indexes_and_costs = [[] for _ in range(len(idxs))]
-    for e,vrr in d.items():
-        for v,cost in vrr:
-            list_of_indexes_and_costs[idxs[e]].append((idxs[v],cost))
+    for e, vrr in d.items():
+        for v, cost in vrr:
+            list_of_indexes_and_costs[idxs[e]].append((idxs[v], cost))
 
     _, costs = dijkstra(list_of_indexes_and_costs, idxs[source])
     return costs[idxs[target]]
@@ -218,7 +218,7 @@ class Dinic:
         self.G[v2].append(edge2)
 
     def bfs(self, s, t):
-        self.level = level = [None]*self.N
+        self.level = level = [None] * self.N
         deq = deque([s])
         level[s] = 0
         G = self.G
@@ -250,12 +250,13 @@ class Dinic:
         INF = 10**9 + 7
         G = self.G
         while self.bfs(s, t):
-            *self.it, = map(iter, self.G)
+            (*self.it,) = map(iter, self.G)
             f = INF
             while f:
                 f = self.dfs(s, t, INF)
                 flow += f
         return flow
+
 
 # n = int(input())
 # a = list(map(int,input().split()))
@@ -317,13 +318,12 @@ class DisjointSet:
         self.parent[root1] = root2
 
 
-
 class DisjointSet:
     # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
     # faster implementation of DSU
     def __init__(self, n: int = 0) -> None:
         if n > 0:  # constant size DSU
-            self.parent_or_size = [-1]*n
+            self.parent_or_size = [-1] * n
         else:
             # WARNING: non-negative numeric elements only
             self.parent_or_size = defaultdict(lambda: -1)
@@ -351,7 +351,7 @@ class DisjointSet:
             self.parent_or_size[a], a, parent = (
                 self.parent_or_size[parent],
                 self.parent_or_size[parent],
-                self.parent_or_size[self.parent_or_size[parent]]
+                self.parent_or_size[self.parent_or_size[parent]],
             )
         return a
 
@@ -371,6 +371,7 @@ def minimum_spanning_tree(edges, costs):
             ds.union(u, v)
             total_tree_cost += cost
     return total_tree_cost
+
 
 # above function is not sufficient for the following question
 # leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/
@@ -408,9 +409,9 @@ def detect_cycle(map_from_node_to_nodes):
 
 def findShortestCycle(n: int, edges: List[List[int]]) -> int:
     # https://web.archive.org/web/20170829175217/http://webcourse.cs.technion.ac.il/234247/Winter2003-2004/ho/WCFiles/Girth.pdf
-    
+
     g = defaultdict(set)
-    for a,b in edges:
+    for a, b in edges:
         g[a].add(b)
         g[b].add(a)
 
@@ -451,7 +452,7 @@ def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
     # For each node, get the sizes of the forests if the tree is split on the node
     # uses the dfs template - see template_recursive.py
 
-    subtree_sizes = {x:1 for x in map_from_node_to_nodes}
+    subtree_sizes = {x: 1 for x in map_from_node_to_nodes}
     parents = {}
 
     def entry_operation(prev, cur, nex):
@@ -484,10 +485,10 @@ def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
 
 
 def find_centroids(map_from_node_to_nodes):  # UNTESTED
-    # Centroid of a tree is a node which if removed from the tree would split it into a 'forest', 
+    # Centroid of a tree is a node which if removed from the tree would split it into a 'forest',
     # such that any tree in the forest would have at most half the number of vertices in the original tree
-    # the centroids is one or two points that 
-    
+    # the centroids is one or two points that
+
     # assumes that input is a tree
     node_to_forest_sizes = get_forest_sizes(map_from_node_to_nodes)
 
@@ -578,4 +579,3 @@ def is_planar(graph):
     # https://en.wikipedia.org/wiki/Planarity_testing
     # https://en.wikipedia.org/wiki/Left-right_planarity_test
     return NotImplementedError
-

@@ -9,10 +9,12 @@
 
 # https://codeforces.com/blog/entry/80158?locale=en
 from types import GeneratorType
+
+
 def bootstrap(f, stack=[]):
     # usage - please remember to YIELD to call and return
     # protip - do not store data structures in the function
-    '''
+    """
     @bootstrap
     def recurse(n):
         if n <= 0:
@@ -20,7 +22,8 @@ def bootstrap(f, stack=[]):
         yield (yield recurse(n-1)) + 2
 
     res = recurse(10**5)
-    '''
+    """
+
     def wrappedfunc(*args, **kwargs):
         if stack:
             return f(*args, **kwargs)
@@ -37,6 +40,7 @@ def bootstrap(f, stack=[]):
                         break
                     to = stack[-1].send(to)
             return to
+
     return wrappedfunc
 
 
@@ -44,7 +48,8 @@ def bootstrap(f, stack=[]):
 def recurse(n):
     if n <= 0:
         yield 0
-    yield (yield recurse(n-1)) + 2
+    yield (yield recurse(n - 1)) + 2
+
 
 # custom invocation with https://codeforces.com/problemset/customtest
 value = int(input())
@@ -70,6 +75,7 @@ print(recurse(value))
 # recusion template that does not use bootstrap
 # for speed and memory reference
 import sys, threading
+
 threading.stack_size(2**27)
 sys.setrecursionlimit(10**6 + 5)
 
@@ -77,12 +83,14 @@ sys.setrecursionlimit(10**6 + 5)
 def recurse(n):
     if n <= 0:
         return 0
-    return recurse(n-1) + 2
+    return recurse(n - 1) + 2
+
 
 # custom invocation with https://codeforces.com/problemset/customtest
 def main():
     value = int(input())
     print(recurse(value))
+
 
 t = threading.Thread(target=main)
 t.start()
@@ -104,6 +112,7 @@ t.join()
 # -----------------------------------------------------------------------------
 
 # recusion template that does not use recursion
+
 
 def not_dfs(start, g, entry_operation, exit_operation):
     # g is map of node to nodes
@@ -144,7 +153,7 @@ def dfs(start, g, entry_operation, exit_operation):
     # https://codeforces.com/contest/1714/submission/166648312
     entered = set([start])
     exiting = set()
-    ptr = {x:0 for x in g}
+    ptr = {x: 0 for x in g}
     stack = [start]
     prev = {}
 
@@ -181,6 +190,7 @@ def dfs(start, g, entry_operation, exit_operation):
 def entry_operation(prev, cur, nex):
     # note that prev is `null_pointer` at the root node
     pass
+
 
 def exit_operation(prev, cur):
     pass

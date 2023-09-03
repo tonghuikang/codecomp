@@ -7,7 +7,7 @@ class SortedList:
         values = sorted(iterable)
         self._len = _len = len(values)
         self._load = _load
-        self._lists = _lists = [values[i:i + _load] for i in range(0, _len, _load)]
+        self._lists = _lists = [values[i : i + _load] for i in range(0, _len, _load)]
         self._list_lens = [len(_list) for _list in _lists]
         self._mins = [_list[0] for _list in _lists]
         self._fen_tree = []
@@ -178,7 +178,7 @@ class SortedList:
         _len = self._len
         self.discard(value)
         if _len == self._len:
-            raise ValueError('{0!r} not in list'.format(value))
+            raise ValueError("{0!r} not in list".format(value))
 
     def pop(self, index=-1):
         """Remove and return value at `index` in sorted list."""
@@ -233,4 +233,4 @@ class SortedList:
 
     def __repr__(self):
         """Return string representation of sorted list."""
-        return 'SortedList({0})'.format(list(self))
+        return "SortedList({0})".format(list(self))

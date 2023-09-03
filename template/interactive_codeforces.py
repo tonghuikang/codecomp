@@ -3,6 +3,7 @@ import sys, getpass
 import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
+
 input = sys.stdin.readline  # to read input quickly
 
 # available on Google, AtCoder Python3, not available on Codeforces
@@ -18,21 +19,27 @@ e18 = 10**18 + 10
 
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = getpass.getuser() == "htong"
+
+
 # OFFLINE_TEST = False  # codechef does not allow getpass
 def log(*args):
     if OFFLINE_TEST:
-        print('\033[36m', *args, '\033[0m', file=sys.stderr)
+        print("\033[36m", *args, "\033[0m", file=sys.stderr)
+
 
 # ---------------------------- template ends here ----------------------------
 
+
 def query(pos):
-    print("? {}".format(pos+1), flush=True)
+    print("? {}".format(pos + 1), flush=True)
     response = int(input())
     return response
 
+
 def alert(pos):
-    print("! {}".format(pos+1), flush=True)
+    print("! {}".format(pos + 1), flush=True)
     sys.exit()
+
 
 # -----------------------------------------------------------------------------
 

@@ -10,7 +10,6 @@ import ast
 import astor  # read more at https://astor.readthedocs.io/en/latest/
 
 if __name__ == "__main__":
-
     source = sys.argv[1]
     parsed = ast.parse(open(source).read())
 
@@ -25,7 +24,7 @@ if __name__ == "__main__":
         if not isinstance(node.body[0], ast.Expr):
             continue
 
-        if not hasattr(node.body[0], 'value') or not isinstance(node.body[0].value, ast.Str):
+        if not hasattr(node.body[0], "value") or not isinstance(node.body[0].value, ast.Str):
             continue
 
         # Uncomment lines below if you want print what and where we are removing

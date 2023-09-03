@@ -33,13 +33,13 @@ class RangeQuery:
 class LowestCommonAncestor:
     # https://cp-algorithms.com/graph/lca_binary_lifting.html
     # https://leetcode.com/problems/minimum-edge-weight-equilibrium-queries-in-a-tree/
-    def __init__(self, n: int, graph: List[List[int]], root=0):        
+    def __init__(self, n: int, graph: List[List[int]], root=0):
         self.n = n
         self.graph = graph
         self.logn = math.ceil(math.log2(n))
         self.depth = [-1 if i != root else 0 for i in range(n)]
-        self.parent = [[-1]*n for _ in range(self.logn)]
-        
+        self.parent = [[-1] * n for _ in range(self.logn)]
+
         # choose your own distance metric
         # self.distance = [[0]*26 for _ in range(n)]
 
@@ -48,39 +48,40 @@ class LowestCommonAncestor:
 
     def dfs(self, v, p=-1):
         for e in self.graph[v]:
-            if e[0] == p: continue
+            if e[0] == p:
+                continue
             self.parent[0][e[0]] = v
             self.depth[e[0]] = self.depth[v] + 1
-            
+
             # choose your own distance metric
             # self.distance[e[0]] = [x for x in self.distance[v]]
             # self.distance[e[0]][e[1]] += 1
-            
+
             self.dfs(e[0], v)
-            
+
     def doubling(self):
-        for i in range(self.logn-1):
+        for i in range(self.logn - 1):
             for v in range(self.n):
                 if self.parent[i][v] != -1:
-                    self.parent[i+1][v] = self.parent[i][self.parent[i][v]]
-                    
+                    self.parent[i + 1][v] = self.parent[i][self.parent[i][v]]
+
     def get(self, u, v):
-        if self.depth[u] > self.depth[v]: u, v = v, u
+        if self.depth[u] > self.depth[v]:
+            u, v = v, u
         for i in range(self.logn):
             if ((self.depth[v] - self.depth[u]) >> i) & 1:
                 v = self.parent[i][v]
         if u == v:
             return u
-        for i in range(self.logn-1, -1, -1):
+        for i in range(self.logn - 1, -1, -1):
             if self.parent[i][u] != self.parent[i][v]:
                 u, v = self.parent[i][u], self.parent[i][v]
         return self.parent[0][u]
-        
+
     # choose your own distance metric
     def distance_between(self, u, v):
         lca = self.get(u, v)
-        return [x+y-2*z for x,y,z in zip(self.distance[u], self.distance[v], self.distance[lca])]
-
+        return [x + y - 2 * z for x, y, z in zip(self.distance[u], self.distance[v], self.distance[lca])]
 
 
 # ------------------------------ Binary Lifting ------------------------------
@@ -92,31 +93,35 @@ anc = [None for i in range(N)]  # anc[u][k] is (2**k)-th ancestor of u
 anc[root] = [-1] * 20
 anc[-1] = [-1] * 20
 
+
 def buildJumps(u, parent):
     jumps = [0] * 20
     jumps[0] = parent
     for i in range(1, 20):
-        jumps[i] = anc[jumps[i - 1]][i - 1]   # avoided writing into a matrix here
+        jumps[i] = anc[jumps[i - 1]][i - 1]  # avoided writing into a matrix here
     anc[u] = jumps
+
 
 def getLast(u, f):
     # Returns highest node on the path from u to root where f(node) is true.
     # Assumes f is monotonic and goes from true to false (from node to root)
     # If all false, returns u.
     for i in reversed(range(20)):
-        if f(anc[u][i]):   # attempted to jump 2**i up, jumps if non-zero
+        if f(anc[u][i]):  # attempted to jump 2**i up, jumps if non-zero
             u = anc[u][i]
     return u
 
 
 import itertools
+
+
 def iterate_all_full_binary_trees(n):
     # https://stackoverflow.com/a/41617394/5894029
     if n == 1:
         yield [1]
     for split in range(1, n):
         gen_left = all_possible_trees(split)
-        gen_right = all_possible_trees(n-split)
+        gen_right = all_possible_trees(n - split)
         for left, right in itertools.product(gen_left, gen_right):
             yield [left, right]
 
@@ -158,7 +163,7 @@ class Trie:
 
         if prune:
             # https://leetcode.com/problems/maximum-genetic-difference-query/discuss/1344900/
-            for c,obj in zip(word[::-1], objects[:-1][::-1]):
+            for c, obj in zip(word[::-1], objects[:-1][::-1]):
                 if not obj[c]:
                     del obj[c]
                 else:
@@ -204,10 +209,10 @@ def count_inversions(perm):
     # for each index, count how many numbers on its left that are larger
     # this is also a sample on how to use the class
     res = 0
-    t = FenwickTree(bits = len(bin(max(perm))))
-    for i,x in enumerate(perm):
+    t = FenwickTree(bits=len(bin(max(perm))))
+    for i, x in enumerate(perm):
         cnt = t.query(x)
-        res += i-cnt
+        res += i - cnt
         t.update(x, 1)
     return res
 
@@ -233,7 +238,7 @@ def binary_lifting_preprocessing(graph, start_node):
                 ancestors_binary[nex].append(ancestors_binary[anc][idx])
                 anc = ancestors_binary[anc][idx]
                 idx += 1
-            
+
             queue.append(nex)
             visited.add(nex)
 
@@ -244,7 +249,7 @@ def binary_lifting_query(node, height, ancestors_binary):
     # assumes that the node is at least height deep
     idx = 0
     while height:
-        if height&1:
+        if height & 1:
             node = ancestors_binary[node][idx]
         else:
             pass

@@ -1,9 +1,9 @@
-
 # -------------------------- Segment Tree --------------------------
 # https://atcoder.github.io/ac-library/master/document_en/segtree.html
 
 
 import typing
+
 
 def _ceil_pow2(n: int) -> int:
     x = 0
@@ -24,10 +24,12 @@ def _bsf(n: int) -> int:
 
 class SegTree:
     # https://github.com/not522/ac-library-python/blob/master/atcoder/segtree.py
-    def __init__(self,
-                 op: typing.Callable[[typing.Any, typing.Any], typing.Any],
-                 e: typing.Any,
-                 v: typing.Union[int, typing.List[typing.Any]]) -> None:
+    def __init__(
+        self,
+        op: typing.Callable[[typing.Any, typing.Any], typing.Any],
+        e: typing.Any,
+        v: typing.Union[int, typing.List[typing.Any]],
+    ) -> None:
         self._op = op
         self._e = e
 
@@ -79,8 +81,7 @@ class SegTree:
     def all_prod(self) -> typing.Any:
         return self._d[1]
 
-    def max_right(self, left: int,
-                  f: typing.Callable[[typing.Any], bool]) -> int:
+    def max_right(self, left: int, f: typing.Callable[[typing.Any], bool]) -> int:
         assert 0 <= left <= self._n
         assert f(self._e)
 
@@ -107,8 +108,7 @@ class SegTree:
 
         return self._n
 
-    def min_left(self, right: int,
-                 f: typing.Callable[[typing.Any], bool]) -> int:
+    def min_left(self, right: int, f: typing.Callable[[typing.Any], bool]) -> int:
         assert 0 <= right <= self._n
         assert f(self._e)
 
@@ -142,13 +142,14 @@ class SegTree:
 class LazySegTree:
     # https://github.com/not522/ac-library-python/blob/master/atcoder/lazysegtree.py
     def __init__(
-            self,
-            op: typing.Callable[[typing.Any, typing.Any], typing.Any],
-            e: typing.Any,
-            mapping: typing.Callable[[typing.Any, typing.Any], typing.Any],
-            composition: typing.Callable[[typing.Any, typing.Any], typing.Any],
-            id_: typing.Any,
-            v: typing.Union[int, typing.List[typing.Any]]) -> None:
+        self,
+        op: typing.Callable[[typing.Any, typing.Any], typing.Any],
+        e: typing.Any,
+        mapping: typing.Callable[[typing.Any, typing.Any], typing.Any],
+        composition: typing.Callable[[typing.Any, typing.Any], typing.Any],
+        id_: typing.Any,
+        v: typing.Union[int, typing.List[typing.Any]],
+    ) -> None:
         self._op = op
         self._e = e
         self._mapping = mapping
@@ -218,8 +219,12 @@ class LazySegTree:
     def all_prod(self) -> typing.Any:
         return self._d[1]
 
-    def apply(self, left: int, right: typing.Optional[int] = None,
-              f: typing.Optional[typing.Any] = None) -> None:
+    def apply(
+        self,
+        left: int,
+        right: typing.Optional[int] = None,
+        f: typing.Optional[typing.Any] = None,
+    ) -> None:
         assert f is not None
 
         if right is None:
@@ -266,8 +271,7 @@ class LazySegTree:
                 if ((right >> i) << i) != right:
                     self._update((right - 1) >> i)
 
-    def max_right(
-            self, left: int, g: typing.Callable[[typing.Any], bool]) -> int:
+    def max_right(self, left: int, g: typing.Callable[[typing.Any], bool]) -> int:
         assert 0 <= left <= self._n
         assert g(self._e)
 
@@ -339,7 +343,6 @@ class LazySegTree:
         self._all_apply(2 * k, self._lz[k])
         self._all_apply(2 * k + 1, self._lz[k])
         self._lz[k] = self._id
-
 
 
 """
@@ -565,7 +568,6 @@ for a,idx in zip(queryCharacters, queryIndices):
     st.set(idx, init(a))
     res.append(st.prod(0, len(s))[-1])
 """
-
 
 
 # Possible range queries
