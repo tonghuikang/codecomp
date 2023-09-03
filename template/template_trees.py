@@ -31,32 +31,56 @@ class RangeQuery:
 
 
 class LowestCommonAncestor:
-    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/graphs/lca.py
-    # LCA
-    def __init__(self, root, graph):
-        self.time = [-1] * len(graph)
-        self.path = [-1] * len(graph)
-        P = [-1] * len(graph)
-        t = -1
-        dfs = [root]
-        while dfs:
-            node = dfs.pop()
-            self.path[t] = P[node]
-            self.time[node] = t = t + 1
-            for nei in graph[node]:
-                if self.time[nei] == -1:
-                    P[nei] = node
-                    dfs.append(nei)
-        self.rmq = RangeQuery(self.time[node] for node in self.path)
+    # https://cp-algorithms.com/graph/lca_binary_lifting.html
+    # https://leetcode.com/problems/minimum-edge-weight-equilibrium-queries-in-a-tree/
+    def __init__(self, n: int, graph: List[List[int]], root=0):        
+        self.n = n
+        self.graph = graph
+        self.logn = math.ceil(math.log2(n))
+        self.depth = [-1 if i != root else 0 for i in range(n)]
+        self.parent = [[-1]*n for _ in range(self.logn)]
+        
+        # choose your own distance metric
+        # self.distance = [[0]*26 for _ in range(n)]
 
-    def __call__(self, a, b):
-        if a == b:
-            return a
-        a = self.time[a]
-        b = self.time[b]
-        if a > b:
-            a, b = b, a
-        return self.path[self.rmq.query(a, b)]
+        self.dfs(root)
+        self.doubling()
+
+    def dfs(self, v, p=-1):
+        for e in self.graph[v]:
+            if e[0] == p: continue
+            self.parent[0][e[0]] = v
+            self.depth[e[0]] = self.depth[v] + 1
+            
+            # choose your own distance metric
+            # self.distance[e[0]] = [x for x in self.distance[v]]
+            # self.distance[e[0]][e[1]] += 1
+            
+            self.dfs(e[0], v)
+            
+    def doubling(self):
+        for i in range(self.logn-1):
+            for v in range(self.n):
+                if self.parent[i][v] != -1:
+                    self.parent[i+1][v] = self.parent[i][self.parent[i][v]]
+                    
+    def get(self, u, v):
+        if self.depth[u] > self.depth[v]: u, v = v, u
+        for i in range(self.logn):
+            if ((self.depth[v] - self.depth[u]) >> i) & 1:
+                v = self.parent[i][v]
+        if u == v:
+            return u
+        for i in range(self.logn-1, -1, -1):
+            if self.parent[i][u] != self.parent[i][v]:
+                u, v = self.parent[i][u], self.parent[i][v]
+        return self.parent[0][u]
+        
+    # choose your own distance metric
+    def distance_between(self, u, v):
+        lca = self.get(u, v)
+        return [x+y-2*z for x,y,z in zip(self.distance[u], self.distance[v], self.distance[lca])]
+
 
 
 # ------------------------------ Binary Lifting ------------------------------
