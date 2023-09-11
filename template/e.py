@@ -102,22 +102,27 @@ def query(pos):
 
 
 def alert(pos):
-    print("! {}".format(pos + 1), flush=True)
+    res = 0
+    for x in pos:
+        res = res^x
+    print("! {}".format(res), flush=True)
 
 
 
 def solve_(n,k):
     # your solution here
 
-    res = 0
+    allres = []
 
     while n >= 2*k:
-        res += query(n-k)
+        val = query(n-k)
+        allres.append(val)
         n -= k
 
     if n == k:
-        res += query(0)
-        alert(res)
+        val = query(0)
+        allres.append(val)
+        alert(allres)
         return
     
     system = []
@@ -143,8 +148,8 @@ def solve_(n,k):
 
     for row in system:
         log(row)
-    res += int(sum(gaussian_elimination(system[:n//2])))
-    alert(res)
+    allres.extend(int(x) for x in (gaussian_elimination(system[:n//2])))
+    alert(allres)
 
 
 # for case_num in [0]:  # no loop over test case
