@@ -118,8 +118,8 @@ def query(pos):
 def alert(pos):
     res = 0
     for x in pos:
-        assert x == int(x)
-        res = res^int(x)
+        # assert x == int(x)
+        res = res^x
     print("! {}".format(res), flush=True)
 
 
