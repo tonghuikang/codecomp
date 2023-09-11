@@ -370,6 +370,43 @@ def floor_sum_over_numerator(n: int, m: int, a: int, b: int) -> int:
     return ans
 
 
+# ------------------------- linear algebra --------------------------
+
+
+def matrix_multiply_mod(A, B, mod):
+    # https://leetcode.cn/contest/weekly-contest-362/ranking/
+    # yawn_sean
+    n, m = len(A), len(A[0])
+    p = len(B[0])
+    ans = [[0] * p for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            for k in range(p):
+                ans[i][k] += A[i][j] * B[j][k]
+                ans[i][k] %= mod
+    return ans
+
+def matrix_power_mod(matrix, exponent, mod):
+    # raise a square matrix to a certain power
+    n = len(matrix)
+    
+    # create the identity matrix
+    result = [[0]*n for _ in range(n)]
+    for i in range(n):
+        result[i][i] = 1
+
+    # exponentiation by squaring
+    while exponent > 0:
+        if exponent % 2 == 1:
+            result = matrix_multiply_mod(result, matrix, mod)
+            exponent -= 1
+        else:
+            matrix = matrix_multiply_mod(matrix, matrix, mod)
+            exponent //= 2
+
+    return result
+
+
 # ------------------------- FFT convolution -------------------------
 
 
