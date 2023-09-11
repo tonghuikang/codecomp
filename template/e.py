@@ -62,28 +62,42 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
-def gaussian_elimination(matrix):
-    n = len(matrix)
-    
-    # Forward Elimination
-    for i in range(n):
-        max_row_idx = max(range(i, n), key=lambda r: abs(matrix[r][i]))
-        matrix[i], matrix[max_row_idx] = matrix[max_row_idx], matrix[i]
-        
-        for j in range(i+1, n):
-            ratio = matrix[j][i]/matrix[i][i]
-            
-            for k in range(n + 1):
-                matrix[j][k] -= ratio * matrix[i][k]
+def xor_rows(a, b):
+    return [ai ^ bi for ai, bi in zip(a, b)]
 
-    # Backward Substitution
-    x = [0 for i in range(n)]
-    for i in range(n-1, -1, -1):
-        x[i] = matrix[i][n] / matrix[i][i]
-        for j in range(i-1, -1, -1):
-            matrix[j][n] -= matrix[j][i] * x[i]
-    
-    return x
+def xor_gaussian_elimination(matrix):
+    row_count = len(matrix)
+    col_count = len(matrix[0])
+
+    # Forward elimination
+    for i in range(row_count):
+        # Find pivot row and swap it with the current row
+        pivot_row = i
+        for j in range(i+1, row_count):
+            if matrix[j][i] != 0:
+                pivot_row = j
+                break
+        matrix[i], matrix[pivot_row] = matrix[pivot_row], matrix[i]
+
+        # Make all rows below this one 0 in current column
+        for j in range(i+1, row_count):
+            if matrix[j][i] != 0:
+                matrix[j] = xor_rows(matrix[j], matrix[i])
+
+    # Backward elimination
+    for i in range(row_count-1, -1, -1):
+        # Make all rows above this one 0 in current column
+        for j in range(i):
+            if matrix[j][i] != 0:
+                matrix[j] = xor_rows(matrix[j], matrix[i])
+    return matrix
+
+# Test the function
+# matrix = [[1, 0, 0, 1],
+#           [1, 1, 0, 1],
+#           [1, 1, 1, 0]]
+
+# print(xor_gaussian_elimination(matrix))
 
 # # Define the augmented matrix
 # matrix = [[2, 3, 3, 9],
@@ -104,7 +118,8 @@ def query(pos):
 def alert(pos):
     res = 0
     for x in pos:
-        res = res^x
+        assert x == int(x)
+        res = res^int(x)
     print("! {}".format(res), flush=True)
 
 
@@ -148,7 +163,8 @@ def solve_(n,k):
 
     for row in system:
         log(row)
-    allres.extend(int(x) for x in (gaussian_elimination(system[:n//2])))
+
+    allres.extend(gaussian_elimination(system[:n//2]))
     alert(allres)
 
 
