@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -31,7 +28,7 @@ def log(*args):
 
 
 def query(pos):
-    print("? {}".format(pos + 1), flush=True)
+    print("{}".format(pos), flush=True)
     response = int(input())
     return response
 
@@ -42,6 +39,23 @@ def alert(pos):
 
 
 # -----------------------------------------------------------------------------
+
+for case_num in range(int(input())):
+    # read line as an integer
+    n = int(input())
+    arr = list(map(int,input().split()))
+
+    arrset = set(arr)
+    cur = 0
+    while cur in arrset:
+        cur += 1
+
+    while True:
+        cur = query(cur)
+        if cur == -1:
+            break
+
+sys.exit()
 
 # read line as an integer
 # k = int(input())
