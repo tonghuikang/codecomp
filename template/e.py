@@ -142,21 +142,23 @@ def solve_(n,k):
     
     system = []
     
-    variables = list(range(n//2))
+    factor = math.gcd(n, k)
 
-    for _ in range(n//2):
+    variables = list(range(n//factor))
+
+    for _ in range(n):
         val = query(0)
-        variables[:k//2] = variables[:k//2][::-1]
-        row = [0 for _ in range(n//2 + 1)]
-        for idx in variables[:k//2]:
+        variables[:k//factor] = variables[:k//factor][::-1]
+        row = [0 for _ in range(n//factor + 1)]
+        for idx in variables[:k//factor]:
             row[idx] += 1
         row[-1] = val
         system.append(row)
 
         val = query(n-k)
-        variables[-k//2:] = variables[-k//2:][::-1]
-        row = [0 for _ in range(n//2 + 1)]
-        for idx in variables[-k//2:]:
+        variables[-k//factor:] = variables[-k//factor:][::-1]
+        row = [0 for _ in range(n//factor + 1)]
+        for idx in variables[-k//factor:]:
             row[idx] += 1
         row[-1] = val
         system.append(row)
@@ -164,7 +166,7 @@ def solve_(n,k):
     for row in system:
         log(row)
 
-    allres.extend(gaussian_elimination(system[:n//2]))
+    allres.extend(gaussian_elimination(system[:n//factor]))
     alert(allres)
 
 
