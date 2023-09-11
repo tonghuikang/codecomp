@@ -62,11 +62,89 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def gaussian_elimination(matrix):
+    n = len(matrix)
+    
+    # Forward Elimination
+    for i in range(n):
+        max_row_idx = max(range(i, n), key=lambda r: abs(matrix[r][i]))
+        matrix[i], matrix[max_row_idx] = matrix[max_row_idx], matrix[i]
+        
+        for j in range(i+1, n):
+            ratio = matrix[j][i]/matrix[i][i]
+            
+            for k in range(n + 1):
+                matrix[j][k] -= ratio * matrix[i][k]
 
-def solve_():
+    # Backward Substitution
+    x = [0 for i in range(n)]
+    for i in range(n-1, -1, -1):
+        x[i] = matrix[i][n] / matrix[i][i]
+        for j in range(i-1, -1, -1):
+            matrix[j][n] -= matrix[j][i] * x[i]
+    
+    return x
+
+# # Define the augmented matrix
+# matrix = [[2, 3, 3, 9],
+#           [1, 1, 17, 4],
+#           [3, 13, 14, 12]]
+
+# # Call the function
+# solution = gaussian_elimination(matrix)
+# print('The solutions are ', solution)
+
+
+def query(pos):
+    print("? {}".format(pos + 1), flush=True)
+    response = int(input())
+    return response
+
+
+def alert(pos):
+    print("! {}".format(pos + 1), flush=True)
+
+
+
+def solve_(n,k):
     # your solution here
 
-    return ""
+    res = 0
+
+    while n >= 2*k:
+        res += query(n-k)
+        n -= k
+
+    if n == k:
+        res += query(0)
+        alert(res)
+        return
+    
+    system = []
+    
+    variables = list(range(n//2))
+
+    for _ in range(n//2):
+        val = query(0)
+        variables[:k//2] = variables[:k//2][::-1]
+        row = [0 for _ in range(n//2 + 1)]
+        for idx in variables[:k//2]:
+            row[idx] += 1
+        row[-1] = val
+        system.append(row)
+
+        val = query(n-k)
+        variables[-k//2:] = variables[-k//2:][::-1]
+        row = [0 for _ in range(n//2 + 1)]
+        for idx in variables[-k//2:]:
+            row[idx] += 1
+        row[-1] = val
+        system.append(row)
+
+    for row in system:
+        log(row)
+    res += int(sum(gaussian_elimination(system[:n//2])))
+    alert(res)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +161,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +170,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -105,4 +183,6 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
+
+sys.exit()
