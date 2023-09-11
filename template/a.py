@@ -71,19 +71,25 @@ def solve_(arr, n):
     arr.sort()
     arr.reverse()
 
-    return [i+1 for x,i in arr]
+    res = [-1 for _ in range(n)]
+    for j,(x,i) in enumerate(arr, start=1):
+        res[i] = j
 
-    # brr = list(range(1,n+1))
 
-    # brr.reverse()
+    # res = []
 
-    # largest value in brr match with smallest value in arr
+    # for x,i in arr:
+    #     res[]
 
-    
+    return res
 
-    
 
-    return ""
+# while True:
+#     n = random.randint(1,3)
+#     arr = [random.randint(1,10) for _ in range(n)]
+#     res = solve_(arr, n)
+
+#     assert len(set(a-b for a,b in zip(arr, res))) == n, arr
 
 
 # for case_num in [0]:  # no loop over test case
