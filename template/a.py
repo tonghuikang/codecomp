@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,10 +60,36 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k,x):
     # your solution here
 
-    return ""
+    # n elements
+    # MEX is k
+    # do not exceed x
+
+    # to get MEX of k
+    required = list(range(k))
+
+    # do not exceed x
+    if max(required) > x:
+        return -1
+
+    if len(required) > n:
+        log('b')
+        return -1
+
+    elements_remaining = n - len(required)
+
+    if k == x:
+        x -= 1
+
+    while elements_remaining:
+        elements_remaining -= 1
+        required.append(x)
+
+    log(required)
+
+    return sum(required)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +106,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k,x = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +115,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,x)  # include input here
 
     # print length if applicable
     # print(len(res))
