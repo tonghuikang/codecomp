@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -64,9 +61,31 @@ def minus_one_matrix(mrr):
 def solve_(a,b,arr,brr):
     # your solution here
 
+    # consider each bit separately
 
+    all_left = 0
+    all_right = 0
 
-    return ""
+    for idx in range(30):
+        mask = 1<<idx
+        crr = [int((x&mask) > 0) for x in arr]
+        drr = [int((x&mask) > 0) for x in brr]
+
+        if sum(crr)%2 == 0:
+            left = right = 0
+        else:
+            left = right = 1
+
+        if 1 in drr and a%2 == 1:
+            right = 1
+
+        if 1 in drr and a%2 == 0:
+            left = 0
+
+        all_left += left*mask
+        all_right += right*mask
+
+    return [all_left, all_right]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -99,7 +118,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
