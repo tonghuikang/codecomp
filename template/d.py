@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -66,7 +63,48 @@ def minus_one_matrix(mrr):
 def solve_(n,crr,k):
     # your solution here
 
-    return ""
+    # increasing monotonic stack
+
+    stack = []
+
+    for i,x in enumerate(crr):
+        while stack and x <= stack[0][1]:
+            stack.pop()
+        stack.append([i,x])
+
+    # log(stack)
+
+    ptr = [-1 for _ in range(n)]
+
+
+    i0,x0 = stack[0]
+    num_sets = k // x0
+
+    k -= num_sets * x0
+    ptr[i0] = num_sets
+
+    prev_x = x0
+
+    for i,x in stack[1:]:
+        diff = x-prev_x
+
+        cur_sets = k // diff
+
+        k -= cur_sets * diff
+        ptr[i] = cur_sets
+        
+        prev_x = x
+
+    res = [0 for _ in range(n)]
+    prev = 0
+
+    for i,x in list(enumerate(ptr))[::-1]:
+        if ptr[i] != -1:
+            prev = x
+        
+        res[i] = prev
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
