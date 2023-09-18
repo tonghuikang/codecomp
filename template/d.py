@@ -68,14 +68,13 @@ def solve_(n,crr,k):
     stack = []
 
     for i,x in enumerate(crr):
-        while stack and x <= stack[0][1]:
+        while stack and x <= stack[-1][1]:
             stack.pop()
         stack.append([i,x])
 
     # log(stack)
 
     ptr = [-1 for _ in range(n)]
-
 
     i0,x0 = stack[0]
     num_sets = k // x0
@@ -84,16 +83,20 @@ def solve_(n,crr,k):
     ptr[i0] = num_sets
 
     prev_x = x0
+    prev_sets = num_sets
 
     for i,x in stack[1:]:
         diff = x-prev_x
 
-        cur_sets = k // diff
+        cur_sets = min(prev_sets, k // diff)
 
         k -= cur_sets * diff
         ptr[i] = cur_sets
         
         prev_x = x
+        prev_sets = cur_sets
+
+    # log(ptr)
 
     res = [0 for _ in range(n)]
     prev = 0
@@ -105,6 +108,14 @@ def solve_(n,crr,k):
         res[i] = prev
 
     return res
+
+
+# while True:
+#     import random
+#     n = random.randint(1,5)
+#     crr = [random.randint(1,10) for _ in range(n)]
+#     k = random.randint(1,100)
+#     solve(n,crr,k)
 
 
 # for case_num in [0]:  # no loop over test case
