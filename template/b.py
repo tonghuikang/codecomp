@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -61,10 +59,47 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(a,b,c,d,m):
     # your solution here
 
-    return ""
+    # hypothesis - you can't go anywhere
+
+    dist = {}
+    dist[a,b] = 0
+
+    queue = deque([(a,b)])
+
+    while queue:
+        x,y = queue.popleft()
+
+        xx, yy = x&y, y
+
+        if (xx,yy) not in dist:
+            queue.append((xx,yy))
+            dist[xx,yy] = dist[x,y] + 1
+
+        xx, yy = x|y, y
+
+        if (xx,yy) not in dist:
+            queue.append((xx,yy))
+            dist[xx,yy] = dist[x,y] + 1
+
+        xx, yy = x,x^y
+
+        if (xx,yy) not in dist:
+            queue.append((xx,yy))
+            dist[xx,yy] = dist[x,y] + 1
+
+        xx, yy = x,y^m
+
+        if (xx,yy) not in dist:
+            queue.append((xx,yy))
+            dist[xx,yy] = dist[x,y] + 1
+
+    if (c,d) in dist:
+        return dist[c,d]
+    
+    return -1
 
 
 # for case_num in [0]:  # no loop over test case
@@ -81,7 +116,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b,c,d,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -90,7 +125,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,c,d,m)  # include input here
 
     # print length if applicable
     # print(len(res))
