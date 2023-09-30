@@ -324,10 +324,10 @@ def solve(n,q,srr,qrr):
         if max_one_1 == cur_len_1 and left_val_2 == 1:
             left_cnt_1 += left_cnt_2
 
-        if max_zero_2 == cur_len_2 and left_val_1 == 0:
+        if max_zero_2 == cur_len_2 and right_val_1 == 0:
             right_cnt_2 += right_cnt_1
             
-        if max_one_2 == cur_len_2 and left_val_1 == 1:
+        if max_one_2 == cur_len_2 and right_val_1 == 1:
             right_cnt_2 += right_cnt_1
 
         return left_val_1, left_cnt_1, right_val_2, right_cnt_2, max_zero_all, max_one_all, cur_len_all  
