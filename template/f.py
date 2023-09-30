@@ -314,17 +314,21 @@ def solve(n,q,srr,qrr):
             # join middle
             max_zero_all = max(max_zero_all, right_cnt_1 + left_cnt_2)
 
-            # all same
-            if max_zero_1 == cur_len_1 and max_zero_2 == cur_len_2:
-                return left_val_1, cur_len_all, right_val_2, cur_len_all, max_zero_all, max_one_all, cur_len_all
-
         if right_val_1 == left_val_2 == 1:
             # join middle
             max_one_all = max(max_one_all, right_cnt_1 + left_cnt_2)
 
-            # all same
-            if max_one_1 == cur_len_1 and max_one_2 == cur_len_2:
-                return left_val_1, cur_len_all, right_val_2, cur_len_all, max_zero_all, max_one_all, cur_len_all
+        if max_zero_1 == cur_len_1 and left_val_2 == 0:
+            left_cnt_1 += left_cnt_2
+            
+        if max_one_1 == cur_len_1 and left_val_2 == 1:
+            left_cnt_1 += left_cnt_2
+
+        if max_zero_2 == cur_len_2 and left_val_1 == 0:
+            right_cnt_2 += right_cnt_1
+            
+        if max_one_2 == cur_len_2 and left_val_1 == 1:
+            right_cnt_2 += right_cnt_1
 
         return left_val_1, left_cnt_1, right_val_2, right_cnt_2, max_zero_all, max_one_all, cur_len_all  
     
