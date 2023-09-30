@@ -194,3 +194,5 @@ def entry_operation(prev, cur, nex):
 
 def exit_operation(prev, cur):
     pass
+
+# NOTE: check small edge cases - null graph, single node graph
