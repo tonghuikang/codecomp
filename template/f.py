@@ -295,6 +295,8 @@ def solve(n,q,srr,qrr):
     def op(x: Tuple[int, int, int, int, int, int], y: Tuple[int, int, int, int, int, int]) -> Tuple[int, int, int, int, int, int]:
         left_val_1, left_cnt_1, right_val_1, right_cnt_1, maxres_1, cur_len_1 = x
         left_val_2, left_cnt_2, right_val_2, right_cnt_2, maxres_2, cur_len_2 = y
+        
+        cur_len_all = cur_len_1 + cur_len_2
 
         if cur_len_1 == 0:
             return y
@@ -310,31 +312,34 @@ def solve(n,q,srr,qrr):
 
             # all same
             if maxres_1 == cur_len_1 and maxres_2 == cur_len_2:
-                return left_val_1, left_cnt_1 + left_cnt_2, right_val_2, right_cnt_1 + right_cnt_2, maxres, cur_len_1 + cur_len_2 
+                return left_val_1, cur_len_all, right_val_2, cur_len_all, cur_len_all, cur_len_all
 
-        return left_val_1, left_cnt_1, right_val_2, right_cnt_2, maxres, cur_len_1 + cur_len_2  
+        return left_val_1, left_cnt_1, right_val_2, right_cnt_2, maxres, cur_len_all  
     
     e = 0,0,0,0,0,0  # left_val, left_cnt, right_val, right_cnt, maxres, cur_len
     
-    def composition(x: bool, y: bool) -> Tuple[int, int]:
+    def composition(x: int, y: int) -> int:
         return x ^ y
 
-    def mapping(x: bool, y: Tuple[int, int, int, int, int, int]) -> Tuple[int, int]:
-        if x:
+    def mapping(x: int, y: Tuple[int, int, int, int, int, int]) -> Tuple[int, int, int, int, int, int]:
+        if not x:
             return y
         left_val_1, left_cnt_1, right_val_1, right_cnt_1, maxres_1, cur_len_1 = y
         return 1-left_val_1, left_cnt_1, 1-right_val_1, right_cnt_1, maxres_1, cur_len_1
 
-    id_ = False
-    f = True
+    id_ = 0
+    f = 1
 
     st = LazySegTree(op, e, mapping, composition, id_, arr)
 
+    # log(st.prod(0, n)[-2])
+
     for c,l,r in qrr:
         if c == 2:
-            print(st.prod(l, r)[0])
+            log(st.prod(l-1, r))
+            print(st.prod(l-1, r)[-2])
         else:
-            st.apply(l, r, f)
+            st.apply(l-1, r, f)
 
 
 for case_num in [0]:  # no loop over test case
@@ -374,4 +379,4 @@ for case_num in [0]:  # no loop over test case
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
