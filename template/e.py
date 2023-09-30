@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,10 +61,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+LARGE = 10**18
+
 def solve_(n,k,p,mrr):
     # your solution here
 
-    return ""
+    dp = defaultdict(lambda: LARGE)
+    
+    start = tuple([0 for _ in range(k)])
+    end = tuple([p for _ in range(k)])
+
+    dp[start] = 0
+
+    for c,*arr in mrr:
+        new_dp = dp.copy()
+        for k,v in dp.items():
+            new_v = tuple(min(p, x+y) for x,y in zip(arr, k))
+            new_dp[new_v] = min(new_dp[new_v], v+c)
+        dp = new_dp
+
+    # log(dp)
+    # log(end)
+
+    if dp[end] == LARGE:
+        return -1
+
+    return dp[end]
 
 
 for case_num in [0]:  # no loop over test case
