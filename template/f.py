@@ -2,9 +2,6 @@
 import typing
 from typing import Tuple
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -290,11 +287,11 @@ class LazySegTree:
 
 def solve(n,q,srr,qrr):
 
-    arr = [[1,1,1,1,1,1] if x == "1" else [0,1,0,1,1,1] for x in srr]
+    arr = [[1,1,1,1,0,1,1] if x == "1" else [0,1,0,1,1,0,1] for x in srr]
 
     def op(x: Tuple[int, int, int, int, int, int], y: Tuple[int, int, int, int, int, int]) -> Tuple[int, int, int, int, int, int]:
-        left_val_1, left_cnt_1, right_val_1, right_cnt_1, maxres_1, cur_len_1 = x
-        left_val_2, left_cnt_2, right_val_2, right_cnt_2, maxres_2, cur_len_2 = y
+        left_val_1, left_cnt_1, right_val_1, right_cnt_1, max_zero_1, max_one_1, cur_len_1 = x
+        left_val_2, left_cnt_2, right_val_2, right_cnt_2, max_zero_2, max_one_2, cur_len_2 = y
         
         cur_len_all = cur_len_1 + cur_len_2
 
@@ -304,19 +301,28 @@ def solve(n,q,srr,qrr):
         if cur_len_2 == 0:
             return x
 
-        maxres = max(maxres_1, maxres_2)
+        max_zero_all = max(max_zero_1, max_zero_2)
+        max_one_all = max(max_one_1, max_one_2)
 
-        if right_val_1 == left_val_2:
+        if right_val_1 == left_val_2 == 0:
             # join middle
-            maxres = max(maxres, right_cnt_1 + left_cnt_2)
+            max_zero_all = max(max_zero_all, right_cnt_1 + left_cnt_2)
 
             # all same
-            if maxres_1 == cur_len_1 and maxres_2 == cur_len_2:
-                return left_val_1, cur_len_all, right_val_2, cur_len_all, cur_len_all, cur_len_all
+            if max_zero_1 == cur_len_1 and max_zero_2 == cur_len_2:
+                return left_val_1, cur_len_all, right_val_2, cur_len_all, max_zero_all, max_one_all, cur_len_all
 
-        return left_val_1, left_cnt_1, right_val_2, right_cnt_2, maxres, cur_len_all  
+        if right_val_1 == left_val_2 == 1:
+            # join middle
+            max_one_all = max(max_one_all, right_cnt_1 + left_cnt_2)
+
+            # all same
+            if max_one_1 == cur_len_1 and max_one_2 == cur_len_2:
+                return left_val_1, cur_len_all, right_val_2, cur_len_all, max_zero_all, max_one_all, cur_len_all
+
+        return left_val_1, left_cnt_1, right_val_2, right_cnt_2, max_zero_all, max_one_all, cur_len_all  
     
-    e = 0,0,0,0,0,0  # left_val, left_cnt, right_val, right_cnt, maxres, cur_len
+    e = 0,0,0,0,0,0,0  # left_val, left_cnt, right_val, right_cnt, maxres, cur_len
     
     def composition(x: int, y: int) -> int:
         return x ^ y
@@ -324,8 +330,8 @@ def solve(n,q,srr,qrr):
     def mapping(x: int, y: Tuple[int, int, int, int, int, int]) -> Tuple[int, int, int, int, int, int]:
         if not x:
             return y
-        left_val_1, left_cnt_1, right_val_1, right_cnt_1, maxres_1, cur_len_1 = y
-        return 1-left_val_1, left_cnt_1, 1-right_val_1, right_cnt_1, maxres_1, cur_len_1
+        left_val_1, left_cnt_1, right_val_1, right_cnt_1, max_zero_1, max_one_1, cur_len_1 = y
+        return 1-left_val_1, left_cnt_1, 1-right_val_1, right_cnt_1, max_one_1, max_zero_1, cur_len_1
 
     id_ = 0
     f = 1
@@ -336,8 +342,8 @@ def solve(n,q,srr,qrr):
 
     for c,l,r in qrr:
         if c == 2:
-            log(st.prod(l-1, r))
-            print(st.prod(l-1, r)[-2])
+            left_val_1, left_cnt_1, right_val_1, right_cnt_1, max_zero_1, max_one_1, cur_len_1 = st.prod(l-1, r)
+            print(max_one_1)
         else:
             st.apply(l-1, r, f)
 
