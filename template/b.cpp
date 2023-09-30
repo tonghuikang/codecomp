@@ -9,6 +9,7 @@ long long encode(long long x, long long y) {
 }
 
 int solve(int a, int b, int c, int d, int m) {
+
     unordered_map<long long, int> dist;
     dist[encode(a,b)] = 0;
 
@@ -19,13 +20,22 @@ int solve(int a, int b, int c, int d, int m) {
         pair<int, int> p = q.front();
         q.pop();
         int x = p.first, y = p.second;
+
+        if (c - ((x | y | m) & c) > 0) {
+            continue;
+        }
+
+        if (d - ((x | y | m) & d) > 0) {
+            continue;
+        }
+
         int cnt = dist[encode(x,y)];
 
         vector<pair<int, int>> nextPairs = {
+            {x, x ^ y},
+            {x, y ^ m},
             {x & y, y},
             {x | y, y},
-            {x, x ^ y},
-            {x, y ^ m}
         };
 
         for(auto& next : nextPairs) {

@@ -62,11 +62,48 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+weights = [
+    [1/2, 0],
+    [1/4, 1/4, 1/8, 0],
+    [1/6, 1/6, 1/6, 1/8, 1/16, 0],
+    [0.1250137, 0.1248679, 0.1249693, 0.1251343, 0.1093974, 0.0781428, 0.0390961, 0.0],
+]
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    dp = [0 for _ in range(n)]
+    dp[-1] = 1
+
+    g = [[] for _ in range(n)]
+
+    for a,b in mrr:
+        g[a].append(b)
+
+    for i in range(n-1,-1,-1):
+
+        pvals = []
+        for x in g[i]:
+            pvals.append(dp[x])
+        if not pvals:
+            continue
+
+        pvals.sort(reverse=True)
+
+        log(i, pvals)
+
+        if len(pvals)%2 == 1:
+            res = sum(pvals) / len(pvals)
+        else:
+            res = 0
+            for w,p in zip(weights[len(pvals)//2 - 1], pvals):
+                res += w * p
+
+        dp[i] = res
+
+    log(dp)
+
+    return dp[0]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,16 +120,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
