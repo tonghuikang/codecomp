@@ -289,6 +289,12 @@ def solve(n,q,srr,qrr):
 
     arr = [[1,1,1,1,0,1,1] if x == "1" else [0,1,0,1,1,0,1] for x in srr]
 
+    # I did not handle the case where you merge
+
+    # 111111 with 11110000
+    # 000111111 with 1111
+    # and related cases
+
     def op(x: Tuple[int, int, int, int, int, int], y: Tuple[int, int, int, int, int, int]) -> Tuple[int, int, int, int, int, int]:
         left_val_1, left_cnt_1, right_val_1, right_cnt_1, max_zero_1, max_one_1, cur_len_1 = x
         left_val_2, left_cnt_2, right_val_2, right_cnt_2, max_zero_2, max_one_2, cur_len_2 = y
@@ -342,8 +348,7 @@ def solve(n,q,srr,qrr):
 
     for c,l,r in qrr:
         if c == 2:
-            left_val_1, left_cnt_1, right_val_1, right_cnt_1, max_zero_1, max_one_1, cur_len_1 = st.prod(l-1, r)
-            print(max_one_1)
+            print(st.prod(l-1, r)[-2])
         else:
             st.apply(l-1, r, f)
 
