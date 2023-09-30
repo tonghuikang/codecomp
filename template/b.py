@@ -4,103 +4,64 @@ from collections import deque
 
 input = sys.stdin.readline  # to read input quickly
 
-# available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
-# import scipy
-
-m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
-# d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
-# d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-MAXINT = sys.maxsize
-e18 = 10**18 + 10
-
-# if testing locally, print to terminal with a different color
-OFFLINE_TEST = False
-CHECK_OFFLINE_TEST = True
-# CHECK_OFFLINE_TEST = False  # uncomment this on Codechef
-if CHECK_OFFLINE_TEST:
-    import getpass
-
-    OFFLINE_TEST = getpass.getuser() == "htong"
-
-
-def log(*args):
-    if CHECK_OFFLINE_TEST and OFFLINE_TEST:
-        print("\033[36m", *args, "\033[0m", file=sys.stderr)
-
-
-def solve(*args):
-    # screen input
-    if OFFLINE_TEST:
-        log("----- solving ------")
-        log(*args)
-        log("----- ------- ------")
-    return solve_(*args)
-
-
-def read_matrix(rows):
-    return [list(map(int, input().split())) for _ in range(rows)]
-
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-
-def minus_one(arr):
-    return [x - 1 for x in arr]
-
-
-def minus_one_matrix(mrr):
-    return [[x - 1 for x in row] for row in mrr]
-
 
 # ---------------------------- template ends here ----------------------------
 
+val = 2**32
 
-def solve_(a,b,c,d,m):
+def decode(z):
+    return divmod(z, val)
+    
+def encode(x,y):
+    return x * val + y
+
+def solve(a,b,c,d,m):
     # your solution here
 
     # hypothesis - you can't go anywhere
 
     dist = {}
-    dist[a,b] = 0
+    dist[encode(a,b)] = 0
 
     queue = deque([(a,b)])
 
     while queue:
         x,y = queue.popleft()
+        cnt = dist[encode(x,y)]
 
         xx, yy = x&y, y
 
-        if (xx,yy) not in dist:
+        if encode(xx,yy) not in dist:
             queue.append((xx,yy))
-            dist[xx,yy] = dist[x,y] + 1
+            dist[encode(xx,yy)] = cnt + 1
 
         xx, yy = x|y, y
 
-        if (xx,yy) not in dist:
+        if encode(xx,yy) not in dist:
             queue.append((xx,yy))
-            dist[xx,yy] = dist[x,y] + 1
+            dist[encode(xx,yy)] = cnt + 1
 
         xx, yy = x,x^y
 
-        if (xx,yy) not in dist:
+        if encode(xx,yy) not in dist:
             queue.append((xx,yy))
-            dist[xx,yy] = dist[x,y] + 1
+            dist[encode(xx,yy)] = cnt + 1
 
         xx, yy = x,y^m
 
-        if (xx,yy) not in dist:
+        if encode(xx,yy) not in dist:
             queue.append((xx,yy))
-            dist[xx,yy] = dist[x,y] + 1
+            dist[encode(xx,yy)] = cnt + 1
 
-    if (c,d) in dist:
-        return dist[c,d]
+    if encode(c,d) in dist:
+        return dist[encode(c,d)]
+
+    # log(len(dist))
     
     return -1
 
+
+# solve(2**30-1,0,4512312,123123,1)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
