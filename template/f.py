@@ -290,7 +290,7 @@ class LazySegTree:
 
 def solve(n,q,srr,qrr):
 
-    arr = [int(x) for x in srr]
+    arr = [[1,1,1,1,1,1] if x == "1" else [0,1,0,1,1,1] for x in srr]
 
     def op(x: Tuple[int, int, int, int, int, int], y: Tuple[int, int, int, int, int, int]) -> Tuple[int, int, int, int, int, int]:
         left_val_1, left_cnt_1, right_val_1, right_cnt_1, maxres_1, cur_len_1 = x
