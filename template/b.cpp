@@ -4,56 +4,42 @@
 
 using namespace std;
 
-const long long val = 1LL << 32;
-
-pair<long long, long long> decode(long long z) {
-    return make_pair(z / val, z % val);
-}
-
 long long encode(long long x, long long y) {
-    return x * val + y;
+    return (x << 32) + y;
 }
 
 int solve(int a, int b, int c, int d, int m) {
     unordered_map<long long, int> dist;
     dist[encode(a,b)] = 0;
 
-    queue<pair<int, int>> queue;
-    queue.push(make_pair(a, b));
+    queue<pair<int, int>> q;
+    q.emplace(a, b);
 
-    while (!queue.empty()) {
-        pair<int, int> p = queue.front();
-        queue.pop();
+    while (!q.empty()) {
+        pair<int, int> p = q.front();
+        q.pop();
         int x = p.first, y = p.second;
         int cnt = dist[encode(x,y)];
 
-        int xx = x & y, yy = y;
-        if (dist.count(encode(xx, yy)) == 0) {
-            queue.push(make_pair(xx, yy));
-            dist[encode(xx, yy)] = cnt + 1;
-        }
+        vector<pair<int, int>> nextPairs = {
+            {x & y, y},
+            {x | y, y},
+            {x, x ^ y},
+            {x, y ^ m}
+        };
 
-        xx = x | y, yy = y;
-        if (dist.count(encode(xx, yy)) == 0) {
-            queue.push(make_pair(xx, yy));
-            dist[encode(xx, yy)] = cnt + 1;
-        }
-
-        xx = x, yy = x ^ y;
-        if (dist.count(encode(xx, yy)) == 0) {
-            queue.push(make_pair(xx, yy));
-            dist[encode(xx, yy)] = cnt + 1;
-        }
-
-        xx = x, yy = y ^ m;
-        if (dist.count(encode(xx, yy)) == 0) {
-            queue.push(make_pair(xx, yy));
-            dist[encode(xx, yy)] = cnt + 1;
+        for(auto& next : nextPairs) {
+            long long encoded = encode(next.first, next.second);
+            if (dist.count(encoded) == 0) {
+                q.emplace(next.first, next.second);
+                dist[encoded] = cnt + 1;
+            }
         }
     }
     
-    if(dist.count(encode(c,d)) > 0)
-        return dist[encode(c,d)];
+    long long encoded = encode(c, d);
+    if(dist.count(encoded) > 0)
+        return dist[encoded];
     
     return -1;
 }

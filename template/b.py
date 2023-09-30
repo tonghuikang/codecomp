@@ -18,6 +18,8 @@ def encode(x,y):
 def solve(a,b,c,d,m):
     # your solution here
 
+    # there is only a finite number of ways the bits interact
+
     # hypothesis - you can't go anywhere
 
     dist = {}
@@ -56,12 +58,13 @@ def solve(a,b,c,d,m):
     if encode(c,d) in dist:
         return dist[encode(c,d)]
 
+    print(len(dist))
     # log(len(dist))
     
     return -1
 
 
-# solve(2**30-1,0,4512312,123123,1)
+print(solve(2**30-1,0,111,0,2**30-1))
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
