@@ -164,6 +164,8 @@ def dp(factors):
     return res
 
 
+log(dp((2,2,2))
+
 def solve_(n):
     # your solution here
 
