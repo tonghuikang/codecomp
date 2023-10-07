@@ -684,7 +684,9 @@ def op(x,y):
     # log("v1", v1)
     # log("v2", v2)
     # log()
-    if v1 >= v2:
+    if v1 > v2:
+        return x
+    if v1 == v2 and idx1 > idx2:
         return x
     return y
 
