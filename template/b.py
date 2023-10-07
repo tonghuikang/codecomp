@@ -119,6 +119,28 @@ def get_prime_factors_with_precomp_sqrt(num):
     return factors
 
 
+# whether is the possible
+
+@cache
+def dp(sumval, pdtval, factors):
+    if len(factors) == 1:
+        if factors[0] == sumval == pdtval:
+            return [factors[0]]
+        return []
+
+    for x in factors:
+        res = []
+        if pdtval % x == 0:
+            f2 = tuple(list(factors).remove(x))
+            val = dp(sumval - x, pdtval // x, f2)
+            if val != []:
+                val = val + [x]
+                if res == [] or len(val) < len(res):
+                    res = val
+    
+    return res
+
+
 def solve_(n):
     # your solution here
 
@@ -129,7 +151,11 @@ def solve_(n):
     if sum(factors) > 41:
         return [-1]
     
-    factors = factors + [1] * (41 - sum(factors))
+    minval = factors + [1] * (41 - sum(factors))
+
+    for i in range(1, 41+1):
+        
+        factors = factors + [1] * (41 - sum(factors))
 
     return factors
 

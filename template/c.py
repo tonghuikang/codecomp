@@ -111,7 +111,9 @@ for case_num in range(int(input())):
     qrr = [x[0] for x in qrr]
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, q, nrr, qrr)  # include input here
+    log(n, q)
+
+    res = solve_(n, q, nrr, qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
