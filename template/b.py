@@ -152,7 +152,7 @@ def dp(factors):
                 a2[i] = a2[i] * x
                 s2 += a2[i]
 
-                if s2 not in res or len(res[s2]) > len(a2) + 1:
+                if s2 not in res or len(res[s2]) > len(a2):
                     if s2 <= 41:
                         res[s2] = [x for x in a2]
 
@@ -164,7 +164,7 @@ def dp(factors):
     return res
 
 
-log(dp((2,2,2))
+# log(dp((2,2,2)))
 
 def solve_(n):
     # your solution here
