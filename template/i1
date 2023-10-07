@@ -1,1 +1,5 @@
 # PLEASE REMEMBER TO COPY YOUR EXAMPLE
+
+mv ~/Downloads/*.txt .
+
+rm *.txt
