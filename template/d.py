@@ -675,7 +675,13 @@ for a,idx in zip(queryCharacters, queryIndices):
 # id_ and f is defined for every element in the array.
 # We can represent f and id_ as an integer instead, and let mapping execute the function
 
+e = (10**18, -1, -1, 1)
+
 def op(x,y):
+    if x == e:
+        return y
+    if y == e:
+        return x
     (idx1,a1,b1,s1) = x
     (idx2,a2,b2,s2) = y
     v1 = a1 if s1 == 1 else b1
@@ -686,11 +692,9 @@ def op(x,y):
     # log()
     if v1 > v2:
         return x
-    if v1 == v2 and idx1 > idx2:
+    if v1 == v2 and idx1 < idx2:
         return x
     return y
-
-e = (0, 0, 0, -1)
 
 def mapping(f,x):
     idx,a,b,s = x
@@ -705,7 +709,7 @@ MOD = 10**9 + 7
 def solve_(n, q, arr, qrr):
     # your solution here
 
-    arr = [0] + arr
+    # arr = [0] + arr
     arr = [(i,x,MOD-x,1) for i,x in enumerate(arr)]  # index, v1, v2, flipped
 
     st = LazySegTree(op, e, mapping, composition, id_, arr)
@@ -717,7 +721,7 @@ def solve_(n, q, arr, qrr):
     res = 0
 
     for l,r in qrr:
-        r += 1
+        l -= 1
         f = -1
         st.apply(l, r, f)   # l inclusive, r exclusive
     
@@ -731,7 +735,7 @@ def solve_(n, q, arr, qrr):
 
         # log(st._d)
 
-        res += idx
+        res += idx + 1
         # log(idx + 1)
         # log(" --- ")
 
