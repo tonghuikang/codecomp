@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import math, random
+from functools import cache
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 
@@ -119,24 +120,28 @@ def get_prime_factors_with_precomp_sqrt(num):
     return factors
 
 
-# whether is the possible
+# for each multiset of prime factors
+# applicable sumval and its corresponding minimum length and array
 
 @cache
-def dp(sumval, pdtval, factors):
+def dp(factors):
+    # return minimum length array that has product factors and sums to sumval
     if len(factors) == 1:
-        if factors[0] == sumval == pdtval:
-            return [factors[0]]
-        return []
+        return [(sumval, 1, (factors[0],))]
+
+    res = {}
+    
 
     for x in factors:
         res = []
-        if pdtval % x == 0:
-            f2 = tuple(list(factors).remove(x))
-            val = dp(sumval - x, pdtval // x, f2)
-            if val != []:
-                val = val + [x]
-                if res == [] or len(val) < len(res):
-                    res = val
+        f2 = tuple(list(factors).remove(x))
+
+        # append
+        val = dp(sumval - x, f2)
+        if val != []:
+            val = val + [x]
+            if res == [] or len(val) < len(res):
+                res = val
     
     return res
 
@@ -153,11 +158,17 @@ def solve_(n):
     
     minval = factors + [1] * (41 - sum(factors))
 
-    for i in range(1, 41+1):
+    # for i in range(1, 41+1):
         
-        factors = factors + [1] * (41 - sum(factors))
+    #     factors = factors + [1] * (41 - sum(factors))
 
-    return factors
+    assert sum(minval) == 41
+    val = 1
+    for x in minval:
+        val = val * x
+    assert val == n
+
+    return minval
 
 
 # for case_num in [0]:  # no loop over test case
@@ -184,6 +195,9 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(n)  # include input here
+
+    if res != [-1]:
+        res = [len(res)] + res
 
     # print length if applicable
     # print(len(res))
