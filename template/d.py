@@ -682,23 +682,26 @@ def op(x,y):
         return y
     if y == e:
         return x
-    (idx1,a1,b1,s1) = x
-    (idx2,a2,b2,s2) = y
-    v1 = a1 if s1 == 1 else b1
-    v2 = a2 if s2 == 1 else b2
-    # log()
-    # log("v1", v1)
-    # log("v2", v2)
-    # log()
-    if v1 > v2:
-        return x
-    if v1 == v2 and idx1 < idx2:
-        return x
-    return y
+    (i1,a1,j1,b1) = x
+    (i2,a2,j2,b2) = y
+
+    if a1 > a2 or (a1 == a2 and i1 < i2):
+        i,a = i1,a1
+    else:
+        i,a = i2,a2
+
+    if b1 > b2 or (b1 == b2 and j1 < j2):
+        j,b = j1,b1
+    else:
+        j,b = j2,b2
+
+    return (i,a,j,b)
 
 def mapping(f,x):
-    idx,a,b,s = x
-    return idx,a,b,f*s
+    if f == 1:
+        return x
+    i,a,j,b = x
+    return j,b,i,a
 
 composition = lambda f,g: f*g
 id_ = 1
@@ -710,7 +713,7 @@ def solve_(n, q, arr, qrr):
     # your solution here
 
     # arr = [0] + arr
-    arr = [(i,x,MOD-x,1) for i,x in enumerate(arr)]  # index, v1, v2, flipped
+    arr = [(i,x,i,(MOD-1 * x)%MOD) for i,x in enumerate(arr)]  # index, v1, v2, flipped
 
     st = LazySegTree(op, e, mapping, composition, id_, arr)
 
@@ -731,11 +734,11 @@ def solve_(n, q, arr, qrr):
         #     log(st.prod(i, i+1))
         # log()
 
-        idx,a,b,s = st.all_prod()
+        i,a,j,b = st.all_prod()
 
         # log(st._d)
 
-        res += idx + 1
+        res += i + 1
         # log(idx + 1)
         # log(" --- ")
 
