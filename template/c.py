@@ -63,21 +63,37 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, q, nrr, qrr):
     # your solution here
+    n += 1
+    nrr = [0] + nrr
 
-    return ""
+    c = Counter(qrr)
+    cnt = 0
+
+    for x in range(n):
+        if c[x] % 2 == 1:
+            for y in range(x, n, x):
+                nrr[y] = 1 - nrr[y]
+
+        if nrr[x] % 2 == 1:
+            cnt += 1
+            for y in range(x, n, x):
+                nrr[y] = 1 - nrr[y]
+
+    return cnt
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    nrr = [1 if x == "1" else 0 for x in srr]
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -87,12 +103,15 @@ for case_num in range(int(input())):
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
+    q = int(input())
+
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qrr = read_matrix(q)  # and return as a list of list of int
+    qrr = [x[0] for x in qrr]
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, q, nrr, qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
