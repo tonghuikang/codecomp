@@ -126,23 +126,41 @@ def get_prime_factors_with_precomp_sqrt(num):
 @cache
 def dp(factors):
     # return minimum length array that has product factors and sums to sumval
-    if len(factors) == 1:
-        return [(sumval, 1, (factors[0],))]
+    log(factors)
+
+    if len(factors) == 1 and factors[0] <= 41:
+        return {factors[0]: [factors[0]]}
 
     res = {}
-    
 
     for x in factors:
-        res = []
-        f2 = tuple(list(factors).remove(x))
+        f2 = list(factors)
+        f2.remove(x)
+        f2 = tuple(f2)
 
-        # append
-        val = dp(sumval - x, f2)
-        if val != []:
-            val = val + [x]
-            if res == [] or len(val) < len(res):
-                res = val
-    
+        r2 = dp(f2)
+
+        for s2, a2 in r2.items():
+            # append
+            ss = s2 + x
+            if ss not in res or len(res[ss]) > len(a2) + 1:
+                if ss <= 41:
+                    res[ss] = [x for x in a2] + [x]
+            
+            for i in range(len(a2)):
+                s2 -= a2[i]
+                a2[i] = a2[i] * x
+                s2 += a2[i]
+
+                if s2 not in res or len(res[s2]) > len(a2) + 1:
+                    if s2 <= 41:
+                        res[s2] = [x for x in a2]
+
+                s2 -= a2[i]
+                a2[i] = a2[i] // x
+                s2 += a2[i]
+
+    log(factors, res)
     return res
 
 
@@ -157,10 +175,15 @@ def solve_(n):
         return [-1]
     
     minval = factors + [1] * (41 - sum(factors))
+    
+    dp_res = dp(tuple(factors))
 
-    # for i in range(1, 41+1):
-        
-    #     factors = factors + [1] * (41 - sum(factors))
+    log(dp_res)
+
+    for k,val in dp_res.items():
+        val = val + [1] * (41 - sum(val))
+        if len(val) < len(minval):
+            minval = val
 
     assert sum(minval) == 41
     val = 1
