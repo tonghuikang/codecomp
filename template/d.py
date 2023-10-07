@@ -680,10 +680,10 @@ def op(x,y):
     (idx2,a2,b2,s2) = y
     v1 = a1 if s1 == 1 else b1
     v2 = a2 if s2 == 1 else b2
-    log()
-    log("v1", v1)
-    log("v2", v2)
-    log()
+    # log()
+    # log("v1", v1)
+    # log("v2", v2)
+    # log()
     if v1 >= v2:
         return x
     return y
@@ -718,12 +718,14 @@ def solve_(n, q, arr, qrr):
         st.apply(l, r, f)   # l inclusive, r exclusive
     
 
-        # log()
-        # for i in range(n):
-        #     log(st.prod(i, i+1))
-        # log()
+        log()
+        for i in range(n):
+            log(st.prod(i, i+1))
+        log()
 
         idx,a,b,s = st.all_prod()
+
+        # log(st._d)
 
         res += idx + 1
         log(idx + 1)
