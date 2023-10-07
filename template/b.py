@@ -126,7 +126,7 @@ def get_prime_factors_with_precomp_sqrt(num):
 @cache
 def dp(factors):
     # return minimum length array that has product factors and sums to sumval
-    log(factors)
+    # log(factors)
 
     if len(factors) == 1 and factors[0] <= 41:
         return {factors[0]: [factors[0]]}
@@ -160,7 +160,7 @@ def dp(factors):
                 a2[i] = a2[i] // x
                 s2 += a2[i]
 
-    log(factors, res)
+    # log(factors, res)
     return res
 
 
@@ -180,7 +180,7 @@ def solve_(n):
     
     dp_res = dp(tuple(factors))
 
-    log(dp_res)
+    # log(dp_res)
 
     for k,val in dp_res.items():
         val = val + [1] * (41 - sum(val))
