@@ -688,7 +688,7 @@ def op(x,y):
         return x
     return y
 
-e = (0, 0, 0, 1)
+e = (0, 0, 0, -1)
 
 def mapping(f,x):
     idx,a,b,s = x
@@ -703,33 +703,35 @@ MOD = 10**9 + 7
 def solve_(n, q, arr, qrr):
     # your solution here
 
+    arr = [0] + arr
     arr = [(i,x,MOD-x,1) for i,x in enumerate(arr)]  # index, v1, v2, flipped
 
     st = LazySegTree(op, e, mapping, composition, id_, arr)
 
-    idx,a,b,s = st.all_prod()
-    log(idx,a,b,s)
+    log(n, q)
+    # idx,a,b,s = st.all_prod()
+    # log(idx,a,b,s)
 
     res = 0
 
     for l,r in qrr:
-        l -= 1
+        r += 1
         f = -1
         st.apply(l, r, f)   # l inclusive, r exclusive
     
 
-        log()
-        for i in range(n):
-            log(st.prod(i, i+1))
-        log()
+        # log()
+        # for i in range(n):
+        #     log(st.prod(i, i+1))
+        # log()
 
         idx,a,b,s = st.all_prod()
 
         # log(st._d)
 
-        res += idx + 1
-        log(idx + 1)
-        log(" --- ")
+        res += idx
+        # log(idx + 1)
+        # log(" --- ")
 
     return res
 
@@ -758,7 +760,7 @@ for case_num in range(int(input())):
     qrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, q, arr, qrr)  # include input here
+    res = solve_(n, q, arr, qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -769,6 +771,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
