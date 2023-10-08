@@ -328,6 +328,22 @@ def count_numbers_with_at_most_certain_sum_of_digits(req_digit_sum, target):
     return res
 
 
+def generate_partitions(n):
+    # https://www.facebook.com/codingcompetitions/hacker-cup/2023/round-1/problems/B2
+    # https://code.activestate.com/recipes/218332/
+
+    # base case of recursion: zero is the sum of the empty list
+    if n == 0:
+        yield []
+        return
+        
+    # modify partitions of n-1 to form partitions of n
+    for p in partitions(n-1):
+        yield [1] + p
+        if p and (len(p) < 2 or p[1] > p[0]):
+            yield [p[0] + 1] + p[1:]
+
+
 # ----------------------------- floor sums  -----------------------------
 
 
