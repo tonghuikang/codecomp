@@ -281,8 +281,6 @@ def solve_(n, arr, mrr):
 
         # mrr[cur] = curset
 
-        # log(full)
-        # log(hole)
 
         if cur == 0:
             break
@@ -292,6 +290,8 @@ def solve_(n, arr, mrr):
         if len(g[arr[cur]]) == 0:
             proc.append(arr[cur])
 
+    log(full)
+    log(hole)
     # log(mrr)
     
     return len(full[0])
