@@ -145,19 +145,6 @@ def solve_(n, arr, mrr):
     for k,v in replacement.items():
         for topic in mrr[k]:
             mrr[v].add(topic)
-    
-    children = [set() for _ in range(n)]
-    g = [set() for _ in range(n)]
-
-    for i,x in enumerate(arr[1:], start=1):
-        if i in replacement:
-            i = replacement[i]
-        if x in replacement:
-            x = replacement[x]
-        if i == x:
-            continue
-        children[x].add(i)    
-        g[x].add(i)
 
     for x in removed:
         mrr[x] = -1
@@ -167,20 +154,21 @@ def solve_(n, arr, mrr):
             replacement[x] if x in replacement else x
         ) for i,x in enumerate(arr)]
 
-    log(replacement)
-    log(arr)
-    log(g)
-    log(mrr)
-    log("----")
-
     children = [set() for _ in range(n)]
     g = [set() for _ in range(n)]
 
     for i,x in enumerate(arr[1:], start=1):
         if i in removed:
             continue
+        if x in replacement:
+            x = replacement[x]
         children[x].add(i)
         g[x].add(i)
+
+    log(replacement)
+    log("arr", arr)
+    log(mrr)
+    log("----")
 
     # log(g)
     # log(children)
@@ -203,11 +191,11 @@ def solve_(n, arr, mrr):
             if len(children[nex]) > 0:  # is a not leaf
                 if required_set_is_set:
                     required_set = required_set & mrr[nex]
-                    log(cur, "required_set_is_set", children[nex])
+                    # log(cur, "required_set_is_set", children[nex])
                 else:
                     required_set_is_set = True
                     required_set = mrr[nex]
-                    log(cur, "required_set_is_set", children[nex])
+                    # log(cur, "required_set_is_set", children[nex])
 
         counts = Counter()
         for x in mrr[cur]:
