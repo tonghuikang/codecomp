@@ -119,6 +119,7 @@ def solve_(r,c,mrr):
                         continue
                     if (start_x,start_y) in visited:
                         break
+                    visited.add((start_x, start_y))
                     stack = [(start_x,start_y)]
                     saved = False
                     while stack:
@@ -139,6 +140,7 @@ def solve_(r,c,mrr):
                         # log(i,j,start_x,start_y)
                         val += len(visited)
             
+            # log(i,j,val)
             # log()
             # log(mrr)
             maxres = max(maxres, val)
