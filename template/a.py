@@ -165,10 +165,10 @@ for case_num in range(int(input())):
 
     res = solve(r,c,mrr)  # include input here
 
-    if res > 0:
-        res = "YES"
-    else:
-        res = "NO"
+    # if res > 0:
+    #     res = "YES"
+    # else:
+    #     res = "NO"
 
     # print length if applicable
     # print(len(res))
