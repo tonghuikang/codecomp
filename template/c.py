@@ -219,7 +219,7 @@ def solve_(n, arr, mrr):
                     hole_count[topic] += 1
 
         for nex in children[cur]:
-            if len(children[nex]) == 0:  # is a not leaf
+            if len(children[nex]) == 0:  # is a leaf
                 for topic in full[nex]:
                     full_count[topic] += 1
                 for topic in (set(full_count.keys()) | set(hole_count.keys())):
@@ -231,10 +231,10 @@ def solve_(n, arr, mrr):
             if full_count[topic] >= len(children[cur]):
                 fulls.add(topic)
                 continue
-            if full_count[topic] == len(children[cur]) - 1 and hole_count[topic] >= 1 and topic in mrr[cur]:
+            if full_count[topic] == len(children[cur]) - 1 and hole_count[topic] == 1 and topic in mrr[cur]:
                 fulls.add(topic)
                 continue
-            if full_count[topic] == len(children[cur]) - 1 and hole_count[topic] >= 1:
+            if full_count[topic] == len(children[cur]) - 1 and hole_count[topic] == 1:
                 holes.add(topic)
 
         full[cur] = fulls
