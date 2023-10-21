@@ -118,6 +118,22 @@ def solve_(n, arr, mrr):
         g[x].add(i)
         children[x].add(i)
 
+    leaf_count = 0
+    for i in range(n):
+        if len(g[i]) == 0:
+            leaf_count += 1
+
+    all_counts = Counter()
+    for topics in mrr:
+        for topic in topics:
+            all_counts[topic] += 1
+    # log(all_counts, leaf_count)
+    for i in range(n):
+        topics = list(mrr[i])
+        for topic in topics:
+            if all_counts[topic] < leaf_count:
+                mrr[i].remove(topic)
+
     ds = DisjointSet(n+10)
     for i,x in enumerate(g):
         if len(x) == 1:
@@ -147,7 +163,7 @@ def solve_(n, arr, mrr):
             mrr[v].add(topic)
 
     for x in removed:
-        mrr[x] = -1
+        mrr[x] = set()
 
     arr = [
         -LARGE if i in removed else (
@@ -173,6 +189,10 @@ def solve_(n, arr, mrr):
     # log(g)
     # log(children)
 
+    full = [set(q for q in x) for x in mrr]
+    hole = [set() for _ in range(n)]
+
+    # tree processing logic
     proc = []
     for i,x in enumerate(g):
         if i in removed:
@@ -185,42 +205,84 @@ def solve_(n, arr, mrr):
         cur = proc.pop()
         log(cur)
 
-        required_set = set()
-        required_set_is_set = False
+        if len(children[cur]) == 0:
+            continue
+
+        full_count = Counter()
+        hole_count = Counter()
+
         for nex in children[cur]:
             if len(children[nex]) > 0:  # is a not leaf
-                if required_set_is_set:
-                    required_set = required_set & mrr[nex]
-                    # log(cur, "required_set_is_set", children[nex])
-                else:
-                    required_set_is_set = True
-                    required_set = mrr[nex]
-                    # log(cur, "required_set_is_set", children[nex])
+                for topic in full[nex]:
+                    full_count[topic] += 1
+                for topic in full[nex]:
+                    hole_count[topic] += 1
 
-        counts = Counter()
-        for x in mrr[cur]:
-            counts[x] += 1
-        num_leaf_children = 0
         for nex in children[cur]:
-            if len(children[nex]) == 0:  # is a leaf
-                num_leaf_children += 1
-                for x in mrr[nex]:
-                    counts[x] += 1
+            if len(children[nex]) == 0:  # is a not leaf
+                for topic in full[nex]:
+                    full_count[topic] += 1
+                for topic in (set(full_count.keys()) | set(hole_count.keys())):
+                    hole_count[topic] += 1
+
+        fulls = set()
+        holes = set()
+        for topic in (set(full_count.keys()) | set(hole_count.keys())):
+            if full_count[topic] >= len(children[cur]):
+                fulls.add(topic)
+                continue
+            if full_count[topic] == len(children[cur]) - 1 and hole_count[topic] >= 1 and topic in mrr[cur]:
+                fulls.add(topic)
+                continue
+            if full_count[topic] == len(children[cur]) - 1 and hole_count[topic] >= 1:
+                holes.add(topic)
+
+        full[cur] = fulls
+        hole[cur] = holes
+
+
+        # # full if at least n
+        # # hole if there is n - 1
+
+        # required_set = set()
+        # required_set_is_set = False
+        # for nex in children[cur]:
+        #     if len(children[nex]) > 0:  # is a not leaf
+        #         if required_set_is_set:
+        #             required_set = required_set & mrr[nex]
+        #             # log(cur, "required_set_is_set", children[nex])
+        #         else:
+        #             required_set_is_set = True
+        #             required_set = mrr[nex]
+        #             # log(cur, "required_set_is_set", children[nex])
+
+        # counts = Counter()
+        # for x in mrr[cur]:
+        #     counts[x] += 1
+        # num_leaf_children = 0
+        # for nex in children[cur]:
+        #     if len(children[nex]) == 0:  # is a leaf
+        #         num_leaf_children += 1
+        #         for x in mrr[nex]:
+        #             counts[x] += 1
         
-        if required_set_is_set:
-            curset = set()
-            for x in required_set:
-                if counts[x] >= num_leaf_children:
-                    curset.add(x)
-        else:
-            curset = set()
-            for x in counts.keys():
-                if counts[x] >= num_leaf_children:
-                    curset.add(x)
+        # if required_set_is_set:
+        #     curset = set()
+        #     for x in required_set:
+        #         if counts[x] >= num_leaf_children:
+        #             curset.add(x)
+        # else:
+        #     curset = set()
+        #     for x in counts.keys():
+        #         if counts[x] >= num_leaf_children:
+        #             curset.add(x)
 
         # log(cur, "num_leaf_children", num_leaf_children, counts, required_set_is_set, required_set)
 
-        mrr[cur] = curset
+        # mrr[cur] = curset
+
+        # log(full)
+        # log(hole)
 
         if cur == 0:
             break
@@ -230,9 +292,9 @@ def solve_(n, arr, mrr):
         if len(g[arr[cur]]) == 0:
             proc.append(arr[cur])
 
-    log(mrr)
+    # log(mrr)
     
-    return len(mrr[0])
+    return len(full[0])
 
 
 # for case_num in [0]:  # no loop over test case
