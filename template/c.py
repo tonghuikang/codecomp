@@ -63,77 +63,178 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+
+
+class DisjointSet:
+    # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
+    # faster implementation of DSU
+    def __init__(self, n: int = 0) -> None:
+        if n > 0:  # constant size DSU
+            self.parent_or_size = [-1] * n
+        else:
+            # WARNING: non-negative numeric elements only
+            self.parent_or_size = defaultdict(lambda: -1)
+
+    def union(self, a: int, b: int) -> int:
+        x = self.find(a)
+        y = self.find(b)
+
+        if x == y:
+            return x
+
+        if -self.parent_or_size[x] < -self.parent_or_size[y]:
+            x, y = y, x
+
+        self.parent_or_size[x] += self.parent_or_size[y]
+        self.parent_or_size[y] = x
+
+        return x
+
+    def find(self, a: int) -> int:
+        parent = self.parent_or_size[a]
+        while parent >= 0:
+            if self.parent_or_size[parent] < 0:
+                return parent
+            self.parent_or_size[a], a, parent = (
+                self.parent_or_size[parent],
+                self.parent_or_size[parent],
+                self.parent_or_size[self.parent_or_size[parent]],
+            )
+        return a
+
+    def size(self, a: int) -> int:
+        return -self.parent_or_size[self.find(a)]
+
+
 def solve_(n, arr, mrr):
     # your solution here
     arr = [-1] + arr
     children = [set() for _ in range(n)]
     g = [set() for _ in range(n)]
-    is_complex = [False for _ in range(n)]
-
-    # leaf_count = [0 for _ in range(n)]
-    # vocab_count = [Counter(x) for x in range(n)]
 
     for i,x in enumerate(arr[1:], start=1):
         g[x].add(i)
         children[x].add(i)
 
+    ds = DisjointSet(n+10)
+    for i,x in enumerate(g):
+        if len(x) == 1:
+            child = list(x)[0]
+            ds.union(i,child)
+
+    for i in range(n):
+        ds.find(i)
+    
+    for i in range(n):
+        ds.find(i)
+
+    replacement = {}
+    ldr0 = ds.find(0)
+
+    for i in range(n):
+        ldr = ds.find(i)
+        if ldr == ldr0:
+            ldr = 0
+        if ldr != i:
+            replacement[i] = ldr
+
+    removed = set(replacement.keys())
+
+    for k,v in replacement.items():
+        for topic in mrr[k]:
+            mrr[v].add(topic)
+    
+    children = [set() for _ in range(n)]
+    g = [set() for _ in range(n)]
+
+    for i,x in enumerate(arr[1:], start=1):
+        if i in replacement:
+            i = replacement[i]
+        if x in replacement:
+            x = replacement[x]
+        if i == x:
+            continue
+        children[x].add(i)    
+        g[x].add(i)
+
+    for x in removed:
+        mrr[x] = -1
+
+    arr = [
+        -2 if i in removed else (
+            replacement[x] if x in replacement else x
+        ) for i,x in enumerate(arr)]
+
+    log(replacement)
+    log(arr)
+    log(g)
+    log(mrr)
+    log("----")
+
+    children = [set() for _ in range(n)]
+    g = [set() for _ in range(n)]
+
+    for i,x in enumerate(arr[1:], start=1):
+        if i in removed:
+            continue
+        children[x].add(i)
+        g[x].add(i)
+
     proc = []
     for i,x in enumerate(g):
+        if i in removed:
+            continue
         if len(x) == 0:
             proc.append(i)
-        if len(x) > 1:
-            is_complex[i] = True
-    
+
     while proc:
+        log(proc)
         cur = proc.pop()
+        log(cur)
 
-        if len(children[cur]) == 1:
-            curset = mrr[cur]
-            mrr[cur] = mrr[list(children[cur])[0]]  # might be large
-            for x in curset:
-                mrr[cur].add(x)
+        required_set = set()
+        required_set_is_set = False
+        for nex in children[cur]:
+            if len(children[nex]) >= 0:  # is a leaf
+                if required_set_is_set:
+                    required_set = required_set & mrr[nex]
+                else:
+                    required_set_is_set = True
+                    required_set = mrr[nex]
+
+        counts = Counter()
+        for x in mrr[cur]:
+            counts[x] += 1
+        num_leaf_children = 0
+        for nex in children[cur]:
+            if len(children[nex]) == 0:  # is a leaf
+                num_leaf_children += 1
+                for x in mrr[nex]:
+                    counts[x] += 1
+        
+        if required_set_is_set:
+            curset = set()
+            for x in required_set:
+                if counts[x] >= num_leaf_children:
+                    curset.add(x)
         else:
-            complex_set = set()
-            for nex in children[cur]:
-                if is_complex[nex]:
-                    if len(complex_set) == 0:
-                        complex_set = mrr[nex]
-                    else:
-                        complex_set = complex_set & mrr[nex]
+            curset = set()
+            for x in counts.keys():
+                if counts[x] >= num_leaf_children:
+                    curset.add(x)
 
-            counts = Counter()
-            for topic in mrr[cur]:
-                counts[topic] += 1
+        log(cur, "num_leaf_children", num_leaf_children, counts, required_set_is_set, required_set)
 
-            for nex in children[cur]:
-                for topic in mrr[nex]:
-                    counts[topic] += 1
-            
-            newset = set()
-            num_children = len(children[cur])
-            for topic,v in counts.items():
-                if v >= num_children:
-                    newset.add(topic)
-
-            if complex_set:
-                newset = newset & complex_set
-            
-            mrr[cur] = newset
-
-        log(cur, complex_set)
+        mrr[cur] = curset
 
         if cur == 0:
             break
-
-        if is_complex[cur] is True:
-            is_complex[arr[cur]] = True
 
         g[arr[cur]].remove(cur)
  
         if len(g[arr[cur]]) == 0:
             proc.append(arr[cur])
 
-    log(is_complex)
     log(mrr)
     
     return len(mrr[0])
