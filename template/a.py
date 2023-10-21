@@ -112,8 +112,8 @@ def solve_(r,c,mrr):
                 if 0 <= start_x < r and 0 <= start_y < c:
             # for start_x in range(r):
             #     for start_y in range(c):
-                    if (start_x, start_y) in visited:
-                        continue
+                    # if (start_x, start_y) in visited:
+                    #     continue
                     # log(start_x, start_y)
                     if mrr[start_x][start_y] != "W":
                         continue
