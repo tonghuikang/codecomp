@@ -12,7 +12,7 @@ input = sys.stdin.readline  # to read input quickly
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 # abc = "abcdefghijklmnopqrstuvwxyz"
@@ -62,11 +62,82 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# An orthogonally contiguous set of stones of the same color is called a group.
+# A group of stones is captured (and removed from the board) once no stones in the group has an adjacent empty space.
 
-def solve_():
+
+class DisjointSet:
+    # leetcode.com/problems/accounts-merge/
+    def __init__(self, parent={}):
+        if not parent:
+            parent = {}
+        self.parent = parent
+
+    def find(self, item):
+        if item not in self.parent:
+            self.parent[item] = item
+            return item
+        elif self.parent[item] == item:
+            return item
+        else:
+            res = self.find(self.parent[item])
+            self.parent[item] = res
+            return res
+
+    def union(self, set1, set2):
+        root1 = self.find(set1)
+        root2 = self.find(set2)
+        self.parent[root1] = root2
+
+
+def solve_(r,c,mrr):
     # your solution here
 
-    return ""
+    mrr = [list(row) for row in mrr]
+    maxres = 0
+
+    # log(mrr)
+
+    for i in range(r):
+        for j in range(c):
+            if mrr[i][j] != ".":
+                continue
+            mrr[i][j] = "B"
+            val = 0
+
+            for start_x in range(r):
+                for start_y in range(c):
+                    # log(start_x, start_y)
+                    if mrr[start_x][start_y] != "W":
+                        continue
+                    visited = set()
+                    stack = [(start_x,start_y)]
+                    saved = False
+                    while stack:
+                        # log(stack)
+                        x,y = stack.pop()
+                        for dx,dy in d4:
+                            xx = x+dx
+                            yy = y+dy
+                            if 0 <= xx < r and 0 <= yy < c and (xx,yy) not in visited:
+                                if mrr[xx][yy] == ".":
+                                    saved = True
+                                    continue
+                                if mrr[xx][yy] == "W":
+                                    stack.append((xx,yy))
+                                    visited.add((xx,yy))
+
+                    if saved is False:
+                        # log(i,j,start_x,start_y)
+                        val += 1
+            
+            # log()
+            # log(mrr)
+            maxres = max(maxres, val)
+            mrr[i][j] = "."
+            # return -1
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,16 +154,21 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    r,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_strings(r)  # and return as a list of str
+    # mrr = read_matrix(r)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(r,c,mrr)  # include input here
+
+    if res > 0:
+        res = "YES"
+    else:
+        res = "NO"
 
     # print length if applicable
     # print(len(res))
