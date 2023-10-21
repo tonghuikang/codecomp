@@ -182,6 +182,9 @@ def solve_(n, arr, mrr):
         children[x].add(i)
         g[x].add(i)
 
+    # log(g)
+    # log(children)
+
     proc = []
     for i,x in enumerate(g):
         if i in removed:
@@ -197,12 +200,14 @@ def solve_(n, arr, mrr):
         required_set = set()
         required_set_is_set = False
         for nex in children[cur]:
-            if len(children[nex]) >= 0:  # is a leaf
+            if len(children[nex]) > 0:  # is a not leaf
                 if required_set_is_set:
                     required_set = required_set & mrr[nex]
+                    log(cur, "required_set_is_set", children[nex])
                 else:
                     required_set_is_set = True
                     required_set = mrr[nex]
+                    log(cur, "required_set_is_set", children[nex])
 
         counts = Counter()
         for x in mrr[cur]:
@@ -225,7 +230,7 @@ def solve_(n, arr, mrr):
                 if counts[x] >= num_leaf_children:
                     curset.add(x)
 
-        log(cur, "num_leaf_children", num_leaf_children, counts, required_set_is_set, required_set)
+        # log(cur, "num_leaf_children", num_leaf_children, counts, required_set_is_set, required_set)
 
         mrr[cur] = curset
 
