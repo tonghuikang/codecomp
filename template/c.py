@@ -10,6 +10,8 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
+LARGE = -10**9
+
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
@@ -161,7 +163,7 @@ def solve_(n, arr, mrr):
         mrr[x] = -1
 
     arr = [
-        -2 if i in removed else (
+        -LARGE if i in removed else (
             replacement[x] if x in replacement else x
         ) for i,x in enumerate(arr)]
 
