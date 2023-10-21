@@ -39,7 +39,7 @@ def solve(*args):
     # screen input
     if OFFLINE_TEST:
         log("----- solving ------")
-        log(*args)
+        # log(*args)
         log("----- ------- ------")
     return solve_(*args)
 
@@ -105,12 +105,20 @@ def solve_(r,c,mrr):
             mrr[i][j] = "B"
             val = 0
 
-            for start_x in range(r):
-                for start_y in range(c):
+            visited = set()
+            for dx, dy in d4:
+                start_x = i + dx
+                start_y = j + dy
+                if 0 <= start_x < r and 0 <= start_y < c:
+            # for start_x in range(r):
+            #     for start_y in range(c):
+                    if (start_x, start_y) in visited:
+                        continue
                     # log(start_x, start_y)
                     if mrr[start_x][start_y] != "W":
                         continue
-                    visited = set()
+                    if (start_x,start_y) in visited:
+                        break
                     stack = [(start_x,start_y)]
                     saved = False
                     while stack:
@@ -129,7 +137,7 @@ def solve_(r,c,mrr):
 
                     if saved is False:
                         # log(i,j,start_x,start_y)
-                        val += 1
+                        val += len(visited)
             
             # log()
             # log(mrr)
