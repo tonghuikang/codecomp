@@ -130,7 +130,5 @@ int main() {
         cout << (allres / 2) << "\n";
     }
 
-    t += 1
-
     return 0;
 }
