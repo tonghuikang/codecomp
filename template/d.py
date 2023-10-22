@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import Counter, defaultdict
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -132,13 +130,15 @@ def solve_(n, arr):
     cntr = Counter(arr)
     allset = set(arr)
 
+    # log(cntr)
+
     for k,v in cntr.items():
         for divisor in divisors[k]:
             divisor_count[divisor] += v
             if divisor != k:
                 small_to_large[divisor].append(k)
     
-    log(divisor_count)
+    # log(divisor_count)
 
     allres = 0
 
@@ -153,16 +153,24 @@ def solve_(n, arr):
             cur_counts[divisor] += divisor_count[divisor]
             cur_counts[divisor] -= v
 
-        log("cur_counts", cur_counts)
+        # log("cur_counts", {k:v for k,v in cur_counts.items() if v != 0})
 
         for divisor in divisors[k]:
+            deductible = cur_counts[divisor]
+            flag = False
             for d in divisors[divisor]:
-                if d != divisor:
-                    cur_counts[d] -= cur_counts[divisor]
+                if d in allset:
+                    flag = True
+                cur_counts[d] -= deductible
+            if flag:
+                v += deductible
 
-        res = n - sum(v for k,v in cur_counts.items() if k in allset) - v
-        log(k, v0, v, res, cur_counts)
+        res = n - v
+        # log(k, v0, v, res)
+        # log("cur_counts", {k:v for k,v in cur_counts.items() if v != 0})
         allres += res * v0
+
+    # assert allres%2 == 0
 
     return allres // 2
 
