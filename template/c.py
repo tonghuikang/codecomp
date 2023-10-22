@@ -66,7 +66,7 @@ def minus_one_matrix(mrr):
 def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    return m
 
 
 # for case_num in [0]:  # no loop over test case
