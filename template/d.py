@@ -54,6 +54,7 @@ vector<int> divisors(int x) {
     return get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp(x));
 }
 
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
@@ -128,6 +129,8 @@ int main() {
 
         cout << (allres / 2) << "\n";
     }
+
+    t += 1
 
     return 0;
 }
