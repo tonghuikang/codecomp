@@ -55,12 +55,12 @@ def get_all_divisors_given_prime_factorization(factors):
                 divs.append(divs[j] * prime_pow)
 
     # NOT IN SORTED ORDER
-    return divs
+    return sorted(divs, reverse=True)
 
 
-divisors = [
-    sorted(get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp(x)), reverse=True)
-    for x in range(1_000_000 + 5)]
+def divisors(x):
+    return get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp(x))
+    
 
 for case_num in range(int(input())):
     n = int(input())
@@ -75,7 +75,7 @@ for case_num in range(int(input())):
     # log(cntr)
 
     for k,v in cntr.items():
-        for divisor in divisors[k]:
+        for divisor in divisors(k):
             divisor_count[divisor] += v
             if divisor != k:
                 small_to_large[divisor].append(k)
@@ -91,16 +91,16 @@ for case_num in range(int(input())):
         for large in small_to_large[k]:
             v += cntr[large]
 
-        for divisor in divisors[k]:
+        for divisor in divisors(k):
             cur_counts[divisor] += divisor_count[divisor]
             cur_counts[divisor] -= v
 
         # log("cur_counts", {k:v for k,v in cur_counts.items() if v != 0})
 
-        for divisor in divisors[k]:
+        for divisor in divisors(k):
             deductible = cur_counts[divisor]
             flag = False
-            for d in divisors[divisor]:
+            for d in divisors(divisor):
                 if d in allset:
                     flag = True
                 cur_counts[d] -= deductible
