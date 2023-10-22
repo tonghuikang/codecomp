@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import heapq
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -66,7 +64,38 @@ def minus_one_matrix(mrr):
 def solve_(n,m,mrr):
     # your solution here
 
-    return m
+    # the value is the peak
+
+    mrr.sort()
+
+    left_extend = 0
+    right_extend = 0
+    maxres = 0
+    ends = []
+
+    for a,b in mrr:
+        if a == 1 and b == m:
+            continue
+
+        while ends and ends[0][0] < a:
+            _, is_left, is_right = heapq.heappop(ends)
+            if is_left:
+                left_extend -= 1
+            if is_right:
+                right_extend -= 1
+
+        is_left = a == 1
+        is_right = b == m
+
+        if is_left:
+            left_extend += 1
+        if is_right:
+            right_extend += 1
+
+        heapq.heappush(ends, (b, is_left, is_right))
+        maxres = max(maxres, len(ends) - min(left_extend, right_extend))
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -89,7 +118,7 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
     res = solve(n,m,mrr)  # include input here
