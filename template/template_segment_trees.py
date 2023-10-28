@@ -476,12 +476,15 @@ RANGE ADDITION (not verified)
 x -> a+x
 # https://leetcode.com/contest/biweekly-contest-116/problems/subarrays-distinct-element-sum-of-squares-ii/
 
-op = lambda a,b: a+b
-e = 0
-mapping = lambda f,x: f(x)
-composition = lambda f,g: (lambda x: f(g(x)))
-id_ = lambda x: x
-f = lambda x: a+x
+# (initial value, number of nodes
+arr = [(0,1) for _ in range(len(nums))]
+
+op = lambda a,b: (a[0]+b[0], a[1]+b[1])
+e = 0,0
+mapping = lambda f,x: (f*x[1] + x[0], x[1])
+composition = lambda f,g: f+g
+id_ = 0
+f = 1
 
 st = LazySegTree(op, e, mapping, composition, id_, arr)
 st.apply(l, r, f)   # redefine f before calling this
@@ -528,6 +531,7 @@ def composition(x: Tuple[int, int], y: Tuple[int, int]) -> Tuple[int, int]:
 id_ = 1,0
 f = b,c
 
+a = [(ai, 1) for ai in map(int, sys.stdin.readline().split())]
 st = LazySegTree(op, e, mapping, composition, id_, a)
 st.apply(l, r, (b, c))
 st.prod(l, r)[0]
