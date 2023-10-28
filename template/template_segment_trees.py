@@ -440,8 +440,8 @@ Some explanation
 - `e()` in S is analogous to zero in the addition field in integers.
 - `e()` in S is analogous to one in the multiplication field in integers.
 - `op(a, e()) = op(e(), a) = op(a)` for all `a`
-- `id` is an identity function.
-- `id(x) = x` for all `x` 
+- `id` is an identity function in the range updates
+- `id(x) = x` for all `x`
 - `composition(id, f) = composition(f, id) = f`
 
 
@@ -466,22 +466,22 @@ We can represent f and id_ as an integer instead, and let mapping execute the fu
 
 op = lambda a,b: a+b
 e = 0
-mapping = lambda f,x: f(x)
-composition = lambda f,g: (lambda x: f(g(x)))
+mapping = lambda f,x: f*x
+composition = lambda f,g: f*g
 id_ = 1
 f = -1
 
 
 RANGE ADDITION (not verified)
 x -> a+x
-We could use Fenwick Tree for this, but let us try using LST
+# https://leetcode.com/contest/biweekly-contest-116/problems/subarrays-distinct-element-sum-of-squares-ii/
 
 op = lambda a,b: a+b
 e = 0
 mapping = lambda f,x: f(x)
 composition = lambda f,g: (lambda x: f(g(x)))
 id_ = lambda x: x
-f = lambda x: a+x   
+f = lambda x: a+x
 
 st = LazySegTree(op, e, mapping, composition, id_, arr)
 st.apply(l, r, f)   # redefine f before calling this
@@ -492,7 +492,7 @@ We can avoid using functions to represent f and id_
 op = lambda a,b: a+b
 e = 0
 mapping = lambda f,x: f+x
-composition = lambda f,g: (lambda x: f(g(x)))
+composition = lambda f,g: f+g
 id_ = 0
 f = a
 
@@ -500,6 +500,19 @@ st = LazySegTree(op, e, mapping, composition, id_, arr)
 st.apply(l, r, f)   # redefine f before calling this
 st.prod(l, r)
 
+# but this does not work?
+
+op = lambda a,b: a+b
+e = 0
+mapping = lambda f,x: f+x
+composition = lambda f,g: f+g
+id_ = 0
+arr = [0,0,0]
+
+st = LazySegTree(op, e, mapping, composition, id_, arr)
+print(st.all_prod())
+st.apply(0,3,100)
+print(st.all_prod())
 
 RANGE AFFINE TRANSFORM
 x -> b*x + c
