@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -62,11 +59,95 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def binary_search(
+    func_,  # condition function
+    first=True,  # else last
+    target=True,  # else False
+    left=0,
+    right=2**31 - 1,
+) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
 
-def solve_():
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first ^ target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:  # find last False
+        return left - 1
+
+# grr = [g(x) for x in range(800)]
+    
+# for i in range(3, 11):
+#     def func(x):
+#         return g(x) >= i
+#     idx = binary_search(func, left=10, right=10**20)
+#     assert g(idx) - 1 == i - 1
+#     assert g(idx) == i
+#     print(i, idx)
+
+# intervals = [(i, a, b-1) for i,a,b in zip(range(2, 11), vrr, vrr[1:])]
+
+intervals = [[2, 4, 7],
+ [1, 8, 8],
+ [2, 9, 728],
+ [3, 729, 50624],
+ [4, 50625, 4084100],
+ [5, 4084101, 4194303],
+ [4, 4194304, 5153631],
+ [5, 5153632, 481890303],
+ [6, 481890304, 536870911],
+ [5, 536870912, 594823320],
+ [6, 594823321, 64339296874],
+ [7, 64339296875, 68719476735],
+ [6, 68719476736, 78364164095],
+ [7, 78364164096, 11688200277600],
+ [8, 11688200277601, 1953124999999999],
+ [9, 1953125000000000, 2251799813685247],
+ [8, 2251799813685248, 2334165173090450],
+ [9, 2334165173090451, 430804206899405823],
+ [10, 430804206899405824, 2305843009213693951]]
+
+
+def interval_overlap(x1, x2, y1, y2):
+    # given intervals [x1,x2], [y1,y2]
+    # [start, end] of overlapping interval
+    # if start > end, there is no overlapping inteval
+    return max(x1, y1), min(x2, y2)
+
+# log(interval_overlap(8,8,1,10))
+
+
+m9 = 10**9 + 7
+
+def solve_(l, r):
     # your solution here
 
-    return ""
+    res = 0
+
+    for i,a,b in intervals:
+        start, end = interval_overlap(a, b, l, r)
+        if start > end:
+            continue
+        res += (end - start + 1)%m9 * i
+
+    return res%m9
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +164,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    l,r = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +173,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(l, r)  # include input here
 
     # print length if applicable
     # print(len(res))
