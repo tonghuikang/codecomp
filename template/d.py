@@ -59,6 +59,24 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def f(x):
+    y = 0
+    while x >= 2:
+        x //= 2
+        y += 1
+    return y
+
+def g(x):
+    if x < 4:
+        return "x must be greater or equal to 4"
+    fx = f(x)
+    z = 0
+    product = 1
+    while product * fx <= x:
+        product *= fx
+        z += 1
+    return z
+
 def binary_search(
     func_,  # condition function
     first=True,  # else last
@@ -91,6 +109,34 @@ def binary_search(
         return left
     else:  # find last False
         return left - 1
+
+grr = [g(x) for x in range(800)]
+vrr = []
+
+for power in range(2, 62):
+    for i in range(1, 12):
+        if g(2**power) > i:
+            continue
+        if g((2**(power+1) - 1)) < i:
+            continue
+        def func(x):
+            return g(x) >= i
+        idx = binary_search(func, left=2**power, right=2**(power+1) - 1)
+        # print(power, i, idx)
+        vrr.append((i, idx))
+
+intervals = [(i, a, b-1) for (i,a),(j,b) in zip(vrr, vrr[1:])]
+shortened = [[-1, -1, -1]]
+for i,a,b in intervals:
+    if i == shortened[-1][0]:
+        shortened[-1][2] = b
+    else:
+        shortened.append([i,a,b])
+shortened = shortened[1:]
+for (i,a,b),(j,x,y) in zip(intervals, intervals[1:]):
+    assert b + 1 == x
+intervals = shortened
+intervals[-1][2] = 10**18
 
 # grr = [g(x) for x in range(800)]
     

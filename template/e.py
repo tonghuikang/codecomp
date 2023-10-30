@@ -75,13 +75,14 @@ def solve_(n,k,arr):
 
     def gcd(a,b):
         if a == 0:
-            return 0
+            return b
         if b == 0:
-            return 0
+            return a
         return math.gcd(a,b)
 
     brr = [1 if gcd(a,b) == 1 else 0 for a,b in zip(arr, arr[1:])]
     cursad = brr.count(1)
+    log(brr)
 
     cur = []
     orr = []  # lengths of consecutive ones
