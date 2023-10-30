@@ -71,6 +71,9 @@ def solve_(n, arr):
     allsum = sum(arr)
     cursum = 0
 
+    if allsum == 1:
+        return 1
+
     num_towers = 0
     while arr:
         val = arr.pop()
