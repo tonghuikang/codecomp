@@ -63,10 +63,98 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def ceiling_division(numer, denom):
+    return -((-numer) // denom)
+
+
 def solve_(n,k,arr):
     # your solution here
 
-    return ""
+    if n == 1:
+        return 0
+
+    def gcd(a,b):
+        if a == 0:
+            return 0
+        if b == 0:
+            return 0
+        return math.gcd(a,b)
+
+    brr = [1 if gcd(a,b) == 1 else 0 for a,b in zip(arr, arr[1:])]
+    cursad = brr.count(1)
+
+    cur = []
+    orr = []  # lengths of consecutive ones
+    oorr = []  # both sides are ones
+    oxrr = []  # one side is one
+    xxrr = []  # both sides are not ones
+    
+    started_with_one = False
+    prev = arr[0]
+
+    if arr[0] == 1:
+        one_count = 1
+        curlen = 0
+    else:
+        one_count = 0
+        curlen = 1
+
+    for a,b in zip(arr, arr[1:]):
+
+        if b == 1:
+            if a == 1:
+                one_count += 1
+                continue
+            else:
+                if started_with_one:
+                    oorr.append(curlen)
+                else:
+                    oxrr.append(curlen)
+                one_count = 1
+                curlen = 0
+                continue
+
+        if a == 1:
+            started_with_one = True
+            orr.append(one_count)
+            one_count = 0
+            curlen = 1
+            continue
+                
+        if gcd(a,b) == 1:
+            curlen += 1
+        else:
+            if started_with_one:
+                oxrr.append(curlen)
+            else:
+                xxrr.append(curlen)
+            started_with_one = False
+            curlen = 1
+    
+    if curlen > 0:
+        if started_with_one:
+            oxrr.append(curlen)
+        else:
+            xxrr.append(curlen)
+    
+    if one_count > 0:
+        orr.append(one_count)
+
+    log(orr)
+    log(oorr)
+    log(oxrr)
+    log(xxrr)
+
+    avail = 0
+    for x in xxrr:
+        avail += ceiling_division(x, 2)
+
+    k_used = min(avail, k)
+    k -= k_used
+
+    cursad -= k_used * 2
+
+    return cursad
 
 
 # for case_num in [0]:  # no loop over test case
