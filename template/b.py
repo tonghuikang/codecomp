@@ -108,7 +108,7 @@ def solve_(a,b,arr,brr):
     f = defaultdict(list)
 
     for x in xrr:
-        idx = bisect.bisect_left(qrr)
+        idx = bisect.bisect_left(qrr, x)
         nex = qrr[idx]
         f[nex].append(x)
 
@@ -117,7 +117,7 @@ def solve_(a,b,arr,brr):
         err.append(x)
         if len(f[x]) > 0:
             for y in sorted(f[x]):
-                err.append(x)
+                err.append(y)
             f[x] = 0        
 
     log(prefix)
