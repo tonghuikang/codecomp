@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -11,7 +9,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+yes, no = "Yes", "No"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -62,11 +60,36 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def solve_(n,k,arr):
+    # graph of offset values
+    # starting from offset 0 can it go k steps
 
-def solve_():
-    # your solution here
+    g = defaultdict(list)
 
-    return ""
+    for i,x in enumerate(arr):
+        if x > n:
+            continue
+        source = (i+1-x)%n
+        dest = (i+1-x+x)%n
+        g[dest].append(source)
+        # log(dest, source)
+
+
+    stack = deque([0])
+    depth = [-1 for _ in range(n)]
+    depth[0] = 0
+
+    while stack:
+        cur = stack.popleft()
+        if depth[cur] == k:
+            return yes
+        for nex in g[cur]:
+            if depth[nex] != -1:
+                return yes
+            depth[nex] = depth[cur] + 1
+            stack.append(nex)
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,8 +106,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +115,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
