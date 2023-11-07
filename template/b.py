@@ -112,16 +112,16 @@ def solve_(a,b,arr,brr):
         f[nex].append(x)
 
     err = []
-    for x in arr:
+    for x in drr:
         err.append(x)
         if len(f[x]) > 0:
             for y in sorted(f[x]):
                 err.append(y)
-            f[x] = 0        
+            f[x] = []        
 
-    log(prefix)
-    log(suffix)
-    log(xrr)
+    # log(prefix)
+    # log(suffix)
+    # log(xrr)
     
     prefix.sort(reverse=True)
     suffix.sort(reverse=True)
