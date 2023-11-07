@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,36 +61,73 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(lrr, rrr, vrr, crr):
+    # iterate from the minimum possible value to the maximum possible value
 
-    return ""
+    minval = sum(lrr)
+    maxval = sum(rrr)
+
+    appearances = defaultdict(list)
+
+    for l,r,vr,cr in zip(lrr, rrr, vrr, crr):
+        n = sum(cr)
+        for v,c in zip(vr, cr):
+            appearances[v].append((n,l,r,c))
+
+    mincost = 10**18
+
+    for target in range(minval, maxval+1):
+        # go through the appearance of target
+
+        # choose the minimum from each multiset
+
+        # by choosing the minimum do I have enough other elements to make up the count
+
+        required = 0
+
+        all_non_target_chosen = maxval
+
+        for n,l,r,c in appearances[target]:
+            all_non_target_chosen -= r
+            non_target = n-c
+            if non_target < l:
+                required += l - non_target
+                all_non_target_chosen += non_target
+                continue
+            all_non_target_chosen += min(non_target, r)
+
+        cost = required
+
+        if all_non_target_chosen + required < target:
+            cost = target - all_non_target_chosen
+
+        # log(target, cost, required, all_non_target_chosen)
+        mincost = min(mincost, cost) 
+
+    return mincost
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
-    # read line as a string
-    # srr = input().strip()
+    lrr = []
+    rrr = []
 
-    # read one line and parse each word as a string
-    # arr = input().split()
+    vrr = []
+    crr = []
+    for _ in range(n):
+        n,l,r = list(map(int,input().split()))
+        lrr.append(l)
+        rrr.append(r)
 
-    # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+        vrr.append(list(map(int,input().split())))
+        crr.append(list(map(int,input().split())))
 
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
-
-    res = solve()  # include input here
+    res = solve(lrr, rrr, vrr, crr)  # include input here
 
     # print length if applicable
     # print(len(res))
