@@ -61,10 +61,55 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(a,b,arr,brr):
+    # just put at the start and at the end
 
-    return ""
+    seen = set(arr)
+
+    # match duplicates
+    g = Counter()
+
+    crr = []
+
+    for x in brr:
+        if x in seen:
+            g[x] += 1
+        else:
+            crr.append(x)
+
+    drr = []
+    for x in arr:
+        drr.append(x)
+        if g[x] > 0:
+            for _ in range(g[x]):
+                drr.append(x)
+            g[x] = 0
+
+
+    maxarr = max(arr)
+    minarr = min(arr)
+
+    prefix = []
+    suffix = []
+
+    xrr = []
+
+    for x in crr:
+        if x >= maxarr:
+            prefix.append(x)
+        elif x < minarr:
+            suffix.append(x)
+        else:
+            xrr.append(x)
+
+    log(prefix)
+    log(suffix)
+    log(xrr)
+    
+    prefix.sort(reverse=True)
+    suffix.sort(reverse=True)
+
+    return prefix + drr + suffix
 
 
 # for case_num in [0]:  # no loop over test case
@@ -81,8 +126,9 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -90,13 +136,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b,arr,brr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
