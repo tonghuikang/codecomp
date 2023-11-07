@@ -106,27 +106,34 @@ def solve_(a,b,arr,brr):
     # match higher
     f = defaultdict(list)
 
+    last_appearance = {}
+    for i,x in enumerate(drr):
+        last_appearance[x] = i
+
     for x in xrr:
         idx = bisect.bisect_left(qrr, x)
         nex = qrr[idx]
-        f[nex].append(x)
+        f[last_appearance[nex]].append(x)
+
 
     err = []
-    for x in drr:
+    for i,x in enumerate(drr):
         err.append(x)
-        if len(f[x]) > 0:
-            for y in sorted(f[x]):
+        if len(f[i]) > 0:
+            for y in sorted(f[i], reverse=True):
                 err.append(y)
-            f[x] = []        
 
     # log(prefix)
     # log(suffix)
-    # log(xrr)
+    log(xrr)
     
     prefix.sort(reverse=True)
     suffix.sort(reverse=True)
 
-    return prefix + err + suffix
+    res = prefix + err + suffix
+
+    assert sorted(res) == sorted(arr + brr)
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
