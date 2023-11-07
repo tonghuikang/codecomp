@@ -1794,11 +1794,14 @@ def solve_(n,m,arr,srr,drr):
 
 
     for colors, s, d in zip(res, srr, drr):
+        # log(colors)
+        colors.reverse()
         res = [-1 for _ in range(s)]
         for idx in range(d):
             while idx < s:
                 if not res:
                     break
+                # log(idx)
                 res[idx] = colors.pop()
                 idx += d
     
