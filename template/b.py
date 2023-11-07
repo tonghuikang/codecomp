@@ -102,6 +102,24 @@ def solve_(a,b,arr,brr):
         else:
             xrr.append(x)
 
+    qrr = sorted(drr)
+
+    # match higher
+    f = defaultdict(list)
+
+    for x in xrr:
+        idx = bisect.bisect_left(qrr)
+        nex = qrr[idx]
+        f[nex].append(x)
+
+    err = []
+    for x in arr:
+        err.append(x)
+        if len(f[x]) > 0:
+            for y in sorted(f[x]):
+                err.append(x)
+            f[x] = 0        
+
     log(prefix)
     log(suffix)
     log(xrr)
@@ -109,7 +127,7 @@ def solve_(a,b,arr,brr):
     prefix.sort(reverse=True)
     suffix.sort(reverse=True)
 
-    return prefix + drr + suffix
+    return prefix + err + suffix
 
 
 # for case_num in [0]:  # no loop over test case
