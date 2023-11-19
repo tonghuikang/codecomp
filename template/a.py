@@ -63,9 +63,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(srr,n,k):
     # your solution here
 
+    if srr.count("B") == k:
+        print(0)
+        return
+
+    all_a = srr.count("A")
+    all_b = srr.count("B")
+
+    a = 0
+    b = 0
+
+    for i,x in enumerate(srr, start=1):
+
+        if x == "A":
+            a += 1
+        if x == "B":
+            b += 1
+
+        # print(all_b - b, all_b + a)
+
+        # if replace with a
+        b_count = all_b - b
+        if b_count == k:
+            print(1)
+            print(i, "A")
+            return
+
+        # if replace with b
+        b_count = all_b + a
+        if b_count == k:
+            print(1)
+            print(i, "B")
+            return
+
+    assert False
     return ""
 
 
@@ -77,13 +111,13 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    n,k = list(map(int,input().split()))
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +126,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr,n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -105,4 +139,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
