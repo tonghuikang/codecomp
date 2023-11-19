@@ -119,23 +119,22 @@ class ManhattanDistanceFinderWithPoint:
 
 def solve_(n, arr, brr):
 
-    points = list(zip(arr, brr))
-    queries = list(zip(arr, brr))
-    # your solution here
+    a2 = []
+    b2 = []
+
+    for a,b in zip(arr, brr):
+        if a > b:
+            a,b = b,a
+        a2.append(a)
+        b2.append(b)
+
+    arr = a2
+    brr = b2
 
     reference_sum = sum(abs(a-b) for a,b in zip(arr, brr))
     maxres = reference_sum
 
-    finder = ManhattanDistanceFinderWithPoint(points)
-
-    for x,y in queries:
-        (a,b), _ = finder.furthest_point_and_distance(y,x)
-
-        res = reference_sum + abs(x-b) + abs(a-y) - abs(x-y) - abs(a-b)
-        maxres = max(maxres, res)
-        # results.append(furthest_point)
-
-    return maxres
+    return maxres + 2 * max(0, max(arr) - min(brr))
 
 
 # for case_num in [0]:  # no loop over test case
