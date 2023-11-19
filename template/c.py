@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,8 +60,34 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,k):
     # your solution here
+
+    if k < n - 1 + m - 1:
+        print("NO")
+        return
+    
+    if k%2 != (n - 1 + m - 1)%2:
+        print("NO")
+        return
+
+    print("YES")
+
+    boo = False
+    for _ in range(n):
+        if boo:
+            print(("R B "*m)[:2*(m-1) - 1])
+        else:
+            print(("B R "*m)[:2*(m-1) - 1])
+        boo = not boo
+
+    boo = False
+    for _ in range(n-1):
+        if boo:
+            print(("R B "*m)[:2*(m) - 1])
+        else:
+            print(("B R "*m)[:2*(m) - 1])
+        boo = not boo
 
     return ""
 
@@ -83,7 +106,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +115,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,k)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -105,4 +128,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

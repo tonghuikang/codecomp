@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -61,10 +58,44 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def ceiling_division(numer, denom):
+    return -((-numer) // denom)
+
+
+
 def solve_(n, arr):
     # your solution here
 
-    return ""
+    if arr == sorted(arr):
+        return 0
+
+    res = 0
+
+    cur = 10**18
+    while arr:
+        # log()
+        # log(cur)
+        x = arr.pop()
+        # log("x", x)
+
+        if x <= cur:
+            cur = x
+            continue
+
+        if x % cur == 0:
+            val = x // cur - 1
+            res += val
+            # log("val", val)
+            continue
+
+        intervals = x // cur + 1
+        cur = x // intervals
+        val = intervals - 1
+        # log("intervals", intervals)
+        # log("val", val)
+        res += val
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
