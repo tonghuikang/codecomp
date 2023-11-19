@@ -61,34 +61,53 @@ def minus_one_matrix(mrr):
 from typing import List, Tuple
 # ---------------------------- template ends here ----------------------------
 
-from typing import List, Tuple
-import math
+class ManhattanDistanceFinderWithPoint:
+    def __init__(self, points: List[Tuple[int, int]]):
+        # Initial values for max and min distances and corresponding points
+        self.max_x_plus_y = (float('-inf'), None)
+        self.min_x_plus_y = (float('inf'), None)
+        self.max_x_minus_y = (float('-inf'), None)
+        self.min_x_minus_y = (float('inf'), None)
+        self.max_minus_x_plus_y = (float('-inf'), None)
+        self.min_minus_x_plus_y = (float('inf'), None)
+        self.max_minus_x_minus_y = (float('-inf'), None)
+        self.min_minus_x_minus_y = (float('inf'), None)
 
-def furthest_point(points: List[Tuple[int, int]], queries: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
-    # Find extreme points
-    max_x_point = max(points, key=lambda p: p[0])
-    min_x_point = min(points, key=lambda p: p[0])
-    max_y_point = max(points, key=lambda p: p[1])
-    min_y_point = min(points, key=lambda p: p[1])
+        for point in points:
+            x, y = point
+            self.max_x_plus_y = max(self.max_x_plus_y, (x + y, point))
+            self.min_x_plus_y = min(self.min_x_plus_y, (x + y, point))
+            self.max_x_minus_y = max(self.max_x_minus_y, (x - y, point))
+            self.min_x_minus_y = min(self.min_x_minus_y, (x - y, point))
+            self.max_minus_x_plus_y = max(self.max_minus_x_plus_y, (-x + y, point))
+            self.min_minus_x_plus_y = min(self.min_minus_x_plus_y, (-x + y, point))
+            self.max_minus_x_minus_y = max(self.max_minus_x_minus_y, (-x - y, point))
+            self.min_minus_x_minus_y = min(self.min_minus_x_minus_y, (-x - y, point))
 
-    def euclidean_distance(p1: Tuple[int, int], p2: Tuple[int, int]) -> float:
-        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-
-    results = []
-    for query in queries:
-        # Calculate distances to the extreme points
-        distances = [
-            (euclidean_distance(query, max_x_point), max_x_point),
-            (euclidean_distance(query, min_x_point), min_x_point),
-            (euclidean_distance(query, max_y_point), max_y_point),
-            (euclidean_distance(query, min_y_point), min_y_point)
+    def furthest_point_and_distance(self, x: int, y: int) -> Tuple[Tuple[int, int], int]:
+        # Calculate distances and corresponding points
+        potential_distances = [
+            (abs(x + y - self.max_x_plus_y[0]), self.max_x_plus_y[1]), 
+            (abs(x + y - self.min_x_plus_y[0]), self.min_x_plus_y[1]),
+            (abs(x - y - self.max_x_minus_y[0]), self.max_x_minus_y[1]), 
+            (abs(x - y - self.min_x_minus_y[0]), self.min_x_minus_y[1]),
+            (abs(-x + y - self.max_minus_x_plus_y[0]), self.max_minus_x_plus_y[1]), 
+            (abs(-x + y - self.min_minus_x_plus_y[0]), self.min_minus_x_plus_y[1]),
+            (abs(-x - y - self.max_minus_x_minus_y[0]), self.max_minus_x_minus_y[1]), 
+            (abs(-x - y - self.min_minus_x_minus_y[0]), self.min_minus_x_minus_y[1])
         ]
 
-        # Find the furthest point
-        furthest_point = max(distances, key=lambda x: x[0])[1]
-        results.append(furthest_point)
+        # Find the furthest distance and corresponding point
+        furthest_distance, furthest_point = max(potential_distances, key=lambda x: x[0])
+        return furthest_point, furthest_distance
 
-    return results
+# # Example usage
+# finder_with_point = ManhattanDistanceFinderWithPoint(points)
+
+# # Query for a specific point
+# furthest_point, furthest_distance = finder_with_point.furthest_point_and_distance(*query_point)
+# furthest_point, furthest_distance
+
 
 # # Example usage
 # points_example = [(1, 3), (4, 2), (5, 5), (3, 3), (0, 0), (6, 6)]
@@ -101,34 +120,14 @@ def furthest_point(points: List[Tuple[int, int]], queries: List[Tuple[int, int]]
 def solve_(n, arr, brr):
 
     points = list(zip(arr, brr))
-    queries = list(zip(brr, arr))
+    queries = list(zip(arr, brr))
     # your solution here
 
-    reference_sum = sum(abs(x-y) for x,y in zip(arr, brr))
-    maxres = reference_sum
+    finder = ManhattanDistanceFinderWithPoint(points)
 
-    # Find extreme points
-    max_x_point = max(points, key=lambda p: p[0])
-    min_x_point = min(points, key=lambda p: p[0])
-    max_y_point = max(points, key=lambda p: p[1])
-    min_y_point = min(points, key=lambda p: p[1])
+    for x,y in queries:
+        (a,b), _ = finder.furthest_distance(y,x)
 
-    def euclidean_distance(p1: Tuple[int, int], p2: Tuple[int, int]) -> float:
-        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-
-    results = []
-    for query in queries:
-        # Calculate distances to the extreme points
-        distances = [
-            (euclidean_distance(query, max_x_point), max_x_point),
-            (euclidean_distance(query, min_x_point), min_x_point),
-            (euclidean_distance(query, max_y_point), max_y_point),
-            (euclidean_distance(query, min_y_point), min_y_point)
-        ]
-
-        # Find the furthest point
-        a,b = max(distances, key=lambda x: x[0])[1]
-        y,x = query
         res = reference_sum + abs(x-b) + abs(a-y) - abs(x-y) - abs(a-b)
         maxres = max(maxres, res)
         # results.append(furthest_point)
