@@ -123,10 +123,13 @@ def solve_(n, arr, brr):
     queries = list(zip(arr, brr))
     # your solution here
 
+    reference_sum = sum(abs(a-b) for a,b in zip(arr, brr))
+    maxres = reference_sum
+
     finder = ManhattanDistanceFinderWithPoint(points)
 
     for x,y in queries:
-        (a,b), _ = finder.furthest_distance(y,x)
+        (a,b), _ = finder.furthest_point_and_distance(y,x)
 
         res = reference_sum + abs(x-b) + abs(a-y) - abs(x-y) - abs(a-b)
         maxres = max(maxres, res)
