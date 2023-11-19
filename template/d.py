@@ -128,7 +128,7 @@ def solve_(n, arr, brr):
 
         # Find the furthest point
         a,b = max(distances, key=lambda x: x[0])[1]
-        x,y = query
+        y,x = query
         res = reference_sum + abs(x-b) + abs(a-y) - abs(x-y) - abs(a-b)
         maxres = max(maxres, res)
         # results.append(furthest_point)
