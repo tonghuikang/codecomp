@@ -74,20 +74,30 @@ def solve_(n,m,k):
     print("YES")
 
     boo = False
+    res = []
     for _ in range(n):
         if boo:
-            print(("R B "*m)[:2*(m-1) - 1])
+            res.append(("R B "*m)[:2*(m-1) - 1])
         else:
-            print(("B R "*m)[:2*(m-1) - 1])
+            res.append(("B R "*m)[:2*(m-1) - 1])
         boo = not boo
 
+    res[1] = "B" + res[1][1:]
+    for r in res:
+        print(r)
+
     boo = False
+    res = []
     for _ in range(n-1):
         if boo:
-            print(("R B "*m)[:2*(m) - 1])
+            res.append(("R B "*m)[:2*(m) - 1])
         else:
-            print(("B R "*m)[:2*(m) - 1])
+            res.append(("B R "*m)[:2*(m) - 1])
         boo = not boo
+
+    res[0] = "R" + res[0][1:]
+    for r in res:
+        print(r)
 
     return ""
 

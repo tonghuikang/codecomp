@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import math
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -60,20 +58,89 @@ def minus_one_matrix(mrr):
     return [[x - 1 for x in row] for row in mrr]
 
 
+from typing import List, Tuple
 # ---------------------------- template ends here ----------------------------
 
+from typing import List, Tuple
+import math
 
-def solve_():
+def furthest_point(points: List[Tuple[int, int]], queries: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
+    # Find extreme points
+    max_x_point = max(points, key=lambda p: p[0])
+    min_x_point = min(points, key=lambda p: p[0])
+    max_y_point = max(points, key=lambda p: p[1])
+    min_y_point = min(points, key=lambda p: p[1])
+
+    def euclidean_distance(p1: Tuple[int, int], p2: Tuple[int, int]) -> float:
+        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+    results = []
+    for query in queries:
+        # Calculate distances to the extreme points
+        distances = [
+            (euclidean_distance(query, max_x_point), max_x_point),
+            (euclidean_distance(query, min_x_point), min_x_point),
+            (euclidean_distance(query, max_y_point), max_y_point),
+            (euclidean_distance(query, min_y_point), min_y_point)
+        ]
+
+        # Find the furthest point
+        furthest_point = max(distances, key=lambda x: x[0])[1]
+        results.append(furthest_point)
+
+    return results
+
+# # Example usage
+# points_example = [(1, 3), (4, 2), (5, 5), (3, 3), (0, 0), (6, 6)]
+# queries_example = [(1, 1), (4, 5), (3, 4)]
+
+# # Get the furthest points for each query
+# furthest_points_queries(points_example, queries_example)
+
+
+def solve_(n, arr, brr):
+
+    points = list(zip(arr, brr))
+    queries = list(zip(brr, arr))
     # your solution here
 
-    return ""
+    reference_sum = sum(abs(x-y) for x,y in zip(arr, brr))
+    maxres = reference_sum
+
+    # Find extreme points
+    max_x_point = max(points, key=lambda p: p[0])
+    min_x_point = min(points, key=lambda p: p[0])
+    max_y_point = max(points, key=lambda p: p[1])
+    min_y_point = min(points, key=lambda p: p[1])
+
+    def euclidean_distance(p1: Tuple[int, int], p2: Tuple[int, int]) -> float:
+        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+    results = []
+    for query in queries:
+        # Calculate distances to the extreme points
+        distances = [
+            (euclidean_distance(query, max_x_point), max_x_point),
+            (euclidean_distance(query, min_x_point), min_x_point),
+            (euclidean_distance(query, max_y_point), max_y_point),
+            (euclidean_distance(query, min_y_point), min_y_point)
+        ]
+
+        # Find the furthest point
+        a,b = max(distances, key=lambda x: x[0])[1]
+        x,y = query
+        res = reference_sum + abs(x-b) + abs(a-y) - abs(x-y) - abs(a-b)
+        maxres = max(maxres, res)
+        # results.append(furthest_point)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,7 +151,8 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +160,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))
