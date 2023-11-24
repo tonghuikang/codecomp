@@ -3,20 +3,6 @@ import sys
 
 input = sys.stdin.readline  # to read input quickly
 
-# available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
-# import scipy
-
-m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
-# d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
-# d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-# abc = "abcdefghijklmnopqrstuvwxyz"
-# abc_map = {c:i for i,c in enumerate(abc)}
-MAXINT = sys.maxsize
-e18 = 10**18 + 10
-
 # if testing locally, print to terminal with a different color
 OFFLINE_TEST = False
 CHECK_OFFLINE_TEST = True
@@ -41,20 +27,6 @@ def solve(*args):
     return solve_(*args)
 
 
-def read_matrix(rows):
-    return [list(map(int, input().split())) for _ in range(rows)]
-
-
-def read_strings(rows):
-    return [input().strip() for _ in range(rows)]
-
-
-def minus_one(arr):
-    return [x - 1 for x in arr]
-
-
-def minus_one_matrix(mrr):
-    return [[x - 1 for x in row] for row in mrr]
 
 
 # ---------------------------- template ends here ----------------------------
@@ -112,6 +84,7 @@ for case_num in [0]:  # no loop over test case
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
+    n = len(arr)
     # arr = minus_one(arr)
 
     w1 = max(i+x for i,x in enumerate(arr))
