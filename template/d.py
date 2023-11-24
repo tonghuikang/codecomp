@@ -32,7 +32,7 @@ def solve(*args):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, arr):
+def solve2_(n, arr):
     n = len(arr)
     # your solution here
 
@@ -68,6 +68,73 @@ def solve_(n, arr):
     return vals
 
 
+def solve_wrong(n, arr):
+
+    n = len(arr)
+    # arr = minus_one(arr)
+
+    w1 = max(i+x for i,x in enumerate(arr))
+    w2 = max(i+x for i,x in enumerate(arr[::-1]))
+
+    log(w1, w2)
+
+    if len(arr) <= 2:
+        return min(w1, w2)
+
+    # read multiple rows
+    # arr = read_strings(k)  # and return as a list of str
+    # mrr = read_matrix(k)  # and return as a list of list of int
+    # mrr = minus_one_matrix(mrr)
+
+    v1 = solve2_(n, arr)  # include input here
+    v2 = solve2_(n, arr[::-1])  # include input here
+
+    v1 = v1[1:-1]
+    v2 = v2[::-1][1:-1]
+
+    log(v1)
+    log(v2)
+
+    res = min(max(x,y) for x,y in zip(v1, v2))
+    res = min(res, w1, w2)
+
+    return res
+
+
+def solve_(n, arr):
+    lrr = [n-i-1+x for i,x in enumerate(arr)]
+    rrr = [i+x for i,x in enumerate(arr)]
+
+    log(lrr)
+    log(rrr)
+
+    log()
+
+    lmax = [0] * n
+    rmax = [0] * n
+
+    lmax[0] = lrr[0]
+    rmax[-1] = rrr[-1]
+
+    for i in range(1,n):
+        lmax[i] = max(lmax[i-1], lrr[i])
+    
+    for i in range(n-2,-1,-1):
+        rmax[i] = max(rmax[i+1], rrr[i])
+
+    minres = min(rmax[0], lmax[-1])
+
+    for i in range(1,n-1):
+        res = max(lmax[i-1], rmax[i+1], arr[i])
+        minres = min(minres, res)
+
+    log(lmax)
+    log(rmax)
+
+    return minres
+
+
+
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 # for case_num in range(int(input())):
@@ -84,37 +151,12 @@ for case_num in [0]:  # no loop over test case
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     arr = list(map(int,input().split()))
-    n = len(arr)
-    # arr = minus_one(arr)
-
-    w1 = max(i+x for i,x in enumerate(arr))
-    w2 = max(i+x for i,x in enumerate(arr[::-1]))
-
-    log(w1, w2)
-
-    if len(arr) <= 2:
-        print(min(w1, w2))
-        continue
-
-    # read multiple rows
-    # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
-
-    v1 = solve(n, arr)  # include input here
-    v2 = solve(n, arr[::-1])  # include input here
-
-    v1 = v1[1:-1]
-    v2 = v2[::-1][1:-1]
-
-    log(v1)
-    log(v2)
-
-    res = min(max(x,y) for x,y in zip(v1, v2))
-    res = min(res, w1, w2)
 
     # print length if applicable
     # print(len(res))
+
+    # res_wrong = solve_wrong(n, arr)
+    res = solve(n, arr)
 
     # parse result
     # res = " ".join(str(x) for x in res)
