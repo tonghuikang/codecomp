@@ -61,6 +61,7 @@ def minus_one_matrix(mrr):
 
 
 def solve_(n, arr):
+    n = len(arr)
     # your solution here
 
     lrr = [x-i for i,x in enumerate(arr)]
@@ -92,7 +93,7 @@ def solve_(n, arr):
 
     # log(vals)
 
-    return minval
+    return vals
 
 
 for case_num in [0]:  # no loop over test case
@@ -113,15 +114,31 @@ for case_num in [0]:  # no loop over test case
     arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
+    w1 = max(i+x for i,x in enumerate(arr))
+    w2 = max(i+x for i,x in enumerate(arr[::-1]))
+
+    log(w1, w2)
+
+    if len(arr) <= 2:
+        print(min(w1, w2))
+        continue
+
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    r1 = solve(n, arr)  # include input here
-    r2 = solve(n, arr[::-1])  # include input here
+    v1 = solve(n, arr)  # include input here
+    v2 = solve(n, arr[::-1])  # include input here
 
-    res = min(r1, r2)
+    v1 = v1[1:-1]
+    v2 = v2[::-1][1:-1]
+
+    log(v1)
+    log(v2)
+
+    res = min(max(x,y) for x,y in zip(v1, v2))
+    res = min(res, w1, w2)
 
     # print length if applicable
     # print(len(res))
