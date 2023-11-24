@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -64,7 +61,15 @@ def minus_one_matrix(mrr):
 def solve_(n, arr):
     # your solution here
 
-    return ""
+    arr = [1] + arr
+
+    res = 0
+
+    for a,b in zip(arr, arr[1:]):
+        if b > a:
+            res += b-a
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case

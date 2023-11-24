@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,8 +60,37 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
+
+    a = min(arr)
+    b = max(arr)
+
+    if a == b:
+        print(0)
+        return
+
+    # +1 if the smaller number is odd and the larger number is even
+
+    res = []
+
+    while a != b:
+        if a&1 == 1 and b&1 == 0:
+            res.append(1)
+            a = (a+1) // 2
+            b = (b+1) // 2
+        else:
+            res.append(0)
+            a = a // 2
+            b = b // 2
+        # log(a,b)
+        
+    print(len(res))
+
+    if len(res) <= n:
+        res = " ".join(str(x) for x in res)
+        print(res)
+
 
     return ""
 
@@ -73,7 +99,7 @@ def solve_():
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,7 +110,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +118,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -105,4 +131,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
