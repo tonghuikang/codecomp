@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -66,7 +63,36 @@ def minus_one_matrix(mrr):
 def solve_(n, arr):
     # your solution here
 
-    return ""
+    lrr = [x-i for i,x in enumerate(arr)]
+    rrr = [x+i for i,x in enumerate(arr)]
+
+    # log(lrr)
+    # log(rrr)
+
+    # go left then right
+
+    lmax = [0, lrr[0]]
+    for x in lrr[1:]:
+        lmax.append(max(lmax[-1], x))
+
+    rmax = [rrr[-1]]
+    for x in rrr[::-1][1:]:
+        rmax.append(max(rmax[-1], x))
+    rmax = rmax[::-1]
+
+    # log(lmax)
+    # log(rmax)
+
+    vals = []
+    minval = 10**18
+    for i,(l,r,x) in enumerate(zip(lmax, rmax, arr)):
+        val = max(l+i, r, x)
+        vals.append(val)
+        minval = min(minval, val)
+
+    # log(vals)
+
+    return minval
 
 
 for case_num in [0]:  # no loop over test case
@@ -92,7 +118,10 @@ for case_num in [0]:  # no loop over test case
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, arr)  # include input here
+    r1 = solve(n, arr)  # include input here
+    r2 = solve(n, arr[::-1])  # include input here
+
+    res = min(r1, r2)
 
     # print length if applicable
     # print(len(res))
