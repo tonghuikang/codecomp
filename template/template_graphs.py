@@ -48,6 +48,12 @@ def count_connected_components_undirected(map_from_node_to_nodes, total_elements
 def find_strongly_connected_components(graph):
     # github.com/cheran-senthil/PyRival/blob/master/pyrival/graphs/scc.py
     # input - list of node to nodes?
+
+    # Given a directed graph, find_SCC returns a list of lists containing 
+    # the strongly connected components in topological order.
+
+    # Note that this implementation can be also be used to check if a directed graph is a
+    # DAG, and in that case it can be used to find the topological ordering of the nodes.
     SCC, S, P = [], [], []
     depth = [0] * len(graph)
 
@@ -407,7 +413,7 @@ def detect_cycle(map_from_node_to_nodes):
     return topological_sort(map_from_node_to_nodes) == []
 
 
-def findShortestCycle(n: int, edges: List[List[int]]) -> int:
+def findShortestCycle(n: int, edges: list[list[int]]) -> int:
     # https://web.archive.org/web/20170829175217/http://webcourse.cs.technion.ac.il/234247/Winter2003-2004/ho/WCFiles/Girth.pdf
 
     g = defaultdict(set)
@@ -444,6 +450,7 @@ def findShortestCycle(n: int, edges: List[List[int]]) -> int:
 
 
 def longest_path(map_from_node_to_nodes_and_costs):
+    # if tree: toposort and apply dp
     return NotImplementedError
 
 
