@@ -82,6 +82,21 @@ def interval_overlap(x1, x2, y1, y2):
     return max(x1, y1), min(x2, y2)
 
 
+def combine_overlapping_intervals(intervals):
+    # https://leetcode.com/problems/count-the-number-of-good-partitions/
+    intervals.sort()
+    new_intervals = []
+
+    for a,b in intervals:
+        if new_intervals and a <= new_intervals[-1][1]:
+            # please check if you intend to combine for equality
+            new_intervals[-1][1] = max(new_intervals[-1][1], b)
+        else:
+            new_intervals.append([a,b])
+            
+    return new_intervals
+
+
 def count_peaks_and_valleys(lst):
     # leetcode.com/problems/count-hills-and-valleys-in-an-array/
     if len(lst) <= 2:
