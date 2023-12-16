@@ -52,10 +52,22 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(mrr):
     # your solution here
 
-    return ""
+    g = defaultdict(list)
+
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    leafs = 0
+
+    for k,lst in g.items():
+        if len(lst) == 1:
+            leafs += 1
+            
+    return (leafs + 1) // 2
 
 
 # for case_num in [0]:  # no loop over test case
@@ -63,7 +75,7 @@ def solve_():
 for case_num in range(int(input())):
 
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -79,10 +91,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(n-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
