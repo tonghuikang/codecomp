@@ -67,7 +67,7 @@ def solve_(n, arr):
     res = 0
 
     mexs = []
-    # mexs.append(0)
+    mexs.append(0)
 
     for x in arr:
         seen.add(x)
@@ -77,12 +77,12 @@ def solve_(n, arr):
         mexs.append(mex)
         # log(mex)
 
-    # mexs.pop()
+    mexs.pop()
     log(res)
     log(mexs)
     maxres = res
 
-
+    res -= n
     # bring to left and add one to all
     seen = set([0])
     mex = 1
@@ -93,7 +93,6 @@ def solve_(n, arr):
         while mex in seen:
             mex += 1
             res += i
-            incr += 1
 
         log(i, mex, res)
         maxres = max(maxres, res)

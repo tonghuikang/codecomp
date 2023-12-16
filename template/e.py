@@ -51,6 +51,7 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# [6, 17, 36, 69, 126, 217, 384, 689, 1278]
 
 def solve_(n):
     # your solution here
