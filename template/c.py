@@ -52,10 +52,40 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, srr):
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    if arr == sorted(arr):
+        return 0
+
+    idxs = [[] for _ in range(26)]
+
+    for i,x in enumerate(arr):
+        idxs[x].append(i)
+    
+    prev = [-1]
+    val = -1
+    for x in range(25,-1,-1):
+        if len(idxs[x]) > 0 and val == -1:
+            val = len(idxs[x])
+        for v in idxs[x]:
+            if v > prev[-1]:
+                prev.append(v)
+
+    prev = prev[1:]
+    # print(prev)
+
+    vals = [arr[x] for x in prev]
+    vals.sort()
+
+    for i,x in zip(prev, vals):
+        arr[i] = x
+
+    if arr == sorted(arr):
+        log(len(prev), val)
+        return len(prev) - val
+
+    return -1
 
 
 # for case_num in [0]:  # no loop over test case
@@ -68,6 +98,8 @@ for case_num in range(int(input())):
 
     # read line as a string
     srr = input().strip()
+
+    arr = [ord(x) - ord("a") for x in srr]
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -82,7 +114,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, srr)  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
