@@ -66,14 +66,38 @@ def solve_(n, arr):
     mex = 0
     res = 0
 
+    mexs = []
+    # mexs.append(0)
+
     for x in arr:
         seen.add(x)
         while mex in seen:
             mex += 1
         res += mex
-        log(mex)
+        mexs.append(mex)
+        # log(mex)
 
-    return res
+    # mexs.pop()
+    log(res)
+    log(mexs)
+    maxres = res
+
+
+    # bring to left and add one to all
+    seen = set([0])
+    mex = 1
+    for i in range(n-1, 0, -1):
+        res -= mexs[i]
+        x = arr[i]
+        seen.add(x)
+        while mex in seen:
+            mex += 1
+            res += i
+
+        log(i, mex, res)
+        maxres = max(maxres, res)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
