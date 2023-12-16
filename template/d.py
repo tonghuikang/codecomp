@@ -93,6 +93,7 @@ def solve_(n, arr):
         while mex in seen:
             mex += 1
             res += i
+            incr += 1
 
         log(i, mex, res)
         maxres = max(maxres, res)
