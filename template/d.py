@@ -412,7 +412,7 @@ def solve_(n, arr):
     arr = arr + arr
     arr = arr[arr.index(0): arr.index(0)+n]
 
-    # log(arr)
+    log(arr)
 
     seen = set()
     mex = 0
@@ -436,6 +436,7 @@ def solve_(n, arr):
 
     st = LazySegTree(op, e, mapping, composition, id_, [(x,1) for x in mexs])
     
+    log([st.prod(i, i+1)[0] for i in range(n)])
     # if mex increase, add remaining elements
     # send the second last element to n
     seen = set([0])
@@ -455,10 +456,50 @@ def solve_(n, arr):
         st.apply(i-1, i, (0, n))
 
         res = st.prod(0, n)[0]
-        # log(i, [st.prod(i, i+1)[0] for i in range(n)], res)
+        log(i, [st.prod(i, i+1)[0] for i in range(n)], res)
         maxres = max(maxres, res)
 
     return maxres
+
+
+from typing import List
+
+def mex(arr: List[int]) -> int:
+    """ Find the smallest non-negative integer not in arr. """
+    arr_set = set(arr)
+    mex = 0
+    while mex in arr_set:
+        mex += 1
+    return mex
+
+def cyclic_shifts(arr: List[int]) -> List[List[int]]:
+    """ Generate all cyclic shifts of the array. """
+    n = len(arr)
+    return [arr[i:] + arr[:i] for i in range(n)]
+
+def calculate_cost(shift: List[int]) -> int:
+    """ Calculate the cost of a given shift. """
+    cost = 0
+    for i in range(len(shift)):
+        cost += mex(shift[:i + 1])
+    return cost
+
+def max_cost_of_cyclic_shifts(permutation: List[int]) -> int:
+    """ Find the maximum cost across all cyclic shifts of the permutation. """
+    shifts = cyclic_shifts(permutation)
+    return max(calculate_cost(shift) for shift in shifts)
+
+
+
+# while True:
+#     import random
+#     arr = list(range(random.randint(1,4)))
+#     random.shuffle(arr)
+
+#     x = solve(len(arr), arr)
+#     y = max_cost_of_cyclic_shifts(arr)
+
+#     assert x == y, (arr, x, y)
 
 
 # for case_num in [0]:  # no loop over test case
