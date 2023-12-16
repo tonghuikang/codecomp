@@ -429,8 +429,10 @@ def solve_(n, arr):
         mexs.append(mex)
         # log(mex)
 
+    idxs = {x:i for i,x in enumerate(arr)}
+
     # mexs.pop()
-    # log(res)
+    log(res)
     # log(mexs)
     maxres = res
 
@@ -446,6 +448,14 @@ def solve_(n, arr):
         while mex in seen:
             mex += 1
             st.apply(0, i, (1, 1))
+
+            prevpos = 0
+            cur = mex
+            while cur < n and idxs[cur] > prevpos and idxs[cur] <= i:
+                prevpos = idxs[cur]
+                # log(idxs, cur)
+                st.apply(idxs[cur], i, (1, 1))
+                cur += 1
 
         # send the last element to zero
         # val = st.prod(i, i+1)[0]
@@ -491,15 +501,15 @@ def max_cost_of_cyclic_shifts(permutation: List[int]) -> int:
 
 
 
-# while True:
-#     import random
-#     arr = list(range(random.randint(1,4)))
-#     random.shuffle(arr)
+while True:
+    import random
+    arr = list(range(random.randint(1,5)))
+    random.shuffle(arr)
 
-#     x = solve(len(arr), arr)
-#     y = max_cost_of_cyclic_shifts(arr)
+    x = solve(len(arr), arr)
+    y = max_cost_of_cyclic_shifts(arr)
 
-#     assert x == y, (arr, x, y)
+    assert x == y, (arr, x, y)
 
 
 # for case_num in [0]:  # no loop over test case
