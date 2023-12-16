@@ -55,7 +55,25 @@ def minus_one_matrix(mrr):
 def solve_(n, arr):
     # your solution here
 
-    return ""
+    # zero needs to be in front?
+
+    arr = arr + arr
+    arr = arr[arr.index(0): arr.index(0)+n]
+
+    log(arr)
+
+    seen = set()
+    mex = 0
+    res = 0
+
+    for x in arr:
+        seen.add(x)
+        while mex in seen:
+            mex += 1
+        res += mex
+        log(mex)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
