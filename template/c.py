@@ -82,7 +82,7 @@ def solve_(n, arr):
         arr[i] = x
 
     if arr == sorted(arr):
-        log(len(prev), val)
+        # log(len(prev), val)
         return len(prev) - val
 
     return -1
