@@ -204,7 +204,7 @@ def solve_(n,m,mrr,arr,brr):
     flag = True
     while flag:
         cnt += 1
-        if cnt > 2_000:
+        if cnt > n*m:
             return -1
 
         if all(x == 0 for x in darr) and all(x == 0 for x in dbrr):
@@ -344,10 +344,14 @@ for case_num in [0]:  # no loop over test case
     arr = list(map(int,input().split()))
     brr = list(map(int,input().split()))
 
-    minres = n * m
-    for i in range(5):
+    minres = n * m + 1
+    for i in range(min(100, 20_000_000 // n*m*n*m)):
         res = solve(n,m,[[x for x in row] for row in mrr],[x for x in arr],[x for x in brr])  # include input here
-        minres = min(minres, res)
+        if res >= 0:
+            minres = min(minres, res)
+
+    if minres == n * m + 1:
+        minres = -1
 
     # print length if applicable
     # print(len(res))
