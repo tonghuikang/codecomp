@@ -90,6 +90,9 @@ def solve_(n,m,mrr,arr,brr):
         mrr = [[x for j,x in enumerate(row)] for i,row in enumerate(mrr) if arr[i] > 0]
         arr = [x for x in arr if x > 0]
 
+        if mrr == []:
+            return res
+
         # remove zero columns
         n = len(mrr)
         m = len(mrr[0])
@@ -103,6 +106,9 @@ def solve_(n,m,mrr,arr,brr):
 
         mrr = [[x for j,x in enumerate(row) if brr[j] > 0] for i,row in enumerate(mrr)]
         brr = [x for x in brr if x > 0]
+
+        if mrr == []:
+            return res
 
         log(arr)
         log(brr)
@@ -131,6 +137,9 @@ def solve_(n,m,mrr,arr,brr):
         mrr = [[x for j,x in enumerate(row)] for i,row in enumerate(mrr) if arr[i] < m]
         arr = [x for x in arr if x < m]
 
+        if mrr == []:
+            return res
+
         # remove max columns
         n = len(mrr)
         m = len(mrr[0])
@@ -145,6 +154,9 @@ def solve_(n,m,mrr,arr,brr):
 
         mrr = [[x for j,x in enumerate(row) if brr[j] < n] for i,row in enumerate(mrr)]
         brr = [x for x in brr if x < n]
+
+        if mrr == []:
+            return res
 
         log(arr)
         log(brr)
@@ -161,7 +173,7 @@ def solve_(n,m,mrr,arr,brr):
         if len(arr) == len(brr) == 0:
             return res
     
-    assert sum(arr) == sum(brr)
+    assert sum(arr) == sum(brr), (arr, brr)
 
     carr = [0 for _ in range(n)]
     cbrr = [0 for _ in range(m)]
@@ -179,6 +191,10 @@ def solve_(n,m,mrr,arr,brr):
     log()
 
     while True:
+        for row in mrr:
+            log(row)
+        log()
+
         i = darr.index(max(darr))
         j = dbrr.index(max(dbrr))
 
@@ -186,6 +202,8 @@ def solve_(n,m,mrr,arr,brr):
             darr[i] -= 1
             dbrr[j] -= 1
             mrr[i][j] = 0
+            arr[i] -= 1
+            brr[j] -= 1
             res += 1
             continue
 
@@ -196,15 +214,12 @@ def solve_(n,m,mrr,arr,brr):
             darr[i] += 1
             dbrr[j] += 1
             mrr[i][j] = 1
+            arr[i] += 1
+            brr[j] += 1
             res += 1
             continue
 
-        for row in mrr:
-            log(row)
-        log()
-
         break
-
 
     for row in mrr:
         log(row)
@@ -213,8 +228,21 @@ def solve_(n,m,mrr,arr,brr):
     log(darr)
     log(dbrr)
     log()
+
+    assert all(x == 0 for x in darr)
+    assert all(x == 0 for x in dbrr)
+
     return res
 
+
+while True:
+    import random
+    n = random.randint(1,4)
+    m = random.randint(1,4)
+    mrr = [[random.randint(0,1) for _ in range(m)] for _ in range(n)]
+    arr = [random.randint(0, m) for _ in range(n)]
+    brr = [random.randint(0, n) for _ in range(m)]
+    solve(n,m,mrr,arr,brr)
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
