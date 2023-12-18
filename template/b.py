@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -66,11 +63,24 @@ def solve_(arr):
 
     a = arr.count(0)
     b = arr.count(1)
+    n = len(arr)
 
-    if a == b:
-        return 0
+    # if a == b:
+    #     return 0
+    
+    ca = 0
+    cb = 0
+    res = 0
 
-    return 
+    for i,x in enumerate(arr,start=1):
+        if x == 0:
+            ca += 1
+        if x == 1:
+            cb += 1
+        if a >= cb and b >= ca:
+            res = i
+
+    return n-res
 
 
 # for case_num in [0]:  # no loop over test case

@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,17 +60,36 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(m, mrr):
     # your solution here
 
-    return ""
+    arr = [0 for _ in range(40)]
+    res = []
+
+    for a,b in mrr:
+        if a == 1:
+            arr[b] += 1
+            continue
+        
+        # can b be built from the array
+        for i in range(35, -1, -1):
+            val =  (1 << i)
+            count = min(b // val, arr[i])
+            b -= count * (1 << i)
+
+        if b == 0:
+            res.append(yes)
+        else:
+            res.append(no)
+
+    return res
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    m = int(input())
     # k = int(input())
 
     # read line as a string
@@ -89,17 +105,17 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(m, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result

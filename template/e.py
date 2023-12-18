@@ -63,15 +63,161 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(n,m,mrr,arr,brr):
+    # just greedy
 
-    return ""
+    if sum(arr) != sum(brr):
+        return -1
+
+    res = 0
+
+    flag = True
+
+    while flag:
+        flag = False
+
+        # remove zero rows
+        n = len(mrr)
+        m = len(mrr[0])
+
+        for i,x in enumerate(arr):
+            if x == 0:
+                flag = True
+                for j in range(m):
+                    if mrr[i][j] == 1:
+                        res += 1
+
+        mrr = [[x for j,x in enumerate(row)] for i,row in enumerate(mrr) if arr[i] > 0]
+        arr = [x for x in arr if x > 0]
+
+        # remove zero columns
+        n = len(mrr)
+        m = len(mrr[0])
+
+        for j,x in enumerate(brr):
+            if x == 0:
+                flag = True
+                for i in range(n):
+                    if mrr[i][j] == 1:
+                        res += 1
+
+        mrr = [[x for j,x in enumerate(row) if brr[j] > 0] for i,row in enumerate(mrr)]
+        brr = [x for x in brr if x > 0]
+
+        log(arr)
+        log(brr)
+        log()
+
+        for row in mrr:
+            log(row)
+        log()
+
+        log()
+        log("--")
+        log()
+
+        # remove max rows
+        n = len(mrr)
+        m = len(mrr[0])
+
+        for i,x in enumerate(arr):
+            if x == m:
+                flag = True
+                for j in range(m):
+                    brr[j] -= 1
+                    if mrr[i][j] == 0:
+                        res += 1
+
+        mrr = [[x for j,x in enumerate(row)] for i,row in enumerate(mrr) if arr[i] < m]
+        arr = [x for x in arr if x < m]
+
+        # remove max columns
+        n = len(mrr)
+        m = len(mrr[0])
+
+        for j,x in enumerate(brr):
+            if x == n:
+                for i in range(n):
+                    arr[i] -= 1
+                    if mrr[i][j] == 0:
+                        res += 1
+
+        mrr = [[x for j,x in enumerate(row) if brr[j] < n] for i,row in enumerate(mrr)]
+        brr = [x for x in brr if x < n]
+
+        log(arr)
+        log(brr)
+        log()
+
+        for row in mrr:
+            log(row)
+        log()
+
+        log()
+        log("--")
+        log()
+
+        if len(arr) == len(brr) == 0:
+            return res
+    
+    assert sum(arr) == sum(brr)
+
+    carr = [0 for _ in range(n)]
+    cbrr = [0 for _ in range(m)]
+
+    for i,row in enumerate(mrr):
+        for j,cell in enumerate(row):
+            carr[i] += cell
+            cbrr[j] += cell
+
+    darr = [b-a for a,b in zip(arr, carr)]
+    dbrr = [b-a for a,b in zip(brr, cbrr)]
+
+    log(darr)
+    log(dbrr)
+    log()
+
+    while True:
+        i = darr.index(max(darr))
+        j = dbrr.index(max(dbrr))
+
+        if darr[i] > 0 and dbrr[j] > 0 and mrr[i][j] == 1:
+            darr[i] -= 1
+            dbrr[j] -= 1
+            mrr[i][j] = 0
+            res += 1
+            continue
+
+        i = darr.index(min(darr))
+        j = dbrr.index(min(dbrr))
+
+        if darr[i] < 0 and dbrr[j] < 0 and mrr[i][j] == 0:
+            darr[i] += 1
+            dbrr[j] += 1
+            mrr[i][j] = 1
+            res += 1
+            continue
+
+        for row in mrr:
+            log(row)
+        log()
+
+        break
 
 
-# for case_num in [0]:  # no loop over test case
+    for row in mrr:
+        log(row)
+    log()
+
+    log(darr)
+    log(dbrr)
+    log()
+    return res
+
+
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
     # read line as an integer
     # n = int(input())
     # k = int(input())
@@ -83,16 +229,18 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr,arr,brr)  # include input here
 
     # print length if applicable
     # print(len(res))
