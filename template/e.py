@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import random
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -64,116 +62,124 @@ def minus_one_matrix(mrr):
 
 
 def solve_(n,m,mrr,arr,brr):
+
+    mrr_original = [[x for x in row] for row in mrr]
     # just greedy
 
     if sum(arr) != sum(brr):
         return -1
 
-    res = 0
+    if 0 in arr and n in brr:
+        return -1
 
-    flag = True
+    if 0 in brr and m in arr:
+        return -1
 
-    while flag:
-        flag = False
+    # res = 0
 
-        # remove zero rows
-        n = len(mrr)
-        m = len(mrr[0])
+    # flag = True
 
-        for i,x in enumerate(arr):
-            if x == 0:
-                flag = True
-                for j in range(m):
-                    if mrr[i][j] == 1:
-                        res += 1
+    # while flag:
+    #     flag = False
 
-        mrr = [[x for j,x in enumerate(row)] for i,row in enumerate(mrr) if arr[i] > 0]
-        arr = [x for x in arr if x > 0]
+    #     # remove zero rows
+    #     n = len(mrr)
+    #     m = len(mrr[0])
 
-        if mrr == []:
-            return res
+    #     for i,x in enumerate(arr):
+    #         if x == 0:
+    #             flag = True
+    #             for j in range(m):
+    #                 if mrr[i][j] == 1:
+    #                     res += 1
 
-        # remove zero columns
-        n = len(mrr)
-        m = len(mrr[0])
+    #     mrr = [[x for j,x in enumerate(row)] for i,row in enumerate(mrr) if arr[i] > 0]
+    #     arr = [x for x in arr if x > 0]
 
-        for j,x in enumerate(brr):
-            if x == 0:
-                flag = True
-                for i in range(n):
-                    if mrr[i][j] == 1:
-                        res += 1
+    #     if mrr == []:
+    #         return res
 
-        mrr = [[x for j,x in enumerate(row) if brr[j] > 0] for i,row in enumerate(mrr)]
-        brr = [x for x in brr if x > 0]
+    #     # remove zero columns
+    #     n = len(mrr)
+    #     m = len(mrr[0])
 
-        if mrr == []:
-            return res
+    #     for j,x in enumerate(brr):
+    #         if x == 0:
+    #             flag = True
+    #             for i in range(n):
+    #                 if mrr[i][j] == 1:
+    #                     res += 1
 
-        log(arr)
-        log(brr)
-        log()
+    #     mrr = [[x for j,x in enumerate(row) if brr[j] > 0] for i,row in enumerate(mrr)]
+    #     brr = [x for x in brr if x > 0]
 
-        for row in mrr:
-            log(row)
-        log()
+    #     if mrr == []:
+    #         return res
 
-        log()
-        log("--")
-        log()
+    #     log(arr)
+    #     log(brr)
+    #     log()
 
-        # remove max rows
-        n = len(mrr)
-        m = len(mrr[0])
+    #     for row in mrr:
+    #         log(row)
+    #     log()
 
-        for i,x in enumerate(arr):
-            if x == m:
-                flag = True
-                for j in range(m):
-                    brr[j] -= 1
-                    if mrr[i][j] == 0:
-                        res += 1
+    #     log()
+    #     log("--")
+    #     log()
 
-        mrr = [[x for j,x in enumerate(row)] for i,row in enumerate(mrr) if arr[i] < m]
-        arr = [x for x in arr if x < m]
+    #     # remove max rows
+    #     n = len(mrr)
+    #     m = len(mrr[0])
 
-        if mrr == []:
-            return res
+    #     for i,x in enumerate(arr):
+    #         if x == m:
+    #             flag = True
+    #             for j in range(m):
+    #                 brr[j] -= 1
+    #                 if mrr[i][j] == 0:
+    #                     res += 1
 
-        # remove max columns
-        n = len(mrr)
-        m = len(mrr[0])
+    #     mrr = [[x for j,x in enumerate(row)] for i,row in enumerate(mrr) if arr[i] < m]
+    #     arr = [x for x in arr if x < m]
 
-        for j,x in enumerate(brr):
-            if x == n:
-                flag = True
-                for i in range(n):
-                    arr[i] -= 1
-                    if mrr[i][j] == 0:
-                        res += 1
+    #     if mrr == []:
+    #         return res
 
-        mrr = [[x for j,x in enumerate(row) if brr[j] < n] for i,row in enumerate(mrr)]
-        brr = [x for x in brr if x < n]
+    #     # remove max columns
+    #     n = len(mrr)
+    #     m = len(mrr[0])
 
-        if mrr == []:
-            return res
+    #     for j,x in enumerate(brr):
+    #         if x == n:
+    #             flag = True
+    #             for i in range(n):
+    #                 arr[i] -= 1
+    #                 if mrr[i][j] == 0:
+    #                     res += 1
 
-        log(arr)
-        log(brr)
-        log()
+    #     mrr = [[x for j,x in enumerate(row) if brr[j] < n] for i,row in enumerate(mrr)]
+    #     brr = [x for x in brr if x < n]
 
-        for row in mrr:
-            log(row)
-        log()
+    #     if mrr == []:
+    #         return res
 
-        log()
-        log("--")
-        log()
+    #     log(arr)
+    #     log(brr)
+    #     log()
 
-        if len(arr) == len(brr) == 0:
-            return res
+    #     for row in mrr:
+    #         log(row)
+    #     log()
+
+    #     log()
+    #     log("--")
+    #     log()
+
+    #     if len(arr) == len(brr) == 0:
+    #         return res
     
-    assert sum(arr) == sum(brr), (arr, brr)
+    # assert sum(arr) == sum(brr), (arr, brr)
 
     carr = [0 for _ in range(n)]
     cbrr = [0 for _ in range(m)]
@@ -190,59 +196,128 @@ def solve_(n,m,mrr,arr,brr):
     log(dbrr)
     log()
 
-    while True:
-        for row in mrr:
-            log(row)
-        log()
+    # visited = set()
+    xrr = list(range(n))
+    yrr = list(range(m))
 
-        i = darr.index(max(darr))
-        j = dbrr.index(max(dbrr))
+    cnt = 0
+    flag = True
+    while flag:
+        cnt += 1
+        if cnt > 2_000:
+            return -1
 
-        if darr[i] > 0 and dbrr[j] > 0 and mrr[i][j] == 1:
-            darr[i] -= 1
-            dbrr[j] -= 1
-            mrr[i][j] = 0
-            arr[i] -= 1
-            brr[j] -= 1
-            res += 1
+        if all(x == 0 for x in darr) and all(x == 0 for x in dbrr):
+            break
+
+        random.shuffle(xrr)
+        random.shuffle(yrr)
+        flag = False
+        # for row in mrr:
+        #     log(row)
+        # log()
+
+        for i in xrr:
+            for j in yrr:
+                if (arr[i] == 0 or brr[j] == 0) and mrr[i][j] == 1:
+                    darr[i] -= 1
+                    dbrr[j] -= 1
+                    mrr[i][j] = 0
+                    flag = True
+                if flag:
+                    continue
+
+                if (arr[i] == m or brr[j] == n) and mrr[i][j] == 0:
+                    darr[i] += 1
+                    dbrr[j] += 1
+                    mrr[i][j] = 1
+                    flag = True
+                if flag:
+                    continue
+            if flag:
+                continue
+        if flag:
             continue
 
-        i = darr.index(min(darr))
-        j = dbrr.index(min(dbrr))
+        for i in xrr:
+            for j in yrr:
+                if darr[i] > 0 and dbrr[j] > 0 and mrr[i][j] == 1:
+                    darr[i] -= 1
+                    dbrr[j] -= 1
+                    mrr[i][j] = 0
+                    flag = True
+                if flag:
+                    continue ##
 
-        if darr[i] < 0 and dbrr[j] < 0 and mrr[i][j] == 0:
-            darr[i] += 1
-            dbrr[j] += 1
-            mrr[i][j] = 1
-            arr[i] += 1
-            brr[j] += 1
-            res += 1
+                if darr[i] < 0 and dbrr[j] < 0 and mrr[i][j] == 0:
+                    darr[i] += 1
+                    dbrr[j] += 1
+                    mrr[i][j] = 1
+                    flag = True
+                if flag:
+                    continue
+            if flag:
+                continue
+        if flag:
             continue
 
-        break
+        for i in xrr:
+            for j in yrr:
+                if (darr[i] > 0 or dbrr[j] > 0) and mrr[i][j] == 1:
+                    darr[i] -= 1
+                    dbrr[j] -= 1
+                    mrr[i][j] = 0
+                    flag = True
+                if flag:
+                    continue
 
-    for row in mrr:
-        log(row)
-    log()
+                if (darr[i] < 0 or dbrr[j] < 0) and mrr[i][j] == 0:
+                    darr[i] += 1
+                    dbrr[j] += 1
+                    mrr[i][j] = 1
+                    flag = True
+                if flag:
+                    continue
+            if flag:
+                continue
+        if flag:
+            continue
 
-    log(darr)
-    log(dbrr)
-    log()
+
+    # log("-")
+    # log()
+
+    # for row in mrr:
+    #     log(row)
+    # log()
+
+    # log(darr)
+    # log(dbrr)
+    # log()
 
     assert all(x == 0 for x in darr)
     assert all(x == 0 for x in dbrr)
 
+    res = 0
+    for i in range(n):
+        for j in range(m):
+            res += abs(mrr_original[i][j] - mrr[i][j]) 
+
     return res
 
 
-while True:
-    import random
-    n = random.randint(1,4)
-    m = random.randint(1,4)
-    mrr = [[random.randint(0,1) for _ in range(m)] for _ in range(n)]
-    arr = [random.randint(0, m) for _ in range(n)]
-    brr = [random.randint(0, n) for _ in range(m)]
-    solve(n,m,mrr,arr,brr)
+# while True:
+#     import random
+#     n = random.randint(1,4)
+#     m = random.randint(1,4)
+#     mrr = [[random.randint(0,1) for _ in range(m)] for _ in range(n)]
+#     arr = [random.randint(0, m) for _ in range(n)]
+#     brr = [random.randint(0, n) for _ in range(m)]
+#     log(n, m)
+#     val = solve(n,m,[[x for x in row] for row in mrr],[x for x in arr],[x for x in brr])
+#     for _ in range(3):
+#         val2 = solve(n,m,[[x for x in row] for row in mrr],[x for x in arr],[x for x in brr])
+#         assert val == val2, (val, val2, n, m, mrr, arr, brr)
 
 for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
@@ -269,7 +344,10 @@ for case_num in [0]:  # no loop over test case
     arr = list(map(int,input().split()))
     brr = list(map(int,input().split()))
 
-    res = solve(n,m,mrr,arr,brr)  # include input here
+    minres = n * m
+    for i in range(5):
+        res = solve(n,m,[[x for x in row] for row in mrr],[x for x in arr],[x for x in brr])  # include input here
+        minres = min(minres, res)
 
     # print length if applicable
     # print(len(res))
@@ -282,4 +360,4 @@ for case_num in [0]:  # no loop over test case
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    print(minres)
