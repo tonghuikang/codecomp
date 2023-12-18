@@ -137,6 +137,7 @@ def solve_(n,m,mrr,arr,brr):
 
         for j,x in enumerate(brr):
             if x == n:
+                flag = True
                 for i in range(n):
                     arr[i] -= 1
                     if mrr[i][j] == 0:
