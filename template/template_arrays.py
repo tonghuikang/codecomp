@@ -205,6 +205,23 @@ def gathering_cost(xpos):
     return cost_arr
 
 
+def gathering_cost_query(xpos, psum, l, m, r):
+    # the gathering cost for subarray xpos[l:r+1] onto xpos[m]
+    # https://leetcode.cn/problems/apply-operations-to-maximize-frequency-score/
+    # https://leetcode.cn/circle/discuss/BYHexE/view/HRjJZC/
+    # psum is preprocessed from xpos
+    # psum = list(itertools.accumulate(arr, initial=0))
+    left = xpos[m] * (m - l) - (psum[m] - psum[l])
+    right = psum[r + 1] - psum[m + 1] - xpos[m] * (r - m)
+    return left + right
+
+
+def gathering_cost(xpos):
+    xpos = sorted(xpos)
+    psum = list(itertools.accumulate(xpos, initial=0))
+    return [gathering_cost_query(xpos, psum, 0, m, len(xpos)-1) for m in range(len(xpos))]
+
+
 def all_nearest_smaller_values(arr):
     # https://en.wikipedia.org/wiki/All_nearest_smaller_values
     # https://leetcode.cn/contest/weekly-contest-358/problems/apply-operations-to-maximize-score/
