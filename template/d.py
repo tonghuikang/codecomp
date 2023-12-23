@@ -64,9 +64,63 @@ def minus_one_matrix(mrr):
 
 
 def solve_(n, k, arr):
-    # your solution here
+    if all(x == arr[0] for x in arr):
+        return 0
+    
+    arr.sort()
+    diff = [y-x for x,y in zip(arr, arr[1:])]
 
-    return ""
+    # we want the maximum final value f
+    # in every operation, we change the number by (f-k)
+        # which can be positive or negative
+    # the gcd of the differences should be divisible by abs(f-k)
+
+    # we can't factorize anything because it is 10**12
+
+    gcd = diff[0]
+    for x in diff:
+        if x == 0:
+            continue
+        gcd = math.gcd(gcd, x)
+
+    # gcd = f-k
+    # f = gcd + k
+    
+    f = gcd + k
+
+    log("gcd, f")
+    log(gcd, f)
+
+    res = 0
+    for x in arr:
+        if (x - f) % (f - k) != 0:
+            log("-", x)
+            return -1
+        if x < f:
+            log("+", x)
+            return -1
+        res += (x - f) // (f - k)
+    
+    return res
+
+
+def solve_ref(n,k,arr):
+    minres = 100000000
+    for final_val in range(k+1, 100):
+        res = 0
+        for x in arr:
+            if (x - final_val) % (final_val - k) != 0:
+                break
+            if x < final_val:
+                break
+            res += (x - final_val) // (final_val - k)
+        else:
+            minres = min(minres, res)    
+            log(n,k,final_val,arr,res)
+    
+    return minres
+
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -94,6 +148,8 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(n, k, arr)  # include input here
+
+    solve_ref(n,k,arr)
 
     # print length if applicable
     # print(len(res))
