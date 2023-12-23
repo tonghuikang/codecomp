@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -66,7 +63,29 @@ def minus_one_matrix(mrr):
 def solve_(n, lrr, rrr, crr):
     # your solution here
 
-    return ""
+    pts = []
+    for x in lrr:
+        pts.append((x,1))
+    for x in rrr:
+        pts.append((x,-1))
+    pts.sort()
+
+    stack = []
+    pair = []
+
+    for x,q in pts:
+        if q == -1:
+            pair.append((stack.pop(), x))
+        else:
+            stack.append(x)
+
+    # log(pair)
+
+    dist = [y-x for x,y in pair]
+    dist.sort()
+    crr.sort(reverse=True)
+
+    return sum(a*b for a,b in zip(dist, crr))
 
 
 # for case_num in [0]:  # no loop over test case
