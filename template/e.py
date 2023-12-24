@@ -11,7 +11,7 @@ input = sys.stdin.readline  # to read input quickly
 # import scipy
 
 m9 = 10**9 + 7  # 998244353
-yes, no = "YES", "NO"
+yes, no = "Yes", "No"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
@@ -62,11 +62,110 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def check(n, k, matrix):
+    assert len(matrix) == n
+    for row in matrix:
+        assert len(row) == n
+    assert sum(sum(row) for row in matrix) == k
 
-def solve_():
+    rowxors = []
+    for x in range(n):
+        val = 0
+        for y in range(n):
+            if matrix[x][y] == 1:
+                val += 1
+        rowxors.append(val%2)
+        
+    colxors = []
+    for y in range(n):
+        val = 0
+        for x in range(n):
+            if matrix[x][y] == 1:
+                val += 1
+        colxors.append(val%2)
+            
+    assert len(set(rowxors)) == 1
+    assert len(set(colxors)) == 1
+
+
+def flip_matrix(matrix):
+    return [[1-x for x in row] for row in matrix]
+
+
+def solve_(n, k):
     # your solution here
+    k_original = k
 
-    return ""
+    if k == n*n:
+        return [[1 for _ in range(n)] for _ in range(n)]
+
+    if k == 0:
+        return [[0 for _ in range(n)] for _ in range(n)]
+
+    if n%2 == 0:
+        if k%2 == 1:
+            return []
+        if k == 2:
+            return []
+        if k == (n*n)-2:
+            return []
+        if k%4 == 0:
+            kset = k // 4
+            matrix = [[0 for _ in range(n)] for _ in range(n)]
+            for i in range(n//2):
+                for j in range(n//2):
+                    if kset == 0:
+                        continue
+                    kset -= 1
+                    for x in range(2):
+                        for y in range(2):
+                            matrix[2*i + x][2*j + y] = 1
+            check(n, k_original, matrix)
+            return matrix
+        
+        flipping = False
+        if k > (n*n) // 2:
+            flipping = True
+            k = n-k
+        kset = (k - 6) // 4
+
+        matrix = [[0 for _ in range(n)] for _ in range(n)]
+        for i in range(n//2):
+            for j in range(n//2):
+                if i <= 1 and j <= 1:
+                    continue
+                if kset == 0:
+                    continue
+                kset -= 1
+                for x in range(2):
+                    for y in range(2):
+                        matrix[2*i + x][2*j + y] = 1
+
+        # for the first 4x4 cells        
+        # xx
+        # x x
+        #  xx
+
+        matrix[0][0] = 1
+        matrix[0][1] = 1
+        matrix[1][0] = 1
+        
+        matrix[2][2] = 1
+        matrix[2][1] = 1
+        matrix[1][2] = 1
+
+        if flipping:
+            matrix = flip_matrix(matrix)
+
+        check(n, k_original, matrix)
+        return matrix
+
+    return []
+
+
+for n in range(1, 5):
+    for k in range(0, n*n+1):
+        solve(n, k)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +182,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n, k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +191,12 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, k)  # include input here
+
+    if res == []:
+        print(no)
+        continue
+    print(yes)
 
     # print length if applicable
     # print(len(res))
@@ -100,7 +204,7 @@ for case_num in range(int(input())):
     # parse result
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
-    # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
