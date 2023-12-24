@@ -66,7 +66,32 @@ def minus_one_matrix(mrr):
 def solve_(n,k,d,arr,vrr):
     # your solution here
 
-    return ""
+    # grow once and reset, repeat
+    maxres = d // 2
+
+    # for each element of position i in arr
+    # how many days is needed to grow to v
+
+    # reset and grow once, repeat
+    res = 0
+    for i,x in enumerate(arr, start=1):
+        if i == x:
+            res += 1
+    res += (d - 1) // 2
+    maxres = max(maxres, res)
+
+    # grow multiple, reset, and grow once and reset
+    for q,b in enumerate(vrr, start=1):
+        res = 0
+        for i in range(n):
+            if i < b:
+                arr[i] += 1
+            if arr[i] == i+1:
+                res += 1
+        res += (d - q - 1) // 2
+        maxres = max(maxres, res)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
