@@ -21,6 +21,9 @@ def solve(n,k,d,arr,vrr):
     maxres = max(maxres, res)
 
     # grow multiple, reset, and grow once and reset
+    while len(vrr) <= n:
+        vrr = vrr + vrr
+
     for q,b in enumerate(vrr, start=1):
         res = 0
         for i in range(n):
