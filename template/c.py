@@ -25,6 +25,8 @@ def solve(n,k,d,arr,vrr):
                 arr[i] += 1
             if arr[i] == i+1:
                 res += 1
+        if d - q <= 0:
+            continue
         res += (d - q - 1) // 2
         maxres = max(maxres, res)
 
