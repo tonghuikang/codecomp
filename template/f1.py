@@ -64,17 +64,60 @@ def minus_one_matrix(mrr):
 
 
 def solve_(n, arr):
+    assert n == len(arr)
     # your solution here
 
-    prev = 0
+    # assume it starts with zero otherwise we can just prune
+
+    # if increase by 2 -> i is on left, arr[i] < i
+    # if increase by 0 -> i is on right, arr[i] > i
+    # if increase by 1 -> ???
+
     for i,x in enumerate(arr, start=1):
         if x > i:
             return 0
-        if x < prev:
-            return 0
-        prev = x
 
-    return ""
+    # same, increase by 1, increases by 2
+    for a,b in zip(arr, arr[1:]):
+        if not 0 <= b-a <= n:
+            return 0
+    
+    if arr[-1] != n:
+        return 0
+
+
+def make_arr(arr):
+    seen = set()
+    brr = []
+    for i,x in enumerate(arr, start=1):
+        seen.add(x)
+        val = 0
+        for q in seen:
+            if q <= i:
+                val += 1
+        brr.append(val)
+    return brr
+
+
+def solve_ref(n, arr):
+    assert n == len(arr)
+    qrr = list(range(1, n+1))
+    res = 0
+    for perm in itertools.permutations(qrr):
+        brr = make_arr(perm)
+        if brr == arr:
+            log(perm)
+            res += 1
+
+    log(res)
+    return res
+
+# while True:
+#     import random
+#     n = random.randint(1, 10)
+#     arr = list(range(1, n+1))
+#     random.shuffle(arr)
+#     log(arr, make_arr(arr))
 
 
 # for case_num in [0]:  # no loop over test case
@@ -109,6 +152,8 @@ for case_num in range(int(input())):
     # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
+
+    solve_ref(n, arr)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required

@@ -71,17 +71,29 @@ def solve_(n, k, arr):
     diff = [y-x for x,y in zip(arr, arr[1:])]
 
     # we want the maximum final value f
-    # in every operation, we change the number by (f-k)
-        # which can be positive or negative
+    # in every operation, we change the number by (f-k), so that each number becomes f
+        # (f-k) can be positive or negative
+        # (f-k) is the same for all numbers
+
     # the gcd of the differences should be divisible by abs(f-k)
+
+    # this means that f = g + z * abs(f-k)
+        # z can be positive or negative
 
     # we can't factorize anything because it is 10**12
 
-    gcd = diff[0]
+    g = diff[0]
     for x in diff:
         if x == 0:
             continue
-        gcd = math.gcd(gcd, x)
+        g = math.gcd(g, x)
+
+    # for positive (f-k)
+    # f = g + z * (f-k)
+    # g = z * (f-k-1)
+    
+    # maximize f, but not larger than minimum value
+    arr[0]    
 
     # gcd = f-k
     # f = gcd + k
