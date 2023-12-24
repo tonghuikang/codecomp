@@ -63,6 +63,11 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 def check(n, k, matrix):
+    return
+    # print(n,k)
+    for row in matrix:
+        print(row)
+
     assert len(matrix) == n
     for row in matrix:
         assert len(row) == n
@@ -96,28 +101,48 @@ def solve_(n, k):
     # your solution here
     k_original = k
 
-    flipping = False
-    if k > (n*n) // 2:
-        flipping = True
-        k = n-k
-
     if k == n*n:
         return [[1 for _ in range(n)] for _ in range(n)]
 
     if k == 0:
         return [[0 for _ in range(n)] for _ in range(n)]
 
-    if n%2 == 0:
+    if k == n:
+        return [[1 if x == y else 0 for x in range(n)] for y in range(n)]
+
+    if k == 2:
+        return []
+    
+    if k == (n*n) - 2:
+        return []
+
+    if n%2 == 0 and k%2 == 1:
+        return []
+
+    flipping = False
+
+    if n%2 == 1:
+        if k%2 == 0 and k > n*n-n:
+            return []
+
+    if n%2 == 1:
         if k%2 == 1:
-            return []
-        if k == 2:
-            return []
-        if k == (n*n)-2:
-            return []
+            if k < n:
+                return []
+            flipping = True
+            k = (n*n)-k
+
+    # if n%2 == 0:
+    #     if k > (n*n) // 2:
+    #         flipping = True
+    #         k = (n*n)-k
         
     if k%4 == 0:
         kset = k // 4
-        matrix = [[0 for _ in range(n)] for _ in range(n)]
+        if flipping:
+            matrix = [[1 for _ in range(n)] for _ in range(n)]
+        else:
+            matrix = [[0 for _ in range(n)] for _ in range(n)]
         for i in range(n//2):
             for j in range(n//2):
                 if kset == 0:
@@ -125,17 +150,23 @@ def solve_(n, k):
                 kset -= 1
                 for x in range(2):
                     for y in range(2):
-                        matrix[2*i + x][2*j + y] = 1
+                        if flipping:
+                            matrix[2*i + x][2*j + y] = 0
+                        else:
+                            matrix[2*i + x][2*j + y] = 1
         
-        if flipping:
+        if sum(sum(row) for row in matrix) != k_original:
             matrix = flip_matrix(matrix)
+
         check(n, k_original, matrix)
         return matrix
         
     if k%4 == 2:
         kset = (k - 6) // 4
-
-        matrix = [[0 for _ in range(n)] for _ in range(n)]
+        if flipping:
+            matrix = [[1 for _ in range(n)] for _ in range(n)]
+        else:
+            matrix = [[0 for _ in range(n)] for _ in range(n)]
         for i in range(n//2):
             for j in range(n//2):
                 if i >= n//2 - 2 and j >= n//2 - 2:
@@ -145,7 +176,10 @@ def solve_(n, k):
                 kset -= 1
                 for x in range(2):
                     for y in range(2):
-                        matrix[2*i + x][2*j + y] = 1
+                        if flipping:
+                            matrix[2*i + x][2*j + y] = 0
+                        else:
+                            matrix[2*i + x][2*j + y] = 1
 
         # for the first 4x4 cells        
         # xx
@@ -160,16 +194,20 @@ def solve_(n, k):
         matrix[~2][~1] = 1
         matrix[~1][~2] = 1
 
-        if flipping:
+        if sum(sum(row) for row in matrix) != k_original:
             matrix = flip_matrix(matrix)
-        check(n, k_original, matrix)
+
+        # if flipping:
+        #     matrix = flip_matrix(matrix)
+        matrix = check(n, k_original, matrix)
         return matrix
 
+    assert False
 
     return []
 
 
-for n in range(1, 5):
+for n in range(1, 10):
     for k in range(0, n*n+1):
         solve(n, k)
 
