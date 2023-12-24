@@ -96,6 +96,11 @@ def solve_(n, k):
     # your solution here
     k_original = k
 
+    flipping = False
+    if k > (n*n) // 2:
+        flipping = True
+        k = n-k
+
     if k == n*n:
         return [[1 for _ in range(n)] for _ in range(n)]
 
@@ -109,30 +114,31 @@ def solve_(n, k):
             return []
         if k == (n*n)-2:
             return []
-        if k%4 == 0:
-            kset = k // 4
-            matrix = [[0 for _ in range(n)] for _ in range(n)]
-            for i in range(n//2):
-                for j in range(n//2):
-                    if kset == 0:
-                        continue
-                    kset -= 1
-                    for x in range(2):
-                        for y in range(2):
-                            matrix[2*i + x][2*j + y] = 1
-            check(n, k_original, matrix)
-            return matrix
         
-        flipping = False
-        if k > (n*n) // 2:
-            flipping = True
-            k = n-k
+    if k%4 == 0:
+        kset = k // 4
+        matrix = [[0 for _ in range(n)] for _ in range(n)]
+        for i in range(n//2):
+            for j in range(n//2):
+                if kset == 0:
+                    continue
+                kset -= 1
+                for x in range(2):
+                    for y in range(2):
+                        matrix[2*i + x][2*j + y] = 1
+        
+        if flipping:
+            matrix = flip_matrix(matrix)
+        check(n, k_original, matrix)
+        return matrix
+        
+    if k%4 == 2:
         kset = (k - 6) // 4
 
         matrix = [[0 for _ in range(n)] for _ in range(n)]
         for i in range(n//2):
             for j in range(n//2):
-                if i <= 1 and j <= 1:
+                if i >= n//2 - 2 and j >= n//2 - 2:
                     continue
                 if kset == 0:
                     continue
@@ -146,19 +152,19 @@ def solve_(n, k):
         # x x
         #  xx
 
-        matrix[0][0] = 1
-        matrix[0][1] = 1
-        matrix[1][0] = 1
+        matrix[~0][~0] = 1
+        matrix[~0][~1] = 1
+        matrix[~1][~0] = 1
         
-        matrix[2][2] = 1
-        matrix[2][1] = 1
-        matrix[1][2] = 1
+        matrix[~2][~2] = 1
+        matrix[~2][~1] = 1
+        matrix[~1][~2] = 1
 
         if flipping:
             matrix = flip_matrix(matrix)
-
         check(n, k_original, matrix)
         return matrix
+
 
     return []
 
