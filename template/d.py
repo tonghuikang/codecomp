@@ -63,10 +63,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+result = {}
+result[1] = [1]
+result[3] = [169, 196, 961]
+result[5] = [10609, 16900, 19600, 61009, 90601, 96100]
+
+for n in range(3,10,2):
+    result[n+2] = [str(x) + "00" for x in result[n]]
+    result[n+2].append(
+          ("1")
+        + ("0" * ((n-1) // 2))
+        + ("6")
+        + ("0" * ((n-1) // 2))
+        + ("9")
+    )
+    result[n+2].append(
+          ("9")
+        + ("0" * ((n-1) // 2))
+        + ("6")
+        + ("0" * ((n-1) // 2))
+        + ("1")
+    )
+
+
 def solve_(n):
     # your solution here
 
-    return ""
+    # https://benvitalenum3ers.wordpress.com/2012/09/29/squares-with-the-same-digits/
+
+    return result[n][:n]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -99,7 +124,7 @@ for case_num in range(int(input())):
 
     # parse result
     # res = " ".join(str(x) for x in res)
-    # res = "\n".join(str(x) for x in res)
+    res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
