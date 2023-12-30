@@ -63,10 +63,19 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k,arr):
     # your solution here
 
-    return ""
+    # 7, 17, 17
+
+    val = 2023
+
+    for x in arr:
+        if val % x != 0:
+            return -1
+        val = val // x
+
+    return [val] + [1] * (k-1)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,8 +92,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,13 +101,18 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,arr)  # include input here
+
+    if res == -1:
+        print(no)
+        continue
+    print(yes)
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
