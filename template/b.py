@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import math
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -80,12 +78,95 @@ primes = [x for i, x in enumerate(largest_prime_factors[2:], start=2) if x == i]
 
 primes = set(primes)
 
+from collections import Counter
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j] * prime_pow)
+
+    # NOT IN SORTED ORDER
+    return divs
+
+
+
+def get_largest_prime_factors(num):
+    # get largest prime factor for each number
+    # you can use this to obtain primes
+    largest_prime_factors = [1] * num
+    for i in range(2, num):
+        if largest_prime_factors[i] > 1:  # not prime
+            continue
+        for j in range(i, num, i):
+            largest_prime_factors[j] = i
+    return largest_prime_factors
+
+
+SIZE_OF_PRIME_ARRAY = 10**6 + 10
+largest_prime_factors = get_largest_prime_factors(SIZE_OF_PRIME_ARRAY)  # take care that it begins with [1,1,2,...]
+primes = [x for i, x in enumerate(largest_prime_factors[2:], start=2) if x == i]
+
+
+def get_all_divisors_given_prime_factorization(factors):
+    c = Counter(factors)
+
+    divs = [1]
+    for prime, count in c.most_common()[::-1]:
+        l = len(divs)
+        prime_pow = 1
+
+        for _ in range(count):
+            prime_pow *= prime
+            for j in range(l):
+                divs.append(divs[j] * prime_pow)
+
+    # NOT IN SORTED ORDER
+    return divs
+
+
+
+def get_prime_factors_with_precomp(num):
+    # requires precomputed `largest_prime_factors``
+    # for numbers below SIZE_OF_PRIME_ARRAY
+    # O(log n)
+    factors = []
+    lf = largest_prime_factors[num]
+    while lf != num:
+        factors.append(lf)
+        num //= lf
+        lf = largest_prime_factors[num]
+    if num > 1:
+        factors.append(num)
+    return factors
+
 
 def solve_(a,b):
     # your solution here
 
-    return ""
+    if a == 1 and b in primes:
+        return b * b
+    if a in primes and b in primes:
+        return a * b
+    if b%a == 0:
+        return b * (b // a)
 
+    return a // math.gcd(a,b) * b // math.gcd(a,b) * math.gcd(a,b)
+
+
+# for x in range(2, 1000):
+#     factors = get_all_divisors_given_prime_factorization(get_prime_factors_with_precomp(x))
+#     factors.sort()
+#     log(x, factors)
+#     if len(factors) >= 3:
+#         assert solve(factors[-3], factors[-2]) == x
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
