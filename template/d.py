@@ -68,7 +68,7 @@ result[1] = [1]
 result[3] = [169, 196, 961]
 result[5] = [10609, 16900, 19600, 61009, 90601, 96100]
 
-for n in range(3,10,2):
+for n in range(3,100,2):
     result[n+2] = [str(x) + "00" for x in result[n]]
     result[n+2].append(
           ("1")
