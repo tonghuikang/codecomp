@@ -66,38 +66,22 @@ def minus_one_matrix(mrr):
 def solve_(n, arr):
     # your solution here
 
-    prev = 10**19
-    brr = []
-    for x in arr:
-        if x != prev:
-            brr.append(x)
-        prev = x
-    arr = brr
-
-    peak = [x < y and y > z for x,y,z in zip([10**19] + arr, arr, arr[1:] + [10**19])]
-    valley = [x > y and y < z for x,y,z in zip([-1] + arr, arr, arr[1:] + [-1])]
-
-    if len(arr) <= 2:
-        return 0
-
     xrr = [10**19]
     yrr = [10**19]
 
-    for x,is_peak,is_valley in zip(arr, peak, valley):
-        if x <= xrr[-1] and is_valley is False:
-            # log("qq", x)
-            # log(x, xrr)
-            xrr.append(x)
-            continue
-        if is_peak is True:
-            # log("is_peak", x)
-            xrr.append(x)
-            continue
-        yrr.append(x)
+    for x in arr:
+        if yrr[-1] > xrr[-1]:
+            xrr, yrr = yrr, xrr
 
-    # log(peak)
-    # log(xrr)
-    # log(yrr)
+        if x <= yrr[-1]:
+            yrr.append(x)
+            continue
+
+        if x > xrr[-1]:
+            yrr.append(x)
+            continue
+
+        xrr.append(x)
 
     res = 0
 
