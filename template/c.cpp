@@ -59,7 +59,6 @@ int solve_(int n, const vector<int>& arr) {
 
     int res = 0;
     for (int factor : factors) {
-        bool flag = true;
         vector<int> diffs;
         for (int i = 0; i < n / factor - 1; ++i) {
             int a = i * factor, b = (i + 1) * factor;
@@ -70,16 +69,16 @@ int solve_(int n, const vector<int>& arr) {
             }
         }
         
-        if (diffs.empty()) continue;
-        int gcd = diffs[0];
-        for (int x : diffs) {
-            gcd = std::gcd(gcd, x);
-        }
-        if (gcd == 1) continue;
-
-        flag = false;  // I added this to match the "if flag:" logic from the Python code.
-        if (flag) {
-            res += 1;
+        // No need for a flag, directly use the condition to continue or increment res
+        if (!diffs.empty()) {
+            int gcd = diffs[0];
+            for (int x : diffs) {
+                gcd = std::gcd(gcd, x);
+            }
+            if (gcd != 1) {
+                // The condition is met, so we increment res
+                res += 1;
+            }
         }
     }
 
