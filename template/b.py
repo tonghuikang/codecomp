@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -61,10 +58,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k,x,arr):
     # your solution here
 
-    return ""
+    arr.sort()
+
+    addres = 0
+    if k + x <= n:
+        must_include = n - (k + x)
+        addres = sum(arr[:must_include])
+        arr = arr[must_include:]
+
+    # log(addres)
+
+    arr = [0] * (k+x-n) + arr
+
+    # last x elements is negative
+    positive, negative = 0, sum(arr[:x])
+    maxres = positive - negative
+    for a,b in zip(arr, arr[x:]):
+        positive += a
+        negative -= a
+        negative += b
+        res = positive - negative
+        maxres = max(maxres, res)
+
+    return maxres + addres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -81,8 +100,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k,x = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -90,7 +109,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,x,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
