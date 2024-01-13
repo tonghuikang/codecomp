@@ -62,9 +62,30 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+LIMIT = 10**18 + 10
 
 def solve_(n,q,mrr,qrr):
     # your solution here
+
+    # group append queries
+    # ignore double queries beyond 100th
+
+    ops = []
+    curlen = 0
+
+    for a,b in qrr:
+        if a == 1:
+            curlen += 1
+            if ops == [] or ops[-1][0] == 2:
+                ops[-1][1].append(b)
+            else:
+                ops.append([1,b])
+        else:
+            ops.append([2,b])
+        if curlen >= LIMIT:
+            break
+
+    log(ops)
 
     return ""
 
