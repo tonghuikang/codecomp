@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -73,21 +70,44 @@ def solve_(n,q,mrr,qrr):
     ops = []
     curlen = 0
 
-    for a,b in qrr:
+    for a,b in mrr:
         if a == 1:
-            curlen += 1
             if ops == [] or ops[-1][0] == 2:
-                ops[-1][1].append(b)
+                ops.append((1,curlen,[b]))
             else:
-                ops.append([1,b])
+                ops[-1][-1].append(b)
+            curlen += 1
         else:
-            ops.append([2,b])
+            ops.append([2,curlen,b+1])
+            curlen = curlen * (b+1)
         if curlen >= LIMIT:
             break
+    ops.append((1, curlen, []))
 
-    log(ops)
+    # log(ops)
 
-    return ""
+    res = []
+
+    for q in qrr:
+        q -= 1
+        # log(q)
+
+        for i,(a,b,c) in enumerate(ops):
+            if b > q:
+                # log("break at", a,b,c)
+                break
+
+        for i,(a,b,c) in enumerate(ops[:i][::-1]):
+            if a == 2:
+                q = q%b
+            if a == 1:
+                if q < b:
+                    continue
+                # log(c, q, b)
+                res.append(c[q-b])
+                break
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -120,7 +140,7 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

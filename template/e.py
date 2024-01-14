@@ -63,10 +63,49 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, k):
+
+    if n > 20:
+        return
     # your solution here
 
-    return ""
+    # between the xth and (x+2)th one the space is less than or equal to k + 1
+    # assume the string starts with 1 and ends with 1
+
+    # given the locations of the last two ones a,b, increment the locations that you can place a one b,[c]
+
+    # (location of second one, location of first one)
+    psum = [[0 for _ in range(n+3)] for _ in range(n+3)]
+
+    # place the first one
+    # (0,1) ... (0,k)
+    for i in range(1,k+1):
+        psum[0][i] += 1
+        psum[0][i+1] -= 1
+
+
+    # given the count at (i,j), populate its sum to (j,[j+1 ... i+k+1])
+    for i in range(n+2):
+        curcnt = 0
+        for j in range(i+1,n+2):
+            curcnt += psum[i][j]
+            curcnt = curcnt % m9
+            log(i,j,curcnt)
+            psum[j][j+1] += curcnt
+            right = min(n+2, i+k+1+1)
+            psum[j][right] -= curcnt
+
+    for row in psum:
+        log(row)
+
+    res = 0
+    for i in range(n+2):
+        curcnt = 0
+        for j in range(n+2):
+            curcnt += psum[i][j]
+        res += curcnt
+
+    return res%m9
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +122,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +131,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k)  # include input here
 
     # print length if applicable
     # print(len(res))
