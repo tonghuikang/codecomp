@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -15,7 +12,7 @@ yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-# abc = "abcdefghijklmnopqrstuvwxyz"
+abc = "abcdefghijklmnopqrstuvwxyz"
 # abc_map = {c:i for i,c in enumerate(abc)}
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
@@ -63,10 +60,24 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,k,m,srr):
     # your solution here
 
-    return ""
+    required = set(list(abc[:k]))
+
+    res = ""
+
+    for x in srr:
+        if x in required:
+            required.remove(x)
+        if len(required) == 0:
+            res += x
+            required = set(list(abc[:n]))
+
+    if len(res) >= n:
+        return ""
+    
+    return (res + list(required)[0] + "a"*n)[:n]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -77,22 +88,30 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
+    srr = input().strip()
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,m,srr)  # include input here
+
+    if res == "":
+        print(yes)
+        continue
+
+    print(no)
+
+    assert len(res) == n
 
     # print length if applicable
     # print(len(res))

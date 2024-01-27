@@ -15,7 +15,7 @@ yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
-# abc = "abcdefghijklmnopqrstuvwxyz"
+abc = "abcdefghijklmnopqrstuvwxyz"
 # abc_map = {c:i for i,c in enumerate(abc)}
 MAXINT = sys.maxsize
 e18 = 10**18 + 10
@@ -63,10 +63,10 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, k):
     # your solution here
 
-    return ""
+    return abc[:k] * n
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +83,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +92,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, k)  # include input here
 
     # print length if applicable
     # print(len(res))
