@@ -74,6 +74,7 @@ def solve_(n,k,m,srr):
             res += x
             required = set(list(abc[:n]))
 
+    log(res)
     if len(res) >= n:
         return ""
     
