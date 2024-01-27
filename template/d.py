@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -62,11 +59,37 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+p = 10**9+7
 
-def solve_():
+from functools import cache
+
+@cache
+def modinv_p(base):
+    # modular inverse if the modulo is a prime
+    return pow(base, -1, p)  # for Python 3.8+
+    # return pow(base, p-2, p)  # if Python version is below 3.8
+
+
+
+def solve_(n,m,k,abfrr):
     # your solution here
 
-    return ""
+    sum_of_friendship = 0
+    for a,b,f in abfrr:
+        sum_of_friendship += f
+
+    number_of_friendships = len(abfrr)
+    total_pairs = n * (n-1) // 2
+
+    # log(number_of_friendships, total_pairs, sum_of_friendship)
+
+    res = 0
+    for _ in range(k):
+        # log(sum_of_friendship, total_pairs)
+        res += sum_of_friendship * modinv_p(total_pairs)
+        sum_of_friendship += number_of_friendships * modinv_p(total_pairs)
+
+    return res%p
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,16 +106,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    abfrr = read_matrix(m)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,k,abfrr)  # include input here
 
     # print length if applicable
     # print(len(res))
