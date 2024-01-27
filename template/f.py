@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,17 +60,52 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+modval = 999_999_893
+
+from functools import cache
+
+@cache
+def modinv_p(base):
+    # modular inverse if the modulo is a prime
+    return pow(base, -1, modval)  # for Python 3.8+
+    # return pow(base, p-2, p)  # if Python version is below 3.8
+
+
+def solve_(n):
     # your solution here
 
-    return ""
+    sets = n // 2
+    p = 2 * sets * (sets + 1) // 2
+
+    sets = (n - 1) // 2
+    q = 2 * sets * (sets + 1) // 2
+
+    # p + ( q )sqrt(2)
+    # ---------
+    # p + (q+2)sqrt(2)
+
+    # log(p,q)
+    # log(p,q+2)
+    # log()
+
+    a = p
+    b = q
+    c = q+2
+
+    # aa - 2bc + (ab - ac)sqrt(2)
+    # aa - 2cc
+
+    res = (a*b - a*c) * modinv_p(a*a - 2*c*c)
+
+    return res%modval
+
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -92,7 +124,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
