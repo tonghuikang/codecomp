@@ -7,7 +7,6 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
 # d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -71,6 +70,18 @@ def modinv_p(base):
     # return pow(base, p-2, p)  # if Python version is below 3.8
 
 
+import math
+s2 = math.sqrt(2)
+
+def simplify(a,b,c,d):
+    # a + b sqrt(2)
+    # c + d sqrt(2)
+
+    x = (a*c - 2*b*d) * modinv_p(c*c - 2*d*d)
+    y = (b*c - a*d) * modinv_p(c*c - 2*d*d)
+    return x, y
+
+
 def solve_(n):
     # your solution here
 
@@ -80,24 +91,52 @@ def solve_(n):
     sets = (n - 1) // 2
     q = 2 * sets * (sets + 1) // 2
 
-    # p + ( q )sqrt(2)
-    # ---------
-    # p + (q+2)sqrt(2)
+    x = n // 4
+    y = (n - 1) // 4
 
-    # log(p,q)
-    # log(p,q+2)
-    # log()
+    
+    log(x,y)
+    log()
+
+
+
+    # p + ( q + ?)sqrt(2)
+    # ---------
+    # p + (q+2 + ?)sqrt(2)
+
+    log(p,q)
+    log(p,q+2)
+    log()
 
     a = p
     b = q
-    c = q+2
+    c = p
+    d = q+2
 
-    # aa - 2bc + (ab - ac)sqrt(2)
-    # aa - 2cc
+    if x >= 1:
+        a += 1
+        c += 1 - modinv_p(pow(2, -x, modval))
 
-    res = (a*b - a*c) * modinv_p(a*a - 2*c*c)
+    if y >= 1:
+        a += 1 - modinv_p(pow(2, -x, modval))
+        c += 1
 
-    return res%modval
+    return simplify(a,b,c,d)[1]%modval
+
+    # # aa - 2bc + (ab - ac)sqrt(2)
+    # # aa - 2cc
+
+    # log(a*a - 2*b*c, a*b - a*c)
+    # log(a*a - 2*c*c)
+    # log()
+
+    # log((p + q*s2)/(p + (q+2)*s2))
+    # log((a*a - 2*b*c + (a*b - a*c)*s2)/(a*a - 2*c*c))
+    # log()
+
+    # res = (a*b - a*c) * modinv_p(a*a - 2*c*c)
+
+    # return res%modval
 
 
 
