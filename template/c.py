@@ -72,7 +72,7 @@ def solve_(n,k,m,srr):
             required.remove(x)
         if len(required) == 0:
             res += x
-            required = set(list(abc[:n]))
+            required = set(list(abc[:k]))
 
     # log(res, required)
     if len(res) >= n:
