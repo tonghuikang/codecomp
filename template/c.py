@@ -74,11 +74,11 @@ def solve_(n,k,m,srr):
             res += x
             required = set(list(abc[:n]))
 
-    log(res)
+    # log(res, required)
     if len(res) >= n:
         return ""
     
-    return (res + list(required)[0] + "a"*n)[:n]
+    return (res + list(required)[0]*n)[:n]
 
 
 # for case_num in [0]:  # no loop over test case
