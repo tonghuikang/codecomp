@@ -111,7 +111,13 @@ def solve_(n,x,y,s):
         if cursum + res[-1] + 1 > num_sets:
             res.append(0)
             cursum += res[-1]
-        elif num_sets - cursum == 6 and leftover == 4:
+        elif num_sets - cursum == 6 and leftover >= 4:
+            res.append(0)
+            cursum += res[-1]
+        elif num_sets - cursum == 10 and leftover >= 5:
+            res.append(0)
+            cursum += res[-1]
+        elif num_sets - cursum == 15 and leftover >= 6:
             res.append(0)
             cursum += res[-1]
         else:
@@ -127,13 +133,13 @@ def solve_(n,x,y,s):
     return ret
 
 
-while True:
-    import random
-    n = random.randint(1, 60)
-    x = random.randint(1, 60)
-    y = random.randint(1, 60)
-    s = random.randint(1, 60)
-    assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
+# while True:
+#     import random
+#     n = random.randint(1, 15)
+#     x = random.randint(1, 60)
+#     y = random.randint(1, 60)
+#     s = random.randint(1, 60)
+#     assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
 
 
 
@@ -161,7 +167,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    if n <= 10:
+    if n <= 5:
         res = solve_brute(n,x,y,s)
     else:
         res = solve(n,x,y,s)  # include input here
