@@ -63,10 +63,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n,b,x,crr):
+def solve_(n,b,size_penalty,crr):
     # your solution here
 
-    return ""
+    # start with being totally distributed
+
+    maxcrr = max(crr)
+    counter = [0 for _ in range(maxcrr + 1)]
+    for c in crr:
+        counter[c] += 1
+
+    res = - (maxcrr - 1) * size_penalty
+    for i,x in enumerate(counter):
+        res += x * (i * (i-1) // 2) * b
+
+    maxres = res
+    cursize = counter[maxcrr]
+
+    log(maxres)
+
+    for i in range(maxcrr-1, -1, -1):
+        loss = cursize * (i * (i+1) // 2) * b
+        gain = cursize * (i * (i-1) // 2) * b
+        gain2 = size_penalty
+        res += gain2 + gain - loss
+        log(loss, gain, gain2, res)
+        maxres = max(maxres, res)
+        cursize += counter[c]
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
