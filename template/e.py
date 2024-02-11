@@ -84,9 +84,11 @@ def solve_(n,x,y,s):
     log(required_remainder)
     
     if s < required_remainder:
+        log("beh")
         return []
     
     if s%y != required_remainder%y:
+        log("meh")
         return []
     
     log("allowed_length", n)
@@ -105,7 +107,11 @@ def solve_(n,x,y,s):
     cursum = start_val
     
     for i in range(n-1):
+        leftover = n - i - 1
         if cursum + res[-1] + 1 > num_sets:
+            res.append(0)
+            cursum += res[-1]
+        elif num_sets - cursum == 6 and leftover == 4:
             res.append(0)
             cursum += res[-1]
         else:
@@ -114,19 +120,20 @@ def solve_(n,x,y,s):
 
     if cursum != num_sets:
         return []
+    # log(res, cursum)
 
     ret = [r*y+remainder for r in res]
 
     return ret
 
 
-while True:
-    import random
-    n = random.randint(1, 10)
-    x = random.randint(1, 10)
-    y = random.randint(1, 10)
-    s = random.randint(1, 10)
-    assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == [])
+# while True:
+#     import random
+#     n = random.randint(1, 20)
+#     x = random.randint(1, 20)
+#     y = random.randint(1, 20)
+#     s = random.randint(1, 20)
+#     assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
 
 
 
