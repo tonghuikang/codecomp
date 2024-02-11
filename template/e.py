@@ -59,9 +59,26 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+import itertools
+
+def solve_brute(n,x,y,s):
+    for comb in itertools.product([0,1], repeat=n-1):
+        arr = [x]
+        for val in comb:
+            if val == 1:
+                arr.append(arr[-1] % y)
+            else:
+                arr.append(arr[-1] + y)
+        if sum(arr) == s:
+            return arr
+    return []
+
 
 def solve_(n,x,y,s):
     # your solution here
+
+    if n <= 10:
+        return solve_brute(n,x,y,s)
 
     remainder = x%y
     required_remainder = (x%y) * n
