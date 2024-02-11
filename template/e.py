@@ -133,13 +133,13 @@ def solve_(n,x,y,s):
     return ret
 
 
-# while True:
-#     import random
-#     n = random.randint(1, 15)
-#     x = random.randint(1, 60)
-#     y = random.randint(1, 60)
-#     s = random.randint(1, 60)
-#     assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
+while True:
+    import random
+    n = random.randint(1, 15)
+    x = random.randint(1, 60)
+    y = random.randint(1, 60)
+    s = random.randint(1, 60)
+    assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
 
 
 
