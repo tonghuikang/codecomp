@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -66,7 +63,45 @@ def minus_one_matrix(mrr):
 def solve_(n,x,y,s):
     # your solution here
 
-    return ""
+    remainder = x%y
+    required_remainder = (x%y) * n
+    log(required_remainder)
+    
+    if s < required_remainder:
+        return []
+    
+    if s%y != required_remainder%y:
+        return []
+    
+    log("allowed_length", n)
+
+    num_sets = (s - required_remainder) // y
+    log("num_sets", num_sets)
+
+    start_val = x // y
+
+    if start_val > num_sets:
+        return []
+
+    log("start_val", start_val)
+
+    res = [start_val]
+    cursum = start_val
+    
+    for i in range(n-1):
+        if cursum + res[-1] + 1 > num_sets:
+            res.append(0)
+            cursum += res[-1]
+        else:
+            res.append(res[-1] + 1)
+            cursum += res[-1]
+
+    if cursum != num_sets:
+        return []
+
+    ret = [r*y+remainder for r in res]
+
+    return ret
 
 
 # for case_num in [0]:  # no loop over test case
@@ -94,11 +129,16 @@ for case_num in range(int(input())):
 
     res = solve(n,x,y,s)  # include input here
 
+    if res == []:
+        print(no)
+        continue
+
+    print(yes)
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
