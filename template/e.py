@@ -74,11 +74,10 @@ def solve_brute(n,x,y,s):
     return []
 
 
+
+
 def solve_(n,x,y,s):
     # your solution here
-
-    if n <= 10:
-        return solve_brute(n,x,y,s)
 
     remainder = x%y
     required_remainder = (x%y) * n
@@ -121,6 +120,17 @@ def solve_(n,x,y,s):
     return ret
 
 
+while True:
+    import random
+    n = random.randint(1, 10)
+    x = random.randint(1, 10)
+    y = random.randint(1, 10)
+    s = random.randint(1, 10)
+    assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == [])
+
+
+
+
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
@@ -144,7 +154,10 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,x,y,s)  # include input here
+    if n <= 10:
+        res = solve_brute(n,x,y,s)
+    else:
+        res = solve(n,x,y,s)  # include input here
 
     if res == []:
         print(no)
