@@ -62,6 +62,17 @@ def minus_one_matrix(mrr):
 import itertools
 
 def solve_brute(n,x,y,s):
+    required_remainder = (x%y) * n
+    # log(required_remainder)
+    
+    if s < required_remainder:
+        # log("beh")
+        return []
+    
+    if s%y != required_remainder%y:
+        # log("meh")
+        return []
+
     for comb in itertools.product([0,1], repeat=n-1):
         arr = [x]
         for val in comb:
@@ -70,38 +81,48 @@ def solve_brute(n,x,y,s):
             else:
                 arr.append(arr[-1] + y)
         if sum(arr) == s:
+            log(arr)
             return arr
     return []
 
 
 
+remainder_to_dash = {}
+csum = 0
+for i in range(1,1000):
+    csum += i
+    remainder_to_dash[csum] = i+1
+    remainder_to_dash[csum+1] = i+3
+
+# log(remainder_to_dash)
+# assert False
 
 def solve_(n,x,y,s):
     # your solution here
 
     remainder = x%y
     required_remainder = (x%y) * n
-    log(required_remainder)
+    # log(required_remainder)
     
     if s < required_remainder:
-        log("beh")
+        # log("beh")
         return []
     
     if s%y != required_remainder%y:
-        log("meh")
+        # log("meh")
         return []
     
-    log("allowed_length", n)
+    # log("allowed_length", n)
 
     num_sets = (s - required_remainder) // y
-    log("num_sets", num_sets)
+    # log("num_sets", num_sets)
 
     start_val = x // y
 
     if start_val > num_sets:
         return []
 
-    log("start_val", start_val)
+    # log("start_val", start_val)
 
     res = [start_val]
     cursum = start_val
@@ -111,13 +132,7 @@ def solve_(n,x,y,s):
         if cursum + res[-1] + 1 > num_sets:
             res.append(0)
             cursum += res[-1]
-        elif num_sets - cursum == 6 and leftover >= 4:
-            res.append(0)
-            cursum += res[-1]
-        elif num_sets - cursum == 10 and leftover >= 5:
-            res.append(0)
-            cursum += res[-1]
-        elif num_sets - cursum == 15 and leftover >= 6:
+        elif num_sets - cursum in remainder_to_dash and leftover >= remainder_to_dash[num_sets - cursum]:
             res.append(0)
             cursum += res[-1]
         else:
@@ -133,13 +148,13 @@ def solve_(n,x,y,s):
     return ret
 
 
-while True:
-    import random
-    n = random.randint(1, 15)
-    x = random.randint(1, 60)
-    y = random.randint(1, 60)
-    s = random.randint(1, 60)
-    assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
+# while True:
+#     import random
+#     n = random.randint(1, 15)
+#     x = random.randint(1, 60)
+#     y = random.randint(1, 1)
+#     s = random.randint(1, 120)
+#     assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
 
 
 
@@ -167,7 +182,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    if n <= 5:
+    if n <= 12:
         res = solve_brute(n,x,y,s)
     else:
         res = solve(n,x,y,s)  # include input here
