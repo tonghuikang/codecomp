@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,36 +60,59 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def find_peak(func_, minimize=False, left=0, right=2**31 - 1):
+    # https://leetcode.com/problems/peak-index-in-a-mountain-array/discuss/139848/
+    # find the peak value of a function, assumes that the ends are not peaks
+    # ASSUMES THAT THERE IS NO PLATEAUS
+
+    def func(val):
+        # negative the value of func_ if we are minimizing
+        if minimize:
+            return -func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid) < func(mid + 1):
+            left = mid + 1
+        else:
+            right = mid
+
+    return left
+
+
 def solve_(n,b,size_penalty,crr):
     # your solution here
 
     # start with being totally distributed
 
     maxcrr = max(crr)
-    counter = [0 for _ in range(maxcrr + 1)]
-    for c in crr:
-        counter[c] += 1
 
-    res = - (maxcrr - 1) * size_penalty
-    for i,x in enumerate(counter):
-        res += x * (i * (i-1) // 2) * b
+    def calculate(k):
+        res = 0
+        for c in crr:
+            larger = c // k + 1
+            smaller = c // k
+            larger_count = c%k
+            smaller_count = c - larger_count
+            value = (
+                c * (c-1) // 2 
+                - larger_count * larger * (larger-1) // 2
+                - smaller_count * smaller * (smaller-1) // 2
+            )
+            res += value * b
+        res -= (k - 1) * size_penalty
+        return res
 
-    maxres = res
-    cursize = counter[maxcrr]
+    if size_penalty == 0:
+        return calculate(10**9)
 
-    log(maxres)
+    # for k in range(1, 10):
+    #     log(k, calculate(k))
 
-    for i in range(maxcrr-1, -1, -1):
-        loss = cursize * (i * (i+1) // 2) * b
-        gain = cursize * (i * (i-1) // 2) * b
-        gain2 = size_penalty
-        res += gain2 + gain - loss
-        log(loss, gain, gain2, res)
-        maxres = max(maxres, res)
-        cursize += counter[c]
+    k = find_peak(calculate, minimize=False, left=1, right=maxcrr+1)
 
-    return maxres
-
+    return max(0, calculate(k))
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
