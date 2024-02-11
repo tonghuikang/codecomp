@@ -76,7 +76,7 @@ def solve_brute(n,x,y,s):
     for comb in itertools.product([0,1], repeat=n-1):
         arr = [x]
         for val in comb:
-            if val == 1:
+            if val == 0:
                 arr.append(arr[-1] % y)
             else:
                 arr.append(arr[-1] + y)
@@ -182,10 +182,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    if n <= 12:
-        res = solve_brute(n,x,y,s)
-    else:
-        res = solve(n,x,y,s)  # include input here
+    res = solve(n,x,y,s)  # include input here
 
     if res == []:
         print(no)
