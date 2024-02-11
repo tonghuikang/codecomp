@@ -94,12 +94,13 @@ def solve_(n,b,size_penalty,crr):
             larger = c // k + 1
             smaller = c // k
             larger_count = c%k
-            smaller_count = c - larger_count
+            smaller_count = k - larger_count
             value = (
                 c * (c-1) // 2 
                 - larger_count * larger * (larger-1) // 2
                 - smaller_count * smaller * (smaller-1) // 2
             )
+            # log(k, c, larger, smaller, larger_count, smaller_count, value)
             res += value * b
         res -= (k - 1) * size_penalty
         return res
@@ -108,11 +109,12 @@ def solve_(n,b,size_penalty,crr):
         return calculate(10**9)
 
     # for k in range(1, 10):
+    #     # assert calculate(k) != calculate(k+1)
     #     log(k, calculate(k))
 
     k = find_peak(calculate, minimize=False, left=1, right=maxcrr+1)
 
-    return max(0, calculate(k))
+    return calculate(k)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
