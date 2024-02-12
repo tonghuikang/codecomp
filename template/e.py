@@ -93,6 +93,17 @@ for i in range(1,1000):
     csum += i
     remainder_to_dash[csum] = i+1
     remainder_to_dash[csum+1] = i+3
+    remainder_to_dash[csum+3] = i+4
+
+remainder_to_dash2 = {}
+csum = 0
+for i in range(1,1000):
+    csum += i
+    remainder_to_dash2[csum] = i+1
+    remainder_to_dash2[csum+1] = i+3
+    remainder_to_dash2[csum+3] = i+4
+    remainder_to_dash2[csum+6] = i+5
+
 
 # log(remainder_to_dash)
 # assert False
@@ -148,13 +159,64 @@ def solve_(n,x,y,s):
     return ret
 
 
+def solve2_(n,x,y,s):
+    # your solution here
+
+    remainder = x%y
+    required_remainder = (x%y) * n
+    # log(required_remainder)
+    
+    if s < required_remainder:
+        # log("beh")
+        return []
+    
+    if s%y != required_remainder%y:
+        # log("meh")
+        return []
+    
+    # log("allowed_length", n)
+
+    num_sets = (s - required_remainder) // y
+    # log("num_sets", num_sets)
+
+    start_val = x // y
+
+    if start_val > num_sets:
+        return []
+
+    # log("start_val", start_val)
+
+    res = [start_val]
+    cursum = start_val
+    
+    for i in range(n-1):
+        leftover = n - i - 1
+        if cursum + res[-1] + 1 > num_sets:
+            res.append(0)
+            cursum += res[-1]
+        elif num_sets - cursum in remainder_to_dash2 and leftover >= remainder_to_dash2[num_sets - cursum]:
+            res.append(0)
+            cursum += res[-1]
+        else:
+            res.append(res[-1] + 1)
+            cursum += res[-1]
+
+    if cursum != num_sets:
+        return []
+    # log(res, cursum)
+
+    ret = [r*y+remainder for r in res]
+
+    return ret
+
 # while True:
 #     import random
-#     n = random.randint(1, 15)
-#     x = random.randint(1, 60)
+#     n = random.randint(1, 60)
+#     x = random.randint(1, 100000)
 #     y = random.randint(1, 1)
-#     s = random.randint(1, 120)
-#     assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
+#     s = random.randint(1, 100000)
+#     # assert (solve_(n,x,y,s) == []) == (solve_brute(n,x,y,s) == []), (n, x, y, s, solve_brute(n,x,y,s))
+#     assert (solve_(n,x,y,s) == []) == (solve2_(n,x,y,s) == []), (n, x, y, s, solve2_(n,x,y,s))
 
 
 
@@ -182,7 +244,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,x,y,s)  # include input here
+    res = solve2_(n,x,y,s)  # include input here
 
     if res == []:
         print(no)
