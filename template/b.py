@@ -64,11 +64,22 @@ def minus_one_matrix(mrr):
 def solve_(n):
     # your solution here
 
-    if n%2 == 1:
-        return list(range(1,n+1))
+    res = list(range(1, n+1))
+    
+    vals = []
+    idxs = []
 
-    return [n] + list(range(1,n))
+    for i,x in enumerate(res):
+        if i%2 == 0:
+            idxs.append(i)
+            vals.append(x)
+    
+    vals.reverse()
 
+    for i,x in zip(idxs, vals):
+        res[i] = x
+
+    return res
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
