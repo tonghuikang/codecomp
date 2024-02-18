@@ -76,6 +76,20 @@ def solve_(n, arr):
                     skip = 2
                     res += 1
 
+    # if there are two zeroes, we can consider costs independently
+    # outside to outside
+    # outside to inside
+    # inside to outside
+    # inside to inside
+    # - size 1
+    # - size 2
+    # - size 3
+    # - size 4
+    # - size 5
+    # - size 6
+    # - size 7 (???)
+                    
+
     return res
 
 
