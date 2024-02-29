@@ -36,8 +36,8 @@ def query(a,b,c,d):
     return response
 
 
-def alert(pos):
-    print("! {}".format(pos + 1), flush=True)
+def alert(a,b):
+    print("! {} {}".format(a,b), flush=True)
 
 
 # -----------------------------------------------------------------------------
@@ -56,7 +56,6 @@ for _ in range(k):
         elif val == "<":
             biggest = i
         else:
-            print(val, val == ">", val == "<")
             assert False
     
     complement_set = set([0])
