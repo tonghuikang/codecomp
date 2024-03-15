@@ -119,11 +119,11 @@ for case_num in range(int(input())):
     # print(len(res))
 
     # parse result
-    res = " ".join(str(x) for x in res)
+    # res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

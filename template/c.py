@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -12,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 
 m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
-# d4 = [(1,0),(0,1),(-1,0),(0,-1)]
+d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 # d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 # d6 = [(2,0),(1,1),(-1,1),(-2,0),(-1,-1),(1,-1)]  # hexagonal layout
 # abc = "abcdefghijklmnopqrstuvwxyz"
@@ -63,10 +61,44 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, srr, trr):
+def solve_(n, arr, brr):
     # your solution here
 
-    return ""
+    queue = deque([(0,0)])
+    visited = set(queue)
+
+    mrr = [arr, brr]
+
+    while queue:
+        x,y = queue.popleft()
+        # log((x,y))
+        
+        for dx,dy in d4:
+            xx = x+dx
+            yy = y+dy
+
+            # log((x,y,xx,yy))
+
+            if 0 <= xx <= 1 and 0 <= yy < n:
+   
+                if xx == 1 and yy == n-1:
+                    return yes
+                if mrr[xx][yy] == 1:
+                    yy -= 1
+                else:
+                    yy += 1
+   
+                if 0 <= xx <= 1 and 0 <= yy < n:
+                    if xx == 1 and yy == n-1:
+                        return yes
+                    if (xx,yy) in visited:
+                        continue
+   
+                    visited.add((xx,yy))
+                    queue.append([xx,yy])
+
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,6 +115,9 @@ for case_num in range(int(input())):
     # read one line and parse each word as a string
     # arr = input().split()
 
+    arr = [int(x == ">") for x in srr]
+    brr = [int(x == "<") for x in trr]
+
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
@@ -93,7 +128,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, srr, trr)  # include input here
+    res = solve(n, arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))
