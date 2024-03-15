@@ -84,11 +84,12 @@ def solve_(n, arr, brr):
                 if xx == 1 and yy == n-1:
                     return yes
                 if mrr[xx][yy] == 1:
-                    yy -= 1
-                else:
                     yy += 1
+                else:
+                    yy -= 1
    
                 if 0 <= xx <= 1 and 0 <= yy < n:
+                    
                     if xx == 1 and yy == n-1:
                         return yes
                     if (xx,yy) in visited:
@@ -97,6 +98,7 @@ def solve_(n, arr, brr):
                     visited.add((xx,yy))
                     queue.append([xx,yy])
 
+    # log(visited)
 
     return no
 
@@ -116,7 +118,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     arr = [int(x == ">") for x in srr]
-    brr = [int(x == "<") for x in trr]
+    brr = [int(x == ">") for x in trr]
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
