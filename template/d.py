@@ -63,10 +63,34 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def split_by_same_elements(lst):
+    res = []
+    for x in lst:
+        if res and x == res[-1][0]:
+            res[-1][-1] += 1
+            continue
+        res.append([x, 1])
+    return res
+
+
 def solve_(srr):
+    n = len(srr)
     # your solution here
 
-    return ""
+    # for each offset
+
+    maxlen = 0
+
+    for offset in range(1, n // 2 + 1):
+        brr = srr[offset:]
+        mrr = [int(x == "?" or y == "?" or x == y) for x,y in zip(srr, brr)]
+        # log(mrr)
+
+        for x,y in split_by_same_elements(mrr):
+            if x == 1 and y >= offset:
+                maxlen = max(maxlen, offset)
+
+    return maxlen * 2
 
 
 # for case_num in [0]:  # no loop over test case
