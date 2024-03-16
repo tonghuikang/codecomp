@@ -62,25 +62,55 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+def mex_game(a):
+    n = len(a)
+    max_score = 0
 
-def solve_(n, arr):
+    def backtrack(alice_turn, remaining, chosen):
+        nonlocal max_score
+
+        if not remaining:
+            mex = 0
+            while mex in chosen:
+                mex += 1
+            max_score = max(max_score, mex)
+            return
+
+        if alice_turn:
+            for i in range(len(remaining)):
+                backtrack(False, remaining[:i] + remaining[i+1:], chosen + [remaining[i]])
+        else:
+            for i in range(len(remaining)):
+                backtrack(True, remaining[:i] + remaining[i+1:], chosen)
+
+    backtrack(True, a, [])
+    return max_score
+
+
+def solve_(arr):
+    n = len(arr)
     # your solution here
 
     # what is the minimum bob could cut
 
     c = Counter(arr)
-    if c[0] == 0:
-        return 0
 
-    res = 1
+    used = False
 
-    for i in range(n):
-        if c[i] >= 2 and c[i+1] >= 1:
-            res = i+2
-            continue
-        return res
+    for x in range(n+10):
+        if c[x] == 0:
+            return x
+        if c[x] == 1 and used:
+            return x
+        if c[x] == 1:
+            used = True
 
-    return res
+    return x
+
+
+# while True:
+#     arr = [random.randint(0,4) for _ in range(random.randint(1,4))]
+#     assert solve(arr) == mex_game(arr), arr
 
 
 # for case_num in [0]:  # no loop over test case
@@ -106,8 +136,8 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n, arr)  # include input here
-
+    res = solve(arr)  # include input here
+    # log(mex_game(arr))
     # print length if applicable
     # print(len(res))
 

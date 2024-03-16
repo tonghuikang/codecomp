@@ -61,8 +61,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def manachers(S):
+    # https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1389421/
+    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/suffix_array.py
+    # https://cp-algorithms.com/string/suffix-array.html
+    A = "@#" + "#".join(S) + "#$"
+    Z = [0] * len(A)
+    center = right = 0
+    for i in range(1, len(A) - 1):
+        if i < right:
+            Z[i] = min(right - i, Z[2 * center - i])
+        while A[i + Z[i] + 1] == A[i - Z[i] - 1]:
+            Z[i] += 1
+        if i + Z[i] > right:
+            center, right = i, i + Z[i]
+    return Z[2:-2:2]
+
+
+def solve_(srr):
+    n = len(srr)
     # your solution here
+
+    # all equal - no good
+    # ababababa - odd no good, even good
+    # full palindrome?
+
+
 
     return ""
 
@@ -71,11 +95,11 @@ def solve_():
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -90,7 +114,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))
