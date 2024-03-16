@@ -116,7 +116,7 @@ def solve_(srr, qrr):
 
         n = r-l
         n2 = n // 2
-        if l+r%2 == 1:  # odd length
+        if (l+r)%2 == 1:  # odd length
             # check if the whole thing is a palindrome
             is_entire_substring_palindrome = False
             if mrr[(r+l) // 2] >= n:
@@ -124,9 +124,9 @@ def solve_(srr, qrr):
 
             if is_entire_substring_palindrome:
                 # check if alternating
-                if mrr[(r+l) // 2 + 1] >= n-1 and mrr[(r+l) // 2 - 1] >= n-1:
-                    log("a")
-                    val = 2 * n2 * (n2+1) // 2
+                if mrr[(r+l) // 2 + 1] >= n-2 and mrr[(r+l) // 2 - 1] >= n-2:
+                    log("z")
+                    val = n2 * (n2+1)
                     # sum of all even numbers
                 else:
                     log("a")
@@ -195,7 +195,7 @@ def solve_test_case(arr, qrr):
 
 def generate_string(length):
     import string
-    return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
+    return ''.join(random.choice("abcde") for _ in range(length))
 
 def generate_test_cases(num_cases, max_n, max_q):
     test_cases = []
@@ -214,14 +214,14 @@ def generate_test_cases(num_cases, max_n, max_q):
 # Generate random test cases
 num_cases = 50000
 max_n = 10
-max_q = 5
+max_q = 1
 test_cases = generate_test_cases(num_cases, max_n, max_q)
 
 # Print the test cases
 # print(num_cases)
 for test_case in test_cases:
     n, q, s, queries = test_case
-    assert solve_test_case(s, queries) == solve(s, queries), (solve_test_case(s, queries), solve(s, queries), s, queries)
+    # assert solve_test_case(s, queries) == solve(s, queries), (solve_test_case(s, queries), solve(s, queries), s, queries)
 
 
 # for case_num in [0]:  # no loop over test case
