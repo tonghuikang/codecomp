@@ -69,19 +69,16 @@ def solve_(n, arr):
     # what is the minimum bob could cut
 
     c = Counter(arr)
-
-    if 0 not in arr:
+    if c[0] == 0:
         return 0
 
-    if arr.count(0) == 1:
-        return 1
-
     res = 1
-    while True:
-        if c[res] >= 2:
-            res += 1
-        else:
-            break
+
+    for i in range(n):
+        if c[i] >= 2 and c[i+1] >= 1:
+            res = i+2
+            continue
+        return res
 
     return res
 
