@@ -212,16 +212,16 @@ def generate_test_cases(num_cases, max_n, max_q):
     return test_cases
 
 # Generate random test cases
-num_cases = 50000
+num_cases = 500000
 max_n = 10
-max_q = 1
+max_q = 3
 test_cases = generate_test_cases(num_cases, max_n, max_q)
 
 # Print the test cases
 # print(num_cases)
 for test_case in test_cases:
     n, q, s, queries = test_case
-    # assert solve_test_case(s, queries) == solve(s, queries), (solve_test_case(s, queries), solve(s, queries), s, queries)
+    assert solve_test_case(s, queries) == solve(s, queries), (solve_test_case(s, queries), solve(s, queries), s, queries)
 
 
 # for case_num in [0]:  # no loop over test case

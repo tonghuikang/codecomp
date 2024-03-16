@@ -60,11 +60,67 @@ def minus_one_matrix(mrr):
     return [[x - 1 for x in row] for row in mrr]
 
 
+def find_longest_path(tree):
+    if not tree:
+        return 0
+
+    # Choose an arbitrary node as the root
+    root = 0
+
+    # Perform DFS from the root node
+    visited = set()
+    stack = deque([(root, 0)])
+    max_path = 0
+    farthest_node = root
+
+    while stack:
+        node, path_length = stack.pop()
+        visited.add(node)
+
+        if path_length > max_path:
+            max_path = path_length
+            farthest_node = node
+
+        for neighbor in tree[node]:
+            if neighbor not in visited:
+                stack.append((neighbor, path_length + 1))
+
+    # Perform DFS from the farthest node found in the previous DFS
+    visited = set()
+    stack = deque([(farthest_node, 0)])
+    max_path = 0
+
+    while stack:
+        node, path_length = stack.pop()
+        visited.add(node)
+
+        max_path = max(max_path, path_length)
+
+        for neighbor in tree[node]:
+            if neighbor not in visited:
+                stack.append((neighbor, path_length + 1))
+
+    return max_path
+
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+
+def solve_(n, mrr):
     # your solution here
+
+    n, mrr
+
+    g = [[] for _ in range(n)]
+    for a,b in mrr:
+        g[a].append(b)
+        g[b].append(a)
+
+    path = find_longest_path(g)
+
+    log(path)
+
 
     return ""
 
@@ -73,7 +129,7 @@ def solve_():
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -89,10 +145,10 @@ for case_num in range(int(input())):
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(n-1)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
