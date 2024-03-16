@@ -211,17 +211,17 @@ def generate_test_cases(num_cases, max_n, max_q):
         test_cases.append((n, q, s, queries))
     return test_cases
 
-# # Generate random test cases
-# num_cases = 50000
-# max_n = 10
-# max_q = 5
-# test_cases = generate_test_cases(num_cases, max_n, max_q)
+# Generate random test cases
+num_cases = 50000
+max_n = 10
+max_q = 5
+test_cases = generate_test_cases(num_cases, max_n, max_q)
 
-# # Print the test cases
-# # print(num_cases)
-# for test_case in test_cases:
-#     n, q, s, queries = test_case
-#     assert solve_test_case(s, queries) == solve(s, queries), (solve_test_case(s, queries), solve(s, queries), s, queries)
+# Print the test cases
+# print(num_cases)
+for test_case in test_cases:
+    n, q, s, queries = test_case
+    assert solve_test_case(s, queries) == solve(s, queries), (solve_test_case(s, queries), solve(s, queries), s, queries)
 
 
 # for case_num in [0]:  # no loop over test case
