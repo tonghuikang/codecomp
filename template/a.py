@@ -73,6 +73,9 @@ def solve_(n, arr):
     if 0 not in arr:
         return 0
 
+    if arr.count(0) == 1:
+        return 1
+
     res = 1
     while True:
         if c[res] >= 2:
@@ -106,7 +109,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve_(n, arr)  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
