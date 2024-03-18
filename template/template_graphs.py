@@ -518,7 +518,6 @@ def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
 
     node_to_forest_sizes = {}
     for cur in map_from_node_to_nodes:
-        parent = parents[cur]
 
         forest_sizes = []
         for nex in map_from_node_to_nodes[cur]:
