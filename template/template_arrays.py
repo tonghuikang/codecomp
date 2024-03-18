@@ -59,6 +59,22 @@ def split_by_same_elements(lst):
     return res
 
 
+def split_when_different(lst):
+    res = []
+    cur = []
+
+    for x in lst:
+        if cur and x == cur[-1]:
+            cur.append(x)
+        else:
+            if cur:
+                res.append(cur)
+            cur = [x]
+    if cur:
+        res.append(cur)
+    return res
+
+
 def split_into_number_and_char(srr):
     import re
 
@@ -99,6 +115,7 @@ def combine_overlapping_intervals(intervals):
 
 def count_peaks_and_valleys(lst):
     # leetcode.com/problems/count-hills-and-valleys-in-an-array/
+    # ASSUMING no plateaus 
     if len(lst) <= 2:
         return 0, 0
     peaks = 0
@@ -126,24 +143,9 @@ def is_subsequence(self, s, t) -> bool:
     return False
 
 
-def split_when_different(lst):
-    res = []
-    cur = []
-
-    for x in lst:
-        if cur and x == cur[-1]:
-            cur.append(x)
-        else:
-            if cur:
-                res.append(cur)
-            cur = [x]
-    if cur:
-        res.append(cur)
-    return res
-
-
 def two_pointers(arr, entry_func, exit_func, condition):
     # number of subarrays that passes condition
+    # not sure what is going on here
 
     nonlocal cnt
     n = len(arr)
@@ -208,9 +210,10 @@ def gathering_cost(xpos):
 def gathering_cost_query(xpos, psum, l, m, r):
     # the gathering cost for subarray xpos[l:r+1] onto xpos[m]
     # https://leetcode.cn/problems/apply-operations-to-maximize-frequency-score/
+    # https://leetcode.cn/problems/minimum-moves-to-pick-k-ones/
     # https://leetcode.cn/circle/discuss/BYHexE/view/HRjJZC/
     # psum is preprocessed from xpos
-    # psum = list(itertools.accumulate(arr, initial=0))
+    # psum = list(itertools.accumulate(xpos, initial=0))
     left = xpos[m] * (m - l) - (psum[m] - psum[l])
     right = psum[r + 1] - psum[m + 1] - xpos[m] * (r - m)
     return left + right
@@ -230,7 +233,7 @@ def all_nearest_smaller_values(arr):
     stack = []
 
     for i in range(len(arr)):
-        while stack and stack[-1][0] >= arr[i]:  # change this if you want to include equalitys
+        while stack and stack[-1][0] >= arr[i]:  # change this if you want to include equalities
             stack.pop()
         if stack:
             result[i] = stack[-1][1]
@@ -600,9 +603,10 @@ def largest_rectangle_in_histogram(heights):
 # ------------------------- standard algorithms -------------------------
 
 
-def z_function(S):
+def z_function(S: list) -> list:
     # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/z_algorithm.py
     # https://cp-algorithms.com/string/z-function.html
+    # length of common prefix for S[i:] and S for each i
     n = len(S)
     Z = [0] * n
     l = r = 0
@@ -626,7 +630,9 @@ def manachers(S):
     # https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1389421/
     # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/suffix_array.py
     # https://cp-algorithms.com/string/suffix-array.html
-    A = "@#" + "#".join(S) + "#$"
+    # if s is a palindrome, s[1:-1] is also a palindrome
+    # length of odd-length palindrome centered at S[i] for each i
+    A = ["@", "#"] + [y for x in zip(S, "#"*len(S)) for y in x] + ["$"]
     Z = [0] * len(A)
     center = right = 0
     for i in range(1, len(A) - 1):
@@ -639,10 +645,11 @@ def manachers(S):
     return Z[2:-2:2]
 
 
-def get_palindromic_ranges(s):
+def get_palindromic_ranges(s) -> list[list[int]]:
     # https://leetcode.com/problems/maximum-number-of-non-overlapping-palindrome-substrings/
     # Tested in https://leetcode.com/problems/palindromic-substrings/submissions/
     # if s is a palindrome, s[1:-1] is also a palindrome
+    # j for each i where s[i:j] is a palindrome (could be odd or even length)
     n = len(s)
     arr = manachers("|" + "|".join(s) + "|")
     bridges = [[] for _ in range(n)]

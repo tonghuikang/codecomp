@@ -4,6 +4,8 @@ import math, random
 import functools, itertools, collections, heapq, bisect
 from collections import Counter, defaultdict, deque
 
+from template_recursive import dfs
+
 MAXINT = sys.maxsize
 
 # ------------------------ standard imports ends here ------------------------
@@ -49,7 +51,7 @@ def find_strongly_connected_components(graph):
     # github.com/cheran-senthil/PyRival/blob/master/pyrival/graphs/scc.py
     # input - list of node to nodes?
 
-    # Given a directed graph, find_SCC returns a list of lists containing 
+    # Given a directed graph, this returns a list of lists containing 
     # the strongly connected components in topological order.
 
     # Note that this implementation can be also be used to check if a directed graph is a
@@ -79,23 +81,22 @@ def find_strongly_connected_components(graph):
     return SCC[::-1]
 
 
-def is_bipartite(map_from_node_to_nodes):
+def is_bipartite(list_of_node_to_nodes):
     # leetcode.com/problems/is-graph-bipartite/discuss/119514/
-    map_from_node_to_nodes = graph
-    n, colored = len(map_from_node_to_nodes), {}
+    n, colored = len(list_of_node_to_nodes), {}
     for i in range(n):
-        if i not in colored and graph[i]:
+        if i not in colored and list_of_node_to_nodes[i]:
             colored[i] = 1
             queue = collections.deque([i])
             while queue:
                 cur = queue.popleft()
-                for nex in graph[cur]:
+                for nex in list_of_node_to_nodes[cur]:
                     if nex not in colored:
                         colored[nex] = -colored[cur]
                         queue.append(nex)
                     elif colored[nex] == colored[cur]:
                         return False
-    # you can obtain 2-coloring from the `colored` as well
+    # you can obtain the 2-coloring from the `colored` as well
     return True
 
 
@@ -117,7 +118,7 @@ def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
             visited[nex] = visited[cur] + 1
             if nex == target:
                 return visited[nex]
-    return MAXINT
+    return sys.maxsize
 
 
 def dijkstra(list_of_indexes_and_costs, start):
@@ -327,12 +328,8 @@ class DisjointSet:
 class DisjointSet:
     # github.com/not522/ac-library-python/blob/master/atcoder/dsu.py
     # faster implementation of DSU
-    def __init__(self, n: int = 0) -> None:
-        if n > 0:  # constant size DSU
-            self.parent_or_size = [-1] * n
-        else:
-            # WARNING: non-negative numeric elements only
-            self.parent_or_size = defaultdict(lambda: -1)
+    def __init__(self, n: int) -> None:
+        self.parent_or_size = [-1] * n
 
     def union(self, a: int, b: int) -> int:
         x = self.find(a)
@@ -363,10 +360,22 @@ class DisjointSet:
 
     def size(self, a: int) -> int:
         return -self.parent_or_size[self.find(a)]
+    
+    def get_groups(self):
+        groups = defaultdict(list)
+        for i in range(len(self.parent_or_size)):
+            # not sure if this changes anything
+            self.find(i)
+
+        for i in range(len(self.parent_or_size)):
+            groups[self.find(i)].append(i)
+
+        return groups.values()
 
 
 def minimum_spanning_tree(edges, costs):
     # leetcode.com/problems/min-cost-to-connect-all-points
+    # leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/
     if len(edges) == len(costs) == 0:
         return 0
     ds = DisjointSet()
@@ -377,10 +386,6 @@ def minimum_spanning_tree(edges, costs):
             ds.union(u, v)
             total_tree_cost += cost
     return total_tree_cost
-
-
-# above function is not sufficient for the following question
-# leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/
 
 
 def topological_sort(map_from_node_to_nodes, all_nodes=set()):
@@ -413,8 +418,9 @@ def detect_cycle(map_from_node_to_nodes):
     return topological_sort(map_from_node_to_nodes) == []
 
 
-def findShortestCycle(n: int, edges: list[list[int]]) -> int:
+def find_shortest_cycle(n: int, edges: list[list[int]]) -> int:
     # https://web.archive.org/web/20170829175217/http://webcourse.cs.technion.ac.il/234247/Winter2003-2004/ho/WCFiles/Girth.pdf
+    # Time complexity: O(VE)
 
     g = defaultdict(set)
     for a, b in edges:
@@ -449,9 +455,45 @@ def findShortestCycle(n: int, edges: list[list[int]]) -> int:
     return minres
 
 
-def longest_path(map_from_node_to_nodes_and_costs):
-    # if tree: toposort and apply dp
-    return NotImplementedError
+def longest_path_in_tree(list_of_node_to_nodes_and_costs):
+    # https://leetcode.com/problems/minimum-height-trees
+    # https://leetcode.com/problems/longest-path-with-different-adjacent-characters/
+    # assumes input is a tree
+    n = len(list_of_node_to_nodes_and_costs)
+    
+    def dfs(start):   
+        path = [None for _ in range(n)]
+        weights = [None for _ in range(n)]
+        weights[start] = 0
+
+        stack = [start]
+        visited = set([start])
+        
+        while stack:
+            cur = stack.pop()
+            for nex, cost in list_of_node_to_nodes_and_costs[cur]:
+                if nex in visited:
+                    continue
+                visited.add(nex)
+                weights[nex] = weights[cur] + cost
+                path[nex] = cur
+                stack.append(nex)
+                
+        return path, weights
+    
+    _, weights = dfs(0)
+    start = weights.index(max(weights))
+
+    path, weights = dfs(start)
+    distance = max(weights)
+    cur = weights.index(distance)
+        
+    max_dist_path = [cur]
+    while cur != start:
+        cur = path[cur]
+        max_dist_path.append(cur)
+    
+    return max_dist_path, distance
 
 
 def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
@@ -459,6 +501,7 @@ def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
     # For each node, get the sizes of the forests if the tree is split on the node
     # uses the dfs template - see template_recursive.py
 
+    n = len(map_from_node_to_nodes)
     subtree_sizes = {x: 1 for x in map_from_node_to_nodes}
     parents = {}
 
@@ -469,7 +512,7 @@ def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
     def exit_operation(prev, cur):
         subtree_sizes[prev] += subtree_sizes[cur]
 
-    start = next(iter(my_dict))
+    start = next(iter(map_from_node_to_nodes))
     parents[start] = "NULL"
     dfs(start, map_from_node_to_nodes, entry_operation, exit_operation)
 
@@ -478,17 +521,17 @@ def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
         parent = parents[cur]
 
         forest_sizes = []
-        for nex in g[cur]:
+        for nex in map_from_node_to_nodes[cur]:
             if nex != parents[cur]:
                 forest_sizes.append(subtree_sizes[nex])
 
-        parent_size = k - sum(forest_sizes) - 1
+        parent_size = n - sum(forest_sizes) - 1
         if parent_size != 0:
             forest_sizes.append(parent_size)
 
         node_to_forest_sizes[cur] = forest_sizes
 
-    return node_to_subtree_sizes
+    return node_to_forest_sizes
 
 
 def find_centroids(map_from_node_to_nodes):  # UNTESTED
