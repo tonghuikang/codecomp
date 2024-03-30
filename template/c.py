@@ -3,6 +3,8 @@ import sys
 
 input = sys.stdin.readline  # to read input quickly
 
+
+from collections import Counter
 # available on Google, AtCoder Python3, not available on Codeforces
 # import numpy as np
 # import scipy
@@ -79,14 +81,21 @@ def solve_(n,len_arr,y,arr):
     diffs = [b-a for a,b in zip(arr, arr[1:])]
     # log(diffs)
 
-    four_count = diffs.count(4)
+    c = Counter(diffs)
 
+    four_count = c[4]
     four_count_taken = min(y, four_count)
     y -= four_count_taken
-    res += 3
+    res += 3*four_count_taken
 
-    # all other additions will add only two
-    res += 2 * y
+    # adding to 2 in between 0 and 3 (this adds 2)
+    three_count = c[3]
+    three_count_taken = min(y, three_count)
+    y -= three_count_taken
+    res += 2*three_count_taken
+
+    # all other additions will add only one
+    res += y
 
     return min(n-2, res)
 
