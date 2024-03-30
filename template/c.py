@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -75,18 +72,23 @@ def solve_(n,len_arr,y,arr):
         if (x + 2)%n in arr_set and (x + 1)%n not in arr_set:
             count += 1
 
-    # no point adding to x + 1
-    # maximum points adding to 2 in between 0 and 4
+    res = count + len(arr) - 2
 
+    # maximum points adding to 2 in between 0 and 4 (this adds 3)
     arr.append(arr[0] + n)
-
     diffs = [b-a for a,b in zip(arr, arr[1:])]
-    log(diffs)
+    # log(diffs)
 
+    four_count = diffs.count(4)
 
-    log(count, len(arr))
+    four_count_taken = min(y, four_count)
+    y -= four_count_taken
+    res += 3
 
-    return count + len(arr) - 2
+    # all other additions will add only two
+    res += 2 * y
+
+    return min(n-2, res)
 
 
 # for case_num in [0]:  # no loop over test case
