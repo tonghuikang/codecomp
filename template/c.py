@@ -62,6 +62,10 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+def ceiling_division(numer, denom):
+    return -((-numer) // denom)
+
+
 def solve_(n,len_arr,y,arr):
     # your solution here
 
@@ -76,26 +80,28 @@ def solve_(n,len_arr,y,arr):
 
     res = count + len(arr) - 2
 
-    # maximum points adding to 2 in between 0 and 4 (this adds 3)
+    # you can always add one to get two
+    # but there are times you can add x to get 2*x+1
+    # get those bonuses
     arr.append(arr[0] + n)
+
     diffs = [b-a for a,b in zip(arr, arr[1:])]
+    diffs = [x for x in diffs if x > 2]
     # log(diffs)
 
-    c = Counter(diffs)
+    bonus_costs = []
+    for x in diffs:
+        if x%2 == 0:
+            bonus_costs.append(x // 2 - 1)
 
-    four_count = c[4]
-    four_count_taken = min(y, four_count)
-    y -= four_count_taken
-    res += 3*four_count_taken
+    bonus_costs.sort()
 
-    # adding to 2 in between 0 and 3 (this adds 2)
-    three_count = c[3]
-    three_count_taken = min(y, three_count)
-    y -= three_count_taken
-    res += 2*three_count_taken
+    res += 2*y
 
-    # all other additions will add only one
-    res += y
+    for x in bonus_costs:
+        if x >= y:
+            y -= x
+            res += 1
 
     return min(n-2, res)
 
