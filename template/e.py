@@ -10,7 +10,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+# m9 = 10**9 + 7  # 998244353
 yes, no = "YES", "NO"
 d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -63,10 +63,47 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
 
-    return ""
+
+LARGE = 10**6 + 10
+p = 998244353  # CHANGE WHEN NEEDED
+
+factorial_mod_p = [1]
+for i in range(1, LARGE + 1):
+    factorial_mod_p.append((factorial_mod_p[-1] * i) % p)
+
+ifactorial_mod_p = [1] * (LARGE + 1)
+ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p - 2, p)
+for i in range(LARGE - 1, 1, -1):
+    ifactorial_mod_p[i] = ifactorial_mod_p[i + 1] * (i + 1) % p
+
+
+def arrange_balls(x, y, z):
+    n = x + y + z
+    numerator = factorial_mod_p[n]
+    denominator = (ifactorial_mod_p[x] * ifactorial_mod_p[y])%p * ifactorial_mod_p[z]
+    return (numerator * denominator)%p
+
+
+def solve_(l,n):
+    if n * 2 == l:
+        return 0
+
+    # your solution here
+    # the state must end in 
+    # ????ABABABAB
+
+    # any starting position except
+    # sum of (distances A->B minus one) is even
+
+    a = n
+    b = l - n*2
+    c = 0
+
+    # log(a,b,c)
+    assert a*2 + b + c == l
+
+    return (arrange_balls(a,b,c)*2)%p
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +120,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    l,n = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +129,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(l,n)  # include input here
 
     # print length if applicable
     # print(len(res))

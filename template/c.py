@@ -95,15 +95,54 @@ def solve_(n,len_arr,y,arr):
             bonus_costs.append(x // 2 - 1)
 
     bonus_costs.sort()
+    # log(res, bonus_costs)
 
     res += 2*y
 
     for x in bonus_costs:
-        if x >= y:
+        if x <= y:
             y -= x
             res += 1
 
     return min(n-2, res)
+
+
+# from itertools import combinations
+
+# def brute_force(n,len_arr,y,arr):
+#     unselected = set(range(n)) - set(arr)
+#     maxres = 0
+
+#     for comb in combinations(unselected, y):
+#         # log(comb)
+#         brr = list(comb) + [x for x in arr]
+#         brr.sort()
+#         brr_set = set(brr)
+
+#         count = 0
+#         for x in brr:
+#             if (x + 2)%n in brr_set and (x + 1)%n not in brr_set:
+#                 count += 1
+
+#         res = count + len(brr) - 2
+#         maxres = max(maxres, res)
+#     return maxres
+
+
+# import random
+# while True:
+#     n = random.randint(4, 40)
+#     x = random.randint(2, n)
+#     y = random.randint(0, min(n-x, 4))
+#     arr = list(range(n))
+#     random.shuffle(arr)
+#     arr = arr[:x]
+#     arr.sort()
+#     # log(arr)
+#     res = solve(n,x,y,[x for x in arr])  # include input here
+#     res2 = brute_force(n,x,y,[x for x in arr])
+#     assert res == res2, [n,x,y,arr,res,res2]
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -129,8 +168,9 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,x,y,arr)  # include input here
-
+    res = solve(n,x,y,[x for x in arr])  # include input here
+    # res = brute_force(n,x,y,[x for x in arr])
+    # assert solve(n,x,y,[x for x in arr]) == brute_force(n,x,y,[x for x in arr]), [solve(n,x,y,[x for x in arr]), brute_force(n,x,y,[x for x in arr])]
     # print length if applicable
     # print(len(res))
 
