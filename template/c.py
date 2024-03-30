@@ -67,13 +67,22 @@ def solve_(n,len_arr,y,arr):
     # your solution here
 
     # auto-include vertices that are the the side
-
+    arr.sort()
     arr_set = set(arr)
 
     count = 0
     for x in arr:
         if (x + 2)%n in arr_set and (x + 1)%n not in arr_set:
             count += 1
+
+    # no point adding to x + 1
+    # maximum points adding to 2 in between 0 and 4
+
+    arr.append(arr[0] + n)
+
+    diffs = [b-a for a,b in zip(arr, arr[1:])]
+    log(diffs)
+
 
     log(count, len(arr))
 
