@@ -63,8 +63,18 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n):
     # your solution here
+
+    total_sum = 0
+    for i in range(1,n+1):
+        total_sum += i * (2*i - 1)
+
+    print(total_sum, 2*n)
+
+    for i in range(n):
+        print(1,n-i,*list(range(1, n+1)))
+        print(2,n-i,*list(range(1, n+1)))
 
     return ""
 
@@ -73,7 +83,7 @@ def solve_():
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -92,7 +102,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -105,4 +115,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)

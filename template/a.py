@@ -70,7 +70,7 @@ def solve_(k,q,arr,nrr):
 
     res = []
     for q in nrr:
-        res.append(min(a,q))
+        res.append(min(a-1,q))
 
     return res
 

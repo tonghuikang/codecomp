@@ -63,17 +63,104 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    if arr == [0]:
+        print(1, 1)
+        print(1, 1)
+        return
+
+    if n == 1:
+        print(arr[0], 0)
+        return
+
+    dp = [0 for _ in range(n+1)]
+    prev = [-1 for _ in range(n+1)]
+
+    # jump one to get value, or jump k to get square
+
+    for cur in range(n):
+
+        nex = cur + 1
+        val = dp[cur] + arr[cur]
+
+        if val > dp[nex]:
+            dp[nex] = val
+            prev[nex] = cur
+
+        for nex in range(cur+1, n+1):
+            dist = nex-cur
+            val = dp[cur] + dist*dist
+
+            if val > dp[nex]:
+                dp[nex] = val
+                prev[nex] = cur
+
+    steps = [n]
+
+    while steps[-1] != 0:
+        steps.append(prev[steps[-1]])
+
+    steps.reverse()
+
+    def get_mex(l,r):
+        mex = 0
+        while mex in arr[l:r]:
+            mex += 1
+        return mex            
+
+    res = []
+
+    def execute(l,r):
+        if l == r:
+            return
+        val = get_mex(l,r)
+        for idx in range(l,r):
+            arr[idx] = val
+        res.append((l,r))
+        log(arr)
+
+    def operate(l,r):
+        if l >= r:
+            return
+        execute(l,r-1)
+        operate(l, r-1)
+        execute(l,r)
+        operate(l, r-1)
+
+    for a,b in zip(steps, steps[1:]):
+        if b-a == 1:
+            assert arr[a] >= 1
+            continue
+        else:
+            if 0 in arr[a:b]:
+                # make all not zero
+                execute(a, b)
+            # make all zero
+            # execute(a, b)
+            # execute(a, b)
+            # log(arr[a:b])
+            # log("operate init", a, b)
+            operate(a, b)
+            execute(a, b)
+
+    # log(dp)
+    # log(steps)
+    # log(arr)
+            
+    print(dp[-1], len(res))
+    res = "\n".join(" ".join(str(x) for x in row) for row in res)
+    print(res)
+    assert dp[-1] == sum(arr)
+    # return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,7 +171,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +179,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -105,4 +192,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
