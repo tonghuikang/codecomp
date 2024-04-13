@@ -119,7 +119,7 @@ def solve_(n, arr):
         for idx in range(l,r):
             arr[idx] = val
         res.append((l,r))
-        log(arr)
+        # log(arr)
 
     def operate(l,r):
         if l >= r:
@@ -138,7 +138,7 @@ def solve_(n, arr):
                 # make all not zero
                 execute(a, b)
             # make all zero
-            # execute(a, b)
+            execute(a, b)
             # execute(a, b)
             # log(arr[a:b])
             # log("operate init", a, b)
