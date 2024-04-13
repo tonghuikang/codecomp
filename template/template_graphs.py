@@ -370,7 +370,7 @@ class DisjointSet:
         for i in range(len(self.parent_or_size)):
             groups[self.find(i)].append(i)
 
-        return groups.values()
+        return list(groups.values())
 
 
 def minimum_spanning_tree(edges, costs):
