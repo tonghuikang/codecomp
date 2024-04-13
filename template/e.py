@@ -3,24 +3,19 @@ import sys
 
 input = sys.stdin.readline  # to read input quickly
 
-# available on Google, AtCoder Python3, not available on Codeforces
-# import numpy as np
-# import scipy
-
-
 def solve_(n, arr):
-    # your solution here
-
     flag = True
 
-    nonzero = list(range(n))
+    # nonzero = list(range(n))
 
-    while flag:
-        flag = False
+    cnt = 2 * int(200_000 ** 0.5) + 20
+    while cnt:
+        cnt -= 1
+        # flag = False
 
-        nexarr = []
+        # nexarr = []
 
-        for i in nonzero:
+        for i in range(n):
             cur = i
             nex = i+1
             if cur == n-1:
@@ -29,13 +24,17 @@ def solve_(n, arr):
             if arr[cur] == 0:
                 continue
             if arr[nex] > 0:
-                flag = True
+                # flag = True
                 arr[nex] = max(0, arr[nex] - arr[cur])
 
-                if arr[nex] > 0:
-                    nexarr.append(cur)
+                # if arr[nex] > 0:
+                #     nexarr.append(cur)
         
-        nonzero = nexarr
+        # nonzero = nexarr
+
+    for i in range(n):
+        if arr[i] > 0 and arr[(i+1)%n] > 0:
+            arr[(i+1)%n] = 0
 
     return [i for i,x in enumerate(arr) if x > 0]
 

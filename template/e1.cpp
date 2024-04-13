@@ -1,37 +1,47 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <cmath>  // Include for pow()
+
 using namespace std;
 
 vector<int> solve_(int n, vector<int>& arr) {
     bool flag = true;
-    vector<int> nonzero(n);
+    vector<int> nonzero;
     for (int i = 0; i < n; ++i) {
-        nonzero[i] = i;
+        nonzero.push_back(i);
     }
 
-    while (flag) {
+    int cnt = static_cast<int>(pow(200000, 0.51));  // Now pow() is recognized
+    while (flag && cnt--) {
         flag = false;
-        vector<int> nexarr;
+        vector<int> next_nonzero;
 
-        for (int i : nonzero) {
-            int cur = i;
-            int nex = (i + 1) % n;
-
-            if (arr[cur] == 0) {
-                continue;
+        for (int idx : nonzero) {
+            int cur = idx;
+            int next = idx + 1;
+            if (cur == n - 1) {
+                next = 0;
             }
-            if (arr[nex] > 0) {
-                flag = true;
-                arr[nex] = max(0, arr[nex] - arr[cur]);
 
-                if (arr[nex] > 0) {
-                    nexarr.push_back(cur);
+            if (arr[cur] == 0) continue;
+            if (arr[next] > 0) {
+                flag = true;
+                arr[next] = max(0, arr[next] - arr[cur]);
+
+                if (arr[next] > 0) {
+                    next_nonzero.push_back(cur);
                 }
             }
         }
 
-        nonzero = std::move(nexarr);
+        nonzero = next_nonzero;
+    }
+
+    for (int i = 0; i < n; ++i) {
+        int next = (i + 1) % n;
+        if (arr[i] > 0 && arr[next] > 0) {
+            arr[next] = 0;
+        }
     }
 
     vector<int> result;
@@ -44,27 +54,26 @@ vector<int> solve_(int n, vector<int>& arr) {
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
+    int T;
+    cin >> T;
+    cin.ignore();  // Ignore the newline after reading T
 
-    int t;
-    cin >> t;
-    while (t--) {
+    for (int case_num = 0; case_num < T; ++case_num) {
         int n;
         cin >> n;
         vector<int> arr(n);
-        for (int& x : arr) {
-            cin >> x;
+        for (int i = 0; i < n; ++i) {
+            cin >> arr[i];
         }
 
         vector<int> res = solve_(n, arr);
-
-        cout << res.size() << "\n";
-        for (int i = 0; i < res.size(); ++i) {
+        cout << res.size() << endl;
+        for (size_t i = 0; i < res.size(); ++i) {  // Use size_t to match type with size()
             if (i > 0) cout << " ";
-            cout << res[i] + 1;  // convert 0-based index to 1-based
+            cout << res[i] + 1;  // Convert zero-based index to one-based
         }
-        cout << "\n";
+        cout << endl;
     }
+
     return 0;
 }
