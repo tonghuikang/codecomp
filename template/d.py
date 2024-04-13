@@ -118,7 +118,7 @@ def solve_(n, arr):
         val = get_mex(l,r)
         for idx in range(l,r):
             arr[idx] = val
-        res.append((l,r))
+        res.append((l+1,r))
         # log(arr)
 
     def operate(l,r):
@@ -131,7 +131,8 @@ def solve_(n, arr):
 
     for a,b in zip(steps, steps[1:]):
         if b-a == 1:
-            assert arr[a] >= 1
+            if arr[a] == 0:
+                execute(a, b)
             continue
         else:
             if 0 in arr[a:b]:
