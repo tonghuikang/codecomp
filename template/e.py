@@ -86,16 +86,26 @@ def ncr_mod_p(n, r, p=p):
     return (num * dem) % p
 
 
-
 def solve_(n):
     # your solution here
 
-    if n > 100:
+    if n > 500:
         return
 
     res = 0
     for i in range(1,n+1):
         for j in range(1, i+1):
+            prod = 1
+            for x in range(i-j+1, i+1):
+                prod = prod * x
+            count = prod // j
+            val = count % j
+            res += val
+            # log(i,j,val)
+
+    res = 0
+    for j in range(1, n+1):
+        for i in range(j, n+1):
             prod = 1
             for x in range(i-j+1, i+1):
                 prod = prod * x

@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,17 +60,47 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+def solve_(n, arr):
+    # only the topmost bit matter
+    allmask = 2**35 - 1
 
-    return ""
+    res = 0
+    for i in range(35):
+        brr = [(x >> i)&1 for x in arr]
+        # log(brr)
+
+        psum = [0]
+        for x in brr:
+            psum.append(psum[-1] ^ x)
+        
+        topmost = [int((x >> i)&allmask == 1) for x in arr]
+
+        left_zero = 1
+        right_zero = psum[1:].count(0)
+        left_ones = 0
+        right_ones = psum[1:].count(1)
+
+        for i,(a,b) in enumerate(zip(psum[1:], topmost), start=1):
+            if b == 1:
+                val = left_zero * right_zero + left_ones * right_ones
+                # log(i,val)
+                res += val
+            
+            if a == 1:
+                left_ones += 1
+                right_ones -= 1
+            else:
+                left_zero += 1
+                right_zero -= 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,7 +111,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +119,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
