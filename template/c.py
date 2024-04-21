@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -62,11 +59,60 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+prod = [1]
 
-def solve_():
+LARGE = 10**6 + 10
+
+for n in range(1,LARGE):
+    val = (prod[-1] * (2*n-1)) % m9
+    prod.append(val)
+
+log(prod[:10])
+
+p = m9
+
+factorial_mod_p = [1]
+for i in range(1, LARGE + 1):
+    factorial_mod_p.append((factorial_mod_p[-1] * i) % p)
+
+ifactorial_mod_p = [1] * (LARGE + 1)
+ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p - 2, p)
+for i in range(LARGE - 1, 1, -1):
+    ifactorial_mod_p[i] = ifactorial_mod_p[i + 1] * (i + 1) % p
+
+
+def ncr_mod_p(n, r, p=p):
+    # https://codeforces.com/contest/1785/submission/192389526
+    if r < 0 or n < r:
+        return 0
+    num = factorial_mod_p[n]
+    dem = (ifactorial_mod_p[r] * ifactorial_mod_p[n - r]) % p
+    return (num * dem) % p
+
+
+
+def solve_(n,k,mrr):
     # your solution here
 
-    return ""
+    # prod 1 to 2n-1
+
+    for a,b in mrr:
+        if a == b:
+            n -= 1
+        else:
+            n -= 2
+
+    if n == 0:
+        return 1
+    
+    res = 1
+    for x in range(1, n // 2 + 1):
+        val = ((ncr_mod_p(n, 2*x) * prod[x]) % m9) * pow(2, x, m9)
+        # log(val, ncr_mod_p(n, 2*x), prod[x], pow(2, x, m9))
+        res += val
+
+    return res%m9
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,16 +129,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))

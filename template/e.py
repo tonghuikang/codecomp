@@ -63,17 +63,55 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+LARGE = 10**6 + 10
+
+p = m9
+
+factorial_mod_p = [1]
+for i in range(1, LARGE + 1):
+    factorial_mod_p.append((factorial_mod_p[-1] * i) % p)
+
+ifactorial_mod_p = [1] * (LARGE + 1)
+ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p - 2, p)
+for i in range(LARGE - 1, 1, -1):
+    ifactorial_mod_p[i] = ifactorial_mod_p[i + 1] * (i + 1) % p
+
+
+def ncr_mod_p(n, r, p=p):
+    # https://codeforces.com/contest/1785/submission/192389526
+    if r < 0 or n < r:
+        return 0
+    num = factorial_mod_p[n]
+    dem = (ifactorial_mod_p[r] * ifactorial_mod_p[n - r]) % p
+    return (num * dem) % p
+
+
+
+def solve_(n):
     # your solution here
 
-    return ""
+    if n > 100:
+        return
+
+    res = 0
+    for i in range(1,n+1):
+        for j in range(1, i+1):
+            prod = 1
+            for x in range(i-j+1, i+1):
+                prod = prod * x
+            count = prod // j
+            val = count % j
+            res += val
+            log(i,j,val)
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -92,7 +130,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
