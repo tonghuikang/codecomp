@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,77 +60,34 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+from math import gcd
 
-def binary_search(
-    func_,  # condition function
-    first=True,  # else last
-    target=True,  # else False
-    left=0,
-    right=2**31 - 1,
-) -> int:
-    # https://leetcode.com/discuss/general-discussion/786126/
-    # ASSUMES THAT THERE IS A TRANSITION
-    # MAY HAVE ISSUES AT THE EXTREMES
-
-    def func(val):
-        # if first True or last False, assume search space is in form
-        # [False, ..., False, True, ..., True]
-
-        # if first False or last True, assume search space is in form
-        # [True, ..., True, False, ..., False]
-        # for this case, func will now be negated
-        if first ^ target:
-            return not func_(val)
-        return func_(val)
-
-    while left < right:
-        mid = (left + right) // 2
-        if func(mid):
-            right = mid
-        else:
-            left = mid + 1
-    if first:  # find first True
-        return left
-    else:  # find last False
-        return left - 1
-
-
-def solve_(n,k,arr):
+def solve_(n, m):
     # your solution here
 
-    # fill to brim first, find the break point
+    # res = 0
+    # for a in range(1,n+1):
+    #     for b in range(1,m+1):
+    #         if (a+b)%(b*b) == 0:
+    #             res += 1
 
-    def func(val):
-        # you could fill everything to at least val
-        cost = sum(max(0, val-x) for x in arr)
-        if cost <= k:
-            return True
-        
-    val = binary_search(func, first=False, target=True, left=0, right=10**15)
-
-    brr = [max(val, x) for x in arr]
+    count = 0
     
-    k -= sum(brr) - sum(arr)
+    # we iterate through all possible gcd values
+    for g in range(1, min(n, m) + 1):
+        # for each g, we iterate through (i, j) such that gcd(i, j) = 1
+        # i and j are coprime, and we actually consider (a, b) = (g*i, g*j)
+        max_i = n // g
+        max_j = m // g
+        for i in range(1, max_i + 1):
+            for j in range(1, max_j + 1):
+                if gcd(i, j) == 1:
+                    a = g * i
+                    b = g * j
+                    if (b * g) % (a + b) == 0:
+                        count += 1
 
-    if len(set(brr)) == 1 and k == 0:
-        return (val - 1) * n + 1
-
-
-    binarr = [int(x > val) for x in brr]
-
-    binarr = binarr + binarr + binarr
-    idxs = [i for i,x in enumerate(binarr) if x == 0]
-    log(brr, k)
-    # log(binarr)
-    # log(idxs)
-
-    maxdist = 0
-    for a,b in zip(idxs, idxs[1+k:]):
-        maxdist = max(maxdist, b - a)
-
-    log(n, val, maxdist)
-
-    return (val - 1) * n + (maxdist)
+    return count
 
 
 # for case_num in [0]:  # no loop over test case
@@ -150,8 +104,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    n,k = list(map(int,input().split()))
-    arr = list(map(int,input().split()))
+    n, m = list(map(int,input().split()))
+    # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -159,7 +113,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,k,arr)  # include input here
+    res = solve(n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -173,3 +127,5 @@ for case_num in range(int(input())):
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
     print(res)
+
+

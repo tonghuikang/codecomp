@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,10 +60,25 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, m):
     # your solution here
 
-    return ""
+    # res = 0
+    # for a in range(1,n+1):
+    #     for b in range(1,m+1):
+    #         if (a+b)%(b*b) == 0:
+    #             res += 1
+
+    res = 0
+    for b in range(1,m+1):
+        b2 = b*b
+        for numer in range(b2, 10**8, b2):
+            if 1 <= numer - b <= n:
+                res += 1
+            if numer - b > n:
+                break
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +95,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n, m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +104,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, m)  # include input here
 
     # print length if applicable
     # print(len(res))
