@@ -74,19 +74,44 @@ def solve_(n, m):
     count = 0
     
     # we iterate through all possible gcd values
+def solve():
+    import sys
+    input = sys.stdin.read
+    data = input().split()
+    
+    t = int(data[0])
+    index = 1
+    results = []
+    MAX_N = 2 * 10**6
+    
+    from math import gcd
+    from sys import stdout
+    
+    # To store the results for each test case
+    count = 0
+    
+    # Iterate over all possible values of gcd(a, b) = g
     for g in range(1, min(n, m) + 1):
-        # for each g, we iterate through (i, j) such that gcd(i, j) = 1
-        # i and j are coprime, and we actually consider (a, b) = (g*i, g*j)
+        # sum (i+j) can be at least 2 (1+1) and at most max_i + max_j
         max_i = n // g
         max_j = m // g
-        for i in range(1, max_i + 1):
-            for j in range(1, max_j + 1):
-                if gcd(i, j) == 1:
-                    a = g * i
-                    b = g * j
-                    if (b * g) % (a + b) == 0:
-                        count += 1
-
+        
+        # Iterate over all possible sums (i+j)
+        for s in range(2, max_i + max_j + 1):
+            # Find how many values of j are there such that j*g is a multiple of s
+            # and 1 <= j <= max_j and j <= s <= i + j (i = s - j)
+            num_multiples = (max_j // s)  # j = s, 2s, 3s, ..., max_j
+            if num_multiples > 0:
+                # We need to check these j values are valid
+                # i = s-j must be >= 1 and i <= max_i
+                valid_js = 0
+                for k in range(1, num_multiples + 1):
+                    j = k * s
+                    i = s - j
+                    if 1 <= i <= max_i:
+                        valid_js += 1
+                count += valid_js
+        
     return count
 
 
