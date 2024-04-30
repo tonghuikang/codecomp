@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,21 +60,47 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(arr):
     # your solution here
 
-    return ""
+    is_alice = True
 
+    while arr:
+        if arr.count(1) == 0:
+            return not is_alice
+        # idx = random.choice([i for i,x in enumerate(arr) if x  == 1])
+        idx = arr.index(1)
+
+        if len(arr) > 1:
+            arr[(idx+1)%len(arr)] = arr[(idx+1)%len(arr)]
+            arr[(idx-1)%len(arr)] = arr[(idx-1)%len(arr)]
+        del arr[idx]
+
+        is_alice = not is_alice
+
+        log(arr)
+
+    return not is_alice
+
+
+# import random
+# while True:
+#     input = [random.randint(0,1) for x in range(random.randint(1,10))]
+#     allres = []
+#     for _ in range(10):
+#         res = solve([x for x in input])
+#         allres.append(res)
+#     assert len(set(allres)) == 1
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -85,6 +108,7 @@ for case_num in range(int(input())):
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
+    arr = [1 if x == "U" else 0 for x in srr]
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,10 +116,15 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(arr)  # include input here
 
     # print length if applicable
     # print(len(res))
+
+    if res:
+        print(yes)
+    else:
+        print(no)
 
     # parse result
     # res = " ".join(str(x) for x in res)
@@ -105,4 +134,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
