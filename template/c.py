@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -121,19 +118,19 @@ def solve_(n,k,arr):
 
     binarr = [int(x > val) for x in brr]
 
-    binarr = binarr + binarr + binarr
-    idxs = [i for i,x in enumerate(binarr) if x == 0]
-    log(brr, k)
-    # log(binarr)
-    # log(idxs)
+    # binarr = binarr + binarr + binarr
+    # idxs = [i for i,x in enumerate(binarr) if x == 0]
+    # log(brr, k)
+    # # log(binarr)
+    # # log(idxs)
 
-    maxdist = 0
-    for a,b in zip(idxs, idxs[1+k:]):
-        maxdist = max(maxdist, b - a)
+    # maxdist = 0
+    # for a,b in zip(idxs, idxs[1+k:]):
+    #     maxdist = max(maxdist, b - a)
 
-    log(n, val, maxdist)
+    # log(n, val, maxdist)
 
-    return (val - 1) * n + (maxdist)
+    return (val - 1) * n + (sum(binarr) + k + 1)
 
 
 # for case_num in [0]:  # no loop over test case

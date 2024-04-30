@@ -62,32 +62,70 @@ def minus_one_matrix(mrr):
 
 from math import gcd
 
+def compute_mobius(N):
+    mu = [1] * (N + 1)
+    is_prime = [True] * (N + 1)
+    
+    mu[1] = 1  # mu(1) = 1
+    for i in range(2, N + 1):
+        if is_prime[i]:  # i is a prime number
+            for j in range(i, N + 1, i):
+                is_prime[j] = False
+                if (j // i) % i == 0:
+                    mu[j] = 0
+                else:
+                    mu[j] = -mu[j]
+    
+    # Reset is_prime to True for prime reidentification
+    is_prime = [False, False] + [True] * (N - 1)
+    for i in range(2, N + 1):
+        if mu[i] == 1 or mu[i] == -1:
+            for j in range(i, N + 1, i):
+                is_prime[j] = False
+    
+    return mu
+
+mu = compute_mobius(2 * 10 ** 6 + 10)
+
+
+from functools import cache
+
+@cache
+def count_coprime(a, b):
+    res = 0
+    for d in range(1, min(a,b) + 1):
+        res += mu[d] * (a // d) * (b // d)
+    return res
+
+
+
 def solve_(n, m):
     # your solution here
 
-    # res = 0
-    # for a in range(1,n+1):
-    #     for b in range(1,m+1):
-    #         if (a+b)%(b*b) == 0:
-    #             res += 1
+    if n > 100:
+        return
 
-    count = 0
+    res = 0
+    vals = []
+    for a in range(1,n+1):
+        for b in range(1,m+1):
+            if (b*gcd(a,b))%(a+b) == 0:
+                log(a,b,gcd(a,b))
+                vals.append((gcd(a,b), a//gcd(a,b), b//gcd(a,b)))
+                res += 1
     
-    # we iterate through all possible gcd values
-    for g in range(1, min(n, m) + 1):
-        # for each g, we iterate through (i, j) such that gcd(i, j) = 1
-        # i and j are coprime, and we actually consider (a, b) = (g*i, g*j)
-        max_i = n // g
-        max_j = m // g
-        for i in range(1, max_i + 1):
-            for j in range(1, max_j + 1):
-                if gcd(i, j) == 1:
-                    a = g * i
-                    b = g * j
-                    if (b * g) % (a + b) == 0:
-                        count += 1
+    for val in sorted(vals):
+        log(val)
 
-    return count
+    res = 0
+    for g in range(2, min(n, m) + 1):
+        p = n // g
+        q = m // g
+        val = count_coprime(p, q)
+        log(g, val)
+        res += val
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
