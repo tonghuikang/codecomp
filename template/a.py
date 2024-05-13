@@ -63,17 +63,30 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
-    # your solution here
+pool = set()
+for i in range(100):
+    for j in range(100):
+        val = i * 3 + j * 5
+        if val <= 100:
+            pool.add(val)
 
-    return ""
+
+
+def solve_(n):
+    # your solution here
+    minres = 100
+    for x in pool:
+        if n >= x:
+            res = n - x
+            minres = min(minres, res)
+    return minres
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -92,7 +105,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
