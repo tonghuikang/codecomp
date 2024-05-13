@@ -1,67 +1,47 @@
-import java.io.*
 import java.util.*
+import kotlin.math.min
 
-const val m9 = 1000000007L  // 998244353
-val yes = "YES"
-val no = "NO"
-val d4 = arrayOf(Pair(1, 0), Pair(0, 1), Pair(-1, 0), Pair(0, -1))
-val d8 = arrayOf(Pair(1, 0), Pair(1, 1), Pair(0, 1), Pair(-1, 1), Pair(-1, 0), Pair(-1, -1), Pair(0, -1), Pair(1, -1))
-val d6 = arrayOf(Pair(2, 0), Pair(1, 1), Pair(-1, 1), Pair(-2, 0), Pair(-1, -1), Pair(1, -1))  // hexagonal layout
-val abc = "abcdefghijklmnopqrstuvwxyz"
-val abcMap = abc.withIndex().associate { it.value to it.index }
-val MAXINT = Long.MAX_VALUE
-val e18 = 1000000000000000010L
+fun main() {
+    val scanner = Scanner(System.`in`)
+    val LARGE = 1e18.toLong() + 10
 
-fun log(vararg args: Any?) {
-    println(args.joinToString(" "))
-}
+    val t = scanner.nextInt()  // Read the number of test cases
+    repeat(t) {
+        val n = scanner.nextInt()  // Read the size of the array
+        val arr = LongArray(n) { scanner.nextLong() }
 
-fun solve(arr: List<Int>): Long {
-    val LARGE = e18
-    var dp = arrayOf(
-        arrayOf(LARGE, LARGE),
-        arrayOf(0L, 0L)
-    )
+        val dp = Array(2) { LongArray(2) { LARGE } }
+        dp[1][0] = 0
+        dp[1][1] = 0
 
-    for (x in arr) {
-        if (x == 0) {
-            dp = arrayOf(
-                arrayOf(LARGE, LARGE),
-                arrayOf(minOf(dp[0][0], dp[1][0]), minOf(dp[0][1], dp[1][1]))
-            )
-            continue
+        for (x in arr) {
+            if (x == 0L) {
+                dp[1][0] = LARGE
+                dp[1][1] = min(dp[1][1], dp[0][1])
+                continue
+            }
+
+            val newDp = Array(2) { LongArray(2) { LARGE } }
+
+            // Fix the current step with fix-forward
+            newDp[1][0] = min(newDp[1][0], dp[0][0])
+            newDp[1][1] = min(newDp[1][1], dp[0][1] + 2 * x)
+
+            // Fix the current step with no fix-forward
+            newDp[1][0] = min(newDp[1][0], dp[1][0] + 1)
+            newDp[1][1] = min(newDp[1][1], dp[1][1] + x)
+            
+            // Fix-forward the current step
+            newDp[0][0] = min(newDp[0][0], dp[1][0] + 1)
+            newDp[0][1] = min(newDp[0][1], dp[1][1] + 2 * x)
+
+            dp[0][0] = newDp[0][0]
+            dp[0][1] = newDp[0][1]
+            dp[1][0] = newDp[1][0]
+            dp[1][1] = newDp[1][1]
         }
 
-        val newDp = arrayOf(
-            arrayOf(LARGE, LARGE),
-            arrayOf(LARGE, LARGE)
-        )
-
-        // fix the current step with fix-forward
-        newDp[1][0] = minOf(newDp[1][0], dp[0][0])
-        newDp[1][1] = minOf(newDp[1][1], dp[0][1] + 2 * x)
-
-        // fix the current step with no fix-forward
-        newDp[1][0] = minOf(newDp[1][0], dp[1][0] + 1)
-        newDp[1][1] = minOf(newDp[1][1], dp[1][1] + x)
-
-        // fix-forward the current step
-        newDp[0][0] = minOf(newDp[0][0], dp[1][0] + 1)
-        newDp[0][1] = minOf(newDp[0][1], dp[1][1] + 2 * x)
-
-        dp = newDp
-    }
-
-    return dp[1][1]
-}
-
-fun main(args: Array<String>) {
-    val br = BufferedReader(InputStreamReader(System.`in`))
-    val t = br.readLine().toInt()
-    repeat(t) {
-        val n = br.readLine().toInt()
-        val arr = br.readLine().split(" ").map { it.toInt() }
-        val result = solve(arr)
+        val result = dp[1][1]
         println(result)
     }
 }
