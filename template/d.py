@@ -30,21 +30,58 @@ def log(*args):
 # ---------------------------- template ends here ----------------------------
 
 
-def query(pos):
-    print("? {}".format(pos + 1), flush=True)
+def query(l, x):
+    print(f"? {l} {x}", flush=True)
     response = int(input())
     return response
 
 
-def alert(pos):
-    print("! {}".format(pos + 1), flush=True)
-    sys.exit()
+def alert(m):
+    print(f"! {m}", flush=True)
+    response = int(input())
+    return response
 
 
 # -----------------------------------------------------------------------------
 
+def solve():
+    n,k = list(map(int,input().split()))
+    curlen = 1
+    curmax = 1
+    query_count = 0
+    
+    while query_count < 2*n and curmax <= n and curlen <= n:
+        log(curmax, curlen)
+        l = 1
+        r = query(l, curlen * curmax)
+        if r == n+1:
+            curmax += 1
+            continue
+
+        for _ in range(k-1):
+            l = r+1
+            r = query(l, curlen * curmax)
+            if r == n+1:
+                curlen += 1
+                break
+
+        else:
+            verdict = alert(curlen * curmax)
+            assert verdict == 1
+            return
+
+    alert(-1)
+    assert verdict == 1
+    return
+
+
+
+
 # read line as an integer
-# k = int(input())
+t = int(input())
+
+for _ in range(t):
+    solve()
 
 # read line as a string
 # srr = input().strip()
