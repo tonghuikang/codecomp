@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys, getpass
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -59,6 +56,9 @@ def solve():
             continue
 
         for _ in range(k-1):
+            if r >= n:
+                curlen += 1
+                break
             l = r+1
             r = query(l, curlen * curmax)
             if r == n+1:
@@ -66,11 +66,13 @@ def solve():
                 break
 
         else:
-            verdict = alert(curlen * curmax)
-            assert verdict == 1
-            return
+            if r == n:
+                verdict = alert(curlen * curmax)
+                assert verdict == 1
+                return
+            curlen += 1
 
-    alert(-1)
+    verdict = alert(-1)
     assert verdict == 1
     return
 
@@ -96,3 +98,4 @@ for _ in range(t):
 # -----------------------------------------------------------------------------
 
 # your code here
+sys.exit()
