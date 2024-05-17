@@ -46,33 +46,43 @@ def solve():
     curlen = 1
     curmax = 1
     query_count = 0
+
+    maxres = -1
     
     while query_count < 2*n and curmax <= n and curlen <= n:
+        old_curlen, old_curmax = curlen, curmax
         log(curmax, curlen)
         l = 1
-        r = query(l, curlen * curmax)
+        assert 1 <= l <= n
+        query_count += 1
+        if query_count >= 2*n:
+            break
+        r = query(l, old_curlen * old_curmax)
         if r == n+1:
             curmax += 1
             continue
+        curlen = r+1
 
         for _ in range(k-1):
             if r >= n:
-                curlen += 1
                 break
+                
             l = r+1
-            r = query(l, curlen * curmax)
+            assert 1 <= l <= n
+            query_count += 1
+            if query_count >= 2*n:
+                break
+            r = query(l, old_curlen * old_curmax)
             if r == n+1:
-                curlen += 1
                 break
 
         else:
             if r == n:
-                verdict = alert(curlen * curmax)
-                assert verdict == 1
-                return
+                maxres = max(maxres, old_curlen * old_curmax)
+
             curlen += 1
 
-    verdict = alert(-1)
+    verdict = alert(maxres)
     assert verdict == 1
     return
 
