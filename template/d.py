@@ -43,48 +43,27 @@ def alert(m):
 
 def solve():
     n,k = list(map(int,input().split()))
-    curlen = 1
-    curmax = 1
-    query_count = 0
 
-    maxres = -1
-    
-    while query_count < 2*n and curmax <= n and curlen <= n:
-        old_curlen, old_curmax = curlen, curmax
-        log(curmax, curlen)
-        l = 1
-        assert 1 <= l <= n
-        query_count += 1
-        if query_count >= 2*n:
+    # find max value
+    for max_val in range(1,n+1):
+        if query(1, max_val*n) == n:
             break
-        r = query(l, old_curlen * old_curmax)
-        if r == n+1:
-            curmax += 1
-            continue
-        curlen = r+1
-
-        for _ in range(k-1):
-            if r >= n:
+    else:
+        alert(-1)
+        return
+        
+    for i in range(1, n // k + 1):
+        l = 1
+        for _ in range(k):
+            if l > n:
                 break
-                
-            l = r+1
-            assert 1 <= l <= n
-            query_count += 1
-            if query_count >= 2*n:
-                break
-            r = query(l, old_curlen * old_curmax)
-            if r == n+1:
-                break
-
+            r = query(l, max_val*i)
+            l = r + 1
         else:
             if r == n:
-                maxres = max(maxres, old_curlen * old_curmax)
-
-            curlen += 1
-
-    verdict = alert(maxres)
-    assert verdict == 1
-    return
+                alert(max_val*i)
+                return
+    alert(-1)
 
 
 
