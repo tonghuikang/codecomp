@@ -64,19 +64,22 @@ t = int(input())
 for _ in range(t):
     n = int(input())
 
-    arr = [1 for _ in range(n)]
-
-    g = [[] for _ in range(n)]
+    g = [set() for _ in range(n)]
 
     # those not reachable by curhead will be 0
 
+    all_count = [2*n]
+    
     @cache
     def query(i, j):
+        assert i < j
         print("? {} {}".format(i+1, j+1), flush=True)
+        if all_count[0] == 0:
+            assert False
+        all_count[0] -= 1
+        log(all_count)
         response = input().strip()
         return response
-
-    pairs = []
 
     curhead = n-1
     curquery = n-2
@@ -85,35 +88,37 @@ for _ in range(t):
         a = curquery
         b = curhead
         if query(a, b) == "NO":
-            g[a].append(b)
-            g[b].append(a)    
+            g[a].add(b)
+            g[b].add(a)    
         else:
             curhead = curquery
         curquery -= 1
+
+    pairs = []
 
     for i in range(n-1):
         a = i
         b = i+1
         if query(a, b) == "NO":
-            g[a].append(b)
-            g[b].append(a)    
+            g[a].add(b)
+            g[b].add(a)    
             pairs.append((a,b))
  
     for (a,b),(c,d) in zip(pairs, pairs[1:]):
         if b == c:
             continue
         if query(b, c) == "NO":
-            g[b].append(c)
-            g[c].append(b)
+            g[b].add(c)
+            g[c].add(b)
         elif query(b, d) == "NO":
-            g[b].append(d)
-            g[d].append(b)
+            g[b].add(d)
+            g[d].add(b)
         elif query(a, c) == "NO":
-            g[a].append(c)
-            g[c].append(a)
+            g[a].add(c)
+            g[c].add(a)
         elif query(a, d) == "NO":
-            g[a].append(d)
-            g[d].append(a)
+            g[a].add(d)
+            g[d].add(a)
 
     coloring = is_bipartite(g)
     log(g)
