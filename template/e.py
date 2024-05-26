@@ -90,13 +90,18 @@ for _ in range(t):
     for (a,b),(c,d) in zip(pairs, pairs[1:]):
         if b == c:
             continue
-        response = query(b, c)
-        if response == "NO":
+        if query(b, c) == "NO":
             g[b].append(c)
             g[c].append(b)
-        else:
+        elif query(b, d) == "NO":
             g[b].append(d)
             g[d].append(b)
+        elif query(a, c) == "NO":
+            g[a].append(c)
+            g[c].append(a)
+        elif query(a, d) == "NO":
+            g[a].append(d)
+            g[d].append(a)
 
     coloring = is_bipartite(g)
     # log(g)
