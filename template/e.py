@@ -43,6 +43,26 @@ def alert(arr):
 
 # -----------------------------------------------------------------------------
 
+
+def is_bipartite(list_of_node_to_nodes):
+    # leetcode.com/problems/is-graph-bipartite/discuss/119514/
+    n, colored = len(list_of_node_to_nodes), {}
+    for i in range(n):
+        if i not in colored and list_of_node_to_nodes[i]:
+            colored[i] = 1
+            queue = collections.deque([i])
+            while queue:
+                cur = queue.popleft()
+                for nex in list_of_node_to_nodes[cur]:
+                    if nex not in colored:
+                        colored[nex] = -colored[cur]
+                        queue.append(nex)
+                    elif colored[nex] == colored[cur]:
+                        return False
+    # you can obtain the 2-coloring from the `colored` as well
+    return colored
+
+
 # read line as an integer
 t = int(input())
 
@@ -51,22 +71,45 @@ for _ in range(t):
 
     arr = [1 for _ in range(n)]
 
-    # those not reachable by curhead will be zero
+    g = [[] for _ in range(n)]
 
-    curhead = n-1
-    curquery = n-2
+    # those not reachable by curhead will be 0
 
-    while curquery >= 0:
-        response = query(curquery, curhead)
+    pairs = []
+
+    for i in range(n-1):
+        a = i
+        b = i+1
+        response = query(a, b)
         if response == "NO":
-            arr[curquery] = 1 - arr[curhead]
+            g[a].append(b)
+            g[b].append(a)    
+            pairs.append((a,b))
+ 
+    for (a,b),(c,d) in zip(pairs, pairs[1:]):
+        if b == c:
+            continue
+        response = query(b, c)
+        if response == "NO":
+            g[b].append(c)
+            g[c].append(b)
         else:
-            arr[curquery] = arr[curhead]
+            g[b].append(d)
+            g[d].append(b)
 
-        curhead = curquery
-        curquery -= 1
+    coloring = is_bipartite(g)
+    # log(g)
+    # log(coloring)
 
+    arr = [1 for _ in range(n)]
+    for i,x in coloring.items():
+        if x == 1:
+            arr[i] = 1
+        else:
+            arr[i] = 0
+            
     alert(arr)
+
 
 
 # read line as a string
