@@ -66,7 +66,26 @@ def minus_one_matrix(mrr):
 def solve_(n):
     # your solution here
 
-    return ""
+    #       111110 
+    # -> (-1)000001    
+
+    #        10
+    # ->     10
+
+    arr = [int(x) for x in bin(n)[2:].zfill(32)[::-1]]
+
+    for i in range(31):
+        if arr[i] == 1 and arr[i+1] == 1:
+            arr[i] -= 2
+            arr[i+1] += 1
+
+        if arr[i] == 2:
+            arr[i] -= 2
+            arr[i+1] += 1
+
+    # log(arr)
+
+    return arr
 
 
 # for case_num in [0]:  # no loop over test case
@@ -95,10 +114,10 @@ for case_num in range(int(input())):
     res = solve(n)  # include input here
 
     # print length if applicable
-    # print(len(res))
+    print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
