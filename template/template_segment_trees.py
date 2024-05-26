@@ -517,6 +517,7 @@ print(st.all_prod())
 st.apply(0,3,100)
 print(st.all_prod())
 
+
 RANGE AFFINE TRANSFORM
 x -> b*x + c
 # https://github.com/not522/ac-library-python/blob/master/example/lazysegtree_practice_k_wo_modint.py
