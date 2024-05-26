@@ -94,6 +94,19 @@ for _ in range(t):
             curhead = curquery
         curquery -= 1
 
+    curhead = n-1
+    curquery = n-2
+
+    while curquery >= 0:
+        a = n-1-curquery
+        b = n-1-curhead
+        if query(b, a) == "NO":
+            g[a].add(b)
+            g[b].add(a)    
+        else:
+            curhead = curquery
+        curquery -= 1
+
     pairs = []
 
     for i in range(n-1):
