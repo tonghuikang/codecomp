@@ -78,11 +78,23 @@ for _ in range(t):
 
     pairs = []
 
+    curhead = n-1
+    curquery = n-2
+ 
+    while curquery >= 0:
+        a = curquery
+        b = curhead
+        if query(a, b) == "NO":
+            g[a].append(b)
+            g[b].append(a)    
+        else:
+            curhead = curquery
+        curquery -= 1
+
     for i in range(n-1):
         a = i
         b = i+1
-        response = query(a, b)
-        if response == "NO":
+        if query(a, b) == "NO":
             g[a].append(b)
             g[b].append(a)    
             pairs.append((a,b))
@@ -104,8 +116,8 @@ for _ in range(t):
             g[d].append(a)
 
     coloring = is_bipartite(g)
-    # log(g)
-    # log(coloring)
+    log(g)
+    log(coloring)
 
     arr = [1 for _ in range(n)]
     for i,x in coloring.items():
