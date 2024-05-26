@@ -51,7 +51,7 @@ for _ in range(t):
 
     arr = [1 for _ in range(n)]
 
-    # those not reachable by curhead will be 0
+    # those not reachable by curhead will be zero
 
     curhead = n-1
     curquery = n-2
@@ -59,9 +59,11 @@ for _ in range(t):
     while curquery >= 0:
         response = query(curquery, curhead)
         if response == "NO":
-            arr[curquery] = 0
+            arr[curquery] = 1 - arr[curhead]
         else:
-            curhead = curquery
+            arr[curquery] = arr[curhead]
+
+        curhead = curquery
         curquery -= 1
 
     alert(arr)
