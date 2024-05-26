@@ -31,13 +31,6 @@ def log(*args):
 
 from functools import cache
 
-@cache
-def query(i, j):
-    print("? {} {}".format(i+1, j+1), flush=True)
-    response = input().strip()
-    return response
-
-
 def alert(arr):
     arr = " ".join(str(x) for x in arr)
     print("! {}".format(arr), flush=True)
@@ -76,6 +69,12 @@ for _ in range(t):
     g = [[] for _ in range(n)]
 
     # those not reachable by curhead will be 0
+
+    @cache
+    def query(i, j):
+        print("? {} {}".format(i+1, j+1), flush=True)
+        response = input().strip()
+        return response
 
     pairs = []
 
