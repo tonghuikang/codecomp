@@ -29,7 +29,9 @@ def log(*args):
 
 # ---------------------------- template ends here ----------------------------
 
+from functools import cache
 
+@cache
 def query(i, j):
     print("? {} {}".format(i+1, j+1), flush=True)
     response = input().strip()
