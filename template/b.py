@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -70,7 +67,7 @@ for i in range(1,19):
     maximum = int("9" * i) + int("9" * i)
     valid_ranges.append([minimum, maximum])
 
-print(valid_ranges)
+# print(valid_ranges)
 
 
 def solve_(n):
@@ -78,6 +75,13 @@ def solve_(n):
 
     if n % 10 == 9:
         return no
+
+    for d in range(1,20):
+        if n > 10**(d+1):
+            # log(10**(d+1), int("1"*d + "0"))
+            if n % 10**(d+1) < int("1"*d + "0"):
+                return no
+
 
     for a,b in valid_ranges:
         if a <= n <= b:
