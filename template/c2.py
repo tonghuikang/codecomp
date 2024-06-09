@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -10,7 +7,7 @@ input = sys.stdin.readline  # to read input quickly
 # import numpy as np
 # import scipy
 
-m9 = 10**9 + 7  # 998244353
+m9 = 998244353
 yes, no = "YES", "NO"
 d4 = [(1,0),(0,1),(-1,0),(0,-1)]
 d8 = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
@@ -63,17 +60,77 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    if min(arr) >= 0:
+        return pow(2, len(arr), m9)
+
+    for i,x in enumerate(arr, start=1):
+        if x < 0:
+            break
+    else:
+        raise
+
+    maxval = abs(sum(arr[:i-1]) + x)
+    minval = sum(arr[:i-1]) + x
+    maxval_count = pow(2, i-1, m9)
+    minval_count = pow(2, i-1, m9)
+
+    # log(maxval, maxval_count)
+    # log(minval, minval_count)
+    # log()
+
+    for x in arr[i:]:
+        new_maxval = max(x + maxval, x + minval, abs(x + maxval), abs(x + minval))
+        new_minval = min(x + maxval, x + minval, abs(x + maxval), abs(x + minval))
+
+        new_maxval_count = 0
+        new_minval_count = 0
+
+        if x + maxval == new_maxval:
+            new_maxval_count += maxval_count
+
+        if x + minval == new_maxval:
+            new_maxval_count += minval_count
+
+        if abs(x + maxval) == new_maxval:
+            new_maxval_count += maxval_count
+
+        if abs(x + minval) == new_maxval:
+            new_maxval_count += minval_count
+
+
+        if x + maxval == new_minval:
+            new_minval_count += maxval_count
+
+        if x + minval == new_minval:
+            new_minval_count += minval_count
+
+        if abs(x + maxval) == new_minval:
+            new_minval_count += maxval_count
+
+        if abs(x + minval) == new_minval:
+            new_minval_count += minval_count
+
+        maxval = new_maxval
+        minval = new_minval
+
+        maxval_count = new_maxval_count % m9
+        minval_count = new_minval_count % m9
+
+        # log(maxval, maxval_count)
+        # log(minval, minval_count)
+        # log()
+
+    return maxval_count
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,7 +141,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +149,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
