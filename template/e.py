@@ -124,10 +124,12 @@ def solve_(n, mrr):
     for i,x in enumerate(counts):
         if x == 1:
             break
+    else:
+        raise
 
     root = i
 
-    # the your child has only one child, you rather connect with your grandchild
+    # your child has only one child, you rather connect with your grandchild
 
     stack = [root]
     visited = set(stack)
