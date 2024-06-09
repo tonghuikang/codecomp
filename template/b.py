@@ -68,8 +68,7 @@ valid_ranges = []
 for i in range(1,19):
     minimum = int("5" * i) + int("5" * i)
     maximum = int("9" * i) + int("9" * i)
-    exclude = int("5" * i) + int("5" * i) + 9
-    valid_ranges.append([minimum, maximum, exclude])
+    valid_ranges.append([minimum, maximum])
 
 # print(valid_ranges)
 
@@ -77,8 +76,11 @@ for i in range(1,19):
 def solve_(n):
     # your solution here
 
-    for a,b,exclude in valid_ranges:
-        if a <= n <= b and n != exclude:
+    if n % 10 == 9:
+        return no
+
+    for a,b in valid_ranges:
+        if a <= n <= b:
             return yes
 
     return no
