@@ -63,8 +63,49 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+
+def z_function(S: list) -> list:
+    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/z_algorithm.py
+    # https://cp-algorithms.com/string/z-function.html
+    # length of common prefix for S[i:] and S for each i
+    n = len(S)
+    Z = [0] * n
+    l = r = 0
+
+    for i in range(1, n):
+        z = Z[i - l]
+        if i + z >= r:
+            z = max(r - i, 0)
+            while i + z < n and S[z] == S[i + z]:
+                z += 1
+
+            l, r = i, i + z
+
+        Z[i] = z
+
+    Z[0] = n
+    return Z
+
+
+def solve_(srr):
     # your solution here
+
+    if srr.count("a") == len(srr):
+        return len(srr) - 1
+
+    n = len(srr)
+
+    srr = srr.lstrip("a")
+
+    left_a = n - len(srr)
+
+    arr = z_function(srr)
+    log(srr)
+    log(arr)
+
+    # for each possible candidate we consider
+
+    
 
     return ""
 
@@ -77,7 +118,7 @@ for case_num in range(int(input())):
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -92,7 +133,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(srr)  # include input here
 
     # print length if applicable
     # print(len(res))

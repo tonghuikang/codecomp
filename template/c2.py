@@ -63,14 +63,13 @@ def minus_one_matrix(mrr):
 def solve_(n, arr):
     # your solution here
 
-    if min(arr) >= 0:
-        return pow(2, len(arr), m9)
-
+    current_sum = 0
     for i,x in enumerate(arr, start=1):
-        if x < 0:
+        current_sum += x
+        if current_sum < 0:
             break
     else:
-        raise
+        return pow(2, len(arr), m9)
 
     maxval = abs(sum(arr[:i-1]) + x)
     minval = sum(arr[:i-1]) + x
@@ -84,6 +83,11 @@ def solve_(n, arr):
     for x in arr[i:]:
         new_maxval = max(x + maxval, x + minval, abs(x + maxval), abs(x + minval))
         new_minval = min(x + maxval, x + minval, abs(x + maxval), abs(x + minval))
+
+        # log(new_maxval)
+        # log(new_minval)
+
+        assert new_maxval != new_minval
 
         new_maxval_count = 0
         new_minval_count = 0
@@ -124,6 +128,12 @@ def solve_(n, arr):
         # log()
 
     return maxval_count
+
+
+# import random
+# for _ in range(100_000):
+#     arr = [random.randint(-10, 10) for _ in range(20)]
+#     solve(len(arr), arr)
 
 
 # for case_num in [0]:  # no loop over test case
