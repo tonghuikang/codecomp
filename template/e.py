@@ -137,7 +137,7 @@ def solve_(n, mrr):
             if nex in visited:
                 continue
             visited.add(nex)
-            if counts[nex] == 2:
+            if len(g[nex]) == 2:
                 for grandchild in g[nex]:
                     if grandchild != cur:
                         break
