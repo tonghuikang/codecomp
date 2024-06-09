@@ -70,7 +70,7 @@ for i in range(1,19):
     maximum = int("9" * i) + int("9" * i)
     valid_ranges.append([minimum, maximum])
 
-# print(valid_ranges)
+print(valid_ranges)
 
 
 def solve_(n):
