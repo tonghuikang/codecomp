@@ -61,7 +61,56 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_(n, mrr, flag):
+def dfs(start, g, entry_operation, exit_operation):
+    # g is map of node to nodes
+    # assumes g is bidirectional
+    # https://codeforces.com/contest/1714/submission/166648312
+    entered = set([start])
+    exiting = set()
+    ptr = {x: 0 for x in g}
+    stack = [start]
+    prev = {}
+
+    null_pointer = "NULL"
+    # might be faster to use an integer for null_pointer
+    # especially if you avoid string compare when checking if null pointer
+    # leaving as a string for safety reasons
+    prev[start] = null_pointer
+
+    while stack:
+        cur = stack[-1]
+
+        if cur not in exiting:
+            while ptr[cur] < len(g[cur]):
+                nex = g[cur][ptr[cur]]
+                ptr[cur] += 1
+                if nex in entered:
+                    continue
+
+                entry_operation(prev[cur], cur, nex)
+
+                entered.add(nex)
+                stack.append(nex)
+                prev[nex] = cur
+                break
+            if ptr[cur] == len(g[cur]):
+                exiting.add(cur)
+
+        else:
+            stack.pop()
+            exit_operation(prev[cur], cur)
+
+
+def entry_operation(prev, cur, nex):
+    # note that prev is `null_pointer` at the root node
+    pass
+
+
+def exit_operation(prev, cur):
+    pass
+
+
+def solve_(n, mrr):
     # root on leaf, connect to whoever with the most connections, repeat
 
     counts = [0 for _ in range(n)]
@@ -74,58 +123,44 @@ def solve_(n, mrr, flag):
     
     for i,x in enumerate(counts):
         if x == 1:
+            break
 
-            root = i
-            g = defaultdict(set)
-            for a,b in mrr:
-                counts[a] += 1
-                counts[b] += 1
-                g[a].add(b)
-                g[b].add(a)
+    root = i
 
-            # your child has only one child, you rather connect with your grandchild
+    # the your child has only one child, you rather connect with your grandchild
 
-            stack = [root]
-            visited = set(stack)
-            while stack:
-                cur = stack.pop()
-                for nex in g[cur]:
-                    if nex in visited:
-                        continue
-                    visited.add(nex)
-                    if len(g[nex]) == 2:
-                        for grandchild in g[nex]:
-                            if grandchild != cur:
-                                break
-                        else:
-                            raise
-                        g[cur].remove(nex)
-                        g[nex].remove(cur)
-                        g[cur].add(grandchild)
-                        g[grandchild].add(cur)
-                        visited.add(grandchild)
-                        stack.append(grandchild)
-                    else:
-                        stack.append(nex)
+    stack = [root]
+    visited = set(stack)
+    while stack:
+        cur = stack.pop()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            if len(g[nex]) == 2:
+                for grandchild in g[nex]:
+                    if grandchild != cur:
+                        break
+                else:
+                    raise
+                g[cur].remove(nex)
+                g[nex].remove(cur)
+                g[cur].add(grandchild)
+                g[grandchild].add(cur)
+                visited.add(grandchild)
+                stack.append(grandchild)
+            else:
+                stack.append(nex)
 
-            counts_new = [0 for _ in range(n)]
-            for k in range(n):
-                for v in g[k]:
-                    counts_new[v] += 1
+    counts_new = [0 for _ in range(n)]
+    for k in range(n):
+        for v in g[k]:
+            counts_new[v] += 1
 
-            assert sum(counts_new) == 2 * (n-1)
-            # log(counts_new)
+    assert sum(counts_new) == 2 * (n-1)
+    log(counts_new)
 
-            return sum(1 for x in counts_new if x == 1)
-
-
-# import random
-# for _ in range(10000000):
-#     n = 6
-#     mrr = []
-#     for i in range(1,n):
-#         mrr.append([i, random.randint(0,i-1)])
-#     assert solve(n, mrr, False) == solve(n, mrr, True)
+    return sum(1 for x in counts_new if x == 1)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -151,7 +186,7 @@ for case_num in range(int(input())):
     mrr = read_matrix(n-1)  # and return as a list of list of int
     mrr = minus_one_matrix(mrr)
 
-    res = max(solve(n, mrr, True), solve(n, mrr, False))  # include input here
+    res = solve(n, mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
