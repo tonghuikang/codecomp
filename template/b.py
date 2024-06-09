@@ -63,17 +63,32 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+valid_ranges = []
+
+for i in range(1,19):
+    minimum = int("5" * i) + int("5" * i)
+    maximum = int("9" * i) + int("9" * i)
+    exclude = int("5" * i) + int("5" * i) + 9
+    valid_ranges.append([minimum, maximum, exclude])
+
+# print(valid_ranges)
+
+
+def solve_(n):
     # your solution here
 
-    return ""
+    for a,b,exclude in valid_ranges:
+        if a <= n <= b and n != exclude:
+            return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -92,7 +107,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n)  # include input here
 
     # print length if applicable
     # print(len(res))
