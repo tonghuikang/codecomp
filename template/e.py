@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+from collections import defaultdict
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -116,12 +114,12 @@ def solve_(n, mrr):
     # root on leaf, connect to whoever with the most connections, repeat
 
     counts = [0 for _ in range(n)]
-    g = defaultdict(list)
+    g = defaultdict(set)
     for a,b in mrr:
         counts[a] += 1
         counts[b] += 1
-        g[a].set(b)
-        g[b].set(a)
+        g[a].add(b)
+        g[b].add(a)
     
     for i,x in enumerate(counts):
         if x == 1:
@@ -129,53 +127,40 @@ def solve_(n, mrr):
 
     root = i
 
-    # for each node, track node with most children, and how many
-
-    node_to_descendant_node_with_most_children = [0 for _ in range(n)]
-    node_to_descendant_node_max_children_count = [0 for _ in range(n)]
-    node_to_children_count = [0 for _ in range(n)]
-
-    def entry_operation(prev, cur, nex):
-        # note that prev is `null_pointer` at the root node
-        pass
-
-    def exit_operation(prev, cur):
-        if prev == "NULL":
-            return
- 
-        node_to_children_count[prev] += 1
-        
-        if node_to_children_count[cur] > node_to_descendant_node_max_children_count[prev]:
-            node_to_descendant_node_max_children_count[prev] = node_to_children_count[cur]
-            node_to_descendant_node_with_most_children[prev] = cur
-        
-        if node_to_descendant_node_max_children_count[cur] > node_to_descendant_node_max_children_count[prev]:
-            node_to_descendant_node_max_children_count[prev] = node_to_descendant_node_max_children_count[cur]
-            node_to_descendant_node_with_most_children[prev] = node_to_descendant_node_with_most_children[cur]
-
-
-    dfs(root, g, entry_operation, exit_operation)
-
-    log(node_to_children_count)
-    log(node_to_descendant_node_max_children_count)
-    log(node_to_descendant_node_with_most_children)
+    # the your child has only one child, you rather connect with your grandchild
 
     stack = [root]
-    visited = set()
-
+    visited = set(stack)
     while stack:
         cur = stack.pop()
-        for nex in cur:
+        for nex in g[cur]:
             if nex in visited:
                 continue
             visited.add(nex)
-            maxnode = 
-            g[cur].remove(nex)
-            g[nex].remove(cur)
-            g[cur].add()
+            if counts[nex] == 2:
+                for grandchild in g[nex]:
+                    if grandchild != cur:
+                        break
+                else:
+                    raise
+                g[cur].remove(nex)
+                g[nex].remove(cur)
+                g[cur].add(grandchild)
+                g[grandchild].add(cur)
+                visited.add(grandchild)
+                stack.append(grandchild)
+            else:
+                stack.append(nex)
 
+    counts_new = [0 for _ in range(n)]
+    for k in range(n):
+        for v in g[k]:
+            counts_new[v] += 1
 
-    return ""
+    assert sum(counts_new) == 2 * (n-1)
+    log(counts_new)
+
+    return sum(1 for x in counts_new if x == 1)
 
 
 # for case_num in [0]:  # no loop over test case
