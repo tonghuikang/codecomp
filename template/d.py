@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
+import bisect
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -95,19 +93,61 @@ def solve_(srr):
 
     n = len(srr)
 
-    srr = srr.lstrip("a")
+    trr = srr.lstrip("a")
+    left_a = n - len(trr)
 
-    left_a = n - len(srr)
+    arr = z_function(trr)
+    arr = [0] * left_a + arr
 
-    arr = z_function(srr)
-    log(srr)
-    log(arr)
 
-    # for each possible candidate we consider
+    # log(srr)
+    # log(arr)
 
+    # for each possible candidate we consider the intervals
+    required = [i for i,x in enumerate(srr) if x != "a"]
+
+    # log(required)
     
+    res = 0
+    for core_length in range(1, n-left_a+1):
+        if srr[left_a + core_length - 1] == "a":
+            continue
+        # log("check", srr[left_a:left_a+core_length])
 
-    return ""
+        ptr = left_a
+        left = left_a
+        right = n   # will be overwritten
+        mininterval = n
+        invalid = False
+
+        while True:
+            # log(ptr, ptr+core_length)
+            idx = bisect.bisect_left(required, ptr+core_length)
+            if idx == len(required):
+                right = n - (ptr + core_length)
+                break
+            new_ptr = required[idx]
+            if arr[new_ptr] < core_length:
+                # log("invalid")
+                invalid = True
+                break
+            interval = new_ptr - (ptr + core_length)
+            mininterval = min(mininterval, interval)
+            ptr = new_ptr
+
+        if not invalid:
+            # log("--")
+            left = min(left, mininterval)
+            right = min(right, mininterval)
+            exclude = max(0, left + right - mininterval)
+            val = (left + 1) * (right + 1) - (exclude * (exclude + 1)) // 2
+            # log(left, mininterval, right)
+            # log(val)
+            res += val
+
+    return res
+
+# solve("ba" * 100_000)
 
 
 # for case_num in [0]:  # no loop over test case
