@@ -459,6 +459,7 @@ def longest_path_in_tree(list_of_node_to_nodes_and_costs):
     # https://leetcode.com/problems/minimum-height-trees
     # https://leetcode.com/problems/longest-path-with-different-adjacent-characters/
     # assumes input is a tree
+    # you can compute diameter of a tree with this method, of center of longest path
     n = len(list_of_node_to_nodes_and_costs)
     
     def dfs(start):   
