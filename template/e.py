@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,10 +60,43 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def modinv_p(base, p=m9):
+    # modular inverse if the modulo is a prime
+    return pow(base, -1, p)  # for Python 3.8+
+    # return pow(base, p-2, p)  # if Python version is below 3.8
+
+
+def solve_(n,k,arr):
+
+    if n == k:
+        return [sum(arr), 0]
     # your solution here
 
-    return ""
+    specials = arr[:k]
+    normal = arr[k:]
+
+    # log(specials)
+    # log(normal)
+
+    alice_val = 0
+    bob_val = 0
+
+    alice_val += sum(normal) * ((len(normal) + 1) // 2) * modinv_p(len(normal))
+    bob_val += sum(normal) * ((len(normal)) // 2) * modinv_p(len(normal))
+
+    alice_val = alice_val%m9
+    bob_val = bob_val%m9
+
+    # log(alice_val)
+    # log(bob_val)
+
+    alice_val += sum(specials) * ((len(normal) + 1 + 1) // 2) * modinv_p(len(normal) + 1)
+    bob_val += sum(specials) * ((len(normal) + 1) // 2) * modinv_p(len(normal) + 1)
+
+    alice_val = alice_val%m9
+    bob_val = bob_val%m9
+
+    return [alice_val, bob_val]
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,8 +113,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,13 +122,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,k,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

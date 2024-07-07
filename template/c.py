@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,17 +60,64 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def ceiling_division(numer, denom):
+    return -((-numer) // denom)
+
+
+def solve_(n, arr, brr, crr):
+    required = ceiling_division(sum(arr), 3)
     # your solution here
 
-    return ""
+    allvals = [arr, brr, crr]
+
+    for p in range(3):
+        for q in range(3):
+            if p == q:
+                continue
+            left = allvals[p]
+            right = allvals[q]
+            r = 3 - p - q
+            middle = allvals[r]
+
+            left_sum = 0
+            for i,x in enumerate(left, start=1):
+                left_sum += x
+                if left_sum >= required:
+                    break
+            left_idx = i
+
+            right_sum = 0
+            for i,x in list(enumerate(right))[::-1]:
+                right_sum += x
+                if right_sum >= required:
+                    break
+            right_idx = i
+
+            if left_idx >= right_idx:
+                continue
+            
+            middle_sum = sum(middle[left_idx:right_idx])
+
+            if middle_sum >= required:
+                # log(left[:left_idx])
+                # log(middle[left_idx:right_idx])
+                # log(right[right_idx:])
+                
+                res = [[0, 0], [0, 0], [0, 0]]
+                res[p] = [1, left_idx]
+                res[r] = [left_idx + 1, right_idx]
+                res[q] = [right_idx + 1, n]
+                res = sum(res, [])
+                return res
+
+    return [-1]
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,7 +128,9 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
+    crr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,13 +138,13 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr, brr, crr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

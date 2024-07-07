@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,10 +60,36 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, m, mrr, nrr):
     # your solution here
 
-    return ""
+    matrix = [[(int(a)-int(b))%3 for a,b in zip(r1, r2)] for r1,r2 in zip(mrr, nrr)]
+    log(matrix)
+    
+    for i in range(n-1):
+        for j in range(m-1):
+            if matrix[i][j] == 0:
+                continue
+            elif matrix[i][j] == 1:
+
+                matrix[i][j] = (matrix[i][j] + 2)%3
+                matrix[i+1][j+1] = (matrix[i+1][j+1] + 2)%3
+
+                matrix[i+1][j] = (matrix[i+1][j] + 1)%3
+                matrix[i][j+1] = (matrix[i][j+1] + 1)%3
+
+            elif matrix[i][j] == 2:
+
+                matrix[i][j] = (matrix[i][j] + 1)%3
+                matrix[i+1][j+1] = (matrix[i+1][j+1] + 1)%3
+
+                matrix[i+1][j] = (matrix[i+1][j] + 2)%3
+                matrix[i][j+1] = (matrix[i][j+1] + 2)%3
+
+    if sum(sum(row) for row in matrix) == 0:
+        return yes
+
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,16 +106,17 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_strings(n)  # and return as a list of list of int
+    nrr = read_strings(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr,nrr)  # include input here
 
     # print length if applicable
     # print(len(res))

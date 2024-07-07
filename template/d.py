@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,17 +60,58 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr, brr):
     # your solution here
 
-    return ""
+    if set(arr) != set(brr):
+        return no
+    
+    val_to_idx = {}
+    for idx, val in enumerate(arr):
+        val_to_idx[val] = idx
+
+    arr = [val_to_idx[val] for val in arr]
+    brr = [val_to_idx[val] for val in brr]
+
+    # arr, brr = brr, arr
+
+    # log(arr)
+    # log(brr)
+
+    val_to_idx = {}
+    for idx, val in enumerate(arr):
+        val_to_idx[val] = idx
+
+    def execute(a, b):
+        # log(a, b)
+        dist = abs(b - a)
+        arr[a], arr[b] = arr[b], arr[a]
+        val_to_idx[arr[a]] = a
+        val_to_idx[arr[b]] = b
+        brr[-1], brr[-dist-1] = brr[-dist-1], brr[-1]
+
+    for i in range(n-2):
+        if arr[i] == brr[i]:
+            continue
+        idx = val_to_idx[brr[i]]
+        execute(i+2, idx)
+        execute(i+1, i+2)
+        execute(i, i+1)
+
+        # log()
+        # log(arr)
+        # log(brr)
+
+    if arr == brr:
+        return yes
+    return no
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,7 +122,8 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +131,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr, brr)  # include input here
 
     # print length if applicable
     # print(len(res))
