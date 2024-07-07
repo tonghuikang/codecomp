@@ -60,6 +60,55 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
+import itertools
+from fractions import Fraction
+
+MOD = 10**9 + 7
+
+def calculate_scores(balls, special_count):
+    n = len(balls)
+    all_permutations = list(itertools.permutations(range(n)))
+    alice_total = 0
+    bob_total = 0
+    
+    for perm in all_permutations:
+        alice_score = 0
+        bob_score = 0
+        alice_turn = True
+        
+        for ball in perm:
+            if alice_turn:
+                alice_score += balls[ball]
+            else:
+                bob_score += balls[ball]
+            
+            if ball >= special_count:
+                alice_turn = not alice_turn
+        
+        alice_total += alice_score
+        bob_total += bob_score
+    
+    total_permutations = len(all_permutations)
+    alice_expected = Fraction(alice_total, total_permutations)
+    bob_expected = Fraction(bob_total, total_permutations)
+    
+    return alice_expected, bob_expected
+
+def mod_inverse(x, m):
+    return pow(x, m-2, m)
+
+def fraction_to_modular(frac, mod):
+    return (frac.numerator * mod_inverse(frac.denominator, mod)) % mod
+
+def solve_check(n, k, arr):
+    alice_expected, bob_expected = calculate_scores(arr, k)
+    
+    alice_result = fraction_to_modular(alice_expected, MOD)
+    bob_result = fraction_to_modular(bob_expected, MOD)
+    
+    return [alice_result, bob_result]
+
+
 def modinv_p(base, p=m9):
     # modular inverse if the modulo is a prime
     return pow(base, -1, p)  # for Python 3.8+
@@ -69,7 +118,7 @@ def modinv_p(base, p=m9):
 def solve_(n,k,arr):
 
     if n == k:
-        return [sum(arr), 0]
+        return [sum(arr)%m9, 0]
     # your solution here
 
     specials = arr[:k]
@@ -99,6 +148,15 @@ def solve_(n,k,arr):
     return [alice_val, bob_val]
 
 
+# import random
+
+# while True:
+#     n = random.randint(1,7)
+#     k = random.randint(1,n)
+#     arr = [random.randint(1,10000) for _ in range(n)]
+#     assert solve(n,k,arr) == solve_check(n,k,arr), (solve(n,k,arr), solve_check(n,k,arr))
+
+
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
@@ -123,6 +181,8 @@ for case_num in range(int(input())):
     # mrr = minus_one_matrix(mrr)
 
     res = solve(n,k,arr)  # include input here
+
+    # assert res == solve_check(n,k,arr), (res, solve_check(n,k,arr))
 
     # print length if applicable
     # print(len(res))
