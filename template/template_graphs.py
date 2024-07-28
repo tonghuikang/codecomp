@@ -83,21 +83,27 @@ def find_strongly_connected_components(graph):
 
 def is_bipartite(list_of_node_to_nodes):
     # leetcode.com/problems/is-graph-bipartite/discuss/119514/
-    n, colored = len(list_of_node_to_nodes), {}
+    n = len(list_of_node_to_nodes)
+    colored = [-1 for _ in range(n)]
     for i in range(n):
-        if i not in colored and list_of_node_to_nodes[i]:
+        if colored[i] == -1 and list_of_node_to_nodes[i]:
             colored[i] = 1
             queue = collections.deque([i])
             while queue:
                 cur = queue.popleft()
                 for nex in list_of_node_to_nodes[cur]:
-                    if nex not in colored:
-                        colored[nex] = -colored[cur]
+                    if colored[nex] == -1:
+                        colored[nex] = 1 - colored[cur]
                         queue.append(nex)
                     elif colored[nex] == colored[cur]:
                         return False
+    
+    for i in range(n):
+        if colored[i] == -1:
+            colored[i] = 1
+
     # you can obtain the 2-coloring from the `colored` as well
-    return True
+    return colored
 
 
 # ------------------------ shortest path ------------------------
