@@ -117,13 +117,13 @@ for _ in range(int(input())):
         if white:
             if a == 3 or b == 3:
                 idx = white.pop()
-                query_tuple(idx+1, 1)
+                query_tuple(idx+1, 3)
                 continue
             
         if black:
             if a == 3 or b == 3:
                 idx = black.pop()
-                query_tuple(idx+1, 1)
+                query_tuple(idx+1, 3)
                 continue
 
         raise
