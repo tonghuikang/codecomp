@@ -95,8 +95,10 @@ for _ in range(int(input())):
     white = [i for i,x in coloring.items() if x == 1]
     black = [i for i,x in coloring.items() if x != 1]
 
-    white_color = 1
-    black_color = 2
+    if n == 1:
+        white = [0]
+
+    assert len(white) + len(black) == n
 
     query("Bob")
     for _ in range(n):

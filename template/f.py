@@ -63,15 +63,65 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,q,arr,qrr):
     # your solution here
+
+    def execute(sequence):
+        sequence.sort()
+
+        # log(sequence)
+
+        while len(sequence) >= 3:
+            if sequence[-1] >= sequence[-2] + sequence[-3]:
+                sequence.pop()
+            else:
+                break
+
+        if len(sequence) < 6:
+            return False
+
+        s = len(sequence)
+        
+        for i in range(s-2):
+            if sequence[i] + sequence[i+1] > sequence[i+2]:
+                break
+        else:
+            raise
+
+        sequence = sequence[:i] + sequence[i+3:]
+        # log(sequence)
+
+        while len(sequence) >= 3:
+            if sequence[-1] >= sequence[-2] + sequence[-3]:
+                sequence.pop()
+            else:
+                break
+
+        if len(sequence) < 3:
+            return False
+        
+        return True
+
+    for a,b in qrr:
+        if b - a >= 60:
+            print(yes)
+            continue
+
+        sequence = [x for x in arr[a-1:b]]
+        boo = execute(sequence)
+
+        if boo:
+            print(yes)
+        else:
+            print(no)
+
 
     return ""
 
 
-# for case_num in [0]:  # no loop over test case
+for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
-for case_num in range(int(input())):
+# for case_num in range(int(input())):
     # read line as an integer
     # n = int(input())
     # k = int(input())
@@ -83,16 +133,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,q = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    qrr = read_matrix(q)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,q,arr,qrr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -105,4 +155,4 @@ for case_num in range(int(input())):
     # print result
     # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
