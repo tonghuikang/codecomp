@@ -67,6 +67,7 @@ def solve_(n,q,arr,qrr):
     # your solution here
 
     def execute(sequence):
+        sequence = [x for x in sequence]
         sequence.sort()
 
         # log(sequence)
@@ -85,7 +86,7 @@ def solve_(n,q,arr,qrr):
         s = len(sequence)
         
         for i in range(s-2):
-            if sequence[i] + sequence[-1] > sequence[-2]:
+            if sequence[i] + sequence[-2] > sequence[-1]:
                 break
         else:
             raise
@@ -104,13 +105,50 @@ def solve_(n,q,arr,qrr):
         
         return True
 
+    def execute2(sequence):
+        sequence = [x for x in sequence]
+        sequence.sort()
+
+        # log(sequence)
+
+        while len(sequence) >= 3:
+            if sequence[-1] >= sequence[-2] + sequence[-3]:
+                sequence.pop()
+            else:
+                break
+
+        if len(sequence) < 6:
+            return False
+
+        s = len(sequence)
+
+        for i in range(s-2):
+            if sequence[i] + sequence[i+1] > sequence[i+2]:
+                break
+        else:
+            raise
+
+        sequence = sequence[:i] + sequence[i+3:]
+        # log(sequence)
+
+        while len(sequence) >= 3:
+            if sequence[-1] >= sequence[-2] + sequence[-3]:
+                sequence.pop()
+            else:
+                break
+
+        if len(sequence) < 3:
+            return False
+
+        return True
+
     for a,b in qrr:
         if b - a >= 60:
             print(yes)
             continue
 
         sequence = [x for x in arr[a-1:b]]
-        boo = execute(sequence)
+        boo = execute2(sequence)
 
         if boo:
             print(yes)
