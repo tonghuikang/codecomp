@@ -80,15 +80,17 @@ def solve_(n,q,arr,qrr):
         if len(sequence) < 6:
             return False
 
+        # WLOG
+
         s = len(sequence)
         
         for i in range(s-2):
-            if sequence[i] + sequence[i+1] > sequence[i+2]:
+            if sequence[i] + sequence[-1] > sequence[-2]:
                 break
         else:
             raise
 
-        sequence = sequence[:i] + sequence[i+3:]
+        sequence = sequence[:i] + sequence[i+1:-2]
         # log(sequence)
 
         while len(sequence) >= 3:
