@@ -103,6 +103,36 @@ def calculate_median(arr):
         return arr[n//2]
 
 
+from itertools import combinations_with_replacement
+
+def calculate_score(arr):
+    n = len(arr)
+    max_score = 0
+    for i in range(n):
+        c = arr[:i] + arr[i+1:]
+        median = sorted(c)[(n-2)//2]
+        score = arr[i] + median
+        max_score = max(max_score, score)
+    return max_score
+
+
+def solve_case(n, k, a, b):
+    max_score = calculate_score(a)
+
+    increasable_indices = [i for i in range(n) if b[i] == 1]
+
+    if not increasable_indices:
+        return max_score
+
+    for distribution in combinations_with_replacement(increasable_indices, k):
+        new_a = a.copy()
+        for idx in distribution:
+            new_a[idx] += 1
+        max_score = max(max_score, calculate_score(new_a))
+
+    return max_score
+
+
 def solve_(n, k, arr, brr):
     # your solution here
 
@@ -110,6 +140,7 @@ def solve_(n, k, arr, brr):
     # or you increase the median
 
     if k == 0:
+        arr.sort()
         # no increments allowed
         # log("k=0", arr[-1], calculate_median(arr[:-1]))
         return arr[-1] + calculate_median(arr[:-1])
@@ -170,12 +201,28 @@ def solve_(n, k, arr, brr):
     median = binary_search(func, first=False, target=True, left=0, right=3 * 10**9)
 
     res = maxval + median
+    log(xrr)
+    log(yrr)
     log(res, maxval, median)
 
     maxres = max(maxres, res)
 
     return maxres
 
+
+import random
+
+def generate_test_case(max_n=10, max_k=5, max_ai=20):
+# def generate_test_case(max_n=4, max_k=5, max_ai=20):
+    n = random.randint(2, max_n)
+    k = random.randint(0, min(max_k, n))  # Ensure k is not larger than n
+    a = [random.randint(1, max_ai) for _ in range(n)]
+    b = [random.choice([0, 1]) for _ in range(n)]
+    return n, k, a, b
+
+# while True:
+#     n, k, a, b = generate_test_case()
+#     assert solve(n, k, a, b) == solve_case(n, k, a, b), ((n, k, a, b), solve(n, k, a, b), solve_case(n, k, a, b))
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
