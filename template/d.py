@@ -63,10 +63,41 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    # annotate the earliest time reachable for each island
+    # for each island, annotate the losable positions
+
+    dist = [n for _ in range(n)]
+    dist[0] = 0
+
+    g = [[x+1] for x in range(n)]
+    g[-1] = []
+    for a,b in mrr:
+        g[a].append(b)
+
+    queue = deque([0])
+    visited = set([0])
+
+    while queue:
+        cur = queue.pop()
+        for nex in g[cur]:
+            if nex in visited:
+                continue
+            visited.add(nex)
+            queue.append(nex)
+            dist[nex] = dist[cur] + 1
+    
+    log(dist)
+    
+    losing_positions = []
+    for i,x in enumerate(dist):
+        losing_positions.append((i-x, i))
+
+    log(losing_positions)
+        
+
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,16 +114,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
-    # mrr = minus_one_matrix(mrr)
+    mrr = read_matrix(m)  # and return as a list of list of int
+    mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
