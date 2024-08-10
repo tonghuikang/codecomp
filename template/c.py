@@ -111,7 +111,7 @@ def solve_(n, k, arr, brr):
 
     if k == 0:
         # no increments allowed
-        log("k=0", arr[-1], calculate_median(arr[:-1]))
+        # log("k=0", arr[-1], calculate_median(arr[:-1]))
         return arr[-1] + calculate_median(arr[:-1])
 
     xrr = [a for a,b in zip(arr, brr) if b == 1]
@@ -122,7 +122,7 @@ def solve_(n, k, arr, brr):
 
     if len(xrr) == 0:
         # no increments allowed
-        log("xrr=0", yrr[-1], calculate_median(yrr[:-1]))
+        # log("xrr=0", yrr[-1], calculate_median(yrr[:-1]))
         return yrr[-1] + calculate_median(yrr[:-1])
 
     qrr = yrr + xrr[:-1]
@@ -147,7 +147,6 @@ def solve_(n, k, arr, brr):
 
     def func(required_median):
         xrr_violating = []
-        yrr_violating = []
 
         allowed_violations = (m-1) // 2  # 1 -> 0, 2 -> 0, 3 -> 1, 4 -> 1, 5 -> 2
 
@@ -171,7 +170,7 @@ def solve_(n, k, arr, brr):
     median = binary_search(func, first=False, target=True, left=0, right=3 * 10**9)
 
     res = maxval + median
-    # log(res, maxval, median)
+    log(res, maxval, median)
 
     maxres = max(maxres, res)
 
