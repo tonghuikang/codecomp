@@ -72,13 +72,13 @@ def solve_(n,m,mrr):
     dist = [n for _ in range(n)]
     dist[0] = 0
 
-    g = [[x+1] for x in range(n)]
-    g[-1] = []
+    g = [[x-1] for x in range(n)]
+    g[0] = []
     for a,b in mrr:
-        g[a].append(b)
+        g[b].append(a)
 
-    queue = deque([0])
-    visited = set([0])
+    queue = deque([n])
+    visited = set([n])
 
     while queue:
         cur = queue.pop()
