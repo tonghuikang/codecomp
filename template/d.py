@@ -70,15 +70,15 @@ def solve_(n,m,mrr):
     # for each island, annotate the losable positions
 
     dist = [n for _ in range(n)]
-    dist[0] = 0
+    dist[n-1] = 0
 
     g = [[x-1] for x in range(n)]
     g[0] = []
     for a,b in mrr:
         g[b].append(a)
 
-    queue = deque([n])
-    visited = set([n])
+    queue = deque([n-1])
+    visited = set([n-1])
 
     while queue:
         cur = queue.pop()
@@ -89,14 +89,26 @@ def solve_(n,m,mrr):
             queue.append(nex)
             dist[nex] = dist[cur] + 1
     
+    log(list(range(n-1,-1,-1)))
     log(dist)
     
+    bitset = 2**n
+    mask = bitset - 1
+
     losing_positions = []
     for i,x in enumerate(dist):
-        losing_positions.append((i-x, i))
+        losing_left = max(0, i-x)
+        losing_right = i
+        winning_left = i + 1
+        winning_right = n - x
+
+        log(i, x)
+        log()
+
 
     log(losing_positions)
         
+    return bin(bitset)[2:]
 
 
 
