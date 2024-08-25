@@ -66,10 +66,31 @@ def minus_one_matrix(mrr):
 def solve_(n, srr):
     # your solution here
 
-    arr = list(srr)
-    arr.sort()
+    c = Counter(list(srr))
+    # vk = [(v,k) for k,v in c.items()]
+    # vk.sort(reverse=True)
 
-    return "".join(arr)
+    # left = []
+    # right = []
+    # for v,k in vk:
+    #     for _ in range(v-1):
+    #         left.append(k)
+    #     right.append(k)
+
+    # arr = left + right[::-1]
+    # return "".join(arr)
+
+
+    res = ""
+    for _ in range(n):
+        for a in abc:
+            if c[a] > 0:
+                res += a
+                c[a] -= 1
+    
+    return res
+
+
 
 
 # for case_num in [0]:  # no loop over test case

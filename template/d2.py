@@ -85,13 +85,14 @@ def get_mex2(arr):
 
 def solve_(n,m,mrr):
     n = sum(len(x) for x in mrr)
+    size = n
     n = min(n, m)
     # your solution here
 
     maxb = 0
 
-    edges = [[] for _ in range(n+10)]
-    starter_to_count = [0 for _ in range(n+10)]
+    edges = [[] for _ in range(size+10)]
+    starter_to_count = [0 for _ in range(size+10)]
     zero_applicable = []
     starters = []
 
@@ -107,9 +108,9 @@ def solve_(n,m,mrr):
         starters.append(a)
         edges[b].append(a)
         
-    maxval = [-1 for _ in range(n+10)]
+    maxval = [-1 for _ in range(size+10)]
 
-    for i in range(n+9,-1,-1):
+    for i in range(size+9,-1,-1):
         # maxval[i] = max(maxval[i], i)
         for prev in edges[i]:
             maxval[prev] = max(maxval[prev], maxval[i], i)
@@ -119,7 +120,7 @@ def solve_(n,m,mrr):
     res = 0
     empties = []
 
-    for i in range(n+10):
+    for i in range(size+10):
         if edges[i] == []:
             empties.append(i)
             continue
@@ -158,6 +159,19 @@ def solve_(n,m,mrr):
 
     return res
 
+
+# import random
+# while True:
+#     n = random.randint(1,20)
+#     m = random.randint(1,100)
+
+#     mrr = []
+#     for _ in range(n):
+#         arr = [random.randint(1,20) for _ in range(random.randint(1,20))]
+#         arr = [len(arr)] + arr
+#         mrr.append(arr)
+
+#     solve(n,m,mrr)
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
