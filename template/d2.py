@@ -84,6 +84,8 @@ def get_mex2(arr):
 
 
 def solve_(n,m,mrr):
+    n = sum(len(x) for x in mrr)
+    n = min(n, m)
     # your solution here
 
     maxb = 0
@@ -134,10 +136,14 @@ def solve_(n,m,mrr):
     for i in range(n+1):
         if edges[i] == -1:
             # empties.append(i)
-            res += max(i, maxempty)
+            val = max(i, maxempty)
+            # log(i, val)
+            res += val
             continue
         
-        res += max(maxempty, edges[i])
+        val = max(maxempty, edges[i])
+        # log(i, val)
+        res += val
 
 
     if m > n:
