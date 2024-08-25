@@ -90,58 +90,65 @@ def solve_(n,m,mrr):
 
     maxb = 0
 
-    edges = [-1 for _ in range(n+10)]
+    edges = [[] for _ in range(n+10)]
+    starter_to_count = [0 for _ in range(n+10)]
     zero_applicable = []
     starters = []
 
     for _, *row in mrr:
         a,b = get_mex2(row)
+        # log(a,b)
         maxb = max(maxb,b)
 
-        if edges[a] != -1:
+        if starter_to_count[a] != 0:
             zero_applicable.append(a)
+        starter_to_count[a] += 1
 
         starters.append(a)
-        edges[a] = max(edges[a], b)
+        edges[b].append(a)
+        
+    maxval = [-1 for _ in range(n+10)]
+
+    for i in range(n+9,-1,-1):
+        # maxval[i] = max(maxval[i], i)
+        for prev in edges[i]:
+            maxval[prev] = max(maxval[prev], maxval[i], i)
+    
+    # log("---")
 
     res = 0
     empties = []
 
-    for i in range(n+1):
-        if edges[i] == -1:
+    for i in range(n+10):
+        if edges[i] == []:
             empties.append(i)
             continue
         
-        cur = i
-        sequence = [cur]
-        while edges[cur] != -1 and edges[cur] != cur:
-            cur = edges[cur]
-            sequence.append(cur)
-        
-        for node in sequence:
-            edges[node] = cur
-
-        # log(i, cur)
+        # # log(i, cur)
 
         # res += cur
 
+    # log(maxval)
+    # log("zero_applicable", zero_applicable)
+
     maxempty = 0
     for x in zero_applicable:
-        maxempty = max(maxempty, edges[x])
+        maxempty = max(maxempty, maxval[x])
 
     for x in starters:
         maxempty = max(maxempty, x)
+
     # log(empties, zero_applicable, maxempty)
 
     for i in range(n+1):
-        if edges[i] == -1:
-            # empties.append(i)
-            val = max(i, maxempty)
-            # log(i, val)
-            res += val
-            continue
+        # if edges[i] == []:
+        #     # empties.append(i)
+        #     val = max(i, maxempty)
+        #     # log(i, val)
+        #     res += val
+        #     continue
         
-        val = max(maxempty, edges[i])
+        val = max(maxval[i], i, maxempty)
         # log(i, val)
         res += val
 
