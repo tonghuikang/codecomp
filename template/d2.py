@@ -88,14 +88,66 @@ def solve_(n,m,mrr):
 
     maxb = 0
 
+    edges = [-1 for _ in range(n+10)]
+    zero_applicable = []
+
     for _, *row in mrr:
         a,b = get_mex2(row)
         maxb = max(maxb,b)
 
-    log(maxb)
-    
-    res = m * (m+1) // 2
-    res += maxb * min(m, maxb) - min(m, maxb) * (min(m, maxb)+1) // 2 + maxb
+        if edges[a] != -1:
+            zero_applicable.append(a)
+
+        edges[a] = max(edges[a], b)
+
+    res = 0
+    empties = []
+
+    for i in range(n+1):
+        if edges[i] == -1:
+            empties.append(i)
+            continue
+        
+        cur = i
+        sequence = [cur]
+        while edges[cur] != -1 and edges[cur] != cur:
+            cur = edges[cur]
+            sequence.append(cur)
+        
+        for node in sequence:
+            edges[node] = cur
+
+        # log(i, cur)
+
+        # res += cur
+
+    maxempty = 0
+    for x in zero_applicable:
+        maxempty = max(maxempty, edges[x])
+    # log(empties, zero_applicable, maxempty)
+
+    for i in range(n+1):
+        if edges[i] == -1:
+            # empties.append(i)
+            res += max(i, maxempty)
+            continue
+        
+        cur = i
+        sequence = [cur]
+        while edges[cur] != -1 and edges[cur] != cur:
+            cur = edges[cur]
+            sequence.append(cur)
+        
+        for node in sequence:
+            edges[node] = cur
+
+        # log(i, cur)
+
+        res += max(maxempty, cur)
+
+
+    if m > n:
+        res += m * (m+1) // 2 - n * (n+1) // 2
 
     return res
 
