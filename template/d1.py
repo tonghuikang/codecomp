@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import math, random
-import functools, itertools, collections, heapq, bisect
-from collections import Counter, defaultdict, deque
 
 input = sys.stdin.readline  # to read input quickly
 
@@ -63,10 +60,44 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def get_mex2(arr):
+    arr = sorted(set(arr))
+
+    hole_one = -1
+    expected = 0
+
+    for x in arr + [999_999_997, 999_999_998, 999_999_999]:
+        if x == expected:
+            expected += 1
+            continue
+        
+        if x != expected and hole_one == -1:
+            hole_one = expected
+            expected += 1
+            if x != expected:
+                return hole_one, expected
+            expected += 1
+            continue
+        if x != expected:
+            return hole_one, expected
+        
+
+
+def solve_(n,m,mrr):
     # your solution here
 
-    return ""
+    maxb = 0
+
+    for _, *row in mrr:
+        a,b = get_mex2(row)
+        maxb = max(maxb,b)
+
+    log(maxb)
+    
+    res = m * (m+1) // 2
+    res += maxb * min(m, maxb) - min(m, maxb) * (min(m, maxb)+1) // 2 + maxb
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,16 +114,16 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    n, m = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
-    # mrr = read_matrix(k)  # and return as a list of list of int
+    mrr = read_matrix(n)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,mrr)  # include input here
 
     # print length if applicable
     # print(len(res))
