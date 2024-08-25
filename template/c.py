@@ -81,14 +81,14 @@ def solve_(n, srr):
     # return "".join(arr)
 
 
-    res = ""
+    res = []
     for _ in range(n):
         for a in abc:
             if c[a] > 0:
-                res += a
+                res.append(a)
                 c[a] -= 1
     
-    return res
+    return "".join(res)
 
 
 
