@@ -242,26 +242,7 @@ def all_nearest_smaller_values(arr):
     return result
 
 
-def rabin_karp(arr, window_size, modulus):
-    # returns the hashes of
-    # [arr[i:i+window_size] for i in range(len(arr) - window_size + 1)]
-    # sample multiple modulus to avoid getting hacked
-    h, t, d = (1 << (17 * window_size - 17)) % modulus, 0, 1 << 17
-    all_hashes = []
-
-    for i in range(window_size):
-        t = (d * t + arr[i]) % modulus
-
-    all_hashes.append(t)
-
-    for i in range(len(arr) - window_size):
-        t = (d * (t - arr[i] * h) + arr[i + window_size]) % modulus
-        all_hashes.append(t)
-
-    return all_hashes
-
-# example of modulus that you can use
-[
+moduluses = [
     1000000007, 1000000009, 1000000021, 1000000033, 1000000087, 
     1000000093, 1000000097, 1000000103, 1000000123, 1000000181, 
     1000000207, 1000000223, 1000000241, 1000000271, 1000000289, 
@@ -273,6 +254,31 @@ def rabin_karp(arr, window_size, modulus):
     1000000829, 1000000861, 1000000871, 1000000891, 1000000901, 
     1000000919, 1000000931, 1000000933, 1000000993, 1000001011
 ]
+import random
+modulus = random.choice(moduluses)
+base = random.randint(100, 200)
+
+# https://leetcode.cn/contest/weekly-contest-415/problems/minimum-number-of-valid-strings-to-form-target-ii/
+
+def get_rabin_karp_prefixes(arr, base=base, modulus=modulus):
+    # returns the hashes of all prefixes
+    # [arr[:i+1] for i in range(len(arr))]
+    mw = 1
+    t = 0
+    all_hashes = [0]
+
+    for i in range(len(arr)):
+        t = (t + arr[i] * mw) % modulus
+        mw = (mw * base) % modulus
+        all_hashes.append(t)
+
+    return all_hashes
+
+
+def get_rabin_karp_hash(prefixes, left, right, base=base, modulus=modulus):
+    hash_value = (prefixes[right] - prefixes[left]) * pow(base, -left, modulus)  # might want to cache
+    return hash_value % modulus
+
 
 def sort_deques(deques):
     # in place sort
