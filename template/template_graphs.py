@@ -306,21 +306,29 @@ def min_cost_flow(map_from_node_to_nodes_and_capcities, demands):
 
 # ---------------------- Aho Corasick ----------------------------------------
 
-from collections import deque, defaultdict
+from collections import deque
+
+# https://leetcode.com/contest/weekly-contest-415/problems/minimum-number-of-valid-strings-to-form-target-ii/
 
 class AhoCorasickNode:
-    def __init__(self):
+    def __init__(self, depth=0):
         # Children nodes: character -> AhoCorasickNode
         self.children = {}
         # Failure link
         self.fail = None
         # Output: list of patterns ending at this node
         self.output = []
+        # Depth of the node in the trie (length of the prefix)
+        self.depth = depth
+        # Optional: To reconstruct the prefix
+        self.parent = None
+        self.char = None
 
 class AhoCorasickAutomaton:
     def __init__(self, keywords):
         """
         Initialize the Aho-Corasick automaton with a list of keywords.
+        It will match all prefixes of each keyword efficiently.
         """
         self.root = AhoCorasickNode()
         self.build_trie(keywords)
@@ -329,14 +337,18 @@ class AhoCorasickAutomaton:
     def build_trie(self, keywords):
         """
         Build the trie structure from the list of keywords.
+        Only full keywords are inserted; prefixes are handled implicitly.
         """
         for keyword in keywords:
             node = self.root
             for char in keyword:
                 if char not in node.children:
-                    node.children[char] = AhoCorasickNode()
+                    new_node = AhoCorasickNode(depth=node.depth + 1)
+                    new_node.parent = node
+                    new_node.char = char
+                    node.children[char] = new_node
                 node = node.children[char]
-            node.output.append(keyword)
+            node.output.append(len(keyword))
 
     def build_failure_links(self):
         """
@@ -344,9 +356,9 @@ class AhoCorasickAutomaton:
         """
         queue = deque()
         # Initialize the queue with root's children
-        for child in self.root.children.values():
-            child.fail = self.root
-            queue.append(child)
+        for child_char, child_node in self.root.children.items():
+            child_node.fail = self.root
+            queue.append(child_node)
 
         while queue:
             current_node = queue.popleft()
@@ -361,28 +373,60 @@ class AhoCorasickAutomaton:
                 # Add child to the queue to process its children
                 queue.append(child_node)
 
-    def search(self, text):
+
+    def search_prefixes(self, text):
         """
-        Search for patterns in the given text.
-        Returns a list of tuples (index, matched_keyword).
+        Search for all prefixes of the keywords in the given text.
+        Returns a list of tuples (start_index, end_index).
         """
         node = self.root
-        results = []
+        full_matches = []
+        max_partial_results = [-1 for _ in text]
+
+        prefix_length = 0  # Length of the current prefix
 
         for index, char in enumerate(text):
-            # Follow the trie edges; if not found, follow failure links
             while node is not None and char not in node.children:
                 node = node.fail
+                # Update prefix_length when following failure links
+                if node:
+                    prefix_length = node.depth
+                else:
+                    prefix_length = 0  # Reset to 0 when failing to root
+
             if node:
                 node = node.children[char]
-                # If there's any pattern that ends here, add it to results
-                for pattern in node.output:
-                    # (end_index, pattern)
-                    results.append((index, pattern))
+                prefix_length = node.depth  # Update prefix length to node's depth
+
+                # Collect matched patterns (full keywords) at this node
+                for len_keyword in node.output:
+                    end_index = index + 1
+                    start_index = end_index - len_keyword
+                    full_matches.append((start_index, end_index))
+                
+                # Collect the maximum prefix indices
+                start_idx = index - prefix_length + 1
+                end_idx = index + 1
+                max_partial_results[start_idx] = end_idx
+
             else:
                 node = self.root  # Restart from root
+                prefix_length = 0  # Reset prefix length
 
-        return results
+        return full_matches, max_partial_results
+
+
+# Example usage:
+if __name__ == "__main__":
+    keywords = ["abc","aaaaa","bcdef"]
+    text = "aabcdabc"
+
+    automaton = AhoCorasickAutomaton(keywords)
+    full_matches, max_partial_results = automaton.search_prefixes(text)
+
+    for start, end in full_matches:
+        print(f"Prefix '{text[start:end]}' found at indices {start} to {end}")
+    print(max_partial_results)
 
 
 # ------------------------ methods using disjoint set ------------------------
