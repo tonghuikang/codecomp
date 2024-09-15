@@ -304,6 +304,87 @@ def min_cost_flow(map_from_node_to_nodes_and_capcities, demands):
     raise NotImplementedError
 
 
+# ---------------------- Aho Corasick ----------------------------------------
+
+from collections import deque, defaultdict
+
+class AhoCorasickNode:
+    def __init__(self):
+        # Children nodes: character -> AhoCorasickNode
+        self.children = {}
+        # Failure link
+        self.fail = None
+        # Output: list of patterns ending at this node
+        self.output = []
+
+class AhoCorasickAutomaton:
+    def __init__(self, keywords):
+        """
+        Initialize the Aho-Corasick automaton with a list of keywords.
+        """
+        self.root = AhoCorasickNode()
+        self.build_trie(keywords)
+        self.build_failure_links()
+
+    def build_trie(self, keywords):
+        """
+        Build the trie structure from the list of keywords.
+        """
+        for keyword in keywords:
+            node = self.root
+            for char in keyword:
+                if char not in node.children:
+                    node.children[char] = AhoCorasickNode()
+                node = node.children[char]
+            node.output.append(keyword)
+
+    def build_failure_links(self):
+        """
+        Build failure links using BFS traversal.
+        """
+        queue = deque()
+        # Initialize the queue with root's children
+        for child in self.root.children.values():
+            child.fail = self.root
+            queue.append(child)
+
+        while queue:
+            current_node = queue.popleft()
+            for char, child_node in current_node.children.items():
+                # Set the failure link for child_node
+                fail_node = current_node.fail
+                while fail_node is not None and char not in fail_node.children:
+                    fail_node = fail_node.fail
+                child_node.fail = fail_node.children[char] if fail_node and char in fail_node.children else self.root
+                # Merge output from failure link
+                child_node.output += child_node.fail.output
+                # Add child to the queue to process its children
+                queue.append(child_node)
+
+    def search(self, text):
+        """
+        Search for patterns in the given text.
+        Returns a list of tuples (index, matched_keyword).
+        """
+        node = self.root
+        results = []
+
+        for index, char in enumerate(text):
+            # Follow the trie edges; if not found, follow failure links
+            while node is not None and char not in node.children:
+                node = node.fail
+            if node:
+                node = node.children[char]
+                # If there's any pattern that ends here, add it to results
+                for pattern in node.output:
+                    # (end_index, pattern)
+                    results.append((index, pattern))
+            else:
+                node = self.root  # Restart from root
+
+        return results
+
+
 # ------------------------ methods using disjoint set ------------------------
 
 
