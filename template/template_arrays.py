@@ -634,10 +634,32 @@ def largest_rectangle_in_histogram(heights):
     return res
 
 
+def prefix_sum_for_matrix(matrix):
+    # each cell at (i,j) is the sum of the submatrix matrix[0:i][0:j] inclusive
+    # untested
+
+    n = len(matrix)
+    m = len(matrix[0])
+    prefix_sum = [[0 for _ in range(m)] for _ in range(n)]
+
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                prefix_sum[i][j] = matrix[i][j]
+            elif j == 0:
+                prefix_sum[i][j] = matrix[i][j] + prefix_sum[i-1][j]
+            elif i == 0:
+                prefix_sum[i][j] = matrix[i][j] + prefix_sum[i][j-1]
+            else:
+                prefix_sum[i][j] = matrix[i][j] + prefix_sum[i-1][j] + prefix_sum[i][j-1] - prefix_sum[i-1][j-1]
+
+    return prefix_sum
+
+
 # ------------------------- standard algorithms -------------------------
 
 
-def z_function(S: list) -> list:
+def z_algorithm(S: list) -> list:
     # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/z_algorithm.py
     # https://cp-algorithms.com/string/z-function.html
     # length of common prefix for S[i:] and S for each i
@@ -661,11 +683,16 @@ def z_function(S: list) -> list:
 
 
 def manachers(S):
+    # Given a sequence, return another sequence of the same length
+    # where each element at i is the length of the longest odd-length palindrome centered at S[i]
+    # [1,2,3,2] -> [1, 1, 3, 1]
     # https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/discuss/1389421/
+    # https://cp-algorithms.com/string/manacher.html
     # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/suffix_array.py
     # https://cp-algorithms.com/string/suffix-array.html
     # if s is a palindrome, s[1:-1] is also a palindrome
-    # length of odd-length palindrome centered at S[i] for each i
+    # if you want the algorithm to work for even length palindrome, add a dummy character in between every character
+
     A = ["@", "#"] + [y for x in zip(S, "#"*len(S)) for y in x] + ["$"]
     Z = [0] * len(A)
     center = right = 0
