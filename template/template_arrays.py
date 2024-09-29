@@ -143,15 +143,21 @@ def is_subsequence(self, s, t) -> bool:
     return False
 
 
-def two_pointers(arr, entry_func, exit_func, condition):
-    # number of subarrays that passes condition
-    # not sure what is going on here
+def two_pointers(n, entry_func, exit_func, condition):
+    # https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/
+    # count number of ranges that passes condition
 
-    nonlocal cnt
-    n = len(arr)
+    # The condition needs to have the following characteristic
+    # if [l, r] passes condition any superset of [l, r] passes the condition
+    
+    # the full range is [0, n-1]
+
     # entry_func(right) -> None
     # exit_func(left) -> None
     # condition() -> bool
+    # NOTE:
+    # - in the functions, you might need to use the nonlocal keyword
+    # - exit_func(left) and entry_func(right) should work for all range(n)
 
     res = 0
     right = 0
@@ -160,36 +166,58 @@ def two_pointers(arr, entry_func, exit_func, condition):
         while right < n and not condition():
             entry_func(right)
             right += 1
-        if condition():  # possible that right == n and not pass
+        if condition():  # possible that [l, n] does not pass condition
             res += n - right + 1
+        else:
+            if right == n:
+                # if [l, n] can't pass, [l+1, n] will not never pass
+                break
         exit_func(left)
     return res
 
 
-# def entry_func(right):
-#     nonlocal cnt
-#     x = nums[right]
-#     prev = cntr[x]
-#     cntr[x] += 1
-#     after = cntr[x]
-#     diff = (after * (after-1) // 2) - (prev * (prev-1) // 2)
-#     cnt += diff
+def count_of_substrings(word: str, k: int) -> int:
+    # sample use of two_pointers
+    # https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/
+    n = len(word)
+    
+    def entry_func(right):
+        nonlocal consonant_counter
+        char = word[right]
+        
+        if char in "aeiou":
+            vowel_counter[char] += 1
+        else:
+            consonant_counter += 1
+    
+    def exit_func(left):
+        nonlocal consonant_counter
+        char = word[left]
+        
+        if char in "aeiou":
+            vowel_counter[char] -= 1
+            if vowel_counter[char] == 0:
+                del vowel_counter[char]
+        else:
+            consonant_counter -= 1
 
-# def exit_func(left):
-#     nonlocal cnt
-#     x = nums[left]
-#     prev = cntr[x]
-#     cntr[x] -= 1
-#     after = cntr[x]
-#     diff = (after * (after-1) // 2) - (prev * (prev-1) // 2)
-#     cnt += diff
+    vowel_counter = defaultdict(int)
+    consonant_counter = 0
+    
+    def condition():
+        return len(vowel_counter) == 5 and consonant_counter >= k
 
-# def condition():
-#     return cnt >= k
-
-# cntr = Counter()
-# cnt = 0
-# res = two_pointers(nums, entry_func, exit_func, condition)
+    include = two_pointers(n, entry_func, exit_func, condition)
+    
+    vowel_counter = defaultdict(int)
+    consonant_counter = 0
+    
+    def condition():
+        return len(vowel_counter) == 5 and consonant_counter > k
+            
+    exclude = two_pointers(n, entry_func, exit_func, condition)
+    
+    return include - exclude
 
 
 def gathering_cost(xpos):
