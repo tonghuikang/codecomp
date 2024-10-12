@@ -296,7 +296,7 @@ def count_numbers_with_at_most_certain_sum_of_digits_and_number_of_digits(n, k):
         return 1
     res = 0
     for n2 in range(n + 1):
-        res += count_numbers_with_certain_sum_of_digits(n2, k)
+        res += count_numbers_with_certain_sum_of_digits_and_number_of_digits(n2, k)
     return res
 
 
@@ -338,10 +338,22 @@ def generate_partitions(n):
         return
         
     # modify partitions of n-1 to form partitions of n
-    for p in partitions(n-1):
+    for p in generate_partitions(n-1):
         yield [1] + p
         if p and (len(p) < 2 or p[1] > p[0]):
             yield [p[0] + 1] + p[1:]
+
+
+@cache
+def stirling2(n, k, m9):
+    # https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind
+    # https://leetcode.com/problems/find-the-number-of-possible-ways-for-an-event
+    # the number of ways to partition a set of n distinguishable objects into k non-empty subsets
+    if n == k:
+        return 1 % m9
+    if n == 0 or k == 0:
+        return 0
+    return (k * stirling2(n-1, k) + stirling2(n-1, k-1)) % m9
 
 
 # ----------------------------- floor sums  -----------------------------
