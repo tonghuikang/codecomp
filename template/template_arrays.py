@@ -406,6 +406,51 @@ def find_equal_subset_sum_subset(arr):
     return left, right
 
 
+
+def replace_value_in_sorted_lists(sorted_lists, old_value, new_value):
+    # You have multiple sorted lists
+    # old_value exists in at least one of the sorted lists
+    # You want to replace the old value with the new value
+    for _, sorted_list in enumerate(sorted_lists):
+        if old_value in sorted_list:
+            # define side effects here
+            sorted_list.remove(old_value)
+            sorted_list.add(new_value)
+            break
+    else:
+        raise
+
+
+def rebalance_sorted_list(left, right, right_size_limit):
+    # You have two sorted containers left and right
+    # You want left[-1] <= right[0] while maximizing len(right) and keeping len(right) <= right_size_limit
+    # https://leetcode.com/contest/weekly-contest-419/problems/find-x-sum-of-all-k-long-subarrays-ii/
+    # https://leetcode.com/problems/find-median-from-data-stream/submissions/1420621341/
+    
+    while left and len(right) < right_size_limit:
+        val = left[-1]
+        del left[-1]
+        # define side effects here
+        right.add(val)
+
+    while len(right) > right_size_limit:
+        val = right[0]
+        del right[0]
+        # define side effects here
+        left.add(val)
+
+    while left and right and left[-1] > right[0]:
+        val = left[-1]
+        del left[-1]
+        # define side effects here
+        right.add(val)
+        
+        val = right[0]
+        del right[0]
+        # define side effects here
+        left.add(val)
+
+
 # ---------------------- longest subsequence or subarray ----------------------
 
 
