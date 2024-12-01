@@ -109,9 +109,9 @@ def is_bipartite(list_of_node_to_nodes):
 # ------------------------ shortest path ------------------------
 
 
-def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
-    # to be tested
-    # no path is produced here
+def shortest_path_unit_cost(map_from_node_to_nodes, source):
+    # shortest path with unit edge costs
+    # https://leetcode.com/problems/maximize-the-number-of-target-nodes-after-connecting-trees-i/
     d = map_from_node_to_nodes
     stack = deque([source])
     visited = {source: 0}
@@ -122,9 +122,8 @@ def shortest_path_constant_cost(map_from_node_to_nodes, source, target):
                 continue
             stack.append(nex)
             visited[nex] = visited[cur] + 1
-            if nex == target:
-                return visited[nex]
-    return sys.maxsize
+            # exit early here if you want to break early on target
+    return visited
 
 
 def dijkstra(list_of_indexes_and_costs, start):
