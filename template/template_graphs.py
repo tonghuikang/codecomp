@@ -667,7 +667,7 @@ def get_forest_sizes(map_from_node_to_nodes):  # UNTESTED
 def find_centroids(map_from_node_to_nodes):  # UNTESTED
     # Centroid of a tree is a node which if removed from the tree would split it into a 'forest',
     # such that any tree in the forest would have at most half the number of vertices in the original tree
-    # the centroids is one or two points that
+    # The centroids could be one or two points
 
     # assumes that input is a tree
     node_to_forest_sizes = get_forest_sizes(map_from_node_to_nodes)
@@ -688,11 +688,43 @@ def find_centroids(map_from_node_to_nodes):  # UNTESTED
     return centroid_candidates
 
 
-def extract_subgraph(map_from_node_to_nodes, source_point, break_point):
-    # dfs starting from the source_point
-    # break at the break point
-    # return pruned graph
-    pass
+def break_tree(map_from_node_to_nodes, break_point):
+    forest = []
+    visited = set([break_point])
+    for start in map_from_node_to_nodes:
+        visited.add(start)
+
+        submap_from_node_to_nodes = {start: []}
+        stack = [start]
+
+        while stack:
+            cur = stack.pop()
+            for nex in map_from_node_to_nodes[cur]:
+                if nex in visited:
+                    continue
+                visited.add(nex)
+                stack.append(nex)
+
+                submap_from_node_to_nodes[cur].append(nex)
+                if nex not in submap_from_node_to_nodes:
+                    submap_from_node_to_nodes[nex] = []
+                submap_from_node_to_nodes[nex].append(cur)
+
+        forest.append(submap_from_node_to_nodes)
+    return forest
+
+
+def centroid_decompose(original_map_from_node_to_nodes):  # UNTESTED
+    maps_from_node_to_nodes = [original_map_from_node_to_nodes]
+
+    while maps_from_node_to_nodes:
+        map_from_node_to_nodes = maps_from_node_to_nodes.pop()
+        centroids = find_centroids(map_from_node_to_nodes)
+        centroid = centroids[0]
+
+        # define function here
+        subtrees = break_tree(map_from_node_to_nodes, centroid)
+        maps_from_node_to_nodes.extend(subtrees)
 
 
 def find_bridges():

@@ -161,6 +161,10 @@ def get_prime_factors_with_precomp_sqrt(num):
     # for numbers below SIZE_OF_PRIME_ARRAY**2
     # O(sqrt(n) / log(n))
 
+    if num == 0:
+        # may need to edit depending on use case
+        return []
+
     if num == 1:
         # may need to edit depending on use case
         return []
