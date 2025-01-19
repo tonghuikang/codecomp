@@ -253,10 +253,9 @@ def gathering_cost(xpos):
     return [gathering_cost_query(xpos, psum, 0, m, len(xpos)-1) for m in range(len(xpos))]
 
 
-def all_nearest_smaller_values(arr):
+def all_nearest_smaller_values(arr: list):
     # https://en.wikipedia.org/wiki/All_nearest_smaller_values
     # https://leetcode.cn/contest/weekly-contest-358/problems/apply-operations-to-maximize-score/
-    # https://poe.com/s/Kc2gVwLTM4hZZJ4EJDOg
     result = [-1 for _ in range(len(arr))]
     stack = []
 
