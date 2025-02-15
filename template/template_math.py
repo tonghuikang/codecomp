@@ -42,7 +42,7 @@ def ceiling_division(numer, denom):
     return -((-numer) // denom)
 
 
-def lcm(a, b):
+def calculate_lcm(a, b):
     # lowest common multiple
     return a * b // math.gcd(a, b)
 

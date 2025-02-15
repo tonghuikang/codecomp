@@ -46,6 +46,37 @@ def binary_search(
         return left - 1
 
 
+def binary_search_float_target(
+    func_,  # condition function
+    first=True,  # else last
+    target=True,  # else False
+    left=0,
+    right=2**31 - 1,
+) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
+
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first ^ target:
+            return not func_(val)
+        return func_(val)
+
+    for _ in range(60):
+        mid = (left + right) / 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid
+    return left
+
+
 def find_peak(func_, minimize=False, left=0, right=2**31 - 1):
     # https://leetcode.com/problems/peak-index-in-a-mountain-array/discuss/139848/
     # find the peak value of a function, assumes that the ends are not peaks
