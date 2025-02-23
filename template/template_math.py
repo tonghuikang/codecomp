@@ -196,10 +196,12 @@ modinv = lambda A, n, s=1, t=0, N=0: (
 )[n < 1]
 
 
-def modinv_p(base, p):
-    # modular inverse if the modulo is a prime
-    return pow(base, -1, p)  # for Python 3.8+
-    # return pow(base, p-2, p)  # if Python version is below 3.8
+def modinv(base, mod):
+    # modular inverse
+    # base must be relatively prime to mod
+    # https://docs.python.org/3/library/functions.html#pow
+    return pow(base, -1, mod)  # for Python 3.8+
+    # return pow(base, mod-2, mod)  # if Python version is below 3.8
 
 
 def chinese_remainder_theorem(divisors, remainders):
@@ -262,6 +264,8 @@ for i in range(1, LARGE + 1):
 ifactorial_mod_p = [1] * (LARGE + 1)
 ifactorial_mod_p[LARGE] = pow(factorial_mod_p[LARGE], p - 2, p)
 for i in range(LARGE - 1, 1, -1):
+    # actually we can just use modinv(factorial_mod_p[r])
+    # but taking modinv only once is faster
     ifactorial_mod_p[i] = ifactorial_mod_p[i + 1] * (i + 1) % p
 
 
@@ -271,6 +275,8 @@ def ncr_mod_p(n, r, p=p):
         return 0
     num = factorial_mod_p[n]
     dem = (ifactorial_mod_p[r] * ifactorial_mod_p[n - r]) % p
+    # for non-prime p, count the prime factors present in the numerator and denominator
+    # https://leetcode.com/problems/check-if-digits-are-equal-in-string-after-operations-ii/
     return (num * dem) % p
 
 
