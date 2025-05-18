@@ -33,31 +33,24 @@ class RangeQuery:
 class LowestCommonAncestor:
     # https://cp-algorithms.com/graph/lca_binary_lifting.html
     # https://leetcode.com/problems/minimum-edge-weight-equilibrium-queries-in-a-tree/
-    def __init__(self, n: int, graph: List[List[int]], root=0):
+    # https://leetcode.com/problems/grid-teleportation-traversal/
+    def __init__(self, n: int, graph: list[list[int]], root=0):
         self.n = n
         self.graph = graph
         self.logn = math.ceil(math.log2(n))
         self.depth = [-1 if i != root else 0 for i in range(n)]
         self.parent = [[-1] * n for _ in range(self.logn)]
 
-        # choose your own distance metric
-        # self.distance = [[0]*26 for _ in range(n)]
-
         self.dfs(root)
         self.doubling()
 
-    def dfs(self, v, p=-1):
+    def dfs(self, v: int, p=-1):
         for e in self.graph[v]:
-            if e[0] == p:
+            if e == p:
                 continue
-            self.parent[0][e[0]] = v
-            self.depth[e[0]] = self.depth[v] + 1
-
-            # choose your own distance metric
-            # self.distance[e[0]] = [x for x in self.distance[v]]
-            # self.distance[e[0]][e[1]] += 1
-
-            self.dfs(e[0], v)
+            self.parent[0][e] = v
+            self.depth[e] = self.depth[v] + 1
+            self.dfs(e, v)
 
     def doubling(self):
         for i in range(self.logn - 1):
@@ -65,7 +58,7 @@ class LowestCommonAncestor:
                 if self.parent[i][v] != -1:
                     self.parent[i + 1][v] = self.parent[i][self.parent[i][v]]
 
-    def get(self, u, v):
+    def get(self, u: int, v: int):
         if self.depth[u] > self.depth[v]:
             u, v = v, u
         for i in range(self.logn):
@@ -77,11 +70,6 @@ class LowestCommonAncestor:
             if self.parent[i][u] != self.parent[i][v]:
                 u, v = self.parent[i][u], self.parent[i][v]
         return self.parent[0][u]
-
-    # choose your own distance metric
-    def distance_between(self, u, v):
-        lca = self.get(u, v)
-        return [x + y - 2 * z for x, y, z in zip(self.distance[u], self.distance[v], self.distance[lca])]
 
 
 # ------------------------------ Binary Lifting ------------------------------
