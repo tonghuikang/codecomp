@@ -170,7 +170,7 @@ class FenwickTree:
     # may need to be implemented again to reduce constant factor
 
     # ALL ELEMENTS ARE TO BE POSITIVE
-    def __init__(self, bits=31):
+    def __init__(self, bits=31):  # NOTE: THIS VALUE CAN TLE
         self.c = defaultdict(int)
         self.LARGE = 2**bits
 
