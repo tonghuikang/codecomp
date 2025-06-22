@@ -40,6 +40,7 @@ class LowestCommonAncestor:
         self.logn = math.ceil(math.log2(n))
         self.depth = [-1 if i != root else 0 for i in range(n)]
         self.parent = [[-1] * n for _ in range(self.logn)]
+        # the immediate parent is self.parent[0][node]
 
         self.dfs(root)
         self.doubling()
@@ -70,48 +71,6 @@ class LowestCommonAncestor:
             if self.parent[i][u] != self.parent[i][v]:
                 u, v = self.parent[i][u], self.parent[i][v]
         return self.parent[0][u]
-
-
-# ------------------------------ Binary Lifting ------------------------------
-
-
-N = 2**20 + 2
-root = 0
-anc = [None for i in range(N)]  # anc[u][k] is (2**k)-th ancestor of u
-anc[root] = [-1] * 20
-anc[-1] = [-1] * 20
-
-
-def buildJumps(u, parent):
-    jumps = [0] * 20
-    jumps[0] = parent
-    for i in range(1, 20):
-        jumps[i] = anc[jumps[i - 1]][i - 1]  # avoided writing into a matrix here
-    anc[u] = jumps
-
-
-def getLast(u, f):
-    # Returns highest node on the path from u to root where f(node) is true.
-    # Assumes f is monotonic and goes from true to false (from node to root)
-    # If all false, returns u.
-    for i in reversed(range(20)):
-        if f(anc[u][i]):  # attempted to jump 2**i up, jumps if non-zero
-            u = anc[u][i]
-    return u
-
-
-import itertools
-
-
-def iterate_all_full_binary_trees(n):
-    # https://stackoverflow.com/a/41617394/5894029
-    if n == 1:
-        yield [1]
-    for split in range(1, n):
-        gen_left = all_possible_trees(split)
-        gen_right = all_possible_trees(n - split)
-        for left, right in itertools.product(gen_left, gen_right):
-            yield [left, right]
 
 
 # ----------------------------------- Trie -----------------------------------
