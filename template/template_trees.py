@@ -13,8 +13,10 @@ MAXINT = sys.maxsize
 
 class RangeQuery:
     # range minimum query, range maximum query, rmq
+    # also known as sparse table
     # https://codeforces.com/contest/1696/submission/161778620
     def __init__(self, data, func=min):
+        # func has to satisfy func(x, x) = x
         # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/graphs/lca.py
         self.func = func
         self._data = _data = [list(data)]
@@ -162,47 +164,6 @@ def count_inversions(perm):
         res += i - cnt
         t.update(x, 1)
     return res
-
-
-def binary_lifting_preprocessing(graph, start_node):
-    # https://atcoder.jp/contests/abc267/submissions/34589213
-    """graph: map or list of node to nodes"""
-
-    ancestors_binary = defaultdict(list)
-    visited = set([start_node])
-    queue = deque([start_node])
-
-    while queue:
-        cur = queue.popleft()
-        for nex in graph[cur]:
-            if nex in visited:
-                continue
-            ancestors_binary[nex].append(cur)
-
-            anc = cur
-            idx = 0
-            while len(ancestors_binary[anc]) >= len(ancestors_binary[nex]):
-                ancestors_binary[nex].append(ancestors_binary[anc][idx])
-                anc = ancestors_binary[anc][idx]
-                idx += 1
-
-            queue.append(nex)
-            visited.add(nex)
-
-    return ancestors_binary
-
-
-def binary_lifting_query(node, height, ancestors_binary):
-    # assumes that the node is at least height deep
-    idx = 0
-    while height:
-        if height & 1:
-            node = ancestors_binary[node][idx]
-        else:
-            pass
-        height = height >> 1
-        idx += 1
-    return node
 
 
 # ----------------------- Self-balancing Trees -----------------------

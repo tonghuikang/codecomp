@@ -126,7 +126,7 @@ def shortest_path_unit_cost(map_from_node_to_nodes, source):
     return visited
 
 
-def dijkstra(list_of_indexes_and_costs, start):
+def dijkstra(list_of_indexes_and_costs: list[list[tuple[int, int]]], start: int):
     # shortest path with nonnegative edge costs
     # leetcode.com/problems/path-with-maximum-probability/
     # leetcode.com/problems/network-delay-time/
@@ -138,17 +138,17 @@ def dijkstra(list_of_indexes_and_costs, start):
     weights[start] = 0
     heapq.heappush(queue, (0, start))
     while queue:
-        g, u = heapq.heappop(queue)
-        if visited[u]:
+        curcost, cur = heapq.heappop(queue)
+        if visited[cur]:
             continue
-        visited[u] = True
-        for v, w in list_of_indexes_and_costs[u]:
-            if not visited[v]:
-                f = g + w
-                if f < weights[v]:
-                    weights[v] = f
-                    path[v] = u
-                    heapq.heappush(queue, (f, v))
+        visited[cur] = True
+        for nex, transition_cost in list_of_indexes_and_costs[cur]:
+            if not visited[nex]:
+                nexcost = curcost + transition_cost
+                if nexcost < weights[nex]:
+                    weights[nex] = nexcost
+                    path[nex] = cur
+                    heapq.heappush(queue, (nexcost, nex))
     return path, weights
 
 
