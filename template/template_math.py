@@ -213,6 +213,17 @@ def chinese_remainder_theorem(divisors, remainders):
     return sum % prod
 
 
+# --------------------- submask ---------------------
+
+def iterate_submasks(mask):
+    """Iterate over all submasks of the given mask"""
+    submask = mask
+    while submask:
+        yield submask
+        submask = (submask - 1) & mask
+    yield 0  # Don't forget the empty submask
+
+
 # --------------------- extended eucliean algorithm ---------------------
 
 
