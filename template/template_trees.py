@@ -124,7 +124,8 @@ class Trie:
 # -------------------------- Fenwick Tree --------------------------
 
 
-class FenwickTree:
+class FenwickTreeSparse:
+    # refer to template/template_sortedlist_c_tourist.py instead
     # also known as Binary Indexed Tree
     # binarysearch.com/problems/Virtual-Array
     # https://leetcode.com/problems/create-sorted-array-through-instructions
