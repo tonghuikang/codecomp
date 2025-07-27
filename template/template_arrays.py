@@ -269,6 +269,41 @@ def all_nearest_smaller_values(arr: list):
     return result
 
 
+def max_xor_sum(nums):
+    # https://leetcode.cn/problems/partition-array-for-maximum-xor-and-and/
+    # linear basis
+    if not nums:
+        return 0
+
+    m = max(nums).bit_length()
+
+    total_xor = 0
+    for num in nums:
+        total_xor ^= num
+    S = total_xor
+
+    new_nums = [x ^ (x & total_xor) for x in nums]
+
+    base = [0] * m
+
+    for x in new_nums:
+        for i in range(m - 1, -1, -1):
+            if (x >> i) & 1:
+                if base[i]:
+                    x ^= base[i]
+                else:
+                    base[i] = x
+                    break
+
+    M = 0
+    for i in range(m - 1, -1, -1):
+        if base[i] and (M ^ base[i]) > M:
+            M ^= base[i]
+
+    # print(nums, S + 2 * M)
+    return S + 2 * M
+
+
 moduluses = [
     1000000007, 1000000009, 1000000021, 1000000033, 1000000087, 
     1000000093, 1000000097, 1000000103, 1000000123, 1000000181, 
