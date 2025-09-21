@@ -819,6 +819,35 @@ def evaluate_expression(data: str) -> Number:
 # evaluate_expression("(3 + 4) * (5 - 6)")
 # evaluate_expression("cos(1 + sin(ln(5) - exp(8))^2)")
 
+# -------------------- linear basis --------------------
+
+
+def max_xor_subsequence(nums: list[int]):
+    # https://leetcode.com/problems/maximum-xor-of-subsequences/
+    # linear basis
+
+    bits = [0 for _ in range(30)]
+    # try to allocate something with MSB of 1
+    
+    for x in nums:
+        for b in range(30-1, -1, -1):
+            # can you build x with the current elements in bits
+            if x & (1 << b):
+                if bits[b] == 0:
+                    # you cannot build x
+                    # so add to elements
+                    bits[b] = x
+                    break
+                x = x ^ bits[b]
+
+    res = 0
+    for x in bits[::-1]:
+        # we try to construct
+        # we greedily choose, starting from element with the largest MSB
+        if res ^ x > res:
+            res = res ^ x
+    return res
+
 
 # -------------------- sprague-grundy function --------------------
 

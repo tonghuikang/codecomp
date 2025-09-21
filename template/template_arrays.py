@@ -803,3 +803,42 @@ def get_palindromic_ranges(s) -> list[list[int]]:
             end -= 1
 
     return bridges
+
+
+class SparseTable:
+    # https://github.com/xile42/codeforces-python/blob/main/templates/sparse_table.py
+    # https://leetcode.com/problems/maximum-total-subarray-value-ii/
+
+    from typing import Union, Tuple
+
+    def __init__(self, arr: list[Union[int, Tuple[int, int]]]) -> None:
+
+        n = len(arr)
+        size = n.bit_length()
+        self.st = [[0] * size for _ in range(n)]
+
+        for i in range(n):
+            self.st[i][0] = arr[i]
+
+        for j in range(1, size):
+            for i in range(n - (1 << j) + 1):
+                self.st[i][j] = self.op(self.st[i][j - 1], self.st[i + (1 << (j - 1))][j - 1])
+
+    def query(self, l: int, r: int) -> int:
+        """ [l, r] """
+        # inclusive
+
+        k = (r - l + 1).bit_length() - 1
+        return self.op(self.st[l][k], self.st[r + 1 - (1 << k)][k])
+
+    def op(self, a: int, b: int) -> int:
+        """ 支持的算子包括: min, max, gcd, &, |, product, lca """
+
+        raise NotImplementedError
+
+
+class MinSparseTable(SparseTable):
+
+    def op(self, a: int, b: int) -> int:
+
+        return a if a < b else b  # 手写min以提高效率
