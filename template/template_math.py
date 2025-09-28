@@ -437,6 +437,8 @@ def matrix_multiply_mod(A, B, mod):
 
 def matrix_power_mod(matrix, exponent, mod):
     # raise a square matrix to a certain power
+    # matrix exponentation
+    # there is a way to do eigen decomposition with np.linalg.eig
     n = len(matrix)
     
     # create the identity matrix
@@ -452,6 +454,55 @@ def matrix_power_mod(matrix, exponent, mod):
         else:
             matrix = matrix_multiply_mod(matrix, matrix, mod)
             exponent //= 2
+
+    return result
+
+
+import numpy as np
+def matrix_power_mod_diagonalizable(matrix, exponent, mod):
+    # requires diagonalizable input
+    # M = PDP^-1
+    # not tested
+
+    n = len(matrix)
+    if n == 0:
+        return []
+
+    if exponent == 0:
+        identity = [[0] * n for _ in range(n)]
+        for i in range(n):
+            identity[i][i] = 1 % mod
+        return identity
+
+    mat = np.array(matrix, dtype=np.complex128)
+    eigenvalues, eigenvectors = np.linalg.eig(mat)
+
+    if np.linalg.matrix_rank(eigenvectors) < n:
+        raise ValueError("matrix is not diagonalizable")
+
+    cond = np.linalg.cond(eigenvectors)
+    if not np.isfinite(cond) or cond > 1e11:
+        raise ValueError("eigenvector matrix is ill-conditioned")
+
+    diag_power = np.diag(np.power(eigenvalues, exponent))
+
+    try:
+        inv_vectors = np.linalg.inv(eigenvectors)
+    except np.linalg.LinAlgError as exc:
+        raise ValueError("failed to invert eigenvector matrix") from exc
+
+    result_np = eigenvectors @ diag_power @ inv_vectors
+
+    if np.max(np.abs(result_np.imag)) > 1e-6:
+        raise ValueError("complex round-off too large")
+
+    result = []
+    for i in range(n):
+        row = []
+        for j in range(n):
+            val = int(np.round(result_np[i, j].real)) % mod
+            row.append(val)
+        result.append(row)
 
     return result
 
