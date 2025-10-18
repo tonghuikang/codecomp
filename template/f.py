@@ -63,21 +63,50 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    # A chooses what is 
+    # B chooses what is
+
+    # if end with A, A wins
+    # if end with AAB, A wins
+    # if there is contiguous A with more than how many B on the right, A wins
+    # if there is a partition where there are more A than B on the right, A wins
+
+    # A will choose a place where
+    # the length of suffix A is longer than any contiguous B
+    # 
+    # BB(A)AAAAAA|BBBB(B)
+    # consider longest contiguous
+    
+    a_count = arr.count(1)
+    b_count = arr.count(0)
+
+    if a_count > b_count:
+        return "Alice"
+
+    for i,x in enumerate(arr):
+        if x == 1:
+            a_count -= 1
+        else:
+            b_count -= 1
+        if a_count > b_count:
+            return "Alice"
+
+    return "Bob"
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
-    # srr = input().strip()
+    srr = input().strip()
+    arr = [1 if x == "A" else 0 for x in srr]
 
     # read one line and parse each word as a string
     # arr = input().split()
@@ -92,7 +121,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -103,6 +132,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
