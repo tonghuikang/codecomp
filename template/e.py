@@ -63,17 +63,35 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    c = Counter()
+    curxorsum = 0
+    c[curxorsum] = 1
+
+    res = 0
+    for pos,x in enumerate(arr, start=1):
+        curxorsum = curxorsum ^ x
+        count = c[curxorsum]
+
+        include = (pos * (pos + 1)) // 2
+        exclude = (count * (count + 1)) // 2
+        val = include - exclude
+
+        # print(pos, count, include, exclude, val)
+        
+        res += val
+        c[curxorsum] += 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,7 +102,7 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +110,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -103,6 +121,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
