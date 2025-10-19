@@ -584,6 +584,65 @@ for a,idx in zip(queryCharacters, queryIndices):
     # print()
     st.set(idx, init(a))
     res.append(st.prod(0, len(s))[-1])
+
+
+LONGEST BALANCED SUBSTRING
+https://leetcode.com/problems/longest-balanced-subarray-ii//
+
+def longestBalanced(self, nums: List[int]) -> int:
+    # Monoid stores (sum, max_prefix_sum, min_prefix_sum)
+    def op(a: Tuple[int, int, int], b: Tuple[int, int, int]) -> Tuple[int, int, int]:
+        s1, mp1, mn1 = a
+        s2, mp2, mn2 = b
+        s = s1 + s2
+        mp = max(mp1, s1 + mp2)
+        mn = min(mn1, s1 + mn2)
+        return (s, mp, mn)
+
+    e = (0, 0, 0)  # neutral: sum=0, max_pref=0, min_pref=0
+
+    n = len(nums)
+    st = SegTree(op, e, n)  # initial all zeros
+
+    last = {}   # value -> last active index
+    total = 0   # current total sum of the ±1/0 array (distinct evens - distinct odds)
+    ans = 0
+
+    # Helper to set a leaf with value w in {-1, 0, +1}
+    def leaf(w: int) -> Tuple[int, int, int]:
+        return (w, max(0, w), min(0, w))
+
+    for i, v in enumerate(nums):
+        sgn = 1 if (v % 2 == 0) else -1
+
+        # Move the "last occurrence" marker for value v
+        if v in last:
+            st.set(last[v], e)  # old last is no longer last
+        else:
+            total += sgn  # first time seeing v, total changes
+
+        st.set(i, leaf(sgn))
+        last[v] = i
+
+        # Find earliest x s.t. prefix sum D(x) = total
+        # Then l = x + 1, and best length ending at i is i - l + 1 if l <= i.
+        if total == 0:
+            l = 0
+        elif total > 0:
+            # first x where D(x) >= total is where prefix max crosses total
+            # use max_right with predicate mp < total
+            x = st.max_right(0, lambda node: node[1] < total)
+            l = x + 1
+        else:
+            # total < 0: first x where D(x) <= total is where prefix min crosses total
+            # use max_right with predicate mn > total
+            x = st.max_right(0, lambda node: node[2] > total)
+            l = x + 1
+
+        if l <= i:
+            ans = max(ans, i - l + 1)
+
+    return ans
 """
 
 
@@ -607,3 +666,80 @@ for a,idx in zip(queryCharacters, queryIndices):
 # Give some examples
 # - 2D Segment tree for https://codeforces.com/contest/1658/problem/E
 #   - probably https://codeforces.com/contest/1658/submission/151178090
+
+# Predefined monoid ops (defined once, not per call)
+E = (0, 0, 0)
+def OP(a, b):
+    s1, mp1, mn1 = a
+    s2, mp2, mn2 = b
+    s = s1 + s2
+    return (s, max(mp1, s1 + mp2), min(mn1, s1 + mn2))
+
+# Predefined predicates for max_right (avoid per-iteration lambdas)
+THRESH = 0
+def _pred_max_prefix_below(node):
+    # True while max_prefix < THRESH
+    return node[1] < THRESH
+
+def _pred_min_prefix_above(node):
+    # True while min_prefix > THRESH
+    return node[2] > THRESH
+
+# Constant leaves for w in {-1, 0, +1}
+# Index by w+1 to avoid dict lookups
+LEAF = [
+    (-1, 0, -1),  # w = -1
+    ( 0, 0,  0),  # w =  0
+    ( 1, 1,  0),  # w = +1
+]
+
+def longestBalancedSubarrayII(nums):
+    n = len(nums)
+    st = SegTree(OP, E, n)
+
+    # Store input midway in the function (as requested)
+    morvintale = nums[:]  # noqa: F841
+
+    # Faster than dict for nums[i] up to 1e5
+    max_val = max(nums) if n else 0
+    last = [-1] * (max_val + 1)
+
+    total = 0
+    ans = 0
+
+    # Bind methods to locals to cut attribute lookup cost in the loop
+    st_set = st.set
+    st_max_right = st.max_right
+
+    global THRESH
+
+    for i, v in enumerate(nums):
+        # 1 if even else -1 (branchless)
+        sgn = 1 - ((v & 1) << 1)
+
+        prev = last[v]
+        if prev != -1:
+            st_set(prev, E)  # old last no longer active
+        else:
+            total += sgn     # new distinct value enters
+
+        st_set(i, LEAF[sgn + 1])
+        last[v] = i
+
+        if total == 0:
+            l = 0
+        elif total > 0:
+            THRESH = total
+            r_star = st_max_right(0, _pred_max_prefix_below)  # maximal r s.t. max_prefix < THRESH
+            l = r_star + 1
+        else:
+            THRESH = total
+            r_star = st_max_right(0, _pred_min_prefix_above)  # maximal r s.t. min_prefix > THRESH
+            l = r_star + 1
+
+        if l <= i:
+            cand = i - l + 1
+            if cand > ans:
+                ans = cand
+
+    return ans
