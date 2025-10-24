@@ -63,17 +63,55 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, arr):
     # your solution here
 
-    return ""
+    # is there even a choice here
+    # decreasing early number is not an issue
+
+    # decrease earliest odd number to 1
+    # decrease earliest even number to 2
+
+    # initial entanglement (x+2, x+1, x+0)
+
+    entanglement = defaultdict(list)
+    for x in range(2, n):
+        entanglement[x].append((x-1, x-2))
+
+    val_to_idx = {val: idx for idx, val in enumerate(arr)}
+
+    # 4 3 2 1
+    # 2 4 3 1  (4 3 1 is entangled)
+
+    for x_idx in range(n):
+        while True:
+            x = arr[x_idx]
+            for y,z in entanglement[x]:
+                y_idx = val_to_idx[y]
+                z_idx = val_to_idx[z]
+                if y_idx > x_idx and z_idx > x_idx:
+                    x, y, z = min(y,z), x if y > z else z, x if y < z else y
+
+                    arr[x_idx] = x
+                    arr[y_idx] = y
+                    arr[z_idx] = z
+
+                    val_to_idx[x] = x_idx
+                    val_to_idx[y] = y_idx
+                    val_to_idx[z] = z_idx
+
+                    break
+            else:
+                break
+    return arr
+
 
 
 # for case_num in [0]:  # no loop over test case
 # for case_num in range(100):  # if the number of test cases is specified
 for case_num in range(int(input())):
     # read line as an integer
-    # n = int(input())
+    n = int(input())
     # k = int(input())
 
     # read line as a string
@@ -84,21 +122,21 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
-    # arr = minus_one(arr)
+    arr = list(map(int,input().split()))
+    arr = minus_one(arr)
 
     # read multiple rows
     # arr = read_strings(k)  # and return as a list of str
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
 
     # parse result
-    # res = " ".join(str(x) for x in res)
+    res = " ".join(str(x + 1) for x in res)
     # res = "\n".join(str(x) for x in res)
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 

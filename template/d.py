@@ -66,6 +66,22 @@ def minus_one_matrix(mrr):
 def solve_():
     # your solution here
 
+    # baseline solution
+    # scan for each bit and count how many match
+    # infer based on what is missing
+
+    # eliminate possible numbers - can't be a certain number
+    # - the last number can't be 1 if somewhere else is 1
+    # - to prove a number is 1, take the complement
+    # you have two ops per number
+    # there should be a cycle
+    # possible numbers to start with 1, n, 2^log(n) - 1
+
+    # to prove that a number is x, I need two ops x and x-complement (n is not power of two)
+    # to even prove that last number is a certain number, I already need 2n to prove all other numbers are not x
+
+
+
     return ""
 
 

@@ -63,10 +63,51 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n, k, arr):
     # your solution here
 
-    return ""
+    # operations
+    # remove an element
+    # break down into three, remove middle
+
+    # cannot binary search?
+    # WLOG just take GCD of everyone first
+
+    # observation
+    # can break into any number smaller than 4x the number
+    # you will never split twice
+    # you will never split and then delete
+    # for each possible number, count how many more under 4x that is not a multiple
+    # numbers that don't appear could be possible number
+
+    c = Counter(arr)
+    possible_nums = set(c.keys())
+
+    for x in c.keys():
+        possible_nums.add(x // 4)
+        possible_nums.add(x // 3)
+        possible_nums.add(x // 2)
+
+    # gcd = arr[0]
+    # if k == 0:
+    #     for x in arr:
+    #         gcd = math.gcd(gcd, x)
+    #     return gcd
+
+    maxres = 1
+
+    for x in sorted(possible_nums):
+        if x == 0:
+            continue
+        count = n - bisect.bisect_left(arr, 4*x)
+        # print(x, count)
+        count += c[x] + c[2*x] + c[3*x]
+        # print(x, count)
+        if count >= n - k:
+            res = x
+            maxres = max(maxres, res)
+
+    return maxres
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,8 +124,10 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n, k = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    arr.sort()
+    # print(sorted(arr))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +135,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n, k, arr)  # include input here
 
     # print length if applicable
     # print(len(res))
