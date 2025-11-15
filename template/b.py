@@ -108,7 +108,7 @@ def solve_(n,m,arr,brr):
 
     # how do the types matter here?
     # each competitor can only receive one merch type
-    
+
     # everyone not getting rewarded is a solution
 
     # same score, same number of merchandise (distinct types)
@@ -116,38 +116,61 @@ def solve_(n,m,arr,brr):
     # binary search on the minimum score recieving prizes
     # build the demand curve
 
+    # transform availability to packages of distinct gifts
+    # each valid competitor will choose from the package of distinct gifts
+    # remainder package can be throw back to the pool
+    # you cannot combine multiple distinct packages to satisfy your demand
+    # - edge cases?
+    # supply 7 1 (2 1x6)
+    # - demand 2 2 2 2 - cannot - but actually can
+    # supply 3 1 (2 1 1)
+    # - demand 2 2 - cannot - but actually can
+    # supply 4 1
+    # - demand 3 2 - cannot
+    # supply 4 1
+    # - demand 2 2 - can
+
+    # transform available to packages of distinct gifts
+    brr = brr[::-1]
+    packages = [0]
+    for x in brr:
+        packages.append(len(brr))
+
+
     cntr = sorted(Counter(arr).items(), reverse=True)
     competitors = [v for k,v in cntr]  # discard k
     del cntr
 
     def func(idx):
 
-        demand_curve = []
-        prev_v = 0
-        for v in competitors[:idx]:
-            demand_curve.append(prev_v + v)
-            prev_v += v
-
-        # print(competitors[:idx], demand_curve)
-
-        demand_curve = [-x for x in demand_curve]
-        heapq.heapify(demand_curve)
-
+        # positive_demand_curve = []
+        # prev_v = 0
+        # for v in competitors[:idx]:
+        #     positive_demand_curve.append(prev_v + v)
+        #     prev_v += v
+            
         available = [x for x in brr]
-        while demand_curve and available:
-            avail = available.pop()
-            demand = -heapq.heappop(demand_curve)
-            deduct = min(avail, demand)
-            remaining = demand - deduct
-            if remaining > 0:
-                heapq.heappush(demand_curve, -remaining)
 
-        if demand_curve:
-            return False
+        for demand, num_competitors in reversed(list(enumerate(competitors[:idx][::-1], start=1))):
+            # print(demand, num_competitors)
+            for _ in range(num_competitors):
+        
+                if demand > len(available):
+                    return False
+            
+                available.sort(reverse=True)
+                for i in range(demand):
+                    available[i] -= 1
+                
+                available = [x for x in available if x]
+
         return True
+
+
 
     # for idx in range(len(competitors) + 1):
     #     print(idx, func(idx))
+    #     print()
 
     if func(len(competitors)):
         return sum(competitors)
@@ -173,10 +196,10 @@ for case_num in range(int(input())):
 
     # read one line and parse each word as an integer
     n,m = list(map(int,input().split()))
-    arr = list(map(int,input().split()))
-    brr = list(map(int,input().split()))
-    arr.sort()
-    brr.sort()
+    xrr = list(map(int,input().split()))
+    yrr = list(map(int,input().split()))
+    xrr.sort()
+    yrr.sort()
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -184,7 +207,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve(n,m,arr,brr)  # include input here
+    res = solve(n,m,xrr,yrr)  # include input here
 
     # print length if applicable
     # print(len(res))
