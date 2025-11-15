@@ -62,9 +62,34 @@ def minus_one_matrix(mrr):
 
 # ---------------------------- template ends here ----------------------------
 
+# A unrewarded competitor will be unhappy if:
+# any other competitor with equal or lower score receives any merchandise at all.
 
-def solve_():
-    # your solution here
+# A rewarded competitor will be unhappy if either:
+# any other competitor of strictly lower score receives equal or more units of merchandise, or
+# any other competitor with equal score receives more units of merchandise.
+
+def solve_(n,m,arr,brr):
+    # maximize competitors rewarded
+
+    # how do the types matter here?
+    # each competitor can only receive one merch type
+    
+    # everyone not getting rewarded is a solution
+
+    # same score, same number of merchandise (distinct types)
+
+    # binary search on the minimum score recieving prizes
+    # build the demand curve
+
+    demand_curve = []
+    prev_v = 0
+    for _,v in sorted(Counter(arr).items()):
+        demand_curve.append(prev_v + v)
+        prev_v += v
+    print(demand_curve)
+
+
 
     return ""
 
@@ -83,8 +108,11 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
+    brr = list(map(int,input().split()))
+    arr.sort()
+    brr.sort()
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +120,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,arr,brr)  # include input here
 
     # print length if applicable
     # print(len(res))
