@@ -149,12 +149,33 @@ def solve_(n,m,arr,brr):
             positive_demand_curve.append(prev_v + v)
             prev_v += v
             
+        positive_demand_curve = positive_demand_curve[::-1]
         available = [x for x in brr]
 
-        log(available)
-        log(positive_demand_curve)
+        # log()
+        # log(positive_demand_curve)
+        # log(available)
 
-        return False
+        # iterate over the supply, collapse the demand
+
+        carryover_demand = 0
+        for demand in positive_demand_curve:
+            demand += carryover_demand
+            if demand == 0:
+                continue
+            if not available:
+                # log("False")
+                return False
+            avail = available.pop()
+            deduct = min(demand, avail)
+            carryover_demand = demand - deduct
+        
+        if carryover_demand > sum(available): 
+            # log("False")
+            return False
+
+        # log("True")
+        return True
 
 
 
