@@ -66,17 +66,26 @@ def minus_one_matrix(mrr):
 def solve_(n,m):
     # your solution here
 
-    if n < 2:
-        # 2 of more points not possible
-        return "NO"
+    # if n < 2:
+    #     # 2 of more points not possible
+    #     return "NO"
 
-    if n == m:
-        # all points won by one
-        return "YES"
+    # if n == m:
+    #     # all points won by one
+    #     return "YES"
 
-    if n == m:
-        # not enough to make margin
+    if m <= n <= 2 * m - 2:
+        b = m
+        a = n - b
+        assert a + b == n
+        assert b >= m
+        assert b - a >= 2
         return "YES"
+        
+
+    # if n == m:
+    #     # not enough to make margin
+    #     return "YES"
 
     if n % 2 == 1:
         # n - 2 has to be even
@@ -89,6 +98,7 @@ def solve_(n,m):
 
     assert a + b == n
     assert b >= m
+    assert b - a >= 2
     # print(a,b)
     # draw until someone wins the last two points
 
