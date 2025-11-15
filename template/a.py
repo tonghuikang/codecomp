@@ -82,8 +82,13 @@ def solve_(n,m):
         # n - 2 has to be even
         return "NO"
     
-    # a = (n - 2) // 2
-    # b = a + 2
+    a = (n - 2) // 2
+    b = a + 2
+    if b < m:
+        return "NO"
+
+    assert a + b == n
+    assert b >= m
     # print(a,b)
     # draw until someone wins the last two points
 
