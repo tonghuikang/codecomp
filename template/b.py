@@ -116,7 +116,7 @@ def solve_(n,m,arr,brr):
     # binary search on the minimum score recieving prizes
     # build the demand curve
 
-    cntr = sorted(Counter(arr).items())
+    cntr = sorted(Counter(arr).items(), reverse=True)
     competitors = [v for k,v in cntr]  # discard k
     del cntr
 
@@ -124,11 +124,11 @@ def solve_(n,m,arr,brr):
 
         demand_curve = []
         prev_v = 0
-        for v in competitors[idx:]:
-            demand_curve.append((len(demand_curve) + 1) * v)
+        for v in competitors[:idx]:
+            demand_curve.append(prev_v + v)
             prev_v += v
 
-        # print(competitors[idx:], demand_curve)
+        # print(competitors[:idx], demand_curve)
 
         demand_curve = [-x for x in demand_curve]
         heapq.heapify(demand_curve)
@@ -149,9 +149,12 @@ def solve_(n,m,arr,brr):
     # for idx in range(len(competitors) + 1):
     #     print(idx, func(idx))
 
-    cntr_idx = binary_search(func, first=True, target=True, left=0, right=len(competitors))
+    if func(len(competitors)):
+        return sum(competitors)
 
-    awarded = competitors[cntr_idx:]
+    cntr_idx = binary_search(func, first=False, target=True, left=0, right=len(competitors))
+
+    awarded = competitors[:cntr_idx]
     return sum(awarded)
 
 
