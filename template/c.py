@@ -63,10 +63,37 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m,arr):
     # your solution here
 
-    return ""
+    # knapsack, cumsum
+    
+    costs = list(range(1, n+1))
+    values = []
+    for i in range(n):
+        value = 0
+        for j in range(i+1):
+            value += arr[j]
+        values.append(value)
+    
+    # print(values)
+
+    # you can select multiple of the same item
+    # choose to reach M but minimize N
+    
+    # print(list(zip(costs, values)))
+
+    items = [(-b/a, b, a) for a,b in zip(costs, values)]
+    
+    res = 0
+    for a,b,c in items:  # ratio, value, cost
+        count = m // b
+        m -= count * b
+        res += c * count
+    if m > 0:
+        res += 1
+
+    return res
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,8 +110,8 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
-    # arr = list(map(int,input().split()))
+    n,m = list(map(int,input().split()))
+    arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
     # read multiple rows
@@ -92,7 +119,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(n,m,arr)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -103,6 +130,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
