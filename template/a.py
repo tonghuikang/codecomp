@@ -87,13 +87,15 @@ def solve_(n,m):
     #     # not enough to make margin
     #     return "YES"
 
-    if n % 2 == 1:
-        # n - 2 has to be even
-        return "NO"
+    # if n % 2 == 1:
+    #     # n - 2 has to be even
+    #     return "NO"
     
     a = (n - 2) // 2
     b = a + 2
     if b < m:
+        return "NO"
+    if a + b != n:
         return "NO"
 
     assert a + b == n
