@@ -69,6 +69,40 @@ def minus_one_matrix(mrr):
 # any other competitor of strictly lower score receives equal or more units of merchandise, or
 # any other competitor with equal score receives more units of merchandise.
 
+def binary_search(
+    func_,  # condition function
+    first=True,  # else last
+    target=True,  # else False
+    left=0,
+    right=2**31 - 1,
+) -> int:
+    # https://leetcode.com/discuss/general-discussion/786126/
+    # ASSUMES THAT THERE IS A TRANSITION
+    # MAY HAVE ISSUES AT THE EXTREMES
+
+    def func(val):
+        # if first True or last False, assume search space is in form
+        # [False, ..., False, True, ..., True]
+
+        # if first False or last True, assume search space is in form
+        # [True, ..., True, False, ..., False]
+        # for this case, func will now be negated
+        if first ^ target:
+            return not func_(val)
+        return func_(val)
+
+    while left < right:
+        mid = (left + right) // 2
+        if func(mid):
+            right = mid
+        else:
+            left = mid + 1
+    if first:  # find first True
+        return left
+    else:  # find last False
+        return left - 1
+
+
 def solve_(n,m,arr,brr):
     # maximize competitors rewarded
 
@@ -82,16 +116,43 @@ def solve_(n,m,arr,brr):
     # binary search on the minimum score recieving prizes
     # build the demand curve
 
-    demand_curve = []
-    prev_v = 0
-    for _,v in sorted(Counter(arr).items()):
-        demand_curve.append(prev_v + v)
-        prev_v += v
-    print(demand_curve)
+    cntr = sorted(Counter(arr).items())
+    competitors = [v for k,v in cntr]  # discard k
+    del cntr
 
+    def func(idx):
 
+        demand_curve = []
+        prev_v = 0
+        for v in competitors[idx:]:
+            demand_curve.append((len(demand_curve) + 1) * v)
+            prev_v += v
 
-    return ""
+        # print(competitors[idx:], demand_curve)
+
+        demand_curve = [-x for x in demand_curve]
+        heapq.heapify(demand_curve)
+
+        available = [x for x in brr]
+        while demand_curve and available:
+            avail = available.pop()
+            demand = -heapq.heappop(demand_curve)
+            deduct = min(avail, demand)
+            remaining = demand - deduct
+            if remaining > 0:
+                heapq.heappush(demand_curve, -remaining)
+
+        if demand_curve:
+            return False
+        return True
+
+    # for idx in range(len(competitors) + 1):
+    #     print(idx, func(idx))
+
+    cntr_idx = binary_search(func, first=True, target=True, left=0, right=len(competitors))
+
+    awarded = competitors[cntr_idx:]
+    return sum(awarded)
 
 
 # for case_num in [0]:  # no loop over test case
@@ -131,6 +192,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
