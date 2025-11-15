@@ -63,10 +63,31 @@ def minus_one_matrix(mrr):
 # ---------------------------- template ends here ----------------------------
 
 
-def solve_():
+def solve_(n,m):
     # your solution here
 
-    return ""
+    if n < 2:
+        # 2 of more points not possible
+        return "NO"
+
+    if n == m:
+        # all points won by one
+        return "YES"
+
+    if n == m:
+        # not enough to make margin
+        return "YES"
+
+    if n % 2 == 1:
+        # n - 2 has to be even
+        return "NO"
+    
+    # a = (n - 2) // 2
+    # b = a + 2
+    # print(a,b)
+    # draw until someone wins the last two points
+
+    return "YES"
 
 
 # for case_num in [0]:  # no loop over test case
@@ -83,7 +104,7 @@ for case_num in range(int(input())):
     # arr = input().split()
 
     # read one line and parse each word as an integer
-    # a,b,c = list(map(int,input().split()))
+    a,b = list(map(int,input().split()))
     # arr = list(map(int,input().split()))
     # arr = minus_one(arr)
 
@@ -92,7 +113,7 @@ for case_num in range(int(input())):
     # mrr = read_matrix(k)  # and return as a list of list of int
     # mrr = minus_one_matrix(mrr)
 
-    res = solve()  # include input here
+    res = solve(a,b)  # include input here
 
     # print length if applicable
     # print(len(res))
@@ -103,6 +124,6 @@ for case_num in range(int(input())):
     # res = "\n".join(" ".join(str(x) for x in row) for row in res)
 
     # print result
-    # print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
+    print("Case #{}: {}".format(case_num+1, res))   # Google and Facebook - case number required
 
-    print(res)
+    # print(res)
