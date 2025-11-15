@@ -143,28 +143,18 @@ def solve_(n,m,arr,brr):
 
     def func(idx):
 
-        # positive_demand_curve = []
-        # prev_v = 0
-        # for v in competitors[:idx]:
-        #     positive_demand_curve.append(prev_v + v)
-        #     prev_v += v
+        positive_demand_curve = []
+        prev_v = 0
+        for v in competitors[:idx]:
+            positive_demand_curve.append(prev_v + v)
+            prev_v += v
             
         available = [x for x in brr]
 
-        for demand, num_competitors in reversed(list(enumerate(competitors[:idx][::-1], start=1))):
-            # print(demand, num_competitors)
-            for _ in range(num_competitors):
-        
-                if demand > len(available):
-                    return False
-            
-                available.sort(reverse=True)
-                for i in range(demand):
-                    available[i] -= 1
-                
-                available = [x for x in available if x]
+        log(available)
+        log(positive_demand_curve)
 
-        return True
+        return False
 
 
 
