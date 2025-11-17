@@ -663,6 +663,98 @@ def basic_calculator(s):
     return sum(stack)
 
 
+def calculator_with_variable(string: str) -> list[list[str | int]]:
+    # Input (a + b * c) * (d - 2)
+    # Output [['d', 'a'], ['d', 'c', 'b'], [-1, '2', 'a'], [-1, '2', 'c', 'b']]
+    # Supports () *+- and variables
+    # 2^n runtime - consider (a + b) * (c + d) * etc
+    # https://leetcode.cn/problems/basic-calculator-iv/
+    # https://www.lihaoyi.com/post/HowtoconductagoodProgrammingInterview.html#prepare-multi-stage-tasks
+    
+    # general design ideas
+    # - isolate operations - cross_multiply
+    # - break down the string (everything in the brackets can be evaluated elsewhere)
+    # - the string is given in ["+", a, +, b, *, c], you are processing in [a, "+", b, +, c, *]
+    # - think of how to debug part by part
+    # - pragmatism - no point resolving within substring the complexity is exponential anyway
+    
+    def cross_multiply(terms_1: list[list[str | int]], terms_2: list[list[str | int]]):
+        cross_terms = []
+        for term_1 in terms_1:
+            for term_2 in terms_2:
+                cross_terms.append(term_1 + term_2)
+        return cross_terms
+    
+    list_of_terms: list[list[list[str | int]]] = []   # addition of addition of multiplicate terms
+    current_operation = "+"
+    current_variable = ""
+    string_idx = 0
+    string = string + "#"  # to end
+    while string_idx < len(string):
+        char = string[string_idx]
+        
+        if char == " ":
+            string_idx += 1
+            continue
+    
+        if char.isalpha() or char.isdigit():
+            # assume that there is no "+ -1"
+            current_variable += char
+            string_idx += 1
+            continue
+        
+        if current_variable:
+            list_of_terms.append([[current_variable]])
+            current_variable = ""
+            # close the variable, continue with the logic
+
+        if char == "(":
+            # find the closing ")"
+            left_idx = string_idx
+            net_open_bracket = 0
+            
+            while string_idx < len(string):
+                search_char = string[string_idx]
+                if search_char == "(":
+                    net_open_bracket += 1
+                if search_char == ")":
+                    net_open_bracket -= 1
+                if net_open_bracket == 0:
+                    break
+                string_idx += 1
+            
+            list_of_terms.append(calculator_with_variable(string[left_idx+1:string_idx]))
+            string_idx += 1
+            continue
+
+        if char in "+-*#":
+            # before we start the next operation
+            # we run the previous operation
+            # and update the current operation
+            if current_operation == "+":
+                pass
+            if current_operation == "-":
+                list_of_terms[-1] = cross_multiply([[-1]], list_of_terms[-1])
+            if current_operation == "*":
+                list_of_terms.append(cross_multiply(list_of_terms.pop(), list_of_terms.pop()))
+            current_operation = char
+            string_idx += 1
+
+            continue
+        
+        raise ValueError
+    
+    # convert addition of addition of multiplicate terms
+    # to addition of multiplicate terms
+
+    addition_terms = []
+    for terms in list_of_terms:
+        for term in terms:
+            addition_terms.append(term)
+
+    return addition_terms
+
+
 # ------------------ expression parsing with eval ------------------
 
 
