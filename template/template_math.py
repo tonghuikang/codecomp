@@ -672,10 +672,11 @@ def calculator_with_variable(string: str) -> list[list[str | int]]:
     # https://www.lihaoyi.com/post/HowtoconductagoodProgrammingInterview.html#prepare-multi-stage-tasks
     
     # general design ideas
-    # - isolate operations - cross_multiply
-    # - break down the string (everything in the brackets can be evaluated elsewhere)
+    # - expression in parentheses can be evaluated independently - think what to return
+    # - always break down into components first - you can very easily debug what is inside
+    # - parentheses parsing is prone to off-by-one (so please break down the expression first)
+    # - isolate complex operations - cross_multiply for variables for examples
     # - the string is given in ["+", a, +, b, *, c], you are processing in [a, "+", b, +, c, *]
-    # - think of how to debug part by part
     # - pragmatism - no point resolving within substring the complexity is exponential anyway
     
     def cross_multiply(terms_1: list[list[str | int]], terms_2: list[list[str | int]]):
