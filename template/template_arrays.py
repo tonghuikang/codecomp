@@ -130,12 +130,15 @@ def count_peaks_and_valleys(lst):
 
 def is_subsequence(self, s, t) -> bool:
     # https://leetcode.com/problems/is-subsequence/
+    # is s a subsequence of t
     if len(s) == 0:
         return True
 
     l = 0
     for r in range(len(t)):
+        # iterating over the pointer to the longer sequence
         if t[r] == s[l]:
+            # if matches, advice the pointer to the shorter sequence
             l += 1
         if l == len(s):
             return True
@@ -399,7 +402,6 @@ def can_partition_array_into_equal_subset_sum(arr):
 def find_equal_subset_sum_subset(arr):
     # https://codeforces.com/contest/1839/submission/208368758
     # assuming you can
-    # GPT-4 generated, should be optimized
     total_sum = sum(arr)
     target_sum = total_sum // 2
     n = len(arr)
@@ -427,32 +429,15 @@ def find_equal_subset_sum_subset(arr):
     c = Counter(left)
     right = []
     for x in arr:
-        log(x, c[x])
         if c[x] > 0:
             c[x] -= 1
             continue
         right.append(x)
 
-    log(sum(left), sum(right), sum(arr))
     assert sum(left) == sum(right)
     assert sum(left) + sum(right) == sum(arr)
     assert sorted(left + right) == sorted(arr)
     return left, right
-
-
-
-def replace_value_in_sorted_lists(sorted_lists, old_value, new_value):
-    # You have multiple sorted lists
-    # old_value exists in at least one of the sorted lists
-    # You want to replace the old value with the new value
-    for _, sorted_list in enumerate(sorted_lists):
-        if old_value in sorted_list:
-            # define side effects here
-            sorted_list.remove(old_value)
-            sorted_list.add(new_value)
-            break
-    else:
-        raise
 
 
 def rebalance_sorted_list(left, right, right_size_limit):
@@ -489,17 +474,21 @@ def rebalance_sorted_list(left, right, right_size_limit):
 
 
 def longest_common_subsequence(arr, brr):
-    # leetcode.com/problems/longest-common-subsequence/discuss/351689/
+    # https://leetcode.com/problems/longest-common-subsequence/discuss/351689/
+    # https://leetcode.com/problems/longest-common-subsequence/solutions/348884/
     m, n = map(len, (arr, brr))
     if m < n:
         return longest_common_subsequence(brr, arr)
     dp = [0] * (n + 1)
     for c in arr:
-        prevRow, prevRowPrevCol = 0, 0
+        new_dp = [x for x in dp]
         for j, d in enumerate(brr):
-            prevRow, prevRowPrevCol = dp[j + 1], prevRow
-            dp[j + 1] = prevRowPrevCol + 1 if c == d else max(dp[j], prevRow)
-    return dp[-1]
+            if c == d:
+                new_dp[j+1] = max(dp[j+1], new_dp[j], dp[j] + 1)
+            else:
+                new_dp[j+1] = max(dp[j+1], new_dp[j], dp[j])
+        dp = new_dp
+    return max(dp)
 
 
 def longest_common_subarray(arr, brr):
