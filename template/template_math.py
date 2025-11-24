@@ -224,6 +224,23 @@ def iterate_submasks(mask):
     yield 0  # Don't forget the empty submask
 
 
+def sum_over_subsets(counts):
+    # https://leetcode.com/problems/number-of-effective-subsequences/
+    # https://usaco.guide/plat/dp-sos
+    # for all idx, take the sum of arr[jdx] where jdx is a subset of idx
+
+    counts = [count for count in counts]
+    assert len(counts).bit_count() == 1
+
+    for b in range(len(counts).bit_length()):
+        mask = 1 << b
+        for idx in range(len(counts)):
+            if idx & mask == 0:
+                counts[idx ^ mask] += counts[idx]
+ 
+    return counts
+
+
 # --------------------- extended eucliean algorithm ---------------------
 
 
