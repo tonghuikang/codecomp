@@ -159,7 +159,7 @@ def count_inversions(perm):
     # for each index, count how many numbers on its left that are larger
     # this is also a sample on how to use the class
     res = 0
-    t = FenwickTree(bits=len(bin(max(perm))))
+    t = FenwickTreeSparse(bits=len(bin(max(perm))))
     for i, x in enumerate(perm):
         cnt = t.query(x)
         res += i - cnt
