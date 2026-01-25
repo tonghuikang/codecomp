@@ -565,6 +565,35 @@ def next_permuation(nums):
     return nums
 
 
+def get_kth_largest_permutation(arr, k):
+    # https://leetcode.com/problems/find-nth-smallest-integer-with-k-one-bits/
+    # kth is zero indexed
+    res = []
+    c = Counter(arr)    
+    for _ in range(len(arr)):
+        # among all possible next element, in increasing order
+        for candidate in sorted(k for k,v in c.items() if v > 0):
+            c[candidate] -= 1
+
+            # number of ways if we force the next character to be this candidate
+            local_perm = 1
+            total = sum(c.values())
+            for v in c.values():
+                local_perm = local_perm * math.comb(total, v)
+                total -= v
+                
+            if k < local_perm:
+                # if not enough to cover the number of ways, should force
+                res.append(candidate)
+                break
+
+            # could cover all forcing
+            k -= local_perm
+            c[candidate] += 1
+
+    return res
+
+
 def get_permutation_given_lexicographic_order(perm):
     # allow duplicates
     # https://stackoverflow.com/questions/6884708/
