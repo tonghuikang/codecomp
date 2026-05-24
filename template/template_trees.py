@@ -27,7 +27,7 @@ class RangeQuery:
             i <<= 1
 
     def query(self, begin, end):
-        # queries data[begin:end]
+        # queries data[begin:end]  # inclusive, exclusive
         assert end > begin
         depth = (end - begin).bit_length() - 1
         return self.func(self._data[depth][begin], self._data[depth][end - (1 << depth)])

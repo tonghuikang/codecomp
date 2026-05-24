@@ -19,6 +19,7 @@ def binary_search(
     left=0,
     right=2**31 - 1,
 ) -> int:
+    # binary_search(func, first=, target=, left=, right=)
     # https://leetcode.com/discuss/general-discussion/786126/
     # ASSUMES THAT THERE IS A TRANSITION
     # MAY HAVE ISSUES AT THE EXTREMES
