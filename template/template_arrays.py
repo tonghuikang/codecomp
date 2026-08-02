@@ -823,6 +823,132 @@ def get_palindromic_ranges(s) -> list[list[int]]:
     return bridges
 
 
+def suffix_array(arr) -> list[int]:
+    # sa[i] is the starting index of the i-th smallest suffix
+    # "banana" -> [5, 3, 1, 0, 4, 2]  (a, ana, anana, banana, na, nana)
+    # arr is a string or a list of comparable elements
+    # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/strings/suffix_array.py
+    # https://cp-algorithms.com/string/suffix-array.html
+    # SA-IS, the induced sorting is O(n), only the compression here is O(n log n)
+    # 0.8 secs for n = 10**6, twice as fast as suffix_array_prefix_doubling
+    if len(arr) <= 1:
+        return list(range(len(arr)))
+    index_map = {x: i for i, x in enumerate(sorted(set(arr)))}
+    return suffix_array_of_ints([index_map[x] for x in arr])
+
+
+def suffix_array_of_ints(A) -> list[int]:
+    # A is a non-empty list of integers, each at least zero
+    n = len(A)
+    buckets = [0] * (max(A) + 2)  # buckets[c] is where the suffixes starting with c begin
+    for a in A:
+        buckets[a + 1] += 1
+    for b in range(1, len(buckets)):
+        buckets[b] += buckets[b - 1]
+
+    isL = [1] * n  # A[i:] is larger than A[i+1:]
+    for i in reversed(range(n - 1)):
+        isL[i] = +(A[i] > A[i + 1]) if A[i] != A[i + 1] else isL[i + 1]
+
+    def induced_sort(LMS):
+        # given the sorted LMS suffixes, deduce the order of all suffixes in two scans
+        SA = [-1] * n
+        SA.append(n)
+        endpoint = buckets[1:]  # fill the LMS suffixes from the back of their buckets
+        for j in reversed(LMS):
+            endpoint[A[j]] -= 1
+            SA[endpoint[A[j]]] = j
+        startpoint = buckets[:-1]  # left to right scan places the L suffixes
+        for i in range(-1, n):
+            j = SA[i] - 1
+            if j >= 0 and isL[j]:
+                SA[startpoint[A[j]]] = j
+                startpoint[A[j]] += 1
+        SA.pop()
+        endpoint = buckets[1:]  # right to left scan places the S suffixes
+        for i in reversed(range(n)):
+            j = SA[i] - 1
+            if j >= 0 and not isL[j]:
+                endpoint[A[j]] -= 1
+                SA[endpoint[A[j]]] = j
+        return SA
+
+    isLMS = [+(i and isL[i - 1] and not isL[i]) for i in range(n)]  # S suffix preceded by an L suffix
+    isLMS.append(1)
+    LMS = [i for i in range(n) if isLMS[i]]
+    if len(LMS) > 1:
+        SA = induced_sort(LMS)  # only approximately sorted, but enough to name the LMS substrings
+        LMS2 = [i for i in SA if isLMS[i]]
+        prev = -1
+        j = 0
+        for i in LMS2:  # equal LMS substrings get the same name
+            i1 = prev
+            i2 = i
+            while prev >= 0 and A[i1] == A[i2]:
+                i1 += 1
+                i2 += 1
+                if isLMS[i1] or isLMS[i2]:
+                    j -= isLMS[i1] and isLMS[i2]
+                    break
+            j += 1
+            prev = i
+            SA[i] = j
+        LMS = [LMS[i] for i in suffix_array_of_ints([SA[i] for i in LMS])]  # recurse on the names
+    return induced_sort(LMS)
+
+
+def suffix_array_prefix_doubling(arr) -> list[int]:
+    # shorter alternative to suffix_array, O(n log^2 n), 1.8 secs for n = 10**6
+    # https://cp-algorithms.com/string/suffix-array.html
+    def compress(lst):  # replace each element with its index in the sorted set
+        index_map = {x: i for i, x in enumerate(sorted(set(lst)))}
+        return [index_map[x] for x in lst]
+
+    n = len(arr)
+    if n <= 1:
+        return list(range(n))
+
+    rank = compress(arr)  # rank of arr[i:i+k] among all substrings of length k
+    k = 1
+    while max(rank) < n - 1:  # some suffixes still share the same rank
+        # combine the ranks of arr[i:i+k] and arr[i+k:i+2k], padding beyond the end with zero
+        rank = compress([r * (n + 1) + (rank[i + k] + 1 if i + k < n else 0) for i, r in enumerate(rank)])
+        k *= 2
+
+    sa = [0] * n
+    for i, r in enumerate(rank):
+        sa[r] = i
+    return sa
+
+
+def lcp_array(arr, sa) -> list[int]:
+    # lcp[i] is the length of the longest common prefix of arr[sa[i]:] and arr[sa[i+1]:]
+    # "banana" -> [1, 3, 0, 0, 2]
+    # number of distinct substrings = n*(n+1)//2 - sum(lcp)
+    # longest substring that appears at least twice has length max(lcp)
+    # to compare two arbitrary suffixes, range minimum query on lcp (see MinSparseTable)
+    # to obtain the longest common substring of two strings, run this on a + separator + b
+    # Kasai's algorithm, O(n)
+    # https://cp-algorithms.com/string/suffix-array.html
+    n = len(arr)
+    rank = [0] * n
+    for i, x in enumerate(sa):
+        rank[x] = i
+
+    lcp = [0] * (n - 1)
+    k = 0
+    for i in range(n):  # in the order of decreasing suffix length
+        if rank[i] == n - 1:  # the largest suffix has no successor
+            k = 0
+            continue
+        j = sa[rank[i] + 1]  # the suffix just after arr[i:] in sorted order
+        while i + k < n and j + k < n and arr[i + k] == arr[j + k]:
+            k += 1
+        lcp[rank[i]] = k
+        k = max(k - 1, 0)  # dropping the leading character reduces the lcp by at most one
+    return lcp
+
+
 class SparseTable:
     # https://github.com/xile42/codeforces-python/blob/main/templates/sparse_table.py
     # https://leetcode.com/problems/maximum-total-subarray-value-ii/
